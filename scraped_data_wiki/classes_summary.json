@@ -140,27 +140,6 @@
         "category": "Debuff/ Anomaly skill"
       },
       {
-        "wikiSkillId": "1800",
-        "url": "https://l2wiki.com/essence/skills/paladin/1800_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1800.png",
-        "iconFile": "skill1800.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1801",
-        "url": "https://l2wiki.com/essence/skills/paladin/1801_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1801.png",
-        "iconFile": "skill1801.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1802",
-        "url": "https://l2wiki.com/essence/skills/paladin/1802_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1802.png",
-        "iconFile": "skill1802.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
         "wikiSkillId": "45",
         "url": "https://l2wiki.com/essence/skills/paladin/45_10_0.html",
         "icon": "https://l2wiki.com/upload/images/icon/skill10255.png",
@@ -323,27 +302,6 @@
         "icon": "https://l2wiki.com/upload/images/icon/skill0451.png",
         "iconFile": "skill0451.png",
         "category": "Buffs"
-      },
-      {
-        "wikiSkillId": "1800",
-        "url": "https://l2wiki.com/essence/skills/gladiator/1800_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1800.png",
-        "iconFile": "skill1800.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1801",
-        "url": "https://l2wiki.com/essence/skills/gladiator/1801_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1801.png",
-        "iconFile": "skill1801.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1802",
-        "url": "https://l2wiki.com/essence/skills/gladiator/1802_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1802.png",
-        "iconFile": "skill1802.png",
-        "category": "Transformation/Mounting Skills"
       },
       {
         "wikiSkillId": "88",
@@ -521,27 +479,6 @@
         "icon": "https://l2wiki.com/upload/images/icon/skill0116.png",
         "iconFile": "skill0116.png",
         "category": "Debuff/ Anomaly skill"
-      },
-      {
-        "wikiSkillId": "1800",
-        "url": "https://l2wiki.com/essence/skills/warlord/1800_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1800.png",
-        "iconFile": "skill1800.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1801",
-        "url": "https://l2wiki.com/essence/skills/warlord/1801_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1801.png",
-        "iconFile": "skill1801.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1802",
-        "url": "https://l2wiki.com/essence/skills/warlord/1802_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1802.png",
-        "iconFile": "skill1802.png",
-        "category": "Transformation/Mounting Skills"
       },
       {
         "wikiSkillId": "181",
@@ -875,27 +812,6 @@
         "category": "Debuff/ Anomaly skill"
       },
       {
-        "wikiSkillId": "1800",
-        "url": "https://l2wiki.com/essence/skills/dark_avenger/1800_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1800.png",
-        "iconFile": "skill1800.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1801",
-        "url": "https://l2wiki.com/essence/skills/dark_avenger/1801_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1801.png",
-        "iconFile": "skill1801.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1802",
-        "url": "https://l2wiki.com/essence/skills/dark_avenger/1802_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1802.png",
-        "iconFile": "skill1802.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
         "wikiSkillId": "45",
         "url": "https://l2wiki.com/essence/skills/dark_avenger/45_10_0.html",
         "icon": "https://l2wiki.com/upload/images/icon/skill10255.png",
@@ -1144,41 +1060,6 @@
         "category": "Debuff/ Anomaly skill"
       },
       {
-        "wikiSkillId": "1833",
-        "url": "https://l2wiki.com/essence/skills/phoenix_knight/1833_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1833.png",
-        "iconFile": "skill1833.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54102",
-        "url": "https://l2wiki.com/essence/skills/phoenix_knight/54102_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/white_knight_suit.png",
-        "iconFile": "white_knight_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54231",
-        "url": "https://l2wiki.com/essence/skills/phoenix_knight/54231_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/dragon_slayer_suit.png",
-        "iconFile": "dragon_slayer_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54200",
-        "url": "https://l2wiki.com/essence/skills/phoenix_knight/54200_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/warhorse_vehicle.png",
-        "iconFile": "warhorse_vehicle.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54202",
-        "url": "https://l2wiki.com/essence/skills/phoenix_knight/54202_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill8607.png",
-        "iconFile": "skill8607.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
         "wikiSkillId": "69",
         "url": "https://l2wiki.com/essence/skills/phoenix_knight/69_26_0.html",
         "icon": "https://l2wiki.com/upload/images/icon/skill0069.png",
@@ -1204,13 +1085,6 @@
         "url": "https://l2wiki.com/essence/skills/phoenix_knight/28_50_0.html",
         "icon": "https://l2wiki.com/upload/images/icon/skill0028.png",
         "iconFile": "skill0028.png",
-        "category": "Other Skills - Active"
-      },
-      {
-        "wikiSkillId": "45190",
-        "url": "https://l2wiki.com/essence/skills/phoenix_knight/45190_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill19203.png",
-        "iconFile": "skill19203.png",
         "category": "Other Skills - Active"
       },
       {
@@ -1570,41 +1444,6 @@
         "category": "Buffs"
       },
       {
-        "wikiSkillId": "1833",
-        "url": "https://l2wiki.com/essence/skills/duelist/1833_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1833.png",
-        "iconFile": "skill1833.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54102",
-        "url": "https://l2wiki.com/essence/skills/duelist/54102_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/white_knight_suit.png",
-        "iconFile": "white_knight_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54231",
-        "url": "https://l2wiki.com/essence/skills/duelist/54231_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/dragon_slayer_suit.png",
-        "iconFile": "dragon_slayer_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54200",
-        "url": "https://l2wiki.com/essence/skills/duelist/54200_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/warhorse_vehicle.png",
-        "iconFile": "warhorse_vehicle.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54202",
-        "url": "https://l2wiki.com/essence/skills/duelist/54202_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill8607.png",
-        "iconFile": "skill8607.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
         "wikiSkillId": "440",
         "url": "https://l2wiki.com/essence/skills/duelist/440_1_0.html",
         "icon": "https://l2wiki.com/upload/images/icon/skill0440.png",
@@ -1617,13 +1456,6 @@
         "icon": "https://l2wiki.com/upload/images/icon/s_dethrone_fire_source_1.png",
         "iconFile": "s_dethrone_fire_source_1.png",
         "category": "Recovery Skills"
-      },
-      {
-        "wikiSkillId": "45190",
-        "url": "https://l2wiki.com/essence/skills/duelist/45190_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill19203.png",
-        "iconFile": "skill19203.png",
-        "category": "Other Skills - Active"
       },
       {
         "wikiSkillId": "45361",
@@ -1846,41 +1678,6 @@
         "category": "Debuff/ Anomaly skill"
       },
       {
-        "wikiSkillId": "1833",
-        "url": "https://l2wiki.com/essence/skills/dreadnought/1833_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1833.png",
-        "iconFile": "skill1833.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54102",
-        "url": "https://l2wiki.com/essence/skills/dreadnought/54102_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/white_knight_suit.png",
-        "iconFile": "white_knight_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54231",
-        "url": "https://l2wiki.com/essence/skills/dreadnought/54231_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/dragon_slayer_suit.png",
-        "iconFile": "dragon_slayer_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54200",
-        "url": "https://l2wiki.com/essence/skills/dreadnought/54200_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/warhorse_vehicle.png",
-        "iconFile": "warhorse_vehicle.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54202",
-        "url": "https://l2wiki.com/essence/skills/dreadnought/54202_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill8607.png",
-        "iconFile": "skill8607.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
         "wikiSkillId": "440",
         "url": "https://l2wiki.com/essence/skills/dreadnought/440_1_0.html",
         "icon": "https://l2wiki.com/upload/images/icon/skill0440.png",
@@ -1893,13 +1690,6 @@
         "icon": "https://l2wiki.com/upload/images/icon/skill30511.png",
         "iconFile": "skill30511.png",
         "category": "Recovery Skills"
-      },
-      {
-        "wikiSkillId": "45190",
-        "url": "https://l2wiki.com/essence/skills/dreadnought/45190_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill19203.png",
-        "iconFile": "skill19203.png",
-        "category": "Other Skills - Active"
       },
       {
         "wikiSkillId": "45390",
@@ -2108,41 +1898,6 @@
         "category": "Buffs"
       },
       {
-        "wikiSkillId": "1833",
-        "url": "https://l2wiki.com/essence/skills/sagittarius/1833_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1833.png",
-        "iconFile": "skill1833.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54102",
-        "url": "https://l2wiki.com/essence/skills/sagittarius/54102_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/white_knight_suit.png",
-        "iconFile": "white_knight_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54231",
-        "url": "https://l2wiki.com/essence/skills/sagittarius/54231_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/dragon_slayer_suit.png",
-        "iconFile": "dragon_slayer_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54200",
-        "url": "https://l2wiki.com/essence/skills/sagittarius/54200_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/warhorse_vehicle.png",
-        "iconFile": "warhorse_vehicle.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54202",
-        "url": "https://l2wiki.com/essence/skills/sagittarius/54202_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill8607.png",
-        "iconFile": "skill8607.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
         "wikiSkillId": "53005",
         "url": "https://l2wiki.com/essence/skills/sagittarius/53005_1_0.html",
         "icon": "https://l2wiki.com/upload/images/icon/skill53005.png",
@@ -2291,27 +2046,6 @@
         "icon": "https://l2wiki.com/upload/images/icon/skill1289.png",
         "iconFile": "skill1289.png",
         "category": "Debuff/ Anomaly skill"
-      },
-      {
-        "wikiSkillId": "1800",
-        "url": "https://l2wiki.com/essence/skills/sorcerer/1800_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1800.png",
-        "iconFile": "skill1800.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1801",
-        "url": "https://l2wiki.com/essence/skills/sorcerer/1801_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1801.png",
-        "iconFile": "skill1801.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1802",
-        "url": "https://l2wiki.com/essence/skills/sorcerer/1802_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1802.png",
-        "iconFile": "skill1802.png",
-        "category": "Transformation/Mounting Skills"
       },
       {
         "wikiSkillId": "1157",
@@ -2541,41 +2275,6 @@
         "category": "Debuff/ Anomaly skill"
       },
       {
-        "wikiSkillId": "1833",
-        "url": "https://l2wiki.com/essence/skills/hell_knight/1833_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1833.png",
-        "iconFile": "skill1833.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54102",
-        "url": "https://l2wiki.com/essence/skills/hell_knight/54102_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/white_knight_suit.png",
-        "iconFile": "white_knight_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54231",
-        "url": "https://l2wiki.com/essence/skills/hell_knight/54231_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/dragon_slayer_suit.png",
-        "iconFile": "dragon_slayer_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54200",
-        "url": "https://l2wiki.com/essence/skills/hell_knight/54200_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/warhorse_vehicle.png",
-        "iconFile": "warhorse_vehicle.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54202",
-        "url": "https://l2wiki.com/essence/skills/hell_knight/54202_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill8607.png",
-        "iconFile": "skill8607.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
         "wikiSkillId": "46",
         "url": "https://l2wiki.com/essence/skills/hell_knight/46_16_0.html",
         "icon": "https://l2wiki.com/upload/images/icon/skill0046.png",
@@ -2594,13 +2293,6 @@
         "url": "https://l2wiki.com/essence/skills/hell_knight/28_50_0.html",
         "icon": "https://l2wiki.com/upload/images/icon/skill0028.png",
         "iconFile": "skill0028.png",
-        "category": "Other Skills - Active"
-      },
-      {
-        "wikiSkillId": "45190",
-        "url": "https://l2wiki.com/essence/skills/hell_knight/45190_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill19203.png",
-        "iconFile": "skill19203.png",
         "category": "Other Skills - Active"
       },
       {
@@ -2724,27 +2416,6 @@
         "icon": "https://l2wiki.com/upload/images/icon/skill10520.png",
         "iconFile": "skill10520.png",
         "category": "Debuff/ Anomaly skill"
-      },
-      {
-        "wikiSkillId": "1800",
-        "url": "https://l2wiki.com/essence/skills/treasure_hunter/1800_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1800.png",
-        "iconFile": "skill1800.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1801",
-        "url": "https://l2wiki.com/essence/skills/treasure_hunter/1801_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1801.png",
-        "iconFile": "skill1801.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1802",
-        "url": "https://l2wiki.com/essence/skills/treasure_hunter/1802_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1802.png",
-        "iconFile": "skill1802.png",
-        "category": "Transformation/Mounting Skills"
       },
       {
         "wikiSkillId": "27",
@@ -3013,27 +2684,6 @@
         "icon": "https://l2wiki.com/upload/images/icon/skill0313.png",
         "iconFile": "skill0313.png",
         "category": "Buffs"
-      },
-      {
-        "wikiSkillId": "1800",
-        "url": "https://l2wiki.com/essence/skills/hawkeye/1800_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1800.png",
-        "iconFile": "skill1800.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1801",
-        "url": "https://l2wiki.com/essence/skills/hawkeye/1801_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1801.png",
-        "iconFile": "skill1801.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1802",
-        "url": "https://l2wiki.com/essence/skills/hawkeye/1802_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1802.png",
-        "iconFile": "skill1802.png",
-        "category": "Transformation/Mounting Skills"
       }
     ]
   },
@@ -3228,53 +2878,11 @@
         "category": "Debuff/ Anomaly skill"
       },
       {
-        "wikiSkillId": "1833",
-        "url": "https://l2wiki.com/essence/skills/archmage/1833_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1833.png",
-        "iconFile": "skill1833.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54102",
-        "url": "https://l2wiki.com/essence/skills/archmage/54102_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/white_knight_suit.png",
-        "iconFile": "white_knight_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54231",
-        "url": "https://l2wiki.com/essence/skills/archmage/54231_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/dragon_slayer_suit.png",
-        "iconFile": "dragon_slayer_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54200",
-        "url": "https://l2wiki.com/essence/skills/archmage/54200_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/warhorse_vehicle.png",
-        "iconFile": "warhorse_vehicle.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54202",
-        "url": "https://l2wiki.com/essence/skills/archmage/54202_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill8607.png",
-        "iconFile": "skill8607.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
         "wikiSkillId": "1157",
         "url": "https://l2wiki.com/essence/skills/archmage/1157_6_0.html",
         "icon": "https://l2wiki.com/upload/images/icon/skill1157.png",
         "iconFile": "skill1157.png",
         "category": "Recovery Skills"
-      },
-      {
-        "wikiSkillId": "45190",
-        "url": "https://l2wiki.com/essence/skills/archmage/45190_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill19203.png",
-        "iconFile": "skill19203.png",
-        "category": "Other Skills - Active"
       },
       {
         "wikiSkillId": "45361",
@@ -3467,48 +3075,6 @@
         "icon": "https://l2wiki.com/upload/images/icon/skill10520.png",
         "iconFile": "skill10520.png",
         "category": "Debuff/ Anomaly skill"
-      },
-      {
-        "wikiSkillId": "1833",
-        "url": "https://l2wiki.com/essence/skills/adventurer/1833_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1833.png",
-        "iconFile": "skill1833.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54102",
-        "url": "https://l2wiki.com/essence/skills/adventurer/54102_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/white_knight_suit.png",
-        "iconFile": "white_knight_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54231",
-        "url": "https://l2wiki.com/essence/skills/adventurer/54231_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/dragon_slayer_suit.png",
-        "iconFile": "dragon_slayer_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54200",
-        "url": "https://l2wiki.com/essence/skills/adventurer/54200_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/warhorse_vehicle.png",
-        "iconFile": "warhorse_vehicle.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54202",
-        "url": "https://l2wiki.com/essence/skills/adventurer/54202_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill8607.png",
-        "iconFile": "skill8607.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "45190",
-        "url": "https://l2wiki.com/essence/skills/adventurer/45190_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill19203.png",
-        "iconFile": "skill19203.png",
-        "category": "Other Skills - Active"
       },
       {
         "wikiSkillId": "1631",
@@ -3832,53 +3398,11 @@
         "category": "Debuff/ Anomaly skill"
       },
       {
-        "wikiSkillId": "1833",
-        "url": "https://l2wiki.com/essence/skills/hierophant/1833_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1833.png",
-        "iconFile": "skill1833.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
         "wikiSkillId": "87001",
         "url": "https://l2wiki.com/essence/skills/hierophant/87001_1_0.html",
         "icon": "https://l2wiki.com/upload/images/icon/transform_priest.png",
         "iconFile": "transform_priest.png",
         "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54102",
-        "url": "https://l2wiki.com/essence/skills/hierophant/54102_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/white_knight_suit.png",
-        "iconFile": "white_knight_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54231",
-        "url": "https://l2wiki.com/essence/skills/hierophant/54231_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/dragon_slayer_suit.png",
-        "iconFile": "dragon_slayer_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54200",
-        "url": "https://l2wiki.com/essence/skills/hierophant/54200_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/warhorse_vehicle.png",
-        "iconFile": "warhorse_vehicle.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54202",
-        "url": "https://l2wiki.com/essence/skills/hierophant/54202_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill8607.png",
-        "iconFile": "skill8607.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "45190",
-        "url": "https://l2wiki.com/essence/skills/hierophant/45190_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill19203.png",
-        "iconFile": "skill19203.png",
-        "category": "Other Skills - Active"
       },
       {
         "wikiSkillId": "45361",
@@ -3973,27 +3497,6 @@
         "icon": "https://l2wiki.com/upload/images/icon/skill16872.png",
         "iconFile": "skill16872.png",
         "category": "Debuff/ Anomaly skill"
-      },
-      {
-        "wikiSkillId": "1800",
-        "url": "https://l2wiki.com/essence/skills/warlock/1800_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1800.png",
-        "iconFile": "skill1800.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1801",
-        "url": "https://l2wiki.com/essence/skills/warlock/1801_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1801.png",
-        "iconFile": "skill1801.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1802",
-        "url": "https://l2wiki.com/essence/skills/warlock/1802_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1802.png",
-        "iconFile": "skill1802.png",
-        "category": "Transformation/Mounting Skills"
       },
       {
         "wikiSkillId": "1111",
@@ -4223,27 +3726,6 @@
         "category": "Debuff/ Anomaly skill"
       },
       {
-        "wikiSkillId": "1800",
-        "url": "https://l2wiki.com/essence/skills/prophet/1800_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1800.png",
-        "iconFile": "skill1800.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1801",
-        "url": "https://l2wiki.com/essence/skills/prophet/1801_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1801.png",
-        "iconFile": "skill1801.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1802",
-        "url": "https://l2wiki.com/essence/skills/prophet/1802_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1802.png",
-        "iconFile": "skill1802.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
         "wikiSkillId": "1050",
         "url": "https://l2wiki.com/essence/skills/prophet/1050_1_0.html",
         "icon": "https://l2wiki.com/upload/images/icon/skill1050.png",
@@ -4397,41 +3879,6 @@
         "category": "Debuff/ Anomaly skill"
       },
       {
-        "wikiSkillId": "1833",
-        "url": "https://l2wiki.com/essence/skills/arcana_lord/1833_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1833.png",
-        "iconFile": "skill1833.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54102",
-        "url": "https://l2wiki.com/essence/skills/arcana_lord/54102_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/white_knight_suit.png",
-        "iconFile": "white_knight_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54231",
-        "url": "https://l2wiki.com/essence/skills/arcana_lord/54231_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/dragon_slayer_suit.png",
-        "iconFile": "dragon_slayer_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54200",
-        "url": "https://l2wiki.com/essence/skills/arcana_lord/54200_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/warhorse_vehicle.png",
-        "iconFile": "warhorse_vehicle.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54202",
-        "url": "https://l2wiki.com/essence/skills/arcana_lord/54202_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill8607.png",
-        "iconFile": "skill8607.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
         "wikiSkillId": "1126",
         "url": "https://l2wiki.com/essence/skills/arcana_lord/1126_35_0.html",
         "icon": "https://l2wiki.com/upload/images/icon/skill1126.png",
@@ -4514,13 +3961,6 @@
         "icon": "https://l2wiki.com/upload/images/icon/skill1346.png",
         "iconFile": "skill1346.png",
         "category": "Summoning Skills"
-      },
-      {
-        "wikiSkillId": "45190",
-        "url": "https://l2wiki.com/essence/skills/arcana_lord/45190_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill19203.png",
-        "iconFile": "skill19203.png",
-        "category": "Other Skills - Active"
       },
       {
         "wikiSkillId": "45361",
@@ -4650,27 +4090,6 @@
         "icon": "https://l2wiki.com/upload/images/icon/skill19191.png",
         "iconFile": "skill19191.png",
         "category": "Debuff/ Anomaly skill"
-      },
-      {
-        "wikiSkillId": "1800",
-        "url": "https://l2wiki.com/essence/skills/necromancer/1800_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1800.png",
-        "iconFile": "skill1800.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1801",
-        "url": "https://l2wiki.com/essence/skills/necromancer/1801_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1801.png",
-        "iconFile": "skill1801.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1802",
-        "url": "https://l2wiki.com/essence/skills/necromancer/1802_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1802.png",
-        "iconFile": "skill1802.png",
-        "category": "Transformation/Mounting Skills"
       },
       {
         "wikiSkillId": "1126",
@@ -4886,41 +4305,6 @@
         "category": "Debuff/ Anomaly skill"
       },
       {
-        "wikiSkillId": "1833",
-        "url": "https://l2wiki.com/essence/skills/cardinal/1833_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1833.png",
-        "iconFile": "skill1833.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54102",
-        "url": "https://l2wiki.com/essence/skills/cardinal/54102_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/white_knight_suit.png",
-        "iconFile": "white_knight_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54231",
-        "url": "https://l2wiki.com/essence/skills/cardinal/54231_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/dragon_slayer_suit.png",
-        "iconFile": "dragon_slayer_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54200",
-        "url": "https://l2wiki.com/essence/skills/cardinal/54200_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/warhorse_vehicle.png",
-        "iconFile": "warhorse_vehicle.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54202",
-        "url": "https://l2wiki.com/essence/skills/cardinal/54202_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill8607.png",
-        "iconFile": "skill8607.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
         "wikiSkillId": "1217",
         "url": "https://l2wiki.com/essence/skills/cardinal/1217_34_0.html",
         "icon": "https://l2wiki.com/upload/images/icon/skill1217.png",
@@ -4996,13 +4380,6 @@
         "icon": "https://l2wiki.com/upload/images/icon/skill1426.png",
         "iconFile": "skill1426.png",
         "category": "Recovery Skills"
-      },
-      {
-        "wikiSkillId": "45190",
-        "url": "https://l2wiki.com/essence/skills/cardinal/45190_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill19203.png",
-        "iconFile": "skill19203.png",
-        "category": "Other Skills - Active"
       },
       {
         "wikiSkillId": "47243",
@@ -5225,41 +4602,6 @@
         "category": "Debuff/ Anomaly skill"
       },
       {
-        "wikiSkillId": "1833",
-        "url": "https://l2wiki.com/essence/skills/soultaker/1833_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1833.png",
-        "iconFile": "skill1833.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54102",
-        "url": "https://l2wiki.com/essence/skills/soultaker/54102_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/white_knight_suit.png",
-        "iconFile": "white_knight_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54231",
-        "url": "https://l2wiki.com/essence/skills/soultaker/54231_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/dragon_slayer_suit.png",
-        "iconFile": "dragon_slayer_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54200",
-        "url": "https://l2wiki.com/essence/skills/soultaker/54200_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/warhorse_vehicle.png",
-        "iconFile": "warhorse_vehicle.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54202",
-        "url": "https://l2wiki.com/essence/skills/soultaker/54202_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill8607.png",
-        "iconFile": "skill8607.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
         "wikiSkillId": "47441",
         "url": "https://l2wiki.com/essence/skills/soultaker/47441_1_0.html",
         "icon": "https://l2wiki.com/upload/images/icon/s_soul_guardian.png",
@@ -5279,13 +4621,6 @@
         "icon": "https://l2wiki.com/upload/images/icon/skill1157.png",
         "iconFile": "skill1157.png",
         "category": "Recovery Skills"
-      },
-      {
-        "wikiSkillId": "45190",
-        "url": "https://l2wiki.com/essence/skills/soultaker/45190_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill19203.png",
-        "iconFile": "skill19203.png",
-        "category": "Other Skills - Active"
       },
       {
         "wikiSkillId": "45361",
@@ -5600,27 +4935,6 @@
         "icon": "https://l2wiki.com/upload/images/icon/skill1396.png",
         "iconFile": "skill1396.png",
         "category": "Debuff/ Anomaly skill"
-      },
-      {
-        "wikiSkillId": "1800",
-        "url": "https://l2wiki.com/essence/skills/bishop/1800_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1800.png",
-        "iconFile": "skill1800.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1801",
-        "url": "https://l2wiki.com/essence/skills/bishop/1801_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1801.png",
-        "iconFile": "skill1801.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1802",
-        "url": "https://l2wiki.com/essence/skills/bishop/1802_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1802.png",
-        "iconFile": "skill1802.png",
-        "category": "Transformation/Mounting Skills"
       },
       {
         "wikiSkillId": "1217",
@@ -6137,13 +5451,6 @@
         "icon": "https://l2wiki.com/upload/images/icon/s_assassin_swoop_attack.png",
         "iconFile": "s_assassin_swoop_attack.png",
         "category": "Physical Skills"
-      },
-      {
-        "wikiSkillId": "87344",
-        "url": "https://l2wiki.com/essence/skills/secret_assassin_male_0/87344_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/s_assassin_armor_change.png",
-        "iconFile": "s_assassin_armor_change.png",
-        "category": "Other Skills - Active"
       }
     ]
   },
@@ -6294,41 +5601,6 @@
         "icon": "https://l2wiki.com/upload/images/icon/s_assassin_riding_wolf.png",
         "iconFile": "s_assassin_riding_wolf.png",
         "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54102",
-        "url": "https://l2wiki.com/essence/skills/secret_assassin_male_3/54102_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/white_knight_suit.png",
-        "iconFile": "white_knight_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54231",
-        "url": "https://l2wiki.com/essence/skills/secret_assassin_male_3/54231_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/dragon_slayer_suit.png",
-        "iconFile": "dragon_slayer_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54200",
-        "url": "https://l2wiki.com/essence/skills/secret_assassin_male_3/54200_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/warhorse_vehicle.png",
-        "iconFile": "warhorse_vehicle.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54202",
-        "url": "https://l2wiki.com/essence/skills/secret_assassin_male_3/54202_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill8607.png",
-        "iconFile": "skill8607.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "45190",
-        "url": "https://l2wiki.com/essence/skills/secret_assassin_male_3/45190_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill19203.png",
-        "iconFile": "skill19203.png",
-        "category": "Other Skills - Active"
       },
       {
         "wikiSkillId": "87323",
@@ -6680,46 +5952,11 @@
         "category": "Transformation/Mounting Skills"
       },
       {
-        "wikiSkillId": "54207",
-        "url": "https://l2wiki.com/essence/skills/human_deathknight_3/54207_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/riding_knightmare.png",
-        "iconFile": "riding_knightmare.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54231",
-        "url": "https://l2wiki.com/essence/skills/human_deathknight_3/54231_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/dragon_slayer_suit.png",
-        "iconFile": "dragon_slayer_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54200",
-        "url": "https://l2wiki.com/essence/skills/human_deathknight_3/54200_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/warhorse_vehicle.png",
-        "iconFile": "warhorse_vehicle.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54202",
-        "url": "https://l2wiki.com/essence/skills/human_deathknight_3/54202_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill8607.png",
-        "iconFile": "skill8607.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
         "wikiSkillId": "45389",
         "url": "https://l2wiki.com/essence/skills/human_deathknight_3/45389_1_0.html",
         "icon": "https://l2wiki.com/upload/images/icon/consume.png",
         "iconFile": "consume.png",
         "category": "Recovery Skills"
-      },
-      {
-        "wikiSkillId": "45190",
-        "url": "https://l2wiki.com/essence/skills/human_deathknight_3/45190_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill19203.png",
-        "iconFile": "skill19203.png",
-        "category": "Other Skills - Active"
       },
       {
         "wikiSkillId": "45361",
@@ -7134,48 +6371,6 @@
         "category": "Debuff/ Anomaly skill"
       },
       {
-        "wikiSkillId": "1834",
-        "url": "https://l2wiki.com/essence/skills/wind_rider/1834_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1834.png",
-        "iconFile": "skill1834.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54102",
-        "url": "https://l2wiki.com/essence/skills/wind_rider/54102_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/white_knight_suit.png",
-        "iconFile": "white_knight_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54231",
-        "url": "https://l2wiki.com/essence/skills/wind_rider/54231_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/dragon_slayer_suit.png",
-        "iconFile": "dragon_slayer_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54200",
-        "url": "https://l2wiki.com/essence/skills/wind_rider/54200_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/warhorse_vehicle.png",
-        "iconFile": "warhorse_vehicle.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54202",
-        "url": "https://l2wiki.com/essence/skills/wind_rider/54202_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill8607.png",
-        "iconFile": "skill8607.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "45190",
-        "url": "https://l2wiki.com/essence/skills/wind_rider/45190_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill19203.png",
-        "iconFile": "skill19203.png",
-        "category": "Other Skills - Active"
-      },
-      {
         "wikiSkillId": "1631",
         "url": "https://l2wiki.com/essence/skills/wind_rider/1631_1_0.html",
         "icon": "https://l2wiki.com/upload/images/icon/skill10518.png",
@@ -7473,48 +6668,6 @@
         "category": "Debuff/ Anomaly skill"
       },
       {
-        "wikiSkillId": "1834",
-        "url": "https://l2wiki.com/essence/skills/sword_muse/1834_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1834.png",
-        "iconFile": "skill1834.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54102",
-        "url": "https://l2wiki.com/essence/skills/sword_muse/54102_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/white_knight_suit.png",
-        "iconFile": "white_knight_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54231",
-        "url": "https://l2wiki.com/essence/skills/sword_muse/54231_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/dragon_slayer_suit.png",
-        "iconFile": "dragon_slayer_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54200",
-        "url": "https://l2wiki.com/essence/skills/sword_muse/54200_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/warhorse_vehicle.png",
-        "iconFile": "warhorse_vehicle.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54202",
-        "url": "https://l2wiki.com/essence/skills/sword_muse/54202_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill8607.png",
-        "iconFile": "skill8607.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "45190",
-        "url": "https://l2wiki.com/essence/skills/sword_muse/45190_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill19203.png",
-        "iconFile": "skill19203.png",
-        "category": "Other Skills - Active"
-      },
-      {
         "wikiSkillId": "45361",
         "url": "https://l2wiki.com/essence/skills/sword_muse/45361_1_0.html",
         "icon": "https://l2wiki.com/upload/images/icon/skill1288.png",
@@ -7662,27 +6815,6 @@
         "category": "Debuff/ Anomaly skill"
       },
       {
-        "wikiSkillId": "1800",
-        "url": "https://l2wiki.com/essence/skills/swordsinger/1800_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1800.png",
-        "iconFile": "skill1800.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1801",
-        "url": "https://l2wiki.com/essence/skills/swordsinger/1801_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1801.png",
-        "iconFile": "skill1801.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1802",
-        "url": "https://l2wiki.com/essence/skills/swordsinger/1802_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1802.png",
-        "iconFile": "skill1802.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
         "wikiSkillId": "21",
         "url": "https://l2wiki.com/essence/skills/swordsinger/21_2_0.html",
         "icon": "https://l2wiki.com/upload/images/icon/skill11770.png",
@@ -7821,27 +6953,6 @@
         "icon": "https://l2wiki.com/upload/images/icon/skill0404.png",
         "iconFile": "skill0404.png",
         "category": "Debuff/ Anomaly skill"
-      },
-      {
-        "wikiSkillId": "1800",
-        "url": "https://l2wiki.com/essence/skills/temple_knight/1800_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1800.png",
-        "iconFile": "skill1800.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1801",
-        "url": "https://l2wiki.com/essence/skills/temple_knight/1801_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1801.png",
-        "iconFile": "skill1801.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1802",
-        "url": "https://l2wiki.com/essence/skills/temple_knight/1802_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1802.png",
-        "iconFile": "skill1802.png",
-        "category": "Transformation/Mounting Skills"
       },
       {
         "wikiSkillId": "21",
@@ -8016,27 +7127,6 @@
         "icon": "https://l2wiki.com/upload/images/icon/skill10520.png",
         "iconFile": "skill10520.png",
         "category": "Debuff/ Anomaly skill"
-      },
-      {
-        "wikiSkillId": "1800",
-        "url": "https://l2wiki.com/essence/skills/plain_walker/1800_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1800.png",
-        "iconFile": "skill1800.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1801",
-        "url": "https://l2wiki.com/essence/skills/plain_walker/1801_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1801.png",
-        "iconFile": "skill1801.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1802",
-        "url": "https://l2wiki.com/essence/skills/plain_walker/1802_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1802.png",
-        "iconFile": "skill1802.png",
-        "category": "Transformation/Mounting Skills"
       },
       {
         "wikiSkillId": "21",
@@ -8219,27 +7309,6 @@
         "icon": "https://l2wiki.com/upload/images/icon/s_lunar_infusion.png",
         "iconFile": "s_lunar_infusion.png",
         "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54102",
-        "url": "https://l2wiki.com/essence/skills/werewolf_3/54102_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/white_knight_suit.png",
-        "iconFile": "white_knight_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54231",
-        "url": "https://l2wiki.com/essence/skills/werewolf_3/54231_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/dragon_slayer_suit.png",
-        "iconFile": "dragon_slayer_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "45190",
-        "url": "https://l2wiki.com/essence/skills/werewolf_3/45190_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill19203.png",
-        "iconFile": "skill19203.png",
-        "category": "Other Skills - Active"
       },
       {
         "wikiSkillId": "45361",
@@ -8462,41 +7531,6 @@
         "category": "Debuff/ Anomaly skill"
       },
       {
-        "wikiSkillId": "1834",
-        "url": "https://l2wiki.com/essence/skills/evas_templar/1834_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1834.png",
-        "iconFile": "skill1834.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54102",
-        "url": "https://l2wiki.com/essence/skills/evas_templar/54102_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/white_knight_suit.png",
-        "iconFile": "white_knight_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54231",
-        "url": "https://l2wiki.com/essence/skills/evas_templar/54231_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/dragon_slayer_suit.png",
-        "iconFile": "dragon_slayer_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54200",
-        "url": "https://l2wiki.com/essence/skills/evas_templar/54200_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/warhorse_vehicle.png",
-        "iconFile": "warhorse_vehicle.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54202",
-        "url": "https://l2wiki.com/essence/skills/evas_templar/54202_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill8607.png",
-        "iconFile": "skill8607.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
         "wikiSkillId": "341",
         "url": "https://l2wiki.com/essence/skills/evas_templar/341_1_0.html",
         "icon": "https://l2wiki.com/upload/images/icon/skill0341.png",
@@ -8515,13 +7549,6 @@
         "url": "https://l2wiki.com/essence/skills/evas_templar/28_50_0.html",
         "icon": "https://l2wiki.com/upload/images/icon/skill0028.png",
         "iconFile": "skill0028.png",
-        "category": "Other Skills - Active"
-      },
-      {
-        "wikiSkillId": "45190",
-        "url": "https://l2wiki.com/essence/skills/evas_templar/45190_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill19203.png",
-        "iconFile": "skill19203.png",
         "category": "Other Skills - Active"
       },
       {
@@ -8696,41 +7723,6 @@
         "category": "Debuff/ Anomaly skill"
       },
       {
-        "wikiSkillId": "1834",
-        "url": "https://l2wiki.com/essence/skills/elemental_master/1834_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1834.png",
-        "iconFile": "skill1834.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54102",
-        "url": "https://l2wiki.com/essence/skills/elemental_master/54102_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/white_knight_suit.png",
-        "iconFile": "white_knight_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54231",
-        "url": "https://l2wiki.com/essence/skills/elemental_master/54231_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/dragon_slayer_suit.png",
-        "iconFile": "dragon_slayer_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54200",
-        "url": "https://l2wiki.com/essence/skills/elemental_master/54200_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/warhorse_vehicle.png",
-        "iconFile": "warhorse_vehicle.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54202",
-        "url": "https://l2wiki.com/essence/skills/elemental_master/54202_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill8607.png",
-        "iconFile": "skill8607.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
         "wikiSkillId": "47912",
         "url": "https://l2wiki.com/essence/skills/elemental_master/47912_1_0.html",
         "icon": "https://l2wiki.com/upload/images/icon/skill10073_2.png",
@@ -8750,13 +7742,6 @@
         "icon": "https://l2wiki.com/upload/images/icon/s_elemental_shift.png",
         "iconFile": "s_elemental_shift.png",
         "category": "Summoning Skills"
-      },
-      {
-        "wikiSkillId": "45190",
-        "url": "https://l2wiki.com/essence/skills/elemental_master/45190_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill19203.png",
-        "iconFile": "skill19203.png",
-        "category": "Other Skills - Active"
       },
       {
         "wikiSkillId": "88282",
@@ -9021,27 +8006,6 @@
         "category": "Debuff/ Anomaly skill"
       },
       {
-        "wikiSkillId": "1800",
-        "url": "https://l2wiki.com/essence/skills/elemental_summoner/1800_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1800.png",
-        "iconFile": "skill1800.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1801",
-        "url": "https://l2wiki.com/essence/skills/elemental_summoner/1801_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1801.png",
-        "iconFile": "skill1801.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1802",
-        "url": "https://l2wiki.com/essence/skills/elemental_summoner/1802_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1802.png",
-        "iconFile": "skill1802.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
         "wikiSkillId": "88291",
         "url": "https://l2wiki.com/essence/skills/elemental_summoner/88291_1_0.html",
         "icon": "https://l2wiki.com/upload/images/icon/s_elemental_unicorn_1st.png",
@@ -9246,41 +8210,6 @@
         "icon": "https://l2wiki.com/upload/images/icon/skill0213.png",
         "iconFile": "skill0213.png",
         "category": "Buffs"
-      },
-      {
-        "wikiSkillId": "1834",
-        "url": "https://l2wiki.com/essence/skills/moonlight_sentinel/1834_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1834.png",
-        "iconFile": "skill1834.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54102",
-        "url": "https://l2wiki.com/essence/skills/moonlight_sentinel/54102_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/white_knight_suit.png",
-        "iconFile": "white_knight_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54231",
-        "url": "https://l2wiki.com/essence/skills/moonlight_sentinel/54231_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/dragon_slayer_suit.png",
-        "iconFile": "dragon_slayer_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54200",
-        "url": "https://l2wiki.com/essence/skills/moonlight_sentinel/54200_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/warhorse_vehicle.png",
-        "iconFile": "warhorse_vehicle.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54202",
-        "url": "https://l2wiki.com/essence/skills/moonlight_sentinel/54202_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill8607.png",
-        "iconFile": "skill8607.png",
-        "category": "Transformation/Mounting Skills"
       },
       {
         "wikiSkillId": "53005",
@@ -9555,27 +8484,6 @@
         "category": "Debuff/ Anomaly skill"
       },
       {
-        "wikiSkillId": "1800",
-        "url": "https://l2wiki.com/essence/skills/spellsinger/1800_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1800.png",
-        "iconFile": "skill1800.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1801",
-        "url": "https://l2wiki.com/essence/skills/spellsinger/1801_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1801.png",
-        "iconFile": "skill1801.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1802",
-        "url": "https://l2wiki.com/essence/skills/spellsinger/1802_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1802.png",
-        "iconFile": "skill1802.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
         "wikiSkillId": "1157",
         "url": "https://l2wiki.com/essence/skills/spellsinger/1157_2_0.html",
         "icon": "https://l2wiki.com/upload/images/icon/skill1157.png",
@@ -9675,27 +8583,6 @@
         "icon": "https://l2wiki.com/upload/images/icon/skill0413.png",
         "iconFile": "skill0413.png",
         "category": "Buffs"
-      },
-      {
-        "wikiSkillId": "1800",
-        "url": "https://l2wiki.com/essence/skills/silver_ranger/1800_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1800.png",
-        "iconFile": "skill1800.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1801",
-        "url": "https://l2wiki.com/essence/skills/silver_ranger/1801_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1801.png",
-        "iconFile": "skill1801.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1802",
-        "url": "https://l2wiki.com/essence/skills/silver_ranger/1802_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1802.png",
-        "iconFile": "skill1802.png",
-        "category": "Transformation/Mounting Skills"
       },
       {
         "wikiSkillId": "21",
@@ -9839,27 +8726,6 @@
         "icon": "https://l2wiki.com/upload/images/icon/skill1201.png",
         "iconFile": "skill1201.png",
         "category": "Debuff/ Anomaly skill"
-      },
-      {
-        "wikiSkillId": "1800",
-        "url": "https://l2wiki.com/essence/skills/elder/1800_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1800.png",
-        "iconFile": "skill1800.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1801",
-        "url": "https://l2wiki.com/essence/skills/elder/1801_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1801.png",
-        "iconFile": "skill1801.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1802",
-        "url": "https://l2wiki.com/essence/skills/elder/1802_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1802.png",
-        "iconFile": "skill1802.png",
-        "category": "Transformation/Mounting Skills"
       },
       {
         "wikiSkillId": "1217",
@@ -10145,53 +9011,11 @@
         "category": "Debuff/ Anomaly skill"
       },
       {
-        "wikiSkillId": "1834",
-        "url": "https://l2wiki.com/essence/skills/mystic_muse/1834_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1834.png",
-        "iconFile": "skill1834.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54102",
-        "url": "https://l2wiki.com/essence/skills/mystic_muse/54102_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/white_knight_suit.png",
-        "iconFile": "white_knight_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54231",
-        "url": "https://l2wiki.com/essence/skills/mystic_muse/54231_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/dragon_slayer_suit.png",
-        "iconFile": "dragon_slayer_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54200",
-        "url": "https://l2wiki.com/essence/skills/mystic_muse/54200_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/warhorse_vehicle.png",
-        "iconFile": "warhorse_vehicle.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54202",
-        "url": "https://l2wiki.com/essence/skills/mystic_muse/54202_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill8607.png",
-        "iconFile": "skill8607.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
         "wikiSkillId": "1157",
         "url": "https://l2wiki.com/essence/skills/mystic_muse/1157_6_0.html",
         "icon": "https://l2wiki.com/upload/images/icon/skill1157.png",
         "iconFile": "skill1157.png",
         "category": "Recovery Skills"
-      },
-      {
-        "wikiSkillId": "45190",
-        "url": "https://l2wiki.com/essence/skills/mystic_muse/45190_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill19203.png",
-        "iconFile": "skill19203.png",
-        "category": "Other Skills - Active"
       },
       {
         "wikiSkillId": "87073",
@@ -10466,46 +9290,11 @@
         "category": "Transformation/Mounting Skills"
       },
       {
-        "wikiSkillId": "54207",
-        "url": "https://l2wiki.com/essence/skills/elf_deathknight_3/54207_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/riding_knightmare.png",
-        "iconFile": "riding_knightmare.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54231",
-        "url": "https://l2wiki.com/essence/skills/elf_deathknight_3/54231_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/dragon_slayer_suit.png",
-        "iconFile": "dragon_slayer_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54200",
-        "url": "https://l2wiki.com/essence/skills/elf_deathknight_3/54200_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/warhorse_vehicle.png",
-        "iconFile": "warhorse_vehicle.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54202",
-        "url": "https://l2wiki.com/essence/skills/elf_deathknight_3/54202_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill8607.png",
-        "iconFile": "skill8607.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
         "wikiSkillId": "45389",
         "url": "https://l2wiki.com/essence/skills/elf_deathknight_3/45389_1_0.html",
         "icon": "https://l2wiki.com/upload/images/icon/consume.png",
         "iconFile": "consume.png",
         "category": "Recovery Skills"
-      },
-      {
-        "wikiSkillId": "45190",
-        "url": "https://l2wiki.com/essence/skills/elf_deathknight_3/45190_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill19203.png",
-        "iconFile": "skill19203.png",
-        "category": "Other Skills - Active"
       },
       {
         "wikiSkillId": "45361",
@@ -10656,27 +9445,6 @@
         "icon": "https://l2wiki.com/upload/images/icon/skill0122.png",
         "iconFile": "skill0122.png",
         "category": "Debuff/ Anomaly skill"
-      },
-      {
-        "wikiSkillId": "1800",
-        "url": "https://l2wiki.com/essence/skills/shillien_knight/1800_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1800.png",
-        "iconFile": "skill1800.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1801",
-        "url": "https://l2wiki.com/essence/skills/shillien_knight/1801_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1801.png",
-        "iconFile": "skill1801.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1802",
-        "url": "https://l2wiki.com/essence/skills/shillien_knight/1802_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1802.png",
-        "iconFile": "skill1802.png",
-        "category": "Transformation/Mounting Skills"
       },
       {
         "wikiSkillId": "18",
@@ -10892,41 +9660,6 @@
         "category": "Debuff/ Anomaly skill"
       },
       {
-        "wikiSkillId": "1834",
-        "url": "https://l2wiki.com/essence/skills/evas_saint/1834_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1834.png",
-        "iconFile": "skill1834.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54102",
-        "url": "https://l2wiki.com/essence/skills/evas_saint/54102_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/white_knight_suit.png",
-        "iconFile": "white_knight_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54231",
-        "url": "https://l2wiki.com/essence/skills/evas_saint/54231_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/dragon_slayer_suit.png",
-        "iconFile": "dragon_slayer_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54200",
-        "url": "https://l2wiki.com/essence/skills/evas_saint/54200_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/warhorse_vehicle.png",
-        "iconFile": "warhorse_vehicle.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54202",
-        "url": "https://l2wiki.com/essence/skills/evas_saint/54202_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill8607.png",
-        "iconFile": "skill8607.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
         "wikiSkillId": "1552",
         "url": "https://l2wiki.com/essence/skills/evas_saint/1552_1_0.html",
         "icon": "https://l2wiki.com/upload/images/icon/skill1552.png",
@@ -10966,13 +9699,6 @@
         "url": "https://l2wiki.com/essence/skills/evas_saint/1550_1_0.html",
         "icon": "https://l2wiki.com/upload/images/icon/skill1550.png",
         "iconFile": "skill1550.png",
-        "category": "Other Skills - Active"
-      },
-      {
-        "wikiSkillId": "45190",
-        "url": "https://l2wiki.com/essence/skills/evas_saint/45190_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill19203.png",
-        "iconFile": "skill19203.png",
         "category": "Other Skills - Active"
       },
       {
@@ -11400,27 +10126,6 @@
         "icon": "https://l2wiki.com/upload/images/icon/skill0403.png",
         "iconFile": "skill0403.png",
         "category": "Debuff/ Anomaly skill"
-      },
-      {
-        "wikiSkillId": "1800",
-        "url": "https://l2wiki.com/essence/skills/bladedancer/1800_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1800.png",
-        "iconFile": "skill1800.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1801",
-        "url": "https://l2wiki.com/essence/skills/bladedancer/1801_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1801.png",
-        "iconFile": "skill1801.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1802",
-        "url": "https://l2wiki.com/essence/skills/bladedancer/1802_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1802.png",
-        "iconFile": "skill1802.png",
-        "category": "Transformation/Mounting Skills"
       }
     ]
   },
@@ -11768,41 +10473,6 @@
         "category": "Debuff/ Anomaly skill"
       },
       {
-        "wikiSkillId": "1835",
-        "url": "https://l2wiki.com/essence/skills/shillien_templar/1835_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1835.png",
-        "iconFile": "skill1835.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54102",
-        "url": "https://l2wiki.com/essence/skills/shillien_templar/54102_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/white_knight_suit.png",
-        "iconFile": "white_knight_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54231",
-        "url": "https://l2wiki.com/essence/skills/shillien_templar/54231_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/dragon_slayer_suit.png",
-        "iconFile": "dragon_slayer_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54200",
-        "url": "https://l2wiki.com/essence/skills/shillien_templar/54200_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/warhorse_vehicle.png",
-        "iconFile": "warhorse_vehicle.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54202",
-        "url": "https://l2wiki.com/essence/skills/shillien_templar/54202_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill8607.png",
-        "iconFile": "skill8607.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
         "wikiSkillId": "18",
         "url": "https://l2wiki.com/essence/skills/shillien_templar/18_38_0.html",
         "icon": "https://l2wiki.com/upload/images/icon/skill0018.png",
@@ -11814,13 +10484,6 @@
         "url": "https://l2wiki.com/essence/skills/shillien_templar/28_50_0.html",
         "icon": "https://l2wiki.com/upload/images/icon/skill0028.png",
         "iconFile": "skill0028.png",
-        "category": "Other Skills - Active"
-      },
-      {
-        "wikiSkillId": "45190",
-        "url": "https://l2wiki.com/essence/skills/shillien_templar/45190_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill19203.png",
-        "iconFile": "skill19203.png",
         "category": "Other Skills - Active"
       },
       {
@@ -11923,27 +10586,6 @@
         "icon": "https://l2wiki.com/upload/images/icon/skill0414.png",
         "iconFile": "skill0414.png",
         "category": "Buffs"
-      },
-      {
-        "wikiSkillId": "1800",
-        "url": "https://l2wiki.com/essence/skills/phantom_ranger/1800_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1800.png",
-        "iconFile": "skill1800.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1801",
-        "url": "https://l2wiki.com/essence/skills/phantom_ranger/1801_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1801.png",
-        "iconFile": "skill1801.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1802",
-        "url": "https://l2wiki.com/essence/skills/phantom_ranger/1802_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1802.png",
-        "iconFile": "skill1802.png",
-        "category": "Transformation/Mounting Skills"
       }
     ]
   },
@@ -12129,48 +10771,6 @@
         "icon": "https://l2wiki.com/upload/images/icon/skill10520.png",
         "iconFile": "skill10520.png",
         "category": "Debuff/ Anomaly skill"
-      },
-      {
-        "wikiSkillId": "1835",
-        "url": "https://l2wiki.com/essence/skills/ghost_hunter/1835_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1835.png",
-        "iconFile": "skill1835.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54102",
-        "url": "https://l2wiki.com/essence/skills/ghost_hunter/54102_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/white_knight_suit.png",
-        "iconFile": "white_knight_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54231",
-        "url": "https://l2wiki.com/essence/skills/ghost_hunter/54231_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/dragon_slayer_suit.png",
-        "iconFile": "dragon_slayer_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54200",
-        "url": "https://l2wiki.com/essence/skills/ghost_hunter/54200_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/warhorse_vehicle.png",
-        "iconFile": "warhorse_vehicle.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54202",
-        "url": "https://l2wiki.com/essence/skills/ghost_hunter/54202_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill8607.png",
-        "iconFile": "skill8607.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "45190",
-        "url": "https://l2wiki.com/essence/skills/ghost_hunter/45190_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill19203.png",
-        "iconFile": "skill19203.png",
-        "category": "Other Skills - Active"
       },
       {
         "wikiSkillId": "1631",
@@ -12386,53 +10986,11 @@
         "category": "Debuff/ Anomaly skill"
       },
       {
-        "wikiSkillId": "1835",
-        "url": "https://l2wiki.com/essence/skills/storm_screamer/1835_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1835.png",
-        "iconFile": "skill1835.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54102",
-        "url": "https://l2wiki.com/essence/skills/storm_screamer/54102_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/white_knight_suit.png",
-        "iconFile": "white_knight_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54231",
-        "url": "https://l2wiki.com/essence/skills/storm_screamer/54231_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/dragon_slayer_suit.png",
-        "iconFile": "dragon_slayer_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54200",
-        "url": "https://l2wiki.com/essence/skills/storm_screamer/54200_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/warhorse_vehicle.png",
-        "iconFile": "warhorse_vehicle.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54202",
-        "url": "https://l2wiki.com/essence/skills/storm_screamer/54202_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill8607.png",
-        "iconFile": "skill8607.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
         "wikiSkillId": "1157",
         "url": "https://l2wiki.com/essence/skills/storm_screamer/1157_6_0.html",
         "icon": "https://l2wiki.com/upload/images/icon/skill1157.png",
         "iconFile": "skill1157.png",
         "category": "Recovery Skills"
-      },
-      {
-        "wikiSkillId": "45190",
-        "url": "https://l2wiki.com/essence/skills/storm_screamer/45190_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill19203.png",
-        "iconFile": "skill19203.png",
-        "category": "Other Skills - Active"
       },
       {
         "wikiSkillId": "45361",
@@ -12606,48 +11164,6 @@
         "category": "Debuff/ Anomaly skill"
       },
       {
-        "wikiSkillId": "1835",
-        "url": "https://l2wiki.com/essence/skills/spectral_dancer/1835_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1835.png",
-        "iconFile": "skill1835.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54102",
-        "url": "https://l2wiki.com/essence/skills/spectral_dancer/54102_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/white_knight_suit.png",
-        "iconFile": "white_knight_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54231",
-        "url": "https://l2wiki.com/essence/skills/spectral_dancer/54231_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/dragon_slayer_suit.png",
-        "iconFile": "dragon_slayer_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54200",
-        "url": "https://l2wiki.com/essence/skills/spectral_dancer/54200_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/warhorse_vehicle.png",
-        "iconFile": "warhorse_vehicle.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54202",
-        "url": "https://l2wiki.com/essence/skills/spectral_dancer/54202_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill8607.png",
-        "iconFile": "skill8607.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "45190",
-        "url": "https://l2wiki.com/essence/skills/spectral_dancer/45190_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill19203.png",
-        "iconFile": "skill19203.png",
-        "category": "Other Skills - Active"
-      },
-      {
         "wikiSkillId": "45361",
         "url": "https://l2wiki.com/essence/skills/spectral_dancer/45361_1_0.html",
         "icon": "https://l2wiki.com/upload/images/icon/skill1288.png",
@@ -12775,27 +11291,6 @@
         "icon": "https://l2wiki.com/upload/images/icon/skill19191.png",
         "iconFile": "skill19191.png",
         "category": "Debuff/ Anomaly skill"
-      },
-      {
-        "wikiSkillId": "1800",
-        "url": "https://l2wiki.com/essence/skills/spellhowler/1800_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1800.png",
-        "iconFile": "skill1800.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1801",
-        "url": "https://l2wiki.com/essence/skills/spellhowler/1801_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1801.png",
-        "iconFile": "skill1801.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1802",
-        "url": "https://l2wiki.com/essence/skills/spellhowler/1802_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1802.png",
-        "iconFile": "skill1802.png",
-        "category": "Transformation/Mounting Skills"
       },
       {
         "wikiSkillId": "1157",
@@ -13272,41 +11767,6 @@
         "category": "Buffs"
       },
       {
-        "wikiSkillId": "1835",
-        "url": "https://l2wiki.com/essence/skills/ghost_sentinel/1835_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1835.png",
-        "iconFile": "skill1835.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54102",
-        "url": "https://l2wiki.com/essence/skills/ghost_sentinel/54102_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/white_knight_suit.png",
-        "iconFile": "white_knight_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54231",
-        "url": "https://l2wiki.com/essence/skills/ghost_sentinel/54231_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/dragon_slayer_suit.png",
-        "iconFile": "dragon_slayer_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54200",
-        "url": "https://l2wiki.com/essence/skills/ghost_sentinel/54200_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/warhorse_vehicle.png",
-        "iconFile": "warhorse_vehicle.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54202",
-        "url": "https://l2wiki.com/essence/skills/ghost_sentinel/54202_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill8607.png",
-        "iconFile": "skill8607.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
         "wikiSkillId": "53005",
         "url": "https://l2wiki.com/essence/skills/ghost_sentinel/53005_1_0.html",
         "icon": "https://l2wiki.com/upload/images/icon/skill53005.png",
@@ -13427,27 +11887,6 @@
         "icon": "https://l2wiki.com/upload/images/icon/skill10520.png",
         "iconFile": "skill10520.png",
         "category": "Debuff/ Anomaly skill"
-      },
-      {
-        "wikiSkillId": "1800",
-        "url": "https://l2wiki.com/essence/skills/abyss_walker/1800_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1800.png",
-        "iconFile": "skill1800.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1801",
-        "url": "https://l2wiki.com/essence/skills/abyss_walker/1801_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1801.png",
-        "iconFile": "skill1801.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1802",
-        "url": "https://l2wiki.com/essence/skills/abyss_walker/1802_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1802.png",
-        "iconFile": "skill1802.png",
-        "category": "Transformation/Mounting Skills"
       },
       {
         "wikiSkillId": "27",
@@ -13586,41 +12025,6 @@
         "category": "Debuff/ Anomaly skill"
       },
       {
-        "wikiSkillId": "1835",
-        "url": "https://l2wiki.com/essence/skills/spectral_master/1835_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1835.png",
-        "iconFile": "skill1835.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54102",
-        "url": "https://l2wiki.com/essence/skills/spectral_master/54102_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/white_knight_suit.png",
-        "iconFile": "white_knight_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54231",
-        "url": "https://l2wiki.com/essence/skills/spectral_master/54231_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/dragon_slayer_suit.png",
-        "iconFile": "dragon_slayer_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54200",
-        "url": "https://l2wiki.com/essence/skills/spectral_master/54200_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/warhorse_vehicle.png",
-        "iconFile": "warhorse_vehicle.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54202",
-        "url": "https://l2wiki.com/essence/skills/spectral_master/54202_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill8607.png",
-        "iconFile": "skill8607.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
         "wikiSkillId": "1126",
         "url": "https://l2wiki.com/essence/skills/spectral_master/1126_35_0.html",
         "icon": "https://l2wiki.com/upload/images/icon/skill1126.png",
@@ -13703,13 +12107,6 @@
         "icon": "https://l2wiki.com/upload/images/icon/skill1348.png",
         "iconFile": "skill1348.png",
         "category": "Summoning Skills"
-      },
-      {
-        "wikiSkillId": "45190",
-        "url": "https://l2wiki.com/essence/skills/spectral_master/45190_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill19203.png",
-        "iconFile": "skill19203.png",
-        "category": "Other Skills - Active"
       },
       {
         "wikiSkillId": "45361",
@@ -14242,46 +12639,11 @@
         "category": "Transformation/Mounting Skills"
       },
       {
-        "wikiSkillId": "54207",
-        "url": "https://l2wiki.com/essence/skills/delf_deathknight_3/54207_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/riding_knightmare.png",
-        "iconFile": "riding_knightmare.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54231",
-        "url": "https://l2wiki.com/essence/skills/delf_deathknight_3/54231_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/dragon_slayer_suit.png",
-        "iconFile": "dragon_slayer_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54200",
-        "url": "https://l2wiki.com/essence/skills/delf_deathknight_3/54200_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/warhorse_vehicle.png",
-        "iconFile": "warhorse_vehicle.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54202",
-        "url": "https://l2wiki.com/essence/skills/delf_deathknight_3/54202_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill8607.png",
-        "iconFile": "skill8607.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
         "wikiSkillId": "45389",
         "url": "https://l2wiki.com/essence/skills/delf_deathknight_3/45389_1_0.html",
         "icon": "https://l2wiki.com/upload/images/icon/consume.png",
         "iconFile": "consume.png",
         "category": "Recovery Skills"
-      },
-      {
-        "wikiSkillId": "45190",
-        "url": "https://l2wiki.com/essence/skills/delf_deathknight_3/45190_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill19203.png",
-        "iconFile": "skill19203.png",
-        "category": "Other Skills - Active"
       },
       {
         "wikiSkillId": "45361",
@@ -14407,13 +12769,6 @@
         "icon": "https://l2wiki.com/upload/images/icon/s_assassin_swoop_attack.png",
         "iconFile": "s_assassin_swoop_attack.png",
         "category": "Physical Skills"
-      },
-      {
-        "wikiSkillId": "87344",
-        "url": "https://l2wiki.com/essence/skills/secret_assassin_female_0/87344_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/s_assassin_armor_change.png",
-        "iconFile": "s_assassin_armor_change.png",
-        "category": "Other Skills - Active"
       }
     ]
   },
@@ -14552,27 +12907,6 @@
         "category": "Debuff/ Anomaly skill"
       },
       {
-        "wikiSkillId": "1800",
-        "url": "https://l2wiki.com/essence/skills/shillien_elder/1800_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1800.png",
-        "iconFile": "skill1800.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1801",
-        "url": "https://l2wiki.com/essence/skills/shillien_elder/1801_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1801.png",
-        "iconFile": "skill1801.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1802",
-        "url": "https://l2wiki.com/essence/skills/shillien_elder/1802_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1802.png",
-        "iconFile": "skill1802.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
         "wikiSkillId": "1217",
         "url": "https://l2wiki.com/essence/skills/shillien_elder/1217_1_0.html",
         "icon": "https://l2wiki.com/upload/images/icon/skill1217.png",
@@ -14707,27 +13041,6 @@
         "icon": "https://l2wiki.com/upload/images/icon/skill1206.png",
         "iconFile": "skill1206.png",
         "category": "Debuff/ Anomaly skill"
-      },
-      {
-        "wikiSkillId": "1800",
-        "url": "https://l2wiki.com/essence/skills/phantom_summoner/1800_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1800.png",
-        "iconFile": "skill1800.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1801",
-        "url": "https://l2wiki.com/essence/skills/phantom_summoner/1801_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1801.png",
-        "iconFile": "skill1801.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1802",
-        "url": "https://l2wiki.com/essence/skills/phantom_summoner/1802_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1802.png",
-        "iconFile": "skill1802.png",
-        "category": "Transformation/Mounting Skills"
       },
       {
         "wikiSkillId": "1126",
@@ -15027,41 +13340,6 @@
         "category": "Debuff/ Anomaly skill"
       },
       {
-        "wikiSkillId": "1835",
-        "url": "https://l2wiki.com/essence/skills/shillien_saint/1835_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1835.png",
-        "iconFile": "skill1835.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54102",
-        "url": "https://l2wiki.com/essence/skills/shillien_saint/54102_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/white_knight_suit.png",
-        "iconFile": "white_knight_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54231",
-        "url": "https://l2wiki.com/essence/skills/shillien_saint/54231_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/dragon_slayer_suit.png",
-        "iconFile": "dragon_slayer_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54200",
-        "url": "https://l2wiki.com/essence/skills/shillien_saint/54200_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/warhorse_vehicle.png",
-        "iconFile": "warhorse_vehicle.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54202",
-        "url": "https://l2wiki.com/essence/skills/shillien_saint/54202_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill8607.png",
-        "iconFile": "skill8607.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
         "wikiSkillId": "1428",
         "url": "https://l2wiki.com/essence/skills/shillien_saint/1428_6_0.html",
         "icon": "https://l2wiki.com/upload/images/icon/skill1428.png",
@@ -15080,13 +13358,6 @@
         "url": "https://l2wiki.com/essence/skills/shillien_saint/1551_1_0.html",
         "icon": "https://l2wiki.com/upload/images/icon/skill1551.png",
         "iconFile": "skill1551.png",
-        "category": "Other Skills - Active"
-      },
-      {
-        "wikiSkillId": "45190",
-        "url": "https://l2wiki.com/essence/skills/shillien_saint/45190_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill19203.png",
-        "iconFile": "skill19203.png",
         "category": "Other Skills - Active"
       },
       {
@@ -15252,48 +13523,6 @@
         "icon": "https://l2wiki.com/upload/images/icon/skill0213.png",
         "iconFile": "skill0213.png",
         "category": "Buffs"
-      },
-      {
-        "wikiSkillId": "1835",
-        "url": "https://l2wiki.com/essence/skills/rose_vain_3/1835_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1835.png",
-        "iconFile": "skill1835.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54102",
-        "url": "https://l2wiki.com/essence/skills/rose_vain_3/54102_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/white_knight_suit.png",
-        "iconFile": "white_knight_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54231",
-        "url": "https://l2wiki.com/essence/skills/rose_vain_3/54231_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/dragon_slayer_suit.png",
-        "iconFile": "dragon_slayer_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54200",
-        "url": "https://l2wiki.com/essence/skills/rose_vain_3/54200_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/warhorse_vehicle.png",
-        "iconFile": "warhorse_vehicle.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54202",
-        "url": "https://l2wiki.com/essence/skills/rose_vain_3/54202_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill8607.png",
-        "iconFile": "skill8607.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "45190",
-        "url": "https://l2wiki.com/essence/skills/rose_vain_3/45190_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill19203.png",
-        "iconFile": "skill19203.png",
-        "category": "Other Skills - Active"
       },
       {
         "wikiSkillId": "88587",
@@ -15491,27 +13720,6 @@
         "category": "Buffs"
       },
       {
-        "wikiSkillId": "1800",
-        "url": "https://l2wiki.com/essence/skills/destroyer/1800_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1800.png",
-        "iconFile": "skill1800.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1801",
-        "url": "https://l2wiki.com/essence/skills/destroyer/1801_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1801.png",
-        "iconFile": "skill1801.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1802",
-        "url": "https://l2wiki.com/essence/skills/destroyer/1802_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1802.png",
-        "iconFile": "skill1802.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
         "wikiSkillId": "34",
         "url": "https://l2wiki.com/essence/skills/destroyer/34_2_0.html",
         "icon": "https://l2wiki.com/upload/images/icon/skill0034.png",
@@ -15670,13 +13878,6 @@
         "icon": "https://l2wiki.com/upload/images/icon/s_rose_spine.png",
         "iconFile": "s_rose_spine.png",
         "category": "Magic Skills"
-      },
-      {
-        "wikiSkillId": "88595",
-        "url": "https://l2wiki.com/essence/skills/rose_vain_0/88595_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/s_rose_armor_change.png",
-        "iconFile": "s_rose_armor_change.png",
-        "category": "Other Skills - Active"
       }
     ]
   },
@@ -16104,41 +14305,6 @@
         "category": "Transformation/Mounting Skills"
       },
       {
-        "wikiSkillId": "54102",
-        "url": "https://l2wiki.com/essence/skills/secret_assassin_female_3/54102_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/white_knight_suit.png",
-        "iconFile": "white_knight_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54231",
-        "url": "https://l2wiki.com/essence/skills/secret_assassin_female_3/54231_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/dragon_slayer_suit.png",
-        "iconFile": "dragon_slayer_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54200",
-        "url": "https://l2wiki.com/essence/skills/secret_assassin_female_3/54200_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/warhorse_vehicle.png",
-        "iconFile": "warhorse_vehicle.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54202",
-        "url": "https://l2wiki.com/essence/skills/secret_assassin_female_3/54202_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill8607.png",
-        "iconFile": "skill8607.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "45190",
-        "url": "https://l2wiki.com/essence/skills/secret_assassin_female_3/45190_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill19203.png",
-        "iconFile": "skill19203.png",
-        "category": "Other Skills - Active"
-      },
-      {
         "wikiSkillId": "87323",
         "url": "https://l2wiki.com/essence/skills/secret_assassin_female_3/87323_1_0.html",
         "icon": "https://l2wiki.com/upload/images/icon/s_assassin_back_dash.png",
@@ -16516,53 +14682,11 @@
         "category": "Buffs"
       },
       {
-        "wikiSkillId": "1837",
-        "url": "https://l2wiki.com/essence/skills/titan/1837_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1837.png",
-        "iconFile": "skill1837.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54102",
-        "url": "https://l2wiki.com/essence/skills/titan/54102_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/white_knight_suit.png",
-        "iconFile": "white_knight_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54231",
-        "url": "https://l2wiki.com/essence/skills/titan/54231_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/dragon_slayer_suit.png",
-        "iconFile": "dragon_slayer_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54200",
-        "url": "https://l2wiki.com/essence/skills/titan/54200_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/warhorse_vehicle.png",
-        "iconFile": "warhorse_vehicle.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54202",
-        "url": "https://l2wiki.com/essence/skills/titan/54202_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill8607.png",
-        "iconFile": "skill8607.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
         "wikiSkillId": "440",
         "url": "https://l2wiki.com/essence/skills/titan/440_1_0.html",
         "icon": "https://l2wiki.com/upload/images/icon/skill0440.png",
         "iconFile": "skill0440.png",
         "category": "Recovery Skills"
-      },
-      {
-        "wikiSkillId": "45190",
-        "url": "https://l2wiki.com/essence/skills/titan/45190_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill19203.png",
-        "iconFile": "skill19203.png",
-        "category": "Other Skills - Active"
       },
       {
         "wikiSkillId": "45413",
@@ -16876,41 +15000,6 @@
         "category": "Debuff/ Anomaly skill"
       },
       {
-        "wikiSkillId": "1837",
-        "url": "https://l2wiki.com/essence/skills/doomcryer/1837_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1837.png",
-        "iconFile": "skill1837.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54102",
-        "url": "https://l2wiki.com/essence/skills/doomcryer/54102_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/white_knight_suit.png",
-        "iconFile": "white_knight_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54231",
-        "url": "https://l2wiki.com/essence/skills/doomcryer/54231_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/dragon_slayer_suit.png",
-        "iconFile": "dragon_slayer_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54200",
-        "url": "https://l2wiki.com/essence/skills/doomcryer/54200_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/warhorse_vehicle.png",
-        "iconFile": "warhorse_vehicle.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54202",
-        "url": "https://l2wiki.com/essence/skills/doomcryer/54202_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill8607.png",
-        "iconFile": "skill8607.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
         "wikiSkillId": "1610",
         "url": "https://l2wiki.com/essence/skills/doomcryer/1610_21_0.html",
         "icon": "https://l2wiki.com/upload/images/icon/skill1610.png",
@@ -16923,13 +15012,6 @@
         "icon": "https://l2wiki.com/upload/images/icon/cure_of_paagrio.png",
         "iconFile": "cure_of_paagrio.png",
         "category": "Recovery Skills"
-      },
-      {
-        "wikiSkillId": "45190",
-        "url": "https://l2wiki.com/essence/skills/doomcryer/45190_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill19203.png",
-        "iconFile": "skill19203.png",
-        "category": "Other Skills - Active"
       },
       {
         "wikiSkillId": "1429",
@@ -17110,27 +15192,6 @@
         "category": "Debuff/ Anomaly skill"
       },
       {
-        "wikiSkillId": "1800",
-        "url": "https://l2wiki.com/essence/skills/tyrant/1800_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1800.png",
-        "iconFile": "skill1800.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1801",
-        "url": "https://l2wiki.com/essence/skills/tyrant/1801_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1801.png",
-        "iconFile": "skill1801.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1802",
-        "url": "https://l2wiki.com/essence/skills/tyrant/1802_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1802.png",
-        "iconFile": "skill1802.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
         "wikiSkillId": "34",
         "url": "https://l2wiki.com/essence/skills/tyrant/34_2_0.html",
         "icon": "https://l2wiki.com/upload/images/icon/skill0034.png",
@@ -17300,27 +15361,6 @@
         "icon": "https://l2wiki.com/upload/images/icon/skill11598.png",
         "iconFile": "skill11598.png",
         "category": "Debuff/ Anomaly skill"
-      },
-      {
-        "wikiSkillId": "1800",
-        "url": "https://l2wiki.com/essence/skills/warcryer/1800_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1800.png",
-        "iconFile": "skill1800.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1801",
-        "url": "https://l2wiki.com/essence/skills/warcryer/1801_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1801.png",
-        "iconFile": "skill1801.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1802",
-        "url": "https://l2wiki.com/essence/skills/warcryer/1802_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1802.png",
-        "iconFile": "skill1802.png",
-        "category": "Transformation/Mounting Skills"
       },
       {
         "wikiSkillId": "1610",
@@ -17543,41 +15583,6 @@
         "category": "Debuff/ Anomaly skill"
       },
       {
-        "wikiSkillId": "1837",
-        "url": "https://l2wiki.com/essence/skills/dominator/1837_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1837.png",
-        "iconFile": "skill1837.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54102",
-        "url": "https://l2wiki.com/essence/skills/dominator/54102_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/white_knight_suit.png",
-        "iconFile": "white_knight_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54231",
-        "url": "https://l2wiki.com/essence/skills/dominator/54231_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/dragon_slayer_suit.png",
-        "iconFile": "dragon_slayer_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54200",
-        "url": "https://l2wiki.com/essence/skills/dominator/54200_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/warhorse_vehicle.png",
-        "iconFile": "warhorse_vehicle.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54202",
-        "url": "https://l2wiki.com/essence/skills/dominator/54202_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill8607.png",
-        "iconFile": "skill8607.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
         "wikiSkillId": "1305",
         "url": "https://l2wiki.com/essence/skills/dominator/1305_11_0.html",
         "icon": "https://l2wiki.com/upload/images/icon/skill1305.png",
@@ -17604,13 +15609,6 @@
         "icon": "https://l2wiki.com/upload/images/icon/remedy_of_paagrio.png",
         "iconFile": "remedy_of_paagrio.png",
         "category": "Recovery Skills"
-      },
-      {
-        "wikiSkillId": "45190",
-        "url": "https://l2wiki.com/essence/skills/dominator/45190_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill19203.png",
-        "iconFile": "skill19203.png",
-        "category": "Other Skills - Active"
       },
       {
         "wikiSkillId": "45446",
@@ -17833,53 +15831,11 @@
         "category": "Debuff/ Anomaly skill"
       },
       {
-        "wikiSkillId": "1837",
-        "url": "https://l2wiki.com/essence/skills/grand_khavatari/1837_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1837.png",
-        "iconFile": "skill1837.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54102",
-        "url": "https://l2wiki.com/essence/skills/grand_khavatari/54102_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/white_knight_suit.png",
-        "iconFile": "white_knight_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54231",
-        "url": "https://l2wiki.com/essence/skills/grand_khavatari/54231_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/dragon_slayer_suit.png",
-        "iconFile": "dragon_slayer_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54200",
-        "url": "https://l2wiki.com/essence/skills/grand_khavatari/54200_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/warhorse_vehicle.png",
-        "iconFile": "warhorse_vehicle.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54202",
-        "url": "https://l2wiki.com/essence/skills/grand_khavatari/54202_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill8607.png",
-        "iconFile": "skill8607.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
         "wikiSkillId": "440",
         "url": "https://l2wiki.com/essence/skills/grand_khavatari/440_1_0.html",
         "icon": "https://l2wiki.com/upload/images/icon/skill0440.png",
         "iconFile": "skill0440.png",
         "category": "Recovery Skills"
-      },
-      {
-        "wikiSkillId": "45190",
-        "url": "https://l2wiki.com/essence/skills/grand_khavatari/45190_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill19203.png",
-        "iconFile": "skill19203.png",
-        "category": "Other Skills - Active"
       },
       {
         "wikiSkillId": "45439",
@@ -18058,27 +16014,6 @@
         "icon": "https://l2wiki.com/upload/images/icon/skill1248.png",
         "iconFile": "skill1248.png",
         "category": "Debuff/ Anomaly skill"
-      },
-      {
-        "wikiSkillId": "1800",
-        "url": "https://l2wiki.com/essence/skills/overlord/1800_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1800.png",
-        "iconFile": "skill1800.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1801",
-        "url": "https://l2wiki.com/essence/skills/overlord/1801_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1801.png",
-        "iconFile": "skill1801.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1802",
-        "url": "https://l2wiki.com/essence/skills/overlord/1802_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1802.png",
-        "iconFile": "skill1802.png",
-        "category": "Transformation/Mounting Skills"
       },
       {
         "wikiSkillId": "1610",
@@ -18506,41 +16441,6 @@
         "category": "Debuff/ Anomaly skill"
       },
       {
-        "wikiSkillId": "1836",
-        "url": "https://l2wiki.com/essence/skills/fortune_seeker/1836_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1836.png",
-        "iconFile": "skill1836.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54102",
-        "url": "https://l2wiki.com/essence/skills/fortune_seeker/54102_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/white_knight_suit.png",
-        "iconFile": "white_knight_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54231",
-        "url": "https://l2wiki.com/essence/skills/fortune_seeker/54231_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/dragon_slayer_suit.png",
-        "iconFile": "dragon_slayer_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54200",
-        "url": "https://l2wiki.com/essence/skills/fortune_seeker/54200_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/warhorse_vehicle.png",
-        "iconFile": "warhorse_vehicle.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54202",
-        "url": "https://l2wiki.com/essence/skills/fortune_seeker/54202_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill8607.png",
-        "iconFile": "skill8607.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
         "wikiSkillId": "440",
         "url": "https://l2wiki.com/essence/skills/fortune_seeker/440_1_0.html",
         "icon": "https://l2wiki.com/upload/images/icon/skill0440.png",
@@ -18559,13 +16459,6 @@
         "url": "https://l2wiki.com/essence/skills/fortune_seeker/302_10_0.html",
         "icon": "https://l2wiki.com/upload/images/icon/skill0302.png",
         "iconFile": "skill0302.png",
-        "category": "Other Skills - Active"
-      },
-      {
-        "wikiSkillId": "45190",
-        "url": "https://l2wiki.com/essence/skills/fortune_seeker/45190_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill19203.png",
-        "iconFile": "skill19203.png",
         "category": "Other Skills - Active"
       },
       {
@@ -18870,27 +16763,6 @@
         "icon": "https://l2wiki.com/upload/images/icon/skill0286.png",
         "iconFile": "skill0286.png",
         "category": "Debuff/ Anomaly skill"
-      },
-      {
-        "wikiSkillId": "1800",
-        "url": "https://l2wiki.com/essence/skills/bounty_hunter/1800_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1800.png",
-        "iconFile": "skill1800.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1801",
-        "url": "https://l2wiki.com/essence/skills/bounty_hunter/1801_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1801.png",
-        "iconFile": "skill1801.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1802",
-        "url": "https://l2wiki.com/essence/skills/bounty_hunter/1802_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1802.png",
-        "iconFile": "skill1802.png",
-        "category": "Transformation/Mounting Skills"
       },
       {
         "wikiSkillId": "254",
@@ -19266,32 +17138,11 @@
         "category": "Debuff/ Anomaly skill"
       },
       {
-        "wikiSkillId": "54102",
-        "url": "https://l2wiki.com/essence/skills/orc_rider_3/54102_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/white_knight_suit.png",
-        "iconFile": "white_knight_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54231",
-        "url": "https://l2wiki.com/essence/skills/orc_rider_3/54231_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/dragon_slayer_suit.png",
-        "iconFile": "dragon_slayer_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
         "wikiSkillId": "440",
         "url": "https://l2wiki.com/essence/skills/orc_rider_3/440_1_0.html",
         "icon": "https://l2wiki.com/upload/images/icon/skill0440.png",
         "iconFile": "skill0440.png",
         "category": "Recovery Skills"
-      },
-      {
-        "wikiSkillId": "45190",
-        "url": "https://l2wiki.com/essence/skills/orc_rider_3/45190_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill19203.png",
-        "iconFile": "skill19203.png",
-        "category": "Other Skills - Active"
       },
       {
         "wikiSkillId": "45361",
@@ -19400,27 +17251,6 @@
         "icon": "https://l2wiki.com/upload/images/icon/skill0213.png",
         "iconFile": "skill0213.png",
         "category": "Buffs"
-      },
-      {
-        "wikiSkillId": "1800",
-        "url": "https://l2wiki.com/essence/skills/orc_rider_2/1800_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1800.png",
-        "iconFile": "skill1800.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1801",
-        "url": "https://l2wiki.com/essence/skills/orc_rider_2/1801_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1801.png",
-        "iconFile": "skill1801.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1802",
-        "url": "https://l2wiki.com/essence/skills/orc_rider_2/1802_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1802.png",
-        "iconFile": "skill1802.png",
-        "category": "Transformation/Mounting Skills"
       },
       {
         "wikiSkillId": "34",
@@ -19564,27 +17394,6 @@
         "icon": "https://l2wiki.com/upload/images/icon/skill0286.png",
         "iconFile": "skill0286.png",
         "category": "Debuff/ Anomaly skill"
-      },
-      {
-        "wikiSkillId": "1800",
-        "url": "https://l2wiki.com/essence/skills/warsmith/1800_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1800.png",
-        "iconFile": "skill1800.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1801",
-        "url": "https://l2wiki.com/essence/skills/warsmith/1801_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1801.png",
-        "iconFile": "skill1801.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1802",
-        "url": "https://l2wiki.com/essence/skills/warsmith/1802_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1802.png",
-        "iconFile": "skill1802.png",
-        "category": "Transformation/Mounting Skills"
       },
       {
         "wikiSkillId": "822",
@@ -19807,34 +17616,6 @@
         "category": "Buffs"
       },
       {
-        "wikiSkillId": "62002",
-        "url": "https://l2wiki.com/essence/skills/soul_hound/62002_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/griffin_vehicle.png",
-        "iconFile": "griffin_vehicle.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54231",
-        "url": "https://l2wiki.com/essence/skills/soul_hound/54231_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/dragon_slayer_suit.png",
-        "iconFile": "dragon_slayer_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54200",
-        "url": "https://l2wiki.com/essence/skills/soul_hound/54200_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/warhorse_vehicle.png",
-        "iconFile": "warhorse_vehicle.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54202",
-        "url": "https://l2wiki.com/essence/skills/soul_hound/54202_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill8607.png",
-        "iconFile": "skill8607.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
         "wikiSkillId": "89301",
         "url": "https://l2wiki.com/essence/skills/soul_hound/89301_2_0.html",
         "icon": "https://l2wiki.com/upload/images/icon/skill55474.png",
@@ -19847,13 +17628,6 @@
         "icon": "https://l2wiki.com/upload/images/icon/skill55475.png",
         "iconFile": "skill55475.png",
         "category": "Recovery Skills"
-      },
-      {
-        "wikiSkillId": "45190",
-        "url": "https://l2wiki.com/essence/skills/soul_hound/45190_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill19203.png",
-        "iconFile": "skill19203.png",
-        "category": "Other Skills - Active"
       },
       {
         "wikiSkillId": "1448",
@@ -20062,34 +17836,6 @@
         "category": "Debuff/ Anomaly skill"
       },
       {
-        "wikiSkillId": "62002",
-        "url": "https://l2wiki.com/essence/skills/doombringer/62002_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/griffin_vehicle.png",
-        "iconFile": "griffin_vehicle.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54231",
-        "url": "https://l2wiki.com/essence/skills/doombringer/54231_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/dragon_slayer_suit.png",
-        "iconFile": "dragon_slayer_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54200",
-        "url": "https://l2wiki.com/essence/skills/doombringer/54200_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/warhorse_vehicle.png",
-        "iconFile": "warhorse_vehicle.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54202",
-        "url": "https://l2wiki.com/essence/skills/doombringer/54202_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill8607.png",
-        "iconFile": "skill8607.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
         "wikiSkillId": "45151",
         "url": "https://l2wiki.com/essence/skills/doombringer/45151_2_0.html",
         "icon": "https://l2wiki.com/upload/images/icon/skill55474.png",
@@ -20102,13 +17848,6 @@
         "icon": "https://l2wiki.com/upload/images/icon/skill55475.png",
         "iconFile": "skill55475.png",
         "category": "Recovery Skills"
-      },
-      {
-        "wikiSkillId": "45190",
-        "url": "https://l2wiki.com/essence/skills/doombringer/45190_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill19203.png",
-        "iconFile": "skill19203.png",
-        "category": "Other Skills - Active"
       },
       {
         "wikiSkillId": "45361",
@@ -20582,41 +18321,6 @@
         "category": "Debuff/ Anomaly skill"
       },
       {
-        "wikiSkillId": "1836",
-        "url": "https://l2wiki.com/essence/skills/maestro/1836_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1836.png",
-        "iconFile": "skill1836.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54102",
-        "url": "https://l2wiki.com/essence/skills/maestro/54102_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/white_knight_suit.png",
-        "iconFile": "white_knight_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54231",
-        "url": "https://l2wiki.com/essence/skills/maestro/54231_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/dragon_slayer_suit.png",
-        "iconFile": "dragon_slayer_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54200",
-        "url": "https://l2wiki.com/essence/skills/maestro/54200_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/warhorse_vehicle.png",
-        "iconFile": "warhorse_vehicle.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54202",
-        "url": "https://l2wiki.com/essence/skills/maestro/54202_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill8607.png",
-        "iconFile": "skill8607.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
         "wikiSkillId": "25",
         "url": "https://l2wiki.com/essence/skills/maestro/25_10_0.html",
         "icon": "https://l2wiki.com/upload/images/icon/skill0025.png",
@@ -20629,13 +18333,6 @@
         "icon": "https://l2wiki.com/upload/images/icon/skill0440.png",
         "iconFile": "skill0440.png",
         "category": "Recovery Skills"
-      },
-      {
-        "wikiSkillId": "45190",
-        "url": "https://l2wiki.com/essence/skills/maestro/45190_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill19203.png",
-        "iconFile": "skill19203.png",
-        "category": "Other Skills - Active"
       },
       {
         "wikiSkillId": "45361",
@@ -21172,27 +18869,6 @@
         "category": "Debuff/ Anomaly skill"
       },
       {
-        "wikiSkillId": "1800",
-        "url": "https://l2wiki.com/essence/skills/wind_hunter/1800_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1800.png",
-        "iconFile": "skill1800.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1801",
-        "url": "https://l2wiki.com/essence/skills/wind_hunter/1801_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1801.png",
-        "iconFile": "skill1801.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "1802",
-        "url": "https://l2wiki.com/essence/skills/wind_hunter/1802_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill1802.png",
-        "iconFile": "skill1802.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
         "wikiSkillId": "47054",
         "url": "https://l2wiki.com/essence/skills/wind_hunter/47054_1_0.html",
         "icon": "https://l2wiki.com/upload/images/icon/skill11027.png",
@@ -21528,48 +19204,6 @@
         "category": "Debuff/ Anomaly skill"
       },
       {
-        "wikiSkillId": "54225",
-        "url": "https://l2wiki.com/essence/skills/storm_blaster/54225_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/etc_lind_vehicle.png",
-        "iconFile": "etc_lind_vehicle.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54102",
-        "url": "https://l2wiki.com/essence/skills/storm_blaster/54102_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/white_knight_suit.png",
-        "iconFile": "white_knight_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54231",
-        "url": "https://l2wiki.com/essence/skills/storm_blaster/54231_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/dragon_slayer_suit.png",
-        "iconFile": "dragon_slayer_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54200",
-        "url": "https://l2wiki.com/essence/skills/storm_blaster/54200_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/warhorse_vehicle.png",
-        "iconFile": "warhorse_vehicle.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54202",
-        "url": "https://l2wiki.com/essence/skills/storm_blaster/54202_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill8607.png",
-        "iconFile": "skill8607.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "45190",
-        "url": "https://l2wiki.com/essence/skills/storm_blaster/45190_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill19203.png",
-        "iconFile": "skill19203.png",
-        "category": "Other Skills - Active"
-      },
-      {
         "wikiSkillId": "47041",
         "url": "https://l2wiki.com/essence/skills/storm_blaster/47041_1_0.html",
         "icon": "https://l2wiki.com/upload/images/icon/elemental_dragon.png",
@@ -21753,34 +19387,6 @@
         "icon": "https://l2wiki.com/upload/images/icon/skill0213.png",
         "iconFile": "skill0213.png",
         "category": "Buffs"
-      },
-      {
-        "wikiSkillId": "62002",
-        "url": "https://l2wiki.com/essence/skills/trickster/62002_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/griffin_vehicle.png",
-        "iconFile": "griffin_vehicle.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54231",
-        "url": "https://l2wiki.com/essence/skills/trickster/54231_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/dragon_slayer_suit.png",
-        "iconFile": "dragon_slayer_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54200",
-        "url": "https://l2wiki.com/essence/skills/trickster/54200_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/warhorse_vehicle.png",
-        "iconFile": "warhorse_vehicle.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54202",
-        "url": "https://l2wiki.com/essence/skills/trickster/54202_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill8607.png",
-        "iconFile": "skill8607.png",
-        "category": "Transformation/Mounting Skills"
       },
       {
         "wikiSkillId": "45151",
@@ -22161,34 +19767,6 @@
         "url": "https://l2wiki.com/essence/skills/crow_3/54274_1_0.html",
         "icon": "https://l2wiki.com/upload/images/icon/s_umemaru_mount.png",
         "iconFile": "s_umemaru_mount.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54102",
-        "url": "https://l2wiki.com/essence/skills/crow_3/54102_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/white_knight_suit.png",
-        "iconFile": "white_knight_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54231",
-        "url": "https://l2wiki.com/essence/skills/crow_3/54231_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/dragon_slayer_suit.png",
-        "iconFile": "dragon_slayer_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54200",
-        "url": "https://l2wiki.com/essence/skills/crow_3/54200_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/warhorse_vehicle.png",
-        "iconFile": "warhorse_vehicle.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54202",
-        "url": "https://l2wiki.com/essence/skills/crow_3/54202_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill8607.png",
-        "iconFile": "skill8607.png",
         "category": "Transformation/Mounting Skills"
       },
       {
@@ -22584,48 +20162,6 @@
         "category": "Buffs"
       },
       {
-        "wikiSkillId": "54256",
-        "url": "https://l2wiki.com/essence/skills/spirit_3/54256_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/s_highelf_unicon_riding.png",
-        "iconFile": "s_highelf_unicon_riding.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54102",
-        "url": "https://l2wiki.com/essence/skills/spirit_3/54102_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/white_knight_suit.png",
-        "iconFile": "white_knight_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54231",
-        "url": "https://l2wiki.com/essence/skills/spirit_3/54231_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/dragon_slayer_suit.png",
-        "iconFile": "dragon_slayer_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54200",
-        "url": "https://l2wiki.com/essence/skills/spirit_3/54200_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/warhorse_vehicle.png",
-        "iconFile": "warhorse_vehicle.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54202",
-        "url": "https://l2wiki.com/essence/skills/spirit_3/54202_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill8607.png",
-        "iconFile": "skill8607.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "45190",
-        "url": "https://l2wiki.com/essence/skills/spirit_3/45190_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill19203.png",
-        "iconFile": "skill19203.png",
-        "category": "Other Skills - Active"
-      },
-      {
         "wikiSkillId": "87710",
         "url": "https://l2wiki.com/essence/skills/spirit_3/87710_1_0.html",
         "icon": "https://l2wiki.com/upload/images/icon/s_sp_sephiroth.png",
@@ -22850,53 +20386,11 @@
         "category": "Buffs"
       },
       {
-        "wikiSkillId": "54256",
-        "url": "https://l2wiki.com/essence/skills/sacred_templar_3/54256_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/s_highelf_unicon_riding.png",
-        "iconFile": "s_highelf_unicon_riding.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54102",
-        "url": "https://l2wiki.com/essence/skills/sacred_templar_3/54102_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/white_knight_suit.png",
-        "iconFile": "white_knight_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54231",
-        "url": "https://l2wiki.com/essence/skills/sacred_templar_3/54231_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/dragon_slayer_suit.png",
-        "iconFile": "dragon_slayer_suit.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54200",
-        "url": "https://l2wiki.com/essence/skills/sacred_templar_3/54200_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/warhorse_vehicle.png",
-        "iconFile": "warhorse_vehicle.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
-        "wikiSkillId": "54202",
-        "url": "https://l2wiki.com/essence/skills/sacred_templar_3/54202_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill8607.png",
-        "iconFile": "skill8607.png",
-        "category": "Transformation/Mounting Skills"
-      },
-      {
         "wikiSkillId": "87850",
         "url": "https://l2wiki.com/essence/skills/sacred_templar_3/87850_1_0.html",
         "icon": "https://l2wiki.com/upload/images/icon/s_st_sacred_guardian.png",
         "iconFile": "s_st_sacred_guardian.png",
         "category": "Summoning Skills"
-      },
-      {
-        "wikiSkillId": "45190",
-        "url": "https://l2wiki.com/essence/skills/sacred_templar_3/45190_1_0.html",
-        "icon": "https://l2wiki.com/upload/images/icon/skill19203.png",
-        "iconFile": "skill19203.png",
-        "category": "Other Skills - Active"
       },
       {
         "wikiSkillId": "87804",

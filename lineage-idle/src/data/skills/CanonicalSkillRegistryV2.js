@@ -1,8 +1,8 @@
 /**
- * CanonicalSkillRegistryV2.js — Single Source of Truth for Skills (Lineage II Essence - Celestial Destiny 3629)
+ * CanonicalSkillRegistryV2.js � Single Source of Truth for Skills (Lineage II Essence - Celestial Destiny 3629)
  * 
- * Major Version Update V2 — Fully Scraped from L2Wiki Essence.
- * Total Unique Semantic Skills: 761
+ * Major Version Update V2 � Fully Scraped from L2Wiki Essence.
+ * Total Canonical Skills: 761 across 46 Lineages
  * Audited: 100%
  */
 
@@ -23,10 +23,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 5000,
         "desc": "P. Def. +50Max HP +200P. Evasion -4",
         "balance": {
-            "mpCost": 36,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 36,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_majesty",
         "vfxGap": false,
@@ -34,15 +34,15 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "knight",
-            "paladin",
-            "darkAvenger",
-            "elvenKnight",
-            "swordSinger",
-            "palusKnight",
-            "bladeDancer"
+                "knight",
+                "paladin",
+                "darkAvenger",
+                "elvenKnight",
+                "swordSinger",
+                "palusKnight",
+                "bladeDancer"
         ]
-    },
+},
     "haste": {
         "id": "haste",
         "name": "Haste",
@@ -59,10 +59,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Haste",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_haste",
         "vfxGap": false,
@@ -70,89 +70,89 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "warrior",
-            "gladiator",
-            "duelist",
-            "warlord",
-            "dreadnought",
-            "knight",
-            "paladin",
-            "phoenixKnight",
-            "darkAvenger",
-            "hellKnight",
-            "rogue",
-            "treasureHunter",
-            "adventurer",
-            "hawkeye",
-            "sagittarius",
-            "wizard",
-            "sorcerer",
-            "archmage",
-            "necromancer",
-            "soultaker",
-            "warlock",
-            "arcanaLord",
-            "cleric",
-            "bishop",
-            "cardinal",
-            "prophet",
-            "hierophant",
-            "deathBlade",
-            "deathMessenger",
-            "deathKnight",
-            "warg",
-            "assassinS1",
-            "assassinS2",
-            "assassinS3",
-            "elvenKnight",
-            "templeKnight",
-            "evaTemplar",
-            "swordSinger",
-            "swordMuse",
-            "elfScout",
-            "plainsWalker",
-            "windRider",
-            "silverRanger",
-            "moonlightSentinel",
-            "elvenWizard",
-            "spellsinger",
-            "mysticMuse",
-            "elementalSummoner",
-            "elementalMaster",
-            "elfOracle",
-            "elfElder",
-            "evaSaint",
-            "palusKnight",
-            "shillienKnight",
-            "shillienTemplar",
-            "bladeDancer",
-            "spectralDancer",
-            "abyssWalker",
-            "ghostHunter",
-            "phantomRanger",
-            "ghostSentinel",
-            "darkWizard",
-            "spellhowler",
-            "stormScreamer",
-            "phantomSummoner",
-            "spectralMaster",
-            "shillienOracle",
-            "shillienElder",
-            "shillienSaint",
-            "bloodRoseS1",
-            "bloodRoseS2",
-            "bloodRose",
-            "lightTemplar",
-            "holyTemplar",
-            "divineTemplar",
-            "elementWeaverS1",
-            "elementWeaverS2",
-            "elementWeaver",
-            "sayhaSeer",
-            "windRiderErth",
-            "sayhaSeeker"
+                "warrior",
+                "gladiator",
+                "duelist",
+                "warlord",
+                "dreadnought",
+                "knight",
+                "paladin",
+                "phoenixKnight",
+                "darkAvenger",
+                "hellKnight",
+                "rogue",
+                "treasureHunter",
+                "adventurer",
+                "hawkeye",
+                "sagittarius",
+                "wizard",
+                "sorcerer",
+                "archmage",
+                "necromancer",
+                "soultaker",
+                "warlock",
+                "arcanaLord",
+                "cleric",
+                "bishop",
+                "cardinal",
+                "prophet",
+                "hierophant",
+                "deathBlade",
+                "deathMessenger",
+                "deathKnight",
+                "warg",
+                "assassinS1",
+                "assassinS2",
+                "assassinS3",
+                "elvenKnight",
+                "templeKnight",
+                "evaTemplar",
+                "swordSinger",
+                "swordMuse",
+                "elfScout",
+                "plainsWalker",
+                "windRider",
+                "silverRanger",
+                "moonlightSentinel",
+                "elvenWizard",
+                "spellsinger",
+                "mysticMuse",
+                "elementalSummoner",
+                "elementalMaster",
+                "elfOracle",
+                "elfElder",
+                "evaSaint",
+                "palusKnight",
+                "shillienKnight",
+                "shillienTemplar",
+                "bladeDancer",
+                "spectralDancer",
+                "abyssWalker",
+                "ghostHunter",
+                "phantomRanger",
+                "ghostSentinel",
+                "darkWizard",
+                "spellhowler",
+                "stormScreamer",
+                "phantomSummoner",
+                "spectralMaster",
+                "shillienOracle",
+                "shillienElder",
+                "shillienSaint",
+                "bloodRoseS1",
+                "bloodRoseS2",
+                "bloodRose",
+                "lightTemplar",
+                "holyTemplar",
+                "divineTemplar",
+                "elementWeaverS1",
+                "elementWeaverS2",
+                "elementWeaver",
+                "sayhaSeer",
+                "windRiderErth",
+                "sayhaSeeker"
         ]
-    },
+},
     "acumen": {
         "id": "acumen",
         "name": "Acumen",
@@ -169,10 +169,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Acumen",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_acumen",
         "vfxGap": false,
@@ -180,89 +180,89 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "warrior",
-            "gladiator",
-            "duelist",
-            "warlord",
-            "dreadnought",
-            "knight",
-            "paladin",
-            "phoenixKnight",
-            "darkAvenger",
-            "hellKnight",
-            "rogue",
-            "treasureHunter",
-            "adventurer",
-            "hawkeye",
-            "sagittarius",
-            "wizard",
-            "sorcerer",
-            "archmage",
-            "necromancer",
-            "soultaker",
-            "warlock",
-            "arcanaLord",
-            "cleric",
-            "bishop",
-            "cardinal",
-            "prophet",
-            "hierophant",
-            "deathBlade",
-            "deathMessenger",
-            "deathKnight",
-            "warg",
-            "assassinS1",
-            "assassinS2",
-            "assassinS3",
-            "elvenKnight",
-            "templeKnight",
-            "evaTemplar",
-            "swordSinger",
-            "swordMuse",
-            "elfScout",
-            "plainsWalker",
-            "windRider",
-            "silverRanger",
-            "moonlightSentinel",
-            "elvenWizard",
-            "spellsinger",
-            "mysticMuse",
-            "elementalSummoner",
-            "elementalMaster",
-            "elfOracle",
-            "elfElder",
-            "evaSaint",
-            "palusKnight",
-            "shillienKnight",
-            "shillienTemplar",
-            "bladeDancer",
-            "spectralDancer",
-            "abyssWalker",
-            "ghostHunter",
-            "phantomRanger",
-            "ghostSentinel",
-            "darkWizard",
-            "spellhowler",
-            "stormScreamer",
-            "phantomSummoner",
-            "spectralMaster",
-            "shillienOracle",
-            "shillienElder",
-            "shillienSaint",
-            "bloodRoseS1",
-            "bloodRoseS2",
-            "bloodRose",
-            "lightTemplar",
-            "holyTemplar",
-            "divineTemplar",
-            "elementWeaverS1",
-            "elementWeaverS2",
-            "elementWeaver",
-            "sayhaSeer",
-            "windRiderErth",
-            "sayhaSeeker"
+                "warrior",
+                "gladiator",
+                "duelist",
+                "warlord",
+                "dreadnought",
+                "knight",
+                "paladin",
+                "phoenixKnight",
+                "darkAvenger",
+                "hellKnight",
+                "rogue",
+                "treasureHunter",
+                "adventurer",
+                "hawkeye",
+                "sagittarius",
+                "wizard",
+                "sorcerer",
+                "archmage",
+                "necromancer",
+                "soultaker",
+                "warlock",
+                "arcanaLord",
+                "cleric",
+                "bishop",
+                "cardinal",
+                "prophet",
+                "hierophant",
+                "deathBlade",
+                "deathMessenger",
+                "deathKnight",
+                "warg",
+                "assassinS1",
+                "assassinS2",
+                "assassinS3",
+                "elvenKnight",
+                "templeKnight",
+                "evaTemplar",
+                "swordSinger",
+                "swordMuse",
+                "elfScout",
+                "plainsWalker",
+                "windRider",
+                "silverRanger",
+                "moonlightSentinel",
+                "elvenWizard",
+                "spellsinger",
+                "mysticMuse",
+                "elementalSummoner",
+                "elementalMaster",
+                "elfOracle",
+                "elfElder",
+                "evaSaint",
+                "palusKnight",
+                "shillienKnight",
+                "shillienTemplar",
+                "bladeDancer",
+                "spectralDancer",
+                "abyssWalker",
+                "ghostHunter",
+                "phantomRanger",
+                "ghostSentinel",
+                "darkWizard",
+                "spellhowler",
+                "stormScreamer",
+                "phantomSummoner",
+                "spectralMaster",
+                "shillienOracle",
+                "shillienElder",
+                "shillienSaint",
+                "bloodRoseS1",
+                "bloodRoseS2",
+                "bloodRose",
+                "lightTemplar",
+                "holyTemplar",
+                "divineTemplar",
+                "elementWeaverS1",
+                "elementWeaverS2",
+                "elementWeaver",
+                "sayhaSeer",
+                "windRiderErth",
+                "sayhaSeeker"
         ]
-    },
+},
     "hp_recovery": {
         "id": "hp_recovery",
         "name": "HP Recovery",
@@ -279,10 +279,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Recovers 549 HP every 9.9 sec.",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_hp_recovery",
         "vfxGap": false,
@@ -290,131 +290,131 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "warrior",
-            "gladiator",
-            "duelist",
-            "warlord",
-            "dreadnought",
-            "knight",
-            "paladin",
-            "phoenixKnight",
-            "darkAvenger",
-            "hellKnight",
-            "rogue",
-            "treasureHunter",
-            "adventurer",
-            "hawkeye",
-            "sagittarius",
-            "wizard",
-            "sorcerer",
-            "archmage",
-            "necromancer",
-            "soultaker",
-            "warlock",
-            "arcanaLord",
-            "cleric",
-            "bishop",
-            "cardinal",
-            "prophet",
-            "hierophant",
-            "deathBlade",
-            "deathMessenger",
-            "deathKnight",
-            "warg",
-            "assassinS1",
-            "assassinS2",
-            "assassinS3",
-            "elvenKnight",
-            "templeKnight",
-            "evaTemplar",
-            "swordSinger",
-            "swordMuse",
-            "elfScout",
-            "plainsWalker",
-            "windRider",
-            "silverRanger",
-            "moonlightSentinel",
-            "elvenWizard",
-            "spellsinger",
-            "mysticMuse",
-            "elementalSummoner",
-            "elementalMaster",
-            "elfOracle",
-            "elfElder",
-            "evaSaint",
-            "palusKnight",
-            "shillienKnight",
-            "shillienTemplar",
-            "bladeDancer",
-            "spectralDancer",
-            "abyssWalker",
-            "ghostHunter",
-            "phantomRanger",
-            "ghostSentinel",
-            "darkWizard",
-            "spellhowler",
-            "stormScreamer",
-            "phantomSummoner",
-            "spectralMaster",
-            "shillienOracle",
-            "shillienElder",
-            "shillienSaint",
-            "bloodRoseS1",
-            "bloodRoseS2",
-            "bloodRose",
-            "raider",
-            "destroyer",
-            "titan",
-            "monk",
-            "tyrant",
-            "grandKhavatari",
-            "dragoon",
-            "vanguardRider",
-            "grandVanguard",
-            "shaman",
-            "overlord",
-            "dominator",
-            "warcryer",
-            "doomcryer",
-            "scavenger",
-            "bountyHunter",
-            "fortuneSeeker",
-            "artisanDwarf",
-            "warsmith",
-            "maestro",
-            "shineMakerS1",
-            "shineMakerS2",
-            "shinemaker",
-            "trooper",
-            "berserker",
-            "doombringer",
-            "soulFinder",
-            "soulBreakerKamael",
-            "soulHound",
-            "warder",
-            "soulRanger",
-            "trickster",
-            "hatamoto",
-            "ronin",
-            "samurai",
-            "sylphGunner",
-            "sharpshooter",
-            "windSniper",
-            "stormBlaster",
-            "lightTemplar",
-            "holyTemplar",
-            "divineTemplar",
-            "elementWeaverS1",
-            "elementWeaverS2",
-            "elementWeaver",
-            "marauder",
-            "ertheiaWarrior",
-            "eviscerator",
-            "sayhaSeer",
-            "windRiderErth",
-            "sayhaSeeker"
+                "warrior",
+                "gladiator",
+                "duelist",
+                "warlord",
+                "dreadnought",
+                "knight",
+                "paladin",
+                "phoenixKnight",
+                "darkAvenger",
+                "hellKnight",
+                "rogue",
+                "treasureHunter",
+                "adventurer",
+                "hawkeye",
+                "sagittarius",
+                "wizard",
+                "sorcerer",
+                "archmage",
+                "necromancer",
+                "soultaker",
+                "warlock",
+                "arcanaLord",
+                "cleric",
+                "bishop",
+                "cardinal",
+                "prophet",
+                "hierophant",
+                "deathBlade",
+                "deathMessenger",
+                "deathKnight",
+                "warg",
+                "assassinS1",
+                "assassinS2",
+                "assassinS3",
+                "elvenKnight",
+                "templeKnight",
+                "evaTemplar",
+                "swordSinger",
+                "swordMuse",
+                "elfScout",
+                "plainsWalker",
+                "windRider",
+                "silverRanger",
+                "moonlightSentinel",
+                "elvenWizard",
+                "spellsinger",
+                "mysticMuse",
+                "elementalSummoner",
+                "elementalMaster",
+                "elfOracle",
+                "elfElder",
+                "evaSaint",
+                "palusKnight",
+                "shillienKnight",
+                "shillienTemplar",
+                "bladeDancer",
+                "spectralDancer",
+                "abyssWalker",
+                "ghostHunter",
+                "phantomRanger",
+                "ghostSentinel",
+                "darkWizard",
+                "spellhowler",
+                "stormScreamer",
+                "phantomSummoner",
+                "spectralMaster",
+                "shillienOracle",
+                "shillienElder",
+                "shillienSaint",
+                "bloodRoseS1",
+                "bloodRoseS2",
+                "bloodRose",
+                "raider",
+                "destroyer",
+                "titan",
+                "monk",
+                "tyrant",
+                "grandKhavatari",
+                "dragoon",
+                "vanguardRider",
+                "grandVanguard",
+                "shaman",
+                "overlord",
+                "dominator",
+                "warcryer",
+                "doomcryer",
+                "scavenger",
+                "bountyHunter",
+                "fortuneSeeker",
+                "artisanDwarf",
+                "warsmith",
+                "maestro",
+                "shineMakerS1",
+                "shineMakerS2",
+                "shinemaker",
+                "trooper",
+                "berserker",
+                "doombringer",
+                "soulFinder",
+                "soulBreakerKamael",
+                "soulHound",
+                "warder",
+                "soulRanger",
+                "trickster",
+                "hatamoto",
+                "ronin",
+                "samurai",
+                "sylphGunner",
+                "sharpshooter",
+                "windSniper",
+                "stormBlaster",
+                "lightTemplar",
+                "holyTemplar",
+                "divineTemplar",
+                "elementWeaverS1",
+                "elementWeaverS2",
+                "elementWeaver",
+                "marauder",
+                "ertheiaWarrior",
+                "eviscerator",
+                "sayhaSeer",
+                "windRiderErth",
+                "sayhaSeeker"
         ]
-    },
+},
     "berserker_spirit": {
         "id": "berserker_spirit",
         "name": "Berserker Spirit",
@@ -431,10 +431,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Berserker Spirit",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_berserker_spirit",
         "vfxGap": false,
@@ -442,89 +442,89 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "warrior",
-            "gladiator",
-            "duelist",
-            "warlord",
-            "dreadnought",
-            "knight",
-            "paladin",
-            "phoenixKnight",
-            "darkAvenger",
-            "hellKnight",
-            "rogue",
-            "treasureHunter",
-            "adventurer",
-            "hawkeye",
-            "sagittarius",
-            "wizard",
-            "sorcerer",
-            "archmage",
-            "necromancer",
-            "soultaker",
-            "warlock",
-            "arcanaLord",
-            "cleric",
-            "bishop",
-            "cardinal",
-            "prophet",
-            "hierophant",
-            "deathBlade",
-            "deathMessenger",
-            "deathKnight",
-            "warg",
-            "assassinS1",
-            "assassinS2",
-            "assassinS3",
-            "elvenKnight",
-            "templeKnight",
-            "evaTemplar",
-            "swordSinger",
-            "swordMuse",
-            "elfScout",
-            "plainsWalker",
-            "windRider",
-            "silverRanger",
-            "moonlightSentinel",
-            "elvenWizard",
-            "spellsinger",
-            "mysticMuse",
-            "elementalSummoner",
-            "elementalMaster",
-            "elfOracle",
-            "elfElder",
-            "evaSaint",
-            "palusKnight",
-            "shillienKnight",
-            "shillienTemplar",
-            "bladeDancer",
-            "spectralDancer",
-            "abyssWalker",
-            "ghostHunter",
-            "phantomRanger",
-            "ghostSentinel",
-            "darkWizard",
-            "spellhowler",
-            "stormScreamer",
-            "phantomSummoner",
-            "spectralMaster",
-            "shillienOracle",
-            "shillienElder",
-            "shillienSaint",
-            "bloodRoseS1",
-            "bloodRoseS2",
-            "bloodRose",
-            "lightTemplar",
-            "holyTemplar",
-            "divineTemplar",
-            "elementWeaverS1",
-            "elementWeaverS2",
-            "elementWeaver",
-            "sayhaSeer",
-            "windRiderErth",
-            "sayhaSeeker"
+                "warrior",
+                "gladiator",
+                "duelist",
+                "warlord",
+                "dreadnought",
+                "knight",
+                "paladin",
+                "phoenixKnight",
+                "darkAvenger",
+                "hellKnight",
+                "rogue",
+                "treasureHunter",
+                "adventurer",
+                "hawkeye",
+                "sagittarius",
+                "wizard",
+                "sorcerer",
+                "archmage",
+                "necromancer",
+                "soultaker",
+                "warlock",
+                "arcanaLord",
+                "cleric",
+                "bishop",
+                "cardinal",
+                "prophet",
+                "hierophant",
+                "deathBlade",
+                "deathMessenger",
+                "deathKnight",
+                "warg",
+                "assassinS1",
+                "assassinS2",
+                "assassinS3",
+                "elvenKnight",
+                "templeKnight",
+                "evaTemplar",
+                "swordSinger",
+                "swordMuse",
+                "elfScout",
+                "plainsWalker",
+                "windRider",
+                "silverRanger",
+                "moonlightSentinel",
+                "elvenWizard",
+                "spellsinger",
+                "mysticMuse",
+                "elementalSummoner",
+                "elementalMaster",
+                "elfOracle",
+                "elfElder",
+                "evaSaint",
+                "palusKnight",
+                "shillienKnight",
+                "shillienTemplar",
+                "bladeDancer",
+                "spectralDancer",
+                "abyssWalker",
+                "ghostHunter",
+                "phantomRanger",
+                "ghostSentinel",
+                "darkWizard",
+                "spellhowler",
+                "stormScreamer",
+                "phantomSummoner",
+                "spectralMaster",
+                "shillienOracle",
+                "shillienElder",
+                "shillienSaint",
+                "bloodRoseS1",
+                "bloodRoseS2",
+                "bloodRose",
+                "lightTemplar",
+                "holyTemplar",
+                "divineTemplar",
+                "elementWeaverS1",
+                "elementWeaverS2",
+                "elementWeaver",
+                "sayhaSeer",
+                "windRiderErth",
+                "sayhaSeeker"
         ]
-    },
+},
     "wild_magic": {
         "id": "wild_magic",
         "name": "Wild Magic",
@@ -541,10 +541,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Wild Magic",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_wild_magic",
         "vfxGap": false,
@@ -552,89 +552,89 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "warrior",
-            "gladiator",
-            "duelist",
-            "warlord",
-            "dreadnought",
-            "knight",
-            "paladin",
-            "phoenixKnight",
-            "darkAvenger",
-            "hellKnight",
-            "rogue",
-            "treasureHunter",
-            "adventurer",
-            "hawkeye",
-            "sagittarius",
-            "wizard",
-            "sorcerer",
-            "archmage",
-            "necromancer",
-            "soultaker",
-            "warlock",
-            "arcanaLord",
-            "cleric",
-            "bishop",
-            "cardinal",
-            "prophet",
-            "hierophant",
-            "deathBlade",
-            "deathMessenger",
-            "deathKnight",
-            "warg",
-            "assassinS1",
-            "assassinS2",
-            "assassinS3",
-            "elvenKnight",
-            "templeKnight",
-            "evaTemplar",
-            "swordSinger",
-            "swordMuse",
-            "elfScout",
-            "plainsWalker",
-            "windRider",
-            "silverRanger",
-            "moonlightSentinel",
-            "elvenWizard",
-            "spellsinger",
-            "mysticMuse",
-            "elementalSummoner",
-            "elementalMaster",
-            "elfOracle",
-            "elfElder",
-            "evaSaint",
-            "palusKnight",
-            "shillienKnight",
-            "shillienTemplar",
-            "bladeDancer",
-            "spectralDancer",
-            "abyssWalker",
-            "ghostHunter",
-            "phantomRanger",
-            "ghostSentinel",
-            "darkWizard",
-            "spellhowler",
-            "stormScreamer",
-            "phantomSummoner",
-            "spectralMaster",
-            "shillienOracle",
-            "shillienElder",
-            "shillienSaint",
-            "bloodRoseS1",
-            "bloodRoseS2",
-            "bloodRose",
-            "lightTemplar",
-            "holyTemplar",
-            "divineTemplar",
-            "elementWeaverS1",
-            "elementWeaverS2",
-            "elementWeaver",
-            "sayhaSeer",
-            "windRiderErth",
-            "sayhaSeeker"
+                "warrior",
+                "gladiator",
+                "duelist",
+                "warlord",
+                "dreadnought",
+                "knight",
+                "paladin",
+                "phoenixKnight",
+                "darkAvenger",
+                "hellKnight",
+                "rogue",
+                "treasureHunter",
+                "adventurer",
+                "hawkeye",
+                "sagittarius",
+                "wizard",
+                "sorcerer",
+                "archmage",
+                "necromancer",
+                "soultaker",
+                "warlock",
+                "arcanaLord",
+                "cleric",
+                "bishop",
+                "cardinal",
+                "prophet",
+                "hierophant",
+                "deathBlade",
+                "deathMessenger",
+                "deathKnight",
+                "warg",
+                "assassinS1",
+                "assassinS2",
+                "assassinS3",
+                "elvenKnight",
+                "templeKnight",
+                "evaTemplar",
+                "swordSinger",
+                "swordMuse",
+                "elfScout",
+                "plainsWalker",
+                "windRider",
+                "silverRanger",
+                "moonlightSentinel",
+                "elvenWizard",
+                "spellsinger",
+                "mysticMuse",
+                "elementalSummoner",
+                "elementalMaster",
+                "elfOracle",
+                "elfElder",
+                "evaSaint",
+                "palusKnight",
+                "shillienKnight",
+                "shillienTemplar",
+                "bladeDancer",
+                "spectralDancer",
+                "abyssWalker",
+                "ghostHunter",
+                "phantomRanger",
+                "ghostSentinel",
+                "darkWizard",
+                "spellhowler",
+                "stormScreamer",
+                "phantomSummoner",
+                "spectralMaster",
+                "shillienOracle",
+                "shillienElder",
+                "shillienSaint",
+                "bloodRoseS1",
+                "bloodRoseS2",
+                "bloodRose",
+                "lightTemplar",
+                "holyTemplar",
+                "divineTemplar",
+                "elementWeaverS1",
+                "elementWeaverS2",
+                "elementWeaver",
+                "sayhaSeer",
+                "windRiderErth",
+                "sayhaSeeker"
         ]
-    },
+},
     "shield_stun": {
         "id": "shield_stun",
         "name": "Shield Stun",
@@ -651,10 +651,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 20000,
         "desc": "Shield Stun",
         "balance": {
-            "mpCost": 48,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 48,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_shield_stun",
         "vfxGap": false,
@@ -662,13 +662,13 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 60,
         "classes": [
-            "knight",
-            "paladin",
-            "phoenixKnight",
-            "darkAvenger",
-            "hellKnight"
+                "knight",
+                "paladin",
+                "phoenixKnight",
+                "darkAvenger",
+                "hellKnight"
         ]
-    },
+},
     "magic_barrier": {
         "id": "magic_barrier",
         "name": "Magic Barrier",
@@ -685,10 +685,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Magic Barrier",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_magic_barrier",
         "vfxGap": false,
@@ -696,89 +696,89 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "warrior",
-            "gladiator",
-            "duelist",
-            "warlord",
-            "dreadnought",
-            "knight",
-            "paladin",
-            "phoenixKnight",
-            "darkAvenger",
-            "hellKnight",
-            "rogue",
-            "treasureHunter",
-            "adventurer",
-            "hawkeye",
-            "sagittarius",
-            "wizard",
-            "sorcerer",
-            "archmage",
-            "necromancer",
-            "soultaker",
-            "warlock",
-            "arcanaLord",
-            "cleric",
-            "bishop",
-            "cardinal",
-            "prophet",
-            "hierophant",
-            "deathBlade",
-            "deathMessenger",
-            "deathKnight",
-            "warg",
-            "assassinS1",
-            "assassinS2",
-            "assassinS3",
-            "elvenKnight",
-            "templeKnight",
-            "evaTemplar",
-            "swordSinger",
-            "swordMuse",
-            "elfScout",
-            "plainsWalker",
-            "windRider",
-            "silverRanger",
-            "moonlightSentinel",
-            "elvenWizard",
-            "spellsinger",
-            "mysticMuse",
-            "elementalSummoner",
-            "elementalMaster",
-            "elfOracle",
-            "elfElder",
-            "evaSaint",
-            "palusKnight",
-            "shillienKnight",
-            "shillienTemplar",
-            "bladeDancer",
-            "spectralDancer",
-            "abyssWalker",
-            "ghostHunter",
-            "phantomRanger",
-            "ghostSentinel",
-            "darkWizard",
-            "spellhowler",
-            "stormScreamer",
-            "phantomSummoner",
-            "spectralMaster",
-            "shillienOracle",
-            "shillienElder",
-            "shillienSaint",
-            "bloodRoseS1",
-            "bloodRoseS2",
-            "bloodRose",
-            "lightTemplar",
-            "holyTemplar",
-            "divineTemplar",
-            "elementWeaverS1",
-            "elementWeaverS2",
-            "elementWeaver",
-            "sayhaSeer",
-            "windRiderErth",
-            "sayhaSeeker"
+                "warrior",
+                "gladiator",
+                "duelist",
+                "warlord",
+                "dreadnought",
+                "knight",
+                "paladin",
+                "phoenixKnight",
+                "darkAvenger",
+                "hellKnight",
+                "rogue",
+                "treasureHunter",
+                "adventurer",
+                "hawkeye",
+                "sagittarius",
+                "wizard",
+                "sorcerer",
+                "archmage",
+                "necromancer",
+                "soultaker",
+                "warlock",
+                "arcanaLord",
+                "cleric",
+                "bishop",
+                "cardinal",
+                "prophet",
+                "hierophant",
+                "deathBlade",
+                "deathMessenger",
+                "deathKnight",
+                "warg",
+                "assassinS1",
+                "assassinS2",
+                "assassinS3",
+                "elvenKnight",
+                "templeKnight",
+                "evaTemplar",
+                "swordSinger",
+                "swordMuse",
+                "elfScout",
+                "plainsWalker",
+                "windRider",
+                "silverRanger",
+                "moonlightSentinel",
+                "elvenWizard",
+                "spellsinger",
+                "mysticMuse",
+                "elementalSummoner",
+                "elementalMaster",
+                "elfOracle",
+                "elfElder",
+                "evaSaint",
+                "palusKnight",
+                "shillienKnight",
+                "shillienTemplar",
+                "bladeDancer",
+                "spectralDancer",
+                "abyssWalker",
+                "ghostHunter",
+                "phantomRanger",
+                "ghostSentinel",
+                "darkWizard",
+                "spellhowler",
+                "stormScreamer",
+                "phantomSummoner",
+                "spectralMaster",
+                "shillienOracle",
+                "shillienElder",
+                "shillienSaint",
+                "bloodRoseS1",
+                "bloodRoseS2",
+                "bloodRose",
+                "lightTemplar",
+                "holyTemplar",
+                "divineTemplar",
+                "elementWeaverS1",
+                "elementWeaverS2",
+                "elementWeaver",
+                "sayhaSeer",
+                "windRiderErth",
+                "sayhaSeeker"
         ]
-    },
+},
     "shield_strike": {
         "id": "shield_strike",
         "name": "Shield Strike",
@@ -795,10 +795,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Attacks the target with a shield provoking them. Power 619.Ignores Shield Defense.Ignores 10% of the target's defense.",
         "balance": {
-            "mpCost": 33,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 33,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_shield_strike",
         "vfxGap": false,
@@ -806,12 +806,12 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "paladin",
-            "phoenixKnight",
-            "darkAvenger",
-            "hellKnight"
+                "paladin",
+                "phoenixKnight",
+                "darkAvenger",
+                "hellKnight"
         ]
-    },
+},
     "holy_strike": {
         "id": "holy_strike",
         "name": "Holy Strike",
@@ -828,10 +828,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 5000,
         "desc": "Attacks the target. Power 638.Deals heavy damage to demons and undead.No critical.",
         "balance": {
-            "mpCost": 5,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 5,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_holy_strike",
         "vfxGap": false,
@@ -839,10 +839,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "paladin",
-            "phoenixKnight"
+                "paladin",
+                "phoenixKnight"
         ]
-    },
+},
     "knight_s_protection": {
         "id": "knight_s_protection",
         "name": "Knight's Protection",
@@ -859,10 +859,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Max HP +300Shield Defense +120",
         "balance": {
-            "mpCost": 50,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 50,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_knight_s_protection",
         "vfxGap": false,
@@ -870,12 +870,12 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 50,
         "classes": [
-            "paladin",
-            "phoenixKnight",
-            "darkAvenger",
-            "hellKnight"
+                "paladin",
+                "phoenixKnight",
+                "darkAvenger",
+                "hellKnight"
         ]
-    },
+},
     "angelic_archon": {
         "id": "angelic_archon",
         "name": "Angelic Archon",
@@ -892,10 +892,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 300000,
         "desc": "You are blessed by the gods.Debuff Resistance +20%Anomaly Resistance +20%Buff Cancel Resistance +20%Received Healing -40%P. Def. +20%M. Def. +20%Speed +6When using swords/ blunt weapons:P. Accuracy +4Atk. Spd. +10%When using swords:Basic Critical Rate +20When using blunt weapons:Basic Critical Damage +10%",
         "balance": {
-            "mpCost": 133,
-            "pwr": 2,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 133,
+                "pwr": 2,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_angelic_archon",
         "vfxGap": false,
@@ -903,9 +903,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 58,
         "classes": [
-            "paladin"
+                "paladin"
         ]
-    },
+},
     "mp_recovery": {
         "id": "mp_recovery",
         "name": "MP Recovery",
@@ -922,10 +922,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Recovers 119 MP every 9.9 sec.",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_mp_recovery",
         "vfxGap": false,
@@ -933,131 +933,131 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "warrior",
-            "gladiator",
-            "duelist",
-            "warlord",
-            "dreadnought",
-            "knight",
-            "paladin",
-            "phoenixKnight",
-            "darkAvenger",
-            "hellKnight",
-            "rogue",
-            "treasureHunter",
-            "adventurer",
-            "hawkeye",
-            "sagittarius",
-            "wizard",
-            "sorcerer",
-            "archmage",
-            "necromancer",
-            "soultaker",
-            "warlock",
-            "arcanaLord",
-            "cleric",
-            "bishop",
-            "cardinal",
-            "prophet",
-            "hierophant",
-            "deathBlade",
-            "deathMessenger",
-            "deathKnight",
-            "warg",
-            "assassinS1",
-            "assassinS2",
-            "assassinS3",
-            "elvenKnight",
-            "templeKnight",
-            "evaTemplar",
-            "swordSinger",
-            "swordMuse",
-            "elfScout",
-            "plainsWalker",
-            "windRider",
-            "silverRanger",
-            "moonlightSentinel",
-            "elvenWizard",
-            "spellsinger",
-            "mysticMuse",
-            "elementalSummoner",
-            "elementalMaster",
-            "elfOracle",
-            "elfElder",
-            "evaSaint",
-            "palusKnight",
-            "shillienKnight",
-            "shillienTemplar",
-            "bladeDancer",
-            "spectralDancer",
-            "abyssWalker",
-            "ghostHunter",
-            "phantomRanger",
-            "ghostSentinel",
-            "darkWizard",
-            "spellhowler",
-            "stormScreamer",
-            "phantomSummoner",
-            "spectralMaster",
-            "shillienOracle",
-            "shillienElder",
-            "shillienSaint",
-            "bloodRoseS1",
-            "bloodRoseS2",
-            "bloodRose",
-            "raider",
-            "destroyer",
-            "titan",
-            "monk",
-            "tyrant",
-            "grandKhavatari",
-            "dragoon",
-            "vanguardRider",
-            "grandVanguard",
-            "shaman",
-            "overlord",
-            "dominator",
-            "warcryer",
-            "doomcryer",
-            "scavenger",
-            "bountyHunter",
-            "fortuneSeeker",
-            "artisanDwarf",
-            "warsmith",
-            "maestro",
-            "shineMakerS1",
-            "shineMakerS2",
-            "shinemaker",
-            "trooper",
-            "berserker",
-            "doombringer",
-            "soulFinder",
-            "soulBreakerKamael",
-            "soulHound",
-            "warder",
-            "soulRanger",
-            "trickster",
-            "hatamoto",
-            "ronin",
-            "samurai",
-            "sylphGunner",
-            "sharpshooter",
-            "windSniper",
-            "stormBlaster",
-            "lightTemplar",
-            "holyTemplar",
-            "divineTemplar",
-            "elementWeaverS1",
-            "elementWeaverS2",
-            "elementWeaver",
-            "marauder",
-            "ertheiaWarrior",
-            "eviscerator",
-            "sayhaSeer",
-            "windRiderErth",
-            "sayhaSeeker"
+                "warrior",
+                "gladiator",
+                "duelist",
+                "warlord",
+                "dreadnought",
+                "knight",
+                "paladin",
+                "phoenixKnight",
+                "darkAvenger",
+                "hellKnight",
+                "rogue",
+                "treasureHunter",
+                "adventurer",
+                "hawkeye",
+                "sagittarius",
+                "wizard",
+                "sorcerer",
+                "archmage",
+                "necromancer",
+                "soultaker",
+                "warlock",
+                "arcanaLord",
+                "cleric",
+                "bishop",
+                "cardinal",
+                "prophet",
+                "hierophant",
+                "deathBlade",
+                "deathMessenger",
+                "deathKnight",
+                "warg",
+                "assassinS1",
+                "assassinS2",
+                "assassinS3",
+                "elvenKnight",
+                "templeKnight",
+                "evaTemplar",
+                "swordSinger",
+                "swordMuse",
+                "elfScout",
+                "plainsWalker",
+                "windRider",
+                "silverRanger",
+                "moonlightSentinel",
+                "elvenWizard",
+                "spellsinger",
+                "mysticMuse",
+                "elementalSummoner",
+                "elementalMaster",
+                "elfOracle",
+                "elfElder",
+                "evaSaint",
+                "palusKnight",
+                "shillienKnight",
+                "shillienTemplar",
+                "bladeDancer",
+                "spectralDancer",
+                "abyssWalker",
+                "ghostHunter",
+                "phantomRanger",
+                "ghostSentinel",
+                "darkWizard",
+                "spellhowler",
+                "stormScreamer",
+                "phantomSummoner",
+                "spectralMaster",
+                "shillienOracle",
+                "shillienElder",
+                "shillienSaint",
+                "bloodRoseS1",
+                "bloodRoseS2",
+                "bloodRose",
+                "raider",
+                "destroyer",
+                "titan",
+                "monk",
+                "tyrant",
+                "grandKhavatari",
+                "dragoon",
+                "vanguardRider",
+                "grandVanguard",
+                "shaman",
+                "overlord",
+                "dominator",
+                "warcryer",
+                "doomcryer",
+                "scavenger",
+                "bountyHunter",
+                "fortuneSeeker",
+                "artisanDwarf",
+                "warsmith",
+                "maestro",
+                "shineMakerS1",
+                "shineMakerS2",
+                "shinemaker",
+                "trooper",
+                "berserker",
+                "doombringer",
+                "soulFinder",
+                "soulBreakerKamael",
+                "soulHound",
+                "warder",
+                "soulRanger",
+                "trickster",
+                "hatamoto",
+                "ronin",
+                "samurai",
+                "sylphGunner",
+                "sharpshooter",
+                "windSniper",
+                "stormBlaster",
+                "lightTemplar",
+                "holyTemplar",
+                "divineTemplar",
+                "elementWeaverS1",
+                "elementWeaverS2",
+                "elementWeaver",
+                "marauder",
+                "ertheiaWarrior",
+                "eviscerator",
+                "sayhaSeer",
+                "windRiderErth",
+                "sayhaSeeker"
         ]
-    },
+},
     "ultimate_defense": {
         "id": "ultimate_defense",
         "name": "Ultimate Defense",
@@ -1074,10 +1074,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 900000,
         "desc": "Ultimate Defense",
         "balance": {
-            "mpCost": 21,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 21,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_ultimate_defense",
         "vfxGap": false,
@@ -1085,19 +1085,19 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 46,
         "classes": [
-            "knight",
-            "paladin",
-            "phoenixKnight",
-            "darkAvenger",
-            "hellKnight",
-            "elvenKnight",
-            "templeKnight",
-            "evaTemplar",
-            "palusKnight",
-            "shillienKnight",
-            "shillienTemplar"
+                "knight",
+                "paladin",
+                "phoenixKnight",
+                "darkAvenger",
+                "hellKnight",
+                "elvenKnight",
+                "templeKnight",
+                "evaTemplar",
+                "palusKnight",
+                "shillienKnight",
+                "shillienTemplar"
         ]
-    },
+},
     "shield_deflect_magic": {
         "id": "shield_deflect_magic",
         "name": "Shield Deflect Magic",
@@ -1114,10 +1114,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 45000,
         "desc": "Reflects M. damage (trigger rate: 20%).",
         "balance": {
-            "mpCost": 28,
-            "pwr": 2,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 28,
+                "pwr": 2,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_shield_deflect_magic",
         "vfxGap": false,
@@ -1125,12 +1125,12 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 60,
         "classes": [
-            "paladin",
-            "darkAvenger",
-            "templeKnight",
-            "shillienKnight"
+                "paladin",
+                "darkAvenger",
+                "templeKnight",
+                "shillienKnight"
         ]
-    },
+},
     "quick_heal": {
         "id": "quick_heal",
         "name": "Quick Heal",
@@ -1147,10 +1147,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 2000,
         "desc": "Recovers HP. Power 271.",
         "balance": {
-            "mpCost": 100,
-            "pwr": 271,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 100,
+                "pwr": 271,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_quick_heal",
         "vfxGap": false,
@@ -1158,11 +1158,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "knight",
-            "paladin",
-            "darkAvenger"
+                "knight",
+                "paladin",
+                "darkAvenger"
         ]
-    },
+},
     "sanctuary": {
         "id": "sanctuary",
         "name": "Sanctuary",
@@ -1179,10 +1179,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "Covers an area with a sacred aura that decreases enemies' P. Def.P. Def. -23%PvP: Attacks up to 10 targets.PvE: Attacks up to 10 targets.",
         "balance": {
-            "mpCost": 50,
-            "pwr": 2,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 50,
+                "pwr": 2,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_sanctuary",
         "vfxGap": false,
@@ -1190,10 +1190,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 50,
         "classes": [
-            "paladin",
-            "phoenixKnight"
+                "paladin",
+                "phoenixKnight"
         ]
-    },
+},
     "shackle": {
         "id": "shackle",
         "name": "Shackle",
@@ -1210,10 +1210,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Inflicts Hold on the target.",
         "balance": {
-            "mpCost": 17,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 17,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_shackle",
         "vfxGap": false,
@@ -1221,16 +1221,16 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 50,
         "classes": [
-            "paladin",
-            "phoenixKnight",
-            "templeKnight",
-            "evaTemplar",
-            "swordSinger",
-            "swordMuse",
-            "bladeDancer",
-            "spectralDancer"
+                "paladin",
+                "phoenixKnight",
+                "templeKnight",
+                "evaTemplar",
+                "swordSinger",
+                "swordMuse",
+                "bladeDancer",
+                "spectralDancer"
         ]
-    },
+},
     "remedy": {
         "id": "remedy",
         "name": "Remedy",
@@ -1247,10 +1247,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 2000,
         "desc": "Removes infection with a 50% chance.",
         "balance": {
-            "mpCost": 35,
-            "pwr": 5,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 35,
+                "pwr": 5,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_remedy",
         "vfxGap": false,
@@ -1258,9 +1258,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "paladin"
+                "paladin"
         ]
-    },
+},
     "dark_assassin_transformation": {
         "id": "dark_assassin_transformation",
         "name": "Dark Assassin Transformation",
@@ -1277,54 +1277,21 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Dark Assassin Transformation",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_dark_assassin_transformation",
         "vfxGap": false,
         "sfxId": "sfx_action",
         "sfxGap": false,
         "minLevel": 60,
-        "classes": [
-            "gladiator",
-            "warlord",
-            "paladin",
-            "darkAvenger",
-            "treasureHunter",
-            "hawkeye",
-            "sorcerer",
-            "necromancer",
-            "warlock",
-            "bishop",
-            "prophet",
-            "templeKnight",
-            "swordSinger",
-            "plainsWalker",
-            "silverRanger",
-            "spellsinger",
-            "elementalSummoner",
-            "elfElder",
-            "shillienKnight",
-            "bladeDancer",
-            "abyssWalker",
-            "phantomRanger",
-            "spellhowler",
-            "phantomSummoner",
-            "shillienElder",
-            "destroyer",
-            "tyrant",
-            "vanguardRider",
-            "overlord",
-            "warcryer",
-            "bountyHunter",
-            "warsmith",
-            "shineMakerS2",
-            "windSniper",
-            "windRiderErth"
-        ]
-    },
+        "classes": [],
+        "availableTo": [],
+        "disabled": true,
+        "removalReason": "cosmetic_mount_purge"
+},
     "aggression_aura": {
         "id": "aggression_aura",
         "name": "Aggression Aura",
@@ -1341,10 +1308,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 20000,
         "desc": "Targets around you start attacking you. Power 5920. Provokes the target.",
         "balance": {
-            "mpCost": 50,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 50,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_aggression_aura",
         "vfxGap": false,
@@ -1352,16 +1319,16 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "paladin",
-            "phoenixKnight",
-            "darkAvenger",
-            "hellKnight",
-            "templeKnight",
-            "evaTemplar",
-            "shillienKnight",
-            "shillienTemplar"
+                "paladin",
+                "phoenixKnight",
+                "darkAvenger",
+                "hellKnight",
+                "templeKnight",
+                "evaTemplar",
+                "shillienKnight",
+                "shillienTemplar"
         ]
-    },
+},
     "sacrifice": {
         "id": "sacrifice",
         "name": "Sacrifice",
@@ -1378,10 +1345,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 5000,
         "desc": "Consumes your HP to recover HP of the target. Power 350.",
         "balance": {
-            "mpCost": 15,
-            "pwr": 350,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 350,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_sacrifice",
         "vfxGap": false,
@@ -1389,10 +1356,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 50,
         "classes": [
-            "paladin",
-            "phoenixKnight"
+                "paladin",
+                "phoenixKnight"
         ]
-    },
+},
     "aggression": {
         "id": "aggression",
         "name": "Aggression",
@@ -1409,10 +1376,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 6000,
         "desc": "Makes the enemy attack you. Power 5920. Provokes the target.",
         "balance": {
-            "mpCost": 15,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_aggression",
         "vfxGap": false,
@@ -1420,19 +1387,19 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "knight",
-            "paladin",
-            "phoenixKnight",
-            "darkAvenger",
-            "hellKnight",
-            "elvenKnight",
-            "templeKnight",
-            "evaTemplar",
-            "palusKnight",
-            "shillienKnight",
-            "shillienTemplar"
+                "knight",
+                "paladin",
+                "phoenixKnight",
+                "darkAvenger",
+                "hellKnight",
+                "elvenKnight",
+                "templeKnight",
+                "evaTemplar",
+                "palusKnight",
+                "shillienKnight",
+                "shillienTemplar"
         ]
-    },
+},
     "blade_strike": {
         "id": "blade_strike",
         "name": "Blade Strike",
@@ -1449,10 +1416,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 5000,
         "desc": "Attacks the target. Power 694.For 20 sec., P. Def. -23%.Ignores Shield Defense.",
         "balance": {
-            "mpCost": 43,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 43,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_blade_strike",
         "vfxGap": false,
@@ -1460,10 +1427,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "gladiator",
-            "duelist"
+                "gladiator",
+                "duelist"
         ]
-    },
+},
     "blade_storm_dance": {
         "id": "blade_storm_dance",
         "name": "Blade Storm Dance",
@@ -1480,10 +1447,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Attacks the target and nearby enemies. Power 155.PvP: Attacks up to 5 targets.PvE: Attacks up to 5 targets.",
         "balance": {
-            "mpCost": 57,
-            "pwr": 155,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 57,
+                "pwr": 155,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_blade_storm_dance",
         "vfxGap": false,
@@ -1491,10 +1458,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 47,
         "classes": [
-            "gladiator",
-            "duelist"
+                "gladiator",
+                "duelist"
         ]
-    },
+},
     "light_assassin_transformation": {
         "id": "light_assassin_transformation",
         "name": "Light Assassin Transformation",
@@ -1511,54 +1478,21 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Light Assassin Transformation",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_light_assassin_transformation",
         "vfxGap": false,
         "sfxId": "sfx_action",
         "sfxGap": false,
         "minLevel": 70,
-        "classes": [
-            "gladiator",
-            "warlord",
-            "paladin",
-            "darkAvenger",
-            "treasureHunter",
-            "hawkeye",
-            "sorcerer",
-            "necromancer",
-            "warlock",
-            "bishop",
-            "prophet",
-            "templeKnight",
-            "swordSinger",
-            "plainsWalker",
-            "silverRanger",
-            "spellsinger",
-            "elementalSummoner",
-            "elfElder",
-            "shillienKnight",
-            "bladeDancer",
-            "abyssWalker",
-            "phantomRanger",
-            "spellhowler",
-            "phantomSummoner",
-            "shillienElder",
-            "destroyer",
-            "tyrant",
-            "vanguardRider",
-            "overlord",
-            "warcryer",
-            "bountyHunter",
-            "warsmith",
-            "shineMakerS2",
-            "windSniper",
-            "windRiderErth"
-        ]
-    },
+        "classes": [],
+        "availableTo": [],
+        "disabled": true,
+        "removalReason": "cosmetic_mount_purge"
+},
     "transformation_pirate": {
         "id": "transformation_pirate",
         "name": "Transformation: Pirate",
@@ -1575,54 +1509,21 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Transformation: Pirate",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_transformation_pirate",
         "vfxGap": false,
         "sfxId": "sfx_action",
         "sfxGap": false,
         "minLevel": 45,
-        "classes": [
-            "gladiator",
-            "warlord",
-            "paladin",
-            "darkAvenger",
-            "treasureHunter",
-            "hawkeye",
-            "sorcerer",
-            "necromancer",
-            "warlock",
-            "bishop",
-            "prophet",
-            "templeKnight",
-            "swordSinger",
-            "plainsWalker",
-            "silverRanger",
-            "spellsinger",
-            "elementalSummoner",
-            "elfElder",
-            "shillienKnight",
-            "bladeDancer",
-            "abyssWalker",
-            "phantomRanger",
-            "spellhowler",
-            "phantomSummoner",
-            "shillienElder",
-            "destroyer",
-            "tyrant",
-            "vanguardRider",
-            "overlord",
-            "warcryer",
-            "bountyHunter",
-            "warsmith",
-            "shineMakerS2",
-            "windSniper",
-            "windRiderErth"
-        ]
-    },
+        "classes": [],
+        "availableTo": [],
+        "disabled": true,
+        "removalReason": "cosmetic_mount_purge"
+},
     "slashing_blade": {
         "id": "slashing_blade",
         "name": "Slashing Blade",
@@ -1639,10 +1540,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Attacks the target. Power 1481.Ignores Shield Defense.Ignores 10% of the target's defense.",
         "balance": {
-            "mpCost": 36,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 36,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_slashing_blade",
         "vfxGap": false,
@@ -1650,10 +1551,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "gladiator",
-            "duelist"
+                "gladiator",
+                "duelist"
         ]
-    },
+},
     "rush": {
         "id": "rush",
         "name": "Rush",
@@ -1670,10 +1571,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 3000,
         "desc": "<Rush skill>Charges at the target.Can only be used if the distance to the target is more than 150.",
         "balance": {
-            "mpCost": 35,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 35,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_rush",
         "vfxGap": false,
@@ -1681,26 +1582,26 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "gladiator",
-            "duelist",
-            "warlord",
-            "dreadnought",
-            "destroyer",
-            "titan",
-            "tyrant",
-            "grandKhavatari",
-            "bountyHunter",
-            "fortuneSeeker",
-            "warsmith",
-            "maestro",
-            "shineMakerS2",
-            "shinemaker",
-            "berserker",
-            "doombringer",
-            "ertheiaWarrior",
-            "eviscerator"
+                "gladiator",
+                "duelist",
+                "warlord",
+                "dreadnought",
+                "destroyer",
+                "titan",
+                "tyrant",
+                "grandKhavatari",
+                "bountyHunter",
+                "fortuneSeeker",
+                "warsmith",
+                "maestro",
+                "shineMakerS2",
+                "shinemaker",
+                "berserker",
+                "doombringer",
+                "ertheiaWarrior",
+                "eviscerator"
         ]
-    },
+},
     "mass_shackling": {
         "id": "mass_shackling",
         "name": "Mass Shackling",
@@ -1717,10 +1618,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "Inflicts Hold on targets around the character.",
         "balance": {
-            "mpCost": 20,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 20,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_mass_shackling",
         "vfxGap": false,
@@ -1728,12 +1629,12 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 55,
         "classes": [
-            "paladin",
-            "phoenixKnight",
-            "templeKnight",
-            "evaTemplar"
+                "paladin",
+                "phoenixKnight",
+                "templeKnight",
+                "evaTemplar"
         ]
-    },
+},
     "blade_movement": {
         "id": "blade_movement",
         "name": "Blade Movement",
@@ -1750,10 +1651,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "Speed +5",
         "balance": {
-            "mpCost": 26,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 26,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_blade_movement",
         "vfxGap": false,
@@ -1761,10 +1662,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 56,
         "classes": [
-            "gladiator",
-            "duelist"
+                "gladiator",
+                "duelist"
         ]
-    },
+},
     "dual_weapon_defense": {
         "id": "dual_weapon_defense",
         "name": "Dual Weapon Defense",
@@ -1781,10 +1682,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 240000,
         "desc": "P. Skill Evasion +15%M. Skill Evasion +15%",
         "balance": {
-            "mpCost": 15,
-            "pwr": 2,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 2,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_dual_weapon_defense",
         "vfxGap": false,
@@ -1792,10 +1693,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 41,
         "classes": [
-            "gladiator",
-            "duelist"
+                "gladiator",
+                "duelist"
         ]
-    },
+},
     "lionheart": {
         "id": "lionheart",
         "name": "Lionheart",
@@ -1812,10 +1713,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 120000,
         "desc": "PvE damage bonus +3%Paralysis Resistance +25%Hold Resistance +25%Sleep Resistance +25%Shock Resistance +25%Buff Cancel Resistance +40%",
         "balance": {
-            "mpCost": 22,
-            "pwr": 0,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 22,
+                "pwr": 0,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_lionheart",
         "vfxGap": false,
@@ -1823,21 +1724,21 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 49,
         "classes": [
-            "warrior",
-            "gladiator",
-            "warlord",
-            "raider",
-            "destroyer",
-            "monk",
-            "tyrant",
-            "scavenger",
-            "bountyHunter",
-            "artisanDwarf",
-            "warsmith",
-            "shineMakerS1",
-            "shineMakerS2"
+                "warrior",
+                "gladiator",
+                "warlord",
+                "raider",
+                "destroyer",
+                "monk",
+                "tyrant",
+                "scavenger",
+                "bountyHunter",
+                "artisanDwarf",
+                "warsmith",
+                "shineMakerS1",
+                "shineMakerS2"
         ]
-    },
+},
     "battle_roar": {
         "id": "battle_roar",
         "name": "Battle Roar",
@@ -1854,10 +1755,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 120000,
         "desc": "Max HP +15%Momentarily recovers bonus HP.",
         "balance": {
-            "mpCost": 18,
-            "pwr": 2,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 18,
+                "pwr": 2,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_battle_roar",
         "vfxGap": false,
@@ -1865,13 +1766,13 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "warrior",
-            "gladiator",
-            "warlord",
-            "raider",
-            "destroyer"
+                "warrior",
+                "gladiator",
+                "warlord",
+                "raider",
+                "destroyer"
         ]
-    },
+},
     "war_cry": {
         "id": "war_cry",
         "name": "War Cry",
@@ -1888,10 +1789,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "War Cry",
         "balance": {
-            "mpCost": 40,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 40,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_war_cry",
         "vfxGap": false,
@@ -1899,13 +1800,13 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 43,
         "classes": [
-            "warrior",
-            "gladiator",
-            "duelist",
-            "warlord",
-            "dreadnought"
+                "warrior",
+                "gladiator",
+                "duelist",
+                "warlord",
+                "dreadnought"
         ]
-    },
+},
     "fatal_strike": {
         "id": "fatal_strike",
         "name": "Fatal Strike",
@@ -1922,10 +1823,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "A powerful strike.Attacks the target. Power 694.Ignores Shield Defense.Ignores 5% of the target's defense.",
         "balance": {
-            "mpCost": 30,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 30,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_fatal_strike",
         "vfxGap": false,
@@ -1933,24 +1834,24 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "warlord",
-            "dreadnought",
-            "prophet",
-            "hierophant",
-            "destroyer",
-            "titan",
-            "overlord",
-            "dominator",
-            "warcryer",
-            "doomcryer",
-            "bountyHunter",
-            "fortuneSeeker",
-            "warsmith",
-            "maestro",
-            "shineMakerS2",
-            "shinemaker"
+                "warlord",
+                "dreadnought",
+                "prophet",
+                "hierophant",
+                "destroyer",
+                "titan",
+                "overlord",
+                "dominator",
+                "warcryer",
+                "doomcryer",
+                "bountyHunter",
+                "fortuneSeeker",
+                "warsmith",
+                "maestro",
+                "shineMakerS2",
+                "shinemaker"
         ]
-    },
+},
     "thunder_storm": {
         "id": "thunder_storm",
         "name": "Thunder Storm",
@@ -1967,10 +1868,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 5000,
         "desc": "Attacks nearby targets. Power 462.Stuns for 3 sec.Ignores Shield Defense.PvP: Attacks up to 5 targets.PvE: Attacks up to 5 targets.",
         "balance": {
-            "mpCost": 34,
-            "pwr": 462,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 34,
+                "pwr": 462,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_thunder_storm",
         "vfxGap": false,
@@ -1978,10 +1879,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "warlord",
-            "dreadnought"
+                "warlord",
+                "dreadnought"
         ]
-    },
+},
     "power_crash": {
         "id": "power_crash",
         "name": "Power Crash",
@@ -1998,10 +1899,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Character attacks the enemy with 586 power.Stuns for 3 sec.Ignores Shield Defense.",
         "balance": {
-            "mpCost": 31,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 31,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_power_crash",
         "vfxGap": false,
@@ -2009,22 +1910,22 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "warlord",
-            "dreadnought",
-            "destroyer",
-            "titan",
-            "overlord",
-            "dominator",
-            "warcryer",
-            "doomcryer",
-            "bountyHunter",
-            "fortuneSeeker",
-            "warsmith",
-            "maestro",
-            "shineMakerS2",
-            "shinemaker"
+                "warlord",
+                "dreadnought",
+                "destroyer",
+                "titan",
+                "overlord",
+                "dominator",
+                "warcryer",
+                "doomcryer",
+                "bountyHunter",
+                "fortuneSeeker",
+                "warsmith",
+                "maestro",
+                "shineMakerS2",
+                "shinemaker"
         ]
-    },
+},
     "purify": {
         "id": "purify",
         "name": "Purify",
@@ -2041,10 +1942,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Purify",
         "balance": {
-            "mpCost": 40,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 40,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_purify",
         "vfxGap": false,
@@ -2052,15 +1953,15 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "gladiator",
-            "warlord",
-            "bishop",
-            "elfElder",
-            "shillienElder",
-            "holyTemplar",
-            "divineTemplar"
+                "gladiator",
+                "warlord",
+                "bishop",
+                "elfElder",
+                "shillienElder",
+                "holyTemplar",
+                "divineTemplar"
         ]
-    },
+},
     "vortex": {
         "id": "vortex",
         "name": "Vortex",
@@ -2077,10 +1978,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 3000,
         "desc": "Attacks the target and nearby enemies. Power 485.Ignores Shield Defense.PvP: Attacks up to 5 targets.PvE: Attacks up to 5 targets.",
         "balance": {
-            "mpCost": 34,
-            "pwr": 485,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 34,
+                "pwr": 485,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_vortex",
         "vfxGap": false,
@@ -2088,17 +1989,17 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "warlord",
-            "dreadnought",
-            "destroyer",
-            "bountyHunter",
-            "fortuneSeeker",
-            "warsmith",
-            "maestro",
-            "shineMakerS2",
-            "shinemaker"
+                "warlord",
+                "dreadnought",
+                "destroyer",
+                "bountyHunter",
+                "fortuneSeeker",
+                "warsmith",
+                "maestro",
+                "shineMakerS2",
+                "shinemaker"
         ]
-    },
+},
     "bandage": {
         "id": "bandage",
         "name": "Bandage",
@@ -2115,10 +2016,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Removes infection with a 70% chance.",
         "balance": {
-            "mpCost": 41,
-            "pwr": 7,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 41,
+                "pwr": 7,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_bandage",
         "vfxGap": false,
@@ -2126,29 +2027,29 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 45,
         "classes": [
-            "warrior",
-            "gladiator",
-            "warlord",
-            "raider",
-            "destroyer",
-            "monk",
-            "tyrant",
-            "dragoon",
-            "vanguardRider",
-            "scavenger",
-            "bountyHunter",
-            "artisanDwarf",
-            "warsmith",
-            "shineMakerS1",
-            "shineMakerS2",
-            "trooper",
-            "berserker",
-            "soulFinder",
-            "soulBreakerKamael",
-            "marauder",
-            "ertheiaWarrior"
+                "warrior",
+                "gladiator",
+                "warlord",
+                "raider",
+                "destroyer",
+                "monk",
+                "tyrant",
+                "dragoon",
+                "vanguardRider",
+                "scavenger",
+                "bountyHunter",
+                "artisanDwarf",
+                "warsmith",
+                "shineMakerS1",
+                "shineMakerS2",
+                "trooper",
+                "berserker",
+                "soulFinder",
+                "soulBreakerKamael",
+                "marauder",
+                "ertheiaWarrior"
         ]
-    },
+},
     "quick_spear": {
         "id": "quick_spear",
         "name": "Quick Spear",
@@ -2165,10 +2066,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 60000,
         "desc": "Attacks the target and nearby enemies. Power 801.Stuns for 3 sec.Ignores Shield Defense.PvP: Attacks up to 5 targets.PvE: Attacks up to 5 targets.",
         "balance": {
-            "mpCost": 51,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 51,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_quick_spear",
         "vfxGap": false,
@@ -2176,10 +2077,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 42,
         "classes": [
-            "warlord",
-            "dreadnought"
+                "warlord",
+                "dreadnought"
         ]
-    },
+},
     "focus_attack": {
         "id": "focus_attack",
         "name": "Focus Attack",
@@ -2196,10 +2097,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "When triggered:Basic attacks hit one target.P. Accuracy +2Basic Critical Damage +3%",
         "balance": {
-            "mpCost": 18,
-            "pwr": 0,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 18,
+                "pwr": 0,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_focus_attack",
         "vfxGap": false,
@@ -2207,10 +2108,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 46,
         "classes": [
-            "warlord",
-            "dreadnought"
+                "warlord",
+                "dreadnought"
         ]
-    },
+},
     "revival": {
         "id": "revival",
         "name": "Revival",
@@ -2227,10 +2128,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 900000,
         "desc": "Revival",
         "balance": {
-            "mpCost": 25,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 25,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_revival",
         "vfxGap": false,
@@ -2238,10 +2139,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 55,
         "classes": [
-            "warlord",
-            "dreadnought"
+                "warlord",
+                "dreadnought"
         ]
-    },
+},
     "provoke": {
         "id": "provoke",
         "name": "Provoke",
@@ -2258,10 +2159,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 20000,
         "desc": "Provokes nearby enemies decreasing their Spear Resistance.The effect lasts for 10 sec.Spear Resistance -5%",
         "balance": {
-            "mpCost": 54,
-            "pwr": 1,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 54,
+                "pwr": 1,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_provoke",
         "vfxGap": false,
@@ -2269,16 +2170,16 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "warlord",
-            "dreadnought",
-            "bountyHunter",
-            "fortuneSeeker",
-            "warsmith",
-            "maestro",
-            "shineMakerS2",
-            "shinemaker"
+                "warlord",
+                "dreadnought",
+                "bountyHunter",
+                "fortuneSeeker",
+                "warsmith",
+                "maestro",
+                "shineMakerS2",
+                "shinemaker"
         ]
-    },
+},
     "howl": {
         "id": "howl",
         "name": "Howl",
@@ -2295,10 +2196,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 2000,
         "desc": "P. Atk. -23%",
         "balance": {
-            "mpCost": 45,
-            "pwr": 2,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 45,
+                "pwr": 2,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_howl",
         "vfxGap": false,
@@ -2306,10 +2207,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 43,
         "classes": [
-            "warlord",
-            "dreadnought"
+                "warlord",
+                "dreadnought"
         ]
-    },
+},
     "thrill_fight": {
         "id": "thrill_fight",
         "name": "Thrill Fight",
@@ -2326,10 +2227,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 5000,
         "desc": "Atk. Spd. +5%Speed -15%",
         "balance": {
-            "mpCost": 21,
-            "pwr": 1,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 21,
+                "pwr": 1,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_thrill_fight",
         "vfxGap": false,
@@ -2337,10 +2238,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 46,
         "classes": [
-            "warlord",
-            "dreadnought"
+                "warlord",
+                "dreadnought"
         ]
-    },
+},
     "power_strike": {
         "id": "power_strike",
         "name": "Power Strike",
@@ -2357,10 +2258,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Accumulates power to make a devastating blow.Power 286.No critical.",
         "balance": {
-            "mpCost": 15,
-            "pwr": 286,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 286,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_power_strike",
         "vfxGap": false,
@@ -2368,21 +2269,21 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 20,
         "classes": [
-            "fighter",
-            "warrior",
-            "knight",
-            "elfFighter",
-            "elvenKnight",
-            "darkElfFighter",
-            "palusKnight",
-            "orcFighter",
-            "raider",
-            "dwarfFighter",
-            "scavenger",
-            "artisanDwarf",
-            "shineMakerS1"
+                "fighter",
+                "warrior",
+                "knight",
+                "elfFighter",
+                "elvenKnight",
+                "darkElfFighter",
+                "palusKnight",
+                "orcFighter",
+                "raider",
+                "dwarfFighter",
+                "scavenger",
+                "artisanDwarf",
+                "shineMakerS1"
         ]
-    },
+},
     "wind_walk": {
         "id": "wind_walk",
         "name": "Wind Walk",
@@ -2399,10 +2300,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Speed +20",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_wind_walk",
         "vfxGap": false,
@@ -2410,58 +2311,58 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 20,
         "classes": [
-            "warrior",
-            "duelist",
-            "dreadnought",
-            "knight",
-            "phoenixKnight",
-            "hellKnight",
-            "rogue",
-            "adventurer",
-            "sagittarius",
-            "wizard",
-            "archmage",
-            "soultaker",
-            "arcanaLord",
-            "cleric",
-            "cardinal",
-            "hierophant",
-            "deathBlade",
-            "deathKnight",
-            "warg",
-            "assassinS1",
-            "assassinS3",
-            "elvenKnight",
-            "evaTemplar",
-            "swordMuse",
-            "elfScout",
-            "windRider",
-            "moonlightSentinel",
-            "elvenWizard",
-            "mysticMuse",
-            "elementalMaster",
-            "elfOracle",
-            "evaSaint",
-            "palusKnight",
-            "shillienTemplar",
-            "spectralDancer",
-            "ghostHunter",
-            "ghostSentinel",
-            "darkWizard",
-            "stormScreamer",
-            "spectralMaster",
-            "shillienOracle",
-            "shillienSaint",
-            "bloodRoseS1",
-            "bloodRose",
-            "lightTemplar",
-            "divineTemplar",
-            "elementWeaverS1",
-            "elementWeaver",
-            "sayhaSeer",
-            "sayhaSeeker"
+                "warrior",
+                "duelist",
+                "dreadnought",
+                "knight",
+                "phoenixKnight",
+                "hellKnight",
+                "rogue",
+                "adventurer",
+                "sagittarius",
+                "wizard",
+                "archmage",
+                "soultaker",
+                "arcanaLord",
+                "cleric",
+                "cardinal",
+                "hierophant",
+                "deathBlade",
+                "deathKnight",
+                "warg",
+                "assassinS1",
+                "assassinS3",
+                "elvenKnight",
+                "evaTemplar",
+                "swordMuse",
+                "elfScout",
+                "windRider",
+                "moonlightSentinel",
+                "elvenWizard",
+                "mysticMuse",
+                "elementalMaster",
+                "elfOracle",
+                "evaSaint",
+                "palusKnight",
+                "shillienTemplar",
+                "spectralDancer",
+                "ghostHunter",
+                "ghostSentinel",
+                "darkWizard",
+                "stormScreamer",
+                "spectralMaster",
+                "shillienOracle",
+                "shillienSaint",
+                "bloodRoseS1",
+                "bloodRose",
+                "lightTemplar",
+                "divineTemplar",
+                "elementWeaverS1",
+                "elementWeaver",
+                "sayhaSeer",
+                "sayhaSeeker"
         ]
-    },
+},
     "wild_sweep": {
         "id": "wild_sweep",
         "name": "Wild Sweep",
@@ -2478,10 +2379,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 3000,
         "desc": "Attacks the target at the front and nearby enemies. Power 108.No critical.PvP: Attacks up to 5 targets.PvE: Attacks up to 5 targets.",
         "balance": {
-            "mpCost": 24,
-            "pwr": 108,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 24,
+                "pwr": 108,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_wild_sweep",
         "vfxGap": false,
@@ -2489,13 +2390,13 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 20,
         "classes": [
-            "warrior",
-            "raider",
-            "scavenger",
-            "artisanDwarf",
-            "shineMakerS1"
+                "warrior",
+                "raider",
+                "scavenger",
+                "artisanDwarf",
+                "shineMakerS1"
         ]
-    },
+},
     "detect_weakness": {
         "id": "detect_weakness",
         "name": "Detect Weakness",
@@ -2512,10 +2413,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Detect Weakness",
         "balance": {
-            "mpCost": 50,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 50,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_detect_weakness",
         "vfxGap": false,
@@ -2523,9 +2424,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 20,
         "classes": [
-            "warrior"
+                "warrior"
         ]
-    },
+},
     "damage_reflection": {
         "id": "damage_reflection",
         "name": "Damage Reflection",
@@ -2542,10 +2443,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Reflects 3% of received damage.",
         "balance": {
-            "mpCost": 18,
-            "pwr": 0,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 18,
+                "pwr": 0,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_damage_reflection",
         "vfxGap": false,
@@ -2553,9 +2454,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "darkAvenger"
+                "darkAvenger"
         ]
-    },
+},
     "dark_panther_s_help": {
         "id": "dark_panther_s_help",
         "name": "Dark Panther's Help",
@@ -2572,10 +2473,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Dark Panther comes to your aid.Dark Panther attacks the same target as you.Dark Panther's additional hit rate: 5%Dark Panther: Attacks a single target; damage is based on your P. Atk. Power 1180.",
         "balance": {
-            "mpCost": 50,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 50,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_dark_panther_s_help",
         "vfxGap": false,
@@ -2583,10 +2484,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "darkAvenger",
-            "hellKnight"
+                "darkAvenger",
+                "hellKnight"
         ]
-    },
+},
     "power_shot": {
         "id": "power_shot",
         "name": "Power Shot",
@@ -2603,10 +2504,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1500,
         "desc": "Makes a powerful shot at the target.Power 92.No critical.",
         "balance": {
-            "mpCost": 6,
-            "pwr": 92,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 6,
+                "pwr": 92,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_power_shot",
         "vfxGap": false,
@@ -2614,13 +2515,13 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 3,
         "classes": [
-            "fighter",
-            "rogue",
-            "elfFighter",
-            "elfScout",
-            "darkElfFighter"
+                "fighter",
+                "rogue",
+                "elfFighter",
+                "elfScout",
+                "darkElfFighter"
         ]
-    },
+},
     "mortal_blow": {
         "id": "mortal_blow",
         "name": "Mortal Blow",
@@ -2637,10 +2538,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1500,
         "desc": "Character attacks the target at a vital point.Power 89",
         "balance": {
-            "mpCost": 5,
-            "pwr": 89,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 5,
+                "pwr": 89,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_mortal_blow",
         "vfxGap": false,
@@ -2648,13 +2549,13 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 3,
         "classes": [
-            "fighter",
-            "rogue",
-            "elfFighter",
-            "elfScout",
-            "darkElfFighter"
+                "fighter",
+                "rogue",
+                "elfFighter",
+                "elfScout",
+                "darkElfFighter"
         ]
-    },
+},
     "dark_strike": {
         "id": "dark_strike",
         "name": "Dark Strike",
@@ -2671,10 +2572,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 5000,
         "desc": "Attacks the target. Power 670.No critical.",
         "balance": {
-            "mpCost": 5,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 5,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_dark_strike",
         "vfxGap": false,
@@ -2682,10 +2583,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "darkAvenger",
-            "hellKnight"
+                "darkAvenger",
+                "hellKnight"
         ]
-    },
+},
     "powerful_charge": {
         "id": "powerful_charge",
         "name": "Powerful Charge",
@@ -2702,10 +2603,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 3000,
         "desc": "Powerful Charge",
         "balance": {
-            "mpCost": 60,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 60,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_powerful_charge",
         "vfxGap": false,
@@ -2713,10 +2614,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "phoenixKnight",
-            "hellKnight"
+                "phoenixKnight",
+                "hellKnight"
         ]
-    },
+},
     "horror": {
         "id": "horror",
         "name": "Horror",
@@ -2733,10 +2634,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 20000,
         "desc": "Frightens the enemy.",
         "balance": {
-            "mpCost": 22,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 22,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_horror",
         "vfxGap": false,
@@ -2744,10 +2645,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 46,
         "classes": [
-            "darkAvenger",
-            "hellKnight"
+                "darkAvenger",
+                "hellKnight"
         ]
-    },
+},
     "hamstring": {
         "id": "hamstring",
         "name": "Hamstring",
@@ -2764,10 +2665,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "The effect lasts for 30 sec.Speed -30%",
         "balance": {
-            "mpCost": 19,
-            "pwr": 3,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 19,
+                "pwr": 3,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_hamstring",
         "vfxGap": false,
@@ -2775,10 +2676,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 43,
         "classes": [
-            "darkAvenger",
-            "hellKnight"
+                "darkAvenger",
+                "hellKnight"
         ]
-    },
+},
     "life_scavenge": {
         "id": "life_scavenge",
         "name": "Life Scavenge",
@@ -2795,10 +2696,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 2000,
         "desc": "HP Recovery from absorbing residual life energy from a corpse.",
         "balance": {
-            "mpCost": 35,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 35,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_life_scavenge",
         "vfxGap": false,
@@ -2806,10 +2707,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "darkAvenger",
-            "hellKnight"
+                "darkAvenger",
+                "hellKnight"
         ]
-    },
+},
     "knight_s_assault": {
         "id": "knight_s_assault",
         "name": "Knight's Assault",
@@ -2826,10 +2727,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Makes a powerful strike at the target.Attacks the target. Power 4907.Ignores Shield Defense.Ignores 10% of the target's defense.",
         "balance": {
-            "mpCost": 63,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 63,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_knight_s_assault",
         "vfxGap": false,
@@ -2837,10 +2738,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "phoenixKnight",
-            "hellKnight"
+                "phoenixKnight",
+                "hellKnight"
         ]
-    },
+},
     "shield_charge": {
         "id": "shield_charge",
         "name": "Shield Charge",
@@ -2857,10 +2758,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "Strikes with a shield.Attacks the target at the front and nearby enemies. Power 6075.For 3 sec., stuns the target.Ignores 10% of the target's defense.PvP: Attacks up to 6 targets.PvE: Attacks up to 6 targets.",
         "balance": {
-            "mpCost": 60,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 60,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_shield_charge",
         "vfxGap": false,
@@ -2868,10 +2769,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "phoenixKnight",
-            "evaTemplar"
+                "phoenixKnight",
+                "evaTemplar"
         ]
-    },
+},
     "power_of_life": {
         "id": "power_of_life",
         "name": "Power of Life",
@@ -2888,10 +2789,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Fills your body with power and energy.Max HP +12%Max HP +1200P. Def. +300Shield Defense +200",
         "balance": {
-            "mpCost": 86,
-            "pwr": 1,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 86,
+                "pwr": 1,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_power_of_life",
         "vfxGap": false,
@@ -2899,10 +2800,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "phoenixKnight",
-            "evaTemplar"
+                "phoenixKnight",
+                "evaTemplar"
         ]
-    },
+},
     "phoenix_strike": {
         "id": "phoenix_strike",
         "name": "Phoenix Strike",
@@ -2919,10 +2820,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 15000,
         "desc": "Phoenix Strike",
         "balance": {
-            "mpCost": 85,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 85,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_phoenix_strike",
         "vfxGap": false,
@@ -2930,9 +2831,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "phoenixKnight"
+                "phoenixKnight"
         ]
-    },
+},
     "shield_throwing": {
         "id": "shield_throwing",
         "name": "Shield Throwing",
@@ -2949,10 +2850,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Throws a shield at the target.Deals P. damage to the target and nearby enemies. Power 7751.PvP effectDuration: 10 sec.P. Skill Critical Rate -5%P. Skill Critical Damage -5%PvE effectDuration: 10 sec.P. Def. -25%Ignores Shield Defense.Ignores 20% of the target's defense.PvP: Attacks up to 6 targets.PvE: Attacks up to 6 targets.",
         "balance": {
-            "mpCost": 66,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 66,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_shield_throwing",
         "vfxGap": false,
@@ -2960,10 +2861,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "phoenixKnight",
-            "hellKnight"
+                "phoenixKnight",
+                "hellKnight"
         ]
-    },
+},
     "battle_will": {
         "id": "battle_will",
         "name": "Battle Will",
@@ -2980,10 +2881,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Increases combat abilities.P. Atk. +500P. Def. +250Chain Strike → Chain Strike: Shock- Increases Pull Atk. Rate.- Adds Stun.- Decreases cooldown.Powerful Charge- Increases attack power.- Increases number of targets.- Increases range.- Adds class effects.",
         "balance": {
-            "mpCost": 120,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 120,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_battle_will",
         "vfxGap": false,
@@ -2991,10 +2892,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "phoenixKnight",
-            "hellKnight"
+                "phoenixKnight",
+                "hellKnight"
         ]
-    },
+},
     "chain_strike": {
         "id": "chain_strike",
         "name": "Chain Strike",
@@ -3011,10 +2912,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 15000,
         "desc": "Pulls the target to you.",
         "balance": {
-            "mpCost": 50,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 50,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_chain_strike",
         "vfxGap": false,
@@ -3022,10 +2923,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "phoenixKnight",
-            "hellKnight"
+                "phoenixKnight",
+                "hellKnight"
         ]
-    },
+},
     "mass_chain_strike": {
         "id": "mass_chain_strike",
         "name": "Mass Chain Strike",
@@ -3042,10 +2943,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 60000,
         "desc": "Pulls target and nearby enemies and puts them in front of the character.PvP: Attacks up to 10 targets.PvE: Attacks up to 10 targets.",
         "balance": {
-            "mpCost": 80,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 80,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_mass_chain_strike",
         "vfxGap": false,
@@ -3053,12 +2954,12 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "phoenixKnight",
-            "hellKnight",
-            "evaTemplar",
-            "shillienTemplar"
+                "phoenixKnight",
+                "hellKnight",
+                "evaTemplar",
+                "shillienTemplar"
         ]
-    },
+},
     "white_guardian_transformation": {
         "id": "white_guardian_transformation",
         "name": "White Guardian Transformation",
@@ -3075,60 +2976,21 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "White Guardian Transformation",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_white_guardian_transformation",
         "vfxGap": false,
         "sfxId": "sfx_action",
         "sfxGap": false,
         "minLevel": 80,
-        "classes": [
-            "duelist",
-            "dreadnought",
-            "phoenixKnight",
-            "hellKnight",
-            "adventurer",
-            "sagittarius",
-            "archmage",
-            "soultaker",
-            "arcanaLord",
-            "cardinal",
-            "hierophant",
-            "warg",
-            "assassinS3",
-            "evaTemplar",
-            "swordMuse",
-            "windRider",
-            "moonlightSentinel",
-            "mysticMuse",
-            "elementalMaster",
-            "evaSaint",
-            "shillienTemplar",
-            "spectralDancer",
-            "ghostHunter",
-            "ghostSentinel",
-            "stormScreamer",
-            "spectralMaster",
-            "shillienSaint",
-            "bloodRose",
-            "titan",
-            "grandKhavatari",
-            "grandVanguard",
-            "dominator",
-            "doomcryer",
-            "fortuneSeeker",
-            "maestro",
-            "shinemaker",
-            "samurai",
-            "stormBlaster",
-            "divineTemplar",
-            "elementWeaver",
-            "sayhaSeeker"
-        ]
-    },
+        "classes": [],
+        "availableTo": [],
+        "disabled": true,
+        "removalReason": "cosmetic_mount_purge"
+},
     "shield_of_faith": {
         "id": "shield_of_faith",
         "name": "Shield of Faith",
@@ -3145,10 +3007,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 900000,
         "desc": "Shield of Faith",
         "balance": {
-            "mpCost": 43,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 43,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_shield_of_faith",
         "vfxGap": false,
@@ -3156,10 +3018,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 79,
         "classes": [
-            "phoenixKnight",
-            "hellKnight"
+                "phoenixKnight",
+                "hellKnight"
         ]
-    },
+},
     "phoenix_protection": {
         "id": "phoenix_protection",
         "name": "Phoenix Protection",
@@ -3176,10 +3038,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 420000,
         "desc": "Phoenix protects your party members.P. Def. +15%M. Def. +20%Received Healing +20%If the caster is far, the skill is cancelled.",
         "balance": {
-            "mpCost": 38,
-            "pwr": 2,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 38,
+                "pwr": 2,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_phoenix_protection",
         "vfxGap": false,
@@ -3187,9 +3049,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 80,
         "classes": [
-            "phoenixKnight"
+                "phoenixKnight"
         ]
-    },
+},
     "mount_golden_lion": {
         "id": "mount_golden_lion",
         "name": "Mount Golden Lion",
@@ -3206,30 +3068,21 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Mount Golden Lion",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_mount_golden_lion",
         "vfxGap": false,
         "sfxId": "sfx_action",
         "sfxGap": false,
         "minLevel": 76,
-        "classes": [
-            "duelist",
-            "dreadnought",
-            "phoenixKnight",
-            "hellKnight",
-            "adventurer",
-            "sagittarius",
-            "archmage",
-            "soultaker",
-            "arcanaLord",
-            "cardinal",
-            "hierophant"
-        ]
-    },
+        "classes": [],
+        "availableTo": [],
+        "disabled": true,
+        "removalReason": "cosmetic_mount_purge"
+},
     "phoenix_shield": {
         "id": "phoenix_shield",
         "name": "Phoenix Shield",
@@ -3246,10 +3099,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 120000,
         "desc": "Phoenix Shield",
         "balance": {
-            "mpCost": 101,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 101,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_phoenix_shield",
         "vfxGap": false,
@@ -3257,9 +3110,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "phoenixKnight"
+                "phoenixKnight"
         ]
-    },
+},
     "dragon_slayer_appearance": {
         "id": "dragon_slayer_appearance",
         "name": "Dragon Slayer Appearance",
@@ -3276,65 +3129,21 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 600000,
         "desc": "Dragon Slayer Appearance",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_dragon_slayer_appearance",
         "vfxGap": false,
         "sfxId": "sfx_action",
         "sfxGap": false,
         "minLevel": 82,
-        "classes": [
-            "duelist",
-            "dreadnought",
-            "phoenixKnight",
-            "hellKnight",
-            "adventurer",
-            "sagittarius",
-            "archmage",
-            "soultaker",
-            "arcanaLord",
-            "cardinal",
-            "hierophant",
-            "deathKnight",
-            "warg",
-            "assassinS3",
-            "evaTemplar",
-            "swordMuse",
-            "windRider",
-            "moonlightSentinel",
-            "mysticMuse",
-            "elementalMaster",
-            "evaSaint",
-            "shillienTemplar",
-            "spectralDancer",
-            "ghostHunter",
-            "ghostSentinel",
-            "stormScreamer",
-            "spectralMaster",
-            "shillienSaint",
-            "bloodRose",
-            "titan",
-            "grandKhavatari",
-            "grandVanguard",
-            "dominator",
-            "doomcryer",
-            "fortuneSeeker",
-            "maestro",
-            "shinemaker",
-            "doombringer",
-            "soulHound",
-            "trickster",
-            "samurai",
-            "stormBlaster",
-            "divineTemplar",
-            "elementWeaver",
-            "eviscerator",
-            "sayhaSeeker"
-        ]
-    },
+        "classes": [],
+        "availableTo": [],
+        "disabled": true,
+        "removalReason": "cosmetic_mount_purge"
+},
     "phoenix_power": {
         "id": "phoenix_power",
         "name": "Phoenix Power",
@@ -3351,10 +3160,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Phoenix Power",
         "balance": {
-            "mpCost": 150,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 150,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_phoenix_power",
         "vfxGap": false,
@@ -3362,9 +3171,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 85,
         "classes": [
-            "phoenixKnight"
+                "phoenixKnight"
         ]
-    },
+},
     "detection": {
         "id": "detection",
         "name": "Detection",
@@ -3381,60 +3190,21 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "<Common de-stealthing skill>Removes the Hide effect from nearby enemies and prevents from using it again for 2 sec.De-stealthing range: 200.",
         "balance": {
-            "mpCost": 70,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 70,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_detection",
         "vfxGap": false,
         "sfxId": "sfx_action",
         "sfxGap": false,
         "minLevel": 76,
-        "classes": [
-            "duelist",
-            "dreadnought",
-            "phoenixKnight",
-            "hellKnight",
-            "adventurer",
-            "archmage",
-            "soultaker",
-            "arcanaLord",
-            "cardinal",
-            "hierophant",
-            "deathKnight",
-            "warg",
-            "assassinS3",
-            "evaTemplar",
-            "swordMuse",
-            "windRider",
-            "mysticMuse",
-            "elementalMaster",
-            "evaSaint",
-            "shillienTemplar",
-            "spectralDancer",
-            "ghostHunter",
-            "stormScreamer",
-            "spectralMaster",
-            "shillienSaint",
-            "bloodRose",
-            "titan",
-            "grandKhavatari",
-            "grandVanguard",
-            "dominator",
-            "doomcryer",
-            "fortuneSeeker",
-            "maestro",
-            "shinemaker",
-            "doombringer",
-            "soulHound",
-            "stormBlaster",
-            "divineTemplar",
-            "elementWeaver",
-            "eviscerator",
-            "sayhaSeeker"
-        ]
-    },
+        "classes": [],
+        "availableTo": [],
+        "disabled": true,
+        "removalReason": "cosmetic_mount_purge"
+},
     "mount_glorious_steed": {
         "id": "mount_glorious_steed",
         "name": "Mount Glorious Steed",
@@ -3451,63 +3221,21 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Mount Glorious Steed",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_mount_glorious_steed",
         "vfxGap": false,
         "sfxId": "sfx_action",
         "sfxGap": false,
         "minLevel": 87,
-        "classes": [
-            "duelist",
-            "dreadnought",
-            "phoenixKnight",
-            "hellKnight",
-            "adventurer",
-            "sagittarius",
-            "archmage",
-            "soultaker",
-            "arcanaLord",
-            "cardinal",
-            "hierophant",
-            "deathKnight",
-            "assassinS3",
-            "evaTemplar",
-            "swordMuse",
-            "windRider",
-            "moonlightSentinel",
-            "mysticMuse",
-            "elementalMaster",
-            "evaSaint",
-            "shillienTemplar",
-            "spectralDancer",
-            "ghostHunter",
-            "ghostSentinel",
-            "stormScreamer",
-            "spectralMaster",
-            "shillienSaint",
-            "bloodRose",
-            "titan",
-            "grandKhavatari",
-            "dominator",
-            "doomcryer",
-            "fortuneSeeker",
-            "maestro",
-            "shinemaker",
-            "doombringer",
-            "soulHound",
-            "trickster",
-            "samurai",
-            "stormBlaster",
-            "divineTemplar",
-            "elementWeaver",
-            "eviscerator",
-            "sayhaSeeker"
-        ]
-    },
+        "classes": [],
+        "availableTo": [],
+        "disabled": true,
+        "removalReason": "cosmetic_mount_purge"
+},
     "glorious_warrior_enhanced_abilities": {
         "id": "glorious_warrior_enhanced_abilities",
         "name": "Glorious Warrior: Enhanced Abilities",
@@ -3524,10 +3252,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "CON +1MEN +1",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_glorious_warrior_enhanced_abilities",
         "vfxGap": false,
@@ -3535,54 +3263,54 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 90,
         "classes": [
-            "duelist",
-            "dreadnought",
-            "phoenixKnight",
-            "hellKnight",
-            "adventurer",
-            "sagittarius",
-            "archmage",
-            "soultaker",
-            "arcanaLord",
-            "cardinal",
-            "hierophant",
-            "deathKnight",
-            "warg",
-            "assassinS3",
-            "evaTemplar",
-            "swordMuse",
-            "windRider",
-            "moonlightSentinel",
-            "mysticMuse",
-            "elementalMaster",
-            "evaSaint",
-            "shillienTemplar",
-            "spectralDancer",
-            "ghostHunter",
-            "ghostSentinel",
-            "stormScreamer",
-            "spectralMaster",
-            "shillienSaint",
-            "bloodRose",
-            "titan",
-            "grandKhavatari",
-            "grandVanguard",
-            "dominator",
-            "doomcryer",
-            "fortuneSeeker",
-            "maestro",
-            "shinemaker",
-            "doombringer",
-            "soulHound",
-            "trickster",
-            "samurai",
-            "stormBlaster",
-            "divineTemplar",
-            "elementWeaver",
-            "eviscerator",
-            "sayhaSeeker"
+                "duelist",
+                "dreadnought",
+                "phoenixKnight",
+                "hellKnight",
+                "adventurer",
+                "sagittarius",
+                "archmage",
+                "soultaker",
+                "arcanaLord",
+                "cardinal",
+                "hierophant",
+                "deathKnight",
+                "warg",
+                "assassinS3",
+                "evaTemplar",
+                "swordMuse",
+                "windRider",
+                "moonlightSentinel",
+                "mysticMuse",
+                "elementalMaster",
+                "evaSaint",
+                "shillienTemplar",
+                "spectralDancer",
+                "ghostHunter",
+                "ghostSentinel",
+                "stormScreamer",
+                "spectralMaster",
+                "shillienSaint",
+                "bloodRose",
+                "titan",
+                "grandKhavatari",
+                "grandVanguard",
+                "dominator",
+                "doomcryer",
+                "fortuneSeeker",
+                "maestro",
+                "shinemaker",
+                "doombringer",
+                "soulHound",
+                "trickster",
+                "samurai",
+                "stormBlaster",
+                "divineTemplar",
+                "elementWeaver",
+                "eviscerator",
+                "sayhaSeeker"
         ]
-    },
+},
     "vengeance": {
         "id": "vengeance",
         "name": "Vengeance",
@@ -3599,10 +3327,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 900000,
         "desc": "Vengeance",
         "balance": {
-            "mpCost": 35,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 35,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_vengeance",
         "vfxGap": false,
@@ -3610,10 +3338,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 77,
         "classes": [
-            "phoenixKnight",
-            "hellKnight"
+                "phoenixKnight",
+                "hellKnight"
         ]
-    },
+},
     "touch_of_life": {
         "id": "touch_of_life",
         "name": "Touch of Life",
@@ -3630,10 +3358,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 300000,
         "desc": "Touch of Life",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_touch_of_life",
         "vfxGap": false,
@@ -3641,10 +3369,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 78,
         "classes": [
-            "phoenixKnight",
-            "evaTemplar"
+                "phoenixKnight",
+                "evaTemplar"
         ]
-    },
+},
     "mount_shining_lady": {
         "id": "mount_shining_lady",
         "name": "Mount Shining Lady",
@@ -3661,63 +3389,21 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Mount Shining Lady",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_mount_shining_lady",
         "vfxGap": false,
         "sfxId": "sfx_action",
         "sfxGap": false,
         "minLevel": 89,
-        "classes": [
-            "duelist",
-            "dreadnought",
-            "phoenixKnight",
-            "hellKnight",
-            "adventurer",
-            "sagittarius",
-            "archmage",
-            "soultaker",
-            "arcanaLord",
-            "cardinal",
-            "hierophant",
-            "deathKnight",
-            "assassinS3",
-            "evaTemplar",
-            "swordMuse",
-            "windRider",
-            "moonlightSentinel",
-            "mysticMuse",
-            "elementalMaster",
-            "evaSaint",
-            "shillienTemplar",
-            "spectralDancer",
-            "ghostHunter",
-            "ghostSentinel",
-            "stormScreamer",
-            "spectralMaster",
-            "shillienSaint",
-            "bloodRose",
-            "titan",
-            "grandKhavatari",
-            "dominator",
-            "doomcryer",
-            "fortuneSeeker",
-            "maestro",
-            "shinemaker",
-            "doombringer",
-            "soulHound",
-            "trickster",
-            "samurai",
-            "stormBlaster",
-            "divineTemplar",
-            "elementWeaver",
-            "eviscerator",
-            "sayhaSeeker"
-        ]
-    },
+        "classes": [],
+        "availableTo": [],
+        "disabled": true,
+        "removalReason": "cosmetic_mount_purge"
+},
     "blade_assault": {
         "id": "blade_assault",
         "name": "Blade Assault",
@@ -3734,10 +3420,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "Blade Assault",
         "balance": {
-            "mpCost": 400,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 400,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_blade_assault",
         "vfxGap": false,
@@ -3745,9 +3431,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "duelist"
+                "duelist"
         ]
-    },
+},
     "blade_rage": {
         "id": "blade_rage",
         "name": "Blade Rage",
@@ -3764,10 +3450,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Attacks the target. Power 195.",
         "balance": {
-            "mpCost": 60,
-            "pwr": 195,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 60,
+                "pwr": 195,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_blade_rage",
         "vfxGap": false,
@@ -3775,9 +3461,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "duelist"
+                "duelist"
         ]
-    },
+},
     "blade_rush": {
         "id": "blade_rush",
         "name": "Blade Rush",
@@ -3794,10 +3480,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 3000,
         "desc": "<Rush skill>Attacks the target. Power 7000.Ignores Shield Defense.Ignores 10% of the target's defense.",
         "balance": {
-            "mpCost": 45,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 45,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_blade_rush",
         "vfxGap": false,
@@ -3805,9 +3491,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "duelist"
+                "duelist"
         ]
-    },
+},
     "final_secret": {
         "id": "final_secret",
         "name": "Final Secret",
@@ -3824,10 +3510,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 120000,
         "desc": "Final Secret",
         "balance": {
-            "mpCost": 41,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 41,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_final_secret",
         "vfxGap": false,
@@ -3835,16 +3521,16 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "duelist",
-            "dreadnought",
-            "titan",
-            "grandKhavatari",
-            "grandVanguard",
-            "fortuneSeeker",
-            "maestro",
-            "shinemaker"
+                "duelist",
+                "dreadnought",
+                "titan",
+                "grandKhavatari",
+                "grandVanguard",
+                "fortuneSeeker",
+                "maestro",
+                "shinemaker"
         ]
-    },
+},
     "indestructible_seal": {
         "id": "indestructible_seal",
         "name": "Indestructible Seal",
@@ -3861,10 +3547,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 60000,
         "desc": "Attacks the target. Power 1091.With a certain chance, inflicts Imprisonment on the target for 5 sec.Imprisoned targets cannot move, attack, teleport, use skills, recover HP/ MP/ CP.When Imprisonment expires, P. Def. -10% for 5 sec.",
         "balance": {
-            "mpCost": 61,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 61,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_indestructible_seal",
         "vfxGap": false,
@@ -3872,9 +3558,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 78,
         "classes": [
-            "duelist"
+                "duelist"
         ]
-    },
+},
     "amazing_blade_strike": {
         "id": "amazing_blade_strike",
         "name": "Amazing Blade Strike",
@@ -3891,10 +3577,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 3000,
         "desc": "<Changing skill>The attack type is based on the distance to the target.With a certain chance, the target's P. Def. -30% for 5 sec.MeleeAttacks the target. Power 7401.Ignores Shield Defense.Ignores 15% of the target's defense.RangedAttacks the target. Power 6290.Ignores Shield Defense.Ignores 10% of the target's defense.",
         "balance": {
-            "mpCost": 60,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 60,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_amazing_blade_strike",
         "vfxGap": false,
@@ -3902,9 +3588,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "duelist"
+                "duelist"
         ]
-    },
+},
     "indestructible_blade": {
         "id": "indestructible_blade",
         "name": "Indestructible Blade",
@@ -3921,10 +3607,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "Attacks the target. Power 8000.With a certain chance, inflicts Imprisonment on the target for 5 sec.Imprisoned targets cannot move, attack, teleport, use skills, recover HP/ MP/ CP.They can only be attacked by Duelists.",
         "balance": {
-            "mpCost": 80,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 80,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_indestructible_blade",
         "vfxGap": false,
@@ -3932,9 +3618,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 85,
         "classes": [
-            "duelist"
+                "duelist"
         ]
-    },
+},
     "challenger": {
         "id": "challenger",
         "name": "Challenger",
@@ -3951,10 +3637,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 60000,
         "desc": "A sword imbued with the will to win, that grants a mighty power.​P. Atk. +25%P. Skill Power +15%P. Skill Critical Rate +20%P. Skill Critical Damage +20%P. Skill damage bonus +10%Max HP +20%Max HP +3000Atk. Spd. +20%Speed +10​Imprisonment Atk. Rate +15%",
         "balance": {
-            "mpCost": 250,
-            "pwr": 3,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 250,
+                "pwr": 3,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_challenger",
         "vfxGap": false,
@@ -3962,9 +3648,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "duelist"
+                "duelist"
         ]
-    },
+},
     "crossed_blades": {
         "id": "crossed_blades",
         "name": "Crossed Blades",
@@ -3981,10 +3667,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Crossed Blades",
         "balance": {
-            "mpCost": 100,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 100,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_crossed_blades",
         "vfxGap": false,
@@ -3992,9 +3678,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "duelist"
+                "duelist"
         ]
-    },
+},
     "blade_wave": {
         "id": "blade_wave",
         "name": "Blade Wave",
@@ -4011,10 +3697,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "Attacks the target and nearby enemies. Power 5811.When attacking a single target, power 7554.Ignores Shield Defense.Ignores 15% of the target's defense.With a certain chance, the target's P. Def. -30% for 10 sec.PvP: Attacks up to 6 targets.PvE: Attacks up to 6 targets.",
         "balance": {
-            "mpCost": 91,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 91,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_blade_wave",
         "vfxGap": false,
@@ -4022,9 +3708,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "duelist"
+                "duelist"
         ]
-    },
+},
     "tough_body": {
         "id": "tough_body",
         "name": "Tough Body",
@@ -4041,10 +3727,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 600000,
         "desc": "Tough Body",
         "balance": {
-            "mpCost": 50,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 50,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_tough_body",
         "vfxGap": false,
@@ -4052,9 +3738,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 77,
         "classes": [
-            "duelist"
+                "duelist"
         ]
-    },
+},
     "blade_punishment": {
         "id": "blade_punishment",
         "name": "Blade Punishment",
@@ -4071,10 +3757,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 5000,
         "desc": "Attacks the target and nearby enemies. Power 6789.Ignores Shield Defense.Ignores 10% of the target's defense.PvP: Attacks up to 3 targets.PvE: Attacks up to 3 targets.",
         "balance": {
-            "mpCost": 72,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 72,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_blade_punishment",
         "vfxGap": false,
@@ -4082,9 +3768,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "duelist"
+                "duelist"
         ]
-    },
+},
     "battle_heart": {
         "id": "battle_heart",
         "name": "Battle Heart",
@@ -4101,10 +3787,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 120000,
         "desc": "Battle Heart",
         "balance": {
-            "mpCost": 60,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 60,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_battle_heart",
         "vfxGap": false,
@@ -4112,9 +3798,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 78,
         "classes": [
-            "duelist"
+                "duelist"
         ]
-    },
+},
     "gleaming_blade": {
         "id": "gleaming_blade",
         "name": "Gleaming Blade",
@@ -4131,10 +3817,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Gleaming Blade",
         "balance": {
-            "mpCost": 75,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 75,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_gleaming_blade",
         "vfxGap": false,
@@ -4142,9 +3828,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 85,
         "classes": [
-            "duelist"
+                "duelist"
         ]
-    },
+},
     "tough_body_dual_weapons": {
         "id": "tough_body_dual_weapons",
         "name": "Tough Body: Dual Weapons",
@@ -4161,10 +3847,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 300000,
         "desc": "Tough Body: Dual Weapons",
         "balance": {
-            "mpCost": 50,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 50,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_tough_body_dual_weapons",
         "vfxGap": false,
@@ -4172,9 +3858,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 83,
         "classes": [
-            "duelist"
+                "duelist"
         ]
-    },
+},
     "final_secret_dual_weapons": {
         "id": "final_secret_dual_weapons",
         "name": "Final Secret: Dual Weapons",
@@ -4191,10 +3877,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 120000,
         "desc": "Final Secret: Dual Weapons",
         "balance": {
-            "mpCost": 60,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 60,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_final_secret_dual_weapons",
         "vfxGap": false,
@@ -4202,9 +3888,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 85,
         "classes": [
-            "duelist"
+                "duelist"
         ]
-    },
+},
     "braveheart": {
         "id": "braveheart",
         "name": "Braveheart",
@@ -4221,10 +3907,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 120000,
         "desc": "Braveheart",
         "balance": {
-            "mpCost": 57,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 57,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_braveheart",
         "vfxGap": false,
@@ -4232,16 +3918,16 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 78,
         "classes": [
-            "duelist",
-            "dreadnought",
-            "titan",
-            "grandKhavatari",
-            "grandVanguard",
-            "fortuneSeeker",
-            "maestro",
-            "shinemaker"
+                "duelist",
+                "dreadnought",
+                "titan",
+                "grandKhavatari",
+                "grandVanguard",
+                "fortuneSeeker",
+                "maestro",
+                "shinemaker"
         ]
-    },
+},
     "shocking_burst": {
         "id": "shocking_burst",
         "name": "Shocking Burst",
@@ -4258,10 +3944,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 60000,
         "desc": "Attacks the target and nearby enemies. Power 2486.With a certain chance, stuns for 3 sec.; also, P. Def. -30%, M. Def. -30%.Ignores Shield Defense.PvP: Attacks up to 5 targets.PvE: Attacks up to 5 targets.",
         "balance": {
-            "mpCost": 90,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 90,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_shocking_burst",
         "vfxGap": false,
@@ -4269,9 +3955,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 77,
         "classes": [
-            "dreadnought"
+                "dreadnought"
         ]
-    },
+},
     "great_sweep": {
         "id": "great_sweep",
         "name": "Great Sweep",
@@ -4288,10 +3974,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 60000,
         "desc": "Great Sweep",
         "balance": {
-            "mpCost": 123,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 123,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_great_sweep",
         "vfxGap": false,
@@ -4299,9 +3985,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "dreadnought"
+                "dreadnought"
         ]
-    },
+},
     "spear_rumble": {
         "id": "spear_rumble",
         "name": "Spear Rumble",
@@ -4318,10 +4004,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "Swings at enemies with a spear.Attacks nearby enemies. Power 4099.For 30 sec., P. Atk. -30%P. Skill Critical Damage -5%Ignores Shield Defense.Ignores 15% of the target's defense.Removes the Wind Walk buff from the target.",
         "balance": {
-            "mpCost": 100,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 100,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_spear_rumble",
         "vfxGap": false,
@@ -4329,9 +4015,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "dreadnought"
+                "dreadnought"
         ]
-    },
+},
     "spike_thrust": {
         "id": "spike_thrust",
         "name": "Spike Thrust",
@@ -4348,10 +4034,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Attacks the target. Power 4907.Ignores Shield Defense.Ignores 10% of the target's defense.",
         "balance": {
-            "mpCost": 60,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 60,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_spike_thrust",
         "vfxGap": false,
@@ -4359,9 +4045,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "dreadnought"
+                "dreadnought"
         ]
-    },
+},
     "spear_howl": {
         "id": "spear_howl",
         "name": "Spear Howl",
@@ -4378,10 +4064,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 8000,
         "desc": "Spear Howl",
         "balance": {
-            "mpCost": 91,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 91,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_spear_howl",
         "vfxGap": false,
@@ -4389,9 +4075,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 80,
         "classes": [
-            "dreadnought"
+                "dreadnought"
         ]
-    },
+},
     "throwing_spear": {
         "id": "throwing_spear",
         "name": "Throwing Spear",
@@ -4408,10 +4094,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Attacks the target. Power 801.Holds for 5 sec.Ignores Shield Defense.No critical.",
         "balance": {
-            "mpCost": 60,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 60,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_throwing_spear",
         "vfxGap": false,
@@ -4419,9 +4105,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 78,
         "classes": [
-            "dreadnought"
+                "dreadnought"
         ]
-    },
+},
     "spear_cage": {
         "id": "spear_cage",
         "name": "Spear Cage",
@@ -4438,10 +4124,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 60000,
         "desc": "Throws spears to attack the target and nearby enemies. Power 4660.Inflicts Hold on the target for 3 sec.For 10 sec., P./ M. Def. -30%.Ignores Shield Defense.Ignores 10% of the target's defense.",
         "balance": {
-            "mpCost": 120,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 120,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_spear_cage",
         "vfxGap": false,
@@ -4449,9 +4135,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "dreadnought"
+                "dreadnought"
         ]
-    },
+},
     "unleashed_power": {
         "id": "unleashed_power",
         "name": "Unleashed Power",
@@ -4468,10 +4154,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Received damage -3%Shock Atk. Rate +5%P. Skill Power +1%",
         "balance": {
-            "mpCost": 60,
-            "pwr": 0,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 60,
+                "pwr": 0,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_unleashed_power",
         "vfxGap": false,
@@ -4479,9 +4165,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "dreadnought"
+                "dreadnought"
         ]
-    },
+},
     "gust_shot": {
         "id": "gust_shot",
         "name": "Gust Shot",
@@ -4498,10 +4184,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 20000,
         "desc": "Attacks the target and nearby enemies. Power 4824.Ignores 10% of the target's defense.PvP: Attacks up to 3 targets.PvE: Attacks up to 3 targets.",
         "balance": {
-            "mpCost": 102,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 102,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_gust_shot",
         "vfxGap": false,
@@ -4509,11 +4195,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "sagittarius",
-            "moonlightSentinel",
-            "ghostSentinel"
+                "sagittarius",
+                "moonlightSentinel",
+                "ghostSentinel"
         ]
-    },
+},
     "lethal_shot": {
         "id": "lethal_shot",
         "name": "Lethal Shot",
@@ -4530,10 +4216,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Aims and shoots at a weak point. Power 9479.Ignores 10% of the target's defense.",
         "balance": {
-            "mpCost": 64,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 64,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_lethal_shot",
         "vfxGap": false,
@@ -4541,11 +4227,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "sagittarius",
-            "moonlightSentinel",
-            "ghostSentinel"
+                "sagittarius",
+                "moonlightSentinel",
+                "ghostSentinel"
         ]
-    },
+},
     "double_shot": {
         "id": "double_shot",
         "name": "Double Shot",
@@ -4562,10 +4248,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1500,
         "desc": "Shoots 2 arrows one by one.Attacks the target twice. Power 3646.",
         "balance": {
-            "mpCost": 68,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 68,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_double_shot",
         "vfxGap": false,
@@ -4573,14 +4259,14 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "hawkeye",
-            "sagittarius",
-            "silverRanger",
-            "moonlightSentinel",
-            "phantomRanger",
-            "ghostSentinel"
+                "hawkeye",
+                "sagittarius",
+                "silverRanger",
+                "moonlightSentinel",
+                "phantomRanger",
+                "ghostSentinel"
         ]
-    },
+},
     "incendiary_shot": {
         "id": "incendiary_shot",
         "name": "Incendiary Shot",
@@ -4597,10 +4283,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 15000,
         "desc": "Shoots an arrow imbued with fire energy.Attacks the target and nearby enemies. Power 8800.Applies Ignite on the target.Ignores 10% of the target's defense.IgniteHP Recovery Potions' Effect -5%Duration: 5 sec.PvP: Attacks up to 8 targets.PvE: Attacks up to 8 targets.",
         "balance": {
-            "mpCost": 110,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 110,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_incendiary_shot",
         "vfxGap": false,
@@ -4608,9 +4294,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "sagittarius"
+                "sagittarius"
         ]
-    },
+},
     "buff_thief": {
         "id": "buff_thief",
         "name": "Buff Thief",
@@ -4627,10 +4313,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "With a certain chance, steals up to 2 of the enemy's buffs.Cannot be used on monsters.Stacks the Spectacular Theft buff with each steal attempt.Spectacular TheftBuff:Lv. 1: P./ M. Atk. +100Lv. 2: P./ M. Atk. +200Lv. 3: P./ M. Atk. +300Duration: 5 min.",
         "balance": {
-            "mpCost": 70,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 70,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_buff_thief",
         "vfxGap": false,
@@ -4638,10 +4324,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 77,
         "classes": [
-            "dreadnought",
-            "fortuneSeeker"
+                "dreadnought",
+                "fortuneSeeker"
         ]
-    },
+},
     "flame_arrow_rain": {
         "id": "flame_arrow_rain",
         "name": "Flame Arrow Rain",
@@ -4658,10 +4344,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "Shoots an arrow imbued with fire power.Attacks the target and nearby enemies. Power 10,800.Ignores 10% of the target's defense.With a certain chance, applies Arrow Break on the target.Arrow BreakP. Atk. -20%M. Atk. -20%P. Def. -20%M. Def. -20%Duration: 10 sec.PvP: Attacks up to 15 targets.PvE: Attacks up to 15 targets.",
         "balance": {
-            "mpCost": 170,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 170,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_flame_arrow_rain",
         "vfxGap": false,
@@ -4669,9 +4355,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "sagittarius"
+                "sagittarius"
         ]
-    },
+},
     "real_target": {
         "id": "real_target",
         "name": "Real Target",
@@ -4688,10 +4374,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "When using a bow, P. Atk. +1%Applies Bow Vulnerability to the target on attack.Bow VulnerabilityDebuff: The target's Bow Resistance -15%Duration: 10 sec.Trigger cooldown: 10 sec.",
         "balance": {
-            "mpCost": 55,
-            "pwr": 0,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 55,
+                "pwr": 0,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_real_target",
         "vfxGap": false,
@@ -4699,11 +4385,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "sagittarius",
-            "moonlightSentinel",
-            "ghostSentinel"
+                "sagittarius",
+                "moonlightSentinel",
+                "ghostSentinel"
         ]
-    },
+},
     "steady_aim": {
         "id": "steady_aim",
         "name": "Steady Aim",
@@ -4720,10 +4406,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Accurate shooting increases your lethal attack rate.P. Atk. +1000Atk. Spd. +3%P. Skill Critical Rate +5%P. Skill Cooldown -3%Speed +5When using Double Shot, an additional attack is triggered.Trigger rate: 50%",
         "balance": {
-            "mpCost": 80,
-            "pwr": 0,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 80,
+                "pwr": 0,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_steady_aim",
         "vfxGap": false,
@@ -4731,9 +4417,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "sagittarius"
+                "sagittarius"
         ]
-    },
+},
     "true_aim": {
         "id": "true_aim",
         "name": "True Aim",
@@ -4750,10 +4436,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Max HP +1000When using a bow, P. Atk. +20%P. Skill Power +1%PvE damage bonus +5%Pull Atk. Rate +5%Hold Atk. Rate +5%Applies Bow Vulnerability on the target on attack.Bow VulnerabilityThe target's Bow Resistance -36%Duration: 10 sec.Trigger cooldown: 10 sec.<Skill upgrade>Lethal Shot → Lethal Shot: ReinforceIncreases number of attacks.",
         "balance": {
-            "mpCost": 67,
-            "pwr": 2,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 67,
+                "pwr": 2,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_true_aim",
         "vfxGap": false,
@@ -4761,11 +4447,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "sagittarius",
-            "moonlightSentinel",
-            "ghostSentinel"
+                "sagittarius",
+                "moonlightSentinel",
+                "ghostSentinel"
         ]
-    },
+},
     "vortex_shot": {
         "id": "vortex_shot",
         "name": "Vortex Shot",
@@ -4782,10 +4468,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 15000,
         "desc": "Shoots a spinning arrow.Attacks the target and nearby enemies. Power 4042.Ignores 5% of the target's defense.",
         "balance": {
-            "mpCost": 100,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 100,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_vortex_shot",
         "vfxGap": false,
@@ -4793,14 +4479,14 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 77,
         "classes": [
-            "hawkeye",
-            "sagittarius",
-            "silverRanger",
-            "moonlightSentinel",
-            "phantomRanger",
-            "ghostSentinel"
+                "hawkeye",
+                "sagittarius",
+                "silverRanger",
+                "moonlightSentinel",
+                "phantomRanger",
+                "ghostSentinel"
         ]
-    },
+},
     "ultimate_evasion_archer": {
         "id": "ultimate_evasion_archer",
         "name": "Ultimate Evasion: Archer",
@@ -4817,10 +4503,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 300000,
         "desc": "Ultimate Evasion: Archer",
         "balance": {
-            "mpCost": 35,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 35,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_ultimate_evasion_archer",
         "vfxGap": false,
@@ -4828,7 +4514,7 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": []
-    },
+},
     "legendary_archer": {
         "id": "legendary_archer",
         "name": "Legendary Archer",
@@ -4845,10 +4531,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 60000,
         "desc": "Gives the power of a legendary archer.Max HP +10%P. Atk. +25%P. Skill Critical Rate +20%P. Skill Critical Damage +20%P. Skill Critical Damage +20P. Skill Power +2%PvE damage bonus +5%Received P. Skill Critical Rate -2%Melee Weapon Resistance +10%When using Lethal Shot, an additional attack is triggered.Trigger rate: 50%",
         "balance": {
-            "mpCost": 200,
-            "pwr": 1,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 200,
+                "pwr": 1,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_legendary_archer",
         "vfxGap": false,
@@ -4856,12 +4542,12 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "sagittarius",
-            "moonlightSentinel",
-            "ghostSentinel",
-            "trickster"
+                "sagittarius",
+                "moonlightSentinel",
+                "ghostSentinel",
+                "trickster"
         ]
-    },
+},
     "hamstring_shot": {
         "id": "hamstring_shot",
         "name": "Hamstring Shot",
@@ -4878,10 +4564,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Hamstring Shot",
         "balance": {
-            "mpCost": 70,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 70,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_hamstring_shot",
         "vfxGap": false,
@@ -4889,11 +4575,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "sagittarius",
-            "moonlightSentinel",
-            "ghostSentinel"
+                "sagittarius",
+                "moonlightSentinel",
+                "ghostSentinel"
         ]
-    },
+},
     "spiral_shot": {
         "id": "spiral_shot",
         "name": "Spiral Shot",
@@ -4910,10 +4596,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 20000,
         "desc": "<Pull skill>Shoots an arrow imbued with strong wind energy.Pulls nearby enemies to the affected target.Attacks twice. Power 6600.Ignores 8% of the target's defense.PvP: Attacks up to 8 targets.PvE: Attacks up to 8 targets.",
         "balance": {
-            "mpCost": 124,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 124,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_spiral_shot",
         "vfxGap": false,
@@ -4921,11 +4607,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "sagittarius",
-            "moonlightSentinel",
-            "ghostSentinel"
+                "sagittarius",
+                "moonlightSentinel",
+                "ghostSentinel"
         ]
-    },
+},
     "legendary_shot": {
         "id": "legendary_shot",
         "name": "Legendary Shot",
@@ -4942,10 +4628,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 60000,
         "desc": "Legendary Shot",
         "balance": {
-            "mpCost": 400,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 400,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_legendary_shot",
         "vfxGap": false,
@@ -4953,11 +4639,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "sagittarius",
-            "moonlightSentinel",
-            "ghostSentinel"
+                "sagittarius",
+                "moonlightSentinel",
+                "ghostSentinel"
         ]
-    },
+},
     "legendary_cloak": {
         "id": "legendary_cloak",
         "name": "Legendary Cloak",
@@ -4974,10 +4660,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Legendary Cloak",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_legendary_cloak",
         "vfxGap": false,
@@ -4985,12 +4671,12 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "sagittarius",
-            "moonlightSentinel",
-            "ghostSentinel",
-            "trickster"
+                "sagittarius",
+                "moonlightSentinel",
+                "ghostSentinel",
+                "trickster"
         ]
-    },
+},
     "binding_shot": {
         "id": "binding_shot",
         "name": "Binding Shot",
@@ -5007,10 +4693,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "P. Atk. +500P. Skill Power +2%Hold Atk. Rate +20%Pull Atk. Rate +10%Triggers Hold on attacking the target.HoldTrigger cooldown is fixed.Trigger cooldown: 15 sec.Duration: 3 sec.",
         "balance": {
-            "mpCost": 72,
-            "pwr": 0,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 72,
+                "pwr": 0,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_binding_shot",
         "vfxGap": false,
@@ -5018,11 +4704,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "sagittarius",
-            "moonlightSentinel",
-            "ghostSentinel"
+                "sagittarius",
+                "moonlightSentinel",
+                "ghostSentinel"
         ]
-    },
+},
     "snipe": {
         "id": "snipe",
         "name": "Snipe",
@@ -5039,10 +4725,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "P. Accuracy +6P. Atk. +250Basic Critical Rate +20%Speed -10",
         "balance": {
-            "mpCost": 80,
-            "pwr": 2,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 80,
+                "pwr": 2,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_snipe",
         "vfxGap": false,
@@ -5050,10 +4736,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 80,
         "classes": [
-            "hawkeye",
-            "sagittarius"
+                "hawkeye",
+                "sagittarius"
         ]
-    },
+},
     "rain_of_fire": {
         "id": "rain_of_fire",
         "name": "Rain of Fire",
@@ -5070,10 +4756,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 7000,
         "desc": "Creates a big explosion.Deals M. damage to the target and nearby enemies. Power 60.PvP: Attacks up to 5 targets.PvE: Attacks up to 5 targets.",
         "balance": {
-            "mpCost": 49,
-            "pwr": 60,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 49,
+                "pwr": 60,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_rain_of_fire",
         "vfxGap": false,
@@ -5081,10 +4767,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 58,
         "classes": [
-            "sorcerer",
-            "archmage"
+                "sorcerer",
+                "archmage"
         ]
-    },
+},
     "target_lock": {
         "id": "target_lock",
         "name": "Target Lock",
@@ -5101,10 +4787,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 60000,
         "desc": "Target Lock",
         "balance": {
-            "mpCost": 100,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 100,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_target_lock",
         "vfxGap": false,
@@ -5112,11 +4798,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "sagittarius",
-            "moonlightSentinel",
-            "ghostSentinel"
+                "sagittarius",
+                "moonlightSentinel",
+                "ghostSentinel"
         ]
-    },
+},
     "prominence": {
         "id": "prominence",
         "name": "Prominence",
@@ -5133,10 +4819,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Summons pure flame.Deals M. damage to the target. Power 76.",
         "balance": {
-            "mpCost": 32,
-            "pwr": 76,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 32,
+                "pwr": 76,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_prominence",
         "vfxGap": false,
@@ -5144,10 +4830,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "sorcerer",
-            "archmage"
+                "sorcerer",
+                "archmage"
         ]
-    },
+},
     "detect_darkness": {
         "id": "detect_darkness",
         "name": "Detect Darkness",
@@ -5164,10 +4850,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "<Common de-stealthing skill>Removes the Hide effect from nearby enemies and prevents from using it again for 2 sec.De-stealthing range: 1000.",
         "balance": {
-            "mpCost": 70,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 70,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_detect_darkness",
         "vfxGap": false,
@@ -5175,12 +4861,12 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "sagittarius",
-            "moonlightSentinel",
-            "ghostSentinel",
-            "trickster"
+                "sagittarius",
+                "moonlightSentinel",
+                "ghostSentinel",
+                "trickster"
         ]
-    },
+},
     "mana_regeneration": {
         "id": "mana_regeneration",
         "name": "Mana Regeneration",
@@ -5197,10 +4883,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "MP Recovery Rate +1.72",
         "balance": {
-            "mpCost": 35,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 35,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_mana_regeneration",
         "vfxGap": false,
@@ -5208,18 +4894,18 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "sorcerer",
-            "archmage",
-            "necromancer",
-            "soultaker",
-            "spellsinger",
-            "mysticMuse",
-            "spellhowler",
-            "stormScreamer",
-            "windRiderErth",
-            "sayhaSeeker"
+                "sorcerer",
+                "archmage",
+                "necromancer",
+                "soultaker",
+                "spellsinger",
+                "mysticMuse",
+                "spellhowler",
+                "stormScreamer",
+                "windRiderErth",
+                "sayhaSeeker"
         ]
-    },
+},
     "blazing_skin": {
         "id": "blazing_skin",
         "name": "Blazing Skin",
@@ -5236,10 +4922,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Reflects 3% of received damage.",
         "balance": {
-            "mpCost": 35,
-            "pwr": 0,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 35,
+                "pwr": 0,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_blazing_skin",
         "vfxGap": false,
@@ -5247,9 +4933,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "sorcerer"
+                "sorcerer"
         ]
-    },
+},
     "inferno": {
         "id": "inferno",
         "name": "Inferno",
@@ -5266,10 +4952,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "Inferno",
         "balance": {
-            "mpCost": 100,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 100,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_inferno",
         "vfxGap": false,
@@ -5277,10 +4963,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 70,
         "classes": [
-            "sorcerer",
-            "archmage"
+                "sorcerer",
+                "archmage"
         ]
-    },
+},
     "sleep": {
         "id": "sleep",
         "name": "Sleep",
@@ -5297,10 +4983,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 20000,
         "desc": "Inflicts Sleep on the enemy.",
         "balance": {
-            "mpCost": 21,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 21,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_sleep",
         "vfxGap": false,
@@ -5308,29 +4994,29 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "sorcerer",
-            "archmage",
-            "necromancer",
-            "soultaker",
-            "cleric",
-            "bishop",
-            "cardinal",
-            "prophet",
-            "hierophant",
-            "spellsinger",
-            "mysticMuse",
-            "elfOracle",
-            "elfElder",
-            "evaSaint",
-            "spellhowler",
-            "stormScreamer",
-            "shillienOracle",
-            "shillienElder",
-            "shillienSaint",
-            "windRiderErth",
-            "sayhaSeeker"
+                "sorcerer",
+                "archmage",
+                "necromancer",
+                "soultaker",
+                "cleric",
+                "bishop",
+                "cardinal",
+                "prophet",
+                "hierophant",
+                "spellsinger",
+                "mysticMuse",
+                "elfOracle",
+                "elfElder",
+                "evaSaint",
+                "spellhowler",
+                "stormScreamer",
+                "shillienOracle",
+                "shillienElder",
+                "shillienSaint",
+                "windRiderErth",
+                "sayhaSeeker"
         ]
-    },
+},
     "concentration": {
         "id": "concentration",
         "name": "Concentration",
@@ -5347,10 +5033,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Casting Interruption Rate -36",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_concentration",
         "vfxGap": false,
@@ -5358,20 +5044,20 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 44,
         "classes": [
-            "wizard",
-            "sorcerer",
-            "cleric",
-            "bishop",
-            "prophet",
-            "elvenWizard",
-            "elfOracle",
-            "elfElder",
-            "darkWizard",
-            "shillienOracle",
-            "shillienElder",
-            "sayhaSeer"
+                "wizard",
+                "sorcerer",
+                "cleric",
+                "bishop",
+                "prophet",
+                "elvenWizard",
+                "elfOracle",
+                "elfElder",
+                "darkWizard",
+                "shillienOracle",
+                "shillienElder",
+                "sayhaSeer"
         ]
-    },
+},
     "magic_wound": {
         "id": "magic_wound",
         "name": "Magic Wound",
@@ -5388,10 +5074,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Decreases the target's M. Def.M. Def. -23%",
         "balance": {
-            "mpCost": 39,
-            "pwr": 2,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 39,
+                "pwr": 2,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_magic_wound",
         "vfxGap": false,
@@ -5399,18 +5085,18 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 44,
         "classes": [
-            "sorcerer",
-            "archmage",
-            "necromancer",
-            "soultaker",
-            "spellsinger",
-            "mysticMuse",
-            "spellhowler",
-            "stormScreamer",
-            "windRiderErth",
-            "sayhaSeeker"
+                "sorcerer",
+                "archmage",
+                "necromancer",
+                "soultaker",
+                "spellsinger",
+                "mysticMuse",
+                "spellhowler",
+                "stormScreamer",
+                "windRiderErth",
+                "sayhaSeeker"
         ]
-    },
+},
     "weakness": {
         "id": "weakness",
         "name": "Weakness",
@@ -5427,10 +5113,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 2000,
         "desc": "Weakens the target.P. Atk. -23%M. Atk. -23%",
         "balance": {
-            "mpCost": 35,
-            "pwr": 2,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 35,
+                "pwr": 2,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_weakness",
         "vfxGap": false,
@@ -5438,34 +5124,34 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "mage",
-            "wizard",
-            "sorcerer",
-            "archmage",
-            "necromancer",
-            "soultaker",
-            "warlock",
-            "arcanaLord",
-            "cleric",
-            "bishop",
-            "cardinal",
-            "prophet",
-            "hierophant",
-            "elfMage",
-            "elvenWizard",
-            "spellsinger",
-            "mysticMuse",
-            "elementalSummoner",
-            "elementalMaster",
-            "elfOracle",
-            "elfElder",
-            "evaSaint",
-            "sayhaMageBase",
-            "sayhaSeer",
-            "windRiderErth",
-            "sayhaSeeker"
+                "mage",
+                "wizard",
+                "sorcerer",
+                "archmage",
+                "necromancer",
+                "soultaker",
+                "warlock",
+                "arcanaLord",
+                "cleric",
+                "bishop",
+                "cardinal",
+                "prophet",
+                "hierophant",
+                "elfMage",
+                "elvenWizard",
+                "spellsinger",
+                "mysticMuse",
+                "elementalSummoner",
+                "elementalMaster",
+                "elfOracle",
+                "elfElder",
+                "evaSaint",
+                "sayhaMageBase",
+                "sayhaSeer",
+                "windRiderErth",
+                "sayhaSeeker"
         ]
-    },
+},
     "hell": {
         "id": "hell",
         "name": "Hell",
@@ -5482,10 +5168,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 60000,
         "desc": "Hell",
         "balance": {
-            "mpCost": 82,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 82,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_hell",
         "vfxGap": false,
@@ -5493,9 +5179,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "hellKnight"
+                "hellKnight"
         ]
-    },
+},
     "dark_knight_s_break": {
         "id": "dark_knight_s_break",
         "name": "Dark Knight's Break",
@@ -5512,10 +5198,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 15000,
         "desc": "Dark Knight's Break",
         "balance": {
-            "mpCost": 85,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 85,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_dark_knight_s_break",
         "vfxGap": false,
@@ -5523,9 +5209,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "hellKnight"
+                "hellKnight"
         ]
-    },
+},
     "body_to_mind": {
         "id": "body_to_mind",
         "name": "Body to Mind",
@@ -5542,10 +5228,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 5000,
         "desc": "Sacrifices your own HP to regenerate MP with 90 Power.",
         "balance": {
-            "mpCost": 15,
-            "pwr": 90,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 90,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_body_to_mind",
         "vfxGap": false,
@@ -5553,22 +5239,22 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "wizard",
-            "sorcerer",
-            "archmage",
-            "necromancer",
-            "soultaker",
-            "elvenWizard",
-            "spellsinger",
-            "mysticMuse",
-            "darkWizard",
-            "spellhowler",
-            "stormScreamer",
-            "sayhaSeer",
-            "windRiderErth",
-            "sayhaSeeker"
+                "wizard",
+                "sorcerer",
+                "archmage",
+                "necromancer",
+                "soultaker",
+                "elvenWizard",
+                "spellsinger",
+                "mysticMuse",
+                "darkWizard",
+                "spellhowler",
+                "stormScreamer",
+                "sayhaSeer",
+                "windRiderErth",
+                "sayhaSeeker"
         ]
-    },
+},
     "hell_smashing": {
         "id": "hell_smashing",
         "name": "Hell Smashing",
@@ -5585,10 +5271,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "Releases powerful energy of Hell.Attacks the target and nearby enemies. Power 6075.Ignores 10% of the target's defense.With a certain chance, removes up to 3 buffs from the target.For 60 sec., applies the Curse debuff:Max CP -90%Debuff/ Anomaly Resistance -30%Received Healing -30%PvP: Attacks up to 6 targets.PvE: Attacks up to 6 targets.",
         "balance": {
-            "mpCost": 60,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 60,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_hell_smashing",
         "vfxGap": false,
@@ -5596,9 +5282,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "hellKnight"
+                "hellKnight"
         ]
-    },
+},
     "toughness": {
         "id": "toughness",
         "name": "Toughness",
@@ -5615,10 +5301,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Enables a stance that increases your defense.Max HP +1200P. Def. +14%P. Def. +300Shield Defense +200",
         "balance": {
-            "mpCost": 86,
-            "pwr": 1,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 86,
+                "pwr": 1,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_toughness",
         "vfxGap": false,
@@ -5626,10 +5312,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "hellKnight",
-            "shillienTemplar"
+                "hellKnight",
+                "shillienTemplar"
         ]
-    },
+},
     "dark_might": {
         "id": "dark_might",
         "name": "Dark Might",
@@ -5646,10 +5332,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Dark Might",
         "balance": {
-            "mpCost": 150,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 150,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_dark_might",
         "vfxGap": false,
@@ -5657,9 +5343,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 85,
         "classes": [
-            "hellKnight"
+                "hellKnight"
         ]
-    },
+},
     "touch_of_death": {
         "id": "touch_of_death",
         "name": "Touch of Death",
@@ -5676,10 +5362,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 120000,
         "desc": "Touch of Death",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_touch_of_death",
         "vfxGap": false,
@@ -5687,10 +5373,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "hellKnight",
-            "shillienTemplar"
+                "hellKnight",
+                "shillienTemplar"
         ]
-    },
+},
     "backstab": {
         "id": "backstab",
         "name": "Backstab",
@@ -5707,10 +5393,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 5000,
         "desc": "<Gap-closing skill>Rushes to the target and attacks them.Strikes at a vital point ignoring the target's CP. Power 2490.",
         "balance": {
-            "mpCost": 35,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 35,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_backstab",
         "vfxGap": false,
@@ -5718,14 +5404,14 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "treasureHunter",
-            "adventurer",
-            "plainsWalker",
-            "windRider",
-            "abyssWalker",
-            "ghostHunter"
+                "treasureHunter",
+                "adventurer",
+                "plainsWalker",
+                "windRider",
+                "abyssWalker",
+                "ghostHunter"
         ]
-    },
+},
     "deadly_blow": {
         "id": "deadly_blow",
         "name": "Deadly Blow",
@@ -5742,10 +5428,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Attacks the target's vital points.Deals P. damage. Power 1423.",
         "balance": {
-            "mpCost": 30,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 30,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_deadly_blow",
         "vfxGap": false,
@@ -5753,14 +5439,14 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "treasureHunter",
-            "adventurer",
-            "plainsWalker",
-            "windRider",
-            "abyssWalker",
-            "ghostHunter"
+                "treasureHunter",
+                "adventurer",
+                "plainsWalker",
+                "windRider",
+                "abyssWalker",
+                "ghostHunter"
         ]
-    },
+},
     "fake_death": {
         "id": "fake_death",
         "name": "Fake Death",
@@ -5777,10 +5463,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Fake Death",
         "balance": {
-            "mpCost": 200,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 200,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_fake_death",
         "vfxGap": false,
@@ -5788,11 +5474,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "treasureHunter",
-            "plainsWalker",
-            "bountyHunter"
+                "treasureHunter",
+                "plainsWalker",
+                "bountyHunter"
         ]
-    },
+},
     "silent_move": {
         "id": "silent_move",
         "name": "Silent Move",
@@ -5809,10 +5495,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Silent Move",
         "balance": {
-            "mpCost": 7,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 7,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_silent_move",
         "vfxGap": false,
@@ -5820,11 +5506,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "treasureHunter",
-            "plainsWalker",
-            "abyssWalker"
+                "treasureHunter",
+                "plainsWalker",
+                "abyssWalker"
         ]
-    },
+},
     "open": {
         "id": "open",
         "name": "Open",
@@ -5841,10 +5527,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "Opens doors Lv. 1 with a 100% chance, doors Lv. 2 with a 75% chance, and chests with a 100% chance.",
         "balance": {
-            "mpCost": 35,
-            "pwr": 10,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 35,
+                "pwr": 10,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_open",
         "vfxGap": false,
@@ -5852,13 +5538,13 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "rogue",
-            "treasureHunter",
-            "elfScout",
-            "plainsWalker",
-            "abyssWalker"
+                "rogue",
+                "treasureHunter",
+                "elfScout",
+                "plainsWalker",
+                "abyssWalker"
         ]
-    },
+},
     "ultimate_evasion": {
         "id": "ultimate_evasion",
         "name": "Ultimate Evasion",
@@ -5875,10 +5561,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 900000,
         "desc": "Ultimate Evasion",
         "balance": {
-            "mpCost": 25,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 25,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_ultimate_evasion",
         "vfxGap": false,
@@ -5886,19 +5572,19 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 55,
         "classes": [
-            "rogue",
-            "treasureHunter",
-            "hawkeye",
-            "sagittarius",
-            "elfScout",
-            "plainsWalker",
-            "silverRanger",
-            "moonlightSentinel",
-            "abyssWalker",
-            "phantomRanger",
-            "ghostSentinel"
+                "rogue",
+                "treasureHunter",
+                "hawkeye",
+                "sagittarius",
+                "elfScout",
+                "plainsWalker",
+                "silverRanger",
+                "moonlightSentinel",
+                "abyssWalker",
+                "phantomRanger",
+                "ghostSentinel"
         ]
-    },
+},
     "shadow_step": {
         "id": "shadow_step",
         "name": "Shadow Step",
@@ -5915,10 +5601,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 20000,
         "desc": "<Teleport/ suppression skill>Instantly teleports behind target's back.Target's Speed -30%",
         "balance": {
-            "mpCost": 37,
-            "pwr": 3,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 37,
+                "pwr": 3,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_shadow_step",
         "vfxGap": false,
@@ -5926,14 +5612,14 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 50,
         "classes": [
-            "treasureHunter",
-            "adventurer",
-            "plainsWalker",
-            "windRider",
-            "abyssWalker",
-            "ghostHunter"
+                "treasureHunter",
+                "adventurer",
+                "plainsWalker",
+                "windRider",
+                "abyssWalker",
+                "ghostHunter"
         ]
-    },
+},
     "hide": {
         "id": "hide",
         "name": "Hide",
@@ -5950,10 +5636,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 180000,
         "desc": "Grants invisibility so enemies cannot see the character.The effect is cancelled upon taking any action except movement.",
         "balance": {
-            "mpCost": 30,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 30,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_hide",
         "vfxGap": false,
@@ -5961,11 +5647,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 50,
         "classes": [
-            "treasureHunter",
-            "plainsWalker",
-            "abyssWalker"
+                "treasureHunter",
+                "plainsWalker",
+                "abyssWalker"
         ]
-    },
+},
     "ice_bolt": {
         "id": "ice_bolt",
         "name": "Ice Bolt",
@@ -5982,10 +5668,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Freezes the air around the target.Deals M. damage. Power 11.For 30 sec., the target's Speed -20%.",
         "balance": {
-            "mpCost": 8,
-            "pwr": 11,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 8,
+                "pwr": 11,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_ice_bolt",
         "vfxGap": false,
@@ -5993,16 +5679,16 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 1,
         "classes": [
-            "mage",
-            "wizard",
-            "elfMage",
-            "elvenWizard",
-            "darkElfMage",
-            "darkWizard",
-            "sayhaMageBase",
-            "sayhaSeer"
+                "mage",
+                "wizard",
+                "elfMage",
+                "elvenWizard",
+                "darkElfMage",
+                "darkWizard",
+                "sayhaMageBase",
+                "sayhaSeer"
         ]
-    },
+},
     "fireball": {
         "id": "fireball",
         "name": "Fireball",
@@ -6019,10 +5705,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 5000,
         "desc": "Creates a fireball.Deals M. damage to the target. Power 40.",
         "balance": {
-            "mpCost": 2,
-            "pwr": 40,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 2,
+                "pwr": 40,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_fireball",
         "vfxGap": false,
@@ -6030,16 +5716,16 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 1,
         "classes": [
-            "mage",
-            "wizard",
-            "elfMage",
-            "elvenWizard",
-            "darkElfMage",
-            "darkWizard",
-            "sayhaMageBase",
-            "sayhaSeer"
+                "mage",
+                "wizard",
+                "elfMage",
+                "elvenWizard",
+                "darkElfMage",
+                "darkWizard",
+                "sayhaMageBase",
+                "sayhaSeer"
         ]
-    },
+},
     "battle_heal": {
         "id": "battle_heal",
         "name": "Battle Heal",
@@ -6056,10 +5742,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Momentarily recovers HP. Power 83.",
         "balance": {
-            "mpCost": 25,
-            "pwr": 83,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 25,
+                "pwr": 83,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_battle_heal",
         "vfxGap": false,
@@ -6067,15 +5753,15 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 10,
         "classes": [
-            "mage",
-            "cleric",
-            "elfMage",
-            "elfOracle",
-            "darkElfMage",
-            "shillienOracle",
-            "sayhaMageBase"
+                "mage",
+                "cleric",
+                "elfMage",
+                "elfOracle",
+                "darkElfMage",
+                "shillienOracle",
+                "sayhaMageBase"
         ]
-    },
+},
     "self_heal": {
         "id": "self_heal",
         "name": "Self Heal",
@@ -6092,10 +5778,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 3000,
         "desc": "Recovers HP. Power 50.",
         "balance": {
-            "mpCost": 9,
-            "pwr": 50,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 9,
+                "pwr": 50,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_self_heal",
         "vfxGap": false,
@@ -6103,15 +5789,15 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 1,
         "classes": [
-            "mage",
-            "cleric",
-            "elfMage",
-            "elfOracle",
-            "darkElfMage",
-            "shillienOracle",
-            "sayhaMageBase"
+                "mage",
+                "cleric",
+                "elfMage",
+                "elfOracle",
+                "darkElfMage",
+                "shillienOracle",
+                "sayhaMageBase"
         ]
-    },
+},
     "wind_strike": {
         "id": "wind_strike",
         "name": "Wind Strike",
@@ -6128,10 +5814,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Creates a powerful hurricane.Deals M. damage to the target. Power 12.",
         "balance": {
-            "mpCost": 8,
-            "pwr": 12,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 8,
+                "pwr": 12,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_wind_strike",
         "vfxGap": false,
@@ -6139,12 +5825,12 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 1,
         "classes": [
-            "mage",
-            "elfMage",
-            "darkElfMage",
-            "sayhaMageBase"
+                "mage",
+                "elfMage",
+                "darkElfMage",
+                "sayhaMageBase"
         ]
-    },
+},
     "flame_explosion": {
         "id": "flame_explosion",
         "name": "Flame Explosion",
@@ -6161,10 +5847,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Makes an explosion imbued with the Fire energy.Deals M. damage to the target. Power 152.Enemies with debuffs/ anomalies receive more damage.",
         "balance": {
-            "mpCost": 56,
-            "pwr": 152,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 56,
+                "pwr": 152,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_flame_explosion",
         "vfxGap": false,
@@ -6172,9 +5858,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "archmage"
+                "archmage"
         ]
-    },
+},
     "fire_vortex": {
         "id": "fire_vortex",
         "name": "Fire Vortex",
@@ -6191,10 +5877,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "Creates a vortex that draws its strength from the Fire dimension.Deals M. damage to the target. Power 158.",
         "balance": {
-            "mpCost": 116,
-            "pwr": 158,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 116,
+                "pwr": 158,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_fire_vortex",
         "vfxGap": false,
@@ -6202,9 +5888,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "archmage"
+                "archmage"
         ]
-    },
+},
     "meteor": {
         "id": "meteor",
         "name": "Meteor",
@@ -6221,10 +5907,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "Meteor",
         "balance": {
-            "mpCost": 131,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 131,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_meteor",
         "vfxGap": false,
@@ -6232,13 +5918,13 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "archmage",
-            "soultaker",
-            "mysticMuse",
-            "stormScreamer",
-            "sayhaSeeker"
+                "archmage",
+                "soultaker",
+                "mysticMuse",
+                "stormScreamer",
+                "sayhaSeeker"
         ]
-    },
+},
     "fire_spiral": {
         "id": "fire_spiral",
         "name": "Fire Spiral",
@@ -6255,10 +5941,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "Attacks with a fire spiral.Deals M. damage to the target and nearby enemies. Power 229.For 5 sec., CON/ MEN -2.PvP: Attacks up to 6 targets.PvE: Attacks up to 6 targets.",
         "balance": {
-            "mpCost": 116,
-            "pwr": 229,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 116,
+                "pwr": 229,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_fire_spiral",
         "vfxGap": false,
@@ -6266,9 +5952,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "archmage"
+                "archmage"
         ]
-    },
+},
     "magic_focus": {
         "id": "magic_focus",
         "name": "Magic Focus",
@@ -6285,10 +5971,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Magic Focus",
         "balance": {
-            "mpCost": 80,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 80,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_magic_focus",
         "vfxGap": false,
@@ -6296,11 +5982,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "archmage",
-            "soultaker",
-            "stormScreamer"
+                "archmage",
+                "soultaker",
+                "stormScreamer"
         ]
-    },
+},
     "arcane_shield": {
         "id": "arcane_shield",
         "name": "Arcane Shield",
@@ -6317,10 +6003,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 300000,
         "desc": "Blocks 50% of damage.For the remainder of inflicted damage MP is consumed instead of HP.The effect is cancelled when MP reaches 0.",
         "balance": {
-            "mpCost": 110,
-            "pwr": 5,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 110,
+                "pwr": 5,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_arcane_shield",
         "vfxGap": false,
@@ -6328,12 +6014,12 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 80,
         "classes": [
-            "archmage",
-            "mysticMuse",
-            "stormScreamer",
-            "sayhaSeeker"
+                "archmage",
+                "mysticMuse",
+                "stormScreamer",
+                "sayhaSeeker"
         ]
-    },
+},
     "archmage_s_shield": {
         "id": "archmage_s_shield",
         "name": "Archmage's Shield",
@@ -6350,10 +6036,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 300000,
         "desc": "Archmage's Shield",
         "balance": {
-            "mpCost": 125,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 125,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_archmage_s_shield",
         "vfxGap": false,
@@ -6361,9 +6047,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "archmage"
+                "archmage"
         ]
-    },
+},
     "heavy_sleep": {
         "id": "heavy_sleep",
         "name": "Heavy Sleep",
@@ -6380,10 +6066,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 15000,
         "desc": "Inflicts Sleep on the target.For some time the target cannot wake up even if hit.",
         "balance": {
-            "mpCost": 74,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 74,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_heavy_sleep",
         "vfxGap": false,
@@ -6391,11 +6077,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "archmage",
-            "soultaker",
-            "stormScreamer"
+                "archmage",
+                "soultaker",
+                "stormScreamer"
         ]
-    },
+},
     "arcane_power": {
         "id": "arcane_power",
         "name": "Arcane Power",
@@ -6412,10 +6098,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "M. Atk. +10%M. Skill MP Consumption +5%",
         "balance": {
-            "mpCost": 36,
-            "pwr": 1,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 36,
+                "pwr": 1,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_arcane_power",
         "vfxGap": false,
@@ -6423,12 +6109,12 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 77,
         "classes": [
-            "archmage",
-            "mysticMuse",
-            "stormScreamer",
-            "sayhaSeeker"
+                "archmage",
+                "mysticMuse",
+                "stormScreamer",
+                "sayhaSeeker"
         ]
-    },
+},
     "master_of_flame": {
         "id": "master_of_flame",
         "name": "Master of Flame",
@@ -6445,10 +6131,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Master of Flame",
         "balance": {
-            "mpCost": 120,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 120,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_master_of_flame",
         "vfxGap": false,
@@ -6456,9 +6142,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "archmage"
+                "archmage"
         ]
-    },
+},
     "exciting_adventure": {
         "id": "exciting_adventure",
         "name": "Exciting Adventure",
@@ -6475,10 +6161,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 900000,
         "desc": "Speed +30P. Evasion +15Vital Point Attack Rate +20%P. Skill Evasion +60%Buff Cancel Resistance +90%Can be used with Ultimate Evasion.",
         "balance": {
-            "mpCost": 36,
-            "pwr": 2,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 36,
+                "pwr": 2,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_exciting_adventure",
         "vfxGap": false,
@@ -6486,9 +6172,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "adventurer"
+                "adventurer"
         ]
-    },
+},
     "lethal_blow": {
         "id": "lethal_blow",
         "name": "Lethal Blow",
@@ -6505,10 +6191,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Increases vital point attack power.Attacks the target at their vital point. Power 7888.",
         "balance": {
-            "mpCost": 60,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 60,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_lethal_blow",
         "vfxGap": false,
@@ -6516,11 +6202,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "adventurer",
-            "windRider",
-            "ghostHunter"
+                "adventurer",
+                "windRider",
+                "ghostHunter"
         ]
-    },
+},
     "flying_dagger": {
         "id": "flying_dagger",
         "name": "Flying Dagger",
@@ -6537,10 +6223,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 5000,
         "desc": "Attacks the target. Power 7200.Ignores Shield Defense.Ignores 15% of the target's defense.Atk. Spd. -10%Casting Spd. -10%Speed -20%Every 0.66 sec. HP -146.",
         "balance": {
-            "mpCost": 62,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 62,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_flying_dagger",
         "vfxGap": false,
@@ -6548,11 +6234,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "adventurer",
-            "windRider",
-            "ghostHunter"
+                "adventurer",
+                "windRider",
+                "ghostHunter"
         ]
-    },
+},
     "dark_blow": {
         "id": "dark_blow",
         "name": "Dark Blow",
@@ -6569,10 +6255,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 5000,
         "desc": "Strikes at the target together with Shadow Figure.Makes 1 attack at the target's vital points. Power 8200.PvP: Attacks up to 2 targets.PvE: Attacks up to 2 targets.Summons Shadow Figure behind the main target and attacks a single target once.",
         "balance": {
-            "mpCost": 50,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 50,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_dark_blow",
         "vfxGap": false,
@@ -6580,11 +6266,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "adventurer",
-            "windRider",
-            "ghostHunter"
+                "adventurer",
+                "windRider",
+                "ghostHunter"
         ]
-    },
+},
     "critical_assault": {
         "id": "critical_assault",
         "name": "Critical Assault",
@@ -6601,10 +6287,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 20000,
         "desc": "Critical Assault",
         "balance": {
-            "mpCost": 100,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 100,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_critical_assault",
         "vfxGap": false,
@@ -6612,9 +6298,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "adventurer"
+                "adventurer"
         ]
-    },
+},
     "mirage": {
         "id": "mirage",
         "name": "Mirage",
@@ -6631,10 +6317,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 300000,
         "desc": "Vital Point Attack Rate +15%All received Critical Damage -10%",
         "balance": {
-            "mpCost": 40,
-            "pwr": 2,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 40,
+                "pwr": 2,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_mirage",
         "vfxGap": false,
@@ -6642,9 +6328,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 79,
         "classes": [
-            "adventurer"
+                "adventurer"
         ]
-    },
+},
     "bluff": {
         "id": "bluff",
         "name": "Bluff",
@@ -6661,10 +6347,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 8000,
         "desc": "Inflicts Stupor on the target.With a 80% chance, makes the target turn their back to you.The target stops attacking you.",
         "balance": {
-            "mpCost": 35,
-            "pwr": 8,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 35,
+                "pwr": 8,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_bluff",
         "vfxGap": false,
@@ -6672,11 +6358,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "adventurer",
-            "windRider",
-            "ghostHunter"
+                "adventurer",
+                "windRider",
+                "ghostHunter"
         ]
-    },
+},
     "focus_power": {
         "id": "focus_power",
         "name": "Focus Power",
@@ -6693,10 +6379,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "Focus Power",
         "balance": {
-            "mpCost": 65,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 65,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_focus_power",
         "vfxGap": false,
@@ -6704,11 +6390,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 78,
         "classes": [
-            "adventurer",
-            "windRider",
-            "ghostHunter"
+                "adventurer",
+                "windRider",
+                "ghostHunter"
         ]
-    },
+},
     "focus_chance": {
         "id": "focus_chance",
         "name": "Focus Chance",
@@ -6725,10 +6411,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "Focus Chance",
         "balance": {
-            "mpCost": 65,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 65,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_focus_chance",
         "vfxGap": false,
@@ -6736,11 +6422,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 78,
         "classes": [
-            "adventurer",
-            "windRider",
-            "ghostHunter"
+                "adventurer",
+                "windRider",
+                "ghostHunter"
         ]
-    },
+},
     "focus_death": {
         "id": "focus_death",
         "name": "Focus Death",
@@ -6757,10 +6443,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "Focus Death",
         "balance": {
-            "mpCost": 65,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 65,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_focus_death",
         "vfxGap": false,
@@ -6768,11 +6454,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 78,
         "classes": [
-            "adventurer",
-            "windRider",
-            "ghostHunter"
+                "adventurer",
+                "windRider",
+                "ghostHunter"
         ]
-    },
+},
     "seclusion": {
         "id": "seclusion",
         "name": "Seclusion",
@@ -6789,10 +6475,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 180000,
         "desc": "Seclusion",
         "balance": {
-            "mpCost": 50,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 50,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_seclusion",
         "vfxGap": false,
@@ -6800,11 +6486,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "adventurer",
-            "windRider",
-            "ghostHunter"
+                "adventurer",
+                "windRider",
+                "ghostHunter"
         ]
-    },
+},
     "critical_wound": {
         "id": "critical_wound",
         "name": "Critical Wound",
@@ -6821,10 +6507,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 8000,
         "desc": "Makes the target receive more damage.Received Basic Critical Damage +10%Received Vital Point Attack Rate +10%",
         "balance": {
-            "mpCost": 30,
-            "pwr": 1,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 30,
+                "pwr": 1,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_critical_wound",
         "vfxGap": false,
@@ -6832,11 +6518,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "adventurer",
-            "windRider",
-            "ghostHunter"
+                "adventurer",
+                "windRider",
+                "ghostHunter"
         ]
-    },
+},
     "reversed_pull": {
         "id": "reversed_pull",
         "name": "Reversed Pull",
@@ -6853,10 +6539,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Reversed Pull",
         "balance": {
-            "mpCost": 50,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 50,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_reversed_pull",
         "vfxGap": false,
@@ -6864,9 +6550,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "adventurer"
+                "adventurer"
         ]
-    },
+},
     "blaze": {
         "id": "blaze",
         "name": "Blaze",
@@ -6883,10 +6569,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "The enemy's body is set aflame.Deals M. damage to the target. Power 31.",
         "balance": {
-            "mpCost": 18,
-            "pwr": 31,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 18,
+                "pwr": 31,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_blaze",
         "vfxGap": false,
@@ -6894,11 +6580,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 20,
         "classes": [
-            "wizard",
-            "warlock",
-            "arcanaLord"
+                "wizard",
+                "warlock",
+                "arcanaLord"
         ]
-    },
+},
     "clear_movements": {
         "id": "clear_movements",
         "name": "Clear Movements",
@@ -6915,10 +6601,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Hide/ Seclusion/ Shadow StepResets cooldowns.",
         "balance": {
-            "mpCost": 60,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 60,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_clear_movements",
         "vfxGap": false,
@@ -6926,11 +6612,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 77,
         "classes": [
-            "adventurer",
-            "windRider",
-            "ghostHunter"
+                "adventurer",
+                "windRider",
+                "ghostHunter"
         ]
-    },
+},
     "fatal_crush": {
         "id": "fatal_crush",
         "name": "Fatal Crush",
@@ -6947,10 +6633,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "A powerful strike.Attacks the target. Power 6246.If the enemy's HP is lower than 30%, increases the number of attacks by 1.Ignores Shield Defense.Ignores 20% of the target's defense.",
         "balance": {
-            "mpCost": 60,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 60,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_fatal_crush",
         "vfxGap": false,
@@ -6958,9 +6644,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "hierophant"
+                "hierophant"
         ]
-    },
+},
     "might_of_heaven": {
         "id": "might_of_heaven",
         "name": "Might of Heaven",
@@ -6977,10 +6663,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Strikes with holy light.Deals M. damage to the target. Power 113.Deals heavy damage to demons and undead.",
         "balance": {
-            "mpCost": 56,
-            "pwr": 113,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 56,
+                "pwr": 113,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_might_of_heaven",
         "vfxGap": false,
@@ -6988,16 +6674,16 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "bishop",
-            "cardinal",
-            "prophet",
-            "hierophant",
-            "elfElder",
-            "evaSaint",
-            "shillienElder",
-            "shillienSaint"
+                "bishop",
+                "cardinal",
+                "prophet",
+                "hierophant",
+                "elfElder",
+                "evaSaint",
+                "shillienElder",
+                "shillienSaint"
         ]
-    },
+},
     "divine_beam": {
         "id": "divine_beam",
         "name": "Divine Beam",
@@ -7014,10 +6700,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Purifies with holy light.Deals M. damage to the target. Power 145.Deals heavy damage to demons and undead.",
         "balance": {
-            "mpCost": 56,
-            "pwr": 145,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 56,
+                "pwr": 145,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_divine_beam",
         "vfxGap": false,
@@ -7025,11 +6711,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "hierophant",
-            "evaSaint",
-            "shillienSaint"
+                "hierophant",
+                "evaSaint",
+                "shillienSaint"
         ]
-    },
+},
     "mana_burn": {
         "id": "mana_burn",
         "name": "Mana Burn",
@@ -7046,10 +6732,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 15000,
         "desc": "Deals M. damage. Power 78.Burns 200 of the target's MP.",
         "balance": {
-            "mpCost": 77,
-            "pwr": 78,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 77,
+                "pwr": 78,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_mana_burn",
         "vfxGap": false,
@@ -7057,9 +6743,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "hierophant"
+                "hierophant"
         ]
-    },
+},
     "dryad_root": {
         "id": "dryad_root",
         "name": "Dryad Root",
@@ -7076,10 +6762,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Inflicts Hold on the target.",
         "balance": {
-            "mpCost": 86,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 86,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_dryad_root",
         "vfxGap": false,
@@ -7087,19 +6773,19 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "cleric",
-            "bishop",
-            "cardinal",
-            "prophet",
-            "hierophant",
-            "elfOracle",
-            "elfElder",
-            "evaSaint",
-            "shillienOracle",
-            "shillienElder",
-            "shillienSaint"
+                "cleric",
+                "bishop",
+                "cardinal",
+                "prophet",
+                "hierophant",
+                "elfOracle",
+                "elfElder",
+                "evaSaint",
+                "shillienOracle",
+                "shillienElder",
+                "shillienSaint"
         ]
-    },
+},
     "word_of_fear": {
         "id": "word_of_fear",
         "name": "Word of Fear",
@@ -7116,10 +6802,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 60000,
         "desc": "Inflicts Fear on targets around the character.",
         "balance": {
-            "mpCost": 224,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 224,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_word_of_fear",
         "vfxGap": false,
@@ -7127,10 +6813,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "prophet",
-            "hierophant"
+                "prophet",
+                "hierophant"
         ]
-    },
+},
     "tower_shield": {
         "id": "tower_shield",
         "name": "Tower Shield",
@@ -7147,10 +6833,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "P. Def. +50Triggers Protective Shield when hit.Protective ShieldBuff: Creates a barrier with 500 HP.Trigger rate: 10%Duration: 5 sec.Trigger cooldown: 20 sec.",
         "balance": {
-            "mpCost": 67,
-            "pwr": 1,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 67,
+                "pwr": 1,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_tower_shield",
         "vfxGap": false,
@@ -7158,9 +6844,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 80,
         "classes": [
-            "hierophant"
+                "hierophant"
         ]
-    },
+},
     "enlightenment": {
         "id": "enlightenment",
         "name": "Enlightenment",
@@ -7177,10 +6863,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 600000,
         "desc": "M. Atk. +10%Received Healing +20%Casting Spd. +30%M. Skill Critical Rate +50%M. Skill MP Consumption -70%Speed +15",
         "balance": {
-            "mpCost": 80,
-            "pwr": 1,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 80,
+                "pwr": 1,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_enlightenment",
         "vfxGap": false,
@@ -7188,12 +6874,12 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 78,
         "classes": [
-            "cardinal",
-            "hierophant",
-            "evaSaint",
-            "shillienSaint"
+                "cardinal",
+                "hierophant",
+                "evaSaint",
+                "shillienSaint"
         ]
-    },
+},
     "prophecy_of_fire": {
         "id": "prophecy_of_fire",
         "name": "Prophecy of Fire",
@@ -7210,10 +6896,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Max HP +10%HP Recovery Rate +10%P. Def. +10%M. Def. +10%Atk. Spd. +10%Casting Spd. +10%P. Skill Critical Damage +15%M. Skill Critical Rate +15%PvE damage bonus +15%Debuff Resistance +10%Anomaly Resistance +10%",
         "balance": {
-            "mpCost": 72,
-            "pwr": 1,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 72,
+                "pwr": 1,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_prophecy_of_fire",
         "vfxGap": false,
@@ -7221,9 +6907,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "hierophant"
+                "hierophant"
         ]
-    },
+},
     "perfect_abilities": {
         "id": "perfect_abilities",
         "name": "Perfect Abilities",
@@ -7240,10 +6926,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "P. Def. +100Triggers Ultimate Critical Attack when hit.Ultimate Critical AttackBuff: P. Skill Critical Damage +50, P. Skill Critical Rate +1%Trigger rate: 70%Duration: 8 sec.Trigger cooldown: 15 sec.",
         "balance": {
-            "mpCost": 73,
-            "pwr": 0,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 73,
+                "pwr": 0,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_perfect_abilities",
         "vfxGap": false,
@@ -7251,9 +6937,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "hierophant"
+                "hierophant"
         ]
-    },
+},
     "great_attack": {
         "id": "great_attack",
         "name": "Great Attack",
@@ -7270,10 +6956,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 15000,
         "desc": "Great Attack",
         "balance": {
-            "mpCost": 91,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 91,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_great_attack",
         "vfxGap": false,
@@ -7281,10 +6967,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 80,
         "classes": [
-            "prophet",
-            "hierophant"
+                "prophet",
+                "hierophant"
         ]
-    },
+},
     "turn_to_stone": {
         "id": "turn_to_stone",
         "name": "Turn to Stone",
@@ -7301,10 +6987,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 480000,
         "desc": "Turn to Stone",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_turn_to_stone",
         "vfxGap": false,
@@ -7312,9 +6998,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 79,
         "classes": [
-            "hierophant"
+                "hierophant"
         ]
-    },
+},
     "improved_sleep": {
         "id": "improved_sleep",
         "name": "Improved Sleep",
@@ -7331,10 +7017,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 20000,
         "desc": "With a high chance, inflicts Sleep on the target.",
         "balance": {
-            "mpCost": 75,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 75,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_improved_sleep",
         "vfxGap": false,
@@ -7342,9 +7028,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 85,
         "classes": [
-            "hierophant"
+                "hierophant"
         ]
-    },
+},
     "unique_seal_of_damage": {
         "id": "unique_seal_of_damage",
         "name": "Unique Seal of Damage",
@@ -7361,10 +7047,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 120000,
         "desc": "With a certain chance, blocks additional attack damage from enemies in front of you.With a certain chance, triggers Physical Attack Weakening/ Vampiric Weakening.<Physical Attack Weakening>P. Atk. -100Vampiric WeakeningHP Recovery -95% on attack",
         "balance": {
-            "mpCost": 91,
-            "pwr": 10,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 91,
+                "pwr": 10,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_unique_seal_of_damage",
         "vfxGap": false,
@@ -7372,9 +7058,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "hierophant"
+                "hierophant"
         ]
-    },
+},
     "crusader": {
         "id": "crusader",
         "name": "Crusader",
@@ -7391,10 +7077,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Crusader",
         "balance": {
-            "mpCost": 200,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 200,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_crusader",
         "vfxGap": false,
@@ -7402,9 +7088,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "hierophant"
+                "hierophant"
         ]
-    },
+},
     "summon_mew_the_cat": {
         "id": "summon_mew_the_cat",
         "name": "Summon Mew the Cat",
@@ -7421,10 +7107,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Summons Mew the Cat.",
         "balance": {
-            "mpCost": 39,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 39,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_summon_mew_the_cat",
         "vfxGap": false,
@@ -7432,9 +7118,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "warlock"
+                "warlock"
         ]
-    },
+},
     "servitor_heal": {
         "id": "servitor_heal",
         "name": "Servitor Heal",
@@ -7451,10 +7137,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 3000,
         "desc": "Recovers servitor's HP with 169 power.",
         "balance": {
-            "mpCost": 24,
-            "pwr": 169,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 24,
+                "pwr": 169,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_servitor_heal",
         "vfxGap": false,
@@ -7462,13 +7148,13 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "necromancer",
-            "warlock",
-            "arcanaLord",
-            "phantomSummoner",
-            "spectralMaster"
+                "necromancer",
+                "warlock",
+                "arcanaLord",
+                "phantomSummoner",
+                "spectralMaster"
         ]
-    },
+},
     "servitor_recharge": {
         "id": "servitor_recharge",
         "name": "Servitor Recharge",
@@ -7485,10 +7171,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 3000,
         "desc": "Recovers servitor's MP. Power 41.The MP recovery effect depends on servitor's MP.",
         "balance": {
-            "mpCost": 42,
-            "pwr": 41,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 42,
+                "pwr": 41,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_servitor_recharge",
         "vfxGap": false,
@@ -7496,13 +7182,13 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "necromancer",
-            "warlock",
-            "arcanaLord",
-            "phantomSummoner",
-            "spectralMaster"
+                "necromancer",
+                "warlock",
+                "arcanaLord",
+                "phantomSummoner",
+                "spectralMaster"
         ]
-    },
+},
     "summon_kat_the_cat": {
         "id": "summon_kat_the_cat",
         "name": "Summon Kat the Cat",
@@ -7519,10 +7205,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Summons Kat the Cat.",
         "balance": {
-            "mpCost": 39,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 39,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_summon_kat_the_cat",
         "vfxGap": false,
@@ -7530,9 +7216,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "warlock"
+                "warlock"
         ]
-    },
+},
     "transfer_pain": {
         "id": "transfer_pain",
         "name": "Transfer Pain",
@@ -7549,10 +7235,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Transfers 10% of received damage to a servitor.MP Consumption is based on your level.",
         "balance": {
-            "mpCost": 7,
-            "pwr": 1,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 7,
+                "pwr": 1,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_transfer_pain",
         "vfxGap": false,
@@ -7560,11 +7246,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "necromancer",
-            "warlock",
-            "phantomSummoner"
+                "necromancer",
+                "warlock",
+                "phantomSummoner"
         ]
-    },
+},
     "summon_kai_the_cat": {
         "id": "summon_kai_the_cat",
         "name": "Summon Kai the Cat",
@@ -7581,10 +7267,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 5000,
         "desc": "Summons Kai the Cat.",
         "balance": {
-            "mpCost": 70,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 70,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_summon_kai_the_cat",
         "vfxGap": false,
@@ -7592,9 +7278,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "warlock"
+                "warlock"
         ]
-    },
+},
     "power_supremacy": {
         "id": "power_supremacy",
         "name": "Power Supremacy",
@@ -7611,10 +7297,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "When activatedP. Atk. +10%Max HP -10%",
         "balance": {
-            "mpCost": 15,
-            "pwr": 1,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 1,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_power_supremacy",
         "vfxGap": false,
@@ -7622,12 +7308,12 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 48,
         "classes": [
-            "warlock",
-            "arcanaLord",
-            "phantomSummoner",
-            "spectralMaster"
+                "warlock",
+                "arcanaLord",
+                "phantomSummoner",
+                "spectralMaster"
         ]
-    },
+},
     "servitor_cure": {
         "id": "servitor_cure",
         "name": "Servitor Cure",
@@ -7644,10 +7330,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 4000,
         "desc": "Removes Infection debuffs from a servitor.",
         "balance": {
-            "mpCost": 35,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 35,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_servitor_cure",
         "vfxGap": false,
@@ -7655,10 +7341,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "warlock",
-            "phantomSummoner"
+                "warlock",
+                "phantomSummoner"
         ]
-    },
+},
     "servitor_ultimate_defense": {
         "id": "servitor_ultimate_defense",
         "name": "Servitor Ultimate Defense",
@@ -7675,10 +7361,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 900000,
         "desc": "Absolute skillThe effect is applied on servitors.P. Def. +1800M. Def. +1350Buff Cancel Resistance +80%",
         "balance": {
-            "mpCost": 48,
-            "pwr": 8,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 48,
+                "pwr": 8,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_servitor_ultimate_defense",
         "vfxGap": false,
@@ -7686,12 +7372,12 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 52,
         "classes": [
-            "warlock",
-            "arcanaLord",
-            "phantomSummoner",
-            "spectralMaster"
+                "warlock",
+                "arcanaLord",
+                "phantomSummoner",
+                "spectralMaster"
         ]
-    },
+},
     "swift_servitor_heal": {
         "id": "swift_servitor_heal",
         "name": "Swift Servitor Heal",
@@ -7708,10 +7394,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 3000,
         "desc": "Recovers servitor's HP with 160 power.Available when HP < 80%.",
         "balance": {
-            "mpCost": 24,
-            "pwr": 160,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 24,
+                "pwr": 160,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_swift_servitor_heal",
         "vfxGap": false,
@@ -7719,13 +7405,13 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "necromancer",
-            "warlock",
-            "arcanaLord",
-            "phantomSummoner",
-            "spectralMaster"
+                "necromancer",
+                "warlock",
+                "arcanaLord",
+                "phantomSummoner",
+                "spectralMaster"
         ]
-    },
+},
     "servitor_wind_walk": {
         "id": "servitor_wind_walk",
         "name": "Servitor Wind Walk",
@@ -7742,10 +7428,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "The effect is applied on servitors.P. Def. +8%M. Def. +10%Atk. Spd. +10%Speed +20",
         "balance": {
-            "mpCost": 30,
-            "pwr": 1,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 30,
+                "pwr": 1,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_servitor_wind_walk",
         "vfxGap": false,
@@ -7753,9 +7439,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 48,
         "classes": [
-            "warlock"
+                "warlock"
         ]
-    },
+},
     "blessed_shield": {
         "id": "blessed_shield",
         "name": "Blessed Shield",
@@ -7772,10 +7458,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Shield Defense Rate +5%",
         "balance": {
-            "mpCost": 35,
-            "pwr": 1,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 35,
+                "pwr": 1,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_blessed_shield",
         "vfxGap": false,
@@ -7783,10 +7469,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "prophet",
-            "elfElder"
+                "prophet",
+                "elfElder"
         ]
-    },
+},
     "servitor_blessing": {
         "id": "servitor_blessing",
         "name": "Servitor Blessing",
@@ -7803,10 +7489,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 4000,
         "desc": "Servitor Blessing",
         "balance": {
-            "mpCost": 58,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 58,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_servitor_blessing",
         "vfxGap": false,
@@ -7814,10 +7500,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 62,
         "classes": [
-            "warlock",
-            "phantomSummoner"
+                "warlock",
+                "phantomSummoner"
         ]
-    },
+},
     "summon_friend": {
         "id": "summon_friend",
         "name": "Summon Friend",
@@ -7834,10 +7520,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 120000,
         "desc": "Summon Friend",
         "balance": {
-            "mpCost": 180,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 180,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_summon_friend",
         "vfxGap": false,
@@ -7845,11 +7531,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 56,
         "classes": [
-            "warlock",
-            "elementalSummoner",
-            "phantomSummoner"
+                "warlock",
+                "elementalSummoner",
+                "phantomSummoner"
         ]
-    },
+},
     "return": {
         "id": "return",
         "name": "Return",
@@ -7866,10 +7552,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 60000,
         "desc": "Teleports to the nearest village.Cannot be used in special places such as the GM Consultation Service.",
         "balance": {
-            "mpCost": 105,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 105,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_return",
         "vfxGap": false,
@@ -7877,10 +7563,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "prophet",
-            "elfElder"
+                "prophet",
+                "elfElder"
         ]
-    },
+},
     "change_armor": {
         "id": "change_armor",
         "name": "Change Armor",
@@ -7897,10 +7583,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Change Armor",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_change_armor",
         "vfxGap": false,
@@ -7908,10 +7594,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 1,
         "classes": [
-            "deathPilgrim",
-            "rider"
+                "deathPilgrim",
+                "rider"
         ]
-    },
+},
     "mystic_resilience": {
         "id": "mystic_resilience",
         "name": "Mystic Resilience",
@@ -7928,10 +7614,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 120000,
         "desc": "With a certain chance, when hit while the effect is active:Removes a debuff.Debuff Resistance +3%Anomaly Resistance +3%",
         "balance": {
-            "mpCost": 15,
-            "pwr": 0,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 0,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_mystic_resilience",
         "vfxGap": false,
@@ -7939,9 +7625,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 51,
         "classes": [
-            "prophet"
+                "prophet"
         ]
-    },
+},
     "ethereal_strike": {
         "id": "ethereal_strike",
         "name": "Ethereal Strike",
@@ -7958,10 +7644,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Creates a mysterious energy vortex that attacks the target.Deals M. damage to the target. Power 147.",
         "balance": {
-            "mpCost": 56,
-            "pwr": 147,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 56,
+                "pwr": 147,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_ethereal_strike",
         "vfxGap": false,
@@ -7969,10 +7655,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "arcanaLord",
-            "spectralMaster"
+                "arcanaLord",
+                "spectralMaster"
         ]
-    },
+},
     "advanced_block": {
         "id": "advanced_block",
         "name": "Advanced Block",
@@ -7989,10 +7675,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Shield Defense +10%",
         "balance": {
-            "mpCost": 44,
-            "pwr": 1,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 44,
+                "pwr": 1,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_advanced_block",
         "vfxGap": false,
@@ -8000,10 +7686,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 42,
         "classes": [
-            "prophet",
-            "elfElder"
+                "prophet",
+                "elfElder"
         ]
-    },
+},
     "warrior_bane": {
         "id": "warrior_bane",
         "name": "Warrior Bane",
@@ -8020,10 +7706,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 3000,
         "desc": "Weakens the target.P. Atk. -23%Speed -20",
         "balance": {
-            "mpCost": 70,
-            "pwr": 2,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 70,
+                "pwr": 2,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_warrior_bane",
         "vfxGap": false,
@@ -8031,10 +7717,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "arcanaLord",
-            "spectralMaster"
+                "arcanaLord",
+                "spectralMaster"
         ]
-    },
+},
     "ray_of_light": {
         "id": "ray_of_light",
         "name": "Ray of Light",
@@ -8051,10 +7737,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Emits a light beam with the spirits' help.Deals M. damage to the target. Power 202.",
         "balance": {
-            "mpCost": 82,
-            "pwr": 202,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 82,
+                "pwr": 202,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_ray_of_light",
         "vfxGap": false,
@@ -8062,10 +7748,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "arcanaLord",
-            "spectralMaster"
+                "arcanaLord",
+                "spectralMaster"
         ]
-    },
+},
     "mage_bane": {
         "id": "mage_bane",
         "name": "Mage Bane",
@@ -8082,10 +7768,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 3000,
         "desc": "Weakens the target.M. Atk. -23%Casting Spd. -20%",
         "balance": {
-            "mpCost": 70,
-            "pwr": 2,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 70,
+                "pwr": 2,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_mage_bane",
         "vfxGap": false,
@@ -8093,10 +7779,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "arcanaLord",
-            "spectralMaster"
+                "arcanaLord",
+                "spectralMaster"
         ]
-    },
+},
     "summon_feline_queen": {
         "id": "summon_feline_queen",
         "name": "Summon Feline Queen",
@@ -8113,10 +7799,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 5000,
         "desc": "Summons Feline Queen.",
         "balance": {
-            "mpCost": 144,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 144,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_summon_feline_queen",
         "vfxGap": false,
@@ -8124,9 +7810,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 77,
         "classes": [
-            "arcanaLord"
+                "arcanaLord"
         ]
-    },
+},
     "chains_of_pain": {
         "id": "chains_of_pain",
         "name": "Chains of Pain",
@@ -8143,10 +7829,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Max HP +1000Transfers 55% of received damage to a servitor.MP Consumption is based on your level.",
         "balance": {
-            "mpCost": 13,
-            "pwr": 6,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 13,
+                "pwr": 6,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_chains_of_pain",
         "vfxGap": false,
@@ -8154,10 +7840,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "arcanaLord",
-            "spectralMaster"
+                "arcanaLord",
+                "spectralMaster"
         ]
-    },
+},
     "servitor_share": {
         "id": "servitor_share",
         "name": "Servitor Share",
@@ -8174,10 +7860,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 60000,
         "desc": "Transfers a certain percentage of the summoner's stats to the servitor.P./ M. Atk.: 50%P./ M. Def.: 50%Atk. Spd./ Casting Spd.: 35%Max HP/ MP: 30%",
         "balance": {
-            "mpCost": 105,
-            "pwr": 5,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 105,
+                "pwr": 5,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_servitor_share",
         "vfxGap": false,
@@ -8185,10 +7871,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "arcanaLord",
-            "spectralMaster"
+                "arcanaLord",
+                "spectralMaster"
         ]
-    },
+},
     "summon_feline_king": {
         "id": "summon_feline_king",
         "name": "Summon Feline King",
@@ -8205,10 +7891,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 5000,
         "desc": "Summons Feline King.",
         "balance": {
-            "mpCost": 144,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 144,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_summon_feline_king",
         "vfxGap": false,
@@ -8216,9 +7902,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 77,
         "classes": [
-            "arcanaLord"
+                "arcanaLord"
         ]
-    },
+},
     "summon_cubic_of_secrets": {
         "id": "summon_cubic_of_secrets",
         "name": "Summon Cubic of Secrets",
@@ -8235,10 +7921,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Summons Cubic of Secrets.M. Atk. +150When using magic skills (attack/ anomaly/ debuff):Delivers an additional attack.The summoner's illusions attack the target.(Trigger cooldown: 15 sec.)",
         "balance": {
-            "mpCost": 78,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 78,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_summon_cubic_of_secrets",
         "vfxGap": false,
@@ -8246,9 +7932,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "arcanaLord"
+                "arcanaLord"
         ]
-    },
+},
     "powerful_servitor_share": {
         "id": "powerful_servitor_share",
         "name": "Powerful Servitor Share",
@@ -8265,10 +7951,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "Powerful Servitor Share",
         "balance": {
-            "mpCost": 117,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 117,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_powerful_servitor_share",
         "vfxGap": false,
@@ -8276,10 +7962,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "arcanaLord",
-            "spectralMaster"
+                "arcanaLord",
+                "spectralMaster"
         ]
-    },
+},
     "summon_cat_emperor": {
         "id": "summon_cat_emperor",
         "name": "Summon Cat Emperor",
@@ -8296,10 +7982,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Summon Cat Emperor",
         "balance": {
-            "mpCost": 186,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 186,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_summon_cat_emperor",
         "vfxGap": false,
@@ -8307,9 +7993,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "arcanaLord"
+                "arcanaLord"
         ]
-    },
+},
     "warrior_servitor": {
         "id": "warrior_servitor",
         "name": "Warrior Servitor",
@@ -8326,10 +8012,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Makes the servitor possessed with an ancient warrior's spirit.Max HP +50%Max MP +20%P. Atk. +45%M. Atk. +20%P. Def. +45%M. Def. +20%Atk. Spd. +35%Casting Spd. +15%Basic Critical Rate +50Basic Critical Rate +15%M. Skill Critical Rate +50M. Skill Critical Rate +15%Basic Critical Damage +15%M. Skill Critical Damage +15%Debuff/ Anomaly Resistance +40%",
         "balance": {
-            "mpCost": 70,
-            "pwr": 5,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 70,
+                "pwr": 5,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_warrior_servitor",
         "vfxGap": false,
@@ -8337,9 +8023,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 78,
         "classes": [
-            "arcanaLord"
+                "arcanaLord"
         ]
-    },
+},
     "dark_burst": {
         "id": "dark_burst",
         "name": "Dark Burst",
@@ -8356,10 +8042,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 7000,
         "desc": "Attacks the target and nearby enemies with a dark energy blast.Deals M. damage. Power 61.",
         "balance": {
-            "mpCost": 28,
-            "pwr": 61,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 28,
+                "pwr": 61,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_dark_burst",
         "vfxGap": false,
@@ -8367,10 +8053,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 46,
         "classes": [
-            "necromancer",
-            "soultaker"
+                "necromancer",
+                "soultaker"
         ]
-    },
+},
     "curse_fear": {
         "id": "curse_fear",
         "name": "Curse Fear",
@@ -8387,10 +8073,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 20000,
         "desc": "Frightens the enemy.",
         "balance": {
-            "mpCost": 35,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 35,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_curse_fear",
         "vfxGap": false,
@@ -8398,10 +8084,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "necromancer",
-            "soultaker"
+                "necromancer",
+                "soultaker"
         ]
-    },
+},
     "anchor": {
         "id": "anchor",
         "name": "Anchor",
@@ -8418,10 +8104,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 60000,
         "desc": "For 5 sec., slowly stiffens the target's body paralyzing them for 3 sec.",
         "balance": {
-            "mpCost": 39,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 39,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_anchor",
         "vfxGap": false,
@@ -8429,10 +8115,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "necromancer",
-            "soultaker"
+                "necromancer",
+                "soultaker"
         ]
-    },
+},
     "death_spike": {
         "id": "death_spike",
         "name": "Death Spike",
@@ -8449,10 +8135,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Attacks with the dark energy.Deals M. damage to the target. Power 84.",
         "balance": {
-            "mpCost": 33,
-            "pwr": 84,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 33,
+                "pwr": 84,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_death_spike",
         "vfxGap": false,
@@ -8460,10 +8146,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "necromancer",
-            "soultaker"
+                "necromancer",
+                "soultaker"
         ]
-    },
+},
     "summon_reanimated_man": {
         "id": "summon_reanimated_man",
         "name": "Summon Reanimated Man",
@@ -8480,10 +8166,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 5000,
         "desc": "Summons Reanimated Man.",
         "balance": {
-            "mpCost": 78,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 78,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_summon_reanimated_man",
         "vfxGap": false,
@@ -8491,9 +8177,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 44,
         "classes": [
-            "necromancer"
+                "necromancer"
         ]
-    },
+},
     "summon_corrupted_man": {
         "id": "summon_corrupted_man",
         "name": "Summon Corrupted Man",
@@ -8510,10 +8196,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 5000,
         "desc": "Summons Corrupted Man.",
         "balance": {
-            "mpCost": 70,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 70,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_summon_corrupted_man",
         "vfxGap": false,
@@ -8521,9 +8207,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "necromancer"
+                "necromancer"
         ]
-    },
+},
     "shining_beam": {
         "id": "shining_beam",
         "name": "Shining Beam",
@@ -8540,10 +8226,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Attacks the target with the power of Light granted by the unbreakable oath.Deals M. damage. Power 126.Enemies with debuffs/ anomalies receive more damage.Deals heavy damage to demons/ undead.",
         "balance": {
-            "mpCost": 56,
-            "pwr": 126,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 56,
+                "pwr": 126,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_shining_beam",
         "vfxGap": false,
@@ -8551,9 +8237,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "cardinal"
+                "cardinal"
         ]
-    },
+},
     "mana_effect_boost": {
         "id": "mana_effect_boost",
         "name": "Mana Effect Boost",
@@ -8570,10 +8256,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Max MP +20%MP Recovery Rate +5.1",
         "balance": {
-            "mpCost": 70,
-            "pwr": 2,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 70,
+                "pwr": 2,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_mana_effect_boost",
         "vfxGap": false,
@@ -8581,17 +8267,17 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "cleric",
-            "bishop",
-            "cardinal",
-            "elfOracle",
-            "elfElder",
-            "evaSaint",
-            "shillienOracle",
-            "shillienElder",
-            "shillienSaint"
+                "cleric",
+                "bishop",
+                "cardinal",
+                "elfOracle",
+                "elfElder",
+                "evaSaint",
+                "shillienOracle",
+                "shillienElder",
+                "shillienSaint"
         ]
-    },
+},
     "prophecy_of_light": {
         "id": "prophecy_of_light",
         "name": "Prophecy of Light",
@@ -8608,10 +8294,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Max HP +10%Max MP +10%P. Def. +10%M. Def. +10%PvE damage bonus +20%Healing Power +15Debuff Resistance +10%Anomaly Resistance PvE damage +10%",
         "balance": {
-            "mpCost": 72,
-            "pwr": 1,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 72,
+                "pwr": 1,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_prophecy_of_light",
         "vfxGap": false,
@@ -8619,9 +8305,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "cardinal"
+                "cardinal"
         ]
-    },
+},
     "paralysis": {
         "id": "paralysis",
         "name": "Paralysis",
@@ -8638,10 +8324,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 20000,
         "desc": "Inflicts Paralysis on the target.",
         "balance": {
-            "mpCost": 69,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 69,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_paralysis",
         "vfxGap": false,
@@ -8649,10 +8335,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "bishop",
-            "cardinal"
+                "bishop",
+                "cardinal"
         ]
-    },
+},
     "favorable_cover_saved_life": {
         "id": "favorable_cover_saved_life",
         "name": "Favorable Cover: Saved Life",
@@ -8669,10 +8355,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 300000,
         "desc": "Favorable Cover: Saved Life",
         "balance": {
-            "mpCost": 60,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 60,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_favorable_cover_saved_life",
         "vfxGap": false,
@@ -8680,14 +8366,14 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "bishop",
-            "cardinal",
-            "elfElder",
-            "evaSaint",
-            "shillienElder",
-            "shillienSaint"
+                "bishop",
+                "cardinal",
+                "elfElder",
+                "evaSaint",
+                "shillienElder",
+                "shillienSaint"
         ]
-    },
+},
     "dark_side": {
         "id": "dark_side",
         "name": "Dark Side",
@@ -8704,10 +8390,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Dark Side",
         "balance": {
-            "mpCost": 200,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 200,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_dark_side",
         "vfxGap": false,
@@ -8715,9 +8401,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "cardinal"
+                "cardinal"
         ]
-    },
+},
     "unleashing": {
         "id": "unleashing",
         "name": "Unleashing",
@@ -8734,10 +8420,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 360000,
         "desc": "Unleashing",
         "balance": {
-            "mpCost": 80,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 80,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_unleashing",
         "vfxGap": false,
@@ -8745,11 +8431,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "cardinal",
-            "evaSaint",
-            "shillienSaint"
+                "cardinal",
+                "evaSaint",
+                "shillienSaint"
         ]
-    },
+},
     "greater_heal": {
         "id": "greater_heal",
         "name": "Greater Heal",
@@ -8766,10 +8452,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 3000,
         "desc": "Recovers the target's HP with 1030 power.",
         "balance": {
-            "mpCost": 92,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 92,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_greater_heal",
         "vfxGap": false,
@@ -8777,12 +8463,12 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "bishop",
-            "cardinal",
-            "elfElder",
-            "shillienElder"
+                "bishop",
+                "cardinal",
+                "elfElder",
+                "shillienElder"
         ]
-    },
+},
     "life_balance": {
         "id": "life_balance",
         "name": "Life Balance",
@@ -8799,10 +8485,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "Life Balance",
         "balance": {
-            "mpCost": 123,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 123,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_life_balance",
         "vfxGap": false,
@@ -8810,9 +8496,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "cardinal"
+                "cardinal"
         ]
-    },
+},
     "greater_battle_heal": {
         "id": "greater_battle_heal",
         "name": "Greater Battle Heal",
@@ -8829,10 +8515,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Momentarily recovers HP. Power 863.",
         "balance": {
-            "mpCost": 177,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 177,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_greater_battle_heal",
         "vfxGap": false,
@@ -8840,12 +8526,12 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "bishop",
-            "cardinal",
-            "elfElder",
-            "shillienElder"
+                "bishop",
+                "cardinal",
+                "elfElder",
+                "shillienElder"
         ]
-    },
+},
     "restore_life": {
         "id": "restore_life",
         "name": "Restore Life",
@@ -8862,10 +8548,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "Restore Life",
         "balance": {
-            "mpCost": 177,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 177,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_restore_life",
         "vfxGap": false,
@@ -8873,10 +8559,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "bishop",
-            "cardinal"
+                "bishop",
+                "cardinal"
         ]
-    },
+},
     "magical_backfire": {
         "id": "magical_backfire",
         "name": "Magical Backfire",
@@ -8893,10 +8579,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "The target's Skill MP Consumption +200%",
         "balance": {
-            "mpCost": 75,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 75,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_magical_backfire",
         "vfxGap": false,
@@ -8904,10 +8590,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "bishop",
-            "cardinal"
+                "bishop",
+                "cardinal"
         ]
-    },
+},
     "chain_heal": {
         "id": "chain_heal",
         "name": "Chain Heal",
@@ -8924,10 +8610,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 7000,
         "desc": "Applied on 10 nearby allies including the target.Recovers 30% of Max HP to the most damaged ally.The rest recover less HP.",
         "balance": {
-            "mpCost": 194,
-            "pwr": 3,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 194,
+                "pwr": 3,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_chain_heal",
         "vfxGap": false,
@@ -8935,9 +8621,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "cardinal"
+                "cardinal"
         ]
-    },
+},
     "greater_group_heal": {
         "id": "greater_group_heal",
         "name": "Greater Group Heal",
@@ -8954,10 +8640,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 6000,
         "desc": "Recovers all party members' HP with 827 power.",
         "balance": {
-            "mpCost": 158,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 158,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_greater_group_heal",
         "vfxGap": false,
@@ -8965,12 +8651,12 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "bishop",
-            "cardinal",
-            "elfElder",
-            "shillienElder"
+                "bishop",
+                "cardinal",
+                "elfElder",
+                "shillienElder"
         ]
-    },
+},
     "blessing": {
         "id": "blessing",
         "name": "Blessing",
@@ -8987,10 +8673,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 900000,
         "desc": "Note!If affected by Dark Side and Dark Side: Master, decreases the amount of recovered HP.Recovers 100% HP to a party member.Can only be used if MP is 30% or lower.",
         "balance": {
-            "mpCost": 235,
-            "pwr": 10,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 235,
+                "pwr": 10,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_blessing",
         "vfxGap": false,
@@ -8998,10 +8684,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "bishop",
-            "cardinal"
+                "bishop",
+                "cardinal"
         ]
-    },
+},
     "balanced_body": {
         "id": "balanced_body",
         "name": "Balanced Body",
@@ -9018,10 +8704,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 15000,
         "desc": "Balanced Body",
         "balance": {
-            "mpCost": 249,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 249,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_balanced_body",
         "vfxGap": false,
@@ -9029,9 +8715,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "cardinal"
+                "cardinal"
         ]
-    },
+},
     "dark_vortex": {
         "id": "dark_vortex",
         "name": "Dark Vortex",
@@ -9048,10 +8734,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "Creates a vortex that draws its strength from the Dark dimension.Deals M. damage to the target. Power 158.",
         "balance": {
-            "mpCost": 116,
-            "pwr": 158,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 116,
+                "pwr": 158,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_dark_vortex",
         "vfxGap": false,
@@ -9059,9 +8745,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "soultaker"
+                "soultaker"
         ]
-    },
+},
     "miracle": {
         "id": "miracle",
         "name": "Miracle",
@@ -9078,10 +8764,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Miracle",
         "balance": {
-            "mpCost": 72,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 72,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_miracle",
         "vfxGap": false,
@@ -9089,9 +8775,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 80,
         "classes": [
-            "cardinal"
+                "cardinal"
         ]
-    },
+},
     "salvation": {
         "id": "salvation",
         "name": "Salvation",
@@ -9108,10 +8794,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Salvation",
         "balance": {
-            "mpCost": 87,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 87,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_salvation",
         "vfxGap": false,
@@ -9119,9 +8805,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 79,
         "classes": [
-            "cardinal"
+                "cardinal"
         ]
-    },
+},
     "sensation": {
         "id": "sensation",
         "name": "Sensation",
@@ -9138,10 +8824,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 900000,
         "desc": "Sensation",
         "balance": {
-            "mpCost": 103,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 103,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_sensation",
         "vfxGap": false,
@@ -9149,9 +8835,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "cardinal"
+                "cardinal"
         ]
-    },
+},
     "tranquility": {
         "id": "tranquility",
         "name": "Tranquility",
@@ -9168,10 +8854,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 300000,
         "desc": "Tranquility",
         "balance": {
-            "mpCost": 105,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 105,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_tranquility",
         "vfxGap": false,
@@ -9179,9 +8865,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "cardinal"
+                "cardinal"
         ]
-    },
+},
     "cleanse": {
         "id": "cleanse",
         "name": "Cleanse",
@@ -9198,10 +8884,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 8000,
         "desc": "Cleanse",
         "balance": {
-            "mpCost": 58,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 58,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_cleanse",
         "vfxGap": false,
@@ -9209,9 +8895,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 77,
         "classes": [
-            "cardinal"
+                "cardinal"
         ]
-    },
+},
     "divine_whisper": {
         "id": "divine_whisper",
         "name": "Divine Whisper",
@@ -9228,10 +8914,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "Divine Whisper",
         "balance": {
-            "mpCost": 100,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 100,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_divine_whisper",
         "vfxGap": false,
@@ -9239,9 +8925,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "cardinal"
+                "cardinal"
         ]
-    },
+},
     "advanced_cleanse": {
         "id": "advanced_cleanse",
         "name": "Advanced Cleanse",
@@ -9258,10 +8944,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 8000,
         "desc": "Removes the target's debuffs and anomalies.Debuff/ Anomaly Resistance +10%",
         "balance": {
-            "mpCost": 55,
-            "pwr": 1,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 55,
+                "pwr": 1,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_advanced_cleanse",
         "vfxGap": false,
@@ -9269,9 +8955,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "cardinal"
+                "cardinal"
         ]
-    },
+},
     "divine_power_acquisition": {
         "id": "divine_power_acquisition",
         "name": "Divine Power Acquisition",
@@ -9288,10 +8974,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Divine Power Acquisition",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_divine_power_acquisition",
         "vfxGap": false,
@@ -9299,9 +8985,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "cardinal"
+                "cardinal"
         ]
-    },
+},
     "void_explosion": {
         "id": "void_explosion",
         "name": "Void Explosion",
@@ -9318,10 +9004,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Makes an explosion imbued with the Dark energy.Deals M. damage to the target. Power 152.Enemies with debuffs/ anomalies receive more damage.",
         "balance": {
-            "mpCost": 56,
-            "pwr": 152,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 56,
+                "pwr": 152,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_void_explosion",
         "vfxGap": false,
@@ -9329,9 +9015,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "soultaker"
+                "soultaker"
         ]
-    },
+},
     "master_of_void": {
         "id": "master_of_void",
         "name": "Master of Void",
@@ -9348,10 +9034,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Master of Void",
         "balance": {
-            "mpCost": 120,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 120,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_master_of_void",
         "vfxGap": false,
@@ -9359,9 +9045,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "soultaker"
+                "soultaker"
         ]
-    },
+},
     "dark_spiral": {
         "id": "dark_spiral",
         "name": "Dark Spiral",
@@ -9378,10 +9064,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "Attacks with a dark spiral.Deals M. damage to the target and nearby enemies. Power 229.For 5 sec., STR/ MEN -2.PvP: Attacks up to 6 targets.PvE: Attacks up to 6 targets.",
         "balance": {
-            "mpCost": 116,
-            "pwr": 229,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 116,
+                "pwr": 229,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_dark_spiral",
         "vfxGap": false,
@@ -9389,9 +9075,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "soultaker"
+                "soultaker"
         ]
-    },
+},
     "soul_guardian": {
         "id": "soul_guardian",
         "name": "Soul Guardian",
@@ -9408,10 +9094,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 300000,
         "desc": "Soul Guardian",
         "balance": {
-            "mpCost": 125,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 125,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_soul_guardian",
         "vfxGap": false,
@@ -9419,9 +9105,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "soultaker"
+                "soultaker"
         ]
-    },
+},
     "divine_strike": {
         "id": "divine_strike",
         "name": "Divine Strike",
@@ -9438,10 +9124,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Summons holy light.Deals M. damage to the target. Power 30.Deals heavy damage to demons and undead.",
         "balance": {
-            "mpCost": 19,
-            "pwr": 30,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 19,
+                "pwr": 30,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_divine_strike",
         "vfxGap": false,
@@ -9449,11 +9135,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 20,
         "classes": [
-            "cleric",
-            "elfOracle",
-            "shillienOracle"
+                "cleric",
+                "elfOracle",
+                "shillienOracle"
         ]
-    },
+},
     "summon_cursed_man": {
         "id": "summon_cursed_man",
         "name": "Summon Cursed Man",
@@ -9470,10 +9156,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 5000,
         "desc": "Summons Cursed Man.",
         "balance": {
-            "mpCost": 151,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 151,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_summon_cursed_man",
         "vfxGap": false,
@@ -9481,9 +9167,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 79,
         "classes": [
-            "soultaker"
+                "soultaker"
         ]
-    },
+},
     "heal": {
         "id": "heal",
         "name": "Heal",
@@ -9500,10 +9186,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 3000,
         "desc": "Recovers the target's HP with 50 power.",
         "balance": {
-            "mpCost": 10,
-            "pwr": 50,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 10,
+                "pwr": 50,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_heal",
         "vfxGap": false,
@@ -9511,11 +9197,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 20,
         "classes": [
-            "cleric",
-            "elfOracle",
-            "shillienOracle"
+                "cleric",
+                "elfOracle",
+                "shillienOracle"
         ]
-    },
+},
     "group_heal": {
         "id": "group_heal",
         "name": "Group Heal",
@@ -9532,10 +9218,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 6000,
         "desc": "Recovers all party members' HP with 66 power.",
         "balance": {
-            "mpCost": 33,
-            "pwr": 66,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 33,
+                "pwr": 66,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_group_heal",
         "vfxGap": false,
@@ -9543,11 +9229,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 20,
         "classes": [
-            "cleric",
-            "elfOracle",
-            "shillienOracle"
+                "cleric",
+                "elfOracle",
+                "shillienOracle"
         ]
-    },
+},
     "peace": {
         "id": "peace",
         "name": "Peace",
@@ -9564,10 +9250,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 5000,
         "desc": "Peace",
         "balance": {
-            "mpCost": 30,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 30,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_peace",
         "vfxGap": false,
@@ -9575,10 +9261,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 35,
         "classes": [
-            "cleric",
-            "bishop"
+                "cleric",
+                "bishop"
         ]
-    },
+},
     "cure": {
         "id": "cure",
         "name": "Cure",
@@ -9595,10 +9281,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 4000,
         "desc": "Removes Infection debuffs from the target.",
         "balance": {
-            "mpCost": 10,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 10,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_cure",
         "vfxGap": false,
@@ -9606,15 +9292,15 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 35,
         "classes": [
-            "cleric",
-            "bishop",
-            "elfOracle",
-            "elfElder",
-            "evaSaint",
-            "shillienOracle",
-            "shillienElder"
+                "cleric",
+                "bishop",
+                "elfOracle",
+                "elfElder",
+                "evaSaint",
+                "shillienOracle",
+                "shillienElder"
         ]
-    },
+},
     "resurrection": {
         "id": "resurrection",
         "name": "Resurrection",
@@ -9631,10 +9317,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "Resurrects a dead party member.XP recovery: 0%",
         "balance": {
-            "mpCost": 59,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 59,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_resurrection",
         "vfxGap": false,
@@ -9642,13 +9328,13 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 20,
         "classes": [
-            "cleric",
-            "bishop",
-            "elfOracle",
-            "elfElder",
-            "shillienOracle"
+                "cleric",
+                "bishop",
+                "elfOracle",
+                "elfElder",
+                "shillienOracle"
         ]
-    },
+},
     "divine_power": {
         "id": "divine_power",
         "name": "Divine Power",
@@ -9665,10 +9351,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 300000,
         "desc": "Healing Power +20",
         "balance": {
-            "mpCost": 70,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 70,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_divine_power",
         "vfxGap": false,
@@ -9676,9 +9362,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 51,
         "classes": [
-            "bishop"
+                "bishop"
         ]
-    },
+},
     "body_of_avatar": {
         "id": "body_of_avatar",
         "name": "Body of Avatar",
@@ -9695,10 +9381,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 120000,
         "desc": "Note!When using Dark Side and Dark Side: Master, removes the buff and prevents the target from using it.Recovers 10% of your Max HP.Max HP +10%",
         "balance": {
-            "mpCost": 39,
-            "pwr": 1,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 39,
+                "pwr": 1,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_body_of_avatar",
         "vfxGap": false,
@@ -9706,9 +9392,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 48,
         "classes": [
-            "bishop"
+                "bishop"
         ]
-    },
+},
     "favorable_cover": {
         "id": "favorable_cover",
         "name": "Favorable Cover",
@@ -9725,10 +9411,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 300000,
         "desc": "Absolute skillUses magic to change a protective stance.Max HP +50Max HP +10%P. Def. +10%Speed +5",
         "balance": {
-            "mpCost": 50,
-            "pwr": 1,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 50,
+                "pwr": 1,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_favorable_cover",
         "vfxGap": false,
@@ -9736,7 +9422,7 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 58,
         "classes": []
-    },
+},
     "requiem": {
         "id": "requiem",
         "name": "Requiem",
@@ -9753,10 +9439,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Nearby monsters do not attack first.",
         "balance": {
-            "mpCost": 33,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 33,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_requiem",
         "vfxGap": false,
@@ -9764,9 +9450,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "bishop"
+                "bishop"
         ]
-    },
+},
     "quick_dash": {
         "id": "quick_dash",
         "name": "Quick Dash",
@@ -9783,10 +9469,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 3000,
         "desc": "Quick Dash",
         "balance": {
-            "mpCost": 35,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 35,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_quick_dash",
         "vfxGap": false,
@@ -9794,9 +9480,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 20,
         "classes": [
-            "warg"
+                "warg"
         ]
-    },
+},
     "repose": {
         "id": "repose",
         "name": "Repose",
@@ -9813,10 +9499,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 5000,
         "desc": "Decreases nearby monsters' aggression.",
         "balance": {
-            "mpCost": 33,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 33,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_repose",
         "vfxGap": false,
@@ -9824,9 +9510,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 44,
         "classes": [
-            "bishop"
+                "bishop"
         ]
-    },
+},
     "mass_resurrection": {
         "id": "mass_resurrection",
         "name": "Mass Resurrection",
@@ -9843,10 +9529,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 600000,
         "desc": "Resurrects dead clan members.XP recovery: 0%",
         "balance": {
-            "mpCost": 243,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 243,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_mass_resurrection",
         "vfxGap": false,
@@ -9854,9 +9540,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "bishop"
+                "bishop"
         ]
-    },
+},
     "vitalize": {
         "id": "vitalize",
         "name": "Vitalize",
@@ -9873,10 +9559,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 3000,
         "desc": "Recovers the target's HP. Power 460.Removes debuffs from the target.P. Atk. reductionM. Atk. reductionP. Def. reductionM. Def. reduction",
         "balance": {
-            "mpCost": 84,
-            "pwr": 460,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 84,
+                "pwr": 460,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_vitalize",
         "vfxGap": false,
@@ -9884,11 +9570,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 46,
         "classes": [
-            "bishop",
-            "elfElder",
-            "shillienElder"
+                "bishop",
+                "elfElder",
+                "shillienElder"
         ]
-    },
+},
     "direct_strike": {
         "id": "direct_strike",
         "name": "Direct Strike",
@@ -9905,10 +9591,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 500,
         "desc": "Attacks the target.Deals P. damage. Power 460.Ignores Shield Defense.Ignores 15% of the target's defense.Starting from Lv. 21, makes 2 attacks.While in the wolf form, changes to Double Claw Strike.Double Claw StrikeAttacks a single target twice.",
         "balance": {
-            "mpCost": 15,
-            "pwr": 460,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 460,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_direct_strike",
         "vfxGap": false,
@@ -9916,9 +9602,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 25,
         "classes": [
-            "warg"
+                "warg"
         ]
-    },
+},
     "punishment": {
         "id": "punishment",
         "name": "Punishment",
@@ -9935,10 +9621,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Attacks the target. Power 403.Ignores Shield Defense.Ignores 15% of the target's defense.",
         "balance": {
-            "mpCost": 18,
-            "pwr": 403,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 18,
+                "pwr": 403,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_punishment",
         "vfxGap": false,
@@ -9946,11 +9632,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 20,
         "classes": [
-            "deathBlade",
-            "deathMessenger",
-            "deathKnight"
+                "deathBlade",
+                "deathMessenger",
+                "deathKnight"
         ]
-    },
+},
     "blow": {
         "id": "blow",
         "name": "Blow",
@@ -9967,10 +9653,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Blow",
         "balance": {
-            "mpCost": 22,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 22,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_blow",
         "vfxGap": false,
@@ -9978,13 +9664,13 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 20,
         "classes": [
-            "assassinS0",
-            "assassinS1",
-            "assassinS2",
-            "assassinS3",
-            "assassinDE"
+                "assassinS0",
+                "assassinS1",
+                "assassinS2",
+                "assassinS3",
+                "assassinDE"
         ]
-    },
+},
     "roar_of_death": {
         "id": "roar_of_death",
         "name": "Roar of Death",
@@ -10001,10 +9687,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 120000,
         "desc": "Roar of Death",
         "balance": {
-            "mpCost": 50,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 50,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_roar_of_death",
         "vfxGap": false,
@@ -10012,11 +9698,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 30,
         "classes": [
-            "deathBlade",
-            "deathMessenger",
-            "deathKnight"
+                "deathBlade",
+                "deathMessenger",
+                "deathKnight"
         ]
-    },
+},
     "forward_move": {
         "id": "forward_move",
         "name": "Forward Move",
@@ -10033,10 +9719,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 3000,
         "desc": "<Rush skill>Moves you forward.",
         "balance": {
-            "mpCost": 45,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 45,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_forward_move",
         "vfxGap": false,
@@ -10044,9 +9730,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "assassinS2"
+                "assassinS2"
         ]
-    },
+},
     "shadow_attack": {
         "id": "shadow_attack",
         "name": "Shadow Attack",
@@ -10063,10 +9749,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 3000,
         "desc": "<Changing skill>A shadow attacks the target.The attack type is based on the distance to the target.Rushes to the target if they are too far.Attacks the target twice. Power 914.Ignores Shield Defense.Ignores 10% of the target's defense.PvP: Attacks up to 3 targets.PvE: Attacks up to 3 targets.",
         "balance": {
-            "mpCost": 35,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 35,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_shadow_attack",
         "vfxGap": false,
@@ -10074,10 +9760,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "assassinS2",
-            "assassinS3"
+                "assassinS2",
+                "assassinS3"
         ]
-    },
+},
     "shadow_blast": {
         "id": "shadow_blast",
         "name": "Shadow Blast",
@@ -10094,10 +9780,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Shadow Blast",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_shadow_blast",
         "vfxGap": false,
@@ -10105,9 +9791,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "assassinS3"
+                "assassinS3"
         ]
-    },
+},
     "change_appearance": {
         "id": "change_appearance",
         "name": "Change Appearance",
@@ -10124,22 +9810,21 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Change Appearance",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_change_appearance",
         "vfxGap": false,
         "sfxId": "sfx_action",
         "sfxGap": false,
         "minLevel": 1,
-        "classes": [
-            "assassinS0",
-            "assassinDE",
-            "bloodRoseBase"
-        ]
-    },
+        "classes": [],
+        "availableTo": [],
+        "disabled": true,
+        "removalReason": "cosmetic_mount_purge"
+},
     "assassination": {
         "id": "assassination",
         "name": "Assassination",
@@ -10156,10 +9841,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Assassination",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_assassination",
         "vfxGap": false,
@@ -10167,9 +9852,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "assassinS3"
+                "assassinS3"
         ]
-    },
+},
     "sharp_blade": {
         "id": "sharp_blade",
         "name": "Sharp Blade",
@@ -10186,10 +9871,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Sharp Blade",
         "balance": {
-            "mpCost": 50,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 50,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_sharp_blade",
         "vfxGap": false,
@@ -10197,10 +9882,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 50,
         "classes": [
-            "assassinS2",
-            "assassinS3"
+                "assassinS2",
+                "assassinS3"
         ]
-    },
+},
     "erosion": {
         "id": "erosion",
         "name": "Erosion",
@@ -10217,10 +9902,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Erosion",
         "balance": {
-            "mpCost": 50,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 50,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_erosion",
         "vfxGap": false,
@@ -10228,10 +9913,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 60,
         "classes": [
-            "assassinS2",
-            "assassinS3"
+                "assassinS2",
+                "assassinS3"
         ]
-    },
+},
     "murder_attempt": {
         "id": "murder_attempt",
         "name": "Murder Attempt",
@@ -10248,10 +9933,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Murder Attempt",
         "balance": {
-            "mpCost": 50,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 50,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_murder_attempt",
         "vfxGap": false,
@@ -10259,10 +9944,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 60,
         "classes": [
-            "assassinS2",
-            "assassinS3"
+                "assassinS2",
+                "assassinS3"
         ]
-    },
+},
     "assassin_s_secret_notes_2nd_page": {
         "id": "assassin_s_secret_notes_2nd_page",
         "name": "Assassin's Secret Notes - 2nd Page",
@@ -10279,10 +9964,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Assassin's Secret Notes - 2nd Page",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_assassin_s_secret_notes_2nd_page",
         "vfxGap": false,
@@ -10290,9 +9975,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 60,
         "classes": [
-            "assassinS2"
+                "assassinS2"
         ]
-    },
+},
     "assassin_s_secret_notes_1st_page": {
         "id": "assassin_s_secret_notes_1st_page",
         "name": "Assassin's Secret Notes - 1st Page",
@@ -10309,10 +9994,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Assassin's Secret Notes - 1st Page",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_assassin_s_secret_notes_1st_page",
         "vfxGap": false,
@@ -10320,9 +10005,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 45,
         "classes": [
-            "assassinS2"
+                "assassinS2"
         ]
-    },
+},
     "assassin_s_secret_notes_3rd_page": {
         "id": "assassin_s_secret_notes_3rd_page",
         "name": "Assassin's Secret Notes - 3rd Page",
@@ -10339,10 +10024,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Assassin's Secret Notes - 3rd Page",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_assassin_s_secret_notes_3rd_page",
         "vfxGap": false,
@@ -10350,9 +10035,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 70,
         "classes": [
-            "assassinS2"
+                "assassinS2"
         ]
-    },
+},
     "resolve_to_kill": {
         "id": "resolve_to_kill",
         "name": "Resolve to Kill",
@@ -10369,10 +10054,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1200000,
         "desc": "Resolve to Kill",
         "balance": {
-            "mpCost": 100,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 100,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_resolve_to_kill",
         "vfxGap": false,
@@ -10380,9 +10065,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "assassinS3"
+                "assassinS3"
         ]
-    },
+},
     "clone_dance": {
         "id": "clone_dance",
         "name": "Clone Dance",
@@ -10399,10 +10084,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 20000,
         "desc": "<Changing skill>Creates shadow clones that attack several targets.Attacks the enemy 2 times. Power 5500.Ignores Shield Defense.Ignores 15% of the target's defense.PvP: Attacks up to 7 targets.PvE: Attacks up to 7 targets.",
         "balance": {
-            "mpCost": 99,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 99,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_clone_dance",
         "vfxGap": false,
@@ -10410,9 +10095,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "assassinS3"
+                "assassinS3"
         ]
-    },
+},
     "relentless_attack": {
         "id": "relentless_attack",
         "name": "Relentless Attack",
@@ -10429,10 +10114,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 5000,
         "desc": "Strikes at the target several times in a row.Attacks the enemy thrice. Power 4800.Ignores Shield Defense.Ignores 15% of the target's defense.",
         "balance": {
-            "mpCost": 77,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 77,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_relentless_attack",
         "vfxGap": false,
@@ -10440,9 +10125,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "assassinS3"
+                "assassinS3"
         ]
-    },
+},
     "silver_wolf": {
         "id": "silver_wolf",
         "name": "Silver Wolf",
@@ -10459,10 +10144,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Silver Wolf",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_silver_wolf",
         "vfxGap": false,
@@ -10470,9 +10155,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "assassinS3"
+                "assassinS3"
         ]
-    },
+},
     "wipeout": {
         "id": "wipeout",
         "name": "Wipeout",
@@ -10489,10 +10174,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 8000,
         "desc": "Attacks the target. Power 1569.Ignores Shield Defense.Ignores 20% of the target's defense.",
         "balance": {
-            "mpCost": 33,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 33,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_wipeout",
         "vfxGap": false,
@@ -10500,10 +10185,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "deathMessenger",
-            "deathKnight"
+                "deathMessenger",
+                "deathKnight"
         ]
-    },
+},
     "time_distortion": {
         "id": "time_distortion",
         "name": "Time Distortion",
@@ -10520,10 +10205,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 180000,
         "desc": "Distorts time around you.Attacks nearby enemies 3 time(s). Power 20,000.Ignores Shield Defense.Ignores 20% of the target's defense.PvP: Attacks up to 10 targets.PvE: Attacks up to 10 targets.Applies the Time Master buff when using the skill.Time MasterP. Atk. +1000P. Atk. +10%P. Skill Power +10%P. Skill Critical Damage +5%Atk. Spd. +30%Speed +30Skill Evasion +10%Cannot be trapped by the Time Distortion effect.Duration: 60 sec.",
         "balance": {
-            "mpCost": 200,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 200,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_time_distortion",
         "vfxGap": false,
@@ -10531,9 +10216,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "assassinS3"
+                "assassinS3"
         ]
-    },
+},
     "deadly_pull": {
         "id": "deadly_pull",
         "name": "Deadly Pull",
@@ -10550,10 +10235,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 3000,
         "desc": "<Pull attack>Makes an attack. Power 1500. After that, pulls the target and applies the Deadly Touch debuff.Ignores Shield Defense.Ignores 5% of the target's defense.Deadly TouchDuration: 3 sec.All received Critical Rate +10%Imprisonment Resistance -10%When using Death Knight's Flame Sword:Deadly Pull → Flame Whip- Increases Pull Atk. Rate.- Removes DP reduction.",
         "balance": {
-            "mpCost": 15,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_deadly_pull",
         "vfxGap": false,
@@ -10561,10 +10246,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "deathMessenger",
-            "deathKnight"
+                "deathMessenger",
+                "deathKnight"
         ]
-    },
+},
     "constraint": {
         "id": "constraint",
         "name": "Constraint",
@@ -10581,10 +10266,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 180000,
         "desc": "Constraint",
         "balance": {
-            "mpCost": 150,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 150,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_constraint",
         "vfxGap": false,
@@ -10592,9 +10277,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "assassinS3"
+                "assassinS3"
         ]
-    },
+},
     "stigma_of_death": {
         "id": "stigma_of_death",
         "name": "Stigma of Death",
@@ -10611,10 +10296,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 15000,
         "desc": "Attacks the target and nearby enemies. Power 1371.Ignores Shield Defense.Ignores 15% of the target's defense.PvP: Attacks up to 5 targets.PvE: Attacks up to 5 targets.Applies Dark Mark to the target on attack.Effects of several marks do not stack.Debuff/ Anomaly Resistance -5%",
         "balance": {
-            "mpCost": 100,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 100,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_stigma_of_death",
         "vfxGap": false,
@@ -10622,9 +10307,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "deathMessenger"
+                "deathMessenger"
         ]
-    },
+},
     "fist_of_fury": {
         "id": "fist_of_fury",
         "name": "Fist of Fury",
@@ -10641,10 +10326,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Attacks the target with a fist imbued with fire energy.Power 2064.With a certain chance, gets 1 DP on attack.Ignores Shield Defense.Ignores 10% of the target's defense.Applies Furious Blast that decreases the enemy's P./ M. Def.Furious BlastP./ M. Def. -23%",
         "balance": {
-            "mpCost": 50,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 50,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_fist_of_fury",
         "vfxGap": false,
@@ -10652,10 +10337,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 50,
         "classes": [
-            "deathMessenger",
-            "deathKnight"
+                "deathMessenger",
+                "deathKnight"
         ]
-    },
+},
     "return_motion": {
         "id": "return_motion",
         "name": "Return Motion",
@@ -10672,10 +10357,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 60000,
         "desc": "Return Motion",
         "balance": {
-            "mpCost": 100,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 100,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_return_motion",
         "vfxGap": false,
@@ -10683,9 +10368,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "assassinS3"
+                "assassinS3"
         ]
-    },
+},
     "flaming_body": {
         "id": "flaming_body",
         "name": "Flaming Body",
@@ -10702,10 +10387,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "DP recovering skillRecovers 1 DP on attack (cooldown: 1 sec.).P. Atk. +20%P. Skill Critical Rate +2%P. Skill Critical Damage +1%<Skill upgrade>Burning Field → Blazing Hell- Decreases casting time.- Removes fixed cooldown.Spirit Ore consumptionWhen using Death Knight's Flame Sword, enhances the following skill.Flaming Body → Dark Form- Increases Speed.",
         "balance": {
-            "mpCost": 15,
-            "pwr": 2,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 2,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_flaming_body",
         "vfxGap": false,
@@ -10713,10 +10398,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 70,
         "classes": [
-            "deathMessenger",
-            "deathKnight"
+                "deathMessenger",
+                "deathKnight"
         ]
-    },
+},
     "bone_cage": {
         "id": "bone_cage",
         "name": "Bone Cage",
@@ -10733,10 +10418,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 20000,
         "desc": "Puts the target into Bone Cage.Imprisoned enemies cannot be attacked.They cannot move, attack, teleport, target, use skills, recover HP/ MP/ CP.When the effect expires:PvP: Max HP/ MP -10%PvE: Deals P. damage. Power 8500.Ignores Shield Defense.Ignores 25% of the target's defense.When Bone Cage expires, makes an explosion that deals damage equal to 200% of your P. Atk.",
         "balance": {
-            "mpCost": 57,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 57,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_bone_cage",
         "vfxGap": false,
@@ -10744,10 +10429,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 55,
         "classes": [
-            "deathMessenger",
-            "deathKnight"
+                "deathMessenger",
+                "deathKnight"
         ]
-    },
+},
     "hellfire": {
         "id": "hellfire",
         "name": "Hellfire",
@@ -10764,10 +10449,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "Attacks nearby enemies. Power 4282. Transforms into Death Knight attacking nearby enemies. Power 4282, applies the Brutal Burn debuff.Ignores Shield Defense.Ignores 15% of the target's defense.If the enemy has the Mark of Demise applied, triggers an additional attack. Power 8000.Ignores Shield Defense.Ignores 20% of the target's defense.(PvP) Brutal Burn's duration: 5 sec.P./ M. Atk. -250P./ M. Def. -40%(PvE) Brutal Burn's duration: 5 sec.P./ M. Def. -40%PvP: Attacks up to 20 targets.PvE: Attacks up to 20 targets.",
         "balance": {
-            "mpCost": 15,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_hellfire",
         "vfxGap": false,
@@ -10775,9 +10460,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "deathKnight"
+                "deathKnight"
         ]
-    },
+},
     "burning_field": {
         "id": "burning_field",
         "name": "Burning Field",
@@ -10794,10 +10479,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "Attacks the enemies thrice. Power 7500.Ignores Shield Defense.Ignores 15% of the target's defense.After that, triggers an additional hit that deals P. damage. Power 7500. Applies Burning Swamp on enemies.Ignores Shield Defense.Ignores 15% of the target's defense.PvP: Attacks up to 6 targets.\\rPvE: Attacks up to 6 targets.Burning SwampDuration: 5 sec.Rush skills cannot be used.",
         "balance": {
-            "mpCost": 15,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_burning_field",
         "vfxGap": false,
@@ -10805,9 +10490,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "deathKnight"
+                "deathKnight"
         ]
-    },
+},
     "death_guard": {
         "id": "death_guard",
         "name": "Death Guard",
@@ -10824,10 +10509,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Death Guard",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_death_guard",
         "vfxGap": false,
@@ -10835,10 +10520,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "deathMessenger",
-            "deathKnight"
+                "deathMessenger",
+                "deathKnight"
         ]
-    },
+},
     "call_of_flame": {
         "id": "call_of_flame",
         "name": "Call of Flame",
@@ -10855,10 +10540,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Call of Flame",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_call_of_flame",
         "vfxGap": false,
@@ -10866,10 +10551,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 60,
         "classes": [
-            "deathMessenger",
-            "deathKnight"
+                "deathMessenger",
+                "deathKnight"
         ]
-    },
+},
     "rage_charge": {
         "id": "rage_charge",
         "name": "Rage Charge",
@@ -10886,10 +10571,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 3000,
         "desc": "Rush skillRushes to the enemy dealing P. damage. Power 5658. Applies Furious Blast on the enemy.Ignores Shield Defense.Ignores 15% of the target's defense.When using Rage Charge, recovers 2 DP (trigger rate: 30%).Furious Blast's duration: 3 sec.P./ M. Def. -30%Sword/ Two-handed Sword Resistance -10%Pull Resistance -30%",
         "balance": {
-            "mpCost": 80,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 80,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_rage_charge",
         "vfxGap": false,
@@ -10897,9 +10582,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 80,
         "classes": [
-            "deathKnight"
+                "deathKnight"
         ]
-    },
+},
     "stigma_of_evil": {
         "id": "stigma_of_evil",
         "name": "Stigma of Evil",
@@ -10916,10 +10601,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 12000,
         "desc": "Attacks enemies. Power 3200. Applies the Mark of Demise debuff on the enemy.Ignores Shield Defense.Ignores 15% of the target's defense.Mark of Demise's duration: 5 sec.Debuff/ Anomaly Resistance -10%When the target with Mark of Demise applied is hit by Hellfire, an additional attack is triggered. Power 8000.Ignores Shield Defense.Ignores 20% of the target's defense.On killing the target with Mark of Demise applied:Applies Soul Steal (duration: 30 sec.).Lv. 1: P. Atk./ P. Def./ M. Def. +100Lv. 2: P. Atk./ P. Def./ M. Def. +200Lv. 3: P. Atk./ P. Def./ M. Def. +300Lv. 4: P. Atk./ P. Def./ M. Def. +400Lv. 5: P. Atk./ P. Def./ M. Def. +500PvP: Attacks up to 5 targets.PvE: Attacks up to 10 targets.",
         "balance": {
-            "mpCost": 100,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 100,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_stigma_of_evil",
         "vfxGap": false,
@@ -10927,9 +10612,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 80,
         "classes": [
-            "deathKnight"
+                "deathKnight"
         ]
-    },
+},
     "upward_strike": {
         "id": "upward_strike",
         "name": "Upward Strike",
@@ -10946,10 +10631,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Attacks the target.Deals P. damage. Power 992.Ignores Shield Defense.Ignores 15% of the target's defense.While in the wolf form, changes to Claw Sweep.Claw SweepMakes 1 attack at a single target.When Wolf Mastery is learnt, the following effects are applied:Upward StrikeNumber of attacks +1Claw SweepNumber of attacks +1, changes the target attack area.",
         "balance": {
-            "mpCost": 40,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 40,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_upward_strike",
         "vfxGap": false,
@@ -10957,9 +10642,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "warg"
+                "warg"
         ]
-    },
+},
     "devour": {
         "id": "devour",
         "name": "Devour",
@@ -10976,10 +10661,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "Recovers 500 DP.Available only if DP are 500 or lower.",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_devour",
         "vfxGap": false,
@@ -10987,9 +10672,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "deathKnight"
+                "deathKnight"
         ]
-    },
+},
     "deadly_ligament_rupture": {
         "id": "deadly_ligament_rupture",
         "name": "Deadly Ligament Rupture",
@@ -11006,10 +10691,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 15000,
         "desc": "Removes and blocks the following buffs:- Wind Walk- Blade Movement- Fast Run",
         "balance": {
-            "mpCost": 43,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 43,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_deadly_ligament_rupture",
         "vfxGap": false,
@@ -11017,9 +10702,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "deathKnight"
+                "deathKnight"
         ]
-    },
+},
     "ultimate_death_knight": {
         "id": "ultimate_death_knight",
         "name": "Ultimate Death Knight",
@@ -11036,10 +10721,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 60000,
         "desc": "Transforms into a Death Knight who is cursed by the Fire Dragon Valakas, but possesses great powers in return.P. Atk. +2000P. Atk. +20%P. Def. +1000P. Def. +10%P. Skill Critical Rate +20%P. Skill Critical Damage +10%P. Skill damage bonus +10%Skill Power +5%Resistance to All Weapons +5%PvP damage +6%Atk. Spd. +10%Speed +10Increases Holy Resistance.Decreases Received Healing penalty.",
         "balance": {
-            "mpCost": 15,
-            "pwr": 2,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 2,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_ultimate_death_knight",
         "vfxGap": false,
@@ -11047,9 +10732,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "deathKnight"
+                "deathKnight"
         ]
-    },
+},
     "flame_grip": {
         "id": "flame_grip",
         "name": "Flame Grip",
@@ -11066,10 +10751,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 60000,
         "desc": "Flame Grip",
         "balance": {
-            "mpCost": 70,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 70,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_flame_grip",
         "vfxGap": false,
@@ -11077,9 +10762,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "deathKnight"
+                "deathKnight"
         ]
-    },
+},
     "mount_night_mare": {
         "id": "mount_night_mare",
         "name": "Mount Night Mare",
@@ -11096,20 +10781,21 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Mount Night Mare",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_mount_night_mare",
         "vfxGap": false,
         "sfxId": "sfx_action",
         "sfxGap": false,
         "minLevel": 76,
-        "classes": [
-            "deathKnight"
-        ]
-    },
+        "classes": [],
+        "availableTo": [],
+        "disabled": true,
+        "removalReason": "cosmetic_mount_purge"
+},
     "howling": {
         "id": "howling",
         "name": "Howling",
@@ -11126,10 +10812,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Howling",
         "balance": {
-            "mpCost": 50,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 50,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_howling",
         "vfxGap": false,
@@ -11137,9 +10823,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "warg"
+                "warg"
         ]
-    },
+},
     "moon_s_grace": {
         "id": "moon_s_grace",
         "name": "Moon's Grace",
@@ -11156,10 +10842,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Moon's Grace",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_moon_s_grace",
         "vfxGap": false,
@@ -11167,7 +10853,7 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 60,
         "classes": []
-    },
+},
     "young_moon_s_grace": {
         "id": "young_moon_s_grace",
         "name": "Young Moon's Grace",
@@ -11184,10 +10870,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Young Moon's Grace",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_young_moon_s_grace",
         "vfxGap": false,
@@ -11195,7 +10881,7 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 45,
         "classes": []
-    },
+},
     "full_moon_s_grace": {
         "id": "full_moon_s_grace",
         "name": "Full Moon's Grace",
@@ -11212,10 +10898,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Full Moon's Grace",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_full_moon_s_grace",
         "vfxGap": false,
@@ -11223,7 +10909,7 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 70,
         "classes": []
-    },
+},
     "recovery": {
         "id": "recovery",
         "name": "Recovery",
@@ -11240,10 +10926,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 60000,
         "desc": "Recovery",
         "balance": {
-            "mpCost": 20,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 20,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_recovery",
         "vfxGap": false,
@@ -11251,14 +10937,14 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 20,
         "classes": [
-            "elvenKnight",
-            "templeKnight",
-            "swordSinger",
-            "elfScout",
-            "plainsWalker",
-            "silverRanger"
+                "elvenKnight",
+                "templeKnight",
+                "swordSinger",
+                "elfScout",
+                "plainsWalker",
+                "silverRanger"
         ]
-    },
+},
     "synchro_freedom": {
         "id": "synchro_freedom",
         "name": "Synchro Freedom",
@@ -11275,10 +10961,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Synchro Freedom",
         "balance": {
-            "mpCost": 50,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 50,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_synchro_freedom",
         "vfxGap": false,
@@ -11286,9 +10972,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "windRider"
+                "windRider"
         ]
-    },
+},
     "fury_blade": {
         "id": "fury_blade",
         "name": "Fury Blade",
@@ -11305,10 +10991,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 20000,
         "desc": "Fury Blade",
         "balance": {
-            "mpCost": 100,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 100,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_fury_blade",
         "vfxGap": false,
@@ -11316,9 +11002,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "windRider"
+                "windRider"
         ]
-    },
+},
     "wind_riding": {
         "id": "wind_riding",
         "name": "Wind Riding",
@@ -11335,10 +11021,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 900000,
         "desc": "Speed +30P. Evasion +15Vital Point Attack Rate +20%P. Skill Evasion +60%Buff Cancel Resistance +90%Can be used with Ultimate Evasion.",
         "balance": {
-            "mpCost": 36,
-            "pwr": 2,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 36,
+                "pwr": 2,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_wind_riding",
         "vfxGap": false,
@@ -11346,9 +11032,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "windRider"
+                "windRider"
         ]
-    },
+},
     "evasion": {
         "id": "evasion",
         "name": "Evasion",
@@ -11365,10 +11051,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 300000,
         "desc": "P. Skill Evasion +50%M. Skill Evasion +50%(The effect is removed after 5 hit(s).)",
         "balance": {
-            "mpCost": 40,
-            "pwr": 5,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 40,
+                "pwr": 5,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_evasion",
         "vfxGap": false,
@@ -11376,9 +11062,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 79,
         "classes": [
-            "windRider"
+                "windRider"
         ]
-    },
+},
     "mount_pegasus": {
         "id": "mount_pegasus",
         "name": "Mount Pegasus",
@@ -11395,27 +11081,21 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Mount Pegasus",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_mount_pegasus",
         "vfxGap": false,
         "sfxId": "sfx_action",
         "sfxGap": false,
         "minLevel": 76,
-        "classes": [
-            "evaTemplar",
-            "swordMuse",
-            "windRider",
-            "moonlightSentinel",
-            "mysticMuse",
-            "elementalMaster",
-            "evaSaint",
-            "sayhaSeeker"
-        ]
-    },
+        "classes": [],
+        "availableTo": [],
+        "disabled": true,
+        "removalReason": "cosmetic_mount_purge"
+},
     "deadly_rhythm": {
         "id": "deadly_rhythm",
         "name": "Deadly Rhythm",
@@ -11432,10 +11112,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Attacks the target. Power 4615.For 10 sec., P. Def. -23%.Ignores Shield Defense.Ignores 10% of the target's defense.",
         "balance": {
-            "mpCost": 60,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 60,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_deadly_rhythm",
         "vfxGap": false,
@@ -11443,10 +11123,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "swordMuse",
-            "spectralDancer"
+                "swordMuse",
+                "spectralDancer"
         ]
-    },
+},
     "entangle": {
         "id": "entangle",
         "name": "Entangle",
@@ -11463,10 +11143,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 20000,
         "desc": "Entangle",
         "balance": {
-            "mpCost": 12,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 12,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_entangle",
         "vfxGap": false,
@@ -11474,11 +11154,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 36,
         "classes": [
-            "elvenKnight",
-            "templeKnight",
-            "evaTemplar"
+                "elvenKnight",
+                "templeKnight",
+                "evaTemplar"
         ]
-    },
+},
     "symphony": {
         "id": "symphony",
         "name": "Symphony",
@@ -11495,10 +11175,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 20000,
         "desc": "Attacks the target. Power 1737.For 3 sec., blocks the target's M. skills.",
         "balance": {
-            "mpCost": 60,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 60,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_symphony",
         "vfxGap": false,
@@ -11506,10 +11186,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "swordSinger",
-            "swordMuse"
+                "swordSinger",
+                "swordMuse"
         ]
-    },
+},
     "wild_beat": {
         "id": "wild_beat",
         "name": "Wild Beat",
@@ -11526,10 +11206,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 25000,
         "desc": "Charms the target making them move toward you. When the Paralysis effect expires, deals damage to the target. Power 9848.Ignores Shield Defense.Ignores 10% of the target's defense.",
         "balance": {
-            "mpCost": 15,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_wild_beat",
         "vfxGap": false,
@@ -11537,9 +11217,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "swordMuse"
+                "swordMuse"
         ]
-    },
+},
     "slowdown": {
         "id": "slowdown",
         "name": "Slowdown",
@@ -11556,10 +11236,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Slowdown",
         "balance": {
-            "mpCost": 11,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 11,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_slowdown",
         "vfxGap": false,
@@ -11567,11 +11247,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 20,
         "classes": [
-            "elvenKnight",
-            "templeKnight",
-            "evaTemplar"
+                "elvenKnight",
+                "templeKnight",
+                "evaTemplar"
         ]
-    },
+},
     "song_of_silence": {
         "id": "song_of_silence",
         "name": "Song of Silence",
@@ -11588,10 +11268,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 60000,
         "desc": "Blocks P./ M. skills of nearby enemies.Duration: 2 sec.Attacks the target. Power 7579.Ignores Shield Defense.Ignores 10% of the target's defense.Bonus effectWith a certain chance, removes damage limit.PvP: Attacks up to 6 targets.PvE: Attacks up to 6 targets.",
         "balance": {
-            "mpCost": 95,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 95,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_song_of_silence",
         "vfxGap": false,
@@ -11599,9 +11279,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 85,
         "classes": [
-            "swordMuse"
+                "swordMuse"
         ]
-    },
+},
     "song_of_wind": {
         "id": "song_of_wind",
         "name": "Song of Wind",
@@ -11618,10 +11298,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 5000,
         "desc": "<Rush skill>Attacks the target. Power 3996.Ignores Shield Defense.Ignores 10% of the target's defense.",
         "balance": {
-            "mpCost": 32,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 32,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_song_of_wind",
         "vfxGap": false,
@@ -11629,10 +11309,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 80,
         "classes": [
-            "swordSinger",
-            "swordMuse"
+                "swordSinger",
+                "swordMuse"
         ]
-    },
+},
     "song_of_cosmos": {
         "id": "song_of_cosmos",
         "name": "Song of Cosmos",
@@ -11649,10 +11329,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "P. Atk. +10%P. Skill Critical Rate +5%P. Skill Critical Damage +5%P. Skill damage bonus in PvE +5%Speed +10",
         "balance": {
-            "mpCost": 160,
-            "pwr": 1,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 160,
+                "pwr": 1,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_song_of_cosmos",
         "vfxGap": false,
@@ -11660,10 +11340,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 80,
         "classes": [
-            "swordSinger",
-            "swordMuse"
+                "swordSinger",
+                "swordMuse"
         ]
-    },
+},
     "frantic_pace": {
         "id": "frantic_pace",
         "name": "Frantic Pace",
@@ -11680,10 +11360,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Attacks the target. Power 6075.Ignores Shield Defense.Ignores 10% of the target's defense.",
         "balance": {
-            "mpCost": 64,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 64,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_frantic_pace",
         "vfxGap": false,
@@ -11691,10 +11371,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "swordMuse",
-            "spectralDancer"
+                "swordMuse",
+                "spectralDancer"
         ]
-    },
+},
     "song_of_hunter": {
         "id": "song_of_hunter",
         "name": "Song of Hunter",
@@ -11711,10 +11391,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 16000,
         "desc": "Attacks the target and nearby enemies twice. Power 3154.Ignores Shield Defense.Ignores 10% of the target's defense.PvP: Attacks up to 4 targets.PvE: Attacks up to 4 targets.",
         "balance": {
-            "mpCost": 76,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 76,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_song_of_hunter",
         "vfxGap": false,
@@ -11722,10 +11402,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 79,
         "classes": [
-            "swordSinger",
-            "swordMuse"
+                "swordSinger",
+                "swordMuse"
         ]
-    },
+},
     "song_of_earth": {
         "id": "song_of_earth",
         "name": "Song of Earth",
@@ -11742,10 +11422,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Caster:P. Atk. +500P./ M. Def. +500P. Skill Critical Rate +5%Speed +15P. Skill Cooldown -3%<Skill upgrade>Frantic Pace → Frantic Pace: Sword MuseSong of Wind → Song of Wind: LegatoSong of Hunter → Song of Hunter: LegatoWhen Rapid Frantic Pace: Sword Muse is used, makes an additional attack.Power 7286.Ignores Shield Defense.Ignores 20% of the target's defense.",
         "balance": {
-            "mpCost": 97,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 97,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_song_of_earth",
         "vfxGap": false,
@@ -11753,10 +11433,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 80,
         "classes": [
-            "swordSinger",
-            "swordMuse"
+                "swordSinger",
+                "swordMuse"
         ]
-    },
+},
     "amadeus": {
         "id": "amadeus",
         "name": "Amadeus",
@@ -11773,10 +11453,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 60000,
         "desc": "Amadeus",
         "balance": {
-            "mpCost": 375,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 375,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_amadeus",
         "vfxGap": false,
@@ -11784,9 +11464,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "swordMuse"
+                "swordMuse"
         ]
-    },
+},
     "guard_crush": {
         "id": "guard_crush",
         "name": "Guard Crush",
@@ -11803,10 +11483,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Attacks the target. Power 811.Ignores Shield Defense.Ignores 10% of the target's defense.",
         "balance": {
-            "mpCost": 33,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 33,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_guard_crush",
         "vfxGap": false,
@@ -11814,10 +11494,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "swordSinger",
-            "bladeDancer"
+                "swordSinger",
+                "bladeDancer"
         ]
-    },
+},
     "additional_strain": {
         "id": "additional_strain",
         "name": "Additional Strain",
@@ -11834,10 +11514,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 3000,
         "desc": "P./ M. Skill Cooldown +3 sec.",
         "balance": {
-            "mpCost": 45,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 45,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_additional_strain",
         "vfxGap": false,
@@ -11845,10 +11525,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "swordSinger",
-            "swordMuse"
+                "swordSinger",
+                "swordMuse"
         ]
-    },
+},
     "eliminate_obstruction": {
         "id": "eliminate_obstruction",
         "name": "Eliminate Obstruction",
@@ -11865,10 +11545,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Eliminate Obstruction",
         "balance": {
-            "mpCost": 50,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 50,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_eliminate_obstruction",
         "vfxGap": false,
@@ -11876,9 +11556,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 74,
         "classes": [
-            "swordSinger"
+                "swordSinger"
         ]
-    },
+},
     "sword_symphony": {
         "id": "sword_symphony",
         "name": "Sword Symphony",
@@ -11895,10 +11575,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Sword Symphony",
         "balance": {
-            "mpCost": 100,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 100,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_sword_symphony",
         "vfxGap": false,
@@ -11906,9 +11586,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "swordSinger"
+                "swordSinger"
         ]
-    },
+},
     "aqua_strike": {
         "id": "aqua_strike",
         "name": "Aqua Strike",
@@ -11925,10 +11605,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Attacks the target. Power 619.Ignores Shield Defense.Ignores 10% of the target's defense.",
         "balance": {
-            "mpCost": 33,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 33,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_aqua_strike",
         "vfxGap": false,
@@ -11936,10 +11616,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "templeKnight",
-            "evaTemplar"
+                "templeKnight",
+                "evaTemplar"
         ]
-    },
+},
     "life_magic_harmony_defense": {
         "id": "life_magic_harmony_defense",
         "name": "Life Magic Harmony - Defense",
@@ -11956,10 +11636,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "P. Def. +100M. Def. +100Max HP +100Recovers 5 MP on killing an enemy.",
         "balance": {
-            "mpCost": 30,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 30,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_life_magic_harmony_defense",
         "vfxGap": false,
@@ -11967,10 +11647,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "templeKnight",
-            "evaTemplar"
+                "templeKnight",
+                "evaTemplar"
         ]
-    },
+},
     "battle_training": {
         "id": "battle_training",
         "name": "Battle Training",
@@ -11987,10 +11667,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "P. Atk. +30Atk. Spd. +10",
         "balance": {
-            "mpCost": 86,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 86,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_battle_training",
         "vfxGap": false,
@@ -11998,12 +11678,12 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "templeKnight",
-            "evaTemplar",
-            "shillienKnight",
-            "shillienTemplar"
+                "templeKnight",
+                "evaTemplar",
+                "shillienKnight",
+                "shillienTemplar"
         ]
-    },
+},
     "shield_bash": {
         "id": "shield_bash",
         "name": "Shield Bash",
@@ -12020,10 +11700,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 20000,
         "desc": "Attacks with a shield.Deals P. damage. Power 1970.With a certain chance, stuns for 3 sec.No critical.",
         "balance": {
-            "mpCost": 52,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 52,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_shield_bash",
         "vfxGap": false,
@@ -12031,10 +11711,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 66,
         "classes": [
-            "templeKnight",
-            "evaTemplar"
+                "templeKnight",
+                "evaTemplar"
         ]
-    },
+},
     "chameleon_rest": {
         "id": "chameleon_rest",
         "name": "Chameleon Rest",
@@ -12051,10 +11731,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Chameleon Rest",
         "balance": {
-            "mpCost": 9,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 9,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_chameleon_rest",
         "vfxGap": false,
@@ -12062,9 +11742,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 46,
         "classes": [
-            "plainsWalker"
+                "plainsWalker"
         ]
-    },
+},
     "enormous_wolf": {
         "id": "enormous_wolf",
         "name": "Enormous Wolf",
@@ -12081,10 +11761,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "<Fear skill>Unleashes the power of the giant wolf monster.Attacks the target twice dealing P. damage. Power 5503.For 3 sec., applies Anxiety on nearby enemies.For 5 sec., their P./ M. Def. -20%.Ignores Shield Defense.Ignores 15% of the target's defense.PvP: Attacks up to 8 targets.PvE: Attacks up to 8 targets.Applies Barghest on the caster.BarghestBuff duration: 10 sec.Buff:HP Recovery Potions' Effect +50Debuff/ Anomaly Resistance +20%",
         "balance": {
-            "mpCost": 100,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 100,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_enormous_wolf",
         "vfxGap": false,
@@ -12092,9 +11772,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "warg"
+                "warg"
         ]
-    },
+},
     "powerful_fists": {
         "id": "powerful_fists",
         "name": "Powerful Fists",
@@ -12111,10 +11791,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 5000,
         "desc": "Makes powerful blows at the target.Attacks twice dealing P. damage. Power 6622.Ignores Shield Defense.Ignores 25% of the target's defense.While in the wolf form, changes to Tenacious Claws that applies Claw Mark to the target with a certain chance.Tenacious ClawsAttacks a single target twice.",
         "balance": {
-            "mpCost": 84,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 84,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_powerful_fists",
         "vfxGap": false,
@@ -12122,9 +11802,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "warg"
+                "warg"
         ]
-    },
+},
     "artful_disarm": {
         "id": "artful_disarm",
         "name": "Artful Disarm",
@@ -12141,10 +11821,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "Artful Disarm",
         "balance": {
-            "mpCost": 50,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 50,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_artful_disarm",
         "vfxGap": false,
@@ -12152,9 +11832,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "warg"
+                "warg"
         ]
-    },
+},
     "imminent_piercing": {
         "id": "imminent_piercing",
         "name": "Imminent Piercing",
@@ -12171,10 +11851,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "Imminent Piercing",
         "balance": {
-            "mpCost": 80,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 80,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_imminent_piercing",
         "vfxGap": false,
@@ -12182,9 +11862,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "warg"
+                "warg"
         ]
-    },
+},
     "devastating_assault": {
         "id": "devastating_assault",
         "name": "Devastating Assault",
@@ -12201,10 +11881,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 20000,
         "desc": "<Pull skill>Attacks nearby enemies with an earth-shaking strike. With a certain chance, pulls enemies to you.Attacks the target and nearby enemies. Power 6535.Ignores Shield Defense.Ignores 10% of the target's defense.PvP: Attacks up to 8 targets.PvE: Attacks up to 8 targets.While in the wolf form, changes to Vortex of Claws.Vortex of ClawsWith a certain chance, pulls nearby enemies attacking them once.",
         "balance": {
-            "mpCost": 74,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 74,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_devastating_assault",
         "vfxGap": false,
@@ -12212,9 +11892,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "warg"
+                "warg"
         ]
-    },
+},
     "moon_influence": {
         "id": "moon_influence",
         "name": "Moon Influence",
@@ -12231,10 +11911,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 600000,
         "desc": "Moon Influence",
         "balance": {
-            "mpCost": 100,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 100,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_moon_influence",
         "vfxGap": false,
@@ -12242,9 +11922,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "warg"
+                "warg"
         ]
-    },
+},
     "improved_speed": {
         "id": "improved_speed",
         "name": "Improved Speed",
@@ -12261,10 +11941,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 60000,
         "desc": "Improved Speed",
         "balance": {
-            "mpCost": 50,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 50,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_improved_speed",
         "vfxGap": false,
@@ -12272,9 +11952,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "warg"
+                "warg"
         ]
-    },
+},
     "confused_mind": {
         "id": "confused_mind",
         "name": "Confused Mind",
@@ -12291,10 +11971,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 60000,
         "desc": "Confused Mind",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_confused_mind",
         "vfxGap": false,
@@ -12302,9 +11982,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "warg"
+                "warg"
         ]
-    },
+},
     "tough_skin": {
         "id": "tough_skin",
         "name": "Tough Skin",
@@ -12321,10 +12001,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 600000,
         "desc": "Tough Skin",
         "balance": {
-            "mpCost": 50,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 50,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_tough_skin",
         "vfxGap": false,
@@ -12332,9 +12012,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "warg"
+                "warg"
         ]
-    },
+},
     "eva_s_defense": {
         "id": "eva_s_defense",
         "name": "Eva's Defense",
@@ -12351,10 +12031,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 420000,
         "desc": "Eva grants her protection.P. Def. +15%M. Def. +10%Speed +4",
         "balance": {
-            "mpCost": 114,
-            "pwr": 2,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 114,
+                "pwr": 2,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_eva_s_defense",
         "vfxGap": false,
@@ -12362,9 +12042,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "evaTemplar"
+                "evaTemplar"
         ]
-    },
+},
     "water_shield_throwing": {
         "id": "water_shield_throwing",
         "name": "Water Shield Throwing",
@@ -12381,10 +12061,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Throws a shield imbued with water energy striking the target and nearby enemies.Deals P. damage. Power 7751.PvPDuration: 10 sec.P. Skill Critical Rate -5%P. Skill Critical Damage -5%PvEDuration: 10 sec.P. Def. -25%Ignores Shield Defense.Ignores 20% of the target's defense.PvP: Attacks up to 6 targets.PvE: Attacks up to 6 targets.",
         "balance": {
-            "mpCost": 66,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 66,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_water_shield_throwing",
         "vfxGap": false,
@@ -12392,9 +12072,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "evaTemplar"
+                "evaTemplar"
         ]
-    },
+},
     "templar_s_assault": {
         "id": "templar_s_assault",
         "name": "Templar's Assault",
@@ -12411,10 +12091,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Makes a powerful attack at the target.Deals P. damage. Power 4907.Ignores Shield Defense.Ignores 10% of the target's defense.When using Templar's Assault, applies the Power of Water buff on you.Stacks up to Lv. 3.Power of Water Lv. 1Buff: P. Skill Critical Rate +3%, P. Skill Critical Damage +3%Duration: 8 sec.Power of Water Lv. 2Buff: P. Skill Critical Rate +8%, P. Skill Critical Damage +8%Duration: 8 sec.Power of Water Lv. 3Buff: P. Skill Critical Rate +15%, P. Skill Critical Damage +15%, P. Skill Power +1%Duration: 8 sec.",
         "balance": {
-            "mpCost": 63,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 63,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_templar_s_assault",
         "vfxGap": false,
@@ -12422,10 +12102,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "evaTemplar",
-            "shillienTemplar"
+                "evaTemplar",
+                "shillienTemplar"
         ]
-    },
+},
     "supernova": {
         "id": "supernova",
         "name": "Supernova",
@@ -12442,10 +12122,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 17000,
         "desc": "Supernova",
         "balance": {
-            "mpCost": 300,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 300,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_supernova",
         "vfxGap": false,
@@ -12453,9 +12133,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "evaTemplar"
+                "evaTemplar"
         ]
-    },
+},
     "templar_s_rush": {
         "id": "templar_s_rush",
         "name": "Templar's Rush",
@@ -12472,10 +12152,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 3000,
         "desc": "<Rush skill>Charges at the enemy and attacks them. Power 2300.Ignores 10% of the target's defense.",
         "balance": {
-            "mpCost": 55,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 55,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_templar_s_rush",
         "vfxGap": false,
@@ -12483,10 +12163,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "evaTemplar",
-            "shillienTemplar"
+                "evaTemplar",
+                "shillienTemplar"
         ]
-    },
+},
     "blessed_by_eva": {
         "id": "blessed_by_eva",
         "name": "Blessed by Eva",
@@ -12503,10 +12183,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 120000,
         "desc": "Blessed by Eva",
         "balance": {
-            "mpCost": 146,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 146,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_blessed_by_eva",
         "vfxGap": false,
@@ -12514,9 +12194,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "evaTemplar"
+                "evaTemplar"
         ]
-    },
+},
     "battle_shield": {
         "id": "battle_shield",
         "name": "Battle Shield",
@@ -12533,10 +12213,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "This shield not only protects you in battle, but also helps you deal more damage.P. Atk. +50P. Def. +50Templar's Rush → Sea Vortex Rush- Increases power.- Increases defense ignore.- Increases attack skill range.- Adds Stun.- Turns into an AoE skill.",
         "balance": {
-            "mpCost": 93,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 93,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_battle_shield",
         "vfxGap": false,
@@ -12544,10 +12224,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "evaTemplar",
-            "shillienTemplar"
+                "evaTemplar",
+                "shillienTemplar"
         ]
-    },
+},
     "armor_of_swift_current": {
         "id": "armor_of_swift_current",
         "name": "Armor of Swift Current",
@@ -12564,10 +12244,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Armor of Swift Current",
         "balance": {
-            "mpCost": 150,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 150,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_armor_of_swift_current",
         "vfxGap": false,
@@ -12575,9 +12255,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "evaTemplar"
+                "evaTemplar"
         ]
-    },
+},
     "over_the_rainbow": {
         "id": "over_the_rainbow",
         "name": "Over the Rainbow",
@@ -12594,10 +12274,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 120000,
         "desc": "Over the Rainbow",
         "balance": {
-            "mpCost": 300,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 300,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_over_the_rainbow",
         "vfxGap": false,
@@ -12605,9 +12285,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "elementalMaster"
+                "elementalMaster"
         ]
-    },
+},
     "elemental_strike": {
         "id": "elemental_strike",
         "name": "Elemental Strike",
@@ -12624,10 +12304,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "<Changing skill>Unleashes magic powers to deal damage to the enemy.Range < 400Deals M. damage. Power 130.Range 400+Deals M. damage. Power 119.",
         "balance": {
-            "mpCost": 43,
-            "pwr": 130,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 43,
+                "pwr": 130,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_elemental_strike",
         "vfxGap": false,
@@ -12635,9 +12315,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "elementalMaster"
+                "elementalMaster"
         ]
-    },
+},
     "elemental_shackles": {
         "id": "elemental_shackles",
         "name": "Elemental Shackles",
@@ -12654,10 +12334,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "<Changing/ Suppression skill>Casts a magic spell that slows enemies down.Range < 400Deals M. damage to the target and nearby enemies. Power 104.Range 400+Deals M. damage to the target and nearby enemies. Power 95.Applies Elemental Break Lv. 1.Elemental Break Lv. 1Duration: 5 sec.Anomaly:- Atk. Spd./ Casting Spd. -23%- P./ M. Atk. -23%PvP: Attacks up to 2 targets.PvE: Attacks up to 2 targets.",
         "balance": {
-            "mpCost": 76,
-            "pwr": 104,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 76,
+                "pwr": 104,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_elemental_shackles",
         "vfxGap": false,
@@ -12665,9 +12345,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "elementalMaster"
+                "elementalMaster"
         ]
-    },
+},
     "elemental_roots": {
         "id": "elemental_roots",
         "name": "Elemental Roots",
@@ -12684,10 +12364,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 20000,
         "desc": "Deals M. damage to several targets. Power 153. For 5 sec., applies Hold.PvP: Holds up to 5 targets.PvE: Holds up to 5 targets.",
         "balance": {
-            "mpCost": 60,
-            "pwr": 153,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 60,
+                "pwr": 153,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_elemental_roots",
         "vfxGap": false,
@@ -12695,9 +12375,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "elementalMaster"
+                "elementalMaster"
         ]
-    },
+},
     "elemental_discharge": {
         "id": "elemental_discharge",
         "name": "Elemental Discharge",
@@ -12714,10 +12394,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Strikes the enemy with unleashed magic powers.Deals M. damage to the target. Power 110.",
         "balance": {
-            "mpCost": 56,
-            "pwr": 110,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 56,
+                "pwr": 110,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_elemental_discharge",
         "vfxGap": false,
@@ -12725,10 +12405,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "elementalSummoner",
-            "elementalMaster"
+                "elementalSummoner",
+                "elementalMaster"
         ]
-    },
+},
     "elemental_vortex": {
         "id": "elemental_vortex",
         "name": "Elemental Vortex",
@@ -12745,10 +12425,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 8000,
         "desc": "<Changing skill>Unleashes explosive magic power to deal damage to enemies.Range < 400Deals M. damage to the target and nearby enemies. Power 108.Range 400+Deals M. damage to the target and nearby enemies. Power 98.Applies Elemental Wound Lv. 1 on the target.Elemental Wound Lv. 1Duration: 5 sec.Debuff: M. Def. -23%PvP: Attacks up to 3 targets.PvE: Attacks up to 3 targets.",
         "balance": {
-            "mpCost": 103,
-            "pwr": 108,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 103,
+                "pwr": 108,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_elemental_vortex",
         "vfxGap": false,
@@ -12756,9 +12436,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "elementalMaster"
+                "elementalMaster"
         ]
-    },
+},
     "shelter": {
         "id": "shelter",
         "name": "Shelter",
@@ -12775,10 +12455,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 120000,
         "desc": "Note!When used, removes Shield of Faith.Cancelled if Shelter: Master is applied.Creates a safe zone that protects nearby allies.For caster:Creates a water barrier.The barrier's HP: 5000 + 200% of Max HP.All received Critical Damage -300When using Templar's Assault, triggers Water Spout with a certain chance.Water SpoutAttacks the target and nearby enemies. Power 120% of your P. Atk.Trigger rate: 30%Ignores 15% of the target's defense.PvP: Attacks up to 9 targets.PvE: Attacks up to 9 targets.For allies:Transfers 50% of damage to the caster.Affects up to 20 targets.If too far from the caster, the effect is cancelled.",
         "balance": {
-            "mpCost": 101,
-            "pwr": 120,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 101,
+                "pwr": 120,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_shelter",
         "vfxGap": false,
@@ -12786,9 +12466,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "evaTemplar"
+                "evaTemplar"
         ]
-    },
+},
     "elemental_nurture": {
         "id": "elemental_nurture",
         "name": "Elemental Nurture",
@@ -12805,10 +12485,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Elemental Nurture",
         "balance": {
-            "mpCost": 100,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 100,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_elemental_nurture",
         "vfxGap": false,
@@ -12816,9 +12496,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 88,
         "classes": [
-            "elementalMaster"
+                "elementalMaster"
         ]
-    },
+},
     "elemental_charm": {
         "id": "elemental_charm",
         "name": "Elemental Charm",
@@ -12835,10 +12515,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 180000,
         "desc": "Elemental Charm",
         "balance": {
-            "mpCost": 150,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 150,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_elemental_charm",
         "vfxGap": false,
@@ -12846,9 +12526,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "elementalMaster"
+                "elementalMaster"
         ]
-    },
+},
     "elemental_concentration": {
         "id": "elemental_concentration",
         "name": "Elemental Concentration",
@@ -12865,10 +12545,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Elemental Concentration",
         "balance": {
-            "mpCost": 150,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 150,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_elemental_concentration",
         "vfxGap": false,
@@ -12876,9 +12556,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "elementalMaster"
+                "elementalMaster"
         ]
-    },
+},
     "elemental_mastership": {
         "id": "elemental_mastership",
         "name": "Elemental Mastership",
@@ -12895,10 +12575,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Elemental Mastership",
         "balance": {
-            "mpCost": 120,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 120,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_elemental_mastership",
         "vfxGap": false,
@@ -12906,9 +12586,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "elementalMaster"
+                "elementalMaster"
         ]
-    },
+},
     "wind_shackles": {
         "id": "wind_shackles",
         "name": "Wind Shackles",
@@ -12925,10 +12605,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 2000,
         "desc": "Slows targets down.Atk. Spd. -23%Casting Spd. -23%",
         "balance": {
-            "mpCost": 75,
-            "pwr": 2,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 75,
+                "pwr": 2,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_wind_shackles",
         "vfxGap": false,
@@ -12936,30 +12616,30 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "elfMage",
-            "elvenWizard",
-            "spellsinger",
-            "mysticMuse",
-            "elementalSummoner",
-            "elementalMaster",
-            "elfOracle",
-            "elfElder",
-            "evaSaint",
-            "darkElfMage",
-            "darkWizard",
-            "spellhowler",
-            "stormScreamer",
-            "phantomSummoner",
-            "spectralMaster",
-            "shillienOracle",
-            "shillienElder",
-            "shillienSaint",
-            "sayhaMageBase",
-            "sayhaSeer",
-            "windRiderErth",
-            "sayhaSeeker"
+                "elfMage",
+                "elvenWizard",
+                "spellsinger",
+                "mysticMuse",
+                "elementalSummoner",
+                "elementalMaster",
+                "elfOracle",
+                "elfElder",
+                "evaSaint",
+                "darkElfMage",
+                "darkWizard",
+                "spellhowler",
+                "stormScreamer",
+                "phantomSummoner",
+                "spectralMaster",
+                "shillienOracle",
+                "shillienElder",
+                "shillienSaint",
+                "sayhaMageBase",
+                "sayhaSeer",
+                "windRiderErth",
+                "sayhaSeeker"
         ]
-    },
+},
     "friendly_walk": {
         "id": "friendly_walk",
         "name": "Friendly Walk",
@@ -12976,10 +12656,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 120000,
         "desc": "Friendly Walk",
         "balance": {
-            "mpCost": 200,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 200,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_friendly_walk",
         "vfxGap": false,
@@ -12987,9 +12667,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 92,
         "classes": [
-            "elementalMaster"
+                "elementalMaster"
         ]
-    },
+},
     "elemental_speed": {
         "id": "elemental_speed",
         "name": "Elemental Speed",
@@ -13006,10 +12686,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 20000,
         "desc": "Note!The learnt Summon Elemental Globe skill is required.Teleports you to the summoned Elemental Globe.Can only be used when the Elemental Globe is summoned.",
         "balance": {
-            "mpCost": 100,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 100,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_elemental_speed",
         "vfxGap": false,
@@ -13017,9 +12697,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "elementalMaster"
+                "elementalMaster"
         ]
-    },
+},
     "summon_elemental_cubic": {
         "id": "summon_elemental_cubic",
         "name": "Summon Elemental Cubic",
@@ -13036,10 +12716,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "<Summon skill>Summons a cubic imbued with the Elemental Unicorn's power.M. Atk. +150M. Skill MP Consumption -1%Triggers an additional attack when using the following skills:- Elemental Shackles- Elemental Vortex- Elemental RootsA ghost Elemental Unicorn helps you attack the target.",
         "balance": {
-            "mpCost": 78,
-            "pwr": 0,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 78,
+                "pwr": 0,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_summon_elemental_cubic",
         "vfxGap": false,
@@ -13047,9 +12727,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "elementalMaster"
+                "elementalMaster"
         ]
-    },
+},
     "summon_elemental_globe": {
         "id": "summon_elemental_globe",
         "name": "Summon Elemental Globe",
@@ -13066,10 +12746,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 180000,
         "desc": "Summon Elemental Globe",
         "balance": {
-            "mpCost": 100,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 100,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_summon_elemental_globe",
         "vfxGap": false,
@@ -13077,9 +12757,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "elementalMaster"
+                "elementalMaster"
         ]
-    },
+},
     "summon_elemental_unicorn": {
         "id": "summon_elemental_unicorn",
         "name": "Summon Elemental Unicorn",
@@ -13096,10 +12776,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Summon Elemental Unicorn",
         "balance": {
-            "mpCost": 50,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 50,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_summon_elemental_unicorn",
         "vfxGap": false,
@@ -13107,9 +12787,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "elementalSummoner"
+                "elementalSummoner"
         ]
-    },
+},
     "freezing_shot": {
         "id": "freezing_shot",
         "name": "Freezing Shot",
@@ -13126,10 +12806,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 15000,
         "desc": "Shoots an arrow imbued with cold energy.Attacks the target and nearby enemies. Power 8800.Applies Icy Air on the target.Ignores 10% of the target's defense.Icy AirReceived Skill Critical Rate +5%Duration: 5 sec.PvP: Attacks up to 8 targets.PvE: Attacks up to 8 targets.",
         "balance": {
-            "mpCost": 110,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 110,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_freezing_shot",
         "vfxGap": false,
@@ -13137,9 +12817,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "moonlightSentinel"
+                "moonlightSentinel"
         ]
-    },
+},
     "water_arrow_rain": {
         "id": "water_arrow_rain",
         "name": "Water Arrow Rain",
@@ -13156,10 +12836,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "Shoots an arrow imbued with water power.Attacks the target and nearby enemies. Power 10,800.Ignores 10% of the target's defense.With a certain chance, applies Arrow Break on the target.Arrow BreakP. Atk. -20%M. Atk. -20%P. Def. -20%M. Def. -20%Duration: 10 sec.PvP: Attacks up to 15 targets.PvE: Attacks up to 15 targets.",
         "balance": {
-            "mpCost": 170,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 170,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_water_arrow_rain",
         "vfxGap": false,
@@ -13167,9 +12847,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "moonlightSentinel"
+                "moonlightSentinel"
         ]
-    },
+},
     "rapid_fire": {
         "id": "rapid_fire",
         "name": "Rapid Fire",
@@ -13186,10 +12866,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "P. Atk. +250Atk. Spd. +20%",
         "balance": {
-            "mpCost": 80,
-            "pwr": 2,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 80,
+                "pwr": 2,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_rapid_fire",
         "vfxGap": false,
@@ -13197,10 +12877,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 80,
         "classes": [
-            "silverRanger",
-            "moonlightSentinel"
+                "silverRanger",
+                "moonlightSentinel"
         ]
-    },
+},
     "alacrity": {
         "id": "alacrity",
         "name": "Alacrity",
@@ -13217,10 +12897,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Swift movements let you attack more effectively.P. Atk. +1000Atk. Spd. +10%P. Skill Critical Rate +3%P. Skill Critical Damage +3%P. Skill Cooldown -5%Speed +7When using Double Shot, an additional attack is triggered.Trigger rate: 50%",
         "balance": {
-            "mpCost": 80,
-            "pwr": 1,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 80,
+                "pwr": 1,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_alacrity",
         "vfxGap": false,
@@ -13228,9 +12908,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "moonlightSentinel"
+                "moonlightSentinel"
         ]
-    },
+},
     "aqua_swirl": {
         "id": "aqua_swirl",
         "name": "Aqua Swirl",
@@ -13247,10 +12927,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Releases a water vortex.Deals M. damage to the target. Power 31.",
         "balance": {
-            "mpCost": 18,
-            "pwr": 31,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 18,
+                "pwr": 31,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_aqua_swirl",
         "vfxGap": false,
@@ -13258,10 +12938,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 20,
         "classes": [
-            "elvenWizard",
-            "sayhaSeer"
+                "elvenWizard",
+                "sayhaSeer"
         ]
-    },
+},
     "freezing_skin": {
         "id": "freezing_skin",
         "name": "Freezing Skin",
@@ -13278,10 +12958,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Reflects 3% of received damage.",
         "balance": {
-            "mpCost": 35,
-            "pwr": 0,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 35,
+                "pwr": 0,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_freezing_skin",
         "vfxGap": false,
@@ -13289,10 +12969,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "spellsinger",
-            "windRiderErth"
+                "spellsinger",
+                "windRiderErth"
         ]
-    },
+},
     "aqua_splash": {
         "id": "aqua_splash",
         "name": "Aqua Splash",
@@ -13309,10 +12989,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 7000,
         "desc": "Creates a powerful wave.Deals M. damage to the target and nearby enemies. Power 60.PvP: Attacks up to 5 targets.PvE: Attacks up to 5 targets.",
         "balance": {
-            "mpCost": 49,
-            "pwr": 60,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 49,
+                "pwr": 60,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_aqua_splash",
         "vfxGap": false,
@@ -13320,12 +13000,12 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 58,
         "classes": [
-            "spellsinger",
-            "mysticMuse",
-            "windRiderErth",
-            "sayhaSeeker"
+                "spellsinger",
+                "mysticMuse",
+                "windRiderErth",
+                "sayhaSeeker"
         ]
-    },
+},
     "hydro_blast": {
         "id": "hydro_blast",
         "name": "Hydro Blast",
@@ -13342,10 +13022,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Strikes with the rush of water.Deals M. damage to the target. Power 76.",
         "balance": {
-            "mpCost": 32,
-            "pwr": 76,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 32,
+                "pwr": 76,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_hydro_blast",
         "vfxGap": false,
@@ -13353,12 +13033,12 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "spellsinger",
-            "mysticMuse",
-            "windRiderErth",
-            "sayhaSeeker"
+                "spellsinger",
+                "mysticMuse",
+                "windRiderErth",
+                "sayhaSeeker"
         ]
-    },
+},
     "blizzard": {
         "id": "blizzard",
         "name": "Blizzard",
@@ -13375,10 +13055,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "Blizzard",
         "balance": {
-            "mpCost": 100,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 100,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_blizzard",
         "vfxGap": false,
@@ -13386,12 +13066,12 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 70,
         "classes": [
-            "spellsinger",
-            "mysticMuse",
-            "windRiderErth",
-            "sayhaSeeker"
+                "spellsinger",
+                "mysticMuse",
+                "windRiderErth",
+                "sayhaSeeker"
         ]
-    },
+},
     "mystic_freeze": {
         "id": "mystic_freeze",
         "name": "Mystic Freeze",
@@ -13408,10 +13088,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "Deals M. damage to the target and nearby enemies. Power 144.Creates Ice Field in the target's area.Ice FieldThe specified area is covered with ice.Enemies in the area get Burning Cold.Field duration: 5 sec.Burning ColdDebuff:- Paralysis/ Suppression/ Sleep Resistance -30%- PvE: M. Def. -10%- PvP: Speed -90%, blocks Rush skills.Duration: 3 sec.PvP: Attacks up to 10 targets.PvE: Attacks up to 10 targets.",
         "balance": {
-            "mpCost": 232,
-            "pwr": 144,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 232,
+                "pwr": 144,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_mystic_freeze",
         "vfxGap": false,
@@ -13419,10 +13099,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 80,
         "classes": [
-            "mysticMuse",
-            "sayhaSeeker"
+                "mysticMuse",
+                "sayhaSeeker"
         ]
-    },
+},
     "winter_shackles": {
         "id": "winter_shackles",
         "name": "Winter Shackles",
@@ -13439,10 +13119,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 45000,
         "desc": "Winter Shackles",
         "balance": {
-            "mpCost": 100,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 100,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_winter_shackles",
         "vfxGap": false,
@@ -13450,10 +13130,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 85,
         "classes": [
-            "mysticMuse",
-            "sayhaSeeker"
+                "mysticMuse",
+                "sayhaSeeker"
         ]
-    },
+},
     "mystic_explosion": {
         "id": "mystic_explosion",
         "name": "Mystic Explosion",
@@ -13470,10 +13150,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Deals M. damage to the target. Power 152.Enemies with debuffs/ anomalies receive more damage.",
         "balance": {
-            "mpCost": 56,
-            "pwr": 152,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 56,
+                "pwr": 152,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_mystic_explosion",
         "vfxGap": false,
@@ -13481,10 +13161,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "mysticMuse",
-            "sayhaSeeker"
+                "mysticMuse",
+                "sayhaSeeker"
         ]
-    },
+},
     "mystic_spiral": {
         "id": "mystic_spiral",
         "name": "Mystic Spiral",
@@ -13501,10 +13181,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "Deals M. damage to enemies. Power 229.Applies the Mystic Decrease debuff.Mystic DecreaseDebuff: A random stat (STR/ INT/ DEX/ WIT/ CON/ MEN) -4Duration: 5 sec.PvP: Attacks up to 12 targets.PvE: Attacks up to 12 targets.",
         "balance": {
-            "mpCost": 116,
-            "pwr": 229,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 116,
+                "pwr": 229,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_mystic_spiral",
         "vfxGap": false,
@@ -13512,10 +13192,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "mysticMuse",
-            "sayhaSeeker"
+                "mysticMuse",
+                "sayhaSeeker"
         ]
-    },
+},
     "ice_vortex": {
         "id": "ice_vortex",
         "name": "Ice Vortex",
@@ -13532,10 +13212,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "Creates a vortex that draws its strength from the Water dimension.Deals M. damage to the target. Power 158.",
         "balance": {
-            "mpCost": 116,
-            "pwr": 158,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 116,
+                "pwr": 158,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_ice_vortex",
         "vfxGap": false,
@@ -13543,10 +13223,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "mysticMuse",
-            "sayhaSeeker"
+                "mysticMuse",
+                "sayhaSeeker"
         ]
-    },
+},
     "eva_s_serenade": {
         "id": "eva_s_serenade",
         "name": "Eva's Serenade",
@@ -13563,10 +13243,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 900000,
         "desc": "Removes debuffs and anomalies from the target.With a 70% chance, protects from debuffs and anomalies.",
         "balance": {
-            "mpCost": 225,
-            "pwr": 7,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 225,
+                "pwr": 7,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_eva_s_serenade",
         "vfxGap": false,
@@ -13574,10 +13254,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 44,
         "classes": [
-            "elfElder",
-            "evaSaint"
+                "elfElder",
+                "evaSaint"
         ]
-    },
+},
     "party_return": {
         "id": "party_return",
         "name": "Party Return",
@@ -13594,10 +13274,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 120000,
         "desc": "Teleports to the nearest village together with a party member.Cannot be used in special places such as the GM Consultation Service.",
         "balance": {
-            "mpCost": 257,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 257,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_party_return",
         "vfxGap": false,
@@ -13605,9 +13285,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 48,
         "classes": [
-            "elfElder"
+                "elfElder"
         ]
-    },
+},
     "winter_frostbite": {
         "id": "winter_frostbite",
         "name": "Winter Frostbite",
@@ -13624,10 +13304,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "Winter Frostbite",
         "balance": {
-            "mpCost": 80,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 80,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_winter_frostbite",
         "vfxGap": false,
@@ -13635,10 +13315,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 90,
         "classes": [
-            "mysticMuse",
-            "sayhaSeeker"
+                "mysticMuse",
+                "sayhaSeeker"
         ]
-    },
+},
     "winter_skin": {
         "id": "winter_skin",
         "name": "Winter Skin",
@@ -13655,10 +13335,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Reflects 12% of received damage.Max HP +600P. Def. +600With a certain chance when hit, applies Frost-dew to the attacking enemy.Frost-dewAnomaly: Applies Paralysis.Duration: 3 sec.",
         "balance": {
-            "mpCost": 100,
-            "pwr": 1,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 100,
+                "pwr": 1,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_winter_skin",
         "vfxGap": false,
@@ -13666,10 +13346,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 82,
         "classes": [
-            "mysticMuse",
-            "sayhaSeeker"
+                "mysticMuse",
+                "sayhaSeeker"
         ]
-    },
+},
     "faery_shield": {
         "id": "faery_shield",
         "name": "Faery Shield",
@@ -13686,10 +13366,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Faery Shield",
         "balance": {
-            "mpCost": 200,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 200,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_faery_shield",
         "vfxGap": false,
@@ -13697,10 +13377,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "mysticMuse",
-            "sayhaSeeker"
+                "mysticMuse",
+                "sayhaSeeker"
         ]
-    },
+},
     "riot": {
         "id": "riot",
         "name": "Riot",
@@ -13717,10 +13397,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 60000,
         "desc": "Riot",
         "balance": {
-            "mpCost": 100,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 100,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_riot",
         "vfxGap": false,
@@ -13728,10 +13408,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 89,
         "classes": [
-            "mysticMuse",
-            "sayhaSeeker"
+                "mysticMuse",
+                "sayhaSeeker"
         ]
-    },
+},
     "winter_slumber": {
         "id": "winter_slumber",
         "name": "Winter Slumber",
@@ -13748,10 +13428,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 15000,
         "desc": "Inflicts Sleep on the target.For some time the target cannot wake up even if hit.",
         "balance": {
-            "mpCost": 74,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 74,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_winter_slumber",
         "vfxGap": false,
@@ -13759,10 +13439,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "mysticMuse",
-            "sayhaSeeker"
+                "mysticMuse",
+                "sayhaSeeker"
         ]
-    },
+},
     "frozen_field": {
         "id": "frozen_field",
         "name": "Frozen Field",
@@ -13779,10 +13459,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "Attacks the enemies thrice. Power 7500.Ignores Shield Defense.Ignores 15% of the target's defense.After that, triggers an additional hit that deals P. damage. Power 7500. Applies Freezing Swamp on enemies.Ignores Shield Defense.Ignores 15% of the target's defense.PvP: Attacks up to 6 targets.PvE: Attacks up to 6 targets.Freezing SwampDuration: 5 sec.Rush skills cannot be used.",
         "balance": {
-            "mpCost": 15,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_frozen_field",
         "vfxGap": false,
@@ -13790,7 +13470,7 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": []
-    },
+},
     "frost_grip": {
         "id": "frost_grip",
         "name": "Frost Grip",
@@ -13807,10 +13487,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 60000,
         "desc": "Frost Grip",
         "balance": {
-            "mpCost": 70,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 70,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_frost_grip",
         "vfxGap": false,
@@ -13818,7 +13498,7 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": []
-    },
+},
     "call_of_frost": {
         "id": "call_of_frost",
         "name": "Call of Frost",
@@ -13835,10 +13515,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "P. Atk. +5%P. Skill Damage bonus +2%Imprisonment Atk. Rate +10%When using Punishment, applies Death Frostbite on the enemy.Trigger rate: 10%Duration: 5 sec.Death FrostbitePvP: Imprisonment Resistance -10%PvE: P./ M. Def. -15%",
         "balance": {
-            "mpCost": 15,
-            "pwr": 1,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 1,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_call_of_frost",
         "vfxGap": false,
@@ -13846,7 +13526,7 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": []
-    },
+},
     "drain_hp": {
         "id": "drain_hp",
         "name": "Drain HP",
@@ -13863,10 +13543,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 4000,
         "desc": "Deals M. damage to the target. Power 60.Absorbs 20% of inflicted damage as HP.",
         "balance": {
-            "mpCost": 19,
-            "pwr": 60,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 19,
+                "pwr": 60,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_drain_hp",
         "vfxGap": false,
@@ -13874,11 +13554,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "palusKnight",
-            "shillienKnight",
-            "shillienTemplar"
+                "palusKnight",
+                "shillienKnight",
+                "shillienTemplar"
         ]
-    },
+},
     "life_leech": {
         "id": "life_leech",
         "name": "Life Leech",
@@ -13895,10 +13575,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 2000,
         "desc": "Deals M. damage to the target. Power 26.Absorbs 80% of inflicted damage as HP.",
         "balance": {
-            "mpCost": 47,
-            "pwr": 26,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 47,
+                "pwr": 26,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_life_leech",
         "vfxGap": false,
@@ -13906,10 +13586,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "shillienKnight",
-            "shillienTemplar"
+                "shillienKnight",
+                "shillienTemplar"
         ]
-    },
+},
     "abyss_strike": {
         "id": "abyss_strike",
         "name": "Abyss Strike",
@@ -13926,10 +13606,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Attacks the target. Power 619.Ignores Shield Defense.Ignores 10% of the target's defense.",
         "balance": {
-            "mpCost": 33,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 33,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_abyss_strike",
         "vfxGap": false,
@@ -13937,10 +13617,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "shillienKnight",
-            "shillienTemplar"
+                "shillienKnight",
+                "shillienTemplar"
         ]
-    },
+},
     "lightning_strike": {
         "id": "lightning_strike",
         "name": "Lightning Strike",
@@ -13957,10 +13637,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 20000,
         "desc": "A powerful lightning strike.Attacks the target. Power 2927.Paralyzes for 3 sec.",
         "balance": {
-            "mpCost": 46,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 46,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_lightning_strike",
         "vfxGap": false,
@@ -13968,10 +13648,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 58,
         "classes": [
-            "shillienKnight",
-            "shillienTemplar"
+                "shillienKnight",
+                "shillienTemplar"
         ]
-    },
+},
     "confusion": {
         "id": "confusion",
         "name": "Confusion",
@@ -13988,10 +13668,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 5000,
         "desc": "Confuses the target and makes them unable to move.",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_confusion",
         "vfxGap": false,
@@ -13999,11 +13679,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "palusKnight",
-            "shillienKnight",
-            "shillienTemplar"
+                "palusKnight",
+                "shillienKnight",
+                "shillienTemplar"
         ]
-    },
+},
     "power_break": {
         "id": "power_break",
         "name": "Power Break",
@@ -14020,10 +13700,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 2000,
         "desc": "Target's P. Atk. --23%",
         "balance": {
-            "mpCost": 16,
-            "pwr": 2,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 16,
+                "pwr": 2,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_power_break",
         "vfxGap": false,
@@ -14031,11 +13711,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "palusKnight",
-            "shillienKnight",
-            "shillienTemplar"
+                "palusKnight",
+                "shillienKnight",
+                "shillienTemplar"
         ]
-    },
+},
     "life_magic_harmony_attack": {
         "id": "life_magic_harmony_attack",
         "name": "Life Magic Harmony - Attack",
@@ -14052,10 +13732,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "P. Def. +100M. Def. +100Max HP +100Recovers 5 MP on killing an enemy.",
         "balance": {
-            "mpCost": 30,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 30,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_life_magic_harmony_attack",
         "vfxGap": false,
@@ -14063,10 +13743,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "shillienKnight",
-            "shillienTemplar"
+                "shillienKnight",
+                "shillienTemplar"
         ]
-    },
+},
     "hex": {
         "id": "hex",
         "name": "Hex",
@@ -14083,10 +13763,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 2000,
         "desc": "Decreases target's P. Def.P. Def. -23%",
         "balance": {
-            "mpCost": 15,
-            "pwr": 2,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 2,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_hex",
         "vfxGap": false,
@@ -14094,10 +13774,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "shillienKnight",
-            "shillienTemplar"
+                "shillienKnight",
+                "shillienTemplar"
         ]
-    },
+},
     "saint_s_burst_sea": {
         "id": "saint_s_burst_sea",
         "name": "Saint's Burst: Sea",
@@ -14114,10 +13794,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Saint's Burst: Sea",
         "balance": {
-            "mpCost": 120,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 120,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_saint_s_burst_sea",
         "vfxGap": false,
@@ -14125,9 +13805,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "evaSaint"
+                "evaSaint"
         ]
-    },
+},
     "prophecy_of_water": {
         "id": "prophecy_of_water",
         "name": "Prophecy of Water",
@@ -14144,10 +13824,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "M. Atk. +5%Casting Spd. +10%P. Def. +10%M. Def. +10%Max MP +15%MP Recovery Rate +10%Skill MP Consumption -10%PvE damage bonus +20%Speed +2Debuff/ Anomaly Resistance +10%",
         "balance": {
-            "mpCost": 72,
-            "pwr": 1,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 72,
+                "pwr": 1,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_prophecy_of_water",
         "vfxGap": false,
@@ -14155,9 +13835,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "evaSaint"
+                "evaSaint"
         ]
-    },
+},
     "eva_s_grail": {
         "id": "eva_s_grail",
         "name": "Eva's Grail",
@@ -14174,10 +13854,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Eva's Grail",
         "balance": {
-            "mpCost": 150,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 150,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_eva_s_grail",
         "vfxGap": false,
@@ -14185,9 +13865,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "evaSaint"
+                "evaSaint"
         ]
-    },
+},
     "mass_vitalize": {
         "id": "mass_vitalize",
         "name": "Mass Vitalize",
@@ -14204,10 +13884,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Recovers party members' HP. Power 800.Removes debuffs from party members.P. Atk. reductionM. Atk. reductionP. Def. reductionM. Def. reduction",
         "balance": {
-            "mpCost": 80,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 80,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_mass_vitalize",
         "vfxGap": false,
@@ -14215,9 +13895,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "evaSaint"
+                "evaSaint"
         ]
-    },
+},
     "eva_s_nocturne": {
         "id": "eva_s_nocturne",
         "name": "Eva's Nocturne",
@@ -14234,10 +13914,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 240000,
         "desc": "Eva's Nocturne",
         "balance": {
-            "mpCost": 297,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 297,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_eva_s_nocturne",
         "vfxGap": false,
@@ -14245,9 +13925,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "evaSaint"
+                "evaSaint"
         ]
-    },
+},
     "mass_cure": {
         "id": "mass_cure",
         "name": "Mass Cure",
@@ -14264,10 +13944,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Removes Infection/ Suppression debuffs from party members.",
         "balance": {
-            "mpCost": 80,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 80,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_mass_cure",
         "vfxGap": false,
@@ -14275,10 +13955,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "evaSaint",
-            "shillienSaint"
+                "evaSaint",
+                "shillienSaint"
         ]
-    },
+},
     "exclusion": {
         "id": "exclusion",
         "name": "Exclusion",
@@ -14295,10 +13975,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Exclusion",
         "balance": {
-            "mpCost": 105,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 105,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_exclusion",
         "vfxGap": false,
@@ -14306,9 +13986,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "evaSaint"
+                "evaSaint"
         ]
-    },
+},
     "remove": {
         "id": "remove",
         "name": "Remove",
@@ -14325,10 +14005,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Remove",
         "balance": {
-            "mpCost": 152,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 152,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_remove",
         "vfxGap": false,
@@ -14336,9 +14016,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "evaSaint"
+                "evaSaint"
         ]
-    },
+},
     "eva_s_blessing": {
         "id": "eva_s_blessing",
         "name": "Eva's Blessing",
@@ -14355,10 +14035,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1200000,
         "desc": "Eva's Blessing",
         "balance": {
-            "mpCost": 73,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 73,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_eva_s_blessing",
         "vfxGap": false,
@@ -14366,9 +14046,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 80,
         "classes": [
-            "evaSaint"
+                "evaSaint"
         ]
-    },
+},
     "dance_of_fury": {
         "id": "dance_of_fury",
         "name": "Dance of Fury",
@@ -14385,10 +14065,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 5000,
         "desc": "<Rush skill>Attacks the target. Power 1308.Ignores Shield Defense.Ignores 10% of the target's defense.",
         "balance": {
-            "mpCost": 20,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 20,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_dance_of_fury",
         "vfxGap": false,
@@ -14396,10 +14076,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "bladeDancer",
-            "spectralDancer"
+                "bladeDancer",
+                "spectralDancer"
         ]
-    },
+},
     "poison_blade_dance": {
         "id": "poison_blade_dance",
         "name": "Poison Blade Dance",
@@ -14416,10 +14096,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 15000,
         "desc": "Your swords emit a toxic cloud.Attacks nearby targets. Power 1039.Applies Poison on the targets.No critical.PvP: Attacks up to 5 targets.PvE: Attacks up to 5 targets.",
         "balance": {
-            "mpCost": 66,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 66,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_poison_blade_dance",
         "vfxGap": false,
@@ -14427,10 +14107,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 55,
         "classes": [
-            "bladeDancer",
-            "spectralDancer"
+                "bladeDancer",
+                "spectralDancer"
         ]
-    },
+},
     "dance_of_blood": {
         "id": "dance_of_blood",
         "name": "Dance of Blood",
@@ -14447,10 +14127,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Dance of Blood",
         "balance": {
-            "mpCost": 100,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 100,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_dance_of_blood",
         "vfxGap": false,
@@ -14458,9 +14138,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "bladeDancer"
+                "bladeDancer"
         ]
-    },
+},
     "dance_of_fire": {
         "id": "dance_of_fire",
         "name": "Dance of Fire",
@@ -14477,10 +14157,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 16000,
         "desc": "Attacks the target and nearby enemies twice. Power 1149.Ignores Shield Defense.Ignores 10% of the target's defense.PvP: Attacks up to 4 targets.PvE: Attacks up to 4 targets.",
         "balance": {
-            "mpCost": 40,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 40,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_dance_of_fire",
         "vfxGap": false,
@@ -14488,10 +14168,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "bladeDancer",
-            "spectralDancer"
+                "bladeDancer",
+                "spectralDancer"
         ]
-    },
+},
     "moving_shadows": {
         "id": "moving_shadows",
         "name": "Moving Shadows",
@@ -14508,10 +14188,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Moving Shadows",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_moving_shadows",
         "vfxGap": false,
@@ -14519,9 +14199,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 62,
         "classes": [
-            "bladeDancer"
+                "bladeDancer"
         ]
-    },
+},
     "dance_of_cosmos": {
         "id": "dance_of_cosmos",
         "name": "Dance of Cosmos",
@@ -14538,10 +14218,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "P. Atk. +10%",
         "balance": {
-            "mpCost": 10,
-            "pwr": 1,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 10,
+                "pwr": 1,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_dance_of_cosmos",
         "vfxGap": false,
@@ -14549,10 +14229,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 42,
         "classes": [
-            "bladeDancer",
-            "spectralDancer"
+                "bladeDancer",
+                "spectralDancer"
         ]
-    },
+},
     "dance_of_warrior": {
         "id": "dance_of_warrior",
         "name": "Dance of Warrior",
@@ -14569,10 +14249,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Caster:P. Atk. +150P./ M. Def. +50P. Skill Critical Damage +1%Atk. Spd. +10P. Skill Cooldown -1%<Skill upgrade>Frantic Pace → Frantic Pace: DancerDance of Fury → Dance of Fury: LegatoDance of Fire → Dance of Fire: LegatoWhen Rapid Frantic Pace: Dance is used, makes an additional attack.Power 7286.Ignores Shield Defense.Ignores 20% of the target's defense.",
         "balance": {
-            "mpCost": 51,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 51,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_dance_of_warrior",
         "vfxGap": false,
@@ -14580,10 +14260,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "bladeDancer",
-            "spectralDancer"
+                "bladeDancer",
+                "spectralDancer"
         ]
-    },
+},
     "break": {
         "id": "break",
         "name": "Break",
@@ -14600,10 +14280,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 40000,
         "desc": "PvP effectP. Atk. -740, P. Def. -740PvE effectP. Atk. -300, P. Def. -23%",
         "balance": {
-            "mpCost": 10,
-            "pwr": 2,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 10,
+                "pwr": 2,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_break",
         "vfxGap": false,
@@ -14611,10 +14291,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "bladeDancer",
-            "spectralDancer"
+                "bladeDancer",
+                "spectralDancer"
         ]
-    },
+},
     "mass_lightning_strike": {
         "id": "mass_lightning_strike",
         "name": "Mass Lightning Strike",
@@ -14631,10 +14311,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 60000,
         "desc": "A powerful lightning strike.Attacks the target and nearby enemies. Power 2311.Paralyzes for 3 sec.PvP: Attacks up to 5 targets.PvE: Attacks up to 5 targets.",
         "balance": {
-            "mpCost": 94,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 94,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_mass_lightning_strike",
         "vfxGap": false,
@@ -14642,9 +14322,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "shillienTemplar"
+                "shillienTemplar"
         ]
-    },
+},
     "shillien_s_curse": {
         "id": "shillien_s_curse",
         "name": "Shillien's Curse",
@@ -14661,10 +14341,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "Shillien's Curse",
         "balance": {
-            "mpCost": 112,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 112,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_shillien_s_curse",
         "vfxGap": false,
@@ -14672,9 +14352,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "shillienTemplar"
+                "shillienTemplar"
         ]
-    },
+},
     "dark_shield_throwing": {
         "id": "dark_shield_throwing",
         "name": "Dark Shield Throwing",
@@ -14691,10 +14371,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Throws a shield imbued with dark energy striking the target and nearby enemies.Deals P. damage. Power 7751.PvPDuration: 10 sec.P. Skill Critical Rate -5%P. Skill Critical Damage -5%PvEDuration: 10 sec.P. Def. -25%Ignores Shield Defense.Ignores 20% of the target's defense.PvP: Attacks up to 6 targets.PvE: Attacks up to 6 targets.",
         "balance": {
-            "mpCost": 66,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 66,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_dark_shield_throwing",
         "vfxGap": false,
@@ -14702,9 +14382,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "shillienTemplar"
+                "shillienTemplar"
         ]
-    },
+},
     "apocalypse": {
         "id": "apocalypse",
         "name": "Apocalypse",
@@ -14721,10 +14401,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 3000,
         "desc": "Apocalypse",
         "balance": {
-            "mpCost": 300,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 300,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_apocalypse",
         "vfxGap": false,
@@ -14732,9 +14412,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "shillienTemplar"
+                "shillienTemplar"
         ]
-    },
+},
     "condemnation": {
         "id": "condemnation",
         "name": "Condemnation",
@@ -14751,10 +14431,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 60000,
         "desc": "<Rush/ Paralysis/ skill with fixed cast time>Base effectReleases the energy of lightning.Attacks the target and nearby enemies twice. Power 10,500.The target's CP -50%Ignores Shield Defense.Ignores 20% of the target's defense.PvP: Attacks up to 12 targets.PvE: Attacks up to 12 targets.DebuffDuration: 3 sec.Received Healing -30%Debuff/ Anomaly Resistance -30%AnomalyDuration: 3 sec.Applies Paralysis.",
         "balance": {
-            "mpCost": 82,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 82,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_condemnation",
         "vfxGap": false,
@@ -14762,9 +14442,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "shillienTemplar"
+                "shillienTemplar"
         ]
-    },
+},
     "lightning_wave_break": {
         "id": "lightning_wave_break",
         "name": "Lightning Wave Break",
@@ -14781,10 +14461,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 60000,
         "desc": "Lightning Wave Break",
         "balance": {
-            "mpCost": 112,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 112,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_lightning_wave_break",
         "vfxGap": false,
@@ -14792,9 +14472,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "shillienTemplar"
+                "shillienTemplar"
         ]
-    },
+},
     "mount_saber_toothed_cougar": {
         "id": "mount_saber_toothed_cougar",
         "name": "Mount Saber-toothed Cougar",
@@ -14811,27 +14491,21 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Mount Saber-toothed Cougar",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_mount_saber_toothed_cougar",
         "vfxGap": false,
         "sfxId": "sfx_action",
         "sfxGap": false,
         "minLevel": 76,
-        "classes": [
-            "shillienTemplar",
-            "spectralDancer",
-            "ghostHunter",
-            "ghostSentinel",
-            "stormScreamer",
-            "spectralMaster",
-            "shillienSaint",
-            "bloodRose"
-        ]
-    },
+        "classes": [],
+        "availableTo": [],
+        "disabled": true,
+        "removalReason": "cosmetic_mount_purge"
+},
     "dead_eye": {
         "id": "dead_eye",
         "name": "Dead Eye",
@@ -14848,10 +14522,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "P. Accuracy +1P. Atk. +140Basic Critical Damage +20%Atk. Spd. -5%",
         "balance": {
-            "mpCost": 60,
-            "pwr": 2,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 60,
+                "pwr": 2,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_dead_eye",
         "vfxGap": false,
@@ -14859,10 +14533,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 60,
         "classes": [
-            "phantomRanger",
-            "ghostSentinel"
+                "phantomRanger",
+                "ghostSentinel"
         ]
-    },
+},
     "mortal_piercing": {
         "id": "mortal_piercing",
         "name": "Mortal Piercing",
@@ -14879,10 +14553,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 20000,
         "desc": "Mortal Piercing",
         "balance": {
-            "mpCost": 100,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 100,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_mortal_piercing",
         "vfxGap": false,
@@ -14890,9 +14564,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "ghostHunter"
+                "ghostHunter"
         ]
-    },
+},
     "counterattack": {
         "id": "counterattack",
         "name": "Counterattack",
@@ -14909,10 +14583,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 300000,
         "desc": "Reflects 10% of received damage.",
         "balance": {
-            "mpCost": 40,
-            "pwr": 1,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 40,
+                "pwr": 1,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_counterattack",
         "vfxGap": false,
@@ -14920,9 +14594,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 79,
         "classes": [
-            "ghostHunter"
+                "ghostHunter"
         ]
-    },
+},
     "ethereal_blood": {
         "id": "ethereal_blood",
         "name": "Ethereal Blood",
@@ -14939,10 +14613,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Ethereal Blood",
         "balance": {
-            "mpCost": 50,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 50,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_ethereal_blood",
         "vfxGap": false,
@@ -14950,9 +14624,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "ghostHunter"
+                "ghostHunter"
         ]
-    },
+},
     "ghost_walking": {
         "id": "ghost_walking",
         "name": "Ghost Walking",
@@ -14969,10 +14643,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 900000,
         "desc": "Speed +30P. Evasion +15Vital Point Attack Rate +20%P. Skill Evasion +60%Buff Cancel Resistance +90%Can be used with Ultimate Evasion.",
         "balance": {
-            "mpCost": 36,
-            "pwr": 2,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 36,
+                "pwr": 2,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_ghost_walking",
         "vfxGap": false,
@@ -14980,9 +14654,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "ghostHunter"
+                "ghostHunter"
         ]
-    },
+},
     "hurricane": {
         "id": "hurricane",
         "name": "Hurricane",
@@ -14999,10 +14673,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Summons a devastating tornado.Deals M. damage to the target. Power 132.",
         "balance": {
-            "mpCost": 56,
-            "pwr": 132,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 56,
+                "pwr": 132,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_hurricane",
         "vfxGap": false,
@@ -15010,10 +14684,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "spellhowler",
-            "stormScreamer"
+                "spellhowler",
+                "stormScreamer"
         ]
-    },
+},
     "tempest": {
         "id": "tempest",
         "name": "Tempest",
@@ -15030,10 +14704,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 7000,
         "desc": "Creates a furious storm.Deals M. damage to the target and nearby enemies. Power 78.PvP: Attacks up to 5 targets.PvE: Attacks up to 5 targets.",
         "balance": {
-            "mpCost": 68,
-            "pwr": 78,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 68,
+                "pwr": 78,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_tempest",
         "vfxGap": false,
@@ -15041,10 +14715,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "spellhowler",
-            "stormScreamer"
+                "spellhowler",
+                "stormScreamer"
         ]
-    },
+},
     "wind_vortex": {
         "id": "wind_vortex",
         "name": "Wind Vortex",
@@ -15061,10 +14735,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "Creates a vortex that draws its strength from the Wind dimension.Deals M. damage to the target. Power 158.",
         "balance": {
-            "mpCost": 116,
-            "pwr": 158,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 116,
+                "pwr": 158,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_wind_vortex",
         "vfxGap": false,
@@ -15072,9 +14746,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "stormScreamer"
+                "stormScreamer"
         ]
-    },
+},
     "demon_wind": {
         "id": "demon_wind",
         "name": "Demon Wind",
@@ -15091,10 +14765,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "Deals Wind damage to the target. Power 155.For 20 sec., Received Healing -52%.",
         "balance": {
-            "mpCost": 110,
-            "pwr": 155,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 110,
+                "pwr": 155,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_demon_wind",
         "vfxGap": false,
@@ -15102,10 +14776,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "spellhowler",
-            "stormScreamer"
+                "spellhowler",
+                "stormScreamer"
         ]
-    },
+},
     "storm_screamer_s_shield": {
         "id": "storm_screamer_s_shield",
         "name": "Storm Screamer's Shield",
@@ -15122,10 +14796,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 300000,
         "desc": "Storm Screamer's Shield",
         "balance": {
-            "mpCost": 125,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 125,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_storm_screamer_s_shield",
         "vfxGap": false,
@@ -15133,9 +14807,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "stormScreamer"
+                "stormScreamer"
         ]
-    },
+},
     "wind_spiral": {
         "id": "wind_spiral",
         "name": "Wind Spiral",
@@ -15152,10 +14826,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "Attacks with a wind spiral.Deals M. damage to the target and nearby enemies. Power 229.For 5 sec., DEX/ WIT -2.PvP: Attacks up to 6 targets.PvE: Attacks up to 6 targets.",
         "balance": {
-            "mpCost": 116,
-            "pwr": 229,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 116,
+                "pwr": 229,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_wind_spiral",
         "vfxGap": false,
@@ -15163,9 +14837,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "stormScreamer"
+                "stormScreamer"
         ]
-    },
+},
     "master_of_thunder": {
         "id": "master_of_thunder",
         "name": "Master of Thunder",
@@ -15182,10 +14856,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Master of Thunder",
         "balance": {
-            "mpCost": 120,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 120,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_master_of_thunder",
         "vfxGap": false,
@@ -15193,9 +14867,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "stormScreamer"
+                "stormScreamer"
         ]
-    },
+},
     "thunder_explosion": {
         "id": "thunder_explosion",
         "name": "Thunder Explosion",
@@ -15212,10 +14886,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Makes an explosion imbued with the Wind energy.Deals M. damage to the target. Power 152.Enemies with debuffs/ anomalies receive more damage.",
         "balance": {
-            "mpCost": 56,
-            "pwr": 152,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 56,
+                "pwr": 152,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_thunder_explosion",
         "vfxGap": false,
@@ -15223,9 +14897,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "stormScreamer"
+                "stormScreamer"
         ]
-    },
+},
     "silence": {
         "id": "silence",
         "name": "Silence",
@@ -15242,10 +14916,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 20000,
         "desc": "Blocks target's M. skills.",
         "balance": {
-            "mpCost": 75,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 75,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_silence",
         "vfxGap": false,
@@ -15253,10 +14927,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "spellhowler",
-            "stormScreamer"
+                "spellhowler",
+                "stormScreamer"
         ]
-    },
+},
     "flamenco": {
         "id": "flamenco",
         "name": "Flamenco",
@@ -15273,10 +14947,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 60000,
         "desc": "Flamenco",
         "balance": {
-            "mpCost": 375,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 375,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_flamenco",
         "vfxGap": false,
@@ -15284,9 +14958,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "spectralDancer"
+                "spectralDancer"
         ]
-    },
+},
     "crazy_waltz": {
         "id": "crazy_waltz",
         "name": "Crazy Waltz",
@@ -15303,10 +14977,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 25000,
         "desc": "Puts the target to sleep making them dance. When the Sleep effect expires, deals damage to the target. Power 9848.Ignores Shield Defense.Ignores 10% of the target's defense.",
         "balance": {
-            "mpCost": 15,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_crazy_waltz",
         "vfxGap": false,
@@ -15314,9 +14988,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "spectralDancer"
+                "spectralDancer"
         ]
-    },
+},
     "dance_of_medusa": {
         "id": "dance_of_medusa",
         "name": "Dance of Medusa",
@@ -15333,10 +15007,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 60000,
         "desc": "Inflicts Paralysis on nearby enemies.Duration: 2 sec.Attacks the target. Power 7579.Ignores Shield Defense.Ignores 10% of the target's defense.Bonus effectWith a certain chance, removes a barrier.PvP: Attacks up to 6 targets.PvE: Attacks up to 6 targets.",
         "balance": {
-            "mpCost": 95,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 95,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_dance_of_medusa",
         "vfxGap": false,
@@ -15344,9 +15018,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 85,
         "classes": [
-            "spectralDancer"
+                "spectralDancer"
         ]
-    },
+},
     "twister": {
         "id": "twister",
         "name": "Twister",
@@ -15363,10 +15037,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Summons a wind blade.Deals M. damage to the target. Power 31.",
         "balance": {
-            "mpCost": 18,
-            "pwr": 31,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 18,
+                "pwr": 31,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_twister",
         "vfxGap": false,
@@ -15374,11 +15048,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 20,
         "classes": [
-            "darkWizard",
-            "phantomSummoner",
-            "spectralMaster"
+                "darkWizard",
+                "phantomSummoner",
+                "spectralMaster"
         ]
-    },
+},
     "storm_arrow_rain": {
         "id": "storm_arrow_rain",
         "name": "Storm Arrow Rain",
@@ -15395,10 +15069,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "Shoots an arrow imbued with storm power.Attacks the target and nearby enemies. Power 10,800.Ignores 10% of the target's defense.With a certain chance, applies Arrow Break on the target.Arrow BreakP. Atk. -20%M. Atk. -20%P. Def. -20%M. Def. -20%Duration: 10 sec.PvP: Attacks up to 15 targets.PvE: Attacks up to 15 targets.",
         "balance": {
-            "mpCost": 170,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 170,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_storm_arrow_rain",
         "vfxGap": false,
@@ -15406,9 +15080,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "ghostSentinel"
+                "ghostSentinel"
         ]
-    },
+},
     "wind_shot": {
         "id": "wind_shot",
         "name": "Wind Shot",
@@ -15425,10 +15099,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 15000,
         "desc": "Shoots an arrow imbued with wind energy.Attacks the target and nearby enemies. Power 8800.Applies Breeze on the target.Ignores 10% of the target's defense.BreezeSkill Critical Damage -5%Duration: 5 sec.PvP: Attacks up to 8 targets.PvE: Attacks up to 8 targets.",
         "balance": {
-            "mpCost": 110,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 110,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_wind_shot",
         "vfxGap": false,
@@ -15436,9 +15110,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "ghostSentinel"
+                "ghostSentinel"
         ]
-    },
+},
     "eagle_eye": {
         "id": "eagle_eye",
         "name": "Eagle Eye",
@@ -15455,10 +15129,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Accurate shooting increases your lethal attack damage.P. Atk. +1000Atk. Spd. +3%P. Skill Critical Damage +5%P. Skill Cooldown -3%Speed +5When using Double Shot, an additional attack is triggered.Trigger rate: 50%",
         "balance": {
-            "mpCost": 80,
-            "pwr": 0,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 80,
+                "pwr": 0,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_eagle_eye",
         "vfxGap": false,
@@ -15466,9 +15140,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "ghostSentinel"
+                "ghostSentinel"
         ]
-    },
+},
     "summon_lord_raise": {
         "id": "summon_lord_raise",
         "name": "Summon Lord Raise",
@@ -15485,10 +15159,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Summon Lord Raise",
         "balance": {
-            "mpCost": 186,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 186,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_summon_lord_raise",
         "vfxGap": false,
@@ -15496,9 +15170,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "spectralMaster"
+                "spectralMaster"
         ]
-    },
+},
     "summon_nightshade": {
         "id": "summon_nightshade",
         "name": "Summon Nightshade",
@@ -15515,10 +15189,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 5000,
         "desc": "Summons Nightshade.",
         "balance": {
-            "mpCost": 144,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 144,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_summon_nightshade",
         "vfxGap": false,
@@ -15526,9 +15200,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 77,
         "classes": [
-            "spectralMaster"
+                "spectralMaster"
         ]
-    },
+},
     "summon_spectral_lord": {
         "id": "summon_spectral_lord",
         "name": "Summon Spectral Lord",
@@ -15545,10 +15219,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 5000,
         "desc": "Summons Spectral Lord.",
         "balance": {
-            "mpCost": 144,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 144,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_summon_spectral_lord",
         "vfxGap": false,
@@ -15556,9 +15230,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 77,
         "classes": [
-            "spectralMaster"
+                "spectralMaster"
         ]
-    },
+},
     "assassin_servitor": {
         "id": "assassin_servitor",
         "name": "Assassin Servitor",
@@ -15575,10 +15249,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Makes the servitor possessed with an ancient assassin's spirit.Max HP +20%Max MP +20%P. Atk. +20%M. Atk. +20%P. Def. +20%M. Def. +20%Atk. Spd. +15%Casting Spd. +15%Speed +10%Basic Critical Rate +50Basic Critical Rate +35%M. Skill Critical Rate +50M. Skill Critical Rate +35%Basic Critical Damage +40%M. Skill Critical Damage +40%Debuff/ Anomaly Resistance +40%",
         "balance": {
-            "mpCost": 70,
-            "pwr": 2,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 70,
+                "pwr": 2,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_assassin_servitor",
         "vfxGap": false,
@@ -15586,9 +15260,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 78,
         "classes": [
-            "spectralMaster"
+                "spectralMaster"
         ]
-    },
+},
     "summon_phantom_cubic": {
         "id": "summon_phantom_cubic",
         "name": "Summon Phantom Cubic",
@@ -15605,10 +15279,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Summons Phantom Cubic.M. Atk. +150When using magic skills (attack/ anomaly/ debuff):Delivers an additional attack.The summoner's illusions attack the target.(Trigger cooldown: 15 sec.)",
         "balance": {
-            "mpCost": 78,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 78,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_summon_phantom_cubic",
         "vfxGap": false,
@@ -15616,9 +15290,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "spectralMaster"
+                "spectralMaster"
         ]
-    },
+},
     "call_of_lightning": {
         "id": "call_of_lightning",
         "name": "Call of Lightning",
@@ -15635,10 +15309,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Call of Lightning",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_call_of_lightning",
         "vfxGap": false,
@@ -15646,7 +15320,7 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 60,
         "classes": []
-    },
+},
     "vampiric_rage": {
         "id": "vampiric_rage",
         "name": "Vampiric Rage",
@@ -15663,10 +15337,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Vampiric Rage",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_vampiric_rage",
         "vfxGap": false,
@@ -15674,10 +15348,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 30,
         "classes": [
-            "shillienOracle",
-            "shillienElder"
+                "shillienOracle",
+                "shillienElder"
         ]
-    },
+},
     "lightning_storm": {
         "id": "lightning_storm",
         "name": "Lightning Storm",
@@ -15694,10 +15368,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "Attacks the enemies thrice. Power 7500.Ignores Shield Defense.Ignores 15% of the target's defense.After that, triggers an additional hit that deals P. damage. Power 7500. Applies Storm Swamp on enemies.Ignores Shield Defense.Ignores 15% of the target's defense.PvP: Attacks up to 6 targets.PvE: Attacks up to 6 targets.Storm SwampDuration: 5 sec.Rush skills cannot be used.",
         "balance": {
-            "mpCost": 15,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_lightning_storm",
         "vfxGap": false,
@@ -15705,7 +15379,7 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": []
-    },
+},
     "lightning_grip": {
         "id": "lightning_grip",
         "name": "Lightning Grip",
@@ -15722,10 +15396,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 60000,
         "desc": "Lightning Grip",
         "balance": {
-            "mpCost": 70,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 70,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_lightning_grip",
         "vfxGap": false,
@@ -15733,7 +15407,7 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": []
-    },
+},
     "shillien_s_mass_stigma": {
         "id": "shillien_s_mass_stigma",
         "name": "Shillien's Mass Stigma",
@@ -15750,10 +15424,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 3000,
         "desc": "Marks nearby enemies with Shillien's stigma.Melee Weapon Resistance -20%M. Def. -10%",
         "balance": {
-            "mpCost": 45,
-            "pwr": 2,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 45,
+                "pwr": 2,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_shillien_s_mass_stigma",
         "vfxGap": false,
@@ -15761,10 +15435,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "shillienElder",
-            "shillienSaint"
+                "shillienElder",
+                "shillienSaint"
         ]
-    },
+},
     "shillien_s_stigma": {
         "id": "shillien_s_stigma",
         "name": "Shillien's Stigma",
@@ -15781,10 +15455,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 3000,
         "desc": "Marks the target with Shillien's stigma.Melee Weapon Resistance -20%M. Def. -10%",
         "balance": {
-            "mpCost": 15,
-            "pwr": 2,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 2,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_shillien_s_stigma",
         "vfxGap": false,
@@ -15792,10 +15466,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "shillienElder",
-            "shillienSaint"
+                "shillienElder",
+                "shillienSaint"
         ]
-    },
+},
     "rapid_recharge": {
         "id": "rapid_recharge",
         "name": "Rapid Recharge",
@@ -15812,10 +15486,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 60000,
         "desc": "Recovers 263 MP.",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_rapid_recharge",
         "vfxGap": false,
@@ -15823,10 +15497,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 66,
         "classes": [
-            "shillienElder",
-            "shillienSaint"
+                "shillienElder",
+                "shillienSaint"
         ]
-    },
+},
     "mighty_servitor": {
         "id": "mighty_servitor",
         "name": "Mighty Servitor",
@@ -15843,10 +15517,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "The effect is applied on servitors.P. Atk. +8%P. Def. +8%M. Def. +10%Atk. Spd. +10%",
         "balance": {
-            "mpCost": 30,
-            "pwr": 1,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 30,
+                "pwr": 1,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_mighty_servitor",
         "vfxGap": false,
@@ -15854,9 +15528,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 48,
         "classes": [
-            "phantomSummoner"
+                "phantomSummoner"
         ]
-    },
+},
     "summon_soulless": {
         "id": "summon_soulless",
         "name": "Summon Soulless",
@@ -15873,10 +15547,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 5000,
         "desc": "Summons Soulless.",
         "balance": {
-            "mpCost": 70,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 70,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_summon_soulless",
         "vfxGap": false,
@@ -15884,9 +15558,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "phantomSummoner"
+                "phantomSummoner"
         ]
-    },
+},
     "summon_silhouette": {
         "id": "summon_silhouette",
         "name": "Summon Silhouette",
@@ -15903,10 +15577,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Summons Silhouette.",
         "balance": {
-            "mpCost": 39,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 39,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_summon_silhouette",
         "vfxGap": false,
@@ -15914,9 +15588,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "phantomSummoner"
+                "phantomSummoner"
         ]
-    },
+},
     "summon_shadow": {
         "id": "summon_shadow",
         "name": "Summon Shadow",
@@ -15933,10 +15607,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Summons Shadow.",
         "balance": {
-            "mpCost": 39,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 39,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_summon_shadow",
         "vfxGap": false,
@@ -15944,9 +15618,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "phantomSummoner"
+                "phantomSummoner"
         ]
-    },
+},
     "saint_s_burst_dark": {
         "id": "saint_s_burst_dark",
         "name": "Saint's Burst: Dark",
@@ -15963,10 +15637,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Saint's Burst: Dark",
         "balance": {
-            "mpCost": 120,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 120,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_saint_s_burst_dark",
         "vfxGap": false,
@@ -15974,9 +15648,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "shillienSaint"
+                "shillienSaint"
         ]
-    },
+},
     "prophecy_of_wind": {
         "id": "prophecy_of_wind",
         "name": "Prophecy of Wind",
@@ -15993,10 +15667,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "M. Skill Critical Rate +15%M. Skill Critical Damage +25%Speed +10%PvE damage bonus +20%Received Skill Critical Rate -6%Received Skill Critical Damage -6%Debuff/ Anomaly Resistance +10%",
         "balance": {
-            "mpCost": 72,
-            "pwr": 2,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 72,
+                "pwr": 2,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_prophecy_of_wind",
         "vfxGap": false,
@@ -16004,9 +15678,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "shillienSaint"
+                "shillienSaint"
         ]
-    },
+},
     "nemesis": {
         "id": "nemesis",
         "name": "Nemesis",
@@ -16023,10 +15697,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 60000,
         "desc": "Brings punishment to enemies.Deals M. damage to the target. Power 195.Received Healing -70%Duration: 10 sec.PvP: Attacks up to 6 targets.PvE: Attacks up to 6 targets.",
         "balance": {
-            "mpCost": 91,
-            "pwr": 195,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 91,
+                "pwr": 195,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_nemesis",
         "vfxGap": false,
@@ -16034,9 +15708,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "shillienSaint"
+                "shillienSaint"
         ]
-    },
+},
     "shillien_s_power": {
         "id": "shillien_s_power",
         "name": "Shillien's Power",
@@ -16053,10 +15727,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Shillien's Power",
         "balance": {
-            "mpCost": 58,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 58,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_shillien_s_power",
         "vfxGap": false,
@@ -16064,9 +15738,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "shillienSaint"
+                "shillienSaint"
         ]
-    },
+},
     "shillien_s_touch": {
         "id": "shillien_s_touch",
         "name": "Shillien's Touch",
@@ -16083,10 +15757,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Shillien's Touch",
         "balance": {
-            "mpCost": 37,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 37,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_shillien_s_touch",
         "vfxGap": false,
@@ -16094,9 +15768,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "shillienSaint"
+                "shillienSaint"
         ]
-    },
+},
     "shillien_s_grail": {
         "id": "shillien_s_grail",
         "name": "Shillien's Grail",
@@ -16113,10 +15787,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Shillien's Grail",
         "balance": {
-            "mpCost": 150,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 150,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_shillien_s_grail",
         "vfxGap": false,
@@ -16124,9 +15798,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "shillienSaint"
+                "shillienSaint"
         ]
-    },
+},
     "mass_wind_shackles": {
         "id": "mass_wind_shackles",
         "name": "Mass Wind Shackles",
@@ -16143,10 +15817,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Slows targets and nearby enemies down.Atk. Spd. -23%Casting Spd. -23%",
         "balance": {
-            "mpCost": 140,
-            "pwr": 2,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 140,
+                "pwr": 2,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_mass_wind_shackles",
         "vfxGap": false,
@@ -16154,9 +15828,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "shillienSaint"
+                "shillienSaint"
         ]
-    },
+},
     "duress": {
         "id": "duress",
         "name": "Duress",
@@ -16173,10 +15847,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 20000,
         "desc": "Inflicts Hold on the target and nearby enemies. P./ M. Atk. -30%.",
         "balance": {
-            "mpCost": 150,
-            "pwr": 3,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 150,
+                "pwr": 3,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_duress",
         "vfxGap": false,
@@ -16184,9 +15858,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "shillienSaint"
+                "shillienSaint"
         ]
-    },
+},
     "mass_dryad_root": {
         "id": "mass_dryad_root",
         "name": "Mass Dryad Root",
@@ -16203,10 +15877,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "Inflicts Hold on the target and nearby enemies.",
         "balance": {
-            "mpCost": 140,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 140,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_mass_dryad_root",
         "vfxGap": false,
@@ -16214,9 +15888,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "shillienSaint"
+                "shillienSaint"
         ]
-    },
+},
     "parasite_rose": {
         "id": "parasite_rose",
         "name": "Parasite Rose",
@@ -16233,10 +15907,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 3000,
         "desc": "Parasite Rose",
         "balance": {
-            "mpCost": 100,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 100,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_parasite_rose",
         "vfxGap": false,
@@ -16244,9 +15918,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "bloodRose"
+                "bloodRose"
         ]
-    },
+},
     "enchanted_rose_s_assault": {
         "id": "enchanted_rose_s_assault",
         "name": "Enchanted Rose's Assault",
@@ -16263,10 +15937,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 5000,
         "desc": "Rushes to the target and attacks them.Deals M. damage to the target twice. Power 151.Note!Consumes Spirit Ore (1 pc.).",
         "balance": {
-            "mpCost": 59,
-            "pwr": 151,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 59,
+                "pwr": 151,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_enchanted_rose_s_assault",
         "vfxGap": false,
@@ -16274,10 +15948,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "bloodRoseS2",
-            "bloodRose"
+                "bloodRoseS2",
+                "bloodRose"
         ]
-    },
+},
     "rose_attack": {
         "id": "rose_attack",
         "name": "Rose Attack",
@@ -16294,10 +15968,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 500,
         "desc": "<Changing skill>The attack type is based on the distance to the target.Distance up to 250Fights with enchanted thorned vines.Deals M. damage. Power 126.Distance 250+Summons an enchanted dagger.Deals M. damage. Power 110.",
         "balance": {
-            "mpCost": 47,
-            "pwr": 126,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 47,
+                "pwr": 126,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_rose_attack",
         "vfxGap": false,
@@ -16305,12 +15979,12 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "bloodRoseBase",
-            "bloodRoseS1",
-            "bloodRoseS2",
-            "bloodRose"
+                "bloodRoseBase",
+                "bloodRoseS1",
+                "bloodRoseS2",
+                "bloodRose"
         ]
-    },
+},
     "dark_disruption": {
         "id": "dark_disruption",
         "name": "Dark Disruption",
@@ -16327,10 +16001,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 60000,
         "desc": "Dark Disruption",
         "balance": {
-            "mpCost": 105,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 105,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_dark_disruption",
         "vfxGap": false,
@@ -16338,9 +16012,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "shillienSaint"
+                "shillienSaint"
         ]
-    },
+},
     "mass_purify": {
         "id": "mass_purify",
         "name": "Mass Purify",
@@ -16357,10 +16031,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Mass Purify",
         "balance": {
-            "mpCost": 80,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 80,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_mass_purify",
         "vfxGap": false,
@@ -16368,9 +16042,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "shillienSaint"
+                "shillienSaint"
         ]
-    },
+},
     "aroma_of_death": {
         "id": "aroma_of_death",
         "name": "Aroma of Death",
@@ -16387,10 +16061,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 60000,
         "desc": "Teleports to the target poisoning them with deadly fumes.Deals M. damage to the target and nearby enemies. Power 237.Enemies with debuffs/ anomalies receive more damage.Debuff/ Anomaly Resistance -5%Duration: 7 sec.Applies Parasite Rose Lv. 3.Parasite Rose Lv. 3Duration: 7 sec.Max HP -30%Hold Resistance -15%Deals M. damage to the target and nearby enemies. Power 257.Enemies with debuffs/ anomalies receive more damage.Debuff/ Anomaly Resistance -5%Duration: 7 sec.PvP: Attacks up to 5 targets.PvE: Attacks up to 5 targets.",
         "balance": {
-            "mpCost": 109,
-            "pwr": 237,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 109,
+                "pwr": 237,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_aroma_of_death",
         "vfxGap": false,
@@ -16398,9 +16072,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "bloodRose"
+                "bloodRose"
         ]
-    },
+},
     "briar_vortex": {
         "id": "briar_vortex",
         "name": "Briar Vortex",
@@ -16417,10 +16091,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 15000,
         "desc": "<Changing skill>The attack type is based on the distance to the target.Distance up to 250Prickly thorns turn into a lacerating storm.Deals M. damage to the target. Power 166.M. Def. -30%Duration: 4 sec.Distance 250+Prickly thorns pierce the enemy.Deals M. damage to the target. Power 156.PvP: Attacks up to 3 targets.PvE: Attacks up to 3 targets.",
         "balance": {
-            "mpCost": 60,
-            "pwr": 166,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 60,
+                "pwr": 166,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_briar_vortex",
         "vfxGap": false,
@@ -16428,9 +16102,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "bloodRose"
+                "bloodRose"
         ]
-    },
+},
     "vine_embrace": {
         "id": "vine_embrace",
         "name": "Vine Embrace",
@@ -16447,10 +16121,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 15000,
         "desc": "<Hold/ changing skill>Damage is based on the distance to the target.With a certain chance, applies Hold to the target for 3 sec.Distance up to 250Deals M. damage to the target. Power 60.Distance 250+Deals M. damage to the target. Power 45.",
         "balance": {
-            "mpCost": 61,
-            "pwr": 60,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 61,
+                "pwr": 60,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_vine_embrace",
         "vfxGap": false,
@@ -16458,10 +16132,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "bloodRoseS2",
-            "bloodRose"
+                "bloodRoseS2",
+                "bloodRose"
         ]
-    },
+},
     "reflecting_illusion": {
         "id": "reflecting_illusion",
         "name": "Reflecting Illusion",
@@ -16478,10 +16152,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 120000,
         "desc": "Reflecting Illusion",
         "balance": {
-            "mpCost": 75,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 75,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_reflecting_illusion",
         "vfxGap": false,
@@ -16489,9 +16163,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "bloodRose"
+                "bloodRose"
         ]
-    },
+},
     "crimson_rose": {
         "id": "crimson_rose",
         "name": "Crimson Rose",
@@ -16508,10 +16182,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Crimson Rose",
         "balance": {
-            "mpCost": 85,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 85,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_crimson_rose",
         "vfxGap": false,
@@ -16519,10 +16193,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "bloodRoseS2",
-            "bloodRose"
+                "bloodRoseS2",
+                "bloodRose"
         ]
-    },
+},
     "kingdom_of_plants": {
         "id": "kingdom_of_plants",
         "name": "Kingdom of Plants",
@@ -16539,10 +16213,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Kingdom of Plants",
         "balance": {
-            "mpCost": 120,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 120,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_kingdom_of_plants",
         "vfxGap": false,
@@ -16550,9 +16224,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "bloodRose"
+                "bloodRose"
         ]
-    },
+},
     "blooming_nightmare": {
         "id": "blooming_nightmare",
         "name": "Blooming Nightmare",
@@ -16569,10 +16243,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "Summons an enchanted dagger to shred all enemies.Deals M. damage to the target and nearby enemies. Power 195.Applies Nightmare Rose.Nightmare RoseSkill Critical Damage -10%Received M. Skill Critical Damage +5%M. Def. -30%Duration: 8 sec.PvP: Attacks up to 3 targets.PvE: Attacks up to 3 targets.",
         "balance": {
-            "mpCost": 60,
-            "pwr": 195,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 60,
+                "pwr": 195,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_blooming_nightmare",
         "vfxGap": false,
@@ -16580,9 +16254,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "bloodRose"
+                "bloodRose"
         ]
-    },
+},
     "bleeding_rose": {
         "id": "bleeding_rose",
         "name": "Bleeding Rose",
@@ -16599,10 +16273,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Bleeding Rose",
         "balance": {
-            "mpCost": 120,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 120,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_bleeding_rose",
         "vfxGap": false,
@@ -16610,9 +16284,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "bloodRose"
+                "bloodRose"
         ]
-    },
+},
     "rose_thorns": {
         "id": "rose_thorns",
         "name": "Rose Thorns",
@@ -16629,10 +16303,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 20000,
         "desc": "Rose Thorns",
         "balance": {
-            "mpCost": 150,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 150,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_rose_thorns",
         "vfxGap": false,
@@ -16640,9 +16314,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "bloodRose"
+                "bloodRose"
         ]
-    },
+},
     "excruciating_strike": {
         "id": "excruciating_strike",
         "name": "Excruciating Strike",
@@ -16659,10 +16333,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 3000,
         "desc": "Attacks nearby targets. Power 465.Ignores Shield Defense.Ignores 30% of the target's defense.No critical.PvP: Attacks up to 5 targets.PvE: Attacks up to 5 targets.",
         "balance": {
-            "mpCost": 46,
-            "pwr": 465,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 46,
+                "pwr": 465,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_excruciating_strike",
         "vfxGap": false,
@@ -16670,10 +16344,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "destroyer",
-            "titan"
+                "destroyer",
+                "titan"
         ]
-    },
+},
     "queen_s_garden": {
         "id": "queen_s_garden",
         "name": "Queen's Garden",
@@ -16690,10 +16364,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 240000,
         "desc": "<Hold skill>Summons a royal garden with giant flowers.Attacks the target and nearby enemies thrice. Power 380.DebuffDuration: 4 sec.Received Healing -50%HP Recovery Potions' Effect limit 1000Blocks Rush skills.Duration: 10 sec.AnomalyApplies Hold.PvP: Attacks up to 8 targets.PvE: Attacks up to 8 targets.Applies the Queen effect when used.QueenDuration: 30 sec.M. Skill Power +5%PvE damage +5%When using attack skills, summons thorns with a certain chance dealing additional damage.Damage is based on your M. Atk. Power 200.Trigger rate: 30%.",
         "balance": {
-            "mpCost": 330,
-            "pwr": 380,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 330,
+                "pwr": 380,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_queen_s_garden",
         "vfxGap": false,
@@ -16701,9 +16375,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "bloodRose"
+                "bloodRose"
         ]
-    },
+},
     "iron_punch": {
         "id": "iron_punch",
         "name": "Iron Punch",
@@ -16720,10 +16394,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Delivers a powerful fist strike.Power 45.No critical.",
         "balance": {
-            "mpCost": 5,
-            "pwr": 45,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 5,
+                "pwr": 45,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_iron_punch",
         "vfxGap": false,
@@ -16731,10 +16405,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 3,
         "classes": [
-            "orcFighter",
-            "monk"
+                "orcFighter",
+                "monk"
         ]
-    },
+},
     "chant_of_wild_magic": {
         "id": "chant_of_wild_magic",
         "name": "Chant of Wild Magic",
@@ -16751,10 +16425,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Chant of Wild Magic",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_chant_of_wild_magic",
         "vfxGap": false,
@@ -16762,22 +16436,22 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "raider",
-            "destroyer",
-            "titan",
-            "monk",
-            "tyrant",
-            "grandKhavatari",
-            "dragoon",
-            "vanguardRider",
-            "grandVanguard",
-            "shaman",
-            "overlord",
-            "dominator",
-            "warcryer",
-            "doomcryer"
+                "raider",
+                "destroyer",
+                "titan",
+                "monk",
+                "tyrant",
+                "grandKhavatari",
+                "dragoon",
+                "vanguardRider",
+                "grandVanguard",
+                "shaman",
+                "overlord",
+                "dominator",
+                "warcryer",
+                "doomcryer"
         ]
-    },
+},
     "zealot": {
         "id": "zealot",
         "name": "Zealot",
@@ -16794,10 +16468,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 300000,
         "desc": "Atk. Spd. +10%Basic Critical Rate +22Basic Critical Damage +22%P. Skill Critical Rate +11%P. Skill Critical Damage +11%P. Accuracy +6Speed +10P. Skill MP Consumption -50%Buff Cancel Resistance +40%Received Healing -50%Knockback/ Knockdown Atk. Rate +3%When using the skill, recovers 80 MP.",
         "balance": {
-            "mpCost": 15,
-            "pwr": 1,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 1,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_zealot",
         "vfxGap": false,
@@ -16805,10 +16479,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 58,
         "classes": [
-            "destroyer",
-            "tyrant"
+                "destroyer",
+                "tyrant"
         ]
-    },
+},
     "chant_of_berserker_spirit": {
         "id": "chant_of_berserker_spirit",
         "name": "Chant of Berserker Spirit",
@@ -16825,10 +16499,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Chant of Berserker Spirit",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_chant_of_berserker_spirit",
         "vfxGap": false,
@@ -16836,22 +16510,22 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "raider",
-            "destroyer",
-            "titan",
-            "monk",
-            "tyrant",
-            "grandKhavatari",
-            "dragoon",
-            "vanguardRider",
-            "grandVanguard",
-            "shaman",
-            "overlord",
-            "dominator",
-            "warcryer",
-            "doomcryer"
+                "raider",
+                "destroyer",
+                "titan",
+                "monk",
+                "tyrant",
+                "grandKhavatari",
+                "dragoon",
+                "vanguardRider",
+                "grandVanguard",
+                "shaman",
+                "overlord",
+                "dominator",
+                "warcryer",
+                "doomcryer"
         ]
-    },
+},
     "guts": {
         "id": "guts",
         "name": "Guts",
@@ -16868,10 +16542,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 300000,
         "desc": "P. Def. +400P. Def. +35%Speed +10Debuff Resistance +25%Anomaly Resistance +25%Cannot be used with Frenzy.",
         "balance": {
-            "mpCost": 30,
-            "pwr": 4,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 30,
+                "pwr": 4,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_guts",
         "vfxGap": false,
@@ -16879,11 +16553,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 43,
         "classes": [
-            "raider",
-            "destroyer",
-            "titan"
+                "raider",
+                "destroyer",
+                "titan"
         ]
-    },
+},
     "chant_of_haste": {
         "id": "chant_of_haste",
         "name": "Chant of Haste",
@@ -16900,10 +16574,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Chant of Haste",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_chant_of_haste",
         "vfxGap": false,
@@ -16911,22 +16585,22 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "raider",
-            "destroyer",
-            "titan",
-            "monk",
-            "tyrant",
-            "grandKhavatari",
-            "dragoon",
-            "vanguardRider",
-            "grandVanguard",
-            "shaman",
-            "overlord",
-            "dominator",
-            "warcryer",
-            "doomcryer"
+                "raider",
+                "destroyer",
+                "titan",
+                "monk",
+                "tyrant",
+                "grandKhavatari",
+                "dragoon",
+                "vanguardRider",
+                "grandVanguard",
+                "shaman",
+                "overlord",
+                "dominator",
+                "warcryer",
+                "doomcryer"
         ]
-    },
+},
     "rage": {
         "id": "rage",
         "name": "Rage",
@@ -16943,10 +16617,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Rage",
         "balance": {
-            "mpCost": 30,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 30,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_rage",
         "vfxGap": false,
@@ -16954,11 +16628,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 55,
         "classes": [
-            "raider",
-            "destroyer",
-            "titan"
+                "raider",
+                "destroyer",
+                "titan"
         ]
-    },
+},
     "chant_of_magic_barrier": {
         "id": "chant_of_magic_barrier",
         "name": "Chant of Magic Barrier",
@@ -16975,10 +16649,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Chant of Magic Barrier",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_chant_of_magic_barrier",
         "vfxGap": false,
@@ -16986,22 +16660,22 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "raider",
-            "destroyer",
-            "titan",
-            "monk",
-            "tyrant",
-            "grandKhavatari",
-            "dragoon",
-            "vanguardRider",
-            "grandVanguard",
-            "shaman",
-            "overlord",
-            "dominator",
-            "warcryer",
-            "doomcryer"
+                "raider",
+                "destroyer",
+                "titan",
+                "monk",
+                "tyrant",
+                "grandKhavatari",
+                "dragoon",
+                "vanguardRider",
+                "grandVanguard",
+                "shaman",
+                "overlord",
+                "dominator",
+                "warcryer",
+                "doomcryer"
         ]
-    },
+},
     "frenzy": {
         "id": "frenzy",
         "name": "Frenzy",
@@ -17018,10 +16692,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 300000,
         "desc": "P. Atk. +9%Atk. Spd. +8%Basic Critical Rate +5Basic Critical Damage +5%P. Skill Critical Rate +4%P. Skill Critical Damage +4%Speed +9When using a two-handed sword:P. Atk. +10%P. Accuracy +8Cannot be used with Guts.",
         "balance": {
-            "mpCost": 20,
-            "pwr": 1,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 20,
+                "pwr": 1,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_frenzy",
         "vfxGap": false,
@@ -17029,11 +16703,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 46,
         "classes": [
-            "raider",
-            "destroyer",
-            "titan"
+                "raider",
+                "destroyer",
+                "titan"
         ]
-    },
+},
     "chant_of_acumen": {
         "id": "chant_of_acumen",
         "name": "Chant of Acumen",
@@ -17050,10 +16724,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Chant of Acumen",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_chant_of_acumen",
         "vfxGap": false,
@@ -17061,22 +16735,22 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "raider",
-            "destroyer",
-            "titan",
-            "monk",
-            "tyrant",
-            "grandKhavatari",
-            "dragoon",
-            "vanguardRider",
-            "grandVanguard",
-            "shaman",
-            "overlord",
-            "dominator",
-            "warcryer",
-            "doomcryer"
+                "raider",
+                "destroyer",
+                "titan",
+                "monk",
+                "tyrant",
+                "grandKhavatari",
+                "dragoon",
+                "vanguardRider",
+                "grandVanguard",
+                "shaman",
+                "overlord",
+                "dominator",
+                "warcryer",
+                "doomcryer"
         ]
-    },
+},
     "chant_of_wind_walk": {
         "id": "chant_of_wind_walk",
         "name": "Chant of Wind Walk",
@@ -17093,10 +16767,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Speed +20",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_chant_of_wind_walk",
         "vfxGap": false,
@@ -17104,17 +16778,17 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 20,
         "classes": [
-            "raider",
-            "titan",
-            "monk",
-            "grandKhavatari",
-            "dragoon",
-            "grandVanguard",
-            "shaman",
-            "dominator",
-            "doomcryer"
+                "raider",
+                "titan",
+                "monk",
+                "grandKhavatari",
+                "dragoon",
+                "grandVanguard",
+                "shaman",
+                "dominator",
+                "doomcryer"
         ]
-    },
+},
     "enchanted_rose_s_gentle_magic": {
         "id": "enchanted_rose_s_gentle_magic",
         "name": "Enchanted Rose's Gentle Magic",
@@ -17131,10 +16805,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Enchanted Rose's Gentle Magic",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_enchanted_rose_s_gentle_magic",
         "vfxGap": false,
@@ -17142,9 +16816,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 60,
         "classes": [
-            "bloodRoseS2"
+                "bloodRoseS2"
         ]
-    },
+},
     "enchanted_rose_s_weak_magic": {
         "id": "enchanted_rose_s_weak_magic",
         "name": "Enchanted Rose's Weak Magic",
@@ -17161,10 +16835,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Enchanted Rose's Weak Magic",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_enchanted_rose_s_weak_magic",
         "vfxGap": false,
@@ -17172,9 +16846,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 45,
         "classes": [
-            "bloodRoseS2"
+                "bloodRoseS2"
         ]
-    },
+},
     "enchanted_rose_s_strong_magic": {
         "id": "enchanted_rose_s_strong_magic",
         "name": "Enchanted Rose's Strong Magic",
@@ -17191,10 +16865,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Enchanted Rose's Strong Magic",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_enchanted_rose_s_strong_magic",
         "vfxGap": false,
@@ -17202,9 +16876,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 70,
         "classes": [
-            "bloodRoseS2"
+                "bloodRoseS2"
         ]
-    },
+},
     "titanic_break": {
         "id": "titanic_break",
         "name": "Titanic Break",
@@ -17221,10 +16895,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Attacks the target and nearby enemies. Power 5544.With a certain chance, knocks the target down.Ignores Shield Defense.Ignores 5% of the target's defense.PvP: Attacks up to 5 targets.PvE: Attacks up to 5 targets.",
         "balance": {
-            "mpCost": 64,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 64,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_titanic_break",
         "vfxGap": false,
@@ -17232,9 +16906,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "titan"
+                "titan"
         ]
-    },
+},
     "demolition_formula": {
         "id": "demolition_formula",
         "name": "Demolition Formula",
@@ -17251,10 +16925,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Attacks the target. Power 6625.Ignores Shield Defense.Ignores 10% of the target's defense.",
         "balance": {
-            "mpCost": 68,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 68,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_demolition_formula",
         "vfxGap": false,
@@ -17262,9 +16936,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "titan"
+                "titan"
         ]
-    },
+},
     "armor_crush": {
         "id": "armor_crush",
         "name": "Armor Crush",
@@ -17281,10 +16955,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 20000,
         "desc": "Attacks the target. Power 4275.Stuns for 3 sec.P./ M. Def. -30%Ignores Shield Defense.",
         "balance": {
-            "mpCost": 60,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 60,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_armor_crush",
         "vfxGap": false,
@@ -17292,12 +16966,12 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 77,
         "classes": [
-            "titan",
-            "fortuneSeeker",
-            "maestro",
-            "shinemaker"
+                "titan",
+                "fortuneSeeker",
+                "maestro",
+                "shinemaker"
         ]
-    },
+},
     "demolition_impact": {
         "id": "demolition_impact",
         "name": "Demolition Impact",
@@ -17314,10 +16988,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Unleashes a destructive shockwave.Attacks the target. Power 4907.Ignores Shield Defense.Ignores 10% of the target's defense.",
         "balance": {
-            "mpCost": 60,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 60,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_demolition_impact",
         "vfxGap": false,
@@ -17325,9 +16999,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "titan"
+                "titan"
         ]
-    },
+},
     "titanic_sweep": {
         "id": "titanic_sweep",
         "name": "Titanic Sweep",
@@ -17344,10 +17018,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 5000,
         "desc": "Attacks nearby enemies. Power 3772.When Giant's Ring is triggered, attacks nearby enemies thrice. Power 3960.Ignores Shield Defense.Ignores 10% of the target's defense.PvP: Attacks up to 12 targets.PvE: Attacks up to 12 targets.",
         "balance": {
-            "mpCost": 72,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 72,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_titanic_sweep",
         "vfxGap": false,
@@ -17355,9 +17029,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "titan"
+                "titan"
         ]
-    },
+},
     "full_sweep": {
         "id": "full_sweep",
         "name": "Full Sweep",
@@ -17374,10 +17048,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 3000,
         "desc": "Makes a powerful strike with a two-handed sword.Attacks nearby targets. Power 2424.Ignores Shield Defense.PvP: Attacks up to 5 targets.PvE: Attacks up to 5 targets.",
         "balance": {
-            "mpCost": 85,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 85,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_full_sweep",
         "vfxGap": false,
@@ -17385,9 +17059,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "titan"
+                "titan"
         ]
-    },
+},
     "titans_secrets": {
         "id": "titans_secrets",
         "name": "Titans' Secrets",
@@ -17404,10 +17078,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 120000,
         "desc": "When used, removes Suppression anomalies.For 3 sec., Suppression Resistance +20%.Recovers 1000 CP.Recovers 15% HP.",
         "balance": {
-            "mpCost": 45,
-            "pwr": 2,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 45,
+                "pwr": 2,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_titans_secrets",
         "vfxGap": false,
@@ -17415,9 +17089,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "titan"
+                "titan"
         ]
-    },
+},
     "hyper_rush": {
         "id": "hyper_rush",
         "name": "Hyper Rush",
@@ -17434,10 +17108,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 3000,
         "desc": "Hyper Rush",
         "balance": {
-            "mpCost": 50,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 50,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_hyper_rush",
         "vfxGap": false,
@@ -17445,9 +17119,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 80,
         "classes": [
-            "titan"
+                "titan"
         ]
-    },
+},
     "destroyer_s_roar": {
         "id": "destroyer_s_roar",
         "name": "Destroyer's Roar",
@@ -17464,10 +17138,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Destroyer's Roar",
         "balance": {
-            "mpCost": 57,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 57,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_destroyer_s_roar",
         "vfxGap": false,
@@ -17475,9 +17149,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 77,
         "classes": [
-            "titan"
+                "titan"
         ]
-    },
+},
     "titanic_weapon": {
         "id": "titanic_weapon",
         "name": "Titanic Weapon",
@@ -17494,10 +17168,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 60000,
         "desc": "P. Atk. +55%Dagger Resistance -20%P. Accuracy +3Max HP +300Atk. Spd. +100Increases attack range.When using Demolition Impact/ Demolition Formula, makes an additional attack with a 20% chance.",
         "balance": {
-            "mpCost": 63,
-            "pwr": 6,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 63,
+                "pwr": 6,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_titanic_weapon",
         "vfxGap": false,
@@ -17505,9 +17179,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "titan"
+                "titan"
         ]
-    },
+},
     "destructive_shriek": {
         "id": "destructive_shriek",
         "name": "Destructive Shriek",
@@ -17524,10 +17198,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Destructive Shriek",
         "balance": {
-            "mpCost": 62,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 62,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_destructive_shriek",
         "vfxGap": false,
@@ -17535,9 +17209,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 90,
         "classes": [
-            "titan"
+                "titan"
         ]
-    },
+},
     "full_knockdown": {
         "id": "full_knockdown",
         "name": "Full Knockdown",
@@ -17554,10 +17228,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 15000,
         "desc": "Delivers a powerful blow to the target knocking them down.Attacks the target. Power 4937.With a certain chance, knocks down for 3 sec.Ignores Shield Defense.",
         "balance": {
-            "mpCost": 107,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 107,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_full_knockdown",
         "vfxGap": false,
@@ -17565,10 +17239,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 81,
         "classes": [
-            "titan",
-            "grandKhavatari"
+                "titan",
+                "grandKhavatari"
         ]
-    },
+},
     "over_the_body": {
         "id": "over_the_body",
         "name": "Over the Body",
@@ -17585,10 +17259,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 900000,
         "desc": "Over the Body",
         "balance": {
-            "mpCost": 65,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 65,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_over_the_body",
         "vfxGap": false,
@@ -17596,9 +17270,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 78,
         "classes": [
-            "titan"
+                "titan"
         ]
-    },
+},
     "mount_black_bear": {
         "id": "mount_black_bear",
         "name": "Mount Black Bear",
@@ -17615,23 +17289,21 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Mount Black Bear",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_mount_black_bear",
         "vfxGap": false,
         "sfxId": "sfx_action",
         "sfxGap": false,
         "minLevel": 76,
-        "classes": [
-            "titan",
-            "grandKhavatari",
-            "dominator",
-            "doomcryer"
-        ]
-    },
+        "classes": [],
+        "availableTo": [],
+        "disabled": true,
+        "removalReason": "cosmetic_mount_purge"
+},
     "inferno_strike": {
         "id": "inferno_strike",
         "name": "Inferno Strike",
@@ -17648,10 +17320,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Inferno Strike",
         "balance": {
-            "mpCost": 43,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 43,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_inferno_strike",
         "vfxGap": false,
@@ -17659,14 +17331,14 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 20,
         "classes": [
-            "orcMage",
-            "shaman",
-            "overlord",
-            "dominator",
-            "warcryer",
-            "doomcryer"
+                "orcMage",
+                "shaman",
+                "overlord",
+                "dominator",
+                "warcryer",
+                "doomcryer"
         ]
-    },
+},
     "vortex_of_fire": {
         "id": "vortex_of_fire",
         "name": "Vortex of Fire",
@@ -17683,10 +17355,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 4000,
         "desc": "Vortex of Fire",
         "balance": {
-            "mpCost": 20,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 20,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_vortex_of_fire",
         "vfxGap": false,
@@ -17694,14 +17366,14 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 20,
         "classes": [
-            "orcMage",
-            "shaman",
-            "overlord",
-            "dominator",
-            "warcryer",
-            "doomcryer"
+                "orcMage",
+                "shaman",
+                "overlord",
+                "dominator",
+                "warcryer",
+                "doomcryer"
         ]
-    },
+},
     "titan_champion": {
         "id": "titan_champion",
         "name": "Titan Champion",
@@ -17718,10 +17390,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 60000,
         "desc": "Max HP +50%(Momentarily recovers bonus HP.)P. Atk. +35%P. Def. +15%M. Def. +15%Critical Rate for basic attacks and P. skills +65%Critical Damage for basic attacks and P. skills +65%P. Skill damage bonus +20%Knockback/ Knockdown Atk. Rate +55%Fear Atk. Rate +55%Knockback/ Knockdown Resistance +20%Hold Resistance +15%Speed +20<Applied on nearby enemies when using the skill>Titan's Charisma (duration: 3 sec.)The Titan's true power is unleashed upon their enemies.Anomaly: With a certain chance, applies Anxiety (Fear) on nearby enemies.",
         "balance": {
-            "mpCost": 300,
-            "pwr": 5,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 300,
+                "pwr": 5,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_titan_champion",
         "vfxGap": false,
@@ -17729,9 +17401,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "titan"
+                "titan"
         ]
-    },
+},
     "shining_prison": {
         "id": "shining_prison",
         "name": "Shining Prison",
@@ -17748,10 +17420,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "Inflicts Hold on the target and nearby enemies.",
         "balance": {
-            "mpCost": 34,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 34,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_shining_prison",
         "vfxGap": false,
@@ -17759,13 +17431,13 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 25,
         "classes": [
-            "shaman",
-            "overlord",
-            "dominator",
-            "warcryer",
-            "doomcryer"
+                "shaman",
+                "overlord",
+                "dominator",
+                "warcryer",
+                "doomcryer"
         ]
-    },
+},
     "life_rescue": {
         "id": "life_rescue",
         "name": "Life Rescue",
@@ -17782,10 +17454,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 3000,
         "desc": "Recovers 127 of the target's HP.",
         "balance": {
-            "mpCost": 32,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 32,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_life_rescue",
         "vfxGap": false,
@@ -17793,13 +17465,13 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 20,
         "classes": [
-            "shaman",
-            "overlord",
-            "dominator",
-            "warcryer",
-            "doomcryer"
+                "shaman",
+                "overlord",
+                "dominator",
+                "warcryer",
+                "doomcryer"
         ]
-    },
+},
     "fear": {
         "id": "fear",
         "name": "Fear",
@@ -17816,10 +17488,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 20000,
         "desc": "Inflicts Fear on the target.",
         "balance": {
-            "mpCost": 20,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 20,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_fear",
         "vfxGap": false,
@@ -17827,14 +17499,14 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 20,
         "classes": [
-            "orcMage",
-            "shaman",
-            "overlord",
-            "dominator",
-            "warcryer",
-            "doomcryer"
+                "orcMage",
+                "shaman",
+                "overlord",
+                "dominator",
+                "warcryer",
+                "doomcryer"
         ]
-    },
+},
     "madness": {
         "id": "madness",
         "name": "Madness",
@@ -17851,10 +17523,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Swaps the enemy's target for a random one.",
         "balance": {
-            "mpCost": 20,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 20,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_madness",
         "vfxGap": false,
@@ -17862,11 +17534,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 20,
         "classes": [
-            "shaman",
-            "overlord",
-            "warcryer"
+                "shaman",
+                "overlord",
+                "warcryer"
         ]
-    },
+},
     "dreaming_spirit": {
         "id": "dreaming_spirit",
         "name": "Dreaming Spirit",
@@ -17883,10 +17555,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 20000,
         "desc": "Inflicts Sleep on the target.",
         "balance": {
-            "mpCost": 20,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 20,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_dreaming_spirit",
         "vfxGap": false,
@@ -17894,14 +17566,14 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 20,
         "classes": [
-            "orcMage",
-            "shaman",
-            "overlord",
-            "dominator",
-            "warcryer",
-            "doomcryer"
+                "orcMage",
+                "shaman",
+                "overlord",
+                "dominator",
+                "warcryer",
+                "doomcryer"
         ]
-    },
+},
     "frost_flame": {
         "id": "frost_flame",
         "name": "Frost Flame",
@@ -17918,10 +17590,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 2000,
         "desc": "Deadly freezing flame strikes the target.Deals continuous damage for 15 sec.",
         "balance": {
-            "mpCost": 29,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 29,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_frost_flame",
         "vfxGap": false,
@@ -17929,9 +17601,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 20,
         "classes": [
-            "shaman"
+                "shaman"
         ]
-    },
+},
     "cold_flames": {
         "id": "cold_flames",
         "name": "Cold Flames",
@@ -17948,10 +17620,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 4000,
         "desc": "Cold Flames",
         "balance": {
-            "mpCost": 95,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 95,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_cold_flames",
         "vfxGap": false,
@@ -17959,9 +17631,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "doomcryer"
+                "doomcryer"
         ]
-    },
+},
     "blood_bond": {
         "id": "blood_bond",
         "name": "Blood Bond",
@@ -17978,10 +17650,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 15000,
         "desc": "Uses blood magic to attack the target bound to the target.Deals M. damage. Power 234.With a 30% chance, triggers an additional hit.Enemies with debuffs/ anomalies receive more damage.With a 30% chance, recovers 1000 HP.PvP: Attacks up to 6 targets.PvE: Attacks up to 6 targets.",
         "balance": {
-            "mpCost": 97,
-            "pwr": 234,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 97,
+                "pwr": 234,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_blood_bond",
         "vfxGap": false,
@@ -17989,9 +17661,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "doomcryer"
+                "doomcryer"
         ]
-    },
+},
     "crimson_flame": {
         "id": "crimson_flame",
         "name": "Crimson Flame",
@@ -18008,10 +17680,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Crimson Flame",
         "balance": {
-            "mpCost": 150,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 150,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_crimson_flame",
         "vfxGap": false,
@@ -18019,10 +17691,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "dominator",
-            "doomcryer"
+                "dominator",
+                "doomcryer"
         ]
-    },
+},
     "bloody_strike": {
         "id": "bloody_strike",
         "name": "Bloody Strike",
@@ -18039,10 +17711,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Unleashes a black-red energy ball at the enemy making it explode.Deals M. damage to the target. Power 152.Enemies with debuffs/ anomalies receive more damage.",
         "balance": {
-            "mpCost": 56,
-            "pwr": 152,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 56,
+                "pwr": 152,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_bloody_strike",
         "vfxGap": false,
@@ -18050,10 +17722,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "dominator",
-            "doomcryer"
+                "dominator",
+                "doomcryer"
         ]
-    },
+},
     "chant_of_prophecy": {
         "id": "chant_of_prophecy",
         "name": "Chant of Prophecy",
@@ -18070,10 +17742,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Casting Spd. +10%Speed +2M. Skill Critical Rate +15%M. Skill Critical Damage +15%Received Basic Critical Damage -30%Received Basic Critical Rate -30%HP Recovery Rate +20%MP Recovery Rate +20%PvE damage bonus +23%Reflects 10% of received damage.",
         "balance": {
-            "mpCost": 172,
-            "pwr": 1,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 172,
+                "pwr": 1,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_chant_of_prophecy",
         "vfxGap": false,
@@ -18081,9 +17753,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "doomcryer"
+                "doomcryer"
         ]
-    },
+},
     "chant_of_healing": {
         "id": "chant_of_healing",
         "name": "Chant of Healing",
@@ -18100,10 +17772,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 2000,
         "desc": "Chant of Healing",
         "balance": {
-            "mpCost": 282,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 282,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_chant_of_healing",
         "vfxGap": false,
@@ -18111,9 +17783,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "doomcryer"
+                "doomcryer"
         ]
-    },
+},
     "chant_of_glory": {
         "id": "chant_of_glory",
         "name": "Chant of Glory",
@@ -18130,10 +17802,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Chant of Glory",
         "balance": {
-            "mpCost": 100,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 100,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_chant_of_glory",
         "vfxGap": false,
@@ -18141,10 +17813,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 85,
         "classes": [
-            "warcryer",
-            "doomcryer"
+                "warcryer",
+                "doomcryer"
         ]
-    },
+},
     "chant_of_gate": {
         "id": "chant_of_gate",
         "name": "Chant of Gate",
@@ -18161,10 +17833,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 300000,
         "desc": "Chant of Gate",
         "balance": {
-            "mpCost": 383,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 383,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_chant_of_gate",
         "vfxGap": false,
@@ -18172,9 +17844,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 78,
         "classes": [
-            "doomcryer"
+                "doomcryer"
         ]
-    },
+},
     "freezing_flame": {
         "id": "freezing_flame",
         "name": "Freezing Flame",
@@ -18191,10 +17863,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 5000,
         "desc": "A wave of freezing flame strikes the enemy.Deals damage for 10 sec.",
         "balance": {
-            "mpCost": 67,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 67,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_freezing_flame",
         "vfxGap": false,
@@ -18202,10 +17874,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "warcryer",
-            "doomcryer"
+                "warcryer",
+                "doomcryer"
         ]
-    },
+},
     "team_building": {
         "id": "team_building",
         "name": "Team Building",
@@ -18222,10 +17894,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 300000,
         "desc": "Team Building",
         "balance": {
-            "mpCost": 550,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 550,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_team_building",
         "vfxGap": false,
@@ -18233,9 +17905,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "doomcryer"
+                "doomcryer"
         ]
-    },
+},
     "hurricane_assault": {
         "id": "hurricane_assault",
         "name": "Hurricane Assault",
@@ -18252,10 +17924,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Attacks the target. Power 728.Ignores Shield Defense.Ignores 10% of the target's defense.",
         "balance": {
-            "mpCost": 30,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 30,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_hurricane_assault",
         "vfxGap": false,
@@ -18263,11 +17935,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "monk",
-            "tyrant",
-            "grandKhavatari"
+                "monk",
+                "tyrant",
+                "grandKhavatari"
         ]
-    },
+},
     "iron_fist": {
         "id": "iron_fist",
         "name": "Iron Fist",
@@ -18284,10 +17956,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 20000,
         "desc": "Delivers a powerful blow to an enemy.Attacks the target. Power 586.With a certain chance, stuns for 3 sec.Ignores Shield Defense.",
         "balance": {
-            "mpCost": 31,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 31,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_iron_fist",
         "vfxGap": false,
@@ -18295,10 +17967,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "tyrant",
-            "grandKhavatari"
+                "tyrant",
+                "grandKhavatari"
         ]
-    },
+},
     "force_burst": {
         "id": "force_burst",
         "name": "Force Burst",
@@ -18315,10 +17987,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 3000,
         "desc": "Attacks the target and nearby enemies. Power 129.Ignores Shield Defense.Ignores 10% of the target's defense.PvP: Attacks up to 5 targets.PvE: Attacks up to 5 targets.",
         "balance": {
-            "mpCost": 49,
-            "pwr": 129,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 49,
+                "pwr": 129,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_force_burst",
         "vfxGap": false,
@@ -18326,10 +17998,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 41,
         "classes": [
-            "tyrant",
-            "grandKhavatari"
+                "tyrant",
+                "grandKhavatari"
         ]
-    },
+},
     "punch_of_doom": {
         "id": "punch_of_doom",
         "name": "Punch of Doom",
@@ -18346,10 +18018,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 60000,
         "desc": "Strikes at the target with the iron fist. Power 4580.Ignores Shield Defense.",
         "balance": {
-            "mpCost": 44,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 44,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_punch_of_doom",
         "vfxGap": false,
@@ -18357,9 +18029,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 55,
         "classes": [
-            "tyrant"
+                "tyrant"
         ]
-    },
+},
     "burning_fist": {
         "id": "burning_fist",
         "name": "Burning Fist",
@@ -18376,10 +18048,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Strikes at the enemy with the flaming fist.Attacks the target. Power 694.Ignores Shield Defense.Ignores 5% of the target's defense.",
         "balance": {
-            "mpCost": 30,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 30,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_burning_fist",
         "vfxGap": false,
@@ -18387,10 +18059,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "tyrant",
-            "grandKhavatari"
+                "tyrant",
+                "grandKhavatari"
         ]
-    },
+},
     "force_storm": {
         "id": "force_storm",
         "name": "Force Storm",
@@ -18407,10 +18079,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 3000,
         "desc": "Attacks the target and nearby enemies. Power 181.Ignores Shield Defense.Ignores 10% of the target's defense.PvP: Attacks up to 5 targets.PvE: Attacks up to 5 targets.",
         "balance": {
-            "mpCost": 57,
-            "pwr": 181,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 57,
+                "pwr": 181,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_force_storm",
         "vfxGap": false,
@@ -18418,10 +18090,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 47,
         "classes": [
-            "tyrant",
-            "grandKhavatari"
+                "tyrant",
+                "grandKhavatari"
         ]
-    },
+},
     "force_blaster": {
         "id": "force_blaster",
         "name": "Force Blaster",
@@ -18438,10 +18110,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 4000,
         "desc": "Attacks the target. Power 431.Ignores Shield Defense.Ignores 10% of the target's defense.",
         "balance": {
-            "mpCost": 31,
-            "pwr": 431,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 31,
+                "pwr": 431,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_force_blaster",
         "vfxGap": false,
@@ -18449,11 +18121,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "monk",
-            "tyrant",
-            "grandKhavatari"
+                "monk",
+                "tyrant",
+                "grandKhavatari"
         ]
-    },
+},
     "break_duress": {
         "id": "break_duress",
         "name": "Break Duress",
@@ -18470,10 +18142,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 600000,
         "desc": "Removes Paralysis/ Shock/ Sleep.",
         "balance": {
-            "mpCost": 29,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 29,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_break_duress",
         "vfxGap": false,
@@ -18481,9 +18153,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 52,
         "classes": [
-            "tyrant"
+                "tyrant"
         ]
-    },
+},
     "bison_spirit_totem": {
         "id": "bison_spirit_totem",
         "name": "Bison Spirit Totem",
@@ -18500,10 +18172,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Bison Spirit Totem",
         "balance": {
-            "mpCost": 32,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 32,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_bison_spirit_totem",
         "vfxGap": false,
@@ -18511,9 +18183,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 68,
         "classes": [
-            "tyrant"
+                "tyrant"
         ]
-    },
+},
     "ogre_s_essence": {
         "id": "ogre_s_essence",
         "name": "Ogre's Essence",
@@ -18530,10 +18202,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 240000,
         "desc": "Ogre's Essence",
         "balance": {
-            "mpCost": 50,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 50,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_ogre_s_essence",
         "vfxGap": false,
@@ -18541,10 +18213,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 45,
         "classes": [
-            "tyrant",
-            "grandKhavatari"
+                "tyrant",
+                "grandKhavatari"
         ]
-    },
+},
     "cripple": {
         "id": "cripple",
         "name": "Cripple",
@@ -18561,10 +18233,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Slows the enemy down.Atk. Spd. -15%Casting Spd. -15%Speed -15%",
         "balance": {
-            "mpCost": 30,
-            "pwr": 2,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 30,
+                "pwr": 2,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_cripple",
         "vfxGap": false,
@@ -18572,11 +18244,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "monk",
-            "tyrant",
-            "grandKhavatari"
+                "monk",
+                "tyrant",
+                "grandKhavatari"
         ]
-    },
+},
     "chant_of_vampire": {
         "id": "chant_of_vampire",
         "name": "Chant of Vampire",
@@ -18593,10 +18265,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Speed +2Debuff/ Anomaly Resistance +10%With a 80% chance, absorbs 7% of damage as HP.",
         "balance": {
-            "mpCost": 40,
-            "pwr": 1,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 40,
+                "pwr": 1,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_chant_of_vampire",
         "vfxGap": false,
@@ -18604,9 +18276,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "warcryer"
+                "warcryer"
         ]
-    },
+},
     "swap_defense": {
         "id": "swap_defense",
         "name": "Swap Defense",
@@ -18623,10 +18295,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "M. Def. -60%P. Def. +10%Note!Cannot be used with Convert.",
         "balance": {
-            "mpCost": 54,
-            "pwr": 6,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 54,
+                "pwr": 6,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_swap_defense",
         "vfxGap": false,
@@ -18634,10 +18306,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "overlord",
-            "warcryer"
+                "overlord",
+                "warcryer"
         ]
-    },
+},
     "convert": {
         "id": "convert",
         "name": "Convert",
@@ -18654,10 +18326,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Max MP -50%Max HP +10%Note!Cannot be used with Swap Defense.",
         "balance": {
-            "mpCost": 54,
-            "pwr": 5,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 54,
+                "pwr": 5,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_convert",
         "vfxGap": false,
@@ -18665,10 +18337,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "overlord",
-            "warcryer"
+                "overlord",
+                "warcryer"
         ]
-    },
+},
     "swap_attack": {
         "id": "swap_attack",
         "name": "Swap Attack",
@@ -18685,10 +18357,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "M. Atk. -70%P. Atk. +100%",
         "balance": {
-            "mpCost": 65,
-            "pwr": 7,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 65,
+                "pwr": 7,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_swap_attack",
         "vfxGap": false,
@@ -18696,10 +18368,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "overlord",
-            "warcryer"
+                "overlord",
+                "warcryer"
         ]
-    },
+},
     "flame_burst": {
         "id": "flame_burst",
         "name": "Flame Burst",
@@ -18716,10 +18388,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 15000,
         "desc": "Deals M. damage to the target and nearby enemies. Power 234.With a 30% chance, triggers an additional strike.For 10 sec., decreases HP/ MP.The amount of decreased HP is based on your M. Atk.The effect is enhanced if the skill is used against 1 target (only once).PvP: Attacks up to 6 targets.PvE: Attacks up to 6 targets.",
         "balance": {
-            "mpCost": 97,
-            "pwr": 234,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 97,
+                "pwr": 234,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_flame_burst",
         "vfxGap": false,
@@ -18727,9 +18399,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "dominator"
+                "dominator"
         ]
-    },
+},
     "debuff_master": {
         "id": "debuff_master",
         "name": "Debuff Master",
@@ -18746,10 +18418,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Debuff Master",
         "balance": {
-            "mpCost": 200,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 200,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_debuff_master",
         "vfxGap": false,
@@ -18757,9 +18429,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "dominator"
+                "dominator"
         ]
-    },
+},
     "prophecy_of_pa_agrio": {
         "id": "prophecy_of_pa_agrio",
         "name": "Prophecy of Pa'agrio",
@@ -18776,10 +18448,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Max CP +20%Speed +12Casting Spd. +10%Casting Spd. +50M. Skill Critical Rate +15%M. Skill Critical Damage +15%CP Recovery Rate +20%PvE damage bonus +23%",
         "balance": {
-            "mpCost": 172,
-            "pwr": 2,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 172,
+                "pwr": 2,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_prophecy_of_pa_agrio",
         "vfxGap": false,
@@ -18787,9 +18459,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "dominator"
+                "dominator"
         ]
-    },
+},
     "pa_agrio_s_glory": {
         "id": "pa_agrio_s_glory",
         "name": "Pa'agrio's Glory",
@@ -18806,10 +18478,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Pa'agrio's Glory",
         "balance": {
-            "mpCost": 100,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 100,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_pa_agrio_s_glory",
         "vfxGap": false,
@@ -18817,10 +18489,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 85,
         "classes": [
-            "overlord",
-            "dominator"
+                "overlord",
+                "dominator"
         ]
-    },
+},
     "seal_of_suspension": {
         "id": "seal_of_suspension",
         "name": "Seal of Suspension",
@@ -18837,10 +18509,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "P./ M. Skill Cooldown +200%",
         "balance": {
-            "mpCost": 113,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 113,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_seal_of_suspension",
         "vfxGap": false,
@@ -18848,10 +18520,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "overlord",
-            "dominator"
+                "overlord",
+                "dominator"
         ]
-    },
+},
     "seal_of_silence": {
         "id": "seal_of_silence",
         "name": "Seal of Silence",
@@ -18868,10 +18540,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 60000,
         "desc": "Blocks target's M. skills.",
         "balance": {
-            "mpCost": 113,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 113,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_seal_of_silence",
         "vfxGap": false,
@@ -18879,10 +18551,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "overlord",
-            "dominator"
+                "overlord",
+                "dominator"
         ]
-    },
+},
     "pa_agrio_s_honor": {
         "id": "pa_agrio_s_honor",
         "name": "Pa'agrio's Honor",
@@ -18899,10 +18571,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 5000,
         "desc": "Recovers nearby allies' CP. Power 690.Number of targets: up to 5 (caster included)",
         "balance": {
-            "mpCost": 263,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 263,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_pa_agrio_s_honor",
         "vfxGap": false,
@@ -18910,10 +18582,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "overlord",
-            "dominator"
+                "overlord",
+                "dominator"
         ]
-    },
+},
     "seal_of_blockade": {
         "id": "seal_of_blockade",
         "name": "Seal of Blockade",
@@ -18930,10 +18602,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 120000,
         "desc": "Blocks basic attacks to the target and nearby enemies.",
         "balance": {
-            "mpCost": 100,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 100,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_seal_of_blockade",
         "vfxGap": false,
@@ -18941,9 +18613,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 79,
         "classes": [
-            "dominator"
+                "dominator"
         ]
-    },
+},
     "pa_agrio_s_touch": {
         "id": "pa_agrio_s_touch",
         "name": "Pa'agrio's Touch",
@@ -18960,10 +18632,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 300000,
         "desc": "Pa'agrio's Touch",
         "balance": {
-            "mpCost": 550,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 550,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_pa_agrio_s_touch",
         "vfxGap": false,
@@ -18971,9 +18643,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "dominator"
+                "dominator"
         ]
-    },
+},
     "seal_of_despair": {
         "id": "seal_of_despair",
         "name": "Seal of Despair",
@@ -18990,10 +18662,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "P. Atk. -10%Atk. Spd. -30%Basic Critical Rate -30%Basic Critical Damage -30%M. Def. -30%P. Accuracy -6Speed -20%",
         "balance": {
-            "mpCost": 107,
-            "pwr": 1,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 107,
+                "pwr": 1,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_seal_of_despair",
         "vfxGap": false,
@@ -19001,9 +18673,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 79,
         "classes": [
-            "dominator"
+                "dominator"
         ]
-    },
+},
     "seal_of_infection": {
         "id": "seal_of_infection",
         "name": "Seal of Infection",
@@ -19020,10 +18692,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 15000,
         "desc": "Seal of Infection",
         "balance": {
-            "mpCost": 125,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 125,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_seal_of_infection",
         "vfxGap": false,
@@ -19031,9 +18703,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 77,
         "classes": [
-            "dominator"
+                "dominator"
         ]
-    },
+},
     "seal_of_disease": {
         "id": "seal_of_disease",
         "name": "Seal of Disease",
@@ -19050,10 +18722,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 15000,
         "desc": "Seal of Disease",
         "balance": {
-            "mpCost": 105,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 105,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_seal_of_disease",
         "vfxGap": false,
@@ -19061,9 +18733,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 77,
         "classes": [
-            "dominator"
+                "dominator"
         ]
-    },
+},
     "ritual_of_life": {
         "id": "ritual_of_life",
         "name": "Ritual of Life",
@@ -19080,10 +18752,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 5000,
         "desc": "Restores target's CP by 863.",
         "balance": {
-            "mpCost": 132,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 132,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_ritual_of_life",
         "vfxGap": false,
@@ -19091,10 +18763,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "overlord",
-            "dominator"
+                "overlord",
+                "dominator"
         ]
-    },
+},
     "pa_agrio_s_cure": {
         "id": "pa_agrio_s_cure",
         "name": "Pa'agrio's Cure",
@@ -19111,10 +18783,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 3500,
         "desc": "Pa'agrio's Cure",
         "balance": {
-            "mpCost": 282,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 282,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_pa_agrio_s_cure",
         "vfxGap": false,
@@ -19122,9 +18794,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "dominator"
+                "dominator"
         ]
-    },
+},
     "jump_attack": {
         "id": "jump_attack",
         "name": "Jump Attack",
@@ -19141,10 +18813,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 5000,
         "desc": "<Rush/ Knockdown skill>Deals P. damage to the target and nearby enemies. Power 6800.With a certain chance, knocks down for 2 sec.Ignores Shield Defense.Ignores 10% of the target's defense.PvP: Attacks up to 5 targets.PvE: Attacks up to 5 targets.On using the skill, increases Rushing Retreat's range and retreat distance for 5 sec.",
         "balance": {
-            "mpCost": 60,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 60,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_jump_attack",
         "vfxGap": false,
@@ -19152,9 +18824,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "grandKhavatari"
+                "grandKhavatari"
         ]
-    },
+},
     "burning_strike": {
         "id": "burning_strike",
         "name": "Burning Strike",
@@ -19171,10 +18843,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 3000,
         "desc": "<Knockdown skill>Attacks the target twice. Power 6534.With a 30% chance, attacks the target twice.With a certain chance, knocks the target down.Ignores Shield Defense.Ignores 15% of the target's defense.",
         "balance": {
-            "mpCost": 64,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 64,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_burning_strike",
         "vfxGap": false,
@@ -19182,9 +18854,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "grandKhavatari"
+                "grandKhavatari"
         ]
-    },
+},
     "burning_assault": {
         "id": "burning_assault",
         "name": "Burning Assault",
@@ -19201,10 +18873,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Attacks the target and nearby enemies. Power 6243.For 5 sec., the target's P. Def. -23%.Knockback/ Knockdown Resistance -10%Ignores Shield Defense.Ignores 10% of the target's defense.PvP: Attacks up to 5 targets.PvE: Attacks up to 5 targets.",
         "balance": {
-            "mpCost": 64,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 64,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_burning_assault",
         "vfxGap": false,
@@ -19212,9 +18884,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "grandKhavatari"
+                "grandKhavatari"
         ]
-    },
+},
     "raging_force": {
         "id": "raging_force",
         "name": "Raging Force",
@@ -19231,10 +18903,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Attacks the target. Power 195.For 20 sec., P. Def. -30%.",
         "balance": {
-            "mpCost": 60,
-            "pwr": 195,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 60,
+                "pwr": 195,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_raging_force",
         "vfxGap": false,
@@ -19242,9 +18914,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "grandKhavatari"
+                "grandKhavatari"
         ]
-    },
+},
     "blazing_strike": {
         "id": "blazing_strike",
         "name": "Blazing Strike",
@@ -19261,10 +18933,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "Makes an empowered attack after a strike with a fire-imbued fist.Critical Rate is very high.Attacks the target. Power 7182.Ignores Shield Defense.Ignores 10% of the target's defense.Makes an additional attack. Power 9690.Ignores Shield Defense.Ignores 25% of the target's defense.",
         "balance": {
-            "mpCost": 62,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 62,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_blazing_strike",
         "vfxGap": false,
@@ -19272,9 +18944,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "grandKhavatari"
+                "grandKhavatari"
         ]
-    },
+},
     "wondrous_power": {
         "id": "wondrous_power",
         "name": "Wondrous Power",
@@ -19291,10 +18963,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 600000,
         "desc": "Wondrous Power",
         "balance": {
-            "mpCost": 50,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 50,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_wondrous_power",
         "vfxGap": false,
@@ -19302,9 +18974,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 77,
         "classes": [
-            "grandKhavatari"
+                "grandKhavatari"
         ]
-    },
+},
     "rushing_retreat": {
         "id": "rushing_retreat",
         "name": "Rushing Retreat",
@@ -19321,10 +18993,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "Rushing Retreat",
         "balance": {
-            "mpCost": 65,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 65,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_rushing_retreat",
         "vfxGap": false,
@@ -19332,9 +19004,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "grandKhavatari"
+                "grandKhavatari"
         ]
-    },
+},
     "final_secret_grand_khavatari": {
         "id": "final_secret_grand_khavatari",
         "name": "Final Secret: Grand Khavatari",
@@ -19351,10 +19023,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 120000,
         "desc": "Final Secret: Grand Khavatari",
         "balance": {
-            "mpCost": 41,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 41,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_final_secret_grand_khavatari",
         "vfxGap": false,
@@ -19362,9 +19034,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "grandKhavatari"
+                "grandKhavatari"
         ]
-    },
+},
     "cacophony_of_war": {
         "id": "cacophony_of_war",
         "name": "Cacophony of War",
@@ -19381,10 +19053,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 300000,
         "desc": "<Base effect>Max HP +20%Momentarily recovers bonus HP.Atk. Spd. +30%Skill Power +5%PvE damage bonus +5%Speed +30P. Skill MP Consumption -50%Buff Cancel Resistance +40%Knockback/ Knockdown Atk. Rate +20%Duration: 1 min.<PvP effect><Fear skill>Attacks nearby enemies applying Anxiety to them for 3 sec. Power 12,000.Ignores Shield Defense.Ignores 10% of the target's defense.With a 40% chance, applies the following effects:Current HP -30%Current MP -30%<PvE effect>Attacks nearby enemies twice. Power 12,000.Ignores Shield Defense.Ignores 10% of the target's defense.PvP: Attacks up to 5 targets.PvE: Attacks up to 12 targets.",
         "balance": {
-            "mpCost": 300,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 300,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_cacophony_of_war",
         "vfxGap": false,
@@ -19392,9 +19064,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "grandKhavatari"
+                "grandKhavatari"
         ]
-    },
+},
     "pa_agrio_s_immunity": {
         "id": "pa_agrio_s_immunity",
         "name": "Pa'agrio's Immunity",
@@ -19411,10 +19083,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "M. Atk. +100P. Def. +300M. Skill Critical Rate +1%Received M. Skill Critical Damage -10%Debuff/ Anomaly Resistance +20%",
         "balance": {
-            "mpCost": 40,
-            "pwr": 0,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 40,
+                "pwr": 0,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_pa_agrio_s_immunity",
         "vfxGap": false,
@@ -19422,9 +19094,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "overlord"
+                "overlord"
         ]
-    },
+},
     "seal_of_mirage": {
         "id": "seal_of_mirage",
         "name": "Seal of Mirage",
@@ -19441,10 +19113,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 5000,
         "desc": "Switches the enemy's target to a random one from all nearby targets.",
         "balance": {
-            "mpCost": 59,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 59,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_seal_of_mirage",
         "vfxGap": false,
@@ -19452,9 +19124,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 44,
         "classes": [
-            "overlord"
+                "overlord"
         ]
-    },
+},
     "spoil": {
         "id": "spoil",
         "name": "Spoil",
@@ -19471,10 +19143,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 3000,
         "desc": "Spoil",
         "balance": {
-            "mpCost": 10,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 10,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_spoil",
         "vfxGap": false,
@@ -19482,12 +19154,12 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 5,
         "classes": [
-            "dwarfFighter",
-            "scavenger",
-            "bountyHunter",
-            "fortuneSeeker"
+                "dwarfFighter",
+                "scavenger",
+                "bountyHunter",
+                "fortuneSeeker"
         ]
-    },
+},
     "sweeper": {
         "id": "sweeper",
         "name": "Sweeper",
@@ -19504,10 +19176,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 500,
         "desc": "Sweeper",
         "balance": {
-            "mpCost": 3,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 3,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_sweeper",
         "vfxGap": false,
@@ -19515,9 +19187,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 5,
         "classes": [
-            "dwarfFighter"
+                "dwarfFighter"
         ]
-    },
+},
     "earthquake": {
         "id": "earthquake",
         "name": "Earthquake",
@@ -19534,10 +19206,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 8000,
         "desc": "Swings the spear to attack nearby targets. Power 3878.Ignores Shield Defense.PvP: Attacks up to 5 targets.PvE: Attacks up to 5 targets.",
         "balance": {
-            "mpCost": 90,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 90,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_earthquake",
         "vfxGap": false,
@@ -19545,11 +19217,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "fortuneSeeker",
-            "maestro",
-            "shinemaker"
+                "fortuneSeeker",
+                "maestro",
+                "shinemaker"
         ]
-    },
+},
     "golden_stone": {
         "id": "golden_stone",
         "name": "Golden Stone",
@@ -19566,10 +19238,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 20000,
         "desc": "For 5 sec., inflicts Imprisonment on the target and nearby enemies turning them into golden statues.Imprisoned targets cannot move, attack, teleport, use skills, recover HP/ MP/ CP.When Imprisonment expires:Attacks the enemies. Power 3256. For 5 sec., P./ M. Def. and Speed -10%.PvP: Attacks up to 9 targets.PvE: Attacks up to 9 targets.",
         "balance": {
-            "mpCost": 60,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 60,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_golden_stone",
         "vfxGap": false,
@@ -19577,9 +19249,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "fortuneSeeker"
+                "fortuneSeeker"
         ]
-    },
+},
     "maphr_s_acumen": {
         "id": "maphr_s_acumen",
         "name": "Maphr’s Acumen",
@@ -19596,10 +19268,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Maphr’s Acumen",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_maphr_s_acumen",
         "vfxGap": false,
@@ -19607,17 +19279,17 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "scavenger",
-            "bountyHunter",
-            "fortuneSeeker",
-            "artisanDwarf",
-            "warsmith",
-            "maestro",
-            "shineMakerS1",
-            "shineMakerS2",
-            "shinemaker"
+                "scavenger",
+                "bountyHunter",
+                "fortuneSeeker",
+                "artisanDwarf",
+                "warsmith",
+                "maestro",
+                "shineMakerS1",
+                "shineMakerS2",
+                "shinemaker"
         ]
-    },
+},
     "adena_stun": {
         "id": "adena_stun",
         "name": "Adena Stun",
@@ -19634,10 +19306,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Throws some adena at the target.Attacks the target. Power 5018. Stuns for 3 sec.With a certain chance, removes up to 3 buff(s) from the target.Ignores Shield Defense.No critical.",
         "balance": {
-            "mpCost": 54,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 54,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_adena_stun",
         "vfxGap": false,
@@ -19645,9 +19317,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "fortuneSeeker"
+                "fortuneSeeker"
         ]
-    },
+},
     "maphr_s_magic_barrier": {
         "id": "maphr_s_magic_barrier",
         "name": "Maphr's Magic Barrier",
@@ -19664,10 +19336,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Maphr's Magic Barrier",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_maphr_s_magic_barrier",
         "vfxGap": false,
@@ -19675,17 +19347,17 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "scavenger",
-            "bountyHunter",
-            "fortuneSeeker",
-            "artisanDwarf",
-            "warsmith",
-            "maestro",
-            "shineMakerS1",
-            "shineMakerS2",
-            "shinemaker"
+                "scavenger",
+                "bountyHunter",
+                "fortuneSeeker",
+                "artisanDwarf",
+                "warsmith",
+                "maestro",
+                "shineMakerS1",
+                "shineMakerS2",
+                "shinemaker"
         ]
-    },
+},
     "maphr_s_haste": {
         "id": "maphr_s_haste",
         "name": "Maphr's Haste",
@@ -19702,10 +19374,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Maphr's Haste",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_maphr_s_haste",
         "vfxGap": false,
@@ -19713,17 +19385,17 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "scavenger",
-            "bountyHunter",
-            "fortuneSeeker",
-            "artisanDwarf",
-            "warsmith",
-            "maestro",
-            "shineMakerS1",
-            "shineMakerS2",
-            "shinemaker"
+                "scavenger",
+                "bountyHunter",
+                "fortuneSeeker",
+                "artisanDwarf",
+                "warsmith",
+                "maestro",
+                "shineMakerS1",
+                "shineMakerS2",
+                "shinemaker"
         ]
-    },
+},
     "trophy_thief": {
         "id": "trophy_thief",
         "name": "Trophy Thief",
@@ -19740,10 +19412,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 8000,
         "desc": "Attacks the target. Power 6373.Ignores Shield Defense.Ignores 20% of the target's defense.With a certain chance, steals items from monsters.",
         "balance": {
-            "mpCost": 72,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 72,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_trophy_thief",
         "vfxGap": false,
@@ -19751,9 +19423,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "fortuneSeeker"
+                "fortuneSeeker"
         ]
-    },
+},
     "maphr_s_wild_magic": {
         "id": "maphr_s_wild_magic",
         "name": "Maphr's Wild Magic",
@@ -19770,10 +19442,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Maphr's Wild Magic",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_maphr_s_wild_magic",
         "vfxGap": false,
@@ -19781,17 +19453,17 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "scavenger",
-            "bountyHunter",
-            "fortuneSeeker",
-            "artisanDwarf",
-            "warsmith",
-            "maestro",
-            "shineMakerS1",
-            "shineMakerS2",
-            "shinemaker"
+                "scavenger",
+                "bountyHunter",
+                "fortuneSeeker",
+                "artisanDwarf",
+                "warsmith",
+                "maestro",
+                "shineMakerS1",
+                "shineMakerS2",
+                "shinemaker"
         ]
-    },
+},
     "spoil_crush": {
         "id": "spoil_crush",
         "name": "Spoil Crush",
@@ -19808,10 +19480,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Attacks the target. Power 4907.With a certain chance, steals items from monsters.Ignores Shield Defense.Ignores 10% of the target's defense.",
         "balance": {
-            "mpCost": 60,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 60,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_spoil_crush",
         "vfxGap": false,
@@ -19819,9 +19491,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "fortuneSeeker"
+                "fortuneSeeker"
         ]
-    },
+},
     "crushing_leap": {
         "id": "crushing_leap",
         "name": "Crushing Leap",
@@ -19838,10 +19510,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Attacks the target. Power 5545.When using the skill, increases its power with a certain chance.Ignores Shield Defense.Ignores 10% of the target's defense.",
         "balance": {
-            "mpCost": 65,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 65,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_crushing_leap",
         "vfxGap": false,
@@ -19849,9 +19521,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "fortuneSeeker"
+                "fortuneSeeker"
         ]
-    },
+},
     "maphr_s_wind_walk": {
         "id": "maphr_s_wind_walk",
         "name": "Maphr's Wind Walk",
@@ -19868,10 +19540,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Maphr's Wind Walk",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_maphr_s_wind_walk",
         "vfxGap": false,
@@ -19879,14 +19551,14 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "scavenger",
-            "fortuneSeeker",
-            "artisanDwarf",
-            "maestro",
-            "shineMakerS1",
-            "shinemaker"
+                "scavenger",
+                "fortuneSeeker",
+                "artisanDwarf",
+                "maestro",
+                "shineMakerS1",
+                "shinemaker"
         ]
-    },
+},
     "body_crush": {
         "id": "body_crush",
         "name": "Body Crush",
@@ -19903,10 +19575,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 20000,
         "desc": "Attacks the target. Power 4129.With a certain chance, stuns for 3 sec.With a certain chance, removes up to 2 buff(s) from the target.Ignores Shield Defense.No critical.",
         "balance": {
-            "mpCost": 61,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 61,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_body_crush",
         "vfxGap": false,
@@ -19914,14 +19586,14 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 78,
         "classes": [
-            "bountyHunter",
-            "fortuneSeeker",
-            "warsmith",
-            "maestro",
-            "shineMakerS2",
-            "shinemaker"
+                "bountyHunter",
+                "fortuneSeeker",
+                "warsmith",
+                "maestro",
+                "shineMakerS2",
+                "shinemaker"
         ]
-    },
+},
     "maphr_s_berserker_spirit": {
         "id": "maphr_s_berserker_spirit",
         "name": "Maphr's Berserker Spirit",
@@ -19938,10 +19610,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Maphr's Berserker Spirit",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_maphr_s_berserker_spirit",
         "vfxGap": false,
@@ -19949,17 +19621,17 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "scavenger",
-            "bountyHunter",
-            "fortuneSeeker",
-            "artisanDwarf",
-            "warsmith",
-            "maestro",
-            "shineMakerS1",
-            "shineMakerS2",
-            "shinemaker"
+                "scavenger",
+                "bountyHunter",
+                "fortuneSeeker",
+                "artisanDwarf",
+                "warsmith",
+                "maestro",
+                "shineMakerS1",
+                "shineMakerS2",
+                "shinemaker"
         ]
-    },
+},
     "rolling_dice": {
         "id": "rolling_dice",
         "name": "Rolling Dice",
@@ -19976,10 +19648,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 7000,
         "desc": "Rolling Dice",
         "balance": {
-            "mpCost": 150,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 150,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_rolling_dice",
         "vfxGap": false,
@@ -19987,9 +19659,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "fortuneSeeker"
+                "fortuneSeeker"
         ]
-    },
+},
     "spoil_festival": {
         "id": "spoil_festival",
         "name": "Spoil Festival",
@@ -20006,10 +19678,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 3000,
         "desc": "Curses the target and nearby enemies.",
         "balance": {
-            "mpCost": 89,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 89,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_spoil_festival",
         "vfxGap": false,
@@ -20017,11 +19689,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "scavenger",
-            "bountyHunter",
-            "fortuneSeeker"
+                "scavenger",
+                "bountyHunter",
+                "fortuneSeeker"
         ]
-    },
+},
     "weapon_reinforcement": {
         "id": "weapon_reinforcement",
         "name": "Weapon Reinforcement",
@@ -20038,10 +19710,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "When using a sword, a blunt weapon, or a spear:P. Atk. +12%With a certain chance, applies the Physical Damage debuff on a basic attack.Physical DamageDebuff: Atk. Spd./ Casting Spd. -10%Duration: 15 sec.Trigger cooldown: 15 sec.",
         "balance": {
-            "mpCost": 40,
-            "pwr": 1,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 40,
+                "pwr": 1,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_weapon_reinforcement",
         "vfxGap": false,
@@ -20049,14 +19721,14 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 77,
         "classes": [
-            "bountyHunter",
-            "fortuneSeeker",
-            "warsmith",
-            "maestro",
-            "shineMakerS2",
-            "shinemaker"
+                "bountyHunter",
+                "fortuneSeeker",
+                "warsmith",
+                "maestro",
+                "shineMakerS2",
+                "shinemaker"
         ]
-    },
+},
     "tenacity": {
         "id": "tenacity",
         "name": "Tenacity",
@@ -20073,10 +19745,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Tenacity",
         "balance": {
-            "mpCost": 72,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 72,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_tenacity",
         "vfxGap": false,
@@ -20084,14 +19756,14 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 80,
         "classes": [
-            "bountyHunter",
-            "fortuneSeeker",
-            "warsmith",
-            "maestro",
-            "shineMakerS2",
-            "shinemaker"
+                "bountyHunter",
+                "fortuneSeeker",
+                "warsmith",
+                "maestro",
+                "shineMakerS2",
+                "shinemaker"
         ]
-    },
+},
     "mount_kukuru": {
         "id": "mount_kukuru",
         "name": "Mount Kukuru",
@@ -20108,22 +19780,21 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Mount Kukuru",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_mount_kukuru",
         "vfxGap": false,
         "sfxId": "sfx_action",
         "sfxGap": false,
         "minLevel": 76,
-        "classes": [
-            "fortuneSeeker",
-            "maestro",
-            "shinemaker"
-        ]
-    },
+        "classes": [],
+        "availableTo": [],
+        "disabled": true,
+        "removalReason": "cosmetic_mount_purge"
+},
     "fortune_time": {
         "id": "fortune_time",
         "name": "Fortune Time",
@@ -20140,10 +19811,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Max HP +20%Max HP +2500P. Skill Power +5%With a certain chance when attacking a raid boss and some monsters:For 2 min., the Fortune Seeker's Mark debuff is applied.(Trigger cooldown: 10 sec.)When Fortune Seeker's Mark is active:An additional reward is dropped on killing a raid boss and some monsters.<Additional rewards and their drop rates>Fortune Time Box - Boss Raid: 1%Scroll: Enchant Rare Accessories, Improved Scroll: Enchant Rare Accessories, Transcendent Upgrade StoneFortune Time Box - Command Channel Raid: 0.8%Improved/ Cursed Scroll: Enchant A-grade Weapon/ Armor, Scroll of Blessing - Weapon/ Armor, Charging Stone: Skill Enchant - 3-star (10%), Transcendent Upgrade StoneFortune Time Box - Special Monster: 1%Fire/ Water/ Earth/ Wind Spirit Evolution Stone, Scroll: Enchant A-grade Weapon/ Armor, Improved/ Cursed Scroll: Enchant A-grade Weapon/ Armor, Scroll of Blessing - Weapon/ ArmorFortune Time Box - Guardian Raid: 0.8%Guardian Pendant Lv. 1, Guardian Book Coupon - 1-3 Stars, Guardian Ring/ Earring, Scroll: Enchant Guardian Ornaments<Note!>The additional reward can only be obtained from certain bosses and monsters.Re-applying Fortune Seeker's Mark will not renew Fortune Seeker's Mark that is already applied to a boss or monster.",
         "balance": {
-            "mpCost": 102,
-            "pwr": 2,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 102,
+                "pwr": 2,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_fortune_time",
         "vfxGap": false,
@@ -20151,9 +19822,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "fortuneSeeker"
+                "fortuneSeeker"
         ]
-    },
+},
     "blazing_fury": {
         "id": "blazing_fury",
         "name": "Blazing Fury",
@@ -20170,10 +19841,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Blazing Fury",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_blazing_fury",
         "vfxGap": false,
@@ -20181,10 +19852,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 1,
         "classes": [
-            "rider",
-            "grandVanguard"
+                "rider",
+                "grandVanguard"
         ]
-    },
+},
     "blazing_beast": {
         "id": "blazing_beast",
         "name": "Blazing Beast",
@@ -20201,10 +19872,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Blazing Beast",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_blazing_beast",
         "vfxGap": false,
@@ -20212,9 +19883,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 1,
         "classes": [
-            "rider"
+                "rider"
         ]
-    },
+},
     "summon_mechanic_golem": {
         "id": "summon_mechanic_golem",
         "name": "Summon Mechanic Golem",
@@ -20231,10 +19902,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 5000,
         "desc": "Summons a Mechanical Golem.",
         "balance": {
-            "mpCost": 49,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 49,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_summon_mechanic_golem",
         "vfxGap": false,
@@ -20242,14 +19913,14 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 28,
         "classes": [
-            "artisanDwarf",
-            "warsmith",
-            "maestro",
-            "shineMakerS1",
-            "shineMakerS2",
-            "shinemaker"
+                "artisanDwarf",
+                "warsmith",
+                "maestro",
+                "shineMakerS1",
+                "shineMakerS2",
+                "shinemaker"
         ]
-    },
+},
     "wild_rush": {
         "id": "wild_rush",
         "name": "Wild Rush",
@@ -20266,10 +19937,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Wild Rush",
         "balance": {
-            "mpCost": 30,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 30,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_wild_rush",
         "vfxGap": false,
@@ -20277,11 +19948,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 20,
         "classes": [
-            "dragoon",
-            "vanguardRider",
-            "grandVanguard"
+                "dragoon",
+                "vanguardRider",
+                "grandVanguard"
         ]
-    },
+},
     "piercing": {
         "id": "piercing",
         "name": "Piercing",
@@ -20298,10 +19969,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "<Spear skill>Attacks the target with a spear.Deals P. damage. Power 419.Ignores Shield Defense.",
         "balance": {
-            "mpCost": 18,
-            "pwr": 419,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 18,
+                "pwr": 419,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_piercing",
         "vfxGap": false,
@@ -20309,10 +19980,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 20,
         "classes": [
-            "dragoon",
-            "vanguardRider"
+                "dragoon",
+                "vanguardRider"
         ]
-    },
+},
     "wild_scratch": {
         "id": "wild_scratch",
         "name": "Wild Scratch",
@@ -20329,10 +20000,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "<Beast skill>The beast attacks the target with its claws.Deals damage based on your P. Atk. Power 8087.Ignores Shield Defense.Ignores 10% of the target's defense.",
         "balance": {
-            "mpCost": 61,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 61,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_wild_scratch",
         "vfxGap": false,
@@ -20340,10 +20011,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 78,
         "classes": [
-            "vanguardRider",
-            "grandVanguard"
+                "vanguardRider",
+                "grandVanguard"
         ]
-    },
+},
     "amazing_piercing": {
         "id": "amazing_piercing",
         "name": "Amazing Piercing",
@@ -20360,10 +20031,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "<Spear skill>Attacks the target with a spear.Deals P. damage. Power 7276.Ignores Shield Defense.Ignores 15% of the target's defense.",
         "balance": {
-            "mpCost": 60,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 60,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_amazing_piercing",
         "vfxGap": false,
@@ -20371,9 +20042,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "grandVanguard"
+                "grandVanguard"
         ]
-    },
+},
     "sweeper_festival": {
         "id": "sweeper_festival",
         "name": "Sweeper Festival",
@@ -20390,10 +20061,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 3000,
         "desc": "Sweeper Festival",
         "balance": {
-            "mpCost": 12,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 12,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_sweeper_festival",
         "vfxGap": false,
@@ -20401,9 +20072,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 28,
         "classes": [
-            "scavenger"
+                "scavenger"
         ]
-    },
+},
     "wild_charge": {
         "id": "wild_charge",
         "name": "Wild Charge",
@@ -20420,10 +20091,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "<Beast skill>The beast's materialized soul strikes at the target.Attacks the target and nearby enemies twice, the damage is based on your P. Atk. Power 3773.Ignores Shield Defense.Ignores 10% of the target's defense.",
         "balance": {
-            "mpCost": 88,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 88,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_wild_charge",
         "vfxGap": false,
@@ -20431,9 +20102,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "grandVanguard"
+                "grandVanguard"
         ]
-    },
+},
     "wide_threatening_swing": {
         "id": "wide_threatening_swing",
         "name": "Wide Threatening Swing",
@@ -20450,10 +20121,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 3000,
         "desc": "<Spear skill>Attacks nearby targets. Power 6198.Ignores Shield Defense.Ignores 10% of the target's defense.",
         "balance": {
-            "mpCost": 68,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 68,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_wide_threatening_swing",
         "vfxGap": false,
@@ -20461,9 +20132,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "grandVanguard"
+                "grandVanguard"
         ]
-    },
+},
     "giant_s_stomp": {
         "id": "giant_s_stomp",
         "name": "Giant's Stomp",
@@ -20480,10 +20151,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 60000,
         "desc": "Giant's Stomp",
         "balance": {
-            "mpCost": 120,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 120,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_giant_s_stomp",
         "vfxGap": false,
@@ -20491,9 +20162,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "grandVanguard"
+                "grandVanguard"
         ]
-    },
+},
     "wild_growl": {
         "id": "wild_growl",
         "name": "Wild Growl",
@@ -20510,10 +20181,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 45000,
         "desc": "<Suppression skill>With a certain chance, suppresses nearby enemies for 3 sec.Suppression: Speed -70%",
         "balance": {
-            "mpCost": 90,
-            "pwr": 7,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 90,
+                "pwr": 7,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_wild_growl",
         "vfxGap": false,
@@ -20521,9 +20192,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 78,
         "classes": [
-            "grandVanguard"
+                "grandVanguard"
         ]
-    },
+},
     "threatening_swing": {
         "id": "threatening_swing",
         "name": "Threatening Swing",
@@ -20540,10 +20211,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 3000,
         "desc": "<Spear skill>Attacks nearby targets. Power 1136.Ignores Shield Defense.",
         "balance": {
-            "mpCost": 38,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 38,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_threatening_swing",
         "vfxGap": false,
@@ -20551,9 +20222,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "vanguardRider"
+                "vanguardRider"
         ]
-    },
+},
     "wild_assault": {
         "id": "wild_assault",
         "name": "Wild Assault",
@@ -20570,10 +20241,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Wild Assault",
         "balance": {
-            "mpCost": 100,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 100,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_wild_assault",
         "vfxGap": false,
@@ -20581,9 +20252,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "vanguardRider"
+                "vanguardRider"
         ]
-    },
+},
     "machine_assistance": {
         "id": "machine_assistance",
         "name": "Machine Assistance",
@@ -20600,10 +20271,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Machine Assistance",
         "balance": {
-            "mpCost": 50,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 50,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_machine_assistance",
         "vfxGap": false,
@@ -20611,10 +20282,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 50,
         "classes": [
-            "warsmith",
-            "shineMakerS2"
+                "warsmith",
+                "shineMakerS2"
         ]
-    },
+},
     "golem_reinforcement": {
         "id": "golem_reinforcement",
         "name": "Golem Reinforcement",
@@ -20631,10 +20302,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "The effect is applied on servitors.P. Def. +8%Max HP +5%",
         "balance": {
-            "mpCost": 35,
-            "pwr": 1,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 35,
+                "pwr": 1,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_golem_reinforcement",
         "vfxGap": false,
@@ -20642,10 +20313,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "warsmith",
-            "shineMakerS2"
+                "warsmith",
+                "shineMakerS2"
         ]
-    },
+},
     "repair_golem": {
         "id": "repair_golem",
         "name": "Repair Golem",
@@ -20662,10 +20333,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 2000,
         "desc": "Repairs the summoned golem to recover the golem's HP by 8%.",
         "balance": {
-            "mpCost": 61,
-            "pwr": 1,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 61,
+                "pwr": 1,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_repair_golem",
         "vfxGap": false,
@@ -20673,10 +20344,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "warsmith",
-            "shineMakerS2"
+                "warsmith",
+                "shineMakerS2"
         ]
-    },
+},
     "strengthen_golem": {
         "id": "strengthen_golem",
         "name": "Strengthen Golem",
@@ -20693,10 +20364,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "The effect is applied on servitors.P. Atk. +8%Atk. Spd. +3%",
         "balance": {
-            "mpCost": 24,
-            "pwr": 1,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 24,
+                "pwr": 1,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_strengthen_golem",
         "vfxGap": false,
@@ -20704,10 +20375,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 43,
         "classes": [
-            "warsmith",
-            "shineMakerS2"
+                "warsmith",
+                "shineMakerS2"
         ]
-    },
+},
     "spirit_weakness": {
         "id": "spirit_weakness",
         "name": "Spirit Weakness",
@@ -20724,10 +20395,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "Spirit Weakness",
         "balance": {
-            "mpCost": 120,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 120,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_spirit_weakness",
         "vfxGap": false,
@@ -20735,9 +20406,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "soulHound"
+                "soulHound"
         ]
-    },
+},
     "summon_siege_golem": {
         "id": "summon_siege_golem",
         "name": "Summon Siege Golem",
@@ -20754,10 +20425,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 5000,
         "desc": "Summon Siege Golem",
         "balance": {
-            "mpCost": 530,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 530,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_summon_siege_golem",
         "vfxGap": false,
@@ -20765,10 +20436,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 49,
         "classes": [
-            "warsmith",
-            "shineMakerS2"
+                "warsmith",
+                "shineMakerS2"
         ]
-    },
+},
     "summon_wild_hog_cannon": {
         "id": "summon_wild_hog_cannon",
         "name": "Summon Wild Hog Cannon",
@@ -20785,10 +20456,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 5000,
         "desc": "Summon Wild Hog Cannon",
         "balance": {
-            "mpCost": 530,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 530,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_summon_wild_hog_cannon",
         "vfxGap": false,
@@ -20796,10 +20467,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 58,
         "classes": [
-            "warsmith",
-            "shineMakerS2"
+                "warsmith",
+                "shineMakerS2"
         ]
-    },
+},
     "soul_wild_magic": {
         "id": "soul_wild_magic",
         "name": "Soul Wild Magic",
@@ -20816,10 +20487,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Soul Wild Magic",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_soul_wild_magic",
         "vfxGap": false,
@@ -20827,20 +20498,20 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "trooper",
-            "berserker",
-            "doombringer",
-            "soulFinder",
-            "soulBreakerKamael",
-            "soulHound",
-            "warder",
-            "soulRanger",
-            "trickster",
-            "marauder",
-            "ertheiaWarrior",
-            "eviscerator"
+                "trooper",
+                "berserker",
+                "doombringer",
+                "soulFinder",
+                "soulBreakerKamael",
+                "soulHound",
+                "warder",
+                "soulRanger",
+                "trickster",
+                "marauder",
+                "ertheiaWarrior",
+                "eviscerator"
         ]
-    },
+},
     "rapier_slash": {
         "id": "rapier_slash",
         "name": "Rapier Slash",
@@ -20857,10 +20528,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 25000,
         "desc": "Swings a rapier.Attacks 2 times ignoring 20% of P. Def. Power 5500.With a 50% chance, triggers Sword Strike (additional hit) (M. damage). Power 152.If the target has Detect Vulnerability (Spirit Weakness) applied, triggers Lightning (additional hit).PvP: Attacks up to 6 targets.PvE: Attacks up to 6 targets.Sword Strike (additional hit)PvP: Decreases Paralysis Resistance and P./ M. Def.PvE: Decreases P./ M. Def.Lightning (additional hit)PvP: Applies Paralysis, decreases P./ M. Def.PvE: Decreases P./ M. Def.",
         "balance": {
-            "mpCost": 100,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 100,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_rapier_slash",
         "vfxGap": false,
@@ -20868,9 +20539,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "soulHound"
+                "soulHound"
         ]
-    },
+},
     "excess_charge": {
         "id": "excess_charge",
         "name": "Excess Charge",
@@ -20887,10 +20558,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "P. Atk. +30%Skill Critical Rate +10%Skill Critical Damage +10%Skill Power +5%Paralysis Atk. Rate +20%Paralysis Resistance +20%Enables Leopold.",
         "balance": {
-            "mpCost": 100,
-            "pwr": 3,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 100,
+                "pwr": 3,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_excess_charge",
         "vfxGap": false,
@@ -20898,9 +20569,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "soulHound"
+                "soulHound"
         ]
-    },
+},
     "soul_haste": {
         "id": "soul_haste",
         "name": "Soul Haste",
@@ -20917,10 +20588,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Soul Haste",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_soul_haste",
         "vfxGap": false,
@@ -20928,20 +20599,20 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "trooper",
-            "berserker",
-            "doombringer",
-            "soulFinder",
-            "soulBreakerKamael",
-            "soulHound",
-            "warder",
-            "soulRanger",
-            "trickster",
-            "marauder",
-            "ertheiaWarrior",
-            "eviscerator"
+                "trooper",
+                "berserker",
+                "doombringer",
+                "soulFinder",
+                "soulBreakerKamael",
+                "soulHound",
+                "warder",
+                "soulRanger",
+                "trickster",
+                "marauder",
+                "ertheiaWarrior",
+                "eviscerator"
         ]
-    },
+},
     "flash_dash": {
         "id": "flash_dash",
         "name": "Flash Dash",
@@ -20958,10 +20629,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 5000,
         "desc": "<Rush skill>Rushes to the target.Makes 1 attack ignoring 10% of P. Def. Power 6013.With a 30% chance, triggers Lightning (additional hit) (M. damage). Power 78.Lightning (additional hit)PvP: Applies Paralysis, decreases P./ M. Def.PvE: Decreases P./ M. Def.",
         "balance": {
-            "mpCost": 72,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 72,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_flash_dash",
         "vfxGap": false,
@@ -20969,10 +20640,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "soulBreakerKamael",
-            "soulHound"
+                "soulBreakerKamael",
+                "soulHound"
         ]
-    },
+},
     "soul_magic_barrier": {
         "id": "soul_magic_barrier",
         "name": "Soul Magic Barrier",
@@ -20989,10 +20660,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Soul Magic Barrier",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_soul_magic_barrier",
         "vfxGap": false,
@@ -21000,20 +20671,20 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "trooper",
-            "berserker",
-            "doombringer",
-            "soulFinder",
-            "soulBreakerKamael",
-            "soulHound",
-            "warder",
-            "soulRanger",
-            "trickster",
-            "marauder",
-            "ertheiaWarrior",
-            "eviscerator"
+                "trooper",
+                "berserker",
+                "doombringer",
+                "soulFinder",
+                "soulBreakerKamael",
+                "soulHound",
+                "warder",
+                "soulRanger",
+                "trickster",
+                "marauder",
+                "ertheiaWarrior",
+                "eviscerator"
         ]
-    },
+},
     "soul_berserker_spirit": {
         "id": "soul_berserker_spirit",
         "name": "Soul Berserker Spirit",
@@ -21030,10 +20701,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Soul Berserker Spirit",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_soul_berserker_spirit",
         "vfxGap": false,
@@ -21041,20 +20712,20 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "trooper",
-            "berserker",
-            "doombringer",
-            "soulFinder",
-            "soulBreakerKamael",
-            "soulHound",
-            "warder",
-            "soulRanger",
-            "trickster",
-            "marauder",
-            "ertheiaWarrior",
-            "eviscerator"
+                "trooper",
+                "berserker",
+                "doombringer",
+                "soulFinder",
+                "soulBreakerKamael",
+                "soulHound",
+                "warder",
+                "soulRanger",
+                "trickster",
+                "marauder",
+                "ertheiaWarrior",
+                "eviscerator"
         ]
-    },
+},
     "crescent_swing": {
         "id": "crescent_swing",
         "name": "Crescent Swing",
@@ -21071,10 +20742,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 12000,
         "desc": "Swings a rapier in a half-circle.Makes 1 attack ignoring 15% of P. Def. Power 4820.With a 30% chance, triggers Sword Strike (additional hit) (M. damage). Power 100.PvP: Attacks up to 4 targets.PvE: Attacks up to 4 targets.Sword Strike (additional hit)PvP: Decreases Paralysis Resistance and P./ M. Def.PvE: Decreases P./ M. Def.",
         "balance": {
-            "mpCost": 91,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 91,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_crescent_swing",
         "vfxGap": false,
@@ -21082,9 +20753,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "soulHound"
+                "soulHound"
         ]
-    },
+},
     "through_strike": {
         "id": "through_strike",
         "name": "Through Strike",
@@ -21101,10 +20772,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Makes a rapier attack.Makes 1 attack ignoring 15% of P. Def. Power 4715.With a 30% chance, triggers Sword Strike (additional hit) (M. damage). Power 120.Sword Strike (additional hit)PvP: Decreases Paralysis Resistance and P./ M. Def.PvP: Decreases P./ M. Def.",
         "balance": {
-            "mpCost": 84,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 84,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_through_strike",
         "vfxGap": false,
@@ -21112,11 +20783,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 80,
         "classes": [
-            "soulFinder",
-            "soulBreakerKamael",
-            "soulHound"
+                "soulFinder",
+                "soulBreakerKamael",
+                "soulHound"
         ]
-    },
+},
     "soul_wind_walk": {
         "id": "soul_wind_walk",
         "name": "Soul Wind Walk",
@@ -21133,10 +20804,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Soul Wind Walk",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_soul_wind_walk",
         "vfxGap": false,
@@ -21144,16 +20815,16 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "trooper",
-            "doombringer",
-            "soulFinder",
-            "soulHound",
-            "warder",
-            "trickster",
-            "marauder",
-            "eviscerator"
+                "trooper",
+                "doombringer",
+                "soulFinder",
+                "soulHound",
+                "warder",
+                "trickster",
+                "marauder",
+                "eviscerator"
         ]
-    },
+},
     "soul_acumen": {
         "id": "soul_acumen",
         "name": "Soul Acumen",
@@ -21170,10 +20841,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Soul Acumen",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_soul_acumen",
         "vfxGap": false,
@@ -21181,20 +20852,20 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "trooper",
-            "berserker",
-            "doombringer",
-            "soulFinder",
-            "soulBreakerKamael",
-            "soulHound",
-            "warder",
-            "soulRanger",
-            "trickster",
-            "marauder",
-            "ertheiaWarrior",
-            "eviscerator"
+                "trooper",
+                "berserker",
+                "doombringer",
+                "soulFinder",
+                "soulBreakerKamael",
+                "soulHound",
+                "warder",
+                "soulRanger",
+                "trickster",
+                "marauder",
+                "ertheiaWarrior",
+                "eviscerator"
         ]
-    },
+},
     "light_soul_connection": {
         "id": "light_soul_connection",
         "name": "Light Soul Connection",
@@ -21211,10 +20882,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Light Soul Connection",
         "balance": {
-            "mpCost": 50,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 50,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_light_soul_connection",
         "vfxGap": false,
@@ -21222,12 +20893,12 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "doombringer",
-            "soulHound",
-            "trickster",
-            "eviscerator"
+                "doombringer",
+                "soulHound",
+                "trickster",
+                "eviscerator"
         ]
-    },
+},
     "shadow_soul_connection": {
         "id": "shadow_soul_connection",
         "name": "Shadow Soul Connection",
@@ -21244,10 +20915,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Shadow Soul Connection",
         "balance": {
-            "mpCost": 50,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 50,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_shadow_soul_connection",
         "vfxGap": false,
@@ -21255,12 +20926,12 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "doombringer",
-            "soulHound",
-            "trickster",
-            "eviscerator"
+                "doombringer",
+                "soulHound",
+                "trickster",
+                "eviscerator"
         ]
-    },
+},
     "chain_lightning": {
         "id": "chain_lightning",
         "name": "Chain Lightning",
@@ -21277,10 +20948,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 8000,
         "desc": "Strikes the target with intertwining lightnings.Incessantly attacks the target ignoring 15% of P. Def. Power 5060.With a 40% chance, triggers Lightning (additional hit) (M. damage). Power 152.PvP: Attacks up to 4 targets.PvE: Attacks up to 4 targets.Lightning (additional hit)PvP: Applies Paralysis, decreases P./ M. Def.PvE: Decreases P./ M. Def.",
         "balance": {
-            "mpCost": 100,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 100,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_chain_lightning",
         "vfxGap": false,
@@ -21288,9 +20959,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "soulHound"
+                "soulHound"
         ]
-    },
+},
     "leopold": {
         "id": "leopold",
         "name": "Leopold",
@@ -21307,10 +20978,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 45000,
         "desc": "Leopold",
         "balance": {
-            "mpCost": 400,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 400,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_leopold",
         "vfxGap": false,
@@ -21318,9 +20989,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "soulHound"
+                "soulHound"
         ]
-    },
+},
     "resonance_shield": {
         "id": "resonance_shield",
         "name": "Resonance Shield",
@@ -21337,10 +21008,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 300000,
         "desc": "Resonance Shield",
         "balance": {
-            "mpCost": 125,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 125,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_resonance_shield",
         "vfxGap": false,
@@ -21348,9 +21019,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "soulHound"
+                "soulHound"
         ]
-    },
+},
     "mount_griffin": {
         "id": "mount_griffin",
         "name": "Mount Griffin",
@@ -21367,23 +21038,21 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Mount Griffin",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_mount_griffin",
         "vfxGap": false,
         "sfxId": "sfx_action",
         "sfxGap": false,
         "minLevel": 76,
-        "classes": [
-            "doombringer",
-            "soulHound",
-            "trickster",
-            "eviscerator"
-        ]
-    },
+        "classes": [],
+        "availableTo": [],
+        "disabled": true,
+        "removalReason": "cosmetic_mount_purge"
+},
     "soul_reinforcement": {
         "id": "soul_reinforcement",
         "name": "Soul Reinforcement",
@@ -21400,10 +21069,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Strengthens yourself with the power of your soul.Max HP +30%P. Atk. +1500PvE damage bonus +20%",
         "balance": {
-            "mpCost": 50,
-            "pwr": 3,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 50,
+                "pwr": 3,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_soul_reinforcement",
         "vfxGap": false,
@@ -21411,10 +21080,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 80,
         "classes": [
-            "soulBreakerKamael",
-            "soulHound"
+                "soulBreakerKamael",
+                "soulHound"
         ]
-    },
+},
     "collect_light_souls": {
         "id": "collect_light_souls",
         "name": "Collect Light Souls",
@@ -21431,10 +21100,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 900000,
         "desc": "Collect Light Souls",
         "balance": {
-            "mpCost": 50,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 50,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_collect_light_souls",
         "vfxGap": false,
@@ -21442,16 +21111,16 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "berserker",
-            "doombringer",
-            "soulBreakerKamael",
-            "soulHound",
-            "soulRanger",
-            "trickster",
-            "ertheiaWarrior",
-            "eviscerator"
+                "berserker",
+                "doombringer",
+                "soulBreakerKamael",
+                "soulHound",
+                "soulRanger",
+                "trickster",
+                "ertheiaWarrior",
+                "eviscerator"
         ]
-    },
+},
     "soul_blade": {
         "id": "soul_blade",
         "name": "Soul Blade",
@@ -21468,10 +21137,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Soul Blade",
         "balance": {
-            "mpCost": 120,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 120,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_soul_blade",
         "vfxGap": false,
@@ -21479,9 +21148,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "soulHound"
+                "soulHound"
         ]
-    },
+},
     "collect_shadow_souls": {
         "id": "collect_shadow_souls",
         "name": "Collect Shadow Souls",
@@ -21498,10 +21167,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 900000,
         "desc": "Collect Shadow Souls",
         "balance": {
-            "mpCost": 50,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 50,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_collect_shadow_souls",
         "vfxGap": false,
@@ -21509,16 +21178,16 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "berserker",
-            "doombringer",
-            "soulBreakerKamael",
-            "soulHound",
-            "soulRanger",
-            "trickster",
-            "ertheiaWarrior",
-            "eviscerator"
+                "berserker",
+                "doombringer",
+                "soulBreakerKamael",
+                "soulHound",
+                "soulRanger",
+                "trickster",
+                "ertheiaWarrior",
+                "eviscerator"
         ]
-    },
+},
     "fragarach": {
         "id": "fragarach",
         "name": "Fragarach",
@@ -21535,10 +21204,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Fragarach",
         "balance": {
-            "mpCost": 100,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 100,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_fragarach",
         "vfxGap": false,
@@ -21546,9 +21215,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "soulHound"
+                "soulHound"
         ]
-    },
+},
     "way_back": {
         "id": "way_back",
         "name": "Way Back",
@@ -21565,10 +21234,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "Way Back",
         "balance": {
-            "mpCost": 100,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 100,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_way_back",
         "vfxGap": false,
@@ -21576,9 +21245,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 80,
         "classes": [
-            "soulHound"
+                "soulHound"
         ]
-    },
+},
     "enuma_elish": {
         "id": "enuma_elish",
         "name": "Enuma Elish",
@@ -21595,10 +21264,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Enuma Elish's energy drives you forward.Attacks the target and nearby enemies. Power 5077.Ignores Shield Defense.Ignores 15% of the target's defense.PvP: Attacks up to 3 targets.PvE: Attacks up to 3 targets.",
         "balance": {
-            "mpCost": 59,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 59,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_enuma_elish",
         "vfxGap": false,
@@ -21606,12 +21275,12 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 80,
         "classes": [
-            "berserker",
-            "doombringer",
-            "ertheiaWarrior",
-            "eviscerator"
+                "berserker",
+                "doombringer",
+                "ertheiaWarrior",
+                "eviscerator"
         ]
-    },
+},
     "soul_mark": {
         "id": "soul_mark",
         "name": "Soul Mark",
@@ -21628,10 +21297,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 40000,
         "desc": "Swings your ancient sword to attack the enemy. Applies Soul Stamp on the target blocking their P. skills and Drain abilities.Attacks the target and nearby enemies. Power 6072.Ignores Shield Defense.Ignores 15% of the target's defense.Soul StampHP absorption rate -20%MP absorption rate -20%Duration: 7 sec.P. Def. -30%Duration: 7 sec.PvP: Attacks up to 7 targets.PvE: Attacks up to 7 targets.",
         "balance": {
-            "mpCost": 86,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 86,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_soul_mark",
         "vfxGap": false,
@@ -21639,10 +21308,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "doombringer",
-            "eviscerator"
+                "doombringer",
+                "eviscerator"
         ]
-    },
+},
     "rush_impact": {
         "id": "rush_impact",
         "name": "Rush Impact",
@@ -21659,10 +21328,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 3000,
         "desc": "<Rush/ Shock skill>Charges at the target and nearby enemies attacking them. Power 2800.With a certain chance, stuns for 2 sec.In PvP, interrupts the target's skill casting with a 2% chance.Can be used if the distance to the target is more than 100.PvP: Attacks up to 3 targets.PvE: Attacks up to 3 targets.Note!When used uninterrupted for 3 sec., inflicts the disability effect.When using the skill while the disability is active:Decreases your MP and MP Drain when hit.",
         "balance": {
-            "mpCost": 45,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 45,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_rush_impact",
         "vfxGap": false,
@@ -21670,12 +21339,12 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 80,
         "classes": [
-            "berserker",
-            "doombringer",
-            "ertheiaWarrior",
-            "eviscerator"
+                "berserker",
+                "doombringer",
+                "ertheiaWarrior",
+                "eviscerator"
         ]
-    },
+},
     "soul_guard": {
         "id": "soul_guard",
         "name": "Soul Guard",
@@ -21692,10 +21361,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 120000,
         "desc": "Soul Guard",
         "balance": {
-            "mpCost": 100,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 100,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_soul_guard",
         "vfxGap": false,
@@ -21703,14 +21372,14 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "trooper",
-            "berserker",
-            "doombringer",
-            "marauder",
-            "ertheiaWarrior",
-            "eviscerator"
+                "trooper",
+                "berserker",
+                "doombringer",
+                "marauder",
+                "ertheiaWarrior",
+                "eviscerator"
         ]
-    },
+},
     "soul_impulse": {
         "id": "soul_impulse",
         "name": "Soul Impulse",
@@ -21727,10 +21396,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 7000,
         "desc": "Deals massive damage with the soul power.Attacks the target. Power 8017.Ignores Shield Defense.Ignores 15% of the target's defense.",
         "balance": {
-            "mpCost": 61,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 61,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_soul_impulse",
         "vfxGap": false,
@@ -21738,12 +21407,12 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "berserker",
-            "doombringer",
-            "ertheiaWarrior",
-            "eviscerator"
+                "berserker",
+                "doombringer",
+                "ertheiaWarrior",
+                "eviscerator"
         ]
-    },
+},
     "soul_smash": {
         "id": "soul_smash",
         "name": "Soul Smash",
@@ -21760,10 +21429,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Crushes enemies with the soul power.Attacks the target twice. Power 5694.Ignores Shield Defense.Ignores 15% of the target's defense.",
         "balance": {
-            "mpCost": 55,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 55,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_soul_smash",
         "vfxGap": false,
@@ -21771,14 +21440,14 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "trooper",
-            "berserker",
-            "doombringer",
-            "marauder",
-            "ertheiaWarrior",
-            "eviscerator"
+                "trooper",
+                "berserker",
+                "doombringer",
+                "marauder",
+                "ertheiaWarrior",
+                "eviscerator"
         ]
-    },
+},
     "increase_power": {
         "id": "increase_power",
         "name": "Increase Power",
@@ -21795,10 +21464,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Unravels potential and increases M. Atk.P. Atk. Shock Atk. Rate +30%",
         "balance": {
-            "mpCost": 45,
-            "pwr": 3,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 45,
+                "pwr": 3,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_increase_power",
         "vfxGap": false,
@@ -21806,14 +21475,14 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "trooper",
-            "berserker",
-            "doombringer",
-            "marauder",
-            "ertheiaWarrior",
-            "eviscerator"
+                "trooper",
+                "berserker",
+                "doombringer",
+                "marauder",
+                "ertheiaWarrior",
+                "eviscerator"
         ]
-    },
+},
     "soul_prison": {
         "id": "soul_prison",
         "name": "Soul Prison",
@@ -21830,10 +21499,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 60000,
         "desc": "Soul Prison",
         "balance": {
-            "mpCost": 85,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 85,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_soul_prison",
         "vfxGap": false,
@@ -21841,10 +21510,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "doombringer",
-            "eviscerator"
+                "doombringer",
+                "eviscerator"
         ]
-    },
+},
     "magic_break": {
         "id": "magic_break",
         "name": "Magic Break",
@@ -21861,10 +21530,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 2000,
         "desc": "Weakens the target's magic abilities.M. Atk. -23%",
         "balance": {
-            "mpCost": 40,
-            "pwr": 2,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 40,
+                "pwr": 2,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_magic_break",
         "vfxGap": false,
@@ -21872,10 +21541,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "doombringer",
-            "eviscerator"
+                "doombringer",
+                "eviscerator"
         ]
-    },
+},
     "soul_weapon": {
         "id": "soul_weapon",
         "name": "Soul Weapon",
@@ -21892,10 +21561,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Soul Weapon",
         "balance": {
-            "mpCost": 75,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 75,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_soul_weapon",
         "vfxGap": false,
@@ -21903,10 +21572,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "doombringer",
-            "eviscerator"
+                "doombringer",
+                "eviscerator"
         ]
-    },
+},
     "overwhelming_power": {
         "id": "overwhelming_power",
         "name": "Overwhelming Power",
@@ -21923,10 +21592,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Awakens Kamael's true powers.P. Atk. +35%P. Atk. +300Atk. Spd. +30%P. Skill Critical Rate +30%P. Skill Critical Damage +30%P. Skill Power +15%Max HP +20%(Momentarily recovers bonus HP.)Shock Atk. Rate +20%Pull Atk. Rate +20%On attack, deals bonus damage equal to 30% of your combat power, added to your damage limit.With a 2% chance, applies Overwhelming Force on attack.Overwhelming ForceP. Skill Critical Rate +20%P. Skill Critical Damage +20%Received Skill Critical Damage -50Speed +20On using Soul Smash/ Soul Impulse, triggers an additional attack.Duration: 10 sec.Trigger cooldown: 11 sec.The following skills are enhanced to their Force versions:Soul Smash and Soul Impulse- Increases power.- Bonus damage to barriers +50%Soul Prison- Increases power.- Increases Pull Atk. Rate.- Enhances the PvP debuff.- Increases the number of targets in PvE.",
         "balance": {
-            "mpCost": 100,
-            "pwr": 4,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 100,
+                "pwr": 4,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_overwhelming_power",
         "vfxGap": false,
@@ -21934,10 +21603,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "doombringer",
-            "eviscerator"
+                "doombringer",
+                "eviscerator"
         ]
-    },
+},
     "kamael_symbol": {
         "id": "kamael_symbol",
         "name": "Kamael Symbol",
@@ -21954,10 +21623,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 120000,
         "desc": "Kamael Symbol",
         "balance": {
-            "mpCost": 41,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 41,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_kamael_symbol",
         "vfxGap": false,
@@ -21965,10 +21634,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "doombringer",
-            "eviscerator"
+                "doombringer",
+                "eviscerator"
         ]
-    },
+},
     "powerful_rush": {
         "id": "powerful_rush",
         "name": "Powerful Rush",
@@ -21985,10 +21654,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Powerful Rush",
         "balance": {
-            "mpCost": 65,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 65,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_powerful_rush",
         "vfxGap": false,
@@ -21996,10 +21665,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "doombringer",
-            "eviscerator"
+                "doombringer",
+                "eviscerator"
         ]
-    },
+},
     "disarm": {
         "id": "disarm",
         "name": "Disarm",
@@ -22016,10 +21685,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 60000,
         "desc": "Disarms a hostile character for 2 sec.The skill can only be used on a mutually hostile character.",
         "balance": {
-            "mpCost": 50,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 50,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_disarm",
         "vfxGap": false,
@@ -22027,10 +21696,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "doombringer",
-            "eviscerator"
+                "doombringer",
+                "eviscerator"
         ]
-    },
+},
     "cunning_throw": {
         "id": "cunning_throw",
         "name": "Cunning Throw",
@@ -22047,10 +21716,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 3000,
         "desc": "Cunning Throw",
         "balance": {
-            "mpCost": 20,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 20,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_cunning_throw",
         "vfxGap": false,
@@ -22058,11 +21727,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 20,
         "classes": [
-            "warder",
-            "soulRanger",
-            "trickster"
+                "warder",
+                "soulRanger",
+                "trickster"
         ]
-    },
+},
     "cunning_shot": {
         "id": "cunning_shot",
         "name": "Cunning Shot",
@@ -22079,10 +21748,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 2000,
         "desc": "Attacks the enemy. Power 1000. With a 20% chance, makes 1 additional attack.Ignores 10% of the target's defense.",
         "balance": {
-            "mpCost": 10,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 10,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_cunning_shot",
         "vfxGap": false,
@@ -22090,11 +21759,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 20,
         "classes": [
-            "warder",
-            "soulRanger",
-            "trickster"
+                "warder",
+                "soulRanger",
+                "trickster"
         ]
-    },
+},
     "earth_tremor": {
         "id": "earth_tremor",
         "name": "Earth Tremor",
@@ -22111,10 +21780,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "A powerful earth strike.Attacks the target. Power 4907.Ignores Shield Defense.Ignores 10% of the target's defense.",
         "balance": {
-            "mpCost": 60,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 60,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_earth_tremor",
         "vfxGap": false,
@@ -22122,10 +21791,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "maestro",
-            "shinemaker"
+                "maestro",
+                "shinemaker"
         ]
-    },
+},
     "blacksmith_s_attack": {
         "id": "blacksmith_s_attack",
         "name": "Blacksmith's Attack",
@@ -22142,10 +21811,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 3000,
         "desc": "<Rush/ Shock skill>Rushes forward.Attacks the target. Power 4588.With a certain chance, stuns for 3 sec.Can be used if the distance to the target is more than 80.",
         "balance": {
-            "mpCost": 50,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 50,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_blacksmith_s_attack",
         "vfxGap": false,
@@ -22153,10 +21822,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "maestro",
-            "shinemaker"
+                "maestro",
+                "shinemaker"
         ]
-    },
+},
     "hammer_rumble": {
         "id": "hammer_rumble",
         "name": "Hammer Rumble",
@@ -22173,10 +21842,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 8000,
         "desc": "Attacks the target. Power 6049.Ignores Shield Defense.Ignores 20% of the target's defense.",
         "balance": {
-            "mpCost": 72,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 72,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_hammer_rumble",
         "vfxGap": false,
@@ -22184,10 +21853,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "maestro",
-            "shinemaker"
+                "maestro",
+                "shinemaker"
         ]
-    },
+},
     "prime_master": {
         "id": "prime_master",
         "name": "Prime Master",
@@ -22204,10 +21873,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 60000,
         "desc": "Prime Master",
         "balance": {
-            "mpCost": 200,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 200,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_prime_master",
         "vfxGap": false,
@@ -22215,10 +21884,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "maestro",
-            "shinemaker"
+                "maestro",
+                "shinemaker"
         ]
-    },
+},
     "mechanical_masterpiece": {
         "id": "mechanical_masterpiece",
         "name": "Mechanical Masterpiece",
@@ -22235,10 +21904,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Mechanical Masterpiece",
         "balance": {
-            "mpCost": 70,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 70,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_mechanical_masterpiece",
         "vfxGap": false,
@@ -22246,10 +21915,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "maestro",
-            "shinemaker"
+                "maestro",
+                "shinemaker"
         ]
-    },
+},
     "death_mark": {
         "id": "death_mark",
         "name": "Death Mark",
@@ -22266,10 +21935,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Death Mark",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_death_mark",
         "vfxGap": false,
@@ -22277,10 +21946,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 15,
         "classes": [
-            "kamaelSoldier",
-            "marauderBase"
+                "kamaelSoldier",
+                "marauderBase"
         ]
-    },
+},
     "might": {
         "id": "might",
         "name": "Might",
@@ -22297,10 +21966,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Might",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_might",
         "vfxGap": false,
@@ -22308,11 +21977,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 3,
         "classes": [
-            "highElfBase",
-            "kamaelSoldier",
-            "marauderBase"
+                "highElfBase",
+                "kamaelSoldier",
+                "marauderBase"
         ]
-    },
+},
     "expand_head_accessory_slots": {
         "id": "expand_head_accessory_slots",
         "name": "Expand Head Accessory Slots",
@@ -22329,10 +21998,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Expand Head Accessory Slots",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_expand_head_accessory_slots",
         "vfxGap": false,
@@ -22340,11 +22009,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 1,
         "classes": [
-            "highElfBase",
-            "kamaelSoldier",
-            "marauderBase"
+                "highElfBase",
+                "kamaelSoldier",
+                "marauderBase"
         ]
-    },
+},
     "kamael_s_dignity": {
         "id": "kamael_s_dignity",
         "name": "Kamael's Dignity",
@@ -22361,10 +22030,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Kamael's Dignity",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_kamael_s_dignity",
         "vfxGap": false,
@@ -22372,10 +22041,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 1,
         "classes": [
-            "kamaelSoldier",
-            "marauderBase"
+                "kamaelSoldier",
+                "marauderBase"
         ]
-    },
+},
     "expand_world_trade_l_coins": {
         "id": "expand_world_trade_l_coins",
         "name": "Expand World Trade (L-Coins)",
@@ -22392,10 +22061,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "World Trade sales slots (L-Coins) +1World Trade operations slots (L-Coins) +1",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_expand_world_trade_l_coins",
         "vfxGap": false,
@@ -22403,11 +22072,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 1,
         "classes": [
-            "highElfBase",
-            "kamaelSoldier",
-            "marauderBase"
+                "highElfBase",
+                "kamaelSoldier",
+                "marauderBase"
         ]
-    },
+},
     "expand_warehouse": {
         "id": "expand_warehouse",
         "name": "Expand Warehouse",
@@ -22424,10 +22093,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Increases the number of items that can be stored in private warehouses and freight.Slots: +6.",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_expand_warehouse",
         "vfxGap": false,
@@ -22435,11 +22104,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 1,
         "classes": [
-            "highElfBase",
-            "kamaelSoldier",
-            "marauderBase"
+                "highElfBase",
+                "kamaelSoldier",
+                "marauderBase"
         ]
-    },
+},
     "shield": {
         "id": "shield",
         "name": "Shield",
@@ -22456,10 +22125,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Shield",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_shield",
         "vfxGap": false,
@@ -22467,11 +22136,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 2,
         "classes": [
-            "highElfBase",
-            "kamaelSoldier",
-            "marauderBase"
+                "highElfBase",
+                "kamaelSoldier",
+                "marauderBase"
         ]
-    },
+},
     "soul_roar": {
         "id": "soul_roar",
         "name": "Soul Roar",
@@ -22488,10 +22157,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 120000,
         "desc": "Soul Roar",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_soul_roar",
         "vfxGap": false,
@@ -22499,12 +22168,12 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 28,
         "classes": [
-            "trooper",
-            "berserker",
-            "marauder",
-            "ertheiaWarrior"
+                "trooper",
+                "berserker",
+                "marauder",
+                "ertheiaWarrior"
         ]
-    },
+},
     "pride_of_kamael": {
         "id": "pride_of_kamael",
         "name": "Pride of Kamael",
@@ -22521,10 +22190,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Pride of Kamael",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_pride_of_kamael",
         "vfxGap": false,
@@ -22532,10 +22201,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 1,
         "classes": [
-            "kamaelSoldier",
-            "marauderBase"
+                "kamaelSoldier",
+                "marauderBase"
         ]
-    },
+},
     "expand_inventory": {
         "id": "expand_inventory",
         "name": "Expand Inventory",
@@ -22552,10 +22221,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Increases the number of items you can carry.Slots: +10.",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_expand_inventory",
         "vfxGap": false,
@@ -22563,11 +22232,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 1,
         "classes": [
-            "highElfBase",
-            "kamaelSoldier",
-            "marauderBase"
+                "highElfBase",
+                "kamaelSoldier",
+                "marauderBase"
         ]
-    },
+},
     "magic_lamp": {
         "id": "magic_lamp",
         "name": "Magic Lamp",
@@ -22584,10 +22253,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Magic Lamp",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_magic_lamp",
         "vfxGap": false,
@@ -22595,11 +22264,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 1,
         "classes": [
-            "highElfBase",
-            "kamaelSoldier",
-            "marauderBase"
+                "highElfBase",
+                "kamaelSoldier",
+                "marauderBase"
         ]
-    },
+},
     "scorn": {
         "id": "scorn",
         "name": "Scorn",
@@ -22616,10 +22285,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 4000,
         "desc": "Provokes nearby monsters with 11,000 power.",
         "balance": {
-            "mpCost": 50,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 50,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_scorn",
         "vfxGap": false,
@@ -22627,10 +22296,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 43,
         "classes": [
-            "berserker",
-            "ertheiaWarrior"
+                "berserker",
+                "ertheiaWarrior"
         ]
-    },
+},
     "freezing_wound": {
         "id": "freezing_wound",
         "name": "Freezing Wound",
@@ -22647,10 +22316,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Uses spirit powers to attack.Power 120%.Duration: 3 sec.Atk. Spd. -200Casting Spd. -200Speed -50",
         "balance": {
-            "mpCost": 40,
-            "pwr": 120,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 40,
+                "pwr": 120,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_freezing_wound",
         "vfxGap": false,
@@ -22658,10 +22327,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "windSniper",
-            "stormBlaster"
+                "windSniper",
+                "stormBlaster"
         ]
-    },
+},
     "elemental_magic_barrier": {
         "id": "elemental_magic_barrier",
         "name": "Elemental Magic Barrier",
@@ -22678,10 +22347,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Elemental Magic Barrier",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_elemental_magic_barrier",
         "vfxGap": false,
@@ -22689,12 +22358,12 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "sylphGunner",
-            "sharpshooter",
-            "windSniper",
-            "stormBlaster"
+                "sylphGunner",
+                "sharpshooter",
+                "windSniper",
+                "stormBlaster"
         ]
-    },
+},
     "elemental_haste": {
         "id": "elemental_haste",
         "name": "Elemental Haste",
@@ -22711,10 +22380,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Elemental Haste",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_elemental_haste",
         "vfxGap": false,
@@ -22722,12 +22391,12 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "sylphGunner",
-            "sharpshooter",
-            "windSniper",
-            "stormBlaster"
+                "sylphGunner",
+                "sharpshooter",
+                "windSniper",
+                "stormBlaster"
         ]
-    },
+},
     "blessing_of_winds": {
         "id": "blessing_of_winds",
         "name": "Blessing of Winds",
@@ -22744,10 +22413,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 60000,
         "desc": "Blessing of Winds",
         "balance": {
-            "mpCost": 30,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 30,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_blessing_of_winds",
         "vfxGap": false,
@@ -22755,10 +22424,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "windSniper",
-            "stormBlaster"
+                "windSniper",
+                "stormBlaster"
         ]
-    },
+},
     "elemental_berserker_spirit": {
         "id": "elemental_berserker_spirit",
         "name": "Elemental Berserker Spirit",
@@ -22775,10 +22444,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Elemental Berserker Spirit",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_elemental_berserker_spirit",
         "vfxGap": false,
@@ -22786,12 +22455,12 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "sylphGunner",
-            "sharpshooter",
-            "windSniper",
-            "stormBlaster"
+                "sylphGunner",
+                "sharpshooter",
+                "windSniper",
+                "stormBlaster"
         ]
-    },
+},
     "elemental_wild_magic": {
         "id": "elemental_wild_magic",
         "name": "Elemental Wild Magic",
@@ -22808,10 +22477,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Elemental Wild Magic",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_elemental_wild_magic",
         "vfxGap": false,
@@ -22819,12 +22488,12 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "sylphGunner",
-            "sharpshooter",
-            "windSniper",
-            "stormBlaster"
+                "sylphGunner",
+                "sharpshooter",
+                "windSniper",
+                "stormBlaster"
         ]
-    },
+},
     "elemental_insight": {
         "id": "elemental_insight",
         "name": "Elemental Insight",
@@ -22841,10 +22510,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Elemental Insight",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_elemental_insight",
         "vfxGap": false,
@@ -22852,12 +22521,12 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "sylphGunner",
-            "sharpshooter",
-            "windSniper",
-            "stormBlaster"
+                "sylphGunner",
+                "sharpshooter",
+                "windSniper",
+                "stormBlaster"
         ]
-    },
+},
     "dual_blow": {
         "id": "dual_blow",
         "name": "Dual Blow",
@@ -22874,10 +22543,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "<Changing skill>Uses spirit powers in combat.Attacks the target twice. Power 1001.With a certain chance, recovers 1% MP on a ranged attack.(Trigger cooldown: 30 sec.)Trigger cooldown affects the following skills:- Stealthy Swiftness- Greater Wind Shot",
         "balance": {
-            "mpCost": 32,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 32,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_dual_blow",
         "vfxGap": false,
@@ -22885,12 +22554,12 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "sylphGunner",
-            "sharpshooter",
-            "windSniper",
-            "stormBlaster"
+                "sylphGunner",
+                "sharpshooter",
+                "windSniper",
+                "stormBlaster"
         ]
-    },
+},
     "fire_explosion": {
         "id": "fire_explosion",
         "name": "Fire Explosion",
@@ -22907,10 +22576,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 20000,
         "desc": "Fire Explosion",
         "balance": {
-            "mpCost": 84,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 84,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_fire_explosion",
         "vfxGap": false,
@@ -22918,10 +22587,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "windSniper",
-            "stormBlaster"
+                "windSniper",
+                "stormBlaster"
         ]
-    },
+},
     "pursuit": {
         "id": "pursuit",
         "name": "Pursuit",
@@ -22938,10 +22607,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 5000,
         "desc": "Charges to the target and attacks them. Power 1650. Applies Rush Jump on the caster.Ignores Shield Defense.Ignores 10% of the target's defense.Rush Jump (duration: 4 sec.)P. Atk. +300Atk. Spd. +120Speed +20P. Accuracy +10",
         "balance": {
-            "mpCost": 40,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 40,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_pursuit",
         "vfxGap": false,
@@ -22949,10 +22618,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "hatamoto",
-            "ronin"
+                "hatamoto",
+                "ronin"
         ]
-    },
+},
     "strike": {
         "id": "strike",
         "name": "Strike",
@@ -22969,10 +22638,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "Attacks the target and nearby enemies. Power 2731.Ignores Shield Defense.Ignores 15% of the target's defense.PvP: Attacks up to 2 targets.PvE: Attacks up to 2 targets.",
         "balance": {
-            "mpCost": 52,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 52,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_strike",
         "vfxGap": false,
@@ -22980,10 +22649,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 45,
         "classes": [
-            "ronin",
-            "samurai"
+                "ronin",
+                "samurai"
         ]
-    },
+},
     "atsumori": {
         "id": "atsumori",
         "name": "Atsumori",
@@ -23000,10 +22669,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 50000,
         "desc": "Atsumori",
         "balance": {
-            "mpCost": 40,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 40,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_atsumori",
         "vfxGap": false,
@@ -23011,10 +22680,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 70,
         "classes": [
-            "ronin",
-            "samurai"
+                "ronin",
+                "samurai"
         ]
-    },
+},
     "forest": {
         "id": "forest",
         "name": "Forest",
@@ -23031,10 +22700,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Forest",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_forest",
         "vfxGap": false,
@@ -23042,11 +22711,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "hatamoto",
-            "ronin",
-            "samurai"
+                "hatamoto",
+                "ronin",
+                "samurai"
         ]
-    },
+},
     "fire": {
         "id": "fire",
         "name": "Fire",
@@ -23063,10 +22732,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Fire",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_fire",
         "vfxGap": false,
@@ -23074,11 +22743,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "hatamoto",
-            "ronin",
-            "samurai"
+                "hatamoto",
+                "ronin",
+                "samurai"
         ]
-    },
+},
     "mountain": {
         "id": "mountain",
         "name": "Mountain",
@@ -23095,10 +22764,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Mountain",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_mountain",
         "vfxGap": false,
@@ -23106,11 +22775,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "hatamoto",
-            "ronin",
-            "samurai"
+                "hatamoto",
+                "ronin",
+                "samurai"
         ]
-    },
+},
     "elemental_care": {
         "id": "elemental_care",
         "name": "Elemental Care",
@@ -23127,10 +22796,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 15000,
         "desc": "Elemental Care",
         "balance": {
-            "mpCost": 83,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 83,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_elemental_care",
         "vfxGap": false,
@@ -23138,10 +22807,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 58,
         "classes": [
-            "windSniper",
-            "stormBlaster"
+                "windSniper",
+                "stormBlaster"
         ]
-    },
+},
     "wind": {
         "id": "wind",
         "name": "Wind",
@@ -23158,10 +22827,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Wind",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_wind",
         "vfxGap": false,
@@ -23169,11 +22838,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "hatamoto",
-            "ronin",
-            "samurai"
+                "hatamoto",
+                "ronin",
+                "samurai"
         ]
-    },
+},
     "single_flash": {
         "id": "single_flash",
         "name": "Single Flash",
@@ -23190,10 +22859,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Attacks the target. Power 985.Ignores Shield Defense.Ignores 15% of the target's defense.",
         "balance": {
-            "mpCost": 30,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 30,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_single_flash",
         "vfxGap": false,
@@ -23201,12 +22870,12 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "samuraiBase",
-            "hatamoto",
-            "ronin",
-            "samurai"
+                "samuraiBase",
+                "hatamoto",
+                "ronin",
+                "samurai"
         ]
-    },
+},
     "elemental_wind_walk": {
         "id": "elemental_wind_walk",
         "name": "Elemental Wind Walk",
@@ -23223,10 +22892,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Speed +20",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_elemental_wind_walk",
         "vfxGap": false,
@@ -23234,11 +22903,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 20,
         "classes": [
-            "sylphGunner",
-            "sharpshooter",
-            "stormBlaster"
+                "sylphGunner",
+                "sharpshooter",
+                "stormBlaster"
         ]
-    },
+},
     "greater_wind_shot": {
         "id": "greater_wind_shot",
         "name": "Greater Wind Shot",
@@ -23255,10 +22924,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "<Changing skill>The spirit power makes your attacks as swift as the wind.Attacks the target thrice. Power 5052.Ignores Shield Defense.Ignores 10% of the target's defense.With a certain chance, recovers 1% MP on a ranged attack.Trigger cooldown: 30 sec.Trigger cooldown affects the following skills:- Dual Blow- Triple Blow",
         "balance": {
-            "mpCost": 75,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 75,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_greater_wind_shot",
         "vfxGap": false,
@@ -23266,9 +22935,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "stormBlaster"
+                "stormBlaster"
         ]
-    },
+},
     "goring_charge": {
         "id": "goring_charge",
         "name": "Goring Charge",
@@ -23285,10 +22954,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 60000,
         "desc": "<Changing/ Knockdown skill>Shoots enemies with bullets enhanced by fearsome wind spirits.Distance < 700:Attacks the target and nearby enemies knocking them down. Power 7107.Ignores Shield Defense.Ignores 15% of the target's defense.PvP: Attacks up to 8 targets.PvE: Attacks up to 8 targets.Distance 700+:Attacks the target and enemies in the attack line knocking them down. Power 8440.Ignores Shield Defense.Ignores 20% of the target's defense.PvP: Attacks up to 5 targets.PvE: Attacks up to 5 targets.",
         "balance": {
-            "mpCost": 121,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 121,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_goring_charge",
         "vfxGap": false,
@@ -23296,9 +22965,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "stormBlaster"
+                "stormBlaster"
         ]
-    },
+},
     "frosty_sting": {
         "id": "frosty_sting",
         "name": "Frosty Sting",
@@ -23315,10 +22984,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 40000,
         "desc": "Frosty Sting",
         "balance": {
-            "mpCost": 120,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 120,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_frosty_sting",
         "vfxGap": false,
@@ -23326,9 +22995,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "stormBlaster"
+                "stormBlaster"
         ]
-    },
+},
     "stealthy_swiftness": {
         "id": "stealthy_swiftness",
         "name": "Stealthy Swiftness",
@@ -23345,10 +23014,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "<Changing skill>Strikes so swiftly that the target does not see you.Attacks the target thrice. Power 4971.Ignores Shield Defense.Ignores 10% of the target's defense.With a certain chance, recovers 1% MP on a ranged attack.(Trigger cooldown: 30 sec.)Trigger cooldown affects the following skills:- Dual Blow- Triple Blow",
         "balance": {
-            "mpCost": 110,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 110,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_stealthy_swiftness",
         "vfxGap": false,
@@ -23356,9 +23025,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "stormBlaster"
+                "stormBlaster"
         ]
-    },
+},
     "wild_dance": {
         "id": "wild_dance",
         "name": "Wild Dance",
@@ -23375,10 +23044,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 15000,
         "desc": "Wild Dance",
         "balance": {
-            "mpCost": 200,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 200,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_wild_dance",
         "vfxGap": false,
@@ -23386,9 +23055,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "stormBlaster"
+                "stormBlaster"
         ]
-    },
+},
     "extra_hit": {
         "id": "extra_hit",
         "name": "Extra Hit",
@@ -23405,10 +23074,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Extra Hit",
         "balance": {
-            "mpCost": 120,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 120,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_extra_hit",
         "vfxGap": false,
@@ -23416,9 +23085,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "stormBlaster"
+                "stormBlaster"
         ]
-    },
+},
     "mount_elemental_lyn_draco": {
         "id": "mount_elemental_lyn_draco",
         "name": "Mount Elemental Lyn Draco",
@@ -23435,20 +23104,21 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Mount Elemental Lyn Draco",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_mount_elemental_lyn_draco",
         "vfxGap": false,
         "sfxId": "sfx_action",
         "sfxGap": false,
         "minLevel": 76,
-        "classes": [
-            "stormBlaster"
-        ]
-    },
+        "classes": [],
+        "availableTo": [],
+        "disabled": true,
+        "removalReason": "cosmetic_mount_purge"
+},
     "elemental_change": {
         "id": "elemental_change",
         "name": "Elemental Change",
@@ -23465,10 +23135,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "Elemental Change",
         "balance": {
-            "mpCost": 100,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 100,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_elemental_change",
         "vfxGap": false,
@@ -23476,9 +23146,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "stormBlaster"
+                "stormBlaster"
         ]
-    },
+},
     "cunning_arrow": {
         "id": "cunning_arrow",
         "name": "Cunning Arrow",
@@ -23495,10 +23165,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 20000,
         "desc": "Attacks the target and nearby enemies. Power 5124.Ignores 10% of the target's defense.PvP: Attacks up to 4 targets.PvE: Attacks up to 4 targets.",
         "balance": {
-            "mpCost": 40,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 40,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_cunning_arrow",
         "vfxGap": false,
@@ -23506,9 +23176,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "trickster"
+                "trickster"
         ]
-    },
+},
     "dragon_strike": {
         "id": "dragon_strike",
         "name": "Dragon Strike",
@@ -23525,10 +23195,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 120000,
         "desc": "Dragon Strike",
         "balance": {
-            "mpCost": 400,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 400,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_dragon_strike",
         "vfxGap": false,
@@ -23536,9 +23206,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "stormBlaster"
+                "stormBlaster"
         ]
-    },
+},
     "soul_wound": {
         "id": "soul_wound",
         "name": "Soul Wound",
@@ -23555,10 +23225,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 15000,
         "desc": "Attacks the target and nearby enemies twice. Power 10,200. With a certain chance, applies Soul Rift.Ignores 15% of the target's defense.Soul Rift (duration: 12 sec.)P./ M. Atk. -4%P. Skill Critical Damage -2%P. Skill Power -1%Bow Resistance -10%PvP: Attacks up to 8 targets.PvE: Attacks up to 8 targets.",
         "balance": {
-            "mpCost": 30,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 30,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_soul_wound",
         "vfxGap": false,
@@ -23566,9 +23236,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "trickster"
+                "trickster"
         ]
-    },
+},
     "cunning_arrest": {
         "id": "cunning_arrest",
         "name": "Cunning Arrest",
@@ -23585,10 +23255,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "Applies Cunning Method (triggered in 6 sec.) on the enemy. Attacks the enemy twice. Power 10,179.Ignores 20% of the target's defense.PvP: Attacks up to 8 targets.PvE: Attacks up to 8 targets.Cunning Method (duration: 6 sec.)If the target is a character/ guardian/ servitor:When the debuff expires, attacks the enemies. Power 6000. With a certain chance, applies one of the following effects.- Pull (trigger rate: 40%)Pulls enemies.- Hold (trigger rate: 40%, duration: 3 sec.)Immobilizes the enemies.- Pull and Hold (trigger rate: 20%, duration: 3 sec.)Pulls and immobilizes the enemies.PvP: Attacks up to 20 targets.PvE: Attacks up to 20 targets.If the target is an NPC/ monster:The anomaly is not applied; triggers an explosion that deals damage to the enemies. Power 6000.",
         "balance": {
-            "mpCost": 100,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 100,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_cunning_arrest",
         "vfxGap": false,
@@ -23596,9 +23266,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "trickster"
+                "trickster"
         ]
-    },
+},
     "expert_advantage": {
         "id": "expert_advantage",
         "name": "Expert Advantage",
@@ -23615,10 +23285,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Max HP +25%P. Atk. +20%Atk. Spd. +100P. Skill Power +10%Bow damage bonus +5%<Skill upgrade>Cunning Shot → Cunning Shot: Advantage- Reduces casting time.- Reduces cooldown.- Increases number of attacks.",
         "balance": {
-            "mpCost": 150,
-            "pwr": 3,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 150,
+                "pwr": 3,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_expert_advantage",
         "vfxGap": false,
@@ -23626,9 +23296,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "trickster"
+                "trickster"
         ]
-    },
+},
     "expert_focus": {
         "id": "expert_focus",
         "name": "Expert Focus",
@@ -23645,10 +23315,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "P. Atk. +1100P. Accuracy +10P. Skill Critical Rate +15%P. Skill Critical Damage +10%PvE damage bonus +2%<Skill upgrade>Cunning Throw → Cunning Throw: Focus- Reduces casting time.- Adds the Shooting Domination effect.",
         "balance": {
-            "mpCost": 100,
-            "pwr": 2,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 100,
+                "pwr": 2,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_expert_focus",
         "vfxGap": false,
@@ -23656,9 +23326,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "trickster"
+                "trickster"
         ]
-    },
+},
     "force_unleashed": {
         "id": "force_unleashed",
         "name": "Force Unleashed",
@@ -23675,10 +23345,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 240000,
         "desc": "Absolute skillMax HP +1200; momentarily recovers HP.P./ M. Def. +1000Debuff/ Anomaly Resistance +30%Skill Evasion +20%Speed +30Max Speed +20Received P. Skill Critical Damage -20%",
         "balance": {
-            "mpCost": 100,
-            "pwr": 3,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 100,
+                "pwr": 3,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_force_unleashed",
         "vfxGap": false,
@@ -23686,9 +23356,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "trickster"
+                "trickster"
         ]
-    },
+},
     "expert_sense": {
         "id": "expert_sense",
         "name": "Expert Sense",
@@ -23705,10 +23375,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Expert Sense",
         "balance": {
-            "mpCost": 50,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 50,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_expert_sense",
         "vfxGap": false,
@@ -23716,9 +23386,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "trickster"
+                "trickster"
         ]
-    },
+},
     "ruse": {
         "id": "ruse",
         "name": "Ruse",
@@ -23735,10 +23405,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 45000,
         "desc": "Manual useSteps back from the target and applies Relocation on yourself.Auto-useAfter using a Rush skill, steps back from the target and applies Relocation on yourself.RelocationTrigger rate: 50%, duration: 3 sec.Skill range +20PvP damage bonus +1%",
         "balance": {
-            "mpCost": 15,
-            "pwr": 5,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 5,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_ruse",
         "vfxGap": false,
@@ -23746,9 +23416,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "trickster"
+                "trickster"
         ]
-    },
+},
     "ability_to_protect": {
         "id": "ability_to_protect",
         "name": "Ability to Protect",
@@ -23765,10 +23435,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Ability to Protect",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_ability_to_protect",
         "vfxGap": false,
@@ -23776,7 +23446,7 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 5,
         "classes": []
-    },
+},
     "ability_to_attack": {
         "id": "ability_to_attack",
         "name": "Ability to Attack",
@@ -23793,10 +23463,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Ability to Attack",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_ability_to_attack",
         "vfxGap": false,
@@ -23804,7 +23474,7 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 10,
         "classes": []
-    },
+},
     "elemental_spirit": {
         "id": "elemental_spirit",
         "name": "Elemental Spirit",
@@ -23821,10 +23491,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Elemental Spirit",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_elemental_spirit",
         "vfxGap": false,
@@ -23832,7 +23502,7 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 1,
         "classes": []
-    },
+},
     "elemental_connection": {
         "id": "elemental_connection",
         "name": "Elemental Connection",
@@ -23849,10 +23519,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Elemental Connection",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_elemental_connection",
         "vfxGap": false,
@@ -23860,7 +23530,7 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 1,
         "classes": []
-    },
+},
     "armor_mastery": {
         "id": "armor_mastery",
         "name": "Armor Mastery",
@@ -23877,10 +23547,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "P. Def. +10M. Def. +20MP Recovery Rate +10%",
         "balance": {
-            "mpCost": 15,
-            "pwr": 1,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 1,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_armor_mastery",
         "vfxGap": false,
@@ -23888,7 +23558,7 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 1,
         "classes": []
-    },
+},
     "weapon_mastery": {
         "id": "weapon_mastery",
         "name": "Weapon Mastery",
@@ -23905,10 +23575,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "P. Atk. +10",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_weapon_mastery",
         "vfxGap": false,
@@ -23916,7 +23586,7 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 1,
         "classes": []
-    },
+},
     "lord_knight": {
         "id": "lord_knight",
         "name": "Lord Knight",
@@ -23933,10 +23603,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Lord Knight",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_lord_knight",
         "vfxGap": false,
@@ -23944,9 +23614,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 1,
         "classes": [
-            "highElfBase"
+                "highElfBase"
         ]
-    },
+},
     "maneuver": {
         "id": "maneuver",
         "name": "Maneuver",
@@ -23963,10 +23633,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Attacks the enemy. Power 6200.Ignores Shield Defense.Ignores 10% of the target's defense.On using the skill, applies Rush Jump on the caster (duration: 4 sec.).P. Atk. +300Atk. Spd. +120Speed +20P. Accuracy +10",
         "balance": {
-            "mpCost": 40,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 40,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_maneuver",
         "vfxGap": false,
@@ -23974,9 +23644,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "samurai"
+                "samurai"
         ]
-    },
+},
     "destiny": {
         "id": "destiny",
         "name": "Destiny",
@@ -23993,10 +23663,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Destiny",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_destiny",
         "vfxGap": false,
@@ -24004,9 +23674,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 1,
         "classes": [
-            "highElfBase"
+                "highElfBase"
         ]
-    },
+},
     "take_life": {
         "id": "take_life",
         "name": "Take Life",
@@ -24023,10 +23693,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 5000,
         "desc": "Attacks the target twice. Power 7850.Ignores Shield Defense.Ignores 20% of the target's defense.",
         "balance": {
-            "mpCost": 50,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 50,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_take_life",
         "vfxGap": false,
@@ -24034,9 +23704,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "samurai"
+                "samurai"
         ]
-    },
+},
     "thousand_wounds": {
         "id": "thousand_wounds",
         "name": "Thousand Wounds",
@@ -24053,10 +23723,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 45000,
         "desc": "Attacks the enemies twice. Power 6240.Ignores Shield Defense.Ignores 15% of the target's defense.PvP: Attacks up to 8 targets.PvE: Attacks up to 8 targets.",
         "balance": {
-            "mpCost": 108,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 108,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_thousand_wounds",
         "vfxGap": false,
@@ -24064,9 +23734,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 78,
         "classes": [
-            "samurai"
+                "samurai"
         ]
-    },
+},
     "crippling_strike": {
         "id": "crippling_strike",
         "name": "Crippling Strike",
@@ -24083,10 +23753,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "PvP effectDeals P. damage to the target. Power 5740. With a certain chance, applies Weapon Break on the target.Ignores Shield Defense.Ignores 25% of the target's defense.Weapon BreakThe target's weapon loses all its properties and is automatically removed from its slot.Weapon repair fee: Spirit Ore (100 pcs.)(Does not include the armor repair fee.)The skill can only be used on a mutually hostile character.PvE effectAttacks the target twice dealing P. damage. Power 5740.Ignores Shield Defense.Ignores 25% of the target's defense.",
         "balance": {
-            "mpCost": 84,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 84,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_crippling_strike",
         "vfxGap": false,
@@ -24094,9 +23764,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 78,
         "classes": [
-            "samurai"
+                "samurai"
         ]
-    },
+},
     "twist": {
         "id": "twist",
         "name": "Twist",
@@ -24113,10 +23783,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 20000,
         "desc": "Attacks the enemies twice. Power 5101.Ignores Shield Defense.Ignores 10% of the target's defense.Applies Weakness Detection to the target.PvP: Attacks up to 2 targets.PvE: Attacks up to 2 targets.Weakness Detection's duration: 8 sec.Received P. Skill Critical Rate +20%Received P. Skill Critical Damage +15%Knockback/ Knockdown Resistance -30%On using Twist/ Full Twist:Disastrous Shriek's number of attacks +1",
         "balance": {
-            "mpCost": 84,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 84,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_twist",
         "vfxGap": false,
@@ -24124,9 +23794,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 77,
         "classes": [
-            "samurai"
+                "samurai"
         ]
-    },
+},
     "walk_in_monster_woods": {
         "id": "walk_in_monster_woods",
         "name": "Walk in Monster Woods",
@@ -24143,10 +23813,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 20000,
         "desc": "Attacks the enemies twice. Power 6480. Applies the Scratch effect.Ignores Shield Defense.Ignores 15% of the target's defense.Scratch's duration: 5 sec.HP absorption rate -10%PvP: Attacks up to 8 targets.PvE: Attacks up to 8 targets.If the target is a common monster, pulls it to you.",
         "balance": {
-            "mpCost": 96,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 96,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_walk_in_monster_woods",
         "vfxGap": false,
@@ -24154,9 +23824,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 78,
         "classes": [
-            "samurai"
+                "samurai"
         ]
-    },
+},
     "determination": {
         "id": "determination",
         "name": "Determination",
@@ -24173,10 +23843,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "P. Atk. +5%P. Skill Critical Rate +5%P. Def. +5000Debuff/ Anomaly Resistance +15%Enhanced Body 5%With a 20% chance, triggers Provoke resistance.When hit, applies Breath of Blood (trigger rate: 10%).(Breath of Blood is cancelled once Determination expires.)Breath of BloodDuration: 5 sec., cooldown: 10 sec.Recovers 10,000 HP every 2 sec.On attack, absorbs 30% of damage as HP.Absorption rate: 80%",
         "balance": {
-            "mpCost": 15,
-            "pwr": 1,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 1,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_determination",
         "vfxGap": false,
@@ -24184,9 +23854,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 78,
         "classes": [
-            "samurai"
+                "samurai"
         ]
-    },
+},
     "battojutsu": {
         "id": "battojutsu",
         "name": "Battojutsu",
@@ -24203,10 +23873,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Battojutsu",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_battojutsu",
         "vfxGap": false,
@@ -24214,9 +23884,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "samurai"
+                "samurai"
         ]
-    },
+},
     "omen": {
         "id": "omen",
         "name": "Omen",
@@ -24233,10 +23903,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 60000,
         "desc": "You feel the presence of an alien power.Nearby enemies' CP -35%Max HP +20% (momentarily recovers bonus HP)Max MP +20%P. Def. +10%M. Def. +10%P. Atk. +30%P. Skill Critical Rate +20%P. Skill Critical Damage +20%P. Skill damage bonus +10%P. Skill Power +5%Knockback/ Knockdown Atk. Rate +15%Debuff/ Anomaly Resistance +10%Enables the following skill:Battojutsu",
         "balance": {
-            "mpCost": 300,
-            "pwr": 4,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 300,
+                "pwr": 4,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_omen",
         "vfxGap": false,
@@ -24244,9 +23914,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "samurai"
+                "samurai"
         ]
-    },
+},
     "adamant_will": {
         "id": "adamant_will",
         "name": "Adamant Will",
@@ -24263,10 +23933,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "P. Atk. +20%P. Skill damage bonus +10%One-handed sword damage bonus +10%Skill upgradeSingle Flash → Double FlashWhen using Double Flash, deals an additional attack.Triple Strike (trigger rate: 40%)1 additional attack",
         "balance": {
-            "mpCost": 80,
-            "pwr": 2,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 80,
+                "pwr": 2,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_adamant_will",
         "vfxGap": false,
@@ -24274,9 +23944,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "samurai"
+                "samurai"
         ]
-    },
+},
     "summon_kagami": {
         "id": "summon_kagami",
         "name": "Summon Kagami",
@@ -24293,10 +23963,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Summon Kagami",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_summon_kagami",
         "vfxGap": false,
@@ -24304,9 +23974,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "samurai"
+                "samurai"
         ]
-    },
+},
     "fire_sphere": {
         "id": "fire_sphere",
         "name": "Fire Sphere",
@@ -24323,10 +23993,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Fire Sphere",
         "balance": {
-            "mpCost": 25,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 25,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_fire_sphere",
         "vfxGap": false,
@@ -24334,11 +24004,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 30,
         "classes": [
-            "elementWeaverS1",
-            "elementWeaverS2",
-            "elementWeaver"
+                "elementWeaverS1",
+                "elementWeaverS2",
+                "elementWeaver"
         ]
-    },
+},
     "ice_sphere": {
         "id": "ice_sphere",
         "name": "Ice Sphere",
@@ -24355,10 +24025,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Ice Sphere",
         "balance": {
-            "mpCost": 25,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 25,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_ice_sphere",
         "vfxGap": false,
@@ -24366,11 +24036,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 30,
         "classes": [
-            "elementWeaverS1",
-            "elementWeaverS2",
-            "elementWeaver"
+                "elementWeaverS1",
+                "elementWeaverS2",
+                "elementWeaver"
         ]
-    },
+},
     "sacral_strike": {
         "id": "sacral_strike",
         "name": "Sacral Strike",
@@ -24387,10 +24057,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Sacral Strike",
         "balance": {
-            "mpCost": 18,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 18,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_sacral_strike",
         "vfxGap": false,
@@ -24398,11 +24068,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 20,
         "classes": [
-            "lightTemplar",
-            "holyTemplar",
-            "divineTemplar"
+                "lightTemplar",
+                "holyTemplar",
+                "divineTemplar"
         ]
-    },
+},
     "bright_dance": {
         "id": "bright_dance",
         "name": "Bright Dance",
@@ -24419,10 +24089,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 15000,
         "desc": "Light magicA sphere containing the power of light attacks the enemy.The sphere has different forms based on attack range.Deals M. damage twice. Power 228.If the target is affected by Twining Plants, triggers Mistilteinn.MistilteinnDeals M. damage. Power 228.",
         "balance": {
-            "mpCost": 84,
-            "pwr": 228,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 84,
+                "pwr": 228,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_bright_dance",
         "vfxGap": false,
@@ -24430,10 +24100,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "elementWeaverS2",
-            "elementWeaver"
+                "elementWeaverS2",
+                "elementWeaver"
         ]
-    },
+},
     "florescence": {
         "id": "florescence",
         "name": "Florescence",
@@ -24450,10 +24120,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Nature magicDeals M. damage to the target. Power 120.Plants grow on the target.After 2 sec., Plants turn into Twining Plants.PlantsResistance to All Weapons -30%M. Def. -15%Twining PlantsResistance to All Weapons -60%M. Def. -30%Applies Hold with a certain chance.If the target held by Twining Plants is affected by light magic:Removes Twining Plants and applies Mistilteinn dealing bonus damage.MistilteinnDeals massive M. damage.For 2 sec., Resistance to All Weapons -60%, M. Def. -30%.",
         "balance": {
-            "mpCost": 93,
-            "pwr": 120,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 93,
+                "pwr": 120,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_florescence",
         "vfxGap": false,
@@ -24461,9 +24131,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "elementWeaver"
+                "elementWeaver"
         ]
-    },
+},
     "nature_spirit": {
         "id": "nature_spirit",
         "name": "Nature Spirit",
@@ -24480,10 +24150,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Nature Spirit",
         "balance": {
-            "mpCost": 150,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 150,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_nature_spirit",
         "vfxGap": false,
@@ -24491,9 +24161,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "elementWeaver"
+                "elementWeaver"
         ]
-    },
+},
     "glacier_strike": {
         "id": "glacier_strike",
         "name": "Glacier Strike",
@@ -24510,10 +24180,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Ice magicSummons a frosty glacier.Deals M. damage to the target and nearby enemies. Power 137.Applies Fire Vulnerability and Icy Wind to the target.Fire VulnerabilityDecreases Fire Resistance.If Ice Vulnerability is applied to the target:Removes Ice Vulnerability.Icy WindIf Blazing Whirlwind is applied to the target:Removes Blazing Whirlwind and then triggers Circle Explosion.Circle ExplosionDeals M. damage. Power 137.M. Def. -23%PvP: Attacks up to 8 targets.PvE: Attacks up to 8 targets.",
         "balance": {
-            "mpCost": 124,
-            "pwr": 137,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 124,
+                "pwr": 137,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_glacier_strike",
         "vfxGap": false,
@@ -24521,9 +24191,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "elementWeaver"
+                "elementWeaver"
         ]
-    },
+},
     "blazing_tempest": {
         "id": "blazing_tempest",
         "name": "Blazing Tempest",
@@ -24540,10 +24210,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Fire magicSummons a blazing whirlwind.Deals M. damage to the target and nearby enemies. Power 137.Applies Ice Vulnerability and Blazing Whirlwind to the target.Ice VulnerabilityDecreases Ice Resistance.If Fire Vulnerability is applied to the target:Removes Fire Vulnerability.Blazing WhirlwindIf Icy Wind is applied to the target:Removes Icy Wind and then triggers Circle Explosion.Circle ExplosionDeals M. damage. Power 137.M. Def. -23%PvP: Attacks up to 8 targets.PvE: Attacks up to 8 targets.",
         "balance": {
-            "mpCost": 124,
-            "pwr": 137,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 124,
+                "pwr": 137,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_blazing_tempest",
         "vfxGap": false,
@@ -24551,9 +24221,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "elementWeaver"
+                "elementWeaver"
         ]
-    },
+},
     "claidheamh_soluis": {
         "id": "claidheamh_soluis",
         "name": "Claidheamh Soluis",
@@ -24570,10 +24240,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "Light magicSummons a shining sword that attacks the target and nearby enemies.Deals M. damage twice. Power 174.If the target is affected by Twining Plants, triggers Mistilteinn.MistilteinnDeals M. damage. Power 174.PvP: Attacks up to 8 targets.PvE: Attacks up to 8 targets.",
         "balance": {
-            "mpCost": 106,
-            "pwr": 174,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 106,
+                "pwr": 174,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_claidheamh_soluis",
         "vfxGap": false,
@@ -24581,9 +24251,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "elementWeaver"
+                "elementWeaver"
         ]
-    },
+},
     "mount_unicorn": {
         "id": "mount_unicorn",
         "name": "Mount Unicorn",
@@ -24600,21 +24270,21 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Mount Unicorn",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_mount_unicorn",
         "vfxGap": false,
         "sfxId": "sfx_action",
         "sfxGap": false,
         "minLevel": 76,
-        "classes": [
-            "divineTemplar",
-            "elementWeaver"
-        ]
-    },
+        "classes": [],
+        "availableTo": [],
+        "disabled": true,
+        "removalReason": "cosmetic_mount_purge"
+},
     "sephiroth": {
         "id": "sephiroth",
         "name": "Sephiroth",
@@ -24631,10 +24301,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 180000,
         "desc": "Light magicSummons the light of the universe.Deals M. damage to the target and nearby enemies thrice. Power 450.If the target is affected by Twining Plants, triggers Mistilteinn.MistilteinnDeals M. damage. Power 450.PvP: Attacks up to 16 targets.PvE: Attacks up to 16 targets.Special effectApplies Light Influence to the caster.Light InfluenceDuration: 10 sec.M. Skill Range +200, M. Skill Power +5%, Silence Atk. Rate +25%When using M. skills, attacks with Powerful Light.If some attacks remain after the attack, duration is renewed.(Max number of attacks: 2)",
         "balance": {
-            "mpCost": 330,
-            "pwr": 450,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 330,
+                "pwr": 450,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_sephiroth",
         "vfxGap": false,
@@ -24642,9 +24312,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "elementWeaver"
+                "elementWeaver"
         ]
-    },
+},
     "sacral_power": {
         "id": "sacral_power",
         "name": "Sacral Power",
@@ -24661,10 +24331,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Sacral Power",
         "balance": {
-            "mpCost": 50,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 50,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_sacral_power",
         "vfxGap": false,
@@ -24672,10 +24342,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "holyTemplar",
-            "divineTemplar"
+                "holyTemplar",
+                "divineTemplar"
         ]
-    },
+},
     "large_protection_of_light": {
         "id": "large_protection_of_light",
         "name": "Large Protection of Light",
@@ -24692,10 +24362,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Large Protection of Light",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_large_protection_of_light",
         "vfxGap": false,
@@ -24703,10 +24373,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 70,
         "classes": [
-            "holyTemplar",
-            "elementWeaverS2"
+                "holyTemplar",
+                "elementWeaverS2"
         ]
-    },
+},
     "flying_leap": {
         "id": "flying_leap",
         "name": "Flying Leap",
@@ -24723,10 +24393,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 5000,
         "desc": "<Rush/ Knockdown skill>Encouraged by the power of light, leaps to the target.Attacks the target and nearby enemies. Power 4514.With a certain chance, the enemies' P. Def. -30%. With a certain chance, knocks the enemies down.Ignores 10% of the target's defense.PvP: Attacks up to 6 targets.PvE: Attacks up to 6 targets.After learning the Divine Guardian skill:Grants Light points on using the skill on an enemy.Grants 50 Light points regardless of your combat power.",
         "balance": {
-            "mpCost": 84,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 84,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_flying_leap",
         "vfxGap": false,
@@ -24734,9 +24404,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "divineTemplar"
+                "divineTemplar"
         ]
-    },
+},
     "small_protection_of_light": {
         "id": "small_protection_of_light",
         "name": "Small Protection of Light",
@@ -24753,10 +24423,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Small Protection of Light",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_small_protection_of_light",
         "vfxGap": false,
@@ -24764,10 +24434,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 45,
         "classes": [
-            "holyTemplar",
-            "elementWeaverS2"
+                "holyTemplar",
+                "elementWeaverS2"
         ]
-    },
+},
     "judgment": {
         "id": "judgment",
         "name": "Judgment",
@@ -24784,10 +24454,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Attacks enemies with the sword filled with the power of light.Deals damage twice. Power 8124.Ignores 20% of the target's defense.PvP: Attacks up to 6 targets.PvE: Attacks up to 6 targets.After leaning the Divine Guardian skill:Grants Light points on using the skill on an enemy.Combat power 1-500: Grants 600 Light points.Combat power 500-999: Grants 750 Light points.Combat power 1000-1499: Grants 850 Light points.Combat power 1500-1999: Grants 1550 Light points.Combat power 2000+: Grants 2300 Light points.",
         "balance": {
-            "mpCost": 116,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 116,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_judgment",
         "vfxGap": false,
@@ -24795,9 +24465,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "divineTemplar"
+                "divineTemplar"
         ]
-    },
+},
     "protection_of_light": {
         "id": "protection_of_light",
         "name": "Protection of Light",
@@ -24814,10 +24484,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Protection of Light",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_protection_of_light",
         "vfxGap": false,
@@ -24825,10 +24495,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 60,
         "classes": [
-            "holyTemplar",
-            "elementWeaverS2"
+                "holyTemplar",
+                "elementWeaverS2"
         ]
-    },
+},
     "noblesse_circlet": {
         "id": "noblesse_circlet",
         "name": "Noblesse Circlet",
@@ -24845,10 +24515,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 10000,
         "desc": "Noblesse Circlet",
         "balance": {
-            "mpCost": 120,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 120,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_noblesse_circlet",
         "vfxGap": false,
@@ -24856,9 +24526,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "divineTemplar"
+                "divineTemplar"
         ]
-    },
+},
     "light_counter": {
         "id": "light_counter",
         "name": "Light Counter",
@@ -24875,10 +24545,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Light Counter",
         "balance": {
-            "mpCost": 100,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 100,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_light_counter",
         "vfxGap": false,
@@ -24886,9 +24556,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "divineTemplar"
+                "divineTemplar"
         ]
-    },
+},
     "decoy": {
         "id": "decoy",
         "name": "Decoy",
@@ -24905,10 +24575,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 180000,
         "desc": "Decoy",
         "balance": {
-            "mpCost": 150,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 150,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_decoy",
         "vfxGap": false,
@@ -24916,9 +24586,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "divineTemplar"
+                "divineTemplar"
         ]
-    },
+},
     "light_discharge": {
         "id": "light_discharge",
         "name": "Light Discharge",
@@ -24935,10 +24605,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 30000,
         "desc": "The skill effect is changed based on its target.Fires an accumulated light charge.For enemies:Attacks the target and nearby enemies twice stunning them with a certain chance. Power 5632.Ignores 20% of the target's defense.PvP: Attacks up to 6 targets.PvE: Attacks up to 6 targets.For allies:Recovers HP based on your M. Atk. Power 1900. Affects up to 6 targets. After that, recovers HP over time.After learning the Divine Guardian skill:Grants Light points on using the skill on an enemy.Combat power 1-500: Grants 720 Light points.Combat power 500-999: Grants 900 Light points.Combat power 1000-1499: Grants 1050 Light points.Combat power 1500-1999: Grants 2050 Light points.Combat power 2000+: Grants 3000 Light points.",
         "balance": {
-            "mpCost": 103,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 103,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_light_discharge",
         "vfxGap": false,
@@ -24946,9 +24616,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "divineTemplar"
+                "divineTemplar"
         ]
-    },
+},
     "divine_guardian": {
         "id": "divine_guardian",
         "name": "Divine Guardian",
@@ -24965,10 +24635,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 1000,
         "desc": "Summons Divine Guardian.Divine Guardian uses skills that match Divine Templar's skills.Sacral Strike → Sacral StrikePurify → PurifyTo learn more about the twin skill, check the Divine Templar buff icon.Divine Guardian teleports to Divine Templar if they are too far away from each other.",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 15,
+                "pwr": 20,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_divine_guardian",
         "vfxGap": false,
@@ -24976,9 +24646,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "divineTemplar"
+                "divineTemplar"
         ]
-    },
+},
     "holy_circle": {
         "id": "holy_circle",
         "name": "Holy Circle",
@@ -24995,10 +24665,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "canonicalCooldownMs": 180000,
         "desc": "On using the skill, its effect affects both enemies and allies.Creates a circle of light.Enemies:Judgment of LightAttacks nearby enemies twice. Power 20,000.For 10 sec., the attacked targets' Debuff/ Anomaly Resistance -4%.Ignores 30% of the target's defense.PvP: Attacks up to 16 targets.PvE: Attacks up to 16 targets.Allies:Light ProtectionDuration: 10 sec.Buff:- Recovers 3000 HP every 2 sec.- Received damage -10%Affects up to 16 targets.After learning the Divine Guardian skill:Grants Light points on using the skill on an enemy.Grants 50,000 Light points regardless of your combat power.",
         "balance": {
-            "mpCost": 200,
-            "pwr": 500,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+                "mpCost": 200,
+                "pwr": 500,
+                "pveMultiplier": 1,
+                "pvpMultiplier": 0.85
         },
         "vfxId": "vfx_holy_circle",
         "vfxGap": false,
@@ -25006,9 +24676,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "divineTemplar"
+                "divineTemplar"
         ]
-    }
+}
 });
 
 export const ALL_CANONICAL_SKILL_IDS = Object.freeze(Object.keys(CANONICAL_SKILL_REGISTRY_V2));

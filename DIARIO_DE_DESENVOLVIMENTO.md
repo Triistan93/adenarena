@@ -8,6 +8,7 @@
 ---
 
 ### 📑 Índice Rápido de Páginas
+- [Página 10 — 16 de Setembro de 2026 às 23:50](#página-10--16-de-setembro-de-2026-às-2350) — *Expurgamento Global de Habilidades Cosméticas, Montarias ("Mount") e de Aparência ("Appearance") em 100% das Classes do Jogo*
 - [Página 9 — 16 de Setembro de 2026 às 23:30](#página-9--16-de-setembro-de-2026-às-2330) — *Reconstrução Canônica Integral do Sistema de Classes (9 Raças, 49 Linhagens, 159 Classes, 134 Arestas, 25 Classes Base), Wiping Controlado do Domínio Legado e Preservação dos Três Pilares Sagrados*
 - [Página 8 — 16 de Setembro de 2026 às 20:50](#página-8--16-de-setembro-de-2026-às-2050) — *Economia Canônica de Soulshots/Spiritshots: Grade Matching (+100%) vs Universal Wildcard (+30%) e Consumo Justo 1:1*
 - [Página 7 — 16 de Setembro de 2026 às 18:30](#página-7--16-de-setembro-de-2026-às-1830) — *Adaptação Integral dos Conceitos Canônicos do Lineage II Essence (Season 1 Lv 1–40), Economia Fechada, Coleções Perpétuas, Crafting D/C, Augmentação e Brooches*
@@ -17,6 +18,40 @@
 - [Página 3 — 15 de Setembro de 2026 às 00:05](#página-3--15-de-setembro-de-2026-às-0005) — *Extração Massiva L2Bandit & PMfun, 1.991 Ícones WebP, Índices Mestres de 20k Chaves, IconService, UI Modernizada & Deploy*
 - [Página 2 — 14 de Setembro de 2026 às 23:45](#página-2--14-de-setembro-de-2026-às-2345) — *Arquitetura Zero-Trust, Blindagem Admin/Cakto/Firestore, Life Activities 2.0, Economia Fechada & Performance Chunks*
 - [Página 1 — 12 de Setembro de 2026 às 22:30](#página-1--12-de-setembro-de-2026-às-2230) — *Consolidação de Arquitetura, UX do Personagem & Mochila, Motor de Encantamento Canônico, Auto-Equip ERS e Ressonância de Armas*
+
+---
+
+<br/>
+
+## Página 10 — 16 de Setembro de 2026 às 23:50
+### 🚫 Expurgamento Global de Habilidades Cosméticas, Montarias ("Mount") e de Aparência ("Appearance") em 100% das Classes do Jogo
+
+> **Data & Hora**: 16/09/2026 às 23:50 (BRT)  
+> **Status de Qualidade**: 
+> - **Testes Automatizados**: **565 testes em 83 suítes passando (100% de aprovação, 0 falhas)**.
+> - **Build de Produção**: Vite compilado com sucesso em 13.75s (276 módulos).
+> - **Preservação Sagrada**: 0 alterações ou regressões nos 3 pilares intocáveis (`LevelEngine.js`, `MarketService.js`, `ExpeditionService.js`).
+
+#### 1. Resumo Executivo da Sessão
+Atendendo à diretriz de limpeza e simplificação tática das árvores de habilidades, foram identificadas e expurgadas integralmente de todas as classes do jogo 18 habilidades utilitárias/cosméticas (Opção C):
+1. **Solicitadas Diretamente**: `Mount Shining Lady` (Lv 89, 4★), `Mount Glorious Steed` (Lv 87, 4★), `Dragon Slayer Appearance` (Lv 82, 4★) e `Detection` (Lv 76, 3★).
+2. **Habilidades de Aparência**: `Change Appearance` (Lv 1, 1★ - Assassins e Rose Vain).
+3. **Todas as Montarias Raciais ("Mount")**: `Mount Golden Lion` (1833), `Mount Pegasus` (1834), `Mount Saber-toothed Cougar` (1835), `Mount Black Bear` (1837), `Mount Kukuru` (1836), `Mount Griffin` (62002), `Mount Night Mare` (54207), `Mount Elemental Lyn Draco` (54225) e `Mount Unicorn` (54256).
+4. **Transformações Cosméticas / Formas**: `Transformation: Pirate` (1800), `Dark Assassin Transformation` (1801), `Light Assassin Transformation` (1802) e `White Guardian Transformation` (54102).
+
+#### 2. Detalhamento Técnico das Alterações
+- **`CanonicalClassRegistry.js` & `build_canonical_registry.mjs`**:
+  - Incorporada lista negra `REMOVED_SKILL_WIKI_IDS` com os 19 IDs numéricos da wiki.
+  - Purga de **358 referências numéricas** em `unlockedSkillIds`. Zero classes agora contêm essas habilidades.
+- **`CanonicalClassRegistryV2.js`**:
+  - Purga de **366 referências** de slugs em `skillIds` ao longo de todas as 142 classes V2.
+- **`CanonicalSkillRegistryV2.js`**:
+  - As 18 habilidades tiveram seus arrays `classes: []` e `availableTo: []` esvaziados e receberam `disabled: true, removalReason: 'cosmetic_mount_purge'`.
+- **Datasets Canônicos Scraped**:
+  - `scraped_data_wiki/classes_summary.json` (358 entradas removidas).
+  - `scraped_data_wiki/skills_detailed.json` (358 classes desvinculadas nas 18 habilidades).
+- **Proteção & Reembolso em Saves**:
+  - `normalizeAndValidateSkills` do `SkillEligibility.js` expurga e reembolsa 100% de qualquer SP gasto caso algum save antigo possua essas habilidades gravadas.
 
 ---
 

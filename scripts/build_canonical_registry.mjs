@@ -246,6 +246,28 @@ for (const race of canonicalTree) {
         const displayName = CANONICAL_DISPLAY_NAMES[id] || summary?.name || id;
         const weapons = summary?.properties?.weapons ? summary.properties.weapons.split(',').map(w => w.trim()) : null;
 
+        const REMOVED_SKILL_WIKI_IDS = new Set([
+          '54202', // Mount Shining Lady
+          '54200', // Mount Glorious Steed
+          '54231', // Dragon Slayer Appearance
+          '45190', // Detection
+          '87344', // Change Appearance
+          '88595', // Change Appearance (Rose Vain)
+          '1833',  // Mount Golden Lion
+          '1834',  // Mount Pegasus
+          '1835',  // Mount Saber-toothed Cougar
+          '1837',  // Mount Black Bear
+          '1836',  // Mount Kukuru
+          '62002', // Mount Griffin
+          '54207', // Mount Night Mare
+          '54225', // Mount Elemental Lyn Draco
+          '54256', // Mount Unicorn
+          '1800',  // Transformation: Pirate
+          '1801',  // Dark Assassin Transformation
+          '1802',  // Light Assassin Transformation
+          '54102'  // White Guardian Transformation
+        ]);
+
         classNodes.set(id, {
           id,
           name: displayName,
@@ -262,7 +284,9 @@ for (const race of canonicalTree) {
           archetypeGroup,
           weapons: weapons || null,
           weaponsStatus: weapons ? 'SOURCE-DERIVED' : 'CONTENT_GAP',
-          unlockedSkillIds: summary?.skills ? summary.skills.map(s => s.wikiSkillId) : [],
+          unlockedSkillIds: summary?.skills 
+            ? summary.skills.map(s => String(s.wikiSkillId)).filter(wId => !REMOVED_SKILL_WIKI_IDS.has(wId)) 
+            : [],
           baseStats: null,
           baseStatsStatus: 'CONTENT_GAP',
           canonicalExistence: true,
@@ -462,6 +486,65 @@ class ClassGraph {
     return this.lineageTerminals.size;
   }
 
+  getAllClassNodes() {
+    return Array.from(this.nodes.values());
+  }
+
+  getAllEdges() {
+    const edgeList = [];
+    for (const [from, children] of this.edges.entries()) {
+      for (const to of children) {
+        edgeList.push({ from, to });
+      }
+    }
+    return edgeList;
+  }
+
+  getRootClasses() {
+    const roots = [];
+    for (const node of this.nodes.values()) {
+      if (!node.parentClass || node.stage === 0) {
+        roots.push(node);
+      }
+    }
+    return roots;
+  }
+
+  getTerminalClasses() {
+    return Array.from(this.terminals).map(id => this.nodes.get(id));
+  }
+
+  topologicalSort() {
+    const inDegree = new Map();
+    for (const id of this.nodes.keys()) inDegree.set(id, 0);
+    for (const parentId of this.inEdges.values()) {}
+    for (const childId of this.inEdges.keys()) {
+      inDegree.set(childId, (inDegree.get(childId) || 0) + 1);
+    }
+
+    const roots = [];
+    for (const [id, deg] of inDegree.entries()) {
+      if (deg === 0) roots.push(id);
+    }
+
+    const order = [];
+    const q = [...roots];
+    const tempIn = new Map(inDegree);
+
+    while (q.length > 0) {
+      const u = q.shift();
+      order.push(this.nodes.get(u));
+      const children = this.edges.get(u) || new Set();
+      for (const v of children) {
+        const d = tempIn.get(v) - 1;
+        tempIn.set(v, d);
+        if (d === 0) q.push(v);
+      }
+    }
+
+    return order;
+  }
+
   validateIntegrity() {
     const visited = new Set();
     let hasCycle = false;
@@ -537,7 +620,20 @@ for (const r of canonicalTree) {
 }
 
 raceCode += `});\n\n`;
-raceCode += `export const ALL_CANONICAL_RACE_IDS = Object.freeze(Object.keys(CANONICAL_RACES));\n`;
+raceCode += `export const ALL_CANONICAL_RACE_IDS = Object.freeze(Object.keys(CANONICAL_RACES));\n\n`;
+raceCode += `export const CanonicalRaceRegistry = {
+  getRace(raceId) {
+    if (!raceId) return null;
+    return CANONICAL_RACES[raceId] || CANONICAL_RACES[String(raceId).toLowerCase()] || null;
+  },
+  getAllRaces() {
+    return Object.values(CANONICAL_RACES);
+  },
+  hasRace(raceId) {
+    if (!raceId) return false;
+    return Boolean(CANONICAL_RACES[raceId] || CANONICAL_RACES[String(raceId).toLowerCase()]);
+  }
+};\n\n`;
 raceCode += `export default CANONICAL_RACES;\n`;
 
 fs.writeFileSync('lineage-idle/src/data/classes/CanonicalRaceRegistry.js', raceCode, 'utf8');
