@@ -8,6 +8,7 @@
 ---
 
 ### 📑 Índice Rápido de Páginas
+- [Página 12 — 17 de Setembro de 2026 às 23:45](#página-12--17-de-setembro-de-2026-às-2345) — *Auditoria Canônica de 903 Habilidades (9 Categorias), Sistema de Spellbooks 4★/5★ Master do L2 Essence, Correção de Ranks e Validação Total*
 - [Página 11 — 17 de Setembro de 2026 às 00:40](#página-11--17-de-setembro-de-2026-às-0040) — *Skill Progression 2.0: Sistema de Loadout de Combate com 7 Slots, Táticas de Auto-Batalha, Drag-and-Drop na UI e Blindagem Universal Anti-Cosméticos*
 - [Página 10 — 16 de Setembro de 2026 às 23:50](#página-10--16-de-setembro-de-2026-às-2350) — *Expurgamento Global de Habilidades Cosméticas, Montarias ("Mount") e de Aparência ("Appearance") em 100% das Classes do Jogo*
 - [Página 9 — 16 de Setembro de 2026 às 23:30](#página-9--16-de-setembro-de-2026-às-2330) — *Reconstrução Canônica Integral do Sistema de Classes (9 Raças, 49 Linhagens, 159 Classes, 134 Arestas, 25 Classes Base), Wiping Controlado do Domínio Legado e Preservação dos Três Pilares Sagrados*
@@ -19,6 +20,51 @@
 - [Página 3 — 15 de Setembro de 2026 às 00:05](#página-3--15-de-setembro-de-2026-às-0005) — *Extração Massiva L2Bandit & PMfun, 1.991 Ícones WebP, Índices Mestres de 20k Chaves, IconService, UI Modernizada & Deploy*
 - [Página 2 — 14 de Setembro de 2026 às 23:45](#página-2--14-de-setembro-de-2026-às-2345) — *Arquitetura Zero-Trust, Blindagem Admin/Cakto/Firestore, Life Activities 2.0, Economia Fechada & Performance Chunks*
 - [Página 1 — 12 de Setembro de 2026 às 22:30](#página-1--12-de-setembro-de-2026-às-2230) — *Consolidação de Arquitetura, UX do Personagem & Mochila, Motor de Encantamento Canônico, Auto-Equip ERS e Ressonância de Armas*
+
+---
+
+<br/>
+
+## Página 12 — 17 de Setembro de 2026 às 23:45
+### 👑 Auditoria Canônica de 903 Habilidades (9 Categorias), Integração dos Livros 4★/5★ Master do L2 Essence e Correção de Ranks
+
+> **Data & Hora**: 17/09/2026 às 23:45 (BRT)  
+> **Status de Qualidade**: 
+> - **Testes Automatizados**: **625 testes em 92 suítes passando (100% de aprovação, 0 falhas)** no `lineage-idle/` + 3 novos testes em `test/life-activity-progression.test.js`.
+> - **Build de Produção**: Vite compilado com sucesso com 0 erros de runtime.
+> - **Catálogo Canônico Auditado**: 903 habilidades canônicas únicas classificadas em 9 categorias estritas.
+> - **Manifesto Oficial Exportado**: `docs/SKILL_CATEGORIZATION_MANIFEST.md` e `Downloads/SKILL_CATEGORIZATION_MANIFEST.md`.
+
+#### 1. Resumo Executivo da Sessão
+Reanálise e auditoria exaustiva de todo o catálogo de habilidades do jogo baseando-se no webscraping oficial do L2Wiki Essence (`scraped_data_wiki/skills_detailed.json`) e na documentação oficial dos sistemas de **Spellbook 4★**, **Spellbook Coupon 4-Star** e **Master Spellbooks** do Lineage II Essence. Resolução de inconsistências críticas onde habilidades ápice/ultimates (como *Legendary Archer*, *Overwhelming Power*, *Leopold*, *Meteor*, *Indestructible Blade*, *Titan Champion*, *Ultimate Death Knight*, *Cacophony of War*, *Exclusion*, etc.) estavam com `starRank: 3` e classificadas como buffs/ataques comuns, enquanto habilidades básicas de 2ª classe constavam com 4★. Estruturação do catálogo em **9 categorias canônicas rigorosas** e correção de habilidades de buff/utilidade anteriormente mal rotuladas.
+
+#### 2. Detalhamento Técnico das Mudanças
+- **Integração do Sistema de Master Books 4★/5★ (`CanonicalSkillRegistryV2.js`)**:
+  - Promoção de **87 habilidades ápice autênticas** de 4★ e 5★ do L2 Essence para `starRank: 4` e raridade `"4★"`, refletindo os requisitos de *Heroic Spellbook* e *Master Books*:
+    - **Ultimates Ofensivas**: *Leopold* (Crafter/Titan), *Meteor* (Archmage/Soultaker), *Indestructible Blade* (Duelist), *Holy Circle* (Paladin), *Sephiroth* (Hierophant), *Time Distortion* (Trickster/Soul Hound), *Dragon Strike*, *Claidheamh Soluis*, *Enuma Elish*, *Supernova*, etc.
+    - **Ultimates de Buff & Postura**: *Legendary Archer* / *Legendary Archer: Master* (Sagittarius/Moonlight/Ghost Sentinel), *Overwhelming Power* / *Overwhelming Power: Master* (Titan), *Cacophony of War* / *Cacophony of War: Master* (Doomcryer), *Titan Champion* (Titan), *Ultimate Death Knight* (Death Knight), *Shelter* (Eva/Shillien Saint), *Prime Master* (Ghost Hunter/Wind Rider/Adventurer).
+    - **Ultimates de Utilidade**: *Pa'agrio's Touch* (Dominator), *Exclusion* (Hierophant), *Dark Disruption* (Shillien Saint), *Miracle* (Cardinal), *Dance of Medusa* (Spectral Dancer), *Song of Silence* (Sword Muse), *Arcane Shield*, *Team Building*.
+  - Despromoção de habilidades normais de 2ª/3ª classe não-ultimates (ex: *Snipe*, *Rapid Fire*, *Song of Earth*, *Phoenix Power*, *Tenacity*) para `starRank: 3`.
+- **Saneamento e Correção de Buffs & Utilidades**:
+  - Correção pontual de habilidades citadas pelo usuário que constavam equivocadamente em ataque:
+    - *Assassin Servitor* $\to$ Ativas — Buff
+    - *Assassin's Secret Notes - 1st/2nd/3rd Page* $\to$ Ativas — Buff
+    - *Full Moon's Grace* $\to$ Ativas — Buff
+    - *Decoy* $\to$ Ativas — Utilidades (Invocação tática/Distração)
+- **Consolidação das 9 Categorias Canônicas (903 Habilidades Únicas)**:
+  1. ⚔️ **Ativas — Ataque**: 188 habilidades
+  2. ✨ **Ativas — Buff**: 254 habilidades
+  3. 🛡️ **Ativas — Utilidades** (Cura, Vampirismo, Controle, Debuff): 157 habilidades
+  4. ⚔️ **Passivas — Ataque** (Maestrias de Armas, Crítico, Poder de Ataque): 32 habilidades
+  5. ✨ **Passivas — Buff** (Auras e Atributos Passivos): 128 habilidades
+  6. 🛡️ **Passivas — Utilidades** (Maestrias de Armadura, Defesa, Resistências, Regen): 27 habilidades
+  7. 👑 **Ultimates — Ataque** (4★ & 5★ Master / Apex Damage): 61 habilidades
+  8. 👑 **Ultimates — Buff** (4★ & 5★ Master / Transforma / Stance): 33 habilidades
+  9. 👑 **Ultimates — Utilidades** (4★ & 5★ Cura Suprema, Imunidade, Controle): 23 habilidades
+- **Script Compilador Canônico (`scripts/compile_skill_categories_wiki.js`)**:
+  - Automação idempotente para leitura de dados brutos e classificação determinística por tags semânticas, tempo de recarga, tipo de efeito e descrição oficial.
+- **Hotfix de Progressão em Life Activities (`LifeActivityCore.js`)**:
+  - Correção do limiar de XP no nível 25 (de 13.100 para 131.000) e inclusão da suíte de teste de regressão `test/life-activity-progression.test.js`.
 
 ---
 

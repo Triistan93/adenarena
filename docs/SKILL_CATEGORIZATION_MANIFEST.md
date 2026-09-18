@@ -1,0 +1,959 @@
+# ⚔️ Catálogo Canônico de Habilidades Classificado (Lineage II Essence — 9 Categorias Canônicas)
+
+Total de habilidades únicas consolidadas: **903**
+
+> **Metodologia de Classificação:**
+> 1. **Ultimates (4★ & 5★)**: Habilidades de pico obtidas via **Spellbook 4★**, **Spellbook: [Skill]: Master** e **Heroic/Legendary Spellbook Coupons** no Lineage II Essence (ex: *Legendary Archer*, *Overwhelming Power*, *Cacophony of War*, *Meteor*, *Leopold*, *Indestructible Blade*, *Titan Champion*, *Ultimate Death Knight*, etc.).
+> 2. **Ativas**: Habilidades de combate ativas (1★ a 3★) separadas com base em efeitos reais em Ataque direto, Buffs de auto-aprimoramento e Utilidades (Cura, Vampirismo, Crowd Control, Debuffs e Invocações).
+> 3. **Passivas**: Habilidades passivas separadas em Ataque (Maestrias ofensivas, Crítico, Poder de Ataque), Buff (Auras e atributos passivos contínuos) e Utilidades (Maestrias defensivas de armaduras/escudo, Resistências e Regeneração).
+
+---
+
+## ⚔️ Ativas — Ataque (188)
+
+- Abyss Strike
+- Amazing Blade Strike
+- Amazing Piercing
+- Apocalypse
+- Aqua Splash
+- Aqua Strike
+- Aqua Swirl
+- Aroma of Death
+- Assassination
+- Backstab
+- Battojutsu
+- Blacksmith's Attack
+- Blade Assault
+- Blade Punishment
+- Blade Rage
+- Blade Storm Dance
+- Blade Strike
+- Blade Wave
+- Blaze
+- Blow
+- Briar Vortex
+- Bright Dance
+- Burning Field
+- Burning Fist
+- Burning Strike
+- Chain Lightning
+- Cold Flames
+- Crazy Waltz
+- Crescent Swing
+- Crippling Strike
+- Cunning Arrow
+- Cunning Shot
+- Cunning Throw
+- Dance of Fire
+- Dance of Fury
+- Dark Blow
+- Dark Burst
+- Dark Shield Throwing
+- Dark Strike
+- Dark Vortex
+- Deadly Blow
+- Deadly Pull
+- Deadly Rhythm
+- Death Mark
+- Death Spike
+- Demolition Impact
+- Demon Wind
+- Destroyer's Roar
+- Devastating Assault
+- Direct Strike
+- Divine Beam
+- Divine Power Acquisition
+- Divine Strike
+- Double Shot
+- Dual Blow
+- Earthquake
+- Elemental Care
+- Elemental Change
+- Elemental Discharge
+- Elemental Strike
+- Elemental Vortex
+- Enchanted Rose's Assault
+- Enormous Wolf
+- Ethereal Strike
+- Eva's Nocturne
+- Excruciating Strike
+- Fatal Strike
+- Fire Explosion
+- Fire Sphere
+- Fire Vortex
+- Fireball
+- Fist of Fury
+- Flame Burst
+- Florescence
+- Flying Dagger
+- Flying Leap
+- Force Blaster
+- Force Burst
+- Force Storm
+- Forward Move
+- Frantic Pace
+- Freezing Shot
+- Frosty Sting
+- Frozen Field
+- Full Sweep
+- Goring Charge
+- Great Sweep
+- Greater Wind Shot
+- Gust Shot
+- Holy Strike
+- Hurricane
+- Hurricane Assault
+- Hydro Blast
+- Ice Sphere
+- Ice Vortex
+- Imminent Piercing
+- Indestructible Seal
+- Inferno Strike
+- Iron Fist
+- Iron Punch
+- Judgment
+- Jump Attack
+- Kamael's Dignity
+- Knight's Assault
+- Legendary Shot
+- Lethal Blow
+- Lethal Shot
+- Lightning Strike
+- Lightning Wave Break
+- Mana Burn
+- Maneuver
+- Mass Lightning Strike
+- Might of Heaven
+- Moon Influence
+- Mortal Blow
+- Mystic Explosion
+- Mystic Spiral
+- Nemesis
+- Parasite Rose
+- Phoenix Strike
+- Piercing
+- Power Crash
+- Power Shot
+- Power Strike
+- Powerful Charge
+- Powerful Fists
+- Prominence
+- Punch of Doom
+- Punishment
+- Pursuit
+- Quick Spear
+- Raging Force
+- Rain of Fire
+- Rapier Slash
+- Ray of Light
+- Relentless Attack
+- Rose Attack
+- Ruse
+- Sacral Strike
+- Shadow Attack
+- Shield Bash
+- Shield Strike
+- Shield Throwing
+- Shining Beam
+- Shocking Burst
+- Silver Wolf
+- Single Flash
+- Slashing Blade
+- Song of Hunter
+- Song of Wind
+- Soul Impulse
+- Soul Mark
+- Soul Smash
+- Soul Wound
+- Spike Thrust
+- Spirit Weakness
+- Stealthy Swiftness
+- Storm Arrow Rain
+- Strike
+- Summon Kagami
+- Symphony
+- Take Life
+- Tempest
+- Templar's Assault
+- Thousand Wounds
+- Threatening Swing
+- Throwing Spear
+- Thunder Storm
+- Titanic Break
+- Titanic Sweep
+- Trophy Thief
+- Twist
+- Twister
+- Upward Strike
+- Vine Embrace
+- Vortex
+- Vortex of Fire
+- Walk in Monster Woods
+- Water Arrow Rain
+- Water Shield Throwing
+- Wide Threatening Swing
+- Wild Assault
+- Wild Charge
+- Wild Scratch
+- Wild Sweep
+- Wind Shot
+- Wind Strike
+- Wind Vortex
+
+---
+
+## ✨ Ativas — Buff (254)
+
+- Ability to Attack
+- Ability to Protect
+- Acumen
+- Adamant Will
+- Advanced Block
+- Aggression Aura
+- Alacrity
+- Angelic Archon
+- Arcane Power
+- Armor of Swift Current
+- Assassin Servitor
+- Assassin's Secret Notes - 1st Page
+- Assassin's Secret Notes - 2nd Page
+- Assassin's Secret Notes - 3rd Page
+- Atsumori
+- Balanced Body
+- Battle Heart
+- Battle Roar
+- Battle Shield
+- Battle Will
+- Binding Shot
+- Bison Spirit Totem
+- Blade Movement
+- Blazing Beast
+- Blazing Fury
+- Blazing Skin
+- Bleeding Rose
+- Blessed by Eva
+- Blessed Shield
+- Blessing
+- Blessing of Winds
+- Body to Mind
+- Call of Flame
+- Call of Frost
+- Call of Lightning
+- Chameleon Rest
+- Chant of Acumen
+- Chant of Gate
+- Chant of Haste
+- Chant of Healing
+- Chant of Magic Barrier
+- Chant of Prophecy
+- Chant of Vampire
+- Chant of Wild Magic
+- Chant of Wind Walk
+- Concentration
+- Confused Mind
+- Convert
+- Counterattack
+- Crimson Flame
+- Crimson Rose
+- Cripple
+- Crossed Blades
+- Crusader
+- Damage Reflection
+- Dance of Blood
+- Dance of Cosmos
+- Dance of Warrior
+- Dark Panther's Help
+- Dark Side
+- Dead Eye
+- Deadly Ligament Rupture
+- Death Guard
+- Debuff Master
+- Destiny
+- Detect Weakness
+- Determination
+- Divine Guardian
+- Divine Power
+- Dual Weapon Defense
+- Eagle Eye
+- Elemental Charm
+- Elemental Connection
+- Elemental Haste
+- Elemental Insight
+- Elemental Magic Barrier
+- Elemental Mastership
+- Elemental Wild Magic
+- Elemental Wind Walk
+- Eliminate Obstruction
+- Enchanted Rose's Gentle Magic
+- Enchanted Rose's Strong Magic
+- Enchanted Rose's Weak Magic
+- Enlightenment
+- Erosion
+- Ethereal Blood
+- Eva's Defense
+- Eva's Grail
+- Exciting Adventure
+- Expert Advantage
+- Expert Focus
+- Expert Sense
+- Extra Hit
+- Fake Death
+- Favorable Cover
+- Favorable Cover: Saved Life
+- Final Secret
+- Fire
+- Flaming Body
+- Focus Attack
+- Focus Chance
+- Focus Death
+- Focus Power
+- Forest
+- Fragarach
+- Freezing Skin
+- Frenzy
+- Full Moon's Grace
+- Ghost Walking
+- Golem Reinforcement
+- Guts
+- Hamstring
+- Hamstring Shot
+- Haste
+- Hex
+- Howl
+- Howling
+- Improved Speed
+- Increase Power
+- Kamael Symbol
+- Kingdom of Plants
+- Knight's Protection
+- Large Protection of Light
+- Life Magic Harmony - Attack
+- Life Magic Harmony - Defense
+- Light Counter
+- Light Soul Connection
+- Lionheart
+- Lord Knight
+- Machine Assistance
+- Magic Barrier
+- Magic Break
+- Magic Wound
+- Magical Backfire
+- Majesty
+- Mana Effect Boost
+- Maphr’s Acumen
+- Maphr's Haste
+- Maphr's Magic Barrier
+- Maphr's Wild Magic
+- Maphr's Wind Walk
+- Mass Wind Shackles
+- Master of Flame
+- Master of Thunder
+- Master of Void
+- Might
+- Mighty Servitor
+- Mirage
+- Moon's Grace
+- Mountain
+- Moving Shadows
+- Murder Attempt
+- Mystic Resilience
+- Noblesse Circlet
+- Omen
+- Over the Body
+- Pa'agrio's Immunity
+- Perfect Abilities
+- Phoenix Power
+- Power Break
+- Power of Life
+- Power Supremacy
+- Powerful Rush
+- Powerful Servitor Share
+- Prophecy of Fire
+- Prophecy of Light
+- Prophecy of Pa'agrio
+- Prophecy of Water
+- Prophecy of Wind
+- Protection of Light
+- Rage
+- Rapid Fire
+- Real Target
+- Reflecting Illusion
+- Requiem
+- Resolve to Kill
+- Reversed Pull
+- Rolling Dice
+- Sacral Power
+- Saint's Burst: Dark
+- Saint's Burst: Sea
+- Sanctuary
+- Servitor Blessing
+- Servitor Cure
+- Servitor Heal
+- Servitor Recharge
+- Servitor Share
+- Servitor Ultimate Defense
+- Servitor Wind Walk
+- Shadow Soul Connection
+- Sharp Blade
+- Shield
+- Shield Deflect Magic
+- Shield of Faith
+- Shillien's Grail
+- Shillien's Mass Stigma
+- Shillien's Power
+- Shillien's Stigma
+- Shillien's Touch
+- Silent Move
+- Small Protection of Light
+- Snipe
+- Song of Cosmos
+- Song of Earth
+- Soul Acumen
+- Soul Blade
+- Soul Guard
+- Soul Haste
+- Soul Magic Barrier
+- Soul Reinforcement
+- Soul Roar
+- Soul Weapon
+- Soul Wild Magic
+- Soul Wind Walk
+- Steady Aim
+- Strengthen Golem
+- Summon Elemental Cubic
+- Summon Elemental Unicorn
+- Summon Phantom Cubic
+- Swap Attack
+- Swap Defense
+- Swift Servitor Heal
+- Sword Symphony
+- Synchro Freedom
+- Target Lock
+- Tenacity
+- Thrill Fight
+- Titanic Weapon
+- Touch of Death
+- Touch of Life
+- Tough Body
+- True Aim
+- Turn to Stone
+- Ultimate Defense
+- Ultimate Evasion
+- Ultimate Evasion: Archer
+- Unleashed Power
+- Unleashing
+- Vampiric Rage
+- Vengeance
+- War Cry
+- Warrior Servitor
+- Weakness
+- Weapon Reinforcement
+- Wild Dance
+- Wild Magic
+- Wind
+- Wind Riding
+- Wind Shackles
+- Wind Walk
+- Winter Skin
+- Wondrous Power
+- Young Moon's Grace
+- Zealot
+
+---
+
+## 🛡️ Ativas — Utilidades (Cura, Vampirismo, Controle, Debuff) (157)
+
+- Additional Strain
+- Adena Stun
+- Advanced Cleanse
+- Aggression
+- Anchor
+- Armor Crush
+- Artful Disarm
+- Bandage
+- Battle Heal
+- Blade Rush
+- Blizzard
+- Blood Bond
+- Bloody Strike
+- Bluff
+- Body Crush
+- Bone Cage
+- Braveheart
+- Break
+- Break Duress
+- Chain Heal
+- Chain Strike
+- Chains of Pain
+- Change Armor
+- Cleanse
+- Collect Light Souls
+- Collect Shadow Souls
+- Confusion
+- Critical Wound
+- Cunning Arrest
+- Cure
+- Curse Fear
+- Decoy
+- Detect Darkness
+- Devour
+- Disarm
+- Drain HP
+- Dryad Root
+- Duress
+- Elemental Roots
+- Elemental Shackles
+- Elemental Speed
+- Entangle
+- Eva's Serenade
+- Fatal Crush
+- Fear
+- Flame Grip
+- Flash Dash
+- Freezing Flame
+- Freezing Wound
+- Friendly Walk
+- Frost Flame
+- Frost Grip
+- Full Knockdown
+- Greater Battle Heal
+- Greater Group Heal
+- Greater Heal
+- Group Heal
+- Guard Crush
+- Heal
+- Heavy Sleep
+- Hide
+- Horror
+- Ice Bolt
+- Inferno
+- Legendary Cloak
+- Life Balance
+- Life Leech
+- Life Rescue
+- Life Scavenge
+- Lightning Grip
+- Madness
+- Mage Bane
+- Mass Chain Strike
+- Mass Cure
+- Mass Dryad Root
+- Mass Purify
+- Mass Resurrection
+- Mass Shackling
+- Mass Vitalize
+- Ogre's Essence
+- Open
+- Pa'agrio's Cure
+- Pa'agrio's Honor
+- Paralysis
+- Party Return
+- Peace
+- Poison Blade Dance
+- Provoke
+- Purify
+- Quick Dash
+- Quick Heal
+- Rapid Recharge
+- Recovery
+- Remedy
+- Remove
+- Repair Golem
+- Repose
+- Restore Life
+- Resurrection
+- Return
+- Return Motion
+- Revival
+- Ritual of Life
+- Rush
+- Rushing Retreat
+- Sacrifice
+- Salvation
+- Scorn
+- Seal of Blockade
+- Seal of Despair
+- Seal of Disease
+- Seal of Infection
+- Seal of Mirage
+- Seal of Silence
+- Seal of Suspension
+- Self Heal
+- Shackle
+- Shadow Step
+- Shield Charge
+- Shield Stun
+- Shillien's Curse
+- Shining Prison
+- Silence
+- Sleep
+- Slowdown
+- Soul Guardian
+- Spoil
+- Spoil Crush
+- Spoil Festival
+- Stigma of Death
+- Summon Corrupted Man
+- Summon Cursed Man
+- Summon Feline King
+- Summon Feline Queen
+- Summon Friend
+- Summon Kai the Cat
+- Summon Kat the Cat
+- Summon Mechanic Golem
+- Summon Mew the Cat
+- Summon Nightshade
+- Summon Reanimated Man
+- Summon Shadow
+- Summon Siege Golem
+- Summon Silhouette
+- Summon Soulless
+- Summon Spectral Lord
+- Summon Wild Hog Cannon
+- Sweeper
+- Sweeper Festival
+- Templar's Rush
+- Transfer Pain
+- Unique Seal of Damage
+- Vitalize
+- Warrior Bane
+- Way Back
+- Winter Slumber
+- Word of Fear
+
+---
+
+## ⚔️ Passivas — Ataque (Maestrias de Armas, Crítico, Poder) (32)
+
+- Ancient Sword Mastery
+- Blade of the Duelist
+- Bleeding Thorn Mastery
+- Bow Mastery
+- BP Mastery
+- Critical Chance
+- Critical Power
+- Crossbow Mastery
+- Crystal Weapon Mastery
+- Dagger Mastery
+- DP Mastery
+- Dual Weapon Mastery
+- Elemental Mastery
+- Ertheia Magic Mastery
+- Final Frenzy
+- Fist Mastery
+- Gun Mastery
+- Katana Mastery
+- Lance Mastery
+- Master of Combat
+- Master of Combat: Orc
+- Master of Dark Magic
+- Master of Magic
+- Mounted Combat
+- Polearm Mastery
+- Rapier Mastery
+- Soul Mastery
+- Spell Mastery
+- Sword/Blunt Mastery
+- Warg Mastery
+- Weapon Mastery
+- Wind Fighter Mastery
+
+---
+
+## ✨ Passivas — Buff (Auras e Atributos Passivos) (128)
+
+- Adventurer Spirit
+- Arcana Lord Spirit
+- Archmage Spirit
+- Battle Training
+- Berserker Spirit
+- Body of Avatar
+- Body of Divine Templar
+- Body of Doombringer
+- Body of Element Weaver
+- Body of Fortune Seeker
+- Body of Ghost Hunter
+- Body of Ghost Sentinel
+- Body of Grand Khavatari
+- Body of Moonlight Sentinel
+- Body of Shillien Saint
+- Body of Shillien Templar
+- Body of Soul Hound
+- Body of Spectral Dancer
+- Body of Storm Screamer
+- Body of Sword Muse
+- Body of the Adventurer
+- Body of the Arcana Lord
+- Body of the Archmage
+- Body of the Cardinal
+- Body of the Dominator
+- Body of the Doomcryer
+- Body of the Dreadnought
+- Body of the Elemental Master
+- Body of the Hell Knight
+- Body of the Hierophant
+- Body of the Maestro
+- Body of the Mystic Muse
+- Body of the Phoenix
+- Body of the Sagittarius
+- Body of the Samurai
+- Body of the ShineMaker
+- Body of the Soultaker
+- Body of the Spectral Master
+- Body of the Storm Blaster
+- Body of the Titan
+- Body of the Vanguard
+- Body of Trickster
+- Body of Wind Rider
+- Boost HP
+- Boost Mana
+- Brutality
+- Bushido Spirit
+- Cardinal Spirit
+- Chant of Berserker Spirit
+- Clear Movements
+- Craft Mastery
+- Crystal Blessing
+- Crystal Mastery
+- Dark Thorn Shield
+- Divine Templar Spirit
+- Dominator Spirit
+- Doombringer Spirit
+- Doomcryer Spirit
+- Dreadnought Spirit
+- Dreaming Spirit
+- Duelist Spirit
+- Element Weaver Spirit
+- Elemental Assault
+- Elemental Berserker Spirit
+- Elemental Concentration
+- Elemental Master Spirit
+- Elemental Spirit
+- Eye of the Storm
+- Focus
+- Fortune Seeker Spirit
+- Ghost Hunter Spirit
+- Ghost Sentinel Spirit
+- Grand Khavatari Spirit
+- Hell Knight Spirit
+- Hierophant Spirit
+- High Elf Mastery
+- HP Increase
+- HP Increase Lv1
+- HP Increase Lv2
+- Katana Focus
+- Long Shot
+- Lucky
+- Maestro Spirit
+- Magic Focus
+- Magic Lamp
+- Mana Regeneration
+- Maphr's Berserker Spirit
+- Master of Prophecy
+- Master of Shadows
+- Master of Summoning
+- Mastery (Rare)
+- Moonlight Sentinel Spirit
+- MP Increase
+- Mystic Muse Spirit
+- Nature Spirit
+- Path of the Assassin
+- Pride of Kamael
+- Pride of Titan
+- Queen of Thorns Aura
+- Reflect Damage
+- Retaliation Counter
+- Sagittarius Spirit
+- Samurai Spirit
+- Servitor Physical ATK
+- Servitor Physical Attack
+- Shadow Sense
+- Shillien Saint Spirit
+- Shillien Templar Spirit
+- ShineMaker Spirit
+- Soul Berserker Spirit
+- Soul Hound Spirit
+- Soultaker Spirit
+- Spectral Dancer Spirit
+- Spectral Master Spirit
+- Spirit of Phoenix
+- Storm Blaster Spirit
+- Storm Screamer Spirit
+- Sword Muse Spirit
+- Titan Spirit
+- Trickster Spirit
+- Vanguard Spirit
+- Vital Force
+- Warg Spirit
+- Way of the Blade
+- Wind Domain
+- Wind Rider Spirit
+- Wind Spirit Transcendence
+- Wind Walker
+
+---
+
+## 🛡️ Passivas — Utilidades (Maestrias de Armadura, Defesa, Regen, Resistências) (27)
+
+- Armor Mastery
+- Bone Armor
+- Deflect Arrow
+- Evasion
+- Expand Head Accessory Slots
+- Expand Inventory
+- Expand Warehouse
+- Expand World Trade (L-Coins)
+- Heavy Armor Mastery
+- Holy Shield Mastery
+- HP Recovery
+- Light Armor Mastery
+- Master of Healing
+- MP Recovery
+- Protection of Darkness
+- Protection of Eva
+- Protection of Faith
+- Protection of Shillien
+- Resist Aqua
+- Resist Holy/Dark
+- Robe Mastery
+- Shield Mastery
+- Thorn Armor Mastery
+- Tough Skin
+- Toughness
+- Weight Limit
+- Wolf Reflexes
+
+---
+
+## 👑 Ultimates — Ataque (4★ & 5★ Master / Apex Damage Skills) (61)
+
+- Blazing Strike
+- Blazing Tempest
+- Blooming Nightmare
+- Burning Assault
+- Claidheamh Soluis
+- Clone Dance
+- Condemnation
+- Critical Assault
+- Crushing Leap
+- Dark Knight's Break
+- Dark Spiral
+- Demolition Formula
+- Destructive Shriek
+- Dragon Strike
+- Earth Tremor
+- Enuma Elish
+- Fire Spiral
+- Flame Arrow Rain
+- Flame Explosion
+- Fury Blade
+- Giant's Stomp
+- Glacier Strike
+- Golden Stone
+- Hammer Rumble
+- Hell
+- Hell Smashing
+- Hellfire
+- Holy Circle
+- Hyper Rush
+- Incendiary Shot
+- Indestructible Blade
+- Leopold
+- Light Discharge
+- Lightning Storm
+- Meteor
+- Mortal Piercing
+- Mystic Freeze
+- Over the Rainbow
+- Rage Charge
+- Rose Thorns
+- Rush Impact
+- Sephiroth
+- Shadow Blast
+- Spear Cage
+- Spear Howl
+- Spear Rumble
+- Spiral Shot
+- Stigma of Evil
+- Supernova
+- Through Strike
+- Thunder Explosion
+- Time Distortion
+- Void Explosion
+- Vortex Shot
+- Wild Beat
+- Wild Growl
+- Wild Rush
+- Wind Spiral
+- Winter Frostbite
+- Winter Shackles
+- Wipeout
+
+---
+
+## 👑 Ultimates — Buff (4★ & 5★ Master / Transformation / Stance Buffs) (33)
+
+- Amadeus
+- Archmage's Shield
+- Cacophony of War
+- Challenger
+- Chant of Glory
+- Dark Might
+- Elemental Nurture
+- Eva's Blessing
+- Excess Charge
+- Faery Shield
+- Final Secret: Dual Weapons
+- Final Secret: Grand Khavatari
+- Flamenco
+- Force Unleashed
+- Fortune Time
+- Gleaming Blade
+- Glorious Warrior: Enhanced Abilities
+- Great Attack
+- Legendary Archer
+- Mechanical Masterpiece
+- Overwhelming Power
+- Pa'agrio's Glory
+- Phoenix Protection
+- Phoenix Shield
+- Prime Master
+- Queen's Garden
+- Resonance Shield
+- Shelter
+- Storm Screamer's Shield
+- Titan Champion
+- Titans' Secrets
+- Tough Body: Dual Weapons
+- Ultimate Death Knight
+
+---
+
+## 👑 Ultimates — Utilidades (4★ & 5★ Cura Suprema, Imunidade, Controle) (23)
+
+- Arcane Shield
+- Buff Thief
+- Constraint
+- Dance of Medusa
+- Dark Disruption
+- Divine Whisper
+- Exclusion
+- Improved Sleep
+- Miracle
+- Pa'agrio's Touch
+- Riot
+- Roar of Death
+- Seclusion
+- Sensation
+- Song of Silence
+- Soul Prison
+- Summon Cat Emperor
+- Summon Cubic of Secrets
+- Summon Elemental Globe
+- Summon Lord Raise
+- Team Building
+- Tower Shield
+- Tranquility
+
+---
+
