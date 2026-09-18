@@ -536,12 +536,12 @@ export function getStats(state) {
   let mpRegenBonus = sk('higherMana') * 2;
 
   // V2 Canonical Passives
-  baseAtk += (sk('sword_blunt_mastery') + sk('dual_weapon_mastery') + sk('polearm_mastery') + sk('bow_mastery') + sk('dagger_mastery') + sk('fist_mastery') + sk('weapon_mastery') + sk('master_of_combat')) * 5;
-  baseMatk += (sk('magic_mastery') + sk('robe_mastery')) * 4;
-  baseDef += (sk('heavy_armor_mastery') * 12) + (sk('light_armor_mastery') * 6) + (sk('armor_mastery') * 8);
-  baseEva += sk('light_armor_mastery') * 3;
+  baseAtk += (sk('sword_blunt_mastery') + sk('dual_weapon_mastery') + sk('polearm_mastery') + sk('bow_mastery') + sk('dagger_mastery') + sk('fist_mastery') + sk('weapon_mastery') + sk('master_of_combat') + sk('two_handed_weapon_mastery') + sk('eye_of_slayer')) * 5;
+  baseMatk += (sk('magic_mastery') + sk('robe_mastery') + sk('sigil_mastery') + sk('spellcraft')) * 4;
+  baseDef += (sk('heavy_armor_mastery') * 12) + (sk('light_armor_mastery') * 6) + (sk('armor_mastery') * 8) + (sk('shield_mastery') * 10);
+  baseEva += (sk('light_armor_mastery') * 3) + (sk('boost_evasion') * 3);
   baseMdef += sk('anti_magic') * 18;
-  mpRegenBonus += (sk('higher_mana') + sk('boost_mp') + sk('mana_recovery')) * 2;
+  mpRegenBonus += (sk('higher_mana') + sk('boost_mp') + sk('mana_recovery') + sk('focus_mind') + sk('higher_mana_gain')) * 2;
 
   const eb = getTotalEquipBonuses(state);
   const setRes = getActiveSetBonuses(state);
@@ -563,8 +563,9 @@ export function getStats(state) {
 
   const now = Date.now();
   let buffAtk = 0, buffDef = 0, buffMatk = 0, buffMdef = 0, buffAtkMult = 0;
-  let buffCrit = (sk('focus') * 5), buffCritDmg = (sk('critical_power') * 0.05);
-  let buffSpd = (sk('quick_step') * 5);
+  let buffCrit = (sk('focus') * 5) + (sk('critical_chance') * 5) + (sk('eye_of_slayer') * 2);
+  let buffCritDmg = (sk('critical_power') * 0.05);
+  let buffSpd = (sk('quick_step') * 5) + (sk('boost_attack_speed') * 5) + (sk('fast_spell_casting') * 4);
 
   let xpBoost = 0, goldBoost = 0, luckBoost = 0, autoPotion = false;
   state.buffs = state.buffs || {};
@@ -959,8 +960,8 @@ export function getStats(state) {
   // 3. Velocidade de Ataque: Retornos decrescentes suaves acima de 2.0x
   const atkSpd = rawAtkSpd > 2.0 ? (2.0 + Math.log10(1 + (rawAtkSpd - 2.0) * 0.5)) : rawAtkSpd;
 
-  const maxHp = Math.floor((100 + state.level * 10 + sk('boostHp') * 60 + (Number(eb.hp) || 0) + (Number(setB.hp) || 0) + codexB.hp + dollsB.hp + setEnchantHp) * (1 + elixirHpMult) * certHpMult);
-  const maxMp = Math.floor((50 + state.level * 5 + sk('boostMana') * 30 + (Number(eb.mp) || 0) + (Number(setB.mp) || 0) + codexB.mp + dollsB.mp) * certMpMult);
+  const maxHp = Math.floor((100 + state.level * 10 + (sk('boostHp') + sk('boost_hp') + sk('vital_force')) * 60 + (Number(eb.hp) || 0) + (Number(setB.hp) || 0) + codexB.hp + dollsB.hp + setEnchantHp) * (1 + elixirHpMult) * certHpMult);
+  const maxMp = Math.floor((50 + state.level * 5 + (sk('boostMana') + sk('boost_mp') + sk('higher_mana')) * 30 + (Number(eb.mp) || 0) + (Number(setB.mp) || 0) + codexB.mp + dollsB.mp) * certMpMult);
 
   const rawStats = {
     atk: finalAtk || 1, def: finalDef || 0, eva: effectiveEvasion || 0, matk: finalMatk || 1, mdef: finalMdef || 0,

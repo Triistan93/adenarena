@@ -288,11 +288,14 @@ export const MonsterAIEngine = {
       });
     }
 
-    // Se Postura da Fortaleza estiver ativa, reduz mais 25% e reflete 10%
+    // Se Postura da Fortaleza estiver ativa, reduz mais 25% e reflete 2.5% (balanceado com teto de segurança)
+    const playerMaxHp = Number(state?.stats?.maxHp) || 2000;
     if (ai.fortressActive) {
       if (realNow < ai.fortressUntil) {
         result.finalDamage = Math.max(1, Math.floor(result.finalDamage * 0.75));
-        result.reflectedDamage += Math.max(1, Math.floor(result.finalDamage * 0.10));
+        const fortressReflectCap = Math.max(10, Math.floor(playerMaxHp * 0.03));
+        const fortressReflect = Math.min(fortressReflectCap, Math.max(1, Math.floor(result.finalDamage * 0.025)));
+        result.reflectedDamage += fortressReflect;
       } else {
         ai.fortressActive = false;
       }
@@ -323,9 +326,11 @@ export const MonsterAIEngine = {
       }
     }
 
-    // 5. Reflexão de Dano (Elite Reflect Trait)
+    // 5. Reflexão de Dano (Elite Reflect Trait — Nerfado de 12% para 3% com teto de 5% Max HP do jogador)
     if (ai.eliteTraits && ai.eliteTraits.includes('reflect')) {
-      const reflectAmt = Math.max(1, Math.floor(result.finalDamage * 0.12));
+      const eliteReflectCap = Math.max(15, Math.floor(playerMaxHp * 0.05));
+      const rawReflect = Math.max(1, Math.floor(result.finalDamage * 0.03));
+      const reflectAmt = Math.min(eliteReflectCap, rawReflect);
       result.reflectedDamage += reflectAmt;
       result.events.push({
         type: 'reflect',

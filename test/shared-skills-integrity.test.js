@@ -140,10 +140,11 @@ test('4. Learning & SP Investment: Any class can learn shared skills from Lv 1',
   assert.equal(testState.skills['wind_strike'], 1, 'wind_strike must now be level 1');
   assert.equal(testState.sp, 500 - cost1, 'SP must be correctly deducted');
 
-  // Invest in ice_bolt
+  // Invest in ice_bolt (unlocked at Lv 20 in wizard lineage)
+  testState.level = 20;
   const cost2 = getSkillCost('ice_bolt', 0);
   const ok2 = spendSP(testState, 'ice_bolt', dummyCallbacks);
-  assert.equal(ok2, true, 'spendSP on ice_bolt must succeed at Lv 1');
+  assert.equal(ok2, true, 'spendSP on ice_bolt must succeed at Lv 20');
   assert.equal(testState.skills['ice_bolt'], 1, 'ice_bolt must now be level 1');
 });
 

@@ -168,57 +168,58 @@ export function areSiblingBranches(classA, classB) {
 export function getSkillUnlockLevelForClass(classId, skillId) {
   if (!classId || !skillId || !CANONICAL_CLASS_REGISTRY_V2) return 1;
 
-  // Shared skills are unlocked at level 1 for all matching archetypes
-  if (SHARED_SKILL_IDS?.includes(skillId) || SHARED_MAGE_SKILL_IDS?.includes(skillId) || SHARED_FIGHTER_SKILL_IDS?.includes(skillId)) {
-    return 1;
-  }
-
   const canonical = resolveCanonicalClassId(classId) || classId;
   const v2Class = CANONICAL_CLASS_REGISTRY_V2[classId] || CANONICAL_CLASS_REGISTRY_V2[canonical];
-  if (!v2Class) return 1;
 
-  // Ultimate gating (Lv 80 / Lv 90)
-  const def = typeof window !== 'undefined' ? window.EchoData?.SKILL_DEFS_ECHO?.[skillId] : null;
-  if (def) {
-    if (def.starRank === 5 || def.tier === 5 || def.reqLvl >= 90) return 90;
-    if (def.isUltimate || def.starRank === 4 || def.tier === 4 || def.reqLvl >= 80) return 80;
-  }
-
-  // 1 & 2. Current and Ancestor classes: find earliest (lowest) minLevel
-  let minLevelFound = v2Class.skillIds?.includes(skillId) ? v2Class.minLevel : Infinity;
-  let curr = v2Class;
-  const visited = new Set([curr.id]);
-  while (curr.parentClass && CANONICAL_CLASS_REGISTRY_V2[curr.parentClass] && !visited.has(curr.parentClass)) {
-    visited.add(curr.parentClass);
-    curr = CANONICAL_CLASS_REGISTRY_V2[curr.parentClass];
-    if (curr.skillIds?.includes(skillId)) {
-      minLevelFound = Math.min(minLevelFound, curr.minLevel);
+  // 1. Authoritative V2 Canonical Class DAG evaluation
+  if (v2Class) {
+    // Ultimate gating (Lv 80 / Lv 90)
+    const def = typeof window !== 'undefined' ? window.EchoData?.SKILL_DEFS_ECHO?.[skillId] : null;
+    if (def) {
+      if (def.starRank === 5 || def.tier === 5 || def.reqLvl >= 90) return 90;
+      if (def.isUltimate || def.starRank === 4 || def.tier === 4 || def.reqLvl >= 80) return 80;
     }
-  }
-  if (minLevelFound !== Infinity) {
-    return minLevelFound;
-  }
 
-  // 3. Descendant classes: find earliest descendant minLevel
-  let minDescLevel = Infinity;
-  const queue = [v2Class.id];
-  const visitedDesc = new Set(queue);
-  while (queue.length > 0) {
-    const parentId = queue.shift();
-    for (const candidate of Object.values(CANONICAL_CLASS_REGISTRY_V2)) {
-      if (candidate.parentClass === parentId && !visitedDesc.has(candidate.id)) {
-        visitedDesc.add(candidate.id);
-        queue.push(candidate.id);
-        if (candidate.skillIds?.includes(skillId)) {
-          minDescLevel = Math.min(minDescLevel, candidate.minLevel);
+    // Current and Ancestor classes: find earliest (lowest) minLevel
+    let minLevelFound = v2Class.skillIds?.includes(skillId) ? v2Class.minLevel : Infinity;
+    let curr = v2Class;
+    const visited = new Set([curr.id]);
+    while (curr.parentClass && CANONICAL_CLASS_REGISTRY_V2[curr.parentClass] && !visited.has(curr.parentClass)) {
+      visited.add(curr.parentClass);
+      curr = CANONICAL_CLASS_REGISTRY_V2[curr.parentClass];
+      if (curr.skillIds?.includes(skillId)) {
+        minLevelFound = Math.min(minLevelFound, curr.minLevel);
+      }
+    }
+    if (minLevelFound !== Infinity) {
+      return minLevelFound;
+    }
+
+    // Descendant classes: find earliest descendant minLevel
+    let minDescLevel = Infinity;
+    const queue = [v2Class.id];
+    const visitedDesc = new Set(queue);
+    while (queue.length > 0) {
+      const parentId = queue.shift();
+      for (const candidate of Object.values(CANONICAL_CLASS_REGISTRY_V2)) {
+        if (candidate.parentClass === parentId && !visitedDesc.has(candidate.id)) {
+          visitedDesc.add(candidate.id);
+          queue.push(candidate.id);
+          if (candidate.skillIds?.includes(skillId)) {
+            minDescLevel = Math.min(minDescLevel, candidate.minLevel);
+          }
         }
       }
     }
-  }
-  if (minDescLevel !== Infinity) {
-    return minDescLevel;
+    if (minDescLevel !== Infinity) {
+      return minDescLevel;
+    }
   }
 
+  // Shared skills are unlocked at level 1 for all matching archetypes (fallback if not in V2 lineage)
+  if (SHARED_SKILL_IDS?.includes(skillId) || SHARED_MAGE_SKILL_IDS?.includes(skillId) || SHARED_FIGHTER_SKILL_IDS?.includes(skillId)) {
+    return 1;
+  }
   return 1;
 }
 
@@ -328,7 +329,47 @@ function isSkillNativeOrAvailableNow(classId, def) {
   if (!classId || !def) return false;
   const canonical = resolveCanonicalClassId(classId) || classId;
 
-  // Shared skills check
+  // Authoritative Canonical V2 class check
+  if (CANONICAL_CLASS_REGISTRY_V2) {
+    const v2Class = CANONICAL_CLASS_REGISTRY_V2[classId] || CANONICAL_CLASS_REGISTRY_V2[canonical];
+    if (v2Class) {
+      // 1. Native to current class
+      if (v2Class.skillIds?.includes(def.id)) return true;
+
+      // 2. Inherited from ancestor classes
+      let curr = v2Class;
+      const visited = new Set([curr.id]);
+      while (curr.parentClass && CANONICAL_CLASS_REGISTRY_V2[curr.parentClass] && !visited.has(curr.parentClass)) {
+        visited.add(curr.parentClass);
+        curr = CANONICAL_CLASS_REGISTRY_V2[curr.parentClass];
+        if (curr.skillIds?.includes(def.id)) return true;
+      }
+
+      // 3. Descendant promotion skills: strictly NOT available to current class
+      const queue = [v2Class.id];
+      const visitedDesc = new Set(queue);
+      let isDescendantSkill = false;
+      while (queue.length > 0) {
+        const parentId = queue.shift();
+        for (const candidate of Object.values(CANONICAL_CLASS_REGISTRY_V2)) {
+          if (candidate.parentClass === parentId && !visitedDesc.has(candidate.id)) {
+            visitedDesc.add(candidate.id);
+            queue.push(candidate.id);
+            if (candidate.skillIds?.includes(def.id)) {
+              isDescendantSkill = true;
+              break;
+            }
+          }
+        }
+        if (isDescendantSkill) break;
+      }
+      if (isDescendantSkill) {
+        return false;
+      }
+    }
+  }
+
+  // Shared skills check (fallback for legacy or un-migrated classes)
   if (SHARED_MAGE_SKILL_IDS.includes(def.id)) {
     return isMageClass(classId);
   }
@@ -393,7 +434,38 @@ export function isSkillInV2Lineage(classId, skillId) {
   if (!CANONICAL_CLASS_REGISTRY_V2 || !classId || !skillId) return false;
   if (isPurgedSkill(skillId)) return false;
 
-  // Shared skills belong to all classes of matching archetype
+  const canonical = resolveCanonicalClassId(classId) || classId;
+  const v2Class = CANONICAL_CLASS_REGISTRY_V2[classId] || CANONICAL_CLASS_REGISTRY_V2[canonical];
+
+  if (v2Class) {
+    // 1. Direct class ownership
+    if (v2Class.skillIds?.includes(skillId)) return true;
+
+    // 2. Ancestor inheritance (parentClass chain)
+    let curr = v2Class;
+    const visitedParents = new Set([curr.id]);
+    while (curr.parentClass && CANONICAL_CLASS_REGISTRY_V2[curr.parentClass] && !visitedParents.has(curr.parentClass)) {
+      visitedParents.add(curr.parentClass);
+      curr = CANONICAL_CLASS_REGISTRY_V2[curr.parentClass];
+      if (curr.skillIds?.includes(skillId)) return true;
+    }
+
+    // 3. Descendant promotions
+    const queue = [v2Class.id];
+    const visitedDesc = new Set(queue);
+    while (queue.length > 0) {
+      const parentId = queue.shift();
+      for (const candidate of Object.values(CANONICAL_CLASS_REGISTRY_V2)) {
+        if (candidate.parentClass === parentId && !visitedDesc.has(candidate.id)) {
+          visitedDesc.add(candidate.id);
+          queue.push(candidate.id);
+          if (candidate.skillIds?.includes(skillId)) return true;
+        }
+      }
+    }
+  }
+
+  // Shared skills belong to all classes of matching archetype (fallback if not explicit in V2)
   if (SHARED_MAGE_SKILL_IDS?.includes(skillId)) {
     return isMageClass(classId);
   }
@@ -402,36 +474,6 @@ export function isSkillInV2Lineage(classId, skillId) {
   }
   if (SHARED_SKILL_IDS?.includes(skillId)) {
     return true;
-  }
-
-  const canonical = resolveCanonicalClassId(classId) || classId;
-  const v2Class = CANONICAL_CLASS_REGISTRY_V2[classId] || CANONICAL_CLASS_REGISTRY_V2[canonical];
-  if (!v2Class) return false;
-
-  // 1. Direct class ownership
-  if (v2Class.skillIds?.includes(skillId)) return true;
-
-  // 2. Ancestor inheritance (parentClass chain)
-  let curr = v2Class;
-  const visitedParents = new Set([curr.id]);
-  while (curr.parentClass && CANONICAL_CLASS_REGISTRY_V2[curr.parentClass] && !visitedParents.has(curr.parentClass)) {
-    visitedParents.add(curr.parentClass);
-    curr = CANONICAL_CLASS_REGISTRY_V2[curr.parentClass];
-    if (curr.skillIds?.includes(skillId)) return true;
-  }
-
-  // 3. Descendant promotions
-  const queue = [v2Class.id];
-  const visitedDesc = new Set(queue);
-  while (queue.length > 0) {
-    const parentId = queue.shift();
-    for (const candidate of Object.values(CANONICAL_CLASS_REGISTRY_V2)) {
-      if (candidate.parentClass === parentId && !visitedDesc.has(candidate.id)) {
-        visitedDesc.add(candidate.id);
-        queue.push(candidate.id);
-        if (candidate.skillIds?.includes(skillId)) return true;
-      }
-    }
   }
 
   return false;
@@ -454,9 +496,16 @@ export function isSkillInProgressionPath(character, skill) {
   const charClass = (typeof character === 'string') ? character : character?.class;
   if (!charClass) return false;
   const canonicalCharClass = resolveCanonicalClassId(charClass) || charClass;
-  const charIsMage = isMageClass(charClass);
+  // Authoritative Canonical V2 check
+  if (CANONICAL_CLASS_REGISTRY_V2) {
+    const v2Class = CANONICAL_CLASS_REGISTRY_V2[charClass] || CANONICAL_CLASS_REGISTRY_V2[canonicalCharClass];
+    if (v2Class && isSkillInV2Lineage(charClass, def.id)) {
+      return true;
+    }
+  }
 
   // 1. Shared skills isolation
+  const charIsMage = isMageClass(charClass);
   if (SHARED_MAGE_SKILL_IDS.includes(def.id)) {
     return charIsMage;
   }
@@ -590,13 +639,16 @@ export function getSkillDetailedVisibility(character, skill) {
     return SKILL_DETAILED_VISIBILITY_STATES.LEARNED;
   }
 
-  // 2. Foreign Archetype check
-  const charIsMage = isMageClass(charClass);
-  if (SHARED_MAGE_SKILL_IDS.includes(def.id) && !charIsMage) {
-    return SKILL_DETAILED_VISIBILITY_STATES.HIDDEN_FOREIGN;
-  }
-  if (SHARED_FIGHTER_SKILL_IDS.includes(def.id) && charIsMage) {
-    return SKILL_DETAILED_VISIBILITY_STATES.HIDDEN_FOREIGN;
+  // 2. Foreign Archetype check (bypassed if skill is explicitly part of character's canonical V2 lineage)
+  const isExplicitV2Skill = isSkillInV2Lineage(charClass, def.id);
+  if (!isExplicitV2Skill) {
+    const charIsMage = isMageClass(charClass);
+    if (SHARED_MAGE_SKILL_IDS.includes(def.id) && !charIsMage) {
+      return SKILL_DETAILED_VISIBILITY_STATES.HIDDEN_FOREIGN;
+    }
+    if (SHARED_FIGHTER_SKILL_IDS.includes(def.id) && charIsMage) {
+      return SKILL_DETAILED_VISIBILITY_STATES.HIDDEN_FOREIGN;
+    }
   }
 
   // 3. Sibling Branch check

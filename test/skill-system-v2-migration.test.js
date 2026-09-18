@@ -32,10 +32,10 @@ import { isSkillInProgressionPath, resolveSkillDef, isMageClass, areSiblingBranc
 import { isSkillAllowedForClass } from '../lineage-idle/src/services/CharacterService.js';
 import { getStats } from '../lineage-idle/src/engine/StatsEngine.js';
 
-test('1. V2 Catalog Integrity: 46 Lineages, 142 Classes, 761 Skills, 0 Silent Gaps', () => {
+test('1. V2 Catalog Integrity: 46 Lineages, 142 Classes, 811 Skills, 0 Silent Gaps', () => {
   const report = SkillSystemV2Validator.validateCanonicalCatalog();
   assert.equal(report.valid, true, `Catalog audit failed: ${report.errors.join('; ')}`);
-  assert.equal(report.metrics.totalSkills, 761, 'Must contain exactly 761 unique canonical skills');
+  assert.equal(report.metrics.totalSkills, 811, 'Must contain exactly 811 unique canonical skills');
   assert.equal(report.metrics.totalClasses, 142, 'Must contain 142 canonical classes across 4 stages');
   assert.equal(report.metrics.totalLineages, 46, 'Must contain all 46 official lineages');
 

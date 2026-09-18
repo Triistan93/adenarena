@@ -576,3 +576,57 @@ Execução de webscraping exaustivo do portal oficial L2Wiki Essence (`https://l
 - **Integridade da Suíte de Testes**:
   - Todos os 527 testes unitários e de integração aprovados com 0 regressões.
 
+---
+
+<br/>
+
+## Página 6 — 18 de Setembro de 2026 às 02:00
+### 🌟 Sistema Canônico de 5 Skills por Evolução: 142 Classes, 46 Linhagens, 710 Atribuições & Monster Balance
+
+> **Data & Hora**: 18/09/2026 às 02:00 (BRT)  
+> **Status de Qualidade**: 
+> - **Testes Automatizados**: **625 testes** em 92 suítes canônicas passando (100% de aprovação).
+> - **Build de Produção**: Vite compilado com sucesso em 12.64s (`dist/` gerado com zero erros).
+> - **Auditoria de Breakpoints da Árvore de Habilidades**: **227 de 227 verificações aprovadas** (100% de conformidade nos níveis 1, 20, 40, 76, 80 e 90).
+> - **Catálogo de Habilidades**: 811 habilidades canônicas em `CanonicalSkillRegistryV2.js`, com 416 habilidades únicas distribuídas pelas 142 classes.
+
+#### 1. Resumo Executivo da Sessão
+Execução completa, ininterrupta e rigorosa do plano de implementação para o **Sistema Canônico de Exatamente 5 Habilidades por Evolução**, eliminando de forma definitiva todas as inventadas, poluições cruzadas entre arquétipos e desequilíbrios históricos. Todas as 142 classes do Lineage II Essence (distribuídas em 46 linhagens autênticas) agora possuem rigorosamente:
+- **Estágio 0 (Base / Lv 1–19)**: 5 habilidades fundamentais (3 ativas + 2 passivas).
+- **Estágio 1 (1ª Classe / Lv 20–39)**: 5 habilidades de especialização inicial (acumulando 10 habilidades).
+- **Estágio 2 (2ª Classe / Lv 40–75)**: 5 habilidades de classe avançada (acumulando 15 habilidades).
+- **Estágio 3 (3ª Classe / Lv 76+)**: 5 habilidades lendárias/ultimates (acumulando 20 habilidades, incluindo as 4★ e 5★ Master).
+
+#### 2. Execução Fase a Fase (10 Fases Concluídas)
+- **Fase 1: Wipe Seguro das Habilidades Antigas**:
+  - Backup preventivo criado em `lineage-idle/src/data/classes/CanonicalClassRegistryV2.backup.js`.
+  - Expurgadas 2.584 atribuições legadas e assimétricas, limpando os nós de todas as 142 classes para garantir zero resíduos ou nós fantasmas.
+- **Fase 2: Inserção das Novas 5 Habilidades Canônicas**:
+  - Aplicação de 710 atribuições exatas (142 classes $\times$ 5 habilidades) em `CanonicalClassRegistryV2.js`.
+  - Sincronização dos arrays `classes` em `CanonicalSkillRegistryV2.js`, vinculando formalmente as habilidades aos seus donos canônicos.
+  - Arqueiros (`sagittarius`, `moonlightSentinel`, `ghostSentinel`, `trickster`) receberam `legendary_archer` (4★ Lv 80) evoluindo para `legendary_archer_master` (5★ Lv 90).
+- **Fase 3: Análise Completa Raça por Raça e Classe por Classe**:
+  - Auditoria exaustiva em script automatizado (`audit_phase3.mjs`): 142 classes e 46 linhagens verificadas.
+  - Confirmação de 0 colisões entre ramos irmãos (`areSiblingBranches`) e 0 lacunas ancestrais.
+- **Fase 4: Correção de Bugs e Estabilização dos Motores**:
+  - Resolução do conflito entre o pool compartilhado legado (`SHARED_MAGE_SKILL_IDS`) e a árvore canônica V2 em `SkillEligibility.js`. O motor agora prioriza autoritativamente a árvore V2 (`v2Class.skillIds`, ancestrais e descendentes) antes de consultar fallbacks.
+  - Correção de testes forenses (`cross-class-contamination.test.js`, `skill-progression-forensic.test.js`, `skill-tree-ui-forensic.test.js`, `shared-skills-integrity.test.js`).
+- **Fase 5: Checagem Integral de Ícones Físicos (.webp)**:
+  - Auditoria física de 100% dos 811 arquivos de ícones referenciados no disco local (`public/icons/`).
+  - Correção das 15 habilidades Master sintetizadas (`indestructible_blade_master`, `titan_champion_master`, `mystic_meteor_master`, etc.), associando-as aos seus ícones oficiais existentes. Zero imagens quebradas ou ausentes no frontend.
+- **Fase 6: Checagem de Descrições e Efeitos Reais no Jogo**:
+  - Verificação de 100% das 416 habilidades únicas com campos `name`, `desc`, `canonicalEffect`, `type` e `balance`.
+  - Integração de todos os 30 tipos de passivas canônicas no `StatsEngine.js` (`two_handed_weapon_mastery`, `eye_of_slayer`, `sigil_mastery`, `spellcraft`, `shield_mastery`, `boost_evasion`, `focus_mind`, `higher_mana_gain`, `critical_chance`, `boost_attack_speed`, `fast_spell_casting`, `boost_hp`, `vital_force`), garantindo que os efeitos descritos se traduzam em cálculos matemáticos reais de combate.
+- **Fase 7: Inspeção da Árvore de Habilidades nos Breakpoints**:
+  - Auditoria com simulação completa de `SkillTreeViewModel` em todos os breakpoints de nível (Lv 1, 20, 40, 76, 80 e 90).
+  - **227/227 verificações aprovadas com 100% de sucesso**: a progressão libera exatamente 5 nós por evolução e preserva o histórico DAG.
+- **Fase 8: Monster Balance & Nerf na Reflexão de Dano**:
+  - Em `MonsterAIEngine.js`, o dano refletido por monstros com traço Elite `reflect` foi nerfado de 12% para 3%, e o da postura `fortress` de 10% para 2.5%.
+  - Implementado teto máximo de segurança de reflexão (limitado a no máximo 5% do Max HP do jogador por golpe), eliminando mortes instantâneas (suicídio acidental) por acertos críticos massivos de jogadores de alto nível.
+- **Fase 9: Validação e Expansão de VFX**:
+  - Verificação de 100% das habilidades ativas e ultimates mapeadas com `vfxId` no `VFXOrchestrator.js` e `LineageVFX.js`.
+  - Sucesso absoluto nos testes de estresse visual e performance com pooling de partículas e zero vazamentos de memória.
+- **Fase 10: Commit e Documentação**:
+  - Atualização do diário de desenvolvimento e versionamento completo das alterações no repositório.
+
+

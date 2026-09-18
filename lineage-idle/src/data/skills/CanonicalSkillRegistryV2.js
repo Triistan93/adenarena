@@ -1,8 +1,8 @@
 /**
  * CanonicalSkillRegistryV2.js — Single Source of Truth for Skills (Lineage II Essence - Celestial Destiny 3629)
  * 
- * Major Version Update V2 — Fully Scraped from L2Wiki Essence.
- * Total Canonical Skills: 761 across 46 Lineages
+ * Major Version Update V2 — Fully Scraped from L2Wiki Essence & L2Bandit.
+ * Total Canonical Skills: 811 across 46 Lineages
  * Audited: 100%
  */
 
@@ -34,13 +34,13 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "knight",
-            "paladin",
+            "bladeDancer",
             "darkAvenger",
             "elvenKnight",
-            "swordSinger",
+            "knight",
+            "paladin",
             "palusKnight",
-            "bladeDancer"
+            "swordSinger"
         ]
     },
     "haste": {
@@ -70,87 +70,87 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "warrior",
-            "gladiator",
-            "duelist",
-            "warlord",
-            "dreadnought",
-            "knight",
-            "paladin",
-            "phoenixKnight",
-            "darkAvenger",
-            "hellKnight",
-            "rogue",
-            "treasureHunter",
+            "abyssWalker",
             "adventurer",
-            "hawkeye",
-            "sagittarius",
-            "wizard",
-            "sorcerer",
-            "archmage",
-            "necromancer",
-            "soultaker",
-            "warlock",
             "arcanaLord",
-            "cleric",
-            "bishop",
-            "cardinal",
-            "prophet",
-            "hierophant",
-            "deathBlade",
-            "deathMessenger",
-            "deathKnight",
-            "warg",
+            "archmage",
             "assassinS1",
             "assassinS2",
             "assassinS3",
-            "elvenKnight",
-            "templeKnight",
-            "evaTemplar",
-            "swordSinger",
-            "swordMuse",
-            "elfScout",
-            "plainsWalker",
-            "windRider",
-            "silverRanger",
-            "moonlightSentinel",
-            "elvenWizard",
-            "spellsinger",
-            "mysticMuse",
-            "elementalSummoner",
-            "elementalMaster",
-            "elfOracle",
-            "elfElder",
-            "evaSaint",
-            "palusKnight",
-            "shillienKnight",
-            "shillienTemplar",
+            "bishop",
             "bladeDancer",
-            "spectralDancer",
-            "abyssWalker",
-            "ghostHunter",
-            "phantomRanger",
-            "ghostSentinel",
-            "darkWizard",
-            "spellhowler",
-            "stormScreamer",
-            "phantomSummoner",
-            "spectralMaster",
-            "shillienOracle",
-            "shillienElder",
-            "shillienSaint",
+            "bloodRose",
             "bloodRoseS1",
             "bloodRoseS2",
-            "bloodRose",
-            "lightTemplar",
-            "holyTemplar",
+            "cardinal",
+            "cleric",
+            "darkAvenger",
+            "darkWizard",
+            "deathBlade",
+            "deathKnight",
+            "deathMessenger",
             "divineTemplar",
+            "dreadnought",
+            "duelist",
+            "elementWeaver",
             "elementWeaverS1",
             "elementWeaverS2",
-            "elementWeaver",
+            "elementalMaster",
+            "elementalSummoner",
+            "elfElder",
+            "elfOracle",
+            "elfScout",
+            "elvenKnight",
+            "elvenWizard",
+            "evaSaint",
+            "evaTemplar",
+            "ghostHunter",
+            "ghostSentinel",
+            "gladiator",
+            "hawkeye",
+            "hellKnight",
+            "hierophant",
+            "holyTemplar",
+            "knight",
+            "lightTemplar",
+            "moonlightSentinel",
+            "mysticMuse",
+            "necromancer",
+            "paladin",
+            "palusKnight",
+            "phantomRanger",
+            "phantomSummoner",
+            "phoenixKnight",
+            "plainsWalker",
+            "prophet",
+            "rogue",
+            "sagittarius",
+            "sayhaSeeker",
             "sayhaSeer",
+            "shillienElder",
+            "shillienKnight",
+            "shillienOracle",
+            "shillienSaint",
+            "shillienTemplar",
+            "silverRanger",
+            "sorcerer",
+            "soultaker",
+            "spectralDancer",
+            "spectralMaster",
+            "spellhowler",
+            "spellsinger",
+            "stormScreamer",
+            "swordMuse",
+            "swordSinger",
+            "templeKnight",
+            "treasureHunter",
+            "warg",
+            "warlock",
+            "warlord",
+            "warrior",
+            "windRider",
             "windRiderErth",
-            "sayhaSeeker"
+            "wizard"
         ]
     },
     "acumen": {
@@ -180,239 +180,239 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "warrior",
-            "gladiator",
-            "duelist",
-            "warlord",
-            "dreadnought",
-            "knight",
-            "paladin",
-            "phoenixKnight",
-            "darkAvenger",
-            "hellKnight",
-            "rogue",
-            "treasureHunter",
+            "abyssWalker",
             "adventurer",
-            "hawkeye",
-            "sagittarius",
-            "wizard",
-            "sorcerer",
-            "archmage",
-            "necromancer",
-            "soultaker",
-            "warlock",
             "arcanaLord",
-            "cleric",
-            "bishop",
-            "cardinal",
-            "prophet",
-            "hierophant",
-            "deathBlade",
-            "deathMessenger",
-            "deathKnight",
-            "warg",
+            "archmage",
             "assassinS1",
             "assassinS2",
             "assassinS3",
-            "elvenKnight",
-            "templeKnight",
-            "evaTemplar",
-            "swordSinger",
-            "swordMuse",
-            "elfScout",
-            "plainsWalker",
-            "windRider",
-            "silverRanger",
-            "moonlightSentinel",
-            "elvenWizard",
-            "spellsinger",
-            "mysticMuse",
-            "elementalSummoner",
-            "elementalMaster",
-            "elfOracle",
-            "elfElder",
-            "evaSaint",
-            "palusKnight",
-            "shillienKnight",
-            "shillienTemplar",
+            "bishop",
             "bladeDancer",
-            "spectralDancer",
-            "abyssWalker",
-            "ghostHunter",
-            "phantomRanger",
-            "ghostSentinel",
-            "darkWizard",
-            "spellhowler",
-            "stormScreamer",
-            "phantomSummoner",
-            "spectralMaster",
-            "shillienOracle",
-            "shillienElder",
-            "shillienSaint",
+            "bloodRose",
             "bloodRoseS1",
             "bloodRoseS2",
-            "bloodRose",
-            "lightTemplar",
-            "holyTemplar",
+            "cardinal",
+            "cleric",
+            "darkAvenger",
+            "darkWizard",
+            "deathBlade",
+            "deathKnight",
+            "deathMessenger",
             "divineTemplar",
+            "dreadnought",
+            "duelist",
+            "elementWeaver",
             "elementWeaverS1",
             "elementWeaverS2",
-            "elementWeaver",
+            "elementalMaster",
+            "elementalSummoner",
+            "elfElder",
+            "elfOracle",
+            "elfScout",
+            "elvenKnight",
+            "elvenWizard",
+            "evaSaint",
+            "evaTemplar",
+            "ghostHunter",
+            "ghostSentinel",
+            "gladiator",
+            "hawkeye",
+            "hellKnight",
+            "hierophant",
+            "holyTemplar",
+            "knight",
+            "lightTemplar",
+            "moonlightSentinel",
+            "mysticMuse",
+            "necromancer",
+            "paladin",
+            "palusKnight",
+            "phantomRanger",
+            "phantomSummoner",
+            "phoenixKnight",
+            "plainsWalker",
+            "prophet",
+            "rogue",
+            "sagittarius",
+            "sayhaSeeker",
             "sayhaSeer",
+            "shillienElder",
+            "shillienKnight",
+            "shillienOracle",
+            "shillienSaint",
+            "shillienTemplar",
+            "silverRanger",
+            "sorcerer",
+            "soultaker",
+            "spectralDancer",
+            "spectralMaster",
+            "spellhowler",
+            "spellsinger",
+            "stormScreamer",
+            "swordMuse",
+            "swordSinger",
+            "templeKnight",
+            "treasureHunter",
+            "warg",
+            "warlock",
+            "warlord",
+            "warrior",
+            "windRider",
             "windRiderErth",
-            "sayhaSeeker"
+            "wizard"
         ]
     },
     "hp_recovery": {
         "id": "hp_recovery",
         "name": "HP Recovery",
         "slug": "hp_recovery",
-        "type": "buff",
-        "rawType": "Buff",
+        "type": "passive",
+        "rawType": "Passive",
         "rarity": "2★",
         "starRank": 2,
-        "icon": "/icons/skill0211.webp",
+        "icon": "/icons/skill0212.webp",
         "iconGap": false,
         "iconGapReason": null,
-        "canonicalEffect": "Recovers 549 HP every 9.9 sec.",
-        "canonicalCooldown": "10 sec.",
-        "canonicalCooldownMs": 10000,
-        "desc": "Recovers 549 HP every 9.9 sec.",
+        "canonicalEffect": "Recovers HP every 9.9 sec.",
+        "canonicalCooldown": "N/A",
+        "canonicalCooldownMs": 0,
+        "desc": "Increases natural HP recovery rate.",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
+            "mpCost": 0,
+            "pwr": 0,
             "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+            "pvpMultiplier": 1
         },
-        "vfxId": "vfx_hp_recovery",
+        "vfxId": null,
         "vfxGap": false,
-        "sfxId": "sfx_action",
+        "sfxId": null,
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "warrior",
-            "gladiator",
-            "duelist",
-            "warlord",
-            "dreadnought",
-            "knight",
-            "paladin",
-            "phoenixKnight",
-            "darkAvenger",
-            "hellKnight",
-            "rogue",
-            "treasureHunter",
+            "abyssWalker",
             "adventurer",
-            "hawkeye",
-            "sagittarius",
-            "wizard",
-            "sorcerer",
-            "archmage",
-            "necromancer",
-            "soultaker",
-            "warlock",
             "arcanaLord",
-            "cleric",
-            "bishop",
-            "cardinal",
-            "prophet",
-            "hierophant",
-            "deathBlade",
-            "deathMessenger",
-            "deathKnight",
-            "warg",
+            "archmage",
+            "artisanDwarf",
             "assassinS1",
             "assassinS2",
             "assassinS3",
-            "elvenKnight",
-            "templeKnight",
-            "evaTemplar",
-            "swordSinger",
-            "swordMuse",
-            "elfScout",
-            "plainsWalker",
-            "windRider",
-            "silverRanger",
-            "moonlightSentinel",
-            "elvenWizard",
-            "spellsinger",
-            "mysticMuse",
-            "elementalSummoner",
-            "elementalMaster",
-            "elfOracle",
-            "elfElder",
-            "evaSaint",
-            "palusKnight",
-            "shillienKnight",
-            "shillienTemplar",
+            "berserker",
+            "bishop",
             "bladeDancer",
-            "spectralDancer",
-            "abyssWalker",
-            "ghostHunter",
-            "phantomRanger",
-            "ghostSentinel",
-            "darkWizard",
-            "spellhowler",
-            "stormScreamer",
-            "phantomSummoner",
-            "spectralMaster",
-            "shillienOracle",
-            "shillienElder",
-            "shillienSaint",
+            "bloodRose",
             "bloodRoseS1",
             "bloodRoseS2",
-            "bloodRose",
-            "raider",
-            "destroyer",
-            "titan",
-            "monk",
-            "tyrant",
-            "grandKhavatari",
-            "dragoon",
-            "vanguardRider",
-            "grandVanguard",
-            "shaman",
-            "overlord",
-            "dominator",
-            "warcryer",
-            "doomcryer",
-            "scavenger",
             "bountyHunter",
+            "cardinal",
+            "cleric",
+            "darkAvenger",
+            "darkWizard",
+            "deathBlade",
+            "deathKnight",
+            "deathMessenger",
+            "destroyer",
+            "divineTemplar",
+            "dominator",
+            "doombringer",
+            "doomcryer",
+            "dragoon",
+            "dreadnought",
+            "duelist",
+            "elementWeaver",
+            "elementWeaverS1",
+            "elementWeaverS2",
+            "elementalMaster",
+            "elementalSummoner",
+            "elfElder",
+            "elfOracle",
+            "elfScout",
+            "elvenKnight",
+            "elvenWizard",
+            "ertheiaWarrior",
+            "evaSaint",
+            "evaTemplar",
+            "eviscerator",
             "fortuneSeeker",
-            "artisanDwarf",
-            "warsmith",
+            "ghostHunter",
+            "ghostSentinel",
+            "gladiator",
+            "grandKhavatari",
+            "grandVanguard",
+            "hatamoto",
+            "hawkeye",
+            "hellKnight",
+            "hierophant",
+            "holyTemplar",
+            "knight",
+            "lightTemplar",
             "maestro",
+            "marauder",
+            "monk",
+            "moonlightSentinel",
+            "mysticMuse",
+            "necromancer",
+            "overlord",
+            "paladin",
+            "palusKnight",
+            "phantomRanger",
+            "phantomSummoner",
+            "phoenixKnight",
+            "plainsWalker",
+            "prophet",
+            "raider",
+            "rogue",
+            "ronin",
+            "sagittarius",
+            "samurai",
+            "sayhaSeeker",
+            "sayhaSeer",
+            "scavenger",
+            "shaman",
+            "sharpshooter",
+            "shillienElder",
+            "shillienKnight",
+            "shillienOracle",
+            "shillienSaint",
+            "shillienTemplar",
             "shineMakerS1",
             "shineMakerS2",
             "shinemaker",
-            "trooper",
-            "berserker",
-            "doombringer",
-            "soulFinder",
+            "silverRanger",
+            "sorcerer",
             "soulBreakerKamael",
+            "soulFinder",
             "soulHound",
-            "warder",
             "soulRanger",
-            "trickster",
-            "hatamoto",
-            "ronin",
-            "samurai",
-            "sylphGunner",
-            "sharpshooter",
-            "windSniper",
+            "soultaker",
+            "spectralDancer",
+            "spectralMaster",
+            "spellhowler",
+            "spellsinger",
             "stormBlaster",
-            "lightTemplar",
-            "holyTemplar",
-            "divineTemplar",
-            "elementWeaverS1",
-            "elementWeaverS2",
-            "elementWeaver",
-            "marauder",
-            "ertheiaWarrior",
-            "eviscerator",
-            "sayhaSeer",
+            "stormScreamer",
+            "swordMuse",
+            "swordSinger",
+            "sylphGunner",
+            "templeKnight",
+            "titan",
+            "treasureHunter",
+            "trickster",
+            "trooper",
+            "tyrant",
+            "vanguardRider",
+            "warcryer",
+            "warder",
+            "warg",
+            "warlock",
+            "warlord",
+            "warrior",
+            "warsmith",
+            "windRider",
             "windRiderErth",
-            "sayhaSeeker"
+            "windSniper",
+            "wizard"
         ]
     },
     "berserker_spirit": {
@@ -442,87 +442,87 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "warrior",
-            "gladiator",
-            "duelist",
-            "warlord",
-            "dreadnought",
-            "knight",
-            "paladin",
-            "phoenixKnight",
-            "darkAvenger",
-            "hellKnight",
-            "rogue",
-            "treasureHunter",
+            "abyssWalker",
             "adventurer",
-            "hawkeye",
-            "sagittarius",
-            "wizard",
-            "sorcerer",
-            "archmage",
-            "necromancer",
-            "soultaker",
-            "warlock",
             "arcanaLord",
-            "cleric",
-            "bishop",
-            "cardinal",
-            "prophet",
-            "hierophant",
-            "deathBlade",
-            "deathMessenger",
-            "deathKnight",
-            "warg",
+            "archmage",
             "assassinS1",
             "assassinS2",
             "assassinS3",
-            "elvenKnight",
-            "templeKnight",
-            "evaTemplar",
-            "swordSinger",
-            "swordMuse",
-            "elfScout",
-            "plainsWalker",
-            "windRider",
-            "silverRanger",
-            "moonlightSentinel",
-            "elvenWizard",
-            "spellsinger",
-            "mysticMuse",
-            "elementalSummoner",
-            "elementalMaster",
-            "elfOracle",
-            "elfElder",
-            "evaSaint",
-            "palusKnight",
-            "shillienKnight",
-            "shillienTemplar",
+            "bishop",
             "bladeDancer",
-            "spectralDancer",
-            "abyssWalker",
-            "ghostHunter",
-            "phantomRanger",
-            "ghostSentinel",
-            "darkWizard",
-            "spellhowler",
-            "stormScreamer",
-            "phantomSummoner",
-            "spectralMaster",
-            "shillienOracle",
-            "shillienElder",
-            "shillienSaint",
+            "bloodRose",
             "bloodRoseS1",
             "bloodRoseS2",
-            "bloodRose",
-            "lightTemplar",
-            "holyTemplar",
+            "cardinal",
+            "cleric",
+            "darkAvenger",
+            "darkWizard",
+            "deathBlade",
+            "deathKnight",
+            "deathMessenger",
             "divineTemplar",
+            "dreadnought",
+            "duelist",
+            "elementWeaver",
             "elementWeaverS1",
             "elementWeaverS2",
-            "elementWeaver",
+            "elementalMaster",
+            "elementalSummoner",
+            "elfElder",
+            "elfOracle",
+            "elfScout",
+            "elvenKnight",
+            "elvenWizard",
+            "evaSaint",
+            "evaTemplar",
+            "ghostHunter",
+            "ghostSentinel",
+            "gladiator",
+            "hawkeye",
+            "hellKnight",
+            "hierophant",
+            "holyTemplar",
+            "knight",
+            "lightTemplar",
+            "moonlightSentinel",
+            "mysticMuse",
+            "necromancer",
+            "paladin",
+            "palusKnight",
+            "phantomRanger",
+            "phantomSummoner",
+            "phoenixKnight",
+            "plainsWalker",
+            "prophet",
+            "rogue",
+            "sagittarius",
+            "sayhaSeeker",
             "sayhaSeer",
+            "shillienElder",
+            "shillienKnight",
+            "shillienOracle",
+            "shillienSaint",
+            "shillienTemplar",
+            "silverRanger",
+            "sorcerer",
+            "soultaker",
+            "spectralDancer",
+            "spectralMaster",
+            "spellhowler",
+            "spellsinger",
+            "stormScreamer",
+            "swordMuse",
+            "swordSinger",
+            "templeKnight",
+            "treasureHunter",
+            "warg",
+            "warlock",
+            "warlord",
+            "warrior",
+            "windRider",
             "windRiderErth",
-            "sayhaSeeker"
+            "wizard"
         ]
     },
     "wild_magic": {
@@ -552,87 +552,87 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "warrior",
-            "gladiator",
-            "duelist",
-            "warlord",
-            "dreadnought",
-            "knight",
-            "paladin",
-            "phoenixKnight",
-            "darkAvenger",
-            "hellKnight",
-            "rogue",
-            "treasureHunter",
+            "abyssWalker",
             "adventurer",
-            "hawkeye",
-            "sagittarius",
-            "wizard",
-            "sorcerer",
-            "archmage",
-            "necromancer",
-            "soultaker",
-            "warlock",
             "arcanaLord",
-            "cleric",
-            "bishop",
-            "cardinal",
-            "prophet",
-            "hierophant",
-            "deathBlade",
-            "deathMessenger",
-            "deathKnight",
-            "warg",
+            "archmage",
             "assassinS1",
             "assassinS2",
             "assassinS3",
-            "elvenKnight",
-            "templeKnight",
-            "evaTemplar",
-            "swordSinger",
-            "swordMuse",
-            "elfScout",
-            "plainsWalker",
-            "windRider",
-            "silverRanger",
-            "moonlightSentinel",
-            "elvenWizard",
-            "spellsinger",
-            "mysticMuse",
-            "elementalSummoner",
-            "elementalMaster",
-            "elfOracle",
-            "elfElder",
-            "evaSaint",
-            "palusKnight",
-            "shillienKnight",
-            "shillienTemplar",
+            "bishop",
             "bladeDancer",
-            "spectralDancer",
-            "abyssWalker",
-            "ghostHunter",
-            "phantomRanger",
-            "ghostSentinel",
-            "darkWizard",
-            "spellhowler",
-            "stormScreamer",
-            "phantomSummoner",
-            "spectralMaster",
-            "shillienOracle",
-            "shillienElder",
-            "shillienSaint",
+            "bloodRose",
             "bloodRoseS1",
             "bloodRoseS2",
-            "bloodRose",
-            "lightTemplar",
-            "holyTemplar",
+            "cardinal",
+            "cleric",
+            "darkAvenger",
+            "darkWizard",
+            "deathBlade",
+            "deathKnight",
+            "deathMessenger",
             "divineTemplar",
+            "dreadnought",
+            "duelist",
+            "elementWeaver",
             "elementWeaverS1",
             "elementWeaverS2",
-            "elementWeaver",
+            "elementalMaster",
+            "elementalSummoner",
+            "elfElder",
+            "elfOracle",
+            "elfScout",
+            "elvenKnight",
+            "elvenWizard",
+            "evaSaint",
+            "evaTemplar",
+            "ghostHunter",
+            "ghostSentinel",
+            "gladiator",
+            "hawkeye",
+            "hellKnight",
+            "hierophant",
+            "holyTemplar",
+            "knight",
+            "lightTemplar",
+            "moonlightSentinel",
+            "mysticMuse",
+            "necromancer",
+            "paladin",
+            "palusKnight",
+            "phantomRanger",
+            "phantomSummoner",
+            "phoenixKnight",
+            "plainsWalker",
+            "prophet",
+            "rogue",
+            "sagittarius",
+            "sayhaSeeker",
             "sayhaSeer",
+            "shillienElder",
+            "shillienKnight",
+            "shillienOracle",
+            "shillienSaint",
+            "shillienTemplar",
+            "silverRanger",
+            "sorcerer",
+            "soultaker",
+            "spectralDancer",
+            "spectralMaster",
+            "spellhowler",
+            "spellsinger",
+            "stormScreamer",
+            "swordMuse",
+            "swordSinger",
+            "templeKnight",
+            "treasureHunter",
+            "warg",
+            "warlock",
+            "warlord",
+            "warrior",
+            "windRider",
             "windRiderErth",
-            "sayhaSeeker"
+            "wizard"
         ]
     },
     "shield_stun": {
@@ -662,11 +662,12 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 60,
         "classes": [
+            "darkAvenger",
+            "elvenKnight",
+            "hellKnight",
             "knight",
             "paladin",
-            "phoenixKnight",
-            "darkAvenger",
-            "hellKnight"
+            "phoenixKnight"
         ]
     },
     "magic_barrier": {
@@ -696,87 +697,87 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "warrior",
-            "gladiator",
-            "duelist",
-            "warlord",
-            "dreadnought",
-            "knight",
-            "paladin",
-            "phoenixKnight",
-            "darkAvenger",
-            "hellKnight",
-            "rogue",
-            "treasureHunter",
+            "abyssWalker",
             "adventurer",
-            "hawkeye",
-            "sagittarius",
-            "wizard",
-            "sorcerer",
-            "archmage",
-            "necromancer",
-            "soultaker",
-            "warlock",
             "arcanaLord",
-            "cleric",
-            "bishop",
-            "cardinal",
-            "prophet",
-            "hierophant",
-            "deathBlade",
-            "deathMessenger",
-            "deathKnight",
-            "warg",
+            "archmage",
             "assassinS1",
             "assassinS2",
             "assassinS3",
-            "elvenKnight",
-            "templeKnight",
-            "evaTemplar",
-            "swordSinger",
-            "swordMuse",
-            "elfScout",
-            "plainsWalker",
-            "windRider",
-            "silverRanger",
-            "moonlightSentinel",
-            "elvenWizard",
-            "spellsinger",
-            "mysticMuse",
-            "elementalSummoner",
-            "elementalMaster",
-            "elfOracle",
-            "elfElder",
-            "evaSaint",
-            "palusKnight",
-            "shillienKnight",
-            "shillienTemplar",
+            "bishop",
             "bladeDancer",
-            "spectralDancer",
-            "abyssWalker",
-            "ghostHunter",
-            "phantomRanger",
-            "ghostSentinel",
-            "darkWizard",
-            "spellhowler",
-            "stormScreamer",
-            "phantomSummoner",
-            "spectralMaster",
-            "shillienOracle",
-            "shillienElder",
-            "shillienSaint",
+            "bloodRose",
             "bloodRoseS1",
             "bloodRoseS2",
-            "bloodRose",
-            "lightTemplar",
-            "holyTemplar",
+            "cardinal",
+            "cleric",
+            "darkAvenger",
+            "darkWizard",
+            "deathBlade",
+            "deathKnight",
+            "deathMessenger",
             "divineTemplar",
+            "dreadnought",
+            "duelist",
+            "elementWeaver",
             "elementWeaverS1",
             "elementWeaverS2",
-            "elementWeaver",
+            "elementalMaster",
+            "elementalSummoner",
+            "elfElder",
+            "elfOracle",
+            "elfScout",
+            "elvenKnight",
+            "elvenWizard",
+            "evaSaint",
+            "evaTemplar",
+            "ghostHunter",
+            "ghostSentinel",
+            "gladiator",
+            "hawkeye",
+            "hellKnight",
+            "hierophant",
+            "holyTemplar",
+            "knight",
+            "lightTemplar",
+            "moonlightSentinel",
+            "mysticMuse",
+            "necromancer",
+            "paladin",
+            "palusKnight",
+            "phantomRanger",
+            "phantomSummoner",
+            "phoenixKnight",
+            "plainsWalker",
+            "prophet",
+            "rogue",
+            "sagittarius",
+            "sayhaSeeker",
             "sayhaSeer",
+            "shillienElder",
+            "shillienKnight",
+            "shillienOracle",
+            "shillienSaint",
+            "shillienTemplar",
+            "silverRanger",
+            "sorcerer",
+            "soultaker",
+            "spectralDancer",
+            "spectralMaster",
+            "spellhowler",
+            "spellsinger",
+            "stormScreamer",
+            "swordMuse",
+            "swordSinger",
+            "templeKnight",
+            "treasureHunter",
+            "warg",
+            "warlock",
+            "warlord",
+            "warrior",
+            "windRider",
             "windRiderErth",
-            "sayhaSeeker"
+            "wizard"
         ]
     },
     "shield_strike": {
@@ -806,10 +807,14 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "paladin",
-            "phoenixKnight",
             "darkAvenger",
-            "hellKnight"
+            "elvenKnight",
+            "hellKnight",
+            "knight",
+            "lightTemplar",
+            "paladin",
+            "palusKnight",
+            "phoenixKnight"
         ]
     },
     "holy_strike": {
@@ -870,10 +875,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 50,
         "classes": [
-            "paladin",
-            "phoenixKnight",
             "darkAvenger",
-            "hellKnight"
+            "hellKnight",
+            "paladin",
+            "phoenixKnight"
         ]
     },
     "angelic_archon": {
@@ -910,152 +915,152 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "id": "mp_recovery",
         "name": "MP Recovery",
         "slug": "mp_recovery",
-        "type": "buff",
-        "rawType": "Buff",
+        "type": "passive",
+        "rawType": "Passive",
         "rarity": "2★",
         "starRank": 2,
-        "icon": "/icons/skill0213.webp",
+        "icon": "/icons/skill0229.webp",
         "iconGap": false,
         "iconGapReason": null,
-        "canonicalEffect": "Recovers 119 MP every 9.9 sec.",
-        "canonicalCooldown": "10 sec.",
-        "canonicalCooldownMs": 10000,
-        "desc": "Recovers 119 MP every 9.9 sec.",
+        "canonicalEffect": "Recovers MP every 9.9 sec.",
+        "canonicalCooldown": "N/A",
+        "canonicalCooldownMs": 0,
+        "desc": "Increases natural MP recovery rate.",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
+            "mpCost": 0,
+            "pwr": 0,
             "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+            "pvpMultiplier": 1
         },
-        "vfxId": "vfx_mp_recovery",
+        "vfxId": null,
         "vfxGap": false,
-        "sfxId": "sfx_action",
+        "sfxId": null,
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "warrior",
-            "gladiator",
-            "duelist",
-            "warlord",
-            "dreadnought",
-            "knight",
-            "paladin",
-            "phoenixKnight",
-            "darkAvenger",
-            "hellKnight",
-            "rogue",
-            "treasureHunter",
+            "abyssWalker",
             "adventurer",
-            "hawkeye",
-            "sagittarius",
-            "wizard",
-            "sorcerer",
-            "archmage",
-            "necromancer",
-            "soultaker",
-            "warlock",
             "arcanaLord",
-            "cleric",
-            "bishop",
-            "cardinal",
-            "prophet",
-            "hierophant",
-            "deathBlade",
-            "deathMessenger",
-            "deathKnight",
-            "warg",
+            "archmage",
+            "artisanDwarf",
             "assassinS1",
             "assassinS2",
             "assassinS3",
-            "elvenKnight",
-            "templeKnight",
-            "evaTemplar",
-            "swordSinger",
-            "swordMuse",
-            "elfScout",
-            "plainsWalker",
-            "windRider",
-            "silverRanger",
-            "moonlightSentinel",
-            "elvenWizard",
-            "spellsinger",
-            "mysticMuse",
-            "elementalSummoner",
-            "elementalMaster",
-            "elfOracle",
-            "elfElder",
-            "evaSaint",
-            "palusKnight",
-            "shillienKnight",
-            "shillienTemplar",
+            "berserker",
+            "bishop",
             "bladeDancer",
-            "spectralDancer",
-            "abyssWalker",
-            "ghostHunter",
-            "phantomRanger",
-            "ghostSentinel",
-            "darkWizard",
-            "spellhowler",
-            "stormScreamer",
-            "phantomSummoner",
-            "spectralMaster",
-            "shillienOracle",
-            "shillienElder",
-            "shillienSaint",
+            "bloodRose",
             "bloodRoseS1",
             "bloodRoseS2",
-            "bloodRose",
-            "raider",
-            "destroyer",
-            "titan",
-            "monk",
-            "tyrant",
-            "grandKhavatari",
-            "dragoon",
-            "vanguardRider",
-            "grandVanguard",
-            "shaman",
-            "overlord",
-            "dominator",
-            "warcryer",
-            "doomcryer",
-            "scavenger",
             "bountyHunter",
+            "cardinal",
+            "cleric",
+            "darkAvenger",
+            "darkWizard",
+            "deathBlade",
+            "deathKnight",
+            "deathMessenger",
+            "destroyer",
+            "divineTemplar",
+            "dominator",
+            "doombringer",
+            "doomcryer",
+            "dragoon",
+            "dreadnought",
+            "duelist",
+            "elementWeaver",
+            "elementWeaverS1",
+            "elementWeaverS2",
+            "elementalMaster",
+            "elementalSummoner",
+            "elfElder",
+            "elfOracle",
+            "elfScout",
+            "elvenKnight",
+            "elvenWizard",
+            "ertheiaWarrior",
+            "evaSaint",
+            "evaTemplar",
+            "eviscerator",
             "fortuneSeeker",
-            "artisanDwarf",
-            "warsmith",
+            "ghostHunter",
+            "ghostSentinel",
+            "gladiator",
+            "grandKhavatari",
+            "grandVanguard",
+            "hatamoto",
+            "hawkeye",
+            "hellKnight",
+            "hierophant",
+            "holyTemplar",
+            "knight",
+            "lightTemplar",
             "maestro",
+            "marauder",
+            "monk",
+            "moonlightSentinel",
+            "mysticMuse",
+            "necromancer",
+            "overlord",
+            "paladin",
+            "palusKnight",
+            "phantomRanger",
+            "phantomSummoner",
+            "phoenixKnight",
+            "plainsWalker",
+            "prophet",
+            "raider",
+            "rogue",
+            "ronin",
+            "sagittarius",
+            "samurai",
+            "sayhaSeeker",
+            "sayhaSeer",
+            "scavenger",
+            "shaman",
+            "sharpshooter",
+            "shillienElder",
+            "shillienKnight",
+            "shillienOracle",
+            "shillienSaint",
+            "shillienTemplar",
             "shineMakerS1",
             "shineMakerS2",
             "shinemaker",
-            "trooper",
-            "berserker",
-            "doombringer",
-            "soulFinder",
+            "silverRanger",
+            "sorcerer",
             "soulBreakerKamael",
+            "soulFinder",
             "soulHound",
-            "warder",
             "soulRanger",
-            "trickster",
-            "hatamoto",
-            "ronin",
-            "samurai",
-            "sylphGunner",
-            "sharpshooter",
-            "windSniper",
+            "soultaker",
+            "spectralDancer",
+            "spectralMaster",
+            "spellhowler",
+            "spellsinger",
             "stormBlaster",
-            "lightTemplar",
-            "holyTemplar",
-            "divineTemplar",
-            "elementWeaverS1",
-            "elementWeaverS2",
-            "elementWeaver",
-            "marauder",
-            "ertheiaWarrior",
-            "eviscerator",
-            "sayhaSeer",
+            "stormScreamer",
+            "swordMuse",
+            "swordSinger",
+            "sylphGunner",
+            "templeKnight",
+            "titan",
+            "treasureHunter",
+            "trickster",
+            "trooper",
+            "tyrant",
+            "vanguardRider",
+            "warcryer",
+            "warder",
+            "warg",
+            "warlock",
+            "warlord",
+            "warrior",
+            "warsmith",
+            "windRider",
             "windRiderErth",
-            "sayhaSeeker"
+            "windSniper",
+            "wizard"
         ]
     },
     "ultimate_defense": {
@@ -1085,17 +1090,17 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 46,
         "classes": [
+            "darkAvenger",
+            "elvenKnight",
+            "evaTemplar",
+            "hellKnight",
             "knight",
             "paladin",
-            "phoenixKnight",
-            "darkAvenger",
-            "hellKnight",
-            "elvenKnight",
-            "templeKnight",
-            "evaTemplar",
             "palusKnight",
+            "phoenixKnight",
             "shillienKnight",
-            "shillienTemplar"
+            "shillienTemplar",
+            "templeKnight"
         ]
     },
     "shield_deflect_magic": {
@@ -1125,10 +1130,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 60,
         "classes": [
-            "paladin",
             "darkAvenger",
-            "templeKnight",
-            "shillienKnight"
+            "paladin",
+            "shillienKnight",
+            "templeKnight"
         ]
     },
     "quick_heal": {
@@ -1158,9 +1163,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
+            "darkAvenger",
             "knight",
-            "paladin",
-            "darkAvenger"
+            "paladin"
         ]
     },
     "sanctuary": {
@@ -1221,14 +1226,14 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 50,
         "classes": [
+            "bladeDancer",
+            "evaTemplar",
             "paladin",
             "phoenixKnight",
-            "templeKnight",
-            "evaTemplar",
-            "swordSinger",
+            "spectralDancer",
             "swordMuse",
-            "bladeDancer",
-            "spectralDancer"
+            "swordSinger",
+            "templeKnight"
         ]
     },
     "remedy": {
@@ -1319,14 +1324,14 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
+            "darkAvenger",
+            "evaTemplar",
+            "hellKnight",
             "paladin",
             "phoenixKnight",
-            "darkAvenger",
-            "hellKnight",
-            "templeKnight",
-            "evaTemplar",
             "shillienKnight",
-            "shillienTemplar"
+            "shillienTemplar",
+            "templeKnight"
         ]
     },
     "sacrifice": {
@@ -1387,17 +1392,17 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
+            "darkAvenger",
+            "elvenKnight",
+            "evaTemplar",
+            "hellKnight",
             "knight",
             "paladin",
-            "phoenixKnight",
-            "darkAvenger",
-            "hellKnight",
-            "elvenKnight",
-            "templeKnight",
-            "evaTemplar",
             "palusKnight",
+            "phoenixKnight",
             "shillienKnight",
-            "shillienTemplar"
+            "shillienTemplar",
+            "templeKnight"
         ]
     },
     "blade_strike": {
@@ -1427,8 +1432,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "gladiator",
-            "duelist"
+            "duelist",
+            "gladiator"
         ]
     },
     "blade_storm_dance": {
@@ -1458,8 +1463,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 47,
         "classes": [
-            "gladiator",
-            "duelist"
+            "duelist",
+            "gladiator"
         ]
     },
     "light_assassin_transformation": {
@@ -1551,8 +1556,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "gladiator",
-            "duelist"
+            "duelist",
+            "gladiator"
         ]
     },
     "rush": {
@@ -1582,24 +1587,24 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "gladiator",
-            "duelist",
-            "warlord",
-            "dreadnought",
-            "destroyer",
-            "titan",
-            "tyrant",
-            "grandKhavatari",
+            "berserker",
             "bountyHunter",
+            "destroyer",
+            "doombringer",
+            "dreadnought",
+            "duelist",
+            "ertheiaWarrior",
+            "eviscerator",
             "fortuneSeeker",
-            "warsmith",
+            "gladiator",
+            "grandKhavatari",
             "maestro",
             "shineMakerS2",
             "shinemaker",
-            "berserker",
-            "doombringer",
-            "ertheiaWarrior",
-            "eviscerator"
+            "titan",
+            "tyrant",
+            "warlord",
+            "warsmith"
         ]
     },
     "mass_shackling": {
@@ -1629,10 +1634,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 55,
         "classes": [
+            "evaTemplar",
             "paladin",
             "phoenixKnight",
-            "templeKnight",
-            "evaTemplar"
+            "templeKnight"
         ]
     },
     "blade_movement": {
@@ -1662,8 +1667,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 56,
         "classes": [
-            "gladiator",
-            "duelist"
+            "duelist",
+            "gladiator"
         ]
     },
     "dual_weapon_defense": {
@@ -1693,8 +1698,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 41,
         "classes": [
-            "gladiator",
-            "duelist"
+            "duelist",
+            "gladiator"
         ]
     },
     "lionheart": {
@@ -1724,19 +1729,20 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 49,
         "classes": [
-            "warrior",
-            "gladiator",
-            "warlord",
-            "raider",
-            "destroyer",
-            "monk",
-            "tyrant",
-            "scavenger",
-            "bountyHunter",
             "artisanDwarf",
-            "warsmith",
+            "bountyHunter",
+            "destroyer",
+            "duelist",
+            "gladiator",
+            "monk",
+            "raider",
+            "scavenger",
             "shineMakerS1",
-            "shineMakerS2"
+            "shineMakerS2",
+            "tyrant",
+            "warlord",
+            "warrior",
+            "warsmith"
         ]
     },
     "battle_roar": {
@@ -1766,11 +1772,13 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "warrior",
+            "destroyer",
             "gladiator",
-            "warlord",
+            "orcFighter",
             "raider",
-            "destroyer"
+            "rider",
+            "warlord",
+            "warrior"
         ]
     },
     "war_cry": {
@@ -1800,11 +1808,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 43,
         "classes": [
-            "warrior",
-            "gladiator",
+            "dreadnought",
             "duelist",
+            "gladiator",
             "warlord",
-            "dreadnought"
+            "warrior"
         ]
     },
     "fatal_strike": {
@@ -1834,22 +1842,22 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "warlord",
-            "dreadnought",
-            "prophet",
-            "hierophant",
-            "destroyer",
-            "titan",
-            "overlord",
-            "dominator",
-            "warcryer",
-            "doomcryer",
             "bountyHunter",
+            "destroyer",
+            "dominator",
+            "doomcryer",
+            "dreadnought",
             "fortuneSeeker",
-            "warsmith",
+            "hierophant",
             "maestro",
+            "overlord",
+            "prophet",
             "shineMakerS2",
-            "shinemaker"
+            "shinemaker",
+            "titan",
+            "warcryer",
+            "warlord",
+            "warsmith"
         ]
     },
     "thunder_storm": {
@@ -1879,8 +1887,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "warlord",
-            "dreadnought"
+            "dreadnought",
+            "warlord"
         ]
     },
     "power_crash": {
@@ -1910,20 +1918,20 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "warlord",
-            "dreadnought",
-            "destroyer",
-            "titan",
-            "overlord",
-            "dominator",
-            "warcryer",
-            "doomcryer",
             "bountyHunter",
+            "destroyer",
+            "dominator",
+            "doomcryer",
+            "dreadnought",
             "fortuneSeeker",
-            "warsmith",
             "maestro",
+            "overlord",
             "shineMakerS2",
-            "shinemaker"
+            "shinemaker",
+            "titan",
+            "warcryer",
+            "warlord",
+            "warsmith"
         ]
     },
     "purify": {
@@ -1953,13 +1961,13 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "gladiator",
-            "warlord",
             "bishop",
+            "divineTemplar",
             "elfElder",
-            "shillienElder",
+            "gladiator",
             "holyTemplar",
-            "divineTemplar"
+            "shillienElder",
+            "warlord"
         ]
     },
     "vortex": {
@@ -1989,15 +1997,15 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "warlord",
-            "dreadnought",
-            "destroyer",
             "bountyHunter",
+            "destroyer",
+            "dreadnought",
             "fortuneSeeker",
-            "warsmith",
             "maestro",
             "shineMakerS2",
-            "shinemaker"
+            "shinemaker",
+            "warlord",
+            "warsmith"
         ]
     },
     "bandage": {
@@ -2027,27 +2035,32 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 45,
         "classes": [
-            "warrior",
-            "gladiator",
-            "warlord",
-            "raider",
-            "destroyer",
-            "monk",
-            "tyrant",
-            "dragoon",
-            "vanguardRider",
-            "scavenger",
-            "bountyHunter",
             "artisanDwarf",
-            "warsmith",
+            "assassinS0",
+            "berserker",
+            "bloodRoseBase",
+            "bountyHunter",
+            "destroyer",
+            "dragoon",
+            "dwarfFighter",
+            "elfFighter",
+            "ertheiaWarrior",
+            "gladiator",
+            "marauder",
+            "monk",
+            "raider",
+            "samuraiBase",
+            "scavenger",
             "shineMakerS1",
             "shineMakerS2",
-            "trooper",
-            "berserker",
-            "soulFinder",
             "soulBreakerKamael",
-            "marauder",
-            "ertheiaWarrior"
+            "soulFinder",
+            "trooper",
+            "tyrant",
+            "vanguardRider",
+            "warlord",
+            "warrior",
+            "warsmith"
         ]
     },
     "quick_spear": {
@@ -2077,8 +2090,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 42,
         "classes": [
-            "warlord",
-            "dreadnought"
+            "dreadnought",
+            "warlord"
         ]
     },
     "focus_attack": {
@@ -2108,8 +2121,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 46,
         "classes": [
-            "warlord",
-            "dreadnought"
+            "dreadnought",
+            "warlord"
         ]
     },
     "revival": {
@@ -2139,8 +2152,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 55,
         "classes": [
-            "warlord",
-            "dreadnought"
+            "dreadnought",
+            "warlord"
         ]
     },
     "provoke": {
@@ -2170,14 +2183,14 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "warlord",
-            "dreadnought",
             "bountyHunter",
+            "dreadnought",
             "fortuneSeeker",
-            "warsmith",
             "maestro",
             "shineMakerS2",
-            "shinemaker"
+            "shinemaker",
+            "warlord",
+            "warsmith"
         ]
     },
     "howl": {
@@ -2207,8 +2220,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 43,
         "classes": [
-            "warlord",
-            "dreadnought"
+            "dreadnought",
+            "warlord"
         ]
     },
     "thrill_fight": {
@@ -2238,8 +2251,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 46,
         "classes": [
-            "warlord",
-            "dreadnought"
+            "dreadnought",
+            "warlord"
         ]
     },
     "power_strike": {
@@ -2269,19 +2282,21 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 20,
         "classes": [
-            "fighter",
-            "warrior",
-            "knight",
+            "artisanDwarf",
+            "bloodRoseBase",
+            "darkElfFighter",
+            "dwarfFighter",
             "elfFighter",
             "elvenKnight",
-            "darkElfFighter",
-            "palusKnight",
+            "fighter",
+            "knight",
             "orcFighter",
+            "palusKnight",
             "raider",
-            "dwarfFighter",
+            "samuraiBase",
             "scavenger",
-            "artisanDwarf",
-            "shineMakerS1"
+            "shineMakerS1",
+            "warrior"
         ]
     },
     "wind_walk": {
@@ -2311,56 +2326,56 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 20,
         "classes": [
-            "warrior",
-            "duelist",
-            "dreadnought",
-            "knight",
-            "phoenixKnight",
-            "hellKnight",
-            "rogue",
             "adventurer",
-            "sagittarius",
-            "wizard",
-            "archmage",
-            "soultaker",
             "arcanaLord",
-            "cleric",
-            "cardinal",
-            "hierophant",
-            "deathBlade",
-            "deathKnight",
-            "warg",
+            "archmage",
             "assassinS1",
             "assassinS3",
-            "elvenKnight",
-            "evaTemplar",
-            "swordMuse",
-            "elfScout",
-            "windRider",
-            "moonlightSentinel",
-            "elvenWizard",
-            "mysticMuse",
+            "bloodRose",
+            "bloodRoseS1",
+            "cardinal",
+            "cleric",
+            "darkWizard",
+            "deathBlade",
+            "deathKnight",
+            "divineTemplar",
+            "dreadnought",
+            "duelist",
+            "elementWeaver",
+            "elementWeaverS1",
             "elementalMaster",
             "elfOracle",
+            "elfScout",
+            "elvenKnight",
+            "elvenWizard",
             "evaSaint",
-            "palusKnight",
-            "shillienTemplar",
-            "spectralDancer",
+            "evaTemplar",
             "ghostHunter",
             "ghostSentinel",
-            "darkWizard",
-            "stormScreamer",
-            "spectralMaster",
+            "hellKnight",
+            "hierophant",
+            "knight",
+            "lightTemplar",
+            "moonlightSentinel",
+            "mysticMuse",
+            "palusKnight",
+            "phoenixKnight",
+            "rogue",
+            "sagittarius",
+            "sayhaSeeker",
+            "sayhaSeer",
             "shillienOracle",
             "shillienSaint",
-            "bloodRoseS1",
-            "bloodRose",
-            "lightTemplar",
-            "divineTemplar",
-            "elementWeaverS1",
-            "elementWeaver",
-            "sayhaSeer",
-            "sayhaSeeker"
+            "shillienTemplar",
+            "soultaker",
+            "spectralDancer",
+            "spectralMaster",
+            "stormScreamer",
+            "swordMuse",
+            "warg",
+            "warrior",
+            "windRider",
+            "wizard"
         ]
     },
     "wild_sweep": {
@@ -2390,11 +2405,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 20,
         "classes": [
-            "warrior",
+            "artisanDwarf",
             "raider",
             "scavenger",
-            "artisanDwarf",
-            "shineMakerS1"
+            "shineMakerS1",
+            "warrior"
         ]
     },
     "detect_weakness": {
@@ -2515,11 +2530,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 3,
         "classes": [
-            "fighter",
-            "rogue",
+            "darkElfFighter",
             "elfFighter",
             "elfScout",
-            "darkElfFighter"
+            "fighter",
+            "rogue"
         ]
     },
     "mortal_blow": {
@@ -2549,11 +2564,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 3,
         "classes": [
-            "fighter",
-            "rogue",
+            "darkElfFighter",
             "elfFighter",
             "elfScout",
-            "darkElfFighter"
+            "fighter",
+            "rogue"
         ]
     },
     "dark_strike": {
@@ -2614,8 +2629,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "phoenixKnight",
-            "hellKnight"
+            "hellKnight",
+            "phoenixKnight"
         ]
     },
     "horror": {
@@ -2738,8 +2753,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "phoenixKnight",
-            "hellKnight"
+            "hellKnight",
+            "phoenixKnight"
         ]
     },
     "shield_charge": {
@@ -2769,8 +2784,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "phoenixKnight",
-            "evaTemplar"
+            "evaTemplar",
+            "phoenixKnight"
         ]
     },
     "power_of_life": {
@@ -2800,8 +2815,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "phoenixKnight",
-            "evaTemplar"
+            "evaTemplar",
+            "phoenixKnight"
         ]
     },
     "phoenix_strike": {
@@ -2861,8 +2876,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "phoenixKnight",
-            "hellKnight"
+            "hellKnight",
+            "phoenixKnight"
         ]
     },
     "battle_will": {
@@ -2892,8 +2907,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "phoenixKnight",
-            "hellKnight"
+            "hellKnight",
+            "phoenixKnight"
         ]
     },
     "chain_strike": {
@@ -2923,8 +2938,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "phoenixKnight",
-            "hellKnight"
+            "hellKnight",
+            "phoenixKnight"
         ]
     },
     "mass_chain_strike": {
@@ -2954,9 +2969,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "phoenixKnight",
-            "hellKnight",
             "evaTemplar",
+            "hellKnight",
+            "phoenixKnight",
             "shillienTemplar"
         ]
     },
@@ -3018,8 +3033,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 79,
         "classes": [
-            "phoenixKnight",
-            "hellKnight"
+            "hellKnight",
+            "phoenixKnight"
         ]
     },
     "phoenix_protection": {
@@ -3263,52 +3278,52 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 90,
         "classes": [
-            "duelist",
-            "dreadnought",
-            "phoenixKnight",
-            "hellKnight",
             "adventurer",
-            "sagittarius",
-            "archmage",
-            "soultaker",
             "arcanaLord",
-            "cardinal",
-            "hierophant",
-            "deathKnight",
-            "warg",
+            "archmage",
             "assassinS3",
-            "evaTemplar",
-            "swordMuse",
-            "windRider",
-            "moonlightSentinel",
-            "mysticMuse",
+            "bloodRose",
+            "cardinal",
+            "deathKnight",
+            "divineTemplar",
+            "dominator",
+            "doombringer",
+            "doomcryer",
+            "dreadnought",
+            "duelist",
+            "elementWeaver",
             "elementalMaster",
             "evaSaint",
-            "shillienTemplar",
-            "spectralDancer",
+            "evaTemplar",
+            "eviscerator",
+            "fortuneSeeker",
             "ghostHunter",
             "ghostSentinel",
-            "stormScreamer",
-            "spectralMaster",
-            "shillienSaint",
-            "bloodRose",
-            "titan",
             "grandKhavatari",
             "grandVanguard",
-            "dominator",
-            "doomcryer",
-            "fortuneSeeker",
+            "hellKnight",
+            "hierophant",
             "maestro",
-            "shinemaker",
-            "doombringer",
-            "soulHound",
-            "trickster",
+            "moonlightSentinel",
+            "mysticMuse",
+            "phoenixKnight",
+            "sagittarius",
             "samurai",
+            "sayhaSeeker",
+            "shillienSaint",
+            "shillienTemplar",
+            "shinemaker",
+            "soulHound",
+            "soultaker",
+            "spectralDancer",
+            "spectralMaster",
             "stormBlaster",
-            "divineTemplar",
-            "elementWeaver",
-            "eviscerator",
-            "sayhaSeeker"
+            "stormScreamer",
+            "swordMuse",
+            "titan",
+            "trickster",
+            "warg",
+            "windRider"
         ]
     },
     "vengeance": {
@@ -3338,8 +3353,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 77,
         "classes": [
-            "phoenixKnight",
-            "hellKnight"
+            "hellKnight",
+            "phoenixKnight"
         ]
     },
     "touch_of_life": {
@@ -3369,8 +3384,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 78,
         "classes": [
-            "phoenixKnight",
-            "evaTemplar"
+            "evaTemplar",
+            "phoenixKnight"
         ]
     },
     "mount_shining_lady": {
@@ -3521,14 +3536,14 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "duelist",
             "dreadnought",
-            "titan",
+            "duelist",
+            "fortuneSeeker",
             "grandKhavatari",
             "grandVanguard",
-            "fortuneSeeker",
             "maestro",
-            "shinemaker"
+            "shinemaker",
+            "titan"
         ]
     },
     "indestructible_seal": {
@@ -3918,14 +3933,14 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 78,
         "classes": [
-            "duelist",
             "dreadnought",
-            "titan",
+            "duelist",
+            "fortuneSeeker",
             "grandKhavatari",
             "grandVanguard",
-            "fortuneSeeker",
             "maestro",
-            "shinemaker"
+            "shinemaker",
+            "titan"
         ]
     },
     "shocking_burst": {
@@ -4195,9 +4210,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "sagittarius",
+            "ghostSentinel",
             "moonlightSentinel",
-            "ghostSentinel"
+            "sagittarius"
         ]
     },
     "lethal_shot": {
@@ -4227,9 +4242,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "sagittarius",
+            "ghostSentinel",
             "moonlightSentinel",
-            "ghostSentinel"
+            "sagittarius"
         ]
     },
     "double_shot": {
@@ -4259,12 +4274,12 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
+            "ghostSentinel",
             "hawkeye",
-            "sagittarius",
-            "silverRanger",
             "moonlightSentinel",
             "phantomRanger",
-            "ghostSentinel"
+            "sagittarius",
+            "silverRanger"
         ]
     },
     "incendiary_shot": {
@@ -4385,9 +4400,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "sagittarius",
+            "ghostSentinel",
             "moonlightSentinel",
-            "ghostSentinel"
+            "sagittarius"
         ]
     },
     "steady_aim": {
@@ -4447,9 +4462,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "sagittarius",
+            "ghostSentinel",
             "moonlightSentinel",
-            "ghostSentinel"
+            "sagittarius"
         ]
     },
     "vortex_shot": {
@@ -4479,12 +4494,12 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 77,
         "classes": [
+            "ghostSentinel",
             "hawkeye",
-            "sagittarius",
-            "silverRanger",
             "moonlightSentinel",
             "phantomRanger",
-            "ghostSentinel"
+            "sagittarius",
+            "silverRanger"
         ]
     },
     "ultimate_evasion_archer": {
@@ -4542,9 +4557,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "sagittarius",
-            "moonlightSentinel",
             "ghostSentinel",
+            "moonlightSentinel",
+            "sagittarius",
             "trickster"
         ]
     },
@@ -4575,9 +4590,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "sagittarius",
+            "ghostSentinel",
             "moonlightSentinel",
-            "ghostSentinel"
+            "sagittarius"
         ]
     },
     "spiral_shot": {
@@ -4607,9 +4622,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "sagittarius",
+            "ghostSentinel",
             "moonlightSentinel",
-            "ghostSentinel"
+            "sagittarius"
         ]
     },
     "legendary_shot": {
@@ -4639,9 +4654,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "sagittarius",
+            "ghostSentinel",
             "moonlightSentinel",
-            "ghostSentinel"
+            "sagittarius"
         ]
     },
     "legendary_cloak": {
@@ -4671,9 +4686,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "sagittarius",
-            "moonlightSentinel",
             "ghostSentinel",
+            "moonlightSentinel",
+            "sagittarius",
             "trickster"
         ]
     },
@@ -4704,9 +4719,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "sagittarius",
+            "ghostSentinel",
             "moonlightSentinel",
-            "ghostSentinel"
+            "sagittarius"
         ]
     },
     "snipe": {
@@ -4767,8 +4782,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 58,
         "classes": [
-            "sorcerer",
-            "archmage"
+            "archmage",
+            "sorcerer"
         ]
     },
     "target_lock": {
@@ -4798,9 +4813,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "sagittarius",
+            "ghostSentinel",
             "moonlightSentinel",
-            "ghostSentinel"
+            "sagittarius"
         ]
     },
     "prominence": {
@@ -4830,8 +4845,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "sorcerer",
-            "archmage"
+            "archmage",
+            "sorcerer"
         ]
     },
     "detect_darkness": {
@@ -4861,9 +4876,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "sagittarius",
-            "moonlightSentinel",
             "ghostSentinel",
+            "moonlightSentinel",
+            "sagittarius",
             "trickster"
         ]
     },
@@ -4894,16 +4909,16 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "sorcerer",
             "archmage",
-            "necromancer",
-            "soultaker",
-            "spellsinger",
             "mysticMuse",
+            "necromancer",
+            "sayhaSeeker",
+            "sorcerer",
+            "soultaker",
             "spellhowler",
+            "spellsinger",
             "stormScreamer",
-            "windRiderErth",
-            "sayhaSeeker"
+            "windRiderErth"
         ]
     },
     "blazing_skin": {
@@ -4963,8 +4978,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 70,
         "classes": [
-            "sorcerer",
-            "archmage"
+            "archmage",
+            "sorcerer"
         ]
     },
     "sleep": {
@@ -4994,27 +5009,27 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "sorcerer",
             "archmage",
-            "necromancer",
-            "soultaker",
-            "cleric",
             "bishop",
             "cardinal",
-            "prophet",
-            "hierophant",
-            "spellsinger",
-            "mysticMuse",
-            "elfOracle",
+            "cleric",
             "elfElder",
+            "elfOracle",
             "evaSaint",
-            "spellhowler",
-            "stormScreamer",
-            "shillienOracle",
+            "hierophant",
+            "mysticMuse",
+            "necromancer",
+            "prophet",
+            "sayhaSeeker",
             "shillienElder",
+            "shillienOracle",
             "shillienSaint",
-            "windRiderErth",
-            "sayhaSeeker"
+            "sorcerer",
+            "soultaker",
+            "spellhowler",
+            "spellsinger",
+            "stormScreamer",
+            "windRiderErth"
         ]
     },
     "concentration": {
@@ -5044,18 +5059,18 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 44,
         "classes": [
-            "wizard",
-            "sorcerer",
-            "cleric",
             "bishop",
-            "prophet",
-            "elvenWizard",
-            "elfOracle",
-            "elfElder",
+            "cleric",
             "darkWizard",
-            "shillienOracle",
+            "elfElder",
+            "elfOracle",
+            "elvenWizard",
+            "prophet",
+            "sayhaSeer",
             "shillienElder",
-            "sayhaSeer"
+            "shillienOracle",
+            "sorcerer",
+            "wizard"
         ]
     },
     "magic_wound": {
@@ -5085,16 +5100,16 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 44,
         "classes": [
-            "sorcerer",
             "archmage",
-            "necromancer",
-            "soultaker",
-            "spellsinger",
             "mysticMuse",
+            "necromancer",
+            "sayhaSeeker",
+            "sorcerer",
+            "soultaker",
             "spellhowler",
+            "spellsinger",
             "stormScreamer",
-            "windRiderErth",
-            "sayhaSeeker"
+            "windRiderErth"
         ]
     },
     "weakness": {
@@ -5124,32 +5139,33 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "mage",
-            "wizard",
-            "sorcerer",
-            "archmage",
-            "necromancer",
-            "soultaker",
-            "warlock",
             "arcanaLord",
-            "cleric",
+            "archmage",
             "bishop",
             "cardinal",
-            "prophet",
-            "hierophant",
-            "elfMage",
-            "elvenWizard",
-            "spellsinger",
-            "mysticMuse",
-            "elementalSummoner",
+            "cleric",
+            "darkWizard",
             "elementalMaster",
-            "elfOracle",
+            "elementalSummoner",
             "elfElder",
+            "elfMage",
+            "elfOracle",
+            "elvenWizard",
             "evaSaint",
+            "hierophant",
+            "mage",
+            "mysticMuse",
+            "necromancer",
+            "prophet",
             "sayhaMageBase",
+            "sayhaSeeker",
             "sayhaSeer",
+            "sorcerer",
+            "soultaker",
+            "spellsinger",
+            "warlock",
             "windRiderErth",
-            "sayhaSeeker"
+            "wizard"
         ]
     },
     "hell": {
@@ -5239,20 +5255,20 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "wizard",
-            "sorcerer",
             "archmage",
-            "necromancer",
-            "soultaker",
-            "elvenWizard",
-            "spellsinger",
-            "mysticMuse",
             "darkWizard",
-            "spellhowler",
-            "stormScreamer",
+            "elvenWizard",
+            "mysticMuse",
+            "necromancer",
+            "sayhaSeeker",
             "sayhaSeer",
+            "sorcerer",
+            "soultaker",
+            "spellhowler",
+            "spellsinger",
+            "stormScreamer",
             "windRiderErth",
-            "sayhaSeeker"
+            "wizard"
         ]
     },
     "hell_smashing": {
@@ -5289,26 +5305,26 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "id": "toughness",
         "name": "Toughness",
         "slug": "toughness",
-        "type": "buff",
-        "rawType": "Buff",
-        "rarity": "3★",
-        "starRank": 3,
-        "icon": "/icons/toughness.webp",
+        "type": "passive",
+        "rawType": "Passive",
+        "rarity": "2★",
+        "starRank": 2,
+        "icon": "/icons/skill0134.webp",
         "iconGap": false,
         "iconGapReason": null,
-        "canonicalEffect": "Enables a stance that increases your defense.Max HP +1200P. Def. +14%P. Def. +30",
-        "canonicalCooldown": "10 sec.",
-        "canonicalCooldownMs": 10000,
-        "desc": "Enables a stance that increases your defense.Max HP +1200P. Def. +14%P. Def. +300Shield Defense +200",
+        "canonicalEffect": "Sleep/Hold Resistance +20%",
+        "canonicalCooldown": "N/A",
+        "canonicalCooldownMs": 0,
+        "desc": "Increases resistance to sleep and hold attacks.",
         "balance": {
-            "mpCost": 86,
-            "pwr": 1,
+            "mpCost": 0,
+            "pwr": 0,
             "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+            "pvpMultiplier": 1
         },
-        "vfxId": "vfx_toughness",
+        "vfxId": null,
         "vfxGap": false,
-        "sfxId": "sfx_action",
+        "sfxId": null,
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
@@ -5404,12 +5420,12 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "treasureHunter",
-            "adventurer",
-            "plainsWalker",
-            "windRider",
             "abyssWalker",
-            "ghostHunter"
+            "adventurer",
+            "ghostHunter",
+            "plainsWalker",
+            "treasureHunter",
+            "windRider"
         ]
     },
     "deadly_blow": {
@@ -5439,12 +5455,12 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "treasureHunter",
-            "adventurer",
-            "plainsWalker",
-            "windRider",
             "abyssWalker",
-            "ghostHunter"
+            "adventurer",
+            "ghostHunter",
+            "plainsWalker",
+            "treasureHunter",
+            "windRider"
         ]
     },
     "fake_death": {
@@ -5474,9 +5490,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "treasureHunter",
+            "bountyHunter",
             "plainsWalker",
-            "bountyHunter"
+            "treasureHunter"
         ]
     },
     "silent_move": {
@@ -5506,9 +5522,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "treasureHunter",
+            "abyssWalker",
             "plainsWalker",
-            "abyssWalker"
+            "treasureHunter"
         ]
     },
     "open": {
@@ -5538,11 +5554,12 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "rogue",
-            "treasureHunter",
+            "abyssWalker",
+            "assassinDE",
             "elfScout",
             "plainsWalker",
-            "abyssWalker"
+            "rogue",
+            "treasureHunter"
         ]
     },
     "ultimate_evasion": {
@@ -5572,17 +5589,20 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 55,
         "classes": [
-            "rogue",
-            "treasureHunter",
-            "hawkeye",
-            "sagittarius",
-            "elfScout",
-            "plainsWalker",
-            "silverRanger",
-            "moonlightSentinel",
             "abyssWalker",
+            "assassinDE",
+            "assassinS1",
+            "bloodRoseS1",
+            "elfScout",
+            "ghostSentinel",
+            "hawkeye",
+            "moonlightSentinel",
             "phantomRanger",
-            "ghostSentinel"
+            "plainsWalker",
+            "rogue",
+            "sagittarius",
+            "silverRanger",
+            "treasureHunter"
         ]
     },
     "shadow_step": {
@@ -5612,12 +5632,12 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 50,
         "classes": [
-            "treasureHunter",
-            "adventurer",
-            "plainsWalker",
-            "windRider",
             "abyssWalker",
-            "ghostHunter"
+            "adventurer",
+            "ghostHunter",
+            "plainsWalker",
+            "treasureHunter",
+            "windRider"
         ]
     },
     "hide": {
@@ -5647,9 +5667,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 50,
         "classes": [
-            "treasureHunter",
+            "abyssWalker",
             "plainsWalker",
-            "abyssWalker"
+            "treasureHunter"
         ]
     },
     "ice_bolt": {
@@ -5679,14 +5699,14 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 1,
         "classes": [
-            "mage",
-            "wizard",
-            "elfMage",
-            "elvenWizard",
             "darkElfMage",
             "darkWizard",
+            "elfMage",
+            "elvenWizard",
+            "mage",
             "sayhaMageBase",
-            "sayhaSeer"
+            "sayhaSeer",
+            "wizard"
         ]
     },
     "fireball": {
@@ -5716,14 +5736,14 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 1,
         "classes": [
-            "mage",
-            "wizard",
-            "elfMage",
-            "elvenWizard",
             "darkElfMage",
             "darkWizard",
+            "elfMage",
+            "elvenWizard",
+            "mage",
             "sayhaMageBase",
-            "sayhaSeer"
+            "sayhaSeer",
+            "wizard"
         ]
     },
     "battle_heal": {
@@ -5753,13 +5773,13 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 10,
         "classes": [
-            "mage",
             "cleric",
+            "darkElfMage",
             "elfMage",
             "elfOracle",
-            "darkElfMage",
-            "shillienOracle",
-            "sayhaMageBase"
+            "mage",
+            "sayhaMageBase",
+            "shillienOracle"
         ]
     },
     "self_heal": {
@@ -5789,13 +5809,13 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 1,
         "classes": [
-            "mage",
             "cleric",
+            "darkElfMage",
             "elfMage",
             "elfOracle",
-            "darkElfMage",
-            "shillienOracle",
-            "sayhaMageBase"
+            "mage",
+            "sayhaMageBase",
+            "shillienOracle"
         ]
     },
     "wind_strike": {
@@ -5825,9 +5845,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 1,
         "classes": [
-            "mage",
-            "elfMage",
             "darkElfMage",
+            "elfMage",
+            "mage",
             "sayhaMageBase"
         ]
     },
@@ -5919,10 +5939,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "minLevel": 76,
         "classes": [
             "archmage",
-            "soultaker",
             "mysticMuse",
-            "stormScreamer",
-            "sayhaSeeker"
+            "sayhaSeeker",
+            "soultaker",
+            "stormScreamer"
         ]
     },
     "fire_spiral": {
@@ -6016,8 +6036,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "classes": [
             "archmage",
             "mysticMuse",
-            "stormScreamer",
-            "sayhaSeeker"
+            "sayhaSeeker",
+            "stormScreamer"
         ]
     },
     "archmage_s_shield": {
@@ -6111,8 +6131,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "classes": [
             "archmage",
             "mysticMuse",
-            "stormScreamer",
-            "sayhaSeeker"
+            "sayhaSeeker",
+            "stormScreamer"
         ]
     },
     "master_of_flame": {
@@ -6203,8 +6223,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "minLevel": 76,
         "classes": [
             "adventurer",
-            "windRider",
-            "ghostHunter"
+            "ghostHunter",
+            "windRider"
         ]
     },
     "flying_dagger": {
@@ -6235,8 +6255,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "minLevel": 76,
         "classes": [
             "adventurer",
-            "windRider",
-            "ghostHunter"
+            "ghostHunter",
+            "windRider"
         ]
     },
     "dark_blow": {
@@ -6267,8 +6287,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "minLevel": 76,
         "classes": [
             "adventurer",
-            "windRider",
-            "ghostHunter"
+            "ghostHunter",
+            "windRider"
         ]
     },
     "critical_assault": {
@@ -6298,7 +6318,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "adventurer"
+            "adventurer",
+            "ghostHunter"
         ]
     },
     "mirage": {
@@ -6359,8 +6380,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "minLevel": 76,
         "classes": [
             "adventurer",
-            "windRider",
-            "ghostHunter"
+            "ghostHunter",
+            "windRider"
         ]
     },
     "focus_power": {
@@ -6391,8 +6412,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "minLevel": 78,
         "classes": [
             "adventurer",
-            "windRider",
-            "ghostHunter"
+            "ghostHunter",
+            "windRider"
         ]
     },
     "focus_chance": {
@@ -6423,8 +6444,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "minLevel": 78,
         "classes": [
             "adventurer",
-            "windRider",
-            "ghostHunter"
+            "ghostHunter",
+            "windRider"
         ]
     },
     "focus_death": {
@@ -6455,8 +6476,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "minLevel": 78,
         "classes": [
             "adventurer",
-            "windRider",
-            "ghostHunter"
+            "ghostHunter",
+            "windRider"
         ]
     },
     "seclusion": {
@@ -6487,8 +6508,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "minLevel": 76,
         "classes": [
             "adventurer",
-            "windRider",
-            "ghostHunter"
+            "ghostHunter",
+            "windRider"
         ]
     },
     "critical_wound": {
@@ -6519,8 +6540,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "minLevel": 76,
         "classes": [
             "adventurer",
-            "windRider",
-            "ghostHunter"
+            "ghostHunter",
+            "windRider"
         ]
     },
     "reversed_pull": {
@@ -6580,9 +6601,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 20,
         "classes": [
-            "wizard",
+            "arcanaLord",
             "warlock",
-            "arcanaLord"
+            "wizard"
         ]
     },
     "clear_movements": {
@@ -6613,8 +6634,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "minLevel": 77,
         "classes": [
             "adventurer",
-            "windRider",
-            "ghostHunter"
+            "ghostHunter",
+            "windRider"
         ]
     },
     "fatal_crush": {
@@ -6676,10 +6697,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "classes": [
             "bishop",
             "cardinal",
-            "prophet",
-            "hierophant",
             "elfElder",
             "evaSaint",
+            "hierophant",
+            "prophet",
             "shillienElder",
             "shillienSaint"
         ]
@@ -6711,8 +6732,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "hierophant",
             "evaSaint",
+            "hierophant",
             "shillienSaint"
         ]
     },
@@ -6773,16 +6794,16 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "cleric",
             "bishop",
             "cardinal",
-            "prophet",
-            "hierophant",
-            "elfOracle",
+            "cleric",
             "elfElder",
+            "elfOracle",
             "evaSaint",
-            "shillienOracle",
+            "hierophant",
+            "prophet",
             "shillienElder",
+            "shillienOracle",
             "shillienSaint"
         ]
     },
@@ -6813,8 +6834,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "prophet",
-            "hierophant"
+            "hierophant",
+            "prophet"
         ]
     },
     "tower_shield": {
@@ -6875,8 +6896,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "minLevel": 78,
         "classes": [
             "cardinal",
-            "hierophant",
             "evaSaint",
+            "hierophant",
             "shillienSaint"
         ]
     },
@@ -6967,8 +6988,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 80,
         "classes": [
-            "prophet",
-            "hierophant"
+            "hierophant",
+            "prophet"
         ]
     },
     "turn_to_stone": {
@@ -7148,11 +7169,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "necromancer",
-            "warlock",
             "arcanaLord",
+            "necromancer",
             "phantomSummoner",
-            "spectralMaster"
+            "spectralMaster",
+            "warlock"
         ]
     },
     "servitor_recharge": {
@@ -7182,11 +7203,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "necromancer",
-            "warlock",
             "arcanaLord",
+            "necromancer",
             "phantomSummoner",
-            "spectralMaster"
+            "spectralMaster",
+            "warlock"
         ]
     },
     "summon_kat_the_cat": {
@@ -7247,8 +7268,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "minLevel": 40,
         "classes": [
             "necromancer",
-            "warlock",
-            "phantomSummoner"
+            "phantomSummoner",
+            "warlock"
         ]
     },
     "summon_kai_the_cat": {
@@ -7308,10 +7329,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 48,
         "classes": [
-            "warlock",
             "arcanaLord",
             "phantomSummoner",
-            "spectralMaster"
+            "spectralMaster",
+            "warlock"
         ]
     },
     "servitor_cure": {
@@ -7341,8 +7362,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "warlock",
-            "phantomSummoner"
+            "phantomSummoner",
+            "warlock"
         ]
     },
     "servitor_ultimate_defense": {
@@ -7372,10 +7393,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 52,
         "classes": [
-            "warlock",
             "arcanaLord",
             "phantomSummoner",
-            "spectralMaster"
+            "spectralMaster",
+            "warlock"
         ]
     },
     "swift_servitor_heal": {
@@ -7405,11 +7426,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "necromancer",
-            "warlock",
             "arcanaLord",
+            "necromancer",
             "phantomSummoner",
-            "spectralMaster"
+            "spectralMaster",
+            "warlock"
         ]
     },
     "servitor_wind_walk": {
@@ -7469,8 +7490,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "prophet",
-            "elfElder"
+            "elfElder",
+            "prophet"
         ]
     },
     "servitor_blessing": {
@@ -7500,8 +7521,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 62,
         "classes": [
-            "warlock",
-            "phantomSummoner"
+            "phantomSummoner",
+            "warlock"
         ]
     },
     "summon_friend": {
@@ -7531,9 +7552,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 56,
         "classes": [
-            "warlock",
             "elementalSummoner",
-            "phantomSummoner"
+            "phantomSummoner",
+            "warlock"
         ]
     },
     "return": {
@@ -7563,8 +7584,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "prophet",
-            "elfElder"
+            "elfElder",
+            "prophet"
         ]
     },
     "change_armor": {
@@ -7686,8 +7707,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 42,
         "classes": [
-            "prophet",
-            "elfElder"
+            "elfElder",
+            "hierophant",
+            "prophet"
         ]
     },
     "warrior_bane": {
@@ -7872,7 +7894,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "minLevel": 76,
         "classes": [
             "arcanaLord",
-            "spectralMaster"
+            "phantomSummoner",
+            "spectralMaster",
+            "warlock"
         ]
     },
     "summon_feline_king": {
@@ -8267,14 +8291,14 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "cleric",
             "bishop",
             "cardinal",
-            "elfOracle",
+            "cleric",
             "elfElder",
+            "elfOracle",
             "evaSaint",
-            "shillienOracle",
             "shillienElder",
+            "shillienOracle",
             "shillienSaint"
         ]
     },
@@ -9229,6 +9253,7 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 20,
         "classes": [
+            "bishop",
             "cleric",
             "elfOracle",
             "shillienOracle"
@@ -9261,8 +9286,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 35,
         "classes": [
-            "cleric",
-            "bishop"
+            "bishop",
+            "cardinal",
+            "cleric"
         ]
     },
     "cure": {
@@ -9292,13 +9318,14 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 35,
         "classes": [
-            "cleric",
             "bishop",
-            "elfOracle",
+            "cardinal",
+            "cleric",
             "elfElder",
+            "elfOracle",
             "evaSaint",
-            "shillienOracle",
-            "shillienElder"
+            "shillienElder",
+            "shillienOracle"
         ]
     },
     "resurrection": {
@@ -9328,10 +9355,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 20,
         "classes": [
-            "cleric",
             "bishop",
-            "elfOracle",
+            "cleric",
             "elfElder",
+            "elfOracle",
             "shillienOracle"
         ]
     },
@@ -9633,8 +9660,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "minLevel": 20,
         "classes": [
             "deathBlade",
-            "deathMessenger",
-            "deathKnight"
+            "deathKnight",
+            "deathMessenger"
         ]
     },
     "blow": {
@@ -9664,11 +9691,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 20,
         "classes": [
+            "assassinDE",
             "assassinS0",
             "assassinS1",
             "assassinS2",
-            "assassinS3",
-            "assassinDE"
+            "assassinS3"
         ]
     },
     "roar_of_death": {
@@ -9699,8 +9726,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "minLevel": 30,
         "classes": [
             "deathBlade",
-            "deathMessenger",
-            "deathKnight"
+            "deathKnight",
+            "deathMessenger"
         ]
     },
     "forward_move": {
@@ -9760,6 +9787,7 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
+            "assassinS1",
             "assassinS2",
             "assassinS3"
         ]
@@ -10185,8 +10213,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "deathMessenger",
-            "deathKnight"
+            "deathKnight",
+            "deathMessenger"
         ]
     },
     "time_distortion": {
@@ -10246,8 +10274,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "deathMessenger",
-            "deathKnight"
+            "deathKnight",
+            "deathMessenger"
         ]
     },
     "constraint": {
@@ -10337,8 +10365,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 50,
         "classes": [
-            "deathMessenger",
-            "deathKnight"
+            "deathBlade",
+            "deathKnight",
+            "deathMessenger"
         ]
     },
     "return_motion": {
@@ -10398,8 +10427,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 70,
         "classes": [
-            "deathMessenger",
-            "deathKnight"
+            "deathKnight",
+            "deathMessenger"
         ]
     },
     "bone_cage": {
@@ -10429,8 +10458,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 55,
         "classes": [
-            "deathMessenger",
-            "deathKnight"
+            "deathKnight",
+            "deathMessenger"
         ]
     },
     "hellfire": {
@@ -10460,7 +10489,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "deathKnight"
+            "deathKnight",
+            "deathPilgrim"
         ]
     },
     "burning_field": {
@@ -10520,8 +10550,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "deathMessenger",
-            "deathKnight"
+            "deathKnight",
+            "deathMessenger"
         ]
     },
     "call_of_flame": {
@@ -10551,8 +10581,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 60,
         "classes": [
-            "deathMessenger",
-            "deathKnight"
+            "deathKnight",
+            "deathMessenger"
         ]
     },
     "rage_charge": {
@@ -10937,12 +10967,12 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 20,
         "classes": [
-            "elvenKnight",
-            "templeKnight",
-            "swordSinger",
             "elfScout",
+            "elvenKnight",
             "plainsWalker",
-            "silverRanger"
+            "silverRanger",
+            "swordSinger",
+            "templeKnight"
         ]
     },
     "synchro_freedom": {
@@ -11123,8 +11153,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "swordMuse",
-            "spectralDancer"
+            "spectralDancer",
+            "swordMuse"
         ]
     },
     "entangle": {
@@ -11155,8 +11185,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "minLevel": 36,
         "classes": [
             "elvenKnight",
-            "templeKnight",
-            "evaTemplar"
+            "evaTemplar",
+            "plainsWalker",
+            "templeKnight"
         ]
     },
     "symphony": {
@@ -11186,8 +11217,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "swordSinger",
-            "swordMuse"
+            "swordMuse",
+            "swordSinger"
         ]
     },
     "wild_beat": {
@@ -11248,8 +11279,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "minLevel": 20,
         "classes": [
             "elvenKnight",
-            "templeKnight",
-            "evaTemplar"
+            "evaTemplar",
+            "templeKnight"
         ]
     },
     "song_of_silence": {
@@ -11309,8 +11340,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 80,
         "classes": [
-            "swordSinger",
-            "swordMuse"
+            "swordMuse",
+            "swordSinger"
         ]
     },
     "song_of_cosmos": {
@@ -11340,8 +11371,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 80,
         "classes": [
-            "swordSinger",
-            "swordMuse"
+            "swordMuse",
+            "swordSinger"
         ]
     },
     "frantic_pace": {
@@ -11371,8 +11402,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "swordMuse",
-            "spectralDancer"
+            "spectralDancer",
+            "swordMuse"
         ]
     },
     "song_of_hunter": {
@@ -11402,8 +11433,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 79,
         "classes": [
-            "swordSinger",
-            "swordMuse"
+            "swordMuse",
+            "swordSinger"
         ]
     },
     "song_of_earth": {
@@ -11433,8 +11464,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 80,
         "classes": [
-            "swordSinger",
-            "swordMuse"
+            "swordMuse",
+            "swordSinger"
         ]
     },
     "amadeus": {
@@ -11494,8 +11525,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "swordSinger",
-            "bladeDancer"
+            "bladeDancer",
+            "swordSinger"
         ]
     },
     "additional_strain": {
@@ -11525,8 +11556,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "swordSinger",
-            "swordMuse"
+            "swordMuse",
+            "swordSinger"
         ]
     },
     "eliminate_obstruction": {
@@ -11556,6 +11587,7 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 74,
         "classes": [
+            "swordMuse",
             "swordSinger"
         ]
     },
@@ -11586,6 +11618,7 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
+            "swordMuse",
             "swordSinger"
         ]
     },
@@ -11616,8 +11649,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "templeKnight",
-            "evaTemplar"
+            "evaTemplar",
+            "templeKnight"
         ]
     },
     "life_magic_harmony_defense": {
@@ -11647,8 +11680,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "templeKnight",
-            "evaTemplar"
+            "evaTemplar",
+            "templeKnight"
         ]
     },
     "battle_training": {
@@ -11678,10 +11711,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "templeKnight",
             "evaTemplar",
             "shillienKnight",
-            "shillienTemplar"
+            "shillienTemplar",
+            "templeKnight"
         ]
     },
     "shield_bash": {
@@ -11711,8 +11744,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 66,
         "classes": [
-            "templeKnight",
-            "evaTemplar"
+            "evaTemplar",
+            "templeKnight"
         ]
     },
     "chameleon_rest": {
@@ -12405,8 +12438,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "elementalSummoner",
-            "elementalMaster"
+            "elementalMaster",
+            "elementalSummoner"
         ]
     },
     "elemental_vortex": {
@@ -12466,6 +12499,7 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
+            "cardinal",
             "evaTemplar"
         ]
     },
@@ -12616,28 +12650,28 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "elfMage",
-            "elvenWizard",
-            "spellsinger",
-            "mysticMuse",
-            "elementalSummoner",
-            "elementalMaster",
-            "elfOracle",
-            "elfElder",
-            "evaSaint",
             "darkElfMage",
             "darkWizard",
-            "spellhowler",
-            "stormScreamer",
+            "elementalMaster",
+            "elementalSummoner",
+            "elfElder",
+            "elfMage",
+            "elfOracle",
+            "elvenWizard",
+            "evaSaint",
+            "mysticMuse",
             "phantomSummoner",
-            "spectralMaster",
-            "shillienOracle",
-            "shillienElder",
-            "shillienSaint",
             "sayhaMageBase",
+            "sayhaSeeker",
             "sayhaSeer",
-            "windRiderErth",
-            "sayhaSeeker"
+            "shillienElder",
+            "shillienOracle",
+            "shillienSaint",
+            "spectralMaster",
+            "spellhowler",
+            "spellsinger",
+            "stormScreamer",
+            "windRiderErth"
         ]
     },
     "friendly_walk": {
@@ -12877,8 +12911,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 80,
         "classes": [
-            "silverRanger",
-            "moonlightSentinel"
+            "moonlightSentinel",
+            "silverRanger"
         ]
     },
     "alacrity": {
@@ -13000,10 +13034,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 58,
         "classes": [
-            "spellsinger",
             "mysticMuse",
-            "windRiderErth",
-            "sayhaSeeker"
+            "sayhaSeeker",
+            "spellsinger",
+            "windRiderErth"
         ]
     },
     "hydro_blast": {
@@ -13033,10 +13067,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "spellsinger",
             "mysticMuse",
-            "windRiderErth",
-            "sayhaSeeker"
+            "sayhaSeeker",
+            "spellsinger",
+            "windRiderErth"
         ]
     },
     "blizzard": {
@@ -13066,10 +13100,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 70,
         "classes": [
-            "spellsinger",
             "mysticMuse",
-            "windRiderErth",
-            "sayhaSeeker"
+            "sayhaSeeker",
+            "spellsinger",
+            "windRiderErth"
         ]
     },
     "mystic_freeze": {
@@ -13711,6 +13745,7 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
+            "abyssWalker",
             "palusKnight",
             "shillienKnight",
             "shillienTemplar"
@@ -13774,6 +13809,7 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
+            "abyssWalker",
             "shillienKnight",
             "shillienTemplar"
         ]
@@ -13986,7 +14022,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "evaSaint"
+            "evaSaint",
+            "hierophant"
         ]
     },
     "remove": {
@@ -14442,6 +14479,7 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
+            "hellKnight",
             "shillienTemplar"
         ]
     },
@@ -14533,8 +14571,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 60,
         "classes": [
-            "phantomRanger",
-            "ghostSentinel"
+            "ghostSentinel",
+            "phantomRanger"
         ]
     },
     "mortal_piercing": {
@@ -14958,6 +14996,7 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
+            "bladeDancer",
             "spectralDancer"
         ]
     },
@@ -15048,6 +15087,7 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 20,
         "classes": [
+            "darkElfMage",
             "darkWizard",
             "phantomSummoner",
             "spectralMaster"
@@ -15260,6 +15300,7 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 78,
         "classes": [
+            "assassinS2",
             "spectralMaster"
         ]
     },
@@ -15348,8 +15389,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 30,
         "classes": [
-            "shillienOracle",
-            "shillienElder"
+            "shillienElder",
+            "shillienOracle"
         ]
     },
     "lightning_storm": {
@@ -15918,7 +15959,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "bloodRose"
+            "bloodRose",
+            "bloodRoseS2"
         ]
     },
     "enchanted_rose_s_assault": {
@@ -15948,8 +15990,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "bloodRoseS2",
-            "bloodRose"
+            "bloodRose",
+            "bloodRoseS2"
         ]
     },
     "rose_attack": {
@@ -15979,10 +16021,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
+            "bloodRose",
             "bloodRoseBase",
             "bloodRoseS1",
-            "bloodRoseS2",
-            "bloodRose"
+            "bloodRoseS2"
         ]
     },
     "dark_disruption": {
@@ -16072,7 +16114,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "bloodRose"
+            "bloodRose",
+            "bloodRoseS2"
         ]
     },
     "briar_vortex": {
@@ -16102,7 +16145,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "bloodRose"
+            "bloodRose",
+            "bloodRoseS1"
         ]
     },
     "vine_embrace": {
@@ -16132,8 +16176,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "bloodRoseS2",
-            "bloodRose"
+            "bloodRose",
+            "bloodRoseS1",
+            "bloodRoseS2"
         ]
     },
     "reflecting_illusion": {
@@ -16193,8 +16238,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "bloodRoseS2",
-            "bloodRose"
+            "bloodRose",
+            "bloodRoseS2"
         ]
     },
     "kingdom_of_plants": {
@@ -16254,7 +16299,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "bloodRose"
+            "bloodRose",
+            "bloodRoseS2"
         ]
     },
     "bleeding_rose": {
@@ -16405,8 +16451,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 3,
         "classes": [
-            "orcFighter",
-            "monk"
+            "dwarfFighter",
+            "marauderBase",
+            "monk",
+            "orcFighter"
         ]
     },
     "chant_of_wild_magic": {
@@ -16436,20 +16484,20 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "raider",
             "destroyer",
-            "titan",
-            "monk",
-            "tyrant",
-            "grandKhavatari",
-            "dragoon",
-            "vanguardRider",
-            "grandVanguard",
-            "shaman",
-            "overlord",
             "dominator",
-            "warcryer",
-            "doomcryer"
+            "doomcryer",
+            "dragoon",
+            "grandKhavatari",
+            "grandVanguard",
+            "monk",
+            "overlord",
+            "raider",
+            "shaman",
+            "titan",
+            "tyrant",
+            "vanguardRider",
+            "warcryer"
         ]
     },
     "zealot": {
@@ -16480,6 +16528,7 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "minLevel": 58,
         "classes": [
             "destroyer",
+            "titan",
             "tyrant"
         ]
     },
@@ -16510,20 +16559,20 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "raider",
             "destroyer",
-            "titan",
-            "monk",
-            "tyrant",
-            "grandKhavatari",
-            "dragoon",
-            "vanguardRider",
-            "grandVanguard",
-            "shaman",
-            "overlord",
             "dominator",
-            "warcryer",
-            "doomcryer"
+            "doomcryer",
+            "dragoon",
+            "grandKhavatari",
+            "grandVanguard",
+            "monk",
+            "overlord",
+            "raider",
+            "shaman",
+            "titan",
+            "tyrant",
+            "vanguardRider",
+            "warcryer"
         ]
     },
     "guts": {
@@ -16553,8 +16602,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 43,
         "classes": [
-            "raider",
             "destroyer",
+            "raider",
             "titan"
         ]
     },
@@ -16585,20 +16634,20 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "raider",
             "destroyer",
-            "titan",
-            "monk",
-            "tyrant",
-            "grandKhavatari",
-            "dragoon",
-            "vanguardRider",
-            "grandVanguard",
-            "shaman",
-            "overlord",
             "dominator",
-            "warcryer",
-            "doomcryer"
+            "doomcryer",
+            "dragoon",
+            "grandKhavatari",
+            "grandVanguard",
+            "monk",
+            "overlord",
+            "raider",
+            "shaman",
+            "titan",
+            "tyrant",
+            "vanguardRider",
+            "warcryer"
         ]
     },
     "rage": {
@@ -16628,8 +16677,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 55,
         "classes": [
-            "raider",
             "destroyer",
+            "raider",
             "titan"
         ]
     },
@@ -16660,20 +16709,20 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "raider",
             "destroyer",
-            "titan",
-            "monk",
-            "tyrant",
-            "grandKhavatari",
-            "dragoon",
-            "vanguardRider",
-            "grandVanguard",
-            "shaman",
-            "overlord",
             "dominator",
-            "warcryer",
-            "doomcryer"
+            "doomcryer",
+            "dragoon",
+            "grandKhavatari",
+            "grandVanguard",
+            "monk",
+            "overlord",
+            "raider",
+            "shaman",
+            "titan",
+            "tyrant",
+            "vanguardRider",
+            "warcryer"
         ]
     },
     "frenzy": {
@@ -16703,8 +16752,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 46,
         "classes": [
-            "raider",
             "destroyer",
+            "raider",
             "titan"
         ]
     },
@@ -16735,20 +16784,20 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "raider",
             "destroyer",
-            "titan",
-            "monk",
-            "tyrant",
-            "grandKhavatari",
-            "dragoon",
-            "vanguardRider",
-            "grandVanguard",
-            "shaman",
-            "overlord",
             "dominator",
-            "warcryer",
-            "doomcryer"
+            "doomcryer",
+            "dragoon",
+            "grandKhavatari",
+            "grandVanguard",
+            "monk",
+            "overlord",
+            "raider",
+            "shaman",
+            "titan",
+            "tyrant",
+            "vanguardRider",
+            "warcryer"
         ]
     },
     "chant_of_wind_walk": {
@@ -16778,15 +16827,15 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 20,
         "classes": [
-            "raider",
-            "titan",
-            "monk",
-            "grandKhavatari",
-            "dragoon",
-            "grandVanguard",
-            "shaman",
             "dominator",
-            "doomcryer"
+            "doomcryer",
+            "dragoon",
+            "grandKhavatari",
+            "grandVanguard",
+            "monk",
+            "raider",
+            "shaman",
+            "titan"
         ]
     },
     "enchanted_rose_s_gentle_magic": {
@@ -16966,10 +17015,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 77,
         "classes": [
-            "titan",
             "fortuneSeeker",
             "maestro",
-            "shinemaker"
+            "shinemaker",
+            "titan"
         ]
     },
     "demolition_impact": {
@@ -17239,8 +17288,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 81,
         "classes": [
-            "titan",
-            "grandKhavatari"
+            "grandKhavatari",
+            "titan"
         ]
     },
     "over_the_body": {
@@ -17331,12 +17380,12 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 20,
         "classes": [
-            "orcMage",
-            "shaman",
-            "overlord",
             "dominator",
-            "warcryer",
-            "doomcryer"
+            "doomcryer",
+            "orcMage",
+            "overlord",
+            "shaman",
+            "warcryer"
         ]
     },
     "vortex_of_fire": {
@@ -17366,12 +17415,12 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 20,
         "classes": [
-            "orcMage",
-            "shaman",
-            "overlord",
             "dominator",
-            "warcryer",
-            "doomcryer"
+            "doomcryer",
+            "orcMage",
+            "overlord",
+            "shaman",
+            "warcryer"
         ]
     },
     "titan_champion": {
@@ -17431,11 +17480,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 25,
         "classes": [
-            "shaman",
-            "overlord",
             "dominator",
-            "warcryer",
-            "doomcryer"
+            "doomcryer",
+            "overlord",
+            "shaman",
+            "warcryer"
         ]
     },
     "life_rescue": {
@@ -17465,11 +17514,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 20,
         "classes": [
-            "shaman",
-            "overlord",
             "dominator",
-            "warcryer",
-            "doomcryer"
+            "doomcryer",
+            "overlord",
+            "shaman",
+            "warcryer"
         ]
     },
     "fear": {
@@ -17499,12 +17548,12 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 20,
         "classes": [
-            "orcMage",
-            "shaman",
-            "overlord",
             "dominator",
-            "warcryer",
-            "doomcryer"
+            "doomcryer",
+            "orcMage",
+            "overlord",
+            "shaman",
+            "warcryer"
         ]
     },
     "madness": {
@@ -17534,8 +17583,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 20,
         "classes": [
-            "shaman",
             "overlord",
+            "shaman",
             "warcryer"
         ]
     },
@@ -17566,12 +17615,12 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 20,
         "classes": [
-            "orcMage",
-            "shaman",
-            "overlord",
             "dominator",
-            "warcryer",
-            "doomcryer"
+            "doomcryer",
+            "orcMage",
+            "overlord",
+            "shaman",
+            "warcryer"
         ]
     },
     "frost_flame": {
@@ -17813,8 +17862,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 85,
         "classes": [
-            "warcryer",
-            "doomcryer"
+            "doomcryer",
+            "warcryer"
         ]
     },
     "chant_of_gate": {
@@ -17874,8 +17923,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "warcryer",
-            "doomcryer"
+            "doomcryer",
+            "warcryer"
         ]
     },
     "team_building": {
@@ -17935,9 +17984,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
+            "grandKhavatari",
             "monk",
-            "tyrant",
-            "grandKhavatari"
+            "tyrant"
         ]
     },
     "iron_fist": {
@@ -17967,8 +18016,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "tyrant",
-            "grandKhavatari"
+            "grandKhavatari",
+            "tyrant"
         ]
     },
     "force_burst": {
@@ -17998,8 +18047,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 41,
         "classes": [
-            "tyrant",
-            "grandKhavatari"
+            "grandKhavatari",
+            "tyrant"
         ]
     },
     "punch_of_doom": {
@@ -18059,8 +18108,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "tyrant",
-            "grandKhavatari"
+            "grandKhavatari",
+            "tyrant"
         ]
     },
     "force_storm": {
@@ -18090,8 +18139,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 47,
         "classes": [
-            "tyrant",
-            "grandKhavatari"
+            "grandKhavatari",
+            "tyrant"
         ]
     },
     "force_blaster": {
@@ -18121,9 +18170,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
+            "grandKhavatari",
             "monk",
-            "tyrant",
-            "grandKhavatari"
+            "tyrant"
         ]
     },
     "break_duress": {
@@ -18213,8 +18262,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 45,
         "classes": [
-            "tyrant",
-            "grandKhavatari"
+            "grandKhavatari",
+            "tyrant"
         ]
     },
     "cripple": {
@@ -18244,9 +18293,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
+            "grandKhavatari",
             "monk",
-            "tyrant",
-            "grandKhavatari"
+            "tyrant"
         ]
     },
     "chant_of_vampire": {
@@ -18489,8 +18538,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 85,
         "classes": [
-            "overlord",
-            "dominator"
+            "dominator",
+            "overlord"
         ]
     },
     "seal_of_suspension": {
@@ -18520,8 +18569,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "overlord",
-            "dominator"
+            "dominator",
+            "overlord"
         ]
     },
     "seal_of_silence": {
@@ -18551,8 +18600,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "overlord",
-            "dominator"
+            "dominator",
+            "overlord"
         ]
     },
     "pa_agrio_s_honor": {
@@ -18582,8 +18631,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "overlord",
-            "dominator"
+            "dominator",
+            "overlord"
         ]
     },
     "seal_of_blockade": {
@@ -18763,8 +18812,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "overlord",
-            "dominator"
+            "dominator",
+            "overlord"
         ]
     },
     "pa_agrio_s_cure": {
@@ -19064,6 +19113,7 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
+            "doomcryer",
             "grandKhavatari"
         ]
     },
@@ -19154,10 +19204,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 5,
         "classes": [
-            "dwarfFighter",
-            "scavenger",
             "bountyHunter",
-            "fortuneSeeker"
+            "dwarfFighter",
+            "fortuneSeeker",
+            "scavenger"
         ]
     },
     "sweeper": {
@@ -19279,15 +19329,15 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "scavenger",
+            "artisanDwarf",
             "bountyHunter",
             "fortuneSeeker",
-            "artisanDwarf",
-            "warsmith",
             "maestro",
+            "scavenger",
             "shineMakerS1",
             "shineMakerS2",
-            "shinemaker"
+            "shinemaker",
+            "warsmith"
         ]
     },
     "adena_stun": {
@@ -19347,15 +19397,15 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "scavenger",
+            "artisanDwarf",
             "bountyHunter",
             "fortuneSeeker",
-            "artisanDwarf",
-            "warsmith",
             "maestro",
+            "scavenger",
             "shineMakerS1",
             "shineMakerS2",
-            "shinemaker"
+            "shinemaker",
+            "warsmith"
         ]
     },
     "maphr_s_haste": {
@@ -19385,15 +19435,15 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "scavenger",
+            "artisanDwarf",
             "bountyHunter",
             "fortuneSeeker",
-            "artisanDwarf",
-            "warsmith",
             "maestro",
+            "scavenger",
             "shineMakerS1",
             "shineMakerS2",
-            "shinemaker"
+            "shinemaker",
+            "warsmith"
         ]
     },
     "trophy_thief": {
@@ -19453,15 +19503,15 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "scavenger",
+            "artisanDwarf",
             "bountyHunter",
             "fortuneSeeker",
-            "artisanDwarf",
-            "warsmith",
             "maestro",
+            "scavenger",
             "shineMakerS1",
             "shineMakerS2",
-            "shinemaker"
+            "shinemaker",
+            "warsmith"
         ]
     },
     "spoil_crush": {
@@ -19551,10 +19601,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "scavenger",
-            "fortuneSeeker",
             "artisanDwarf",
+            "fortuneSeeker",
             "maestro",
+            "scavenger",
             "shineMakerS1",
             "shinemaker"
         ]
@@ -19588,10 +19638,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "classes": [
             "bountyHunter",
             "fortuneSeeker",
-            "warsmith",
             "maestro",
             "shineMakerS2",
-            "shinemaker"
+            "shinemaker",
+            "warsmith"
         ]
     },
     "maphr_s_berserker_spirit": {
@@ -19621,15 +19671,15 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "scavenger",
+            "artisanDwarf",
             "bountyHunter",
             "fortuneSeeker",
-            "artisanDwarf",
-            "warsmith",
             "maestro",
+            "scavenger",
             "shineMakerS1",
             "shineMakerS2",
-            "shinemaker"
+            "shinemaker",
+            "warsmith"
         ]
     },
     "rolling_dice": {
@@ -19689,9 +19739,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "scavenger",
             "bountyHunter",
-            "fortuneSeeker"
+            "fortuneSeeker",
+            "scavenger"
         ]
     },
     "weapon_reinforcement": {
@@ -19723,10 +19773,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "classes": [
             "bountyHunter",
             "fortuneSeeker",
-            "warsmith",
             "maestro",
             "shineMakerS2",
-            "shinemaker"
+            "shinemaker",
+            "warsmith"
         ]
     },
     "tenacity": {
@@ -19758,10 +19808,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "classes": [
             "bountyHunter",
             "fortuneSeeker",
-            "warsmith",
             "maestro",
             "shineMakerS2",
-            "shinemaker"
+            "shinemaker",
+            "warsmith"
         ]
     },
     "mount_kukuru": {
@@ -19852,8 +19902,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 1,
         "classes": [
-            "rider",
-            "grandVanguard"
+            "grandVanguard",
+            "rider"
         ]
     },
     "blazing_beast": {
@@ -19914,11 +19964,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "minLevel": 28,
         "classes": [
             "artisanDwarf",
-            "warsmith",
             "maestro",
             "shineMakerS1",
             "shineMakerS2",
-            "shinemaker"
+            "shinemaker",
+            "warsmith"
         ]
     },
     "wild_rush": {
@@ -19949,8 +19999,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "minLevel": 20,
         "classes": [
             "dragoon",
-            "vanguardRider",
-            "grandVanguard"
+            "grandVanguard",
+            "rider",
+            "vanguardRider"
         ]
     },
     "piercing": {
@@ -20011,8 +20062,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 78,
         "classes": [
-            "vanguardRider",
-            "grandVanguard"
+            "grandVanguard",
+            "vanguardRider"
         ]
     },
     "amazing_piercing": {
@@ -20282,8 +20333,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 50,
         "classes": [
-            "warsmith",
-            "shineMakerS2"
+            "shineMakerS2",
+            "warsmith"
         ]
     },
     "golem_reinforcement": {
@@ -20313,8 +20364,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "warsmith",
-            "shineMakerS2"
+            "shineMakerS2",
+            "warsmith"
         ]
     },
     "repair_golem": {
@@ -20344,8 +20395,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "warsmith",
-            "shineMakerS2"
+            "shineMakerS2",
+            "warsmith"
         ]
     },
     "strengthen_golem": {
@@ -20375,8 +20426,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 43,
         "classes": [
-            "warsmith",
-            "shineMakerS2"
+            "shineMakerS2",
+            "warsmith"
         ]
     },
     "spirit_weakness": {
@@ -20436,8 +20487,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 49,
         "classes": [
-            "warsmith",
-            "shineMakerS2"
+            "shineMakerS2",
+            "warsmith"
         ]
     },
     "summon_wild_hog_cannon": {
@@ -20467,8 +20518,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 58,
         "classes": [
-            "warsmith",
-            "shineMakerS2"
+            "shineMakerS2",
+            "warsmith"
         ]
     },
     "soul_wild_magic": {
@@ -20498,18 +20549,18 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "trooper",
             "berserker",
             "doombringer",
-            "soulFinder",
+            "ertheiaWarrior",
+            "eviscerator",
+            "marauder",
             "soulBreakerKamael",
+            "soulFinder",
             "soulHound",
-            "warder",
             "soulRanger",
             "trickster",
-            "marauder",
-            "ertheiaWarrior",
-            "eviscerator"
+            "trooper",
+            "warder"
         ]
     },
     "rapier_slash": {
@@ -20599,18 +20650,18 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "trooper",
             "berserker",
             "doombringer",
-            "soulFinder",
+            "ertheiaWarrior",
+            "eviscerator",
+            "marauder",
             "soulBreakerKamael",
+            "soulFinder",
             "soulHound",
-            "warder",
             "soulRanger",
             "trickster",
-            "marauder",
-            "ertheiaWarrior",
-            "eviscerator"
+            "trooper",
+            "warder"
         ]
     },
     "flash_dash": {
@@ -20671,18 +20722,18 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "trooper",
             "berserker",
             "doombringer",
-            "soulFinder",
+            "ertheiaWarrior",
+            "eviscerator",
+            "marauder",
             "soulBreakerKamael",
+            "soulFinder",
             "soulHound",
-            "warder",
             "soulRanger",
             "trickster",
-            "marauder",
-            "ertheiaWarrior",
-            "eviscerator"
+            "trooper",
+            "warder"
         ]
     },
     "soul_berserker_spirit": {
@@ -20712,18 +20763,18 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "trooper",
             "berserker",
             "doombringer",
-            "soulFinder",
+            "ertheiaWarrior",
+            "eviscerator",
+            "marauder",
             "soulBreakerKamael",
+            "soulFinder",
             "soulHound",
-            "warder",
             "soulRanger",
             "trickster",
-            "marauder",
-            "ertheiaWarrior",
-            "eviscerator"
+            "trooper",
+            "warder"
         ]
     },
     "crescent_swing": {
@@ -20783,8 +20834,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 80,
         "classes": [
-            "soulFinder",
             "soulBreakerKamael",
+            "soulFinder",
             "soulHound"
         ]
     },
@@ -20815,14 +20866,14 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "trooper",
             "doombringer",
+            "eviscerator",
+            "marauder",
             "soulFinder",
             "soulHound",
-            "warder",
             "trickster",
-            "marauder",
-            "eviscerator"
+            "trooper",
+            "warder"
         ]
     },
     "soul_acumen": {
@@ -20852,18 +20903,18 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "trooper",
             "berserker",
             "doombringer",
-            "soulFinder",
+            "ertheiaWarrior",
+            "eviscerator",
+            "marauder",
             "soulBreakerKamael",
+            "soulFinder",
             "soulHound",
-            "warder",
             "soulRanger",
             "trickster",
-            "marauder",
-            "ertheiaWarrior",
-            "eviscerator"
+            "trooper",
+            "warder"
         ]
     },
     "light_soul_connection": {
@@ -20894,9 +20945,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "minLevel": 76,
         "classes": [
             "doombringer",
+            "eviscerator",
             "soulHound",
-            "trickster",
-            "eviscerator"
+            "trickster"
         ]
     },
     "shadow_soul_connection": {
@@ -20927,9 +20978,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "minLevel": 76,
         "classes": [
             "doombringer",
+            "eviscerator",
             "soulHound",
-            "trickster",
-            "eviscerator"
+            "trickster"
         ]
     },
     "chain_lightning": {
@@ -20989,6 +21040,7 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
+            "maestro",
             "soulHound"
         ]
     },
@@ -21113,12 +21165,12 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "classes": [
             "berserker",
             "doombringer",
+            "ertheiaWarrior",
+            "eviscerator",
             "soulBreakerKamael",
             "soulHound",
             "soulRanger",
-            "trickster",
-            "ertheiaWarrior",
-            "eviscerator"
+            "trickster"
         ]
     },
     "soul_blade": {
@@ -21180,12 +21232,12 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "classes": [
             "berserker",
             "doombringer",
+            "ertheiaWarrior",
+            "eviscerator",
             "soulBreakerKamael",
             "soulHound",
             "soulRanger",
-            "trickster",
-            "ertheiaWarrior",
-            "eviscerator"
+            "trickster"
         ]
     },
     "fragarach": {
@@ -21372,12 +21424,12 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "trooper",
             "berserker",
             "doombringer",
-            "marauder",
             "ertheiaWarrior",
-            "eviscerator"
+            "eviscerator",
+            "marauder",
+            "trooper"
         ]
     },
     "soul_impulse": {
@@ -21440,12 +21492,12 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "trooper",
             "berserker",
             "doombringer",
-            "marauder",
             "ertheiaWarrior",
-            "eviscerator"
+            "eviscerator",
+            "marauder",
+            "trooper"
         ]
     },
     "increase_power": {
@@ -21475,12 +21527,12 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "trooper",
             "berserker",
             "doombringer",
-            "marauder",
             "ertheiaWarrior",
-            "eviscerator"
+            "eviscerator",
+            "marauder",
+            "trooper"
         ]
     },
     "soul_prison": {
@@ -21604,7 +21656,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "minLevel": 76,
         "classes": [
             "doombringer",
-            "eviscerator"
+            "eviscerator",
+            "titan"
         ]
     },
     "kamael_symbol": {
@@ -21727,9 +21780,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 20,
         "classes": [
-            "warder",
             "soulRanger",
-            "trickster"
+            "trickster",
+            "warder"
         ]
     },
     "cunning_shot": {
@@ -21759,9 +21812,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 20,
         "classes": [
-            "warder",
             "soulRanger",
-            "trickster"
+            "trickster",
+            "warder"
         ]
     },
     "earth_tremor": {
@@ -21977,6 +22030,7 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 3,
         "classes": [
+            "cleric",
             "highElfBase",
             "kamaelSoldier",
             "marauderBase"
@@ -22168,10 +22222,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 28,
         "classes": [
-            "trooper",
             "berserker",
+            "ertheiaWarrior",
             "marauder",
-            "ertheiaWarrior"
+            "trooper"
         ]
     },
     "pride_of_kamael": {
@@ -22327,8 +22381,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "windSniper",
-            "stormBlaster"
+            "stormBlaster",
+            "windSniper"
         ]
     },
     "elemental_magic_barrier": {
@@ -22358,10 +22412,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "sylphGunner",
             "sharpshooter",
-            "windSniper",
-            "stormBlaster"
+            "stormBlaster",
+            "sylphGunner",
+            "windSniper"
         ]
     },
     "elemental_haste": {
@@ -22391,10 +22445,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "sylphGunner",
             "sharpshooter",
-            "windSniper",
-            "stormBlaster"
+            "stormBlaster",
+            "sylphGunner",
+            "windSniper"
         ]
     },
     "blessing_of_winds": {
@@ -22424,8 +22478,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "windSniper",
-            "stormBlaster"
+            "stormBlaster",
+            "windSniper"
         ]
     },
     "elemental_berserker_spirit": {
@@ -22455,10 +22509,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "sylphGunner",
             "sharpshooter",
-            "windSniper",
-            "stormBlaster"
+            "stormBlaster",
+            "sylphGunner",
+            "windSniper"
         ]
     },
     "elemental_wild_magic": {
@@ -22488,10 +22542,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "sylphGunner",
             "sharpshooter",
-            "windSniper",
-            "stormBlaster"
+            "stormBlaster",
+            "sylphGunner",
+            "windSniper"
         ]
     },
     "elemental_insight": {
@@ -22521,10 +22575,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "sylphGunner",
             "sharpshooter",
-            "windSniper",
-            "stormBlaster"
+            "stormBlaster",
+            "sylphGunner",
+            "windSniper"
         ]
     },
     "dual_blow": {
@@ -22554,10 +22608,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "sylphGunner",
             "sharpshooter",
-            "windSniper",
-            "stormBlaster"
+            "stormBlaster",
+            "sylphGunner",
+            "windSniper"
         ]
     },
     "fire_explosion": {
@@ -22587,8 +22641,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "windSniper",
-            "stormBlaster"
+            "stormBlaster",
+            "windSniper"
         ]
     },
     "pursuit": {
@@ -22807,8 +22861,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 58,
         "classes": [
-            "windSniper",
-            "stormBlaster"
+            "stormBlaster",
+            "sylphGunner",
+            "windSniper"
         ]
     },
     "wind": {
@@ -22870,10 +22925,10 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "samuraiBase",
             "hatamoto",
             "ronin",
-            "samurai"
+            "samurai",
+            "samuraiBase"
         ]
     },
     "elemental_wind_walk": {
@@ -22903,9 +22958,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 20,
         "classes": [
-            "sylphGunner",
             "sharpshooter",
-            "stormBlaster"
+            "stormBlaster",
+            "sylphGunner"
         ]
     },
     "greater_wind_shot": {
@@ -23176,6 +23231,7 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
+            "soulRanger",
             "trickster"
         ]
     },
@@ -23236,6 +23292,7 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
+            "soulRanger",
             "trickster"
         ]
     },
@@ -23535,57 +23592,68 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "id": "armor_mastery",
         "name": "Armor Mastery",
         "slug": "armor_mastery",
-        "type": "active",
-        "rawType": "Ativo",
+        "type": "passive",
+        "rawType": "Passive",
         "rarity": "1★",
         "starRank": 1,
         "icon": "/icons/skill0142.webp",
         "iconGap": false,
         "iconGapReason": null,
-        "canonicalEffect": "P. Def. +10M. Def. +20MP Recovery Rate +10%",
-        "canonicalCooldown": "1s",
-        "canonicalCooldownMs": 1000,
-        "desc": "P. Def. +10M. Def. +20MP Recovery Rate +10%",
+        "canonicalEffect": "P. Def. +10, M. Def. +20",
+        "canonicalCooldown": "N/A",
+        "canonicalCooldownMs": 0,
+        "desc": "Permanently increases P. Def. and M. Def.",
         "balance": {
-            "mpCost": 15,
-            "pwr": 1,
+            "mpCost": 0,
+            "pwr": 0,
             "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+            "pvpMultiplier": 1
         },
-        "vfxId": "vfx_armor_mastery",
+        "vfxId": null,
         "vfxGap": false,
-        "sfxId": "sfx_action",
+        "sfxId": null,
         "sfxGap": false,
         "minLevel": 1,
-        "classes": []
+        "classes": [
+            "darkElfFighter",
+            "elfFighter",
+            "fighter"
+        ]
     },
     "weapon_mastery": {
         "id": "weapon_mastery",
         "name": "Weapon Mastery",
         "slug": "weapon_mastery",
-        "type": "active",
-        "rawType": "Ativo",
+        "type": "passive",
+        "rawType": "Passive",
         "rarity": "1★",
         "starRank": 1,
         "icon": "/icons/skill0141.webp",
         "iconGap": false,
         "iconGapReason": null,
         "canonicalEffect": "P. Atk. +10",
-        "canonicalCooldown": "1s",
-        "canonicalCooldownMs": 1000,
-        "desc": "P. Atk. +10",
+        "canonicalCooldown": "N/A",
+        "canonicalCooldownMs": 0,
+        "desc": "Permanently increases P. Atk.",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
+            "mpCost": 0,
+            "pwr": 0,
             "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+            "pvpMultiplier": 1
         },
-        "vfxId": "vfx_weapon_mastery",
+        "vfxId": null,
         "vfxGap": false,
-        "sfxId": "sfx_action",
+        "sfxId": null,
         "sfxGap": false,
         "minLevel": 1,
-        "classes": []
+        "classes": [
+            "darkElfFighter",
+            "dwarfFighter",
+            "elfFighter",
+            "fighter",
+            "kamaelSoldier",
+            "orcFighter"
+        ]
     },
     "lord_knight": {
         "id": "lord_knight",
@@ -24004,9 +24072,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 30,
         "classes": [
+            "elementWeaver",
             "elementWeaverS1",
-            "elementWeaverS2",
-            "elementWeaver"
+            "elementWeaverS2"
         ]
     },
     "ice_sphere": {
@@ -24036,9 +24104,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 30,
         "classes": [
+            "elementWeaver",
             "elementWeaverS1",
-            "elementWeaverS2",
-            "elementWeaver"
+            "elementWeaverS2"
         ]
     },
     "sacral_strike": {
@@ -24068,9 +24136,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 20,
         "classes": [
-            "lightTemplar",
+            "divineTemplar",
             "holyTemplar",
-            "divineTemplar"
+            "lightTemplar"
         ]
     },
     "bright_dance": {
@@ -24100,8 +24168,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "elementWeaverS2",
-            "elementWeaver"
+            "elementWeaver",
+            "elementWeaverS2"
         ]
     },
     "florescence": {
@@ -24312,7 +24380,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "elementWeaver"
+            "elementWeaver",
+            "hierophant"
         ]
     },
     "sacral_power": {
@@ -24342,8 +24411,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 40,
         "classes": [
-            "holyTemplar",
-            "divineTemplar"
+            "divineTemplar",
+            "holyTemplar"
         ]
     },
     "large_protection_of_light": {
@@ -24373,8 +24442,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 70,
         "classes": [
-            "holyTemplar",
-            "elementWeaverS2"
+            "elementWeaverS2",
+            "holyTemplar"
         ]
     },
     "flying_leap": {
@@ -24434,8 +24503,9 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 45,
         "classes": [
+            "elementWeaverS2",
             "holyTemplar",
-            "elementWeaverS2"
+            "lightTemplar"
         ]
     },
     "judgment": {
@@ -24495,8 +24565,8 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 60,
         "classes": [
-            "holyTemplar",
-            "elementWeaverS2"
+            "elementWeaverS2",
+            "holyTemplar"
         ]
     },
     "noblesse_circlet": {
@@ -24676,11 +24746,1660 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxGap": false,
         "minLevel": 76,
         "classes": [
-            "divineTemplar"
+            "divineTemplar",
+            "phoenixKnight"
         ]
+    },
+    "sword_blunt_mastery": {
+        "id": "sword_blunt_mastery",
+        "name": "Sword/Blunt Weapon Mastery",
+        "slug": "sword_blunt_mastery",
+        "type": "passive",
+        "rawType": "Passive",
+        "rarity": "2★",
+        "starRank": 2,
+        "icon": "/icons/skill0257.webp",
+        "iconGap": false,
+        "iconGapReason": null,
+        "canonicalEffect": "P. Atk. +15%",
+        "canonicalCooldown": "N/A",
+        "canonicalCooldownMs": 0,
+        "desc": "Increases P. Atk. when using a sword or blunt weapon.",
+        "balance": {
+            "mpCost": 0,
+            "pwr": 0,
+            "pveMultiplier": 1,
+            "pvpMultiplier": 1
+        },
+        "vfxId": null,
+        "vfxGap": false,
+        "sfxId": null,
+        "sfxGap": false,
+        "minLevel": 20,
+        "classes": [
+            "artisanDwarf",
+            "deathPilgrim",
+            "elvenKnight",
+            "knight",
+            "lightTemplar",
+            "palusKnight",
+            "samuraiBase",
+            "shineMakerS1",
+            "trooper",
+            "warrior"
+        ]
+    },
+    "dual_weapon_mastery": {
+        "id": "dual_weapon_mastery",
+        "name": "Dual Weapon Mastery",
+        "slug": "dual_weapon_mastery",
+        "type": "passive",
+        "rawType": "Passive",
+        "rarity": "2★",
+        "starRank": 2,
+        "icon": "/icons/skill0144.webp",
+        "iconGap": false,
+        "iconGapReason": null,
+        "canonicalEffect": "P. Atk. +20%",
+        "canonicalCooldown": "N/A",
+        "canonicalCooldownMs": 0,
+        "desc": "Increases P. Atk. when using dual swords or dual daggers.",
+        "balance": {
+            "mpCost": 0,
+            "pwr": 0,
+            "pveMultiplier": 1,
+            "pvpMultiplier": 1
+        },
+        "vfxId": null,
+        "vfxGap": false,
+        "sfxId": null,
+        "sfxGap": false,
+        "minLevel": 40,
+        "classes": [
+            "bladeDancer",
+            "gladiator"
+        ]
+    },
+    "bow_mastery": {
+        "id": "bow_mastery",
+        "name": "Bow Mastery",
+        "slug": "bow_mastery",
+        "type": "passive",
+        "rawType": "Passive",
+        "rarity": "2★",
+        "starRank": 2,
+        "icon": "/icons/skill0208.webp",
+        "iconGap": false,
+        "iconGapReason": null,
+        "canonicalEffect": "P. Atk. +25%",
+        "canonicalCooldown": "N/A",
+        "canonicalCooldownMs": 0,
+        "desc": "Increases P. Atk. when using a bow.",
+        "balance": {
+            "mpCost": 0,
+            "pwr": 0,
+            "pveMultiplier": 1,
+            "pvpMultiplier": 1
+        },
+        "vfxId": null,
+        "vfxGap": false,
+        "sfxId": null,
+        "sfxGap": false,
+        "minLevel": 20,
+        "classes": [
+            "elfScout",
+            "hawkeye",
+            "phantomRanger",
+            "sylphGunner",
+            "warder"
+        ]
+    },
+    "dagger_mastery": {
+        "id": "dagger_mastery",
+        "name": "Dagger Mastery",
+        "slug": "dagger_mastery",
+        "type": "passive",
+        "rawType": "Passive",
+        "rarity": "2★",
+        "starRank": 2,
+        "icon": "/icons/skill0209.webp",
+        "iconGap": false,
+        "iconGapReason": null,
+        "canonicalEffect": "P. Atk. +20%, Critical Rate +10",
+        "canonicalCooldown": "N/A",
+        "canonicalCooldownMs": 0,
+        "desc": "Increases P. Atk. and critical chance when using a dagger.",
+        "balance": {
+            "mpCost": 0,
+            "pwr": 0,
+            "pveMultiplier": 1,
+            "pvpMultiplier": 1
+        },
+        "vfxId": null,
+        "vfxGap": false,
+        "sfxId": null,
+        "sfxGap": false,
+        "minLevel": 20,
+        "classes": [
+            "assassinDE",
+            "assassinS0",
+            "bloodRoseBase",
+            "rogue",
+            "scavenger",
+            "soulFinder"
+        ]
+    },
+    "polearm_mastery": {
+        "id": "polearm_mastery",
+        "name": "Polearm Mastery",
+        "slug": "polearm_mastery",
+        "type": "passive",
+        "rawType": "Passive",
+        "rarity": "2★",
+        "starRank": 2,
+        "icon": "/icons/skill0216.webp",
+        "iconGap": false,
+        "iconGapReason": null,
+        "canonicalEffect": "P. Atk. +20%, Max targets +3",
+        "canonicalCooldown": "N/A",
+        "canonicalCooldownMs": 0,
+        "desc": "Increases P. Atk. and attack count when using a spear or polearm.",
+        "balance": {
+            "mpCost": 0,
+            "pwr": 0,
+            "pveMultiplier": 1,
+            "pvpMultiplier": 1
+        },
+        "vfxId": null,
+        "vfxGap": false,
+        "sfxId": null,
+        "sfxGap": false,
+        "minLevel": 20,
+        "classes": [
+            "rider",
+            "warlord"
+        ]
+    },
+    "fist_mastery": {
+        "id": "fist_mastery",
+        "name": "Fist Mastery",
+        "slug": "fist_mastery",
+        "type": "passive",
+        "rawType": "Passive",
+        "rarity": "2★",
+        "starRank": 2,
+        "icon": "/icons/skill0210.webp",
+        "iconGap": false,
+        "iconGapReason": null,
+        "canonicalEffect": "P. Atk. +20%",
+        "canonicalCooldown": "N/A",
+        "canonicalCooldownMs": 0,
+        "desc": "Increases P. Atk. when using fist weapons.",
+        "balance": {
+            "mpCost": 0,
+            "pwr": 0,
+            "pveMultiplier": 1,
+            "pvpMultiplier": 1
+        },
+        "vfxId": null,
+        "vfxGap": false,
+        "sfxId": null,
+        "sfxGap": false,
+        "minLevel": 20,
+        "classes": [
+            "marauderBase",
+            "monk"
+        ]
+    },
+    "two_handed_weapon_mastery": {
+        "id": "two_handed_weapon_mastery",
+        "name": "Two-handed Weapon Mastery",
+        "slug": "two_handed_weapon_mastery",
+        "type": "passive",
+        "rawType": "Passive",
+        "rarity": "2★",
+        "starRank": 2,
+        "icon": "/icons/skill0293.webp",
+        "iconGap": false,
+        "iconGapReason": null,
+        "canonicalEffect": "P. Atk. +25%, Critical Damage +15%",
+        "canonicalCooldown": "N/A",
+        "canonicalCooldownMs": 0,
+        "desc": "Increases P. Atk. and Critical Damage when using a two-handed weapon.",
+        "balance": {
+            "mpCost": 0,
+            "pwr": 0,
+            "pveMultiplier": 1,
+            "pvpMultiplier": 1
+        },
+        "vfxId": null,
+        "vfxGap": false,
+        "sfxId": null,
+        "sfxGap": false,
+        "minLevel": 40,
+        "classes": [
+            "berserker",
+            "deathMessenger",
+            "raider"
+        ]
+    },
+    "magic_mastery": {
+        "id": "magic_mastery",
+        "name": "Magic Mastery",
+        "slug": "magic_mastery",
+        "type": "passive",
+        "rawType": "Passive",
+        "rarity": "2★",
+        "starRank": 2,
+        "icon": "/icons/skill0249.webp",
+        "iconGap": false,
+        "iconGapReason": null,
+        "canonicalEffect": "M. Atk. +20%, Magic Critical Rate +10",
+        "canonicalCooldown": "N/A",
+        "canonicalCooldownMs": 0,
+        "desc": "Increases M. Atk. and Magic Critical Rate.",
+        "balance": {
+            "mpCost": 0,
+            "pwr": 0,
+            "pveMultiplier": 1,
+            "pvpMultiplier": 1
+        },
+        "vfxId": null,
+        "vfxGap": false,
+        "sfxId": null,
+        "sfxGap": false,
+        "minLevel": 20,
+        "classes": [
+            "darkElfMage",
+            "elfMage",
+            "highElfBase",
+            "mage",
+            "orcMage",
+            "sayhaMageBase"
+        ]
+    },
+    "heavy_armor_mastery": {
+        "id": "heavy_armor_mastery",
+        "name": "Heavy Armor Mastery",
+        "slug": "heavy_armor_mastery",
+        "type": "passive",
+        "rawType": "Passive",
+        "rarity": "2★",
+        "starRank": 2,
+        "icon": "/icons/skill0259.webp",
+        "iconGap": false,
+        "iconGapReason": null,
+        "canonicalEffect": "P. Def. +60, Received Critical Damage -10%",
+        "canonicalCooldown": "N/A",
+        "canonicalCooldownMs": 0,
+        "desc": "Increases P. Def. when equipped with heavy armor.",
+        "balance": {
+            "mpCost": 0,
+            "pwr": 0,
+            "pveMultiplier": 1,
+            "pvpMultiplier": 1
+        },
+        "vfxId": null,
+        "vfxGap": false,
+        "sfxId": null,
+        "sfxGap": false,
+        "minLevel": 20,
+        "classes": [
+            "deathPilgrim",
+            "dwarfFighter",
+            "elvenKnight",
+            "knight",
+            "lightTemplar",
+            "orcFighter",
+            "palusKnight",
+            "rider",
+            "warrior"
+        ]
+    },
+    "light_armor_mastery": {
+        "id": "light_armor_mastery",
+        "name": "Light Armor Mastery",
+        "slug": "light_armor_mastery",
+        "type": "passive",
+        "rawType": "Passive",
+        "rarity": "2★",
+        "starRank": 2,
+        "icon": "/icons/skill0258.webp",
+        "iconGap": false,
+        "iconGapReason": null,
+        "canonicalEffect": "P. Def. +40, Evasion +6, Atk. Spd +5%",
+        "canonicalCooldown": "N/A",
+        "canonicalCooldownMs": 0,
+        "desc": "Increases P. Def. and Evasion when equipped with light armor.",
+        "balance": {
+            "mpCost": 0,
+            "pwr": 0,
+            "pveMultiplier": 1,
+            "pvpMultiplier": 1
+        },
+        "vfxId": null,
+        "vfxGap": false,
+        "sfxId": null,
+        "sfxGap": false,
+        "minLevel": 20,
+        "classes": [
+            "assassinDE",
+            "assassinS0",
+            "bloodRoseBase",
+            "elfScout",
+            "kamaelSoldier",
+            "marauderBase",
+            "monk",
+            "rogue",
+            "samuraiBase",
+            "scavenger",
+            "shineMakerS1",
+            "sylphGunner"
+        ]
+    },
+    "robe_mastery": {
+        "id": "robe_mastery",
+        "name": "Robe Mastery",
+        "slug": "robe_mastery",
+        "type": "passive",
+        "rawType": "Passive",
+        "rarity": "2★",
+        "starRank": 2,
+        "icon": "/icons/skill0251.webp",
+        "iconGap": false,
+        "iconGapReason": null,
+        "canonicalEffect": "P. Def. +30, Cast. Spd +10%",
+        "canonicalCooldown": "N/A",
+        "canonicalCooldownMs": 0,
+        "desc": "Increases P. Def. and Cast. Spd. when equipped with a robe.",
+        "balance": {
+            "mpCost": 0,
+            "pwr": 0,
+            "pveMultiplier": 1,
+            "pvpMultiplier": 1
+        },
+        "vfxId": null,
+        "vfxGap": false,
+        "sfxId": null,
+        "sfxGap": false,
+        "minLevel": 20,
+        "classes": [
+            "darkElfMage",
+            "elfMage",
+            "highElfBase",
+            "mage",
+            "orcMage",
+            "sayhaMageBase"
+        ]
+    },
+    "shield_mastery": {
+        "id": "shield_mastery",
+        "name": "Shield Mastery",
+        "slug": "shield_mastery",
+        "type": "passive",
+        "rawType": "Passive",
+        "rarity": "2★",
+        "starRank": 2,
+        "icon": "/icons/skill0153.webp",
+        "iconGap": false,
+        "iconGapReason": null,
+        "canonicalEffect": "Shield Def +100, Block Rate +20%",
+        "canonicalCooldown": "N/A",
+        "canonicalCooldownMs": 0,
+        "desc": "Increases Shield Defense and Shield Block Rate.",
+        "balance": {
+            "mpCost": 0,
+            "pwr": 0,
+            "pveMultiplier": 1,
+            "pvpMultiplier": 1
+        },
+        "vfxId": null,
+        "vfxGap": false,
+        "sfxId": null,
+        "sfxGap": false,
+        "minLevel": 20,
+        "classes": [
+            "darkAvenger",
+            "holyTemplar",
+            "paladin",
+            "shillienKnight",
+            "templeKnight"
+        ]
+    },
+    "sigil_mastery": {
+        "id": "sigil_mastery",
+        "name": "Sigil Mastery",
+        "slug": "sigil_mastery",
+        "type": "passive",
+        "rawType": "Passive",
+        "rarity": "2★",
+        "starRank": 2,
+        "icon": "/icons/skill0153.webp",
+        "iconGap": false,
+        "iconGapReason": null,
+        "canonicalEffect": "Max MP +200, M. Atk. +10%",
+        "canonicalCooldown": "N/A",
+        "canonicalCooldownMs": 0,
+        "desc": "Increases Max MP and M. Atk. when equipped with a sigil.",
+        "balance": {
+            "mpCost": 0,
+            "pwr": 0,
+            "pveMultiplier": 1,
+            "pvpMultiplier": 1
+        },
+        "vfxId": null,
+        "vfxGap": false,
+        "sfxId": null,
+        "sfxGap": false,
+        "minLevel": 20,
+        "classes": [
+            "elementalSummoner",
+            "phantomSummoner",
+            "warlock"
+        ]
+    },
+    "anti_magic": {
+        "id": "anti_magic",
+        "name": "Anti Magic",
+        "slug": "anti_magic",
+        "type": "passive",
+        "rawType": "Passive",
+        "rarity": "2★",
+        "starRank": 2,
+        "icon": "/icons/skill0146.webp",
+        "iconGap": false,
+        "iconGapReason": null,
+        "canonicalEffect": "M. Def. +90",
+        "canonicalCooldown": "N/A",
+        "canonicalCooldownMs": 0,
+        "desc": "Increases M. Def. and magic damage resistance.",
+        "balance": {
+            "mpCost": 0,
+            "pwr": 0,
+            "pveMultiplier": 1,
+            "pvpMultiplier": 1
+        },
+        "vfxId": null,
+        "vfxGap": false,
+        "sfxId": null,
+        "sfxGap": false,
+        "minLevel": 20,
+        "classes": [
+            "cleric",
+            "darkWizard",
+            "dragoon",
+            "elementWeaverS1",
+            "elfOracle",
+            "elvenWizard",
+            "sayhaSeer",
+            "shaman",
+            "shillienOracle",
+            "wizard"
+        ]
+    },
+    "magic_resistance": {
+        "id": "magic_resistance",
+        "name": "Magic Resistance",
+        "slug": "magic_resistance",
+        "type": "passive",
+        "rawType": "Passive",
+        "rarity": "2★",
+        "starRank": 2,
+        "icon": "/icons/skill0147.webp",
+        "iconGap": false,
+        "iconGapReason": null,
+        "canonicalEffect": "M. Def. +50, Magic Resistance +10%",
+        "canonicalCooldown": "N/A",
+        "canonicalCooldownMs": 0,
+        "desc": "Increases resistance against magical attacks and anomalies.",
+        "balance": {
+            "mpCost": 0,
+            "pwr": 0,
+            "pveMultiplier": 1,
+            "pvpMultiplier": 1
+        },
+        "vfxId": null,
+        "vfxGap": false,
+        "sfxId": null,
+        "sfxGap": false,
+        "minLevel": 20,
+        "classes": []
+    },
+    "boost_hp": {
+        "id": "boost_hp",
+        "name": "Boost HP",
+        "slug": "boost_hp",
+        "type": "passive",
+        "rawType": "Passive",
+        "rarity": "1★",
+        "starRank": 1,
+        "icon": "/icons/skill0211.webp",
+        "iconGap": false,
+        "iconGapReason": null,
+        "canonicalEffect": "Max HP +500",
+        "canonicalCooldown": "N/A",
+        "canonicalCooldownMs": 0,
+        "desc": "Permanently increases Max HP.",
+        "balance": {
+            "mpCost": 0,
+            "pwr": 0,
+            "pveMultiplier": 1,
+            "pvpMultiplier": 1
+        },
+        "vfxId": null,
+        "vfxGap": false,
+        "sfxId": null,
+        "sfxGap": false,
+        "minLevel": 20,
+        "classes": [
+            "artisanDwarf",
+            "assassinS0",
+            "deathPilgrim",
+            "dragoon",
+            "raider"
+        ]
+    },
+    "boost_mana": {
+        "id": "boost_mana",
+        "name": "Boost Mana",
+        "slug": "boost_mana",
+        "type": "passive",
+        "rawType": "Passive",
+        "rarity": "1★",
+        "starRank": 1,
+        "icon": "/icons/skill0213.webp",
+        "iconGap": false,
+        "iconGapReason": null,
+        "canonicalEffect": "Max MP +300",
+        "canonicalCooldown": "N/A",
+        "canonicalCooldownMs": 0,
+        "desc": "Permanently increases Max MP.",
+        "balance": {
+            "mpCost": 0,
+            "pwr": 0,
+            "pveMultiplier": 1,
+            "pvpMultiplier": 1
+        },
+        "vfxId": null,
+        "vfxGap": false,
+        "sfxId": null,
+        "sfxGap": false,
+        "minLevel": 20,
+        "classes": []
+    },
+    "fast_hp_recovery": {
+        "id": "fast_hp_recovery",
+        "name": "Fast HP Recovery",
+        "slug": "fast_hp_recovery",
+        "type": "passive",
+        "rawType": "Passive",
+        "rarity": "1★",
+        "starRank": 1,
+        "icon": "/icons/skill0212.webp",
+        "iconGap": false,
+        "iconGapReason": null,
+        "canonicalEffect": "HP Recovery Rate +15%",
+        "canonicalCooldown": "N/A",
+        "canonicalCooldownMs": 0,
+        "desc": "Increases natural HP recovery rate.",
+        "balance": {
+            "mpCost": 0,
+            "pwr": 0,
+            "pveMultiplier": 1,
+            "pvpMultiplier": 1
+        },
+        "vfxId": null,
+        "vfxGap": false,
+        "sfxId": null,
+        "sfxGap": false,
+        "minLevel": 20,
+        "classes": []
+    },
+    "fast_mana_recovery": {
+        "id": "fast_mana_recovery",
+        "name": "Fast Mana Recovery",
+        "slug": "fast_mana_recovery",
+        "type": "passive",
+        "rawType": "Passive",
+        "rarity": "1★",
+        "starRank": 1,
+        "icon": "/icons/skill0229.webp",
+        "iconGap": false,
+        "iconGapReason": null,
+        "canonicalEffect": "MP Recovery Rate +15%",
+        "canonicalCooldown": "N/A",
+        "canonicalCooldownMs": 0,
+        "desc": "Increases natural MP recovery rate.",
+        "balance": {
+            "mpCost": 0,
+            "pwr": 0,
+            "pveMultiplier": 1,
+            "pvpMultiplier": 1
+        },
+        "vfxId": null,
+        "vfxGap": false,
+        "sfxId": null,
+        "sfxGap": false,
+        "minLevel": 20,
+        "classes": []
+    },
+    "vital_force": {
+        "id": "vital_force",
+        "name": "Vital Force",
+        "slug": "vital_force",
+        "type": "passive",
+        "rawType": "Passive",
+        "rarity": "1★",
+        "starRank": 1,
+        "icon": "/icons/skill0148.webp",
+        "iconGap": false,
+        "iconGapReason": null,
+        "canonicalEffect": "HP/MP Recovery +30%",
+        "canonicalCooldown": "N/A",
+        "canonicalCooldownMs": 0,
+        "desc": "Increases HP and MP recovery rate while sitting or resting.",
+        "balance": {
+            "mpCost": 0,
+            "pwr": 0,
+            "pveMultiplier": 1,
+            "pvpMultiplier": 1
+        },
+        "vfxId": null,
+        "vfxGap": false,
+        "sfxId": null,
+        "sfxGap": false,
+        "minLevel": 20,
+        "classes": [
+            "deathBlade"
+        ]
+    },
+    "quick_step": {
+        "id": "quick_step",
+        "name": "Quick Step",
+        "slug": "quick_step",
+        "type": "passive",
+        "rawType": "Passive",
+        "rarity": "2★",
+        "starRank": 2,
+        "icon": "/icons/skill0169.webp",
+        "iconGap": false,
+        "iconGapReason": null,
+        "canonicalEffect": "Speed +15",
+        "canonicalCooldown": "N/A",
+        "canonicalCooldownMs": 0,
+        "desc": "Increases Movement Speed.",
+        "balance": {
+            "mpCost": 0,
+            "pwr": 0,
+            "pveMultiplier": 1,
+            "pvpMultiplier": 1
+        },
+        "vfxId": null,
+        "vfxGap": false,
+        "sfxId": null,
+        "sfxGap": false,
+        "minLevel": 20,
+        "classes": [
+            "assassinS1",
+            "bloodRoseS1",
+            "elfScout",
+            "hatamoto",
+            "rogue",
+            "soulFinder",
+            "swordSinger",
+            "warder"
+        ]
+    },
+    "long_shot": {
+        "id": "long_shot",
+        "name": "Long Shot",
+        "slug": "long_shot",
+        "type": "passive",
+        "rawType": "Passive",
+        "rarity": "2★",
+        "starRank": 2,
+        "icon": "/icons/skill0113.webp",
+        "iconGap": false,
+        "iconGapReason": null,
+        "canonicalEffect": "Bow Range +200",
+        "canonicalCooldown": "N/A",
+        "canonicalCooldownMs": 0,
+        "desc": "Increases shooting range of bows and crossbows.",
+        "balance": {
+            "mpCost": 0,
+            "pwr": 0,
+            "pveMultiplier": 1,
+            "pvpMultiplier": 1
+        },
+        "vfxId": null,
+        "vfxGap": false,
+        "sfxId": null,
+        "sfxGap": false,
+        "minLevel": 20,
+        "classes": [
+            "hawkeye",
+            "phantomRanger",
+            "sharpshooter",
+            "silverRanger",
+            "soulRanger"
+        ]
+    },
+    "critical_power": {
+        "id": "critical_power",
+        "name": "Critical Power",
+        "slug": "critical_power",
+        "type": "passive",
+        "rawType": "Passive",
+        "rarity": "2★",
+        "starRank": 2,
+        "icon": "/icons/skill4085.webp",
+        "iconGap": false,
+        "iconGapReason": null,
+        "canonicalEffect": "Critical Damage +25%",
+        "canonicalCooldown": "N/A",
+        "canonicalCooldownMs": 0,
+        "desc": "Increases P. Skill and basic Critical Damage.",
+        "balance": {
+            "mpCost": 0,
+            "pwr": 0,
+            "pveMultiplier": 1,
+            "pvpMultiplier": 1
+        },
+        "vfxId": null,
+        "vfxGap": false,
+        "sfxId": null,
+        "sfxGap": false,
+        "minLevel": 40,
+        "classes": [
+            "abyssWalker",
+            "assassinS1",
+            "bloodRoseS1",
+            "bountyHunter",
+            "deathBlade",
+            "destroyer",
+            "ertheiaWarrior",
+            "hatamoto",
+            "plainsWalker",
+            "sharpshooter",
+            "shineMakerS2",
+            "silverRanger",
+            "soulRanger",
+            "treasureHunter",
+            "vanguardRider"
+        ]
+    },
+    "critical_chance": {
+        "id": "critical_chance",
+        "name": "Critical Chance",
+        "slug": "critical_chance",
+        "type": "passive",
+        "rawType": "Passive",
+        "rarity": "2★",
+        "starRank": 2,
+        "icon": "/icons/skill4086.webp",
+        "iconGap": false,
+        "iconGapReason": null,
+        "canonicalEffect": "Critical Rate +30",
+        "canonicalCooldown": "N/A",
+        "canonicalCooldownMs": 0,
+        "desc": "Increases Critical Rate for basic and physical skill attacks.",
+        "balance": {
+            "mpCost": 0,
+            "pwr": 0,
+            "pveMultiplier": 1,
+            "pvpMultiplier": 1
+        },
+        "vfxId": null,
+        "vfxGap": false,
+        "sfxId": null,
+        "sfxGap": false,
+        "minLevel": 40,
+        "classes": [
+            "adventurer",
+            "assassinS2",
+            "ghostHunter"
+        ]
+    },
+    "boost_attack_speed": {
+        "id": "boost_attack_speed",
+        "name": "Boost Attack Speed",
+        "slug": "boost_attack_speed",
+        "type": "passive",
+        "rawType": "Passive",
+        "rarity": "2★",
+        "starRank": 2,
+        "icon": "/icons/skill0168.webp",
+        "iconGap": false,
+        "iconGapReason": null,
+        "canonicalEffect": "Atk. Spd. +10%",
+        "canonicalCooldown": "N/A",
+        "canonicalCooldownMs": 0,
+        "desc": "Permanently increases Atk. Spd.",
+        "balance": {
+            "mpCost": 0,
+            "pwr": 0,
+            "pveMultiplier": 1,
+            "pvpMultiplier": 1
+        },
+        "vfxId": null,
+        "vfxGap": false,
+        "sfxId": null,
+        "sfxGap": false,
+        "minLevel": 20,
+        "classes": [
+            "dragoon",
+            "marauder",
+            "tyrant",
+            "windSniper"
+        ]
+    },
+    "focus_mind": {
+        "id": "focus_mind",
+        "name": "Focus Mind",
+        "slug": "focus_mind",
+        "type": "passive",
+        "rawType": "Passive",
+        "rarity": "2★",
+        "starRank": 2,
+        "icon": "/icons/skill0191.webp",
+        "iconGap": false,
+        "iconGapReason": null,
+        "canonicalEffect": "MP Recovery +10 per tick",
+        "canonicalCooldown": "N/A",
+        "canonicalCooldownMs": 0,
+        "desc": "Recovers MP continuously during combat.",
+        "balance": {
+            "mpCost": 0,
+            "pwr": 0,
+            "pveMultiplier": 1,
+            "pvpMultiplier": 1
+        },
+        "vfxId": null,
+        "vfxGap": false,
+        "sfxId": null,
+        "sfxGap": false,
+        "minLevel": 40,
+        "classes": [
+            "arcanaLord",
+            "archmage",
+            "cardinal",
+            "dominator",
+            "doomcryer",
+            "elementalMaster",
+            "evaSaint",
+            "hierophant",
+            "shillienSaint",
+            "spectralMaster",
+            "spellhowler",
+            "spellsinger"
+        ]
+    },
+    "spellcraft": {
+        "id": "spellcraft",
+        "name": "Spellcraft",
+        "slug": "spellcraft",
+        "type": "passive",
+        "rawType": "Passive",
+        "rarity": "2★",
+        "starRank": 2,
+        "icon": "/icons/skill0163.webp",
+        "iconGap": false,
+        "iconGapReason": null,
+        "canonicalEffect": "M. Critical Damage +20%",
+        "canonicalCooldown": "N/A",
+        "canonicalCooldownMs": 0,
+        "desc": "Increases Magic Critical Damage and reduces cooldowns.",
+        "balance": {
+            "mpCost": 0,
+            "pwr": 0,
+            "pveMultiplier": 1,
+            "pvpMultiplier": 1
+        },
+        "vfxId": null,
+        "vfxGap": false,
+        "sfxId": null,
+        "sfxGap": false,
+        "minLevel": 40,
+        "classes": [
+            "elementWeaverS2",
+            "necromancer",
+            "sorcerer",
+            "soulBreakerKamael",
+            "spellhowler",
+            "spellsinger",
+            "windRiderErth"
+        ]
+    },
+    "fast_spell_casting": {
+        "id": "fast_spell_casting",
+        "name": "Fast Spell Casting",
+        "slug": "fast_spell_casting",
+        "type": "passive",
+        "rawType": "Passive",
+        "rarity": "2★",
+        "starRank": 2,
+        "icon": "/icons/skill0228.webp",
+        "iconGap": false,
+        "iconGapReason": null,
+        "canonicalEffect": "Cast. Spd. +15%",
+        "canonicalCooldown": "N/A",
+        "canonicalCooldownMs": 0,
+        "desc": "Permanently increases Casting Speed.",
+        "balance": {
+            "mpCost": 0,
+            "pwr": 0,
+            "pveMultiplier": 1,
+            "pvpMultiplier": 1
+        },
+        "vfxId": null,
+        "vfxGap": false,
+        "sfxId": null,
+        "sfxGap": false,
+        "minLevel": 20,
+        "classes": [
+            "cleric",
+            "darkWizard",
+            "elementWeaverS1",
+            "elfOracle",
+            "elvenWizard",
+            "sayhaSeer",
+            "shaman",
+            "shillienOracle",
+            "wizard"
+        ]
+    },
+    "higher_mana_gain": {
+        "id": "higher_mana_gain",
+        "name": "Higher Mana Gain",
+        "slug": "higher_mana_gain",
+        "type": "passive",
+        "rawType": "Passive",
+        "rarity": "2★",
+        "starRank": 2,
+        "icon": "/icons/skill0244.webp",
+        "iconGap": false,
+        "iconGapReason": null,
+        "canonicalEffect": "MP Gain +20%",
+        "canonicalCooldown": "N/A",
+        "canonicalCooldownMs": 0,
+        "desc": "Increases MP gained from potions and recovery spells.",
+        "balance": {
+            "mpCost": 0,
+            "pwr": 0,
+            "pveMultiplier": 1,
+            "pvpMultiplier": 1
+        },
+        "vfxId": null,
+        "vfxGap": false,
+        "sfxId": null,
+        "sfxGap": false,
+        "minLevel": 20,
+        "classes": [
+            "bishop",
+            "elementWeaverS1",
+            "elementalSummoner",
+            "elfElder",
+            "overlord",
+            "phantomSummoner",
+            "prophet",
+            "shillienElder",
+            "warcryer"
+        ]
+    },
+    "master_of_combat": {
+        "id": "master_of_combat",
+        "name": "Master of Combat",
+        "slug": "master_of_combat",
+        "type": "passive",
+        "rawType": "Passive",
+        "rarity": "3★",
+        "starRank": 3,
+        "icon": "/icons/skill0430.webp",
+        "iconGap": false,
+        "iconGapReason": null,
+        "canonicalEffect": "P. Atk. +150, Max HP +1000, Max CP +1500",
+        "canonicalCooldown": "N/A",
+        "canonicalCooldownMs": 0,
+        "desc": "Transcendent combat mastery. Increases P. Atk. and Max CP/HP.",
+        "balance": {
+            "mpCost": 0,
+            "pwr": 0,
+            "pveMultiplier": 1,
+            "pvpMultiplier": 1
+        },
+        "vfxId": null,
+        "vfxGap": false,
+        "sfxId": null,
+        "sfxGap": false,
+        "minLevel": 76,
+        "classes": [
+            "deathKnight",
+            "doombringer",
+            "dreadnought",
+            "duelist",
+            "evaTemplar",
+            "eviscerator",
+            "fortuneSeeker",
+            "grandKhavatari",
+            "grandVanguard",
+            "hellKnight",
+            "phoenixKnight",
+            "shillienTemplar",
+            "shinemaker",
+            "spectralDancer",
+            "swordMuse",
+            "titan",
+            "warg"
+        ]
+    },
+    "eye_of_slayer": {
+        "id": "eye_of_slayer",
+        "name": "Eye of Slayer",
+        "slug": "eye_of_slayer",
+        "type": "passive",
+        "rawType": "Passive",
+        "rarity": "3★",
+        "starRank": 3,
+        "icon": "/icons/skill0358.webp",
+        "iconGap": false,
+        "iconGapReason": null,
+        "canonicalEffect": "Damage to Beasts +15%",
+        "canonicalCooldown": "N/A",
+        "canonicalCooldownMs": 0,
+        "desc": "Increases damage dealt to Beasts and Monsters.",
+        "balance": {
+            "mpCost": 0,
+            "pwr": 0,
+            "pveMultiplier": 1,
+            "pvpMultiplier": 1
+        },
+        "vfxId": null,
+        "vfxGap": false,
+        "sfxId": null,
+        "sfxGap": false,
+        "minLevel": 76,
+        "classes": [
+            "assassinS3",
+            "ghostSentinel",
+            "moonlightSentinel",
+            "sagittarius"
+        ]
+    },
+    "eye_of_hunter": {
+        "id": "eye_of_hunter",
+        "name": "Eye of Hunter",
+        "slug": "eye_of_hunter",
+        "type": "passive",
+        "rawType": "Passive",
+        "rarity": "3★",
+        "starRank": 3,
+        "icon": "/icons/skill0359.webp",
+        "iconGap": false,
+        "iconGapReason": null,
+        "canonicalEffect": "Damage to Insects +15%",
+        "canonicalCooldown": "N/A",
+        "canonicalCooldownMs": 0,
+        "desc": "Increases damage dealt to Insects and Plants.",
+        "balance": {
+            "mpCost": 0,
+            "pwr": 0,
+            "pveMultiplier": 1,
+            "pvpMultiplier": 1
+        },
+        "vfxId": null,
+        "vfxGap": false,
+        "sfxId": null,
+        "sfxGap": false,
+        "minLevel": 76,
+        "classes": []
+    },
+    "boost_evasion": {
+        "id": "boost_evasion",
+        "name": "Boost Evasion",
+        "slug": "boost_evasion",
+        "type": "passive",
+        "rawType": "Passive",
+        "rarity": "2★",
+        "starRank": 2,
+        "icon": "/icons/skill0198.webp",
+        "iconGap": false,
+        "iconGapReason": null,
+        "canonicalEffect": "Evasion +6",
+        "canonicalCooldown": "N/A",
+        "canonicalCooldownMs": 0,
+        "desc": "Permanently increases Physical Evasion.",
+        "balance": {
+            "mpCost": 0,
+            "pwr": 0,
+            "pveMultiplier": 1,
+            "pvpMultiplier": 1
+        },
+        "vfxId": null,
+        "vfxGap": false,
+        "sfxId": null,
+        "sfxGap": false,
+        "minLevel": 20,
+        "classes": [
+            "assassinS1",
+            "bloodRoseS2",
+            "plainsWalker",
+            "ronin",
+            "soulBreakerKamael",
+            "vanguardRider",
+            "windSniper"
+        ]
+    },
+    "boost_morale": {
+        "id": "boost_morale",
+        "name": "Boost Morale",
+        "slug": "boost_morale",
+        "type": "passive",
+        "rawType": "Passive",
+        "rarity": "2★",
+        "starRank": 2,
+        "icon": "/icons/skill0287.webp",
+        "iconGap": false,
+        "iconGapReason": null,
+        "canonicalEffect": "Anomaly Resistance +20%",
+        "canonicalCooldown": "N/A",
+        "canonicalCooldownMs": 0,
+        "desc": "Increases resistance to hold, sleep, and mental anomalies.",
+        "balance": {
+            "mpCost": 0,
+            "pwr": 0,
+            "pveMultiplier": 1,
+            "pvpMultiplier": 1
+        },
+        "vfxId": null,
+        "vfxGap": false,
+        "sfxId": null,
+        "sfxGap": false,
+        "minLevel": 40,
+        "classes": []
+    },
+    "legendary_archer_master": {
+        "id": "legendary_archer_master",
+        "name": "Legendary Archer: Master",
+        "slug": "legendary_archer_master",
+        "type": "buff",
+        "rawType": "Buff",
+        "rarity": "5★",
+        "starRank": 5,
+        "icon": "/icons/s_legendary_archer_hu1.webp",
+        "canonicalEffect": "Transforms into a Legendary Archer Master. Max HP +10%, P. Atk. +20%, P. Skill Critical Rate +30%, P. Skill Critical Damage +30%, PvE Damage +10%, Melee Resistance +10%. Triggers Carpet Bombing & Tactical Error.",
+        "canonicalCooldown": "1 min.",
+        "canonicalCooldownMs": 60000,
+        "desc": "Transforms into a Legendary Archer Master. Max HP +10%, P. Atk. +20%, P. Skill Critical Rate +30%, P. Skill Critical Damage +30%, PvE Damage +10%, Melee Resistance +10%. Enables Legendary Shot and triggers Carpet Bombing (AoE Power 15,000) and Tactical Error.",
+        "balance": {
+            "mpCost": 250,
+            "pwr": 1,
+            "pveMultiplier": 1.2,
+            "pvpMultiplier": 1
+        },
+        "vfxId": "vfx_legendary_archer",
+        "sfxId": "sfx_action",
+        "minLevel": 90,
+        "classes": [
+            "ghostSentinel",
+            "moonlightSentinel",
+            "sagittarius",
+            "trickster"
+        ],
+        "iconGap": false,
+        "iconGapReason": null,
+        "vfxGap": false,
+        "sfxGap": false
+    },
+    "indestructible_blade_master": {
+        "id": "indestructible_blade_master",
+        "name": "Indestructible Blade: Master",
+        "slug": "indestructible_blade_master",
+        "type": "active",
+        "rawType": "Physical Skills",
+        "rarity": "5★",
+        "starRank": 5,
+        "icon": "/icons/unbreakable_sonic.webp",
+        "canonicalEffect": "Master ultimate strike with dual swords. Ignores defense and deals colossal critical damage.",
+        "canonicalCooldown": "30s",
+        "canonicalCooldownMs": 30000,
+        "desc": "Unleashes the supreme power of indestructible dual blades. Attacks enemies in front with overwhelming force, ignoring 30% of target defense.",
+        "balance": {
+            "mpCost": 180,
+            "pwr": 250,
+            "pveMultiplier": 1.3,
+            "pvpMultiplier": 1
+        },
+        "vfxId": "vfx_indestructible_blade",
+        "sfxId": "sfx_action",
+        "minLevel": 90,
+        "classes": [
+            "duelist"
+        ],
+        "iconGap": false,
+        "iconGapReason": null,
+        "vfxGap": false,
+        "sfxGap": false
+    },
+    "titan_champion_master": {
+        "id": "titan_champion_master",
+        "name": "Titan Champion: Master",
+        "slug": "titan_champion_master",
+        "type": "buff",
+        "rawType": "Buff",
+        "rarity": "5★",
+        "starRank": 5,
+        "icon": "/icons/s_champion_of_titan.webp",
+        "canonicalEffect": "Master stance of the Titan Champion. Max HP +40%, P. Atk. +50%, Critical Damage +35%.",
+        "canonicalCooldown": "2 min.",
+        "canonicalCooldownMs": 120000,
+        "desc": "Awakens the ancient titan fury. Grants immense durability and unstoppable destruction when below 60% HP.",
+        "balance": {
+            "mpCost": 200,
+            "pwr": 1,
+            "pveMultiplier": 1.25,
+            "pvpMultiplier": 1
+        },
+        "vfxId": "vfx_titan_champion",
+        "sfxId": "sfx_action",
+        "minLevel": 90,
+        "classes": [
+            "titan"
+        ],
+        "iconGap": false,
+        "iconGapReason": null,
+        "vfxGap": false,
+        "sfxGap": false
+    },
+    "overwhelming_power_master": {
+        "id": "overwhelming_power_master",
+        "name": "Overwhelming Power: Master",
+        "slug": "overwhelming_power_master",
+        "type": "buff",
+        "rawType": "Buff",
+        "rarity": "5★",
+        "starRank": 5,
+        "icon": "/icons/skill0494.webp",
+        "canonicalEffect": "Master destructive surge. P. Atk. +40%, P. Skill Power +25%.",
+        "canonicalCooldown": "1 min.",
+        "canonicalCooldownMs": 60000,
+        "desc": "Channels overwhelming primal power to smash through any defense.",
+        "balance": {
+            "mpCost": 180,
+            "pwr": 1,
+            "pveMultiplier": 1.2,
+            "pvpMultiplier": 1
+        },
+        "vfxId": "vfx_overwhelming_power",
+        "sfxId": "sfx_action",
+        "minLevel": 90,
+        "classes": [
+            "titan"
+        ],
+        "iconGap": false,
+        "iconGapReason": null,
+        "vfxGap": false,
+        "sfxGap": false
+    },
+    "cacophony_of_war_master": {
+        "id": "cacophony_of_war_master",
+        "name": "Cacophony of War: Master",
+        "slug": "cacophony_of_war_master",
+        "type": "buff",
+        "rawType": "Buff",
+        "rarity": "5★",
+        "starRank": 5,
+        "icon": "/icons/war_roar.webp",
+        "canonicalEffect": "Supreme battle chant. P. Atk. +35%, Atk. Spd. +25%, P. Critical Damage +30%.",
+        "canonicalCooldown": "2 min.",
+        "canonicalCooldownMs": 120000,
+        "desc": "Unleashes a deafening war song that inspires allies and terrifies all foes.",
+        "balance": {
+            "mpCost": 220,
+            "pwr": 1,
+            "pveMultiplier": 1.25,
+            "pvpMultiplier": 1
+        },
+        "vfxId": "vfx_cacophony_of_war",
+        "sfxId": "sfx_action",
+        "minLevel": 90,
+        "classes": [
+            "doomcryer"
+        ],
+        "iconGap": false,
+        "iconGapReason": null,
+        "vfxGap": false,
+        "sfxGap": false
+    },
+    "mystic_meteor_master": {
+        "id": "mystic_meteor_master",
+        "name": "Mystic Meteor: Master",
+        "slug": "mystic_meteor_master",
+        "type": "active",
+        "rawType": "Magic Skills",
+        "rarity": "5★",
+        "starRank": 5,
+        "icon": "/icons/meteor.webp",
+        "canonicalEffect": "Supreme celestial meteor. Falls from the stratosphere dealing catastrophic AoE damage.",
+        "canonicalCooldown": "30s",
+        "canonicalCooldownMs": 30000,
+        "desc": "Summons a colossal burning star from orbit that decimates the battlefield and leaves burning ground for 10 seconds.",
+        "balance": {
+            "mpCost": 260,
+            "pwr": 300,
+            "pveMultiplier": 1.35,
+            "pvpMultiplier": 1
+        },
+        "vfxId": "vfx_meteor",
+        "sfxId": "sfx_action",
+        "minLevel": 90,
+        "classes": [
+            "archmage",
+            "soultaker"
+        ],
+        "iconGap": false,
+        "iconGapReason": null,
+        "vfxGap": false,
+        "sfxGap": false
+    },
+    "ultimate_death_knight_master": {
+        "id": "ultimate_death_knight_master",
+        "name": "Ultimate Death Knight: Master",
+        "slug": "ultimate_death_knight_master",
+        "type": "buff",
+        "rawType": "Buff",
+        "rarity": "5★",
+        "starRank": 5,
+        "icon": "/icons/death_knight_transform.webp",
+        "canonicalEffect": "Transcends into the Sovereign of Death. All attacks gain vampiric drain and hellfire burst.",
+        "canonicalCooldown": "2 min.",
+        "canonicalCooldownMs": 120000,
+        "desc": "Awakens the true lord of the abyss. Converts 20% of damage dealt into HP and ignites enemies with black flames.",
+        "balance": {
+            "mpCost": 240,
+            "pwr": 1,
+            "pveMultiplier": 1.3,
+            "pvpMultiplier": 1
+        },
+        "vfxId": "vfx_ultimate_death_knight",
+        "sfxId": "sfx_action",
+        "minLevel": 90,
+        "classes": [
+            "deathKnight"
+        ],
+        "iconGap": false,
+        "iconGapReason": null,
+        "vfxGap": false,
+        "sfxGap": false
+    },
+    "holy_circle_master": {
+        "id": "holy_circle_master",
+        "name": "Holy Circle: Master",
+        "slug": "holy_circle_master",
+        "type": "active",
+        "rawType": "Physical Skills",
+        "rarity": "5★",
+        "starRank": 5,
+        "icon": "/icons/s_st_sacrosanctity.webp",
+        "canonicalEffect": "Supreme holy barrier and consecrated ground. Deals holy damage and grants invulnerability.",
+        "canonicalCooldown": "45s",
+        "canonicalCooldownMs": 45000,
+        "desc": "Consecrates the ground around the paladin, blinding enemies and creating an impenetrable holy perimeter.",
+        "balance": {
+            "mpCost": 200,
+            "pwr": 220,
+            "pveMultiplier": 1.25,
+            "pvpMultiplier": 1
+        },
+        "vfxId": "vfx_holy_circle",
+        "sfxId": "sfx_action",
+        "minLevel": 90,
+        "classes": [
+            "phoenixKnight"
+        ],
+        "iconGap": false,
+        "iconGapReason": null,
+        "vfxGap": false,
+        "sfxGap": false
+    },
+    "condemnation_master": {
+        "id": "condemnation_master",
+        "name": "Condemnation: Master",
+        "slug": "condemnation_master",
+        "type": "active",
+        "rawType": "Physical Skills",
+        "rarity": "5★",
+        "starRank": 5,
+        "icon": "/icons/condemn.webp",
+        "canonicalEffect": "Damns the souls of all nearby enemies with abyssal chains.",
+        "canonicalCooldown": "40s",
+        "canonicalCooldownMs": 40000,
+        "desc": "Strikes down with the black judgment blade, locking target movements and draining vitality.",
+        "balance": {
+            "mpCost": 200,
+            "pwr": 240,
+            "pveMultiplier": 1.3,
+            "pvpMultiplier": 1
+        },
+        "vfxId": "vfx_condemnation",
+        "sfxId": "sfx_action",
+        "minLevel": 90,
+        "classes": [
+            "hellKnight"
+        ],
+        "iconGap": false,
+        "iconGapReason": null,
+        "vfxGap": false,
+        "sfxGap": false
+    },
+    "sephiroth_master": {
+        "id": "sephiroth_master",
+        "name": "Sephiroth: Master",
+        "slug": "sephiroth_master",
+        "type": "active",
+        "rawType": "Magic Skills",
+        "rarity": "5★",
+        "starRank": 5,
+        "icon": "/icons/s_sp_sephiroth.webp",
+        "canonicalEffect": "Divine inquisitor strike. Deals pure sacred damage that ignores attribute defenses.",
+        "canonicalCooldown": "30s",
+        "canonicalCooldownMs": 30000,
+        "desc": "Calls forth the holy light of the tree of life to smite opponents with unmitigated divine radiance.",
+        "balance": {
+            "mpCost": 220,
+            "pwr": 260,
+            "pveMultiplier": 1.3,
+            "pvpMultiplier": 1
+        },
+        "vfxId": "vfx_sephiroth",
+        "sfxId": "sfx_action",
+        "minLevel": 90,
+        "classes": [
+            "hierophant"
+        ],
+        "iconGap": false,
+        "iconGapReason": null,
+        "vfxGap": false,
+        "sfxGap": false
+    },
+    "time_distortion_master": {
+        "id": "time_distortion_master",
+        "name": "Time Distortion: Master",
+        "slug": "time_distortion_master",
+        "type": "active",
+        "rawType": "Special skills - Active",
+        "rarity": "5★",
+        "starRank": 5,
+        "icon": "/icons/s_time_distortion_new.webp",
+        "canonicalEffect": "Distorts the fabric of spacetime. Freezes enemy actions and resets caster cooldowns.",
+        "canonicalCooldown": "1 min.",
+        "canonicalCooldownMs": 60000,
+        "desc": "Bends spacetime around the soul hound, slowing enemies by 80% while enabling instant teleportation strikes.",
+        "balance": {
+            "mpCost": 250,
+            "pwr": 240,
+            "pveMultiplier": 1.3,
+            "pvpMultiplier": 1
+        },
+        "vfxId": "vfx_time_distortion",
+        "sfxId": "sfx_action",
+        "minLevel": 90,
+        "classes": [
+            "soulHound"
+        ],
+        "iconGap": false,
+        "iconGapReason": null,
+        "vfxGap": false,
+        "sfxGap": false
+    },
+    "shelter_master": {
+        "id": "shelter_master",
+        "name": "Shelter: Master",
+        "slug": "shelter_master",
+        "type": "buff",
+        "rawType": "Buff",
+        "rarity": "5★",
+        "starRank": 5,
+        "icon": "/icons/shelter.webp",
+        "canonicalEffect": "Absolute divine sanctuary. Complete immunity to damage and debuffs for 10 seconds.",
+        "canonicalCooldown": "3 min.",
+        "canonicalCooldownMs": 180000,
+        "desc": "Envelops the saint in an unbreakable divine barrier while healing all party members to full HP.",
+        "balance": {
+            "mpCost": 300,
+            "pwr": 1,
+            "pveMultiplier": 1,
+            "pvpMultiplier": 1
+        },
+        "vfxId": "vfx_shelter",
+        "sfxId": "sfx_action",
+        "minLevel": 90,
+        "classes": [
+            "evaSaint",
+            "shillienSaint"
+        ],
+        "iconGap": false,
+        "iconGapReason": null,
+        "vfxGap": false,
+        "sfxGap": false
+    },
+    "exclusion_master": {
+        "id": "exclusion_master",
+        "name": "Exclusion: Master",
+        "slug": "exclusion_master",
+        "type": "buff",
+        "rawType": "Debuff/ Anomaly skill",
+        "rarity": "5★",
+        "starRank": 5,
+        "icon": "/icons/expel.webp",
+        "canonicalEffect": "Banishes the target to an alternate dimension, removing them from combat for 15 seconds.",
+        "canonicalCooldown": "2 min.",
+        "canonicalCooldownMs": 120000,
+        "desc": "Excludes target enemy from the battlefield into an isolated void pocket.",
+        "balance": {
+            "mpCost": 250,
+            "pwr": 1,
+            "pveMultiplier": 1,
+            "pvpMultiplier": 1
+        },
+        "vfxId": "vfx_exclusion",
+        "sfxId": "sfx_action",
+        "minLevel": 90,
+        "classes": [
+            "hierophant"
+        ],
+        "iconGap": false,
+        "iconGapReason": null,
+        "vfxGap": false,
+        "sfxGap": false
+    },
+    "dark_disruption_master": {
+        "id": "dark_disruption_master",
+        "name": "Dark Disruption: Master",
+        "slug": "dark_disruption_master",
+        "type": "buff",
+        "rawType": "Debuff/ Anomaly skill",
+        "rarity": "5★",
+        "starRank": 5,
+        "icon": "/icons/banish.webp",
+        "canonicalEffect": "Mass dark curse. Corrupts all enemy buffs and slashes P. Def and M. Def by 40%.",
+        "canonicalCooldown": "1 min.",
+        "canonicalCooldownMs": 60000,
+        "desc": "Shillien mass disruption that nullifies enemy defensive enchantments and cripples defense.",
+        "balance": {
+            "mpCost": 240,
+            "pwr": 1,
+            "pveMultiplier": 1.2,
+            "pvpMultiplier": 1
+        },
+        "vfxId": "vfx_dark_disruption",
+        "sfxId": "sfx_action",
+        "minLevel": 90,
+        "classes": [
+            "shillienSaint"
+        ],
+        "iconGap": false,
+        "iconGapReason": null,
+        "vfxGap": false,
+        "sfxGap": false
+    },
+    "paagrios_touch_master": {
+        "id": "paagrios_touch_master",
+        "name": "Pa'agrio's Touch: Master",
+        "slug": "paagrios_touch_master",
+        "type": "buff",
+        "rawType": "Recovery Skills",
+        "rarity": "5★",
+        "starRank": 5,
+        "icon": "/icons/touch_of_paagrio1.webp",
+        "canonicalEffect": "Restores 100% HP and CP and grants Pa'agrio's divine flame protection.",
+        "canonicalCooldown": "2 min.",
+        "canonicalCooldownMs": 120000,
+        "desc": "Calls the supreme blessing of the god of fire, cleansing all debuffs and restoring maximum health and combat points.",
+        "balance": {
+            "mpCost": 280,
+            "pwr": 1,
+            "pveMultiplier": 1,
+            "pvpMultiplier": 1
+        },
+        "vfxId": "vfx_paagrios_touch",
+        "sfxId": "sfx_action",
+        "minLevel": 90,
+        "classes": [
+            "dominator"
+        ],
+        "iconGap": false,
+        "iconGapReason": null,
+        "vfxGap": false,
+        "sfxGap": false
+    },
+    "leopold_master": {
+        "id": "leopold_master",
+        "name": "Leopold: Master",
+        "slug": "leopold_master",
+        "type": "active",
+        "rawType": "Physical Skills",
+        "rarity": "5★",
+        "starRank": 5,
+        "icon": "/icons/s_leopold.webp",
+        "canonicalEffect": "Fires the colossal Leopold siege cannon, obliterating everything in a massive forward radius.",
+        "canonicalCooldown": "45s",
+        "canonicalCooldownMs": 45000,
+        "desc": "Deploys the ultimate dwarven siege artillery. Fires high-explosive shells dealing 35,000 power to all enemies.",
+        "balance": {
+            "mpCost": 250,
+            "pwr": 350,
+            "pveMultiplier": 1.4,
+            "pvpMultiplier": 1
+        },
+        "vfxId": "vfx_leopold",
+        "sfxId": "sfx_action",
+        "minLevel": 90,
+        "classes": [
+            "maestro"
+        ],
+        "iconGap": false,
+        "iconGapReason": null,
+        "vfxGap": false,
+        "sfxGap": false
     }
 });
-
-export const ALL_CANONICAL_SKILL_IDS = Object.freeze(Object.keys(CANONICAL_SKILL_REGISTRY_V2));
-
-export default CANONICAL_SKILL_REGISTRY_V2;
