@@ -3683,6 +3683,8 @@ export function renderZoneMap(state, callbacks = {}) {
 const SKILL_LOADOUT_SLOT_ICONS = { basic: '⚔️', core1: '🔥', core2: '🔥', special1: '💠', special2: '💠', signature: '✨', ultimate: '🌟' };
 const SKILL_LOADOUT_SLOT_LABELS = { basic: 'Basic', core1: 'Core 1', core2: 'Core 2', special1: 'Spec 1', special2: 'Spec 2', signature: 'Signat.', ultimate: 'Ultim.' };
 
+export const NEUTRAL_SKILL_PLACEHOLDER = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='8' fill='%231e293b' stroke='%23334155' stroke-width='2'/%3E%3Ctext x='24' y='30' font-size='20' text-anchor='middle' fill='%2394a3b8'%3E⚔%EF%B8%8E%3C/text%3E%3C/svg%3E";
+
 function renderLoadoutBar(state) {
   const loadout = getLoadout(state);
   const unlockedSlots = getUnlockedSlots(state.level || 1);
@@ -3724,7 +3726,7 @@ function renderLoadoutBar(state) {
 
     const iconData = getSkillIcon(skillId, def);
     const rawPath = iconData?.iconPath || (typeof iconData === 'string' ? iconData : null) || def.icon || '';
-    const iconUrl = rawPath ? getAssetUrl(rawPath) : '';
+    const iconUrl = rawPath ? getAssetUrl(rawPath) : NEUTRAL_SKILL_PLACEHOLDER;
     const skillLevel = state.skills[skillId] || 0;
     const cond = getSkillCondition(state, slotName);
     const condBadge = getConditionBadgeText(cond);
@@ -3735,7 +3737,7 @@ function renderLoadoutBar(state) {
     return `
       <div class="loadout-slot is-equipped" data-slot="${slotName}" data-skill-id="${skillId}" title="${def.name} (${slotLabel}) — Clique para ver detalhes e configurar táticas">
         <div class="loadout-slot-frame">
-          <img src="${iconUrl}" class="loadout-skill-icon" alt="${def.name}" onerror="this.style.opacity='0.4'; this.onerror=null;" />
+          <img src="${iconUrl}" class="loadout-skill-icon" alt="${def.name}" onerror="this.onerror=null; this.src='${NEUTRAL_SKILL_PLACEHOLDER}'; this.style.opacity='0.4';" />
           ${skillLevel > 1 ? `<span class="loadout-skill-lvl">${skillLevel}</span>` : ''}
           <button class="loadout-slot-unequip-btn" data-slot="${slotName}" title="Desequipar ${def.name}">×</button>
         </div>
@@ -3764,41 +3766,42 @@ function renderLoadoutBar(state) {
   `;
 }
 
-function renderSkillCard(skill, state) {
-  const isSelected = state.selectedSkill === skill.skillId;
-  const rank = skill.rank;
-  const cost = skill.cost;
-  const isMaxed = rank.isMaxed;
+// ─── Renderização do Card de Habilidade (Skill Card) ──────────────────────────
+
+function renderSkillCard(skill, state, activeLoadoutSlot = null) {
   const isLearned = skill.isLearned;
-  const canAfford = cost.canAfford;
-  const isBookLocked = cost.isBookLocked;
-  const isUlt = skill.ultimate;
+  const isLocked = skill.isLocked;
+  const isAvailable = skill.isAvailable;
+  const isBookLocked = skill.isBookLocked;
+  const isMaxed = skill.isMaxed;
+  const cost = skill.cost || { sp: 0, adena: 0 };
+  const canAfford = (state.sp || 0) >= cost.sp;
+  const isEquipped = !!skill.equippedSlot;
+  const equippedSlot = skill.equippedSlot;
+  const isDraggable = isLearned;
 
-  const equippedSlot = getSkillSlot(state, skill.skillId);
-  const slotPill = equippedSlot
-    ? `<span class="skill-loadout-slot-pill" title="Equipado no slot ${SKILL_LOADOUT_SLOT_LABELS[equippedSlot] || equippedSlot}">⚡ ${SKILL_LOADOUT_SLOT_LABELS[equippedSlot] || equippedSlot}</span>`
-    : '';
-  const isDraggable = isLearned && !skill.isPassive && !isPurgedSkill(skill.skillId);
-
-  const cardClasses = ['skill-node-card'];
+  const cardClasses = ['skill-card'];
   if (isLearned) cardClasses.push('is-learned');
-  else cardClasses.push('is-available');
+  if (isAvailable) cardClasses.push('is-available');
+  if (isLocked) cardClasses.push('is-locked');
+  if (isBookLocked) cardClasses.push('is-book-locked');
+  if (isEquipped) cardClasses.push('is-equipped');
   if (isMaxed) cardClasses.push('is-maxed');
-  if (canAfford) cardClasses.push('can-afford');
-  if (isSelected) cardClasses.push('is-selected');
-  if (isBookLocked) cardClasses.push('book-locked');
-  if (isUlt) cardClasses.push('is-ultimate');
-  if (equippedSlot) cardClasses.push('is-in-loadout');
+  if (activeLoadoutSlot && isLearned) cardClasses.push('is-selectable-for-slot');
 
-  const starPill = skill.starRank >= 4
-    ? `<span class="skill-star-pill">${skill.starRank}★</span>`
+  const starPill = skill.starRank
+    ? `<span class="skill-star-pill star-${skill.starRank}">${'★'.repeat(Math.min(skill.starRank, 5))}</span>`
     : '';
 
-  const rankBadge = `
-    <span class="skill-rank-badge ${isMaxed ? 'maxed' : ''}">
-      ${isMaxed ? 'MAX' : `${rank.current}/${rank.max}`}
-    </span>
-  `;
+  const rankBadge = skill.rank
+    ? `<span class="skill-rank-badge rank-${String(skill.rank).toLowerCase()}">${skill.rank}</span>`
+    : '';
+
+  const slotPill = equippedSlot
+    ? `<span class="skill-slot-pill" title="Equipado no slot ${SKILL_LOADOUT_SLOT_LABELS[equippedSlot] || equippedSlot}">
+         ${SKILL_LOADOUT_SLOT_ICONS[equippedSlot] || '⚔️'} ${SKILL_LOADOUT_SLOT_LABELS[equippedSlot] || equippedSlot}
+       </span>`
+    : '';
 
   const elemClass = `element-${String(skill.element || 'physical').toLowerCase()}`;
   const costBadge = isMaxed
@@ -3807,7 +3810,8 @@ function renderSkillCard(skill, state) {
       ? `<span class="skill-cost-badge cost-book">🔒 Livro ${skill.starRank || 4}★</span>`
       : `<span class="skill-cost-badge ${canAfford ? 'cost-affordable' : 'cost-expensive'}">✦ ${cost.sp} SP</span>`;
 
-  const iconUrl = getAssetUrl(skill.iconPath || '/assets/skills/icons/power_strike.png');
+  const rawSkillPath = skill.iconPath || skill.icon || '';
+  const iconUrl = rawSkillPath ? getAssetUrl(rawSkillPath) : NEUTRAL_SKILL_PLACEHOLDER;
 
   return `
     <div class="${cardClasses.join(' ')}"
@@ -3817,7 +3821,7 @@ function renderSkillCard(skill, state) {
          draggable="${isDraggable ? 'true' : 'false'}"
          title="${skill.name} (${skill.element})${equippedSlot ? ` — Equipado no Loadout: ${SKILL_LOADOUT_SLOT_LABELS[equippedSlot] || equippedSlot}` : ''}">
       <div class="skill-icon-frame-48">
-        <img src="${iconUrl}" class="skill-icon-img" alt="${skill.name}" onerror="this.style.opacity='0.4'; this.onerror=null;" />
+        <img src="${iconUrl}" class="skill-icon-img" alt="${skill.name}" onerror="this.onerror=null; this.src='${NEUTRAL_SKILL_PLACEHOLDER}'; this.style.opacity='0.4';" />
         ${starPill}
         ${rankBadge}
         ${slotPill}

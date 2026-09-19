@@ -157,12 +157,21 @@ function buildSkillEffectText(def, lvl) {
 }
 
 // Publica funções de escalamento globalmente
-window.SkillScaling = {
-  getSkillPwrAtLevel,
-  getSkillHealAtLevel,
-  getSkillBuffAtLevel,
-  buildSkillEffectText
-};
+if (typeof window !== 'undefined') {
+  window.SkillScaling = {
+    getSkillPwrAtLevel,
+    getSkillHealAtLevel,
+    getSkillBuffAtLevel,
+    buildSkillEffectText
+  };
+} else if (typeof globalThis !== 'undefined') {
+  globalThis.SkillScaling = {
+    getSkillPwrAtLevel,
+    getSkillHealAtLevel,
+    getSkillBuffAtLevel,
+    buildSkillEffectText
+  };
+}
 
 /**
  * Curadoria de Habilidades da Classe:
@@ -348,15 +357,116 @@ function resolveSkillIcon(rawName, sk, classDef, classId) {
   if (arch.includes('archer')) {
     return '/assets/skills/icons/archery_bow.png';
   }
-  return '/assets/skills/icons/power_strike.png';
+  return null;
+}
+
+/**
+ * Converte strings canônicas de recarga (ex: "15 sec.", "1 min.", "0.5 sec.") em milissegundos sem fabricação.
+ * Retorna 0 para passivas/sem recarga ('N/A', 'none', '-', ':'), e null para ausência de dado.
+ */
+export function parseCooldownToMs(cdStr) {
+  if (typeof cdStr === 'number') return cdStr;
+  if (!cdStr || typeof cdStr !== 'string') return null;
+  const s = cdStr.trim().toLowerCase();
+  if (s === 'n/a' || s === 'none' || s === '-' || s === ':') return 0;
+  const matchSec = s.match(/([\d.]+)\s*sec/);
+  if (matchSec) return Math.round(parseFloat(matchSec[1]) * 1000);
+  const matchMin = s.match(/([\d.]+)\s*min/);
+  if (matchMin) return Math.round(parseFloat(matchMin[1]) * 60000);
+  const matchMs = s.match(/([\d.]+)\s*ms/);
+  if (matchMs) return Math.round(parseFloat(matchMs[1]));
+  const num = parseFloat(s);
+  return !isNaN(num) ? Math.round(num * 1000) : null;
+}
+
+/**
+ * Transforms a V2 canonical skill definition to Echo runtime format without fabricating stats.
+ * Preserva zeros legítimos, deixa campos ausentes como null e converte recarga com precisão.
+ */
+export function transformV2SkillToEcho(sId, s, existingDef = null) {
+  const starRank = s.starRank || 1;
+  const isUlt = starRank >= 4;
+  let reqBook = null;
+  if (starRank === 2) reqBook = 'book_2star';
+  else if (starRank === 3) reqBook = 'book_3star';
+  else if (starRank === 4) reqBook = 'book_4star';
+  else if (starRank >= 5) reqBook = 'book_5star';
+
+  const spCost = starRank >= 4 ? 100 : (starRank === 3 ? 60 : (starRank === 2 ? 30 : 15));
+  const isBuff = s.type === 'buff';
+  const isPassive = s.type === 'passive';
+  const isToggle = s.type === 'toggle';
+  const sNameLower = String(s.name || '').toLowerCase();
+  const isHeal = sNameLower.includes('heal') || sNameLower.includes('bandage') || sNameLower.includes('recovery');
+  const isVampiric = sNameLower.includes('drain') || sNameLower.includes('vampir') || sNameLower.includes('siphon');
+
+  let reqWeapon = 'any';
+  let reqShield = false;
+  if (/shot|arrow|bow|snipe/.test(sNameLower)) reqWeapon = 'bow';
+  else if (/dagger|backstab|mortal_blow|deadly_blow/.test(sNameLower)) reqWeapon = 'dagger';
+  else if (/dual|sonic/.test(sNameLower)) reqWeapon = 'dual';
+  else if (/spear|polearm|whirlwind/.test(sNameLower)) reqWeapon = 'spear';
+  else if (/blunt|hammer|crush|spoil/.test(sNameLower)) reqWeapon = 'blunt';
+  else if (/twohand|greatsword/.test(sNameLower)) reqWeapon = 'twohand';
+  else if (/fist|claw|punch/.test(sNameLower)) reqWeapon = 'fist';
+  if (/shield|shield_stun|shield_bash/.test(sNameLower)) reqShield = true;
+
+  const pwr = s.balance?.pwr !== undefined ? s.balance.pwr : (isPassive || isBuff || isToggle ? 0 : null);
+  const mpCost = s.balance?.mpCost !== undefined ? s.balance.mpCost : (isPassive ? 0 : null);
+  const baseCd = s.canonicalCooldownMs !== undefined ? s.canonicalCooldownMs : (parseCooldownToMs(s.canonicalCooldown) ?? (isPassive ? 0 : null));
+
+  if (!existingDef) {
+    return {
+      id: sId,
+      name: s.name,
+      type: s.type,
+      tier: starRank,
+      cost: spCost,
+      max: 5,
+      pwr,
+      baseCd,
+      mpCost,
+      effect: isBuff ? 'warcry' : (isPassive ? 'stat' : (isToggle ? 'toggle' : (isHeal ? 'heal' : (isVampiric ? 'vampiric' : 'dmg')))),
+      info: s.desc || s.canonicalEffect || s.name,
+      desc: s.desc || '',
+      effectText: s.canonicalEffect || '',
+      icon: s.icon,
+      iconGap: s.iconGap,
+      iconGapReason: s.iconGapReason,
+      vfxGap: s.vfxGap,
+      sfxGap: s.sfxGap,
+      classes: s.classes || [],
+      classReq: s.classes?.[0] || 'any',
+      reqLvl: 1,
+      requiredWeapon: reqWeapon,
+      requiredShield: reqShield,
+      requiredItemToUnlock: reqBook,
+      isUltimate: isUlt,
+      starRank,
+      overhit: true,
+      toggle: isToggle
+    };
+  }
+
+  return Object.assign(existingDef, {
+    iconGap: s.iconGap,
+    iconGapReason: s.iconGapReason,
+    vfxGap: s.vfxGap,
+    sfxGap: s.sfxGap,
+    canonicalEffect: s.canonicalEffect,
+    canonicalCooldown: s.canonicalCooldown,
+    canonicalCooldownMs: s.canonicalCooldownMs,
+    classes: s.classes || existingDef.classes || []
+  });
 }
 
 // ─── Construção ─────────────────────────────────────────────────────────
 
 function buildEchoAdapter() {
-  const E = window.EchoData;
+  const root = typeof window !== 'undefined' ? window : (typeof globalThis !== 'undefined' ? globalThis : null);
+  const E = root ? root.EchoData : null;
   if (!E || !E.CLASSES_ECHO) {
-    console.warn('[echo-adapter] window.EchoData.CLASSES_ECHO não encontrado.');
+    // Retorna de forma segura em ambiente Node ou antes do EchoData carregar
     return;
   }
 
@@ -854,86 +964,6 @@ function buildEchoAdapter() {
   CLASS_SKILLS_ECHO['shared'] = [...SHARED_SKILL_IDS];
   CLASS_SKILLS_ECHO['shared_mage'] = [...SHARED_MAGE_SKILL_IDS];
   CLASS_SKILLS_ECHO['shared_fighter'] = [...SHARED_FIGHTER_SKILL_IDS];
-
-  /**
-   * Transforms a V2 canonical skill definition to Echo runtime format without fabricating stats.
-   */
-  function transformV2SkillToEcho(sId, s, existingDef = null) {
-    const starRank = s.starRank || 1;
-    const isUlt = starRank >= 4;
-    let reqBook = null;
-    if (starRank === 2) reqBook = 'book_2star';
-    else if (starRank === 3) reqBook = 'book_3star';
-    else if (starRank === 4) reqBook = 'book_4star';
-    else if (starRank >= 5) reqBook = 'book_5star';
-
-    const spCost = starRank >= 4 ? 100 : (starRank === 3 ? 60 : (starRank === 2 ? 30 : 15));
-    const isBuff = s.type === 'buff';
-    const isPassive = s.type === 'passive';
-    const isToggle = s.type === 'toggle';
-    const sNameLower = String(s.name || '').toLowerCase();
-    const isHeal = sNameLower.includes('heal') || sNameLower.includes('bandage') || sNameLower.includes('recovery');
-    const isVampiric = sNameLower.includes('drain') || sNameLower.includes('vampir') || sNameLower.includes('siphon');
-
-    let reqWeapon = 'any';
-    let reqShield = false;
-    if (/shot|arrow|bow|snipe/.test(sNameLower)) reqWeapon = 'bow';
-    else if (/dagger|backstab|mortal_blow|deadly_blow/.test(sNameLower)) reqWeapon = 'dagger';
-    else if (/dual|sonic/.test(sNameLower)) reqWeapon = 'dual';
-    else if (/spear|polearm|whirlwind/.test(sNameLower)) reqWeapon = 'spear';
-    else if (/blunt|hammer|crush|spoil/.test(sNameLower)) reqWeapon = 'blunt';
-    else if (/twohand|greatsword/.test(sNameLower)) reqWeapon = 'twohand';
-    else if (/fist|claw|punch/.test(sNameLower)) reqWeapon = 'fist';
-    if (/shield|shield_stun|shield_bash/.test(sNameLower)) reqShield = true;
-
-    const pwr = s.balance?.pwr ?? (isPassive || isBuff || isToggle ? 0 : null);
-    const mpCost = s.balance?.mpCost ?? 0;
-    const baseCd = s.canonicalCooldownMs ?? (s.canonicalCooldown ? cdToMs(s.canonicalCooldown) : 8000);
-
-    if (!existingDef) {
-      return {
-        id: sId,
-        name: s.name,
-        type: s.type,
-        tier: starRank,
-        cost: spCost,
-        max: 5,
-        pwr,
-        baseCd,
-        mpCost,
-        effect: isBuff ? 'warcry' : (isPassive ? 'stat' : (isToggle ? 'toggle' : (isHeal ? 'heal' : (isVampiric ? 'vampiric' : 'dmg')))),
-        info: s.desc || s.canonicalEffect || s.name,
-        desc: s.desc || '',
-        effectText: s.canonicalEffect || '',
-        icon: s.icon,
-        iconGap: s.iconGap,
-        iconGapReason: s.iconGapReason,
-        vfxGap: s.vfxGap,
-        sfxGap: s.sfxGap,
-        classes: s.classes || [],
-        classReq: s.classes?.[0] || 'any',
-        reqLvl: 1,
-        requiredWeapon: reqWeapon,
-        requiredShield: reqShield,
-        requiredItemToUnlock: reqBook,
-        isUltimate: isUlt,
-        starRank,
-        overhit: true,
-        toggle: isToggle
-      };
-    }
-
-    return Object.assign(existingDef, {
-      iconGap: s.iconGap,
-      iconGapReason: s.iconGapReason,
-      vfxGap: s.vfxGap,
-      sfxGap: s.sfxGap,
-      canonicalEffect: s.canonicalEffect,
-      canonicalCooldown: s.canonicalCooldown,
-      canonicalCooldownMs: s.canonicalCooldownMs,
-      classes: s.classes || existingDef.classes || []
-    });
-  }
 
   // ─── CANONICAL V2 INTEGRATION (46 Lineages, 142 Class Stages, 825 Skills) ───
   if (CANONICAL_SKILL_REGISTRY_V2) {
