@@ -7,6 +7,7 @@
 
 import { ACTIVE_CLASSES } from '../elemental/ElementMatrix.js';
 import { HISTORICAL_CLASSES } from '../elemental/HistoricalClasses.js';
+import { CANONICAL_CLASS_REGISTRY } from './CanonicalClassRegistry.js';
 
 export const CLASS_ALIASES = {
   // 🗡️ Assassin (Humano e Elfo Negro)
@@ -360,16 +361,15 @@ const BASE_CLASS_RACE_MAP = {
     elvenfighter: 'elf_fighter',
     mage: 'elf_mage',
     elfmage: 'elf_mage',
-    elvenmage: 'elf_mage',
-    wizard: 'elf_mage'
+    elvenmage: 'elf_mage'
   },
   darkelf: {
     fighter: 'dark_elf_fighter',
     darkelffighter: 'dark_elf_fighter',
-    palusknight: 'dark_elf_palus_knight',
+    palusknight: 'palus_knight',
     mage: 'dark_elf_mage',
     darkelfmage: 'dark_elf_mage',
-    darkwizard: 'dark_elf_wizard'
+    darkwizard: 'dark_wizard'
   },
   dark_elf: {
     fighter: 'dark_elf_fighter',
@@ -535,9 +535,13 @@ export function resolveCanonicalClassId(classId, race = null) {
   const lower = raw.toLowerCase();
   const cleaned = lower.replace(/[-_\s]+/g, '');
 
-  // Desambiguação de ID curto com raça explícita (Item 9 das Diretrizes)
+  // Desambiguação de ID com raça explícita (Item 9 das Diretrizes)
   if (race) {
     const normRace = String(race).toLowerCase().trim().replace(/[-_\s]+/g, '');
+    // Caso Dark Elf Assassin (Stage 1 canônico no Grafo 159)
+    if ((normRace === 'darkelf' || normRace === 'dark_elf') && (lower === 'assassin' || cleaned === 'assassin')) {
+      return 'assassin';
+    }
     if (BASE_CLASS_RACE_MAP[normRace]) {
       const racePool = BASE_CLASS_RACE_MAP[normRace];
       if (racePool[lower]) return racePool[lower];
@@ -545,7 +549,7 @@ export function resolveCanonicalClassId(classId, race = null) {
     }
   }
 
-  // 1. Verificação direta
+  // 1. Verificação direta em CLASS_ALIASES e EXTENDED_FALLBACKS
   if (CLASS_ALIASES[classId]) return CLASS_ALIASES[classId];
   if (EXTENDED_FALLBACKS[classId]) return EXTENDED_FALLBACKS[classId];
 
@@ -557,7 +561,14 @@ export function resolveCanonicalClassId(classId, race = null) {
   if (CLASS_ALIASES[cleaned]) return CLASS_ALIASES[cleaned];
   if (EXTENDED_FALLBACKS[cleaned]) return EXTENDED_FALLBACKS[cleaned];
 
-  // 4. Remoção inteligente de prefixos de raça
+  // 3.5 Preservação estrita dos nós oficiais do Grafo Canônico (159 classes) antes de stripping
+  if (CANONICAL_CLASS_REGISTRY) {
+    if (CANONICAL_CLASS_REGISTRY[raw]) return CANONICAL_CLASS_REGISTRY[raw].id;
+    if (CANONICAL_CLASS_REGISTRY[lower]) return CANONICAL_CLASS_REGISTRY[lower].id;
+    if (CANONICAL_CLASS_REGISTRY[cleaned]) return CANONICAL_CLASS_REGISTRY[cleaned].id;
+  }
+
+  // 4. Remoção inteligente de prefixos de raça com isolamento estrito
   for (const prefix of RACE_PREFIXES) {
     if (lower.startsWith(prefix)) {
       if (prefix.startsWith('dwarf')) {
@@ -568,8 +579,21 @@ export function resolveCanonicalClassId(classId, race = null) {
       if (CLASS_ALIASES[stripped]) return CLASS_ALIASES[stripped];
       const strippedClean = stripped.replace(/[-_\s]+/g, '');
       if (CLASS_ALIASES[strippedClean]) return CLASS_ALIASES[strippedClean];
-      if (DAG_LOOKUP.has(stripped)) return DAG_LOOKUP.get(stripped);
-      if (DAG_LOOKUP.has(strippedClean)) return DAG_LOOKUP.get(strippedClean);
+      
+      // Protege contra contaminação racial: não permite que prefixos não-humanos caiam em fallbacks human_
+      const isNonHumanPrefix = prefix !== 'human' && prefix !== 'human_';
+      if (DAG_LOOKUP.has(stripped)) {
+        const found = DAG_LOOKUP.get(stripped);
+        if (!(isNonHumanPrefix && found.startsWith('human_'))) {
+          return found;
+        }
+      }
+      if (DAG_LOOKUP.has(strippedClean)) {
+        const found = DAG_LOOKUP.get(strippedClean);
+        if (!(isNonHumanPrefix && found.startsWith('human_'))) {
+          return found;
+        }
+      }
       if (ALL_DAG_CLASS_IDS.has(stripped)) return stripped;
     }
   }

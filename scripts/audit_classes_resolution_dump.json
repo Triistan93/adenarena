@@ -1,0 +1,1274 @@
+[
+  {
+    "id": "fighter",
+    "race": "human",
+    "stage": 0,
+    "status": "RESOLVED",
+    "v2ClassId": "fighter",
+    "skillsCount": 5
+  },
+  {
+    "id": "warrior",
+    "race": "human",
+    "stage": 1,
+    "status": "RESOLVED",
+    "v2ClassId": "warrior",
+    "skillsCount": 10
+  },
+  {
+    "id": "gladiator",
+    "race": "human",
+    "stage": 2,
+    "status": "RESOLVED",
+    "v2ClassId": "gladiator",
+    "skillsCount": 15
+  },
+  {
+    "id": "duelist",
+    "race": "human",
+    "stage": 3,
+    "status": "RESOLVED",
+    "v2ClassId": "duelist",
+    "skillsCount": 20
+  },
+  {
+    "id": "warlord",
+    "race": "human",
+    "stage": 2,
+    "status": "RESOLVED",
+    "v2ClassId": "warlord",
+    "skillsCount": 15
+  },
+  {
+    "id": "dreadnought",
+    "race": "human",
+    "stage": 3,
+    "status": "RESOLVED",
+    "v2ClassId": "dreadnought",
+    "skillsCount": 20
+  },
+  {
+    "id": "knight",
+    "race": "human",
+    "stage": 1,
+    "status": "RESOLVED",
+    "v2ClassId": "knight",
+    "skillsCount": 10
+  },
+  {
+    "id": "paladin",
+    "race": "human",
+    "stage": 2,
+    "status": "RESOLVED",
+    "v2ClassId": "paladin",
+    "skillsCount": 15
+  },
+  {
+    "id": "phoenix_knight",
+    "race": "human",
+    "stage": 3,
+    "status": "RESOLVED",
+    "v2ClassId": "phoenixKnight",
+    "skillsCount": 20
+  },
+  {
+    "id": "dark_avenger",
+    "race": "human",
+    "stage": 2,
+    "status": "RESOLVED",
+    "v2ClassId": "darkAvenger",
+    "skillsCount": 15
+  },
+  {
+    "id": "hell_knight",
+    "race": "human",
+    "stage": 3,
+    "status": "RESOLVED",
+    "v2ClassId": "hellKnight",
+    "skillsCount": 20
+  },
+  {
+    "id": "rogue",
+    "race": "human",
+    "stage": 1,
+    "status": "RESOLVED",
+    "v2ClassId": "rogue",
+    "skillsCount": 10
+  },
+  {
+    "id": "treasure_hunter",
+    "race": "human",
+    "stage": 2,
+    "status": "RESOLVED",
+    "v2ClassId": "treasureHunter",
+    "skillsCount": 15
+  },
+  {
+    "id": "adventurer",
+    "race": "human",
+    "stage": 3,
+    "status": "RESOLVED",
+    "v2ClassId": "adventurer",
+    "skillsCount": 20
+  },
+  {
+    "id": "hawkeye",
+    "race": "human",
+    "stage": 2,
+    "status": "RESOLVED",
+    "v2ClassId": "hawkeye",
+    "skillsCount": 15
+  },
+  {
+    "id": "sagittarius",
+    "race": "human",
+    "stage": 3,
+    "status": "RESOLVED",
+    "v2ClassId": "sagittarius",
+    "skillsCount": 20
+  },
+  {
+    "id": "mage",
+    "race": "human",
+    "stage": 0,
+    "status": "RESOLVED",
+    "v2ClassId": "mage",
+    "skillsCount": 5
+  },
+  {
+    "id": "wizard",
+    "race": "human",
+    "stage": 1,
+    "status": "RESOLVED",
+    "v2ClassId": "wizard",
+    "skillsCount": 10
+  },
+  {
+    "id": "sorcerer",
+    "race": "human",
+    "stage": 2,
+    "status": "RESOLVED",
+    "v2ClassId": "sorcerer",
+    "skillsCount": 15
+  },
+  {
+    "id": "archmage",
+    "race": "human",
+    "stage": 3,
+    "status": "RESOLVED",
+    "v2ClassId": "archmage",
+    "skillsCount": 20
+  },
+  {
+    "id": "necromancer",
+    "race": "human",
+    "stage": 2,
+    "status": "RESOLVED",
+    "v2ClassId": "necromancer",
+    "skillsCount": 15
+  },
+  {
+    "id": "soultaker",
+    "race": "human",
+    "stage": 3,
+    "status": "RESOLVED",
+    "v2ClassId": "soultaker",
+    "skillsCount": 20
+  },
+  {
+    "id": "warlock",
+    "race": "human",
+    "stage": 2,
+    "status": "RESOLVED",
+    "v2ClassId": "warlock",
+    "skillsCount": 15
+  },
+  {
+    "id": "arcana_lord",
+    "race": "human",
+    "stage": 3,
+    "status": "RESOLVED",
+    "v2ClassId": "arcanaLord",
+    "skillsCount": 20
+  },
+  {
+    "id": "cleric",
+    "race": "human",
+    "stage": 1,
+    "status": "RESOLVED",
+    "v2ClassId": "cleric",
+    "skillsCount": 10
+  },
+  {
+    "id": "bishop",
+    "race": "human",
+    "stage": 2,
+    "status": "RESOLVED",
+    "v2ClassId": "bishop",
+    "skillsCount": 15
+  },
+  {
+    "id": "cardinal",
+    "race": "human",
+    "stage": 3,
+    "status": "RESOLVED",
+    "v2ClassId": "cardinal",
+    "skillsCount": 20
+  },
+  {
+    "id": "prophet",
+    "race": "human",
+    "stage": 2,
+    "status": "RESOLVED",
+    "v2ClassId": "prophet",
+    "skillsCount": 15
+  },
+  {
+    "id": "hierophant",
+    "race": "human",
+    "stage": 3,
+    "status": "RESOLVED",
+    "v2ClassId": "hierophant",
+    "skillsCount": 20
+  },
+  {
+    "id": "human_deathknight_0",
+    "race": "human",
+    "stage": 0,
+    "status": "RESOLVED",
+    "v2ClassId": "deathPilgrim",
+    "skillsCount": 5
+  },
+  {
+    "id": "human_deathknight_1",
+    "race": "human",
+    "stage": 1,
+    "status": "RESOLVED",
+    "v2ClassId": "deathBlade",
+    "skillsCount": 10
+  },
+  {
+    "id": "human_deathknight_2",
+    "race": "human",
+    "stage": 2,
+    "status": "RESOLVED",
+    "v2ClassId": "deathMessenger",
+    "skillsCount": 15
+  },
+  {
+    "id": "human_deathknight_3",
+    "race": "human",
+    "stage": 3,
+    "status": "RESOLVED",
+    "v2ClassId": "deathKnight",
+    "skillsCount": 20
+  },
+  {
+    "id": "secret_assassin_male_0",
+    "race": "human",
+    "stage": 0,
+    "status": "RESOLVED",
+    "v2ClassId": "assassinS0",
+    "skillsCount": 5
+  },
+  {
+    "id": "secret_assassin_male_1",
+    "race": "human",
+    "stage": 1,
+    "status": "RESOLVED",
+    "v2ClassId": "assassinS1",
+    "skillsCount": 10
+  },
+  {
+    "id": "secret_assassin_male_2",
+    "race": "human",
+    "stage": 2,
+    "status": "RESOLVED",
+    "v2ClassId": "assassinS2",
+    "skillsCount": 15
+  },
+  {
+    "id": "secret_assassin_male_3",
+    "race": "human",
+    "stage": 3,
+    "status": "RESOLVED",
+    "v2ClassId": "assassinS3",
+    "skillsCount": 20
+  },
+  {
+    "id": "werewolf_0",
+    "race": "human",
+    "stage": 0,
+    "status": "CONTENT_GAP",
+    "v2ClassId": null,
+    "skillsCount": 1
+  },
+  {
+    "id": "werewolf_1",
+    "race": "human",
+    "stage": 1,
+    "status": "CONTENT_GAP",
+    "v2ClassId": null,
+    "skillsCount": 1
+  },
+  {
+    "id": "werewolf_2",
+    "race": "human",
+    "stage": 2,
+    "status": "CONTENT_GAP",
+    "v2ClassId": null,
+    "skillsCount": 1
+  },
+  {
+    "id": "werewolf_3",
+    "race": "human",
+    "stage": 3,
+    "status": "RESOLVED",
+    "v2ClassId": "warg",
+    "skillsCount": 5
+  },
+  {
+    "id": "elven_fighter",
+    "race": "elf",
+    "stage": 0,
+    "status": "RESOLVED",
+    "v2ClassId": "elfFighter",
+    "skillsCount": 5
+  },
+  {
+    "id": "elven_knight",
+    "race": "elf",
+    "stage": 1,
+    "status": "RESOLVED",
+    "v2ClassId": "elvenKnight",
+    "skillsCount": 10
+  },
+  {
+    "id": "temple_knight",
+    "race": "elf",
+    "stage": 2,
+    "status": "RESOLVED",
+    "v2ClassId": "templeKnight",
+    "skillsCount": 15
+  },
+  {
+    "id": "evas_templar",
+    "race": "elf",
+    "stage": 3,
+    "status": "RESOLVED",
+    "v2ClassId": "evaTemplar",
+    "skillsCount": 20
+  },
+  {
+    "id": "swordsinger",
+    "race": "elf",
+    "stage": 2,
+    "status": "RESOLVED",
+    "v2ClassId": "swordSinger",
+    "skillsCount": 15
+  },
+  {
+    "id": "sword_muse",
+    "race": "elf",
+    "stage": 3,
+    "status": "RESOLVED",
+    "v2ClassId": "swordMuse",
+    "skillsCount": 20
+  },
+  {
+    "id": "elven_scout",
+    "race": "elf",
+    "stage": 1,
+    "status": "RESOLVED",
+    "v2ClassId": "elfScout",
+    "skillsCount": 10
+  },
+  {
+    "id": "plain_walker",
+    "race": "elf",
+    "stage": 2,
+    "status": "RESOLVED",
+    "v2ClassId": "plainsWalker",
+    "skillsCount": 15
+  },
+  {
+    "id": "wind_rider",
+    "race": "elf",
+    "stage": 3,
+    "status": "RESOLVED",
+    "v2ClassId": "windRider",
+    "skillsCount": 20
+  },
+  {
+    "id": "silver_ranger",
+    "race": "elf",
+    "stage": 2,
+    "status": "RESOLVED",
+    "v2ClassId": "silverRanger",
+    "skillsCount": 15
+  },
+  {
+    "id": "moonlight_sentinel",
+    "race": "elf",
+    "stage": 3,
+    "status": "RESOLVED",
+    "v2ClassId": "moonlightSentinel",
+    "skillsCount": 20
+  },
+  {
+    "id": "elven_mage",
+    "race": "elf",
+    "stage": 0,
+    "status": "RESOLVED",
+    "v2ClassId": "elfMage",
+    "skillsCount": 5
+  },
+  {
+    "id": "elven_wizard",
+    "race": "elf",
+    "stage": 1,
+    "status": "RESOLVED",
+    "v2ClassId": "elvenWizard",
+    "skillsCount": 10
+  },
+  {
+    "id": "spellsinger",
+    "race": "elf",
+    "stage": 2,
+    "status": "RESOLVED",
+    "v2ClassId": "spellsinger",
+    "skillsCount": 15
+  },
+  {
+    "id": "mystic_muse",
+    "race": "elf",
+    "stage": 3,
+    "status": "RESOLVED",
+    "v2ClassId": "mysticMuse",
+    "skillsCount": 20
+  },
+  {
+    "id": "elemental_summoner",
+    "race": "elf",
+    "stage": 2,
+    "status": "RESOLVED",
+    "v2ClassId": "elementalSummoner",
+    "skillsCount": 15
+  },
+  {
+    "id": "elemental_master",
+    "race": "elf",
+    "stage": 3,
+    "status": "RESOLVED",
+    "v2ClassId": "elementalMaster",
+    "skillsCount": 20
+  },
+  {
+    "id": "oracle",
+    "race": "elf",
+    "stage": 1,
+    "status": "RESOLVED",
+    "v2ClassId": "elfOracle",
+    "skillsCount": 10
+  },
+  {
+    "id": "elder",
+    "race": "elf",
+    "stage": 2,
+    "status": "RESOLVED",
+    "v2ClassId": "elfElder",
+    "skillsCount": 15
+  },
+  {
+    "id": "evas_saint",
+    "race": "elf",
+    "stage": 3,
+    "status": "RESOLVED",
+    "v2ClassId": "evaSaint",
+    "skillsCount": 20
+  },
+  {
+    "id": "elf_deathknight_0",
+    "race": "elf",
+    "stage": 0,
+    "status": "RESOLVED",
+    "v2ClassId": "deathPilgrim",
+    "skillsCount": 5
+  },
+  {
+    "id": "elf_deathknight_1",
+    "race": "elf",
+    "stage": 1,
+    "status": "RESOLVED",
+    "v2ClassId": "deathBlade",
+    "skillsCount": 10
+  },
+  {
+    "id": "elf_deathknight_2",
+    "race": "elf",
+    "stage": 2,
+    "status": "RESOLVED",
+    "v2ClassId": "deathMessenger",
+    "skillsCount": 15
+  },
+  {
+    "id": "elf_deathknight_3",
+    "race": "elf",
+    "stage": 3,
+    "status": "RESOLVED",
+    "v2ClassId": "deathKnight",
+    "skillsCount": 20
+  },
+  {
+    "id": "dark_fighter",
+    "race": "darkelf",
+    "stage": 0,
+    "status": "RESOLVED",
+    "v2ClassId": "darkElfFighter",
+    "skillsCount": 5
+  },
+  {
+    "id": "palus_knight",
+    "race": "darkelf",
+    "stage": 1,
+    "status": "RESOLVED",
+    "v2ClassId": "palusKnight",
+    "skillsCount": 10
+  },
+  {
+    "id": "shillien_knight",
+    "race": "darkelf",
+    "stage": 2,
+    "status": "RESOLVED",
+    "v2ClassId": "shillienKnight",
+    "skillsCount": 15
+  },
+  {
+    "id": "shillien_templar",
+    "race": "darkelf",
+    "stage": 3,
+    "status": "RESOLVED",
+    "v2ClassId": "shillienTemplar",
+    "skillsCount": 20
+  },
+  {
+    "id": "bladedancer",
+    "race": "darkelf",
+    "stage": 2,
+    "status": "RESOLVED",
+    "v2ClassId": "bladeDancer",
+    "skillsCount": 15
+  },
+  {
+    "id": "spectral_dancer",
+    "race": "darkelf",
+    "stage": 3,
+    "status": "RESOLVED",
+    "v2ClassId": "spectralDancer",
+    "skillsCount": 20
+  },
+  {
+    "id": "assassin",
+    "race": "darkelf",
+    "stage": 1,
+    "status": "RESOLVED",
+    "v2ClassId": "assassinDE",
+    "skillsCount": 10
+  },
+  {
+    "id": "abyss_walker",
+    "race": "darkelf",
+    "stage": 2,
+    "status": "RESOLVED",
+    "v2ClassId": "abyssWalker",
+    "skillsCount": 15
+  },
+  {
+    "id": "ghost_hunter",
+    "race": "darkelf",
+    "stage": 3,
+    "status": "RESOLVED",
+    "v2ClassId": "ghostHunter",
+    "skillsCount": 20
+  },
+  {
+    "id": "phantom_ranger",
+    "race": "darkelf",
+    "stage": 2,
+    "status": "RESOLVED",
+    "v2ClassId": "phantomRanger",
+    "skillsCount": 15
+  },
+  {
+    "id": "ghost_sentinel",
+    "race": "darkelf",
+    "stage": 3,
+    "status": "RESOLVED",
+    "v2ClassId": "ghostSentinel",
+    "skillsCount": 20
+  },
+  {
+    "id": "dark_mage",
+    "race": "darkelf",
+    "stage": 0,
+    "status": "RESOLVED",
+    "v2ClassId": "darkElfMage",
+    "skillsCount": 5
+  },
+  {
+    "id": "dark_wizard",
+    "race": "darkelf",
+    "stage": 1,
+    "status": "RESOLVED",
+    "v2ClassId": "darkWizard",
+    "skillsCount": 10
+  },
+  {
+    "id": "spellhowler",
+    "race": "darkelf",
+    "stage": 2,
+    "status": "RESOLVED",
+    "v2ClassId": "spellhowler",
+    "skillsCount": 15
+  },
+  {
+    "id": "storm_screamer",
+    "race": "darkelf",
+    "stage": 3,
+    "status": "RESOLVED",
+    "v2ClassId": "stormScreamer",
+    "skillsCount": 20
+  },
+  {
+    "id": "phantom_summoner",
+    "race": "darkelf",
+    "stage": 2,
+    "status": "RESOLVED",
+    "v2ClassId": "phantomSummoner",
+    "skillsCount": 15
+  },
+  {
+    "id": "spectral_master",
+    "race": "darkelf",
+    "stage": 3,
+    "status": "RESOLVED",
+    "v2ClassId": "spectralMaster",
+    "skillsCount": 20
+  },
+  {
+    "id": "shillien_oracle",
+    "race": "darkelf",
+    "stage": 1,
+    "status": "RESOLVED",
+    "v2ClassId": "shillienOracle",
+    "skillsCount": 10
+  },
+  {
+    "id": "shillien_elder",
+    "race": "darkelf",
+    "stage": 2,
+    "status": "RESOLVED",
+    "v2ClassId": "shillienElder",
+    "skillsCount": 15
+  },
+  {
+    "id": "shillien_saint",
+    "race": "darkelf",
+    "stage": 3,
+    "status": "RESOLVED",
+    "v2ClassId": "shillienSaint",
+    "skillsCount": 20
+  },
+  {
+    "id": "delf_deathknight_0",
+    "race": "darkelf",
+    "stage": 0,
+    "status": "RESOLVED",
+    "v2ClassId": "deathPilgrim",
+    "skillsCount": 5
+  },
+  {
+    "id": "delf_deathknight_1",
+    "race": "darkelf",
+    "stage": 1,
+    "status": "RESOLVED",
+    "v2ClassId": "deathBlade",
+    "skillsCount": 10
+  },
+  {
+    "id": "delf_deathknight_2",
+    "race": "darkelf",
+    "stage": 2,
+    "status": "RESOLVED",
+    "v2ClassId": "deathMessenger",
+    "skillsCount": 15
+  },
+  {
+    "id": "delf_deathknight_3",
+    "race": "darkelf",
+    "stage": 3,
+    "status": "RESOLVED",
+    "v2ClassId": "deathKnight",
+    "skillsCount": 20
+  },
+  {
+    "id": "secret_assassin_female_0",
+    "race": "darkelf",
+    "stage": 0,
+    "status": "RESOLVED",
+    "v2ClassId": "assassinS0",
+    "skillsCount": 5
+  },
+  {
+    "id": "secret_assassin_female_1",
+    "race": "darkelf",
+    "stage": 1,
+    "status": "RESOLVED",
+    "v2ClassId": "assassinS1",
+    "skillsCount": 10
+  },
+  {
+    "id": "secret_assassin_female_2",
+    "race": "darkelf",
+    "stage": 2,
+    "status": "RESOLVED",
+    "v2ClassId": "assassinS2",
+    "skillsCount": 15
+  },
+  {
+    "id": "secret_assassin_female_3",
+    "race": "darkelf",
+    "stage": 3,
+    "status": "RESOLVED",
+    "v2ClassId": "assassinS3",
+    "skillsCount": 20
+  },
+  {
+    "id": "rose_vain_0",
+    "race": "darkelf",
+    "stage": 0,
+    "status": "RESOLVED",
+    "v2ClassId": "bloodRoseBase",
+    "skillsCount": 5
+  },
+  {
+    "id": "rose_vain_1",
+    "race": "darkelf",
+    "stage": 1,
+    "status": "RESOLVED",
+    "v2ClassId": "bloodRoseS1",
+    "skillsCount": 10
+  },
+  {
+    "id": "rose_vain_2",
+    "race": "darkelf",
+    "stage": 2,
+    "status": "RESOLVED",
+    "v2ClassId": "bloodRoseS2",
+    "skillsCount": 15
+  },
+  {
+    "id": "rose_vain_3",
+    "race": "darkelf",
+    "stage": 3,
+    "status": "RESOLVED",
+    "v2ClassId": "bloodRose",
+    "skillsCount": 20
+  },
+  {
+    "id": "orc_fighter",
+    "race": "orc",
+    "stage": 0,
+    "status": "RESOLVED",
+    "v2ClassId": "orcFighter",
+    "skillsCount": 5
+  },
+  {
+    "id": "orc_raider",
+    "race": "orc",
+    "stage": 1,
+    "status": "RESOLVED",
+    "v2ClassId": "raider",
+    "skillsCount": 10
+  },
+  {
+    "id": "destroyer",
+    "race": "orc",
+    "stage": 2,
+    "status": "RESOLVED",
+    "v2ClassId": "destroyer",
+    "skillsCount": 15
+  },
+  {
+    "id": "titan",
+    "race": "orc",
+    "stage": 3,
+    "status": "RESOLVED",
+    "v2ClassId": "titan",
+    "skillsCount": 20
+  },
+  {
+    "id": "orc_monk",
+    "race": "orc",
+    "stage": 1,
+    "status": "RESOLVED",
+    "v2ClassId": "monk",
+    "skillsCount": 10
+  },
+  {
+    "id": "tyrant",
+    "race": "orc",
+    "stage": 2,
+    "status": "RESOLVED",
+    "v2ClassId": "tyrant",
+    "skillsCount": 15
+  },
+  {
+    "id": "grand_khavatari",
+    "race": "orc",
+    "stage": 3,
+    "status": "RESOLVED",
+    "v2ClassId": "grandKhavatari",
+    "skillsCount": 20
+  },
+  {
+    "id": "orc_mage",
+    "race": "orc",
+    "stage": 0,
+    "status": "RESOLVED",
+    "v2ClassId": "orcMage",
+    "skillsCount": 5
+  },
+  {
+    "id": "orc_shaman",
+    "race": "orc",
+    "stage": 1,
+    "status": "RESOLVED",
+    "v2ClassId": "shaman",
+    "skillsCount": 10
+  },
+  {
+    "id": "overlord",
+    "race": "orc",
+    "stage": 2,
+    "status": "RESOLVED",
+    "v2ClassId": "overlord",
+    "skillsCount": 15
+  },
+  {
+    "id": "dominator",
+    "race": "orc",
+    "stage": 3,
+    "status": "RESOLVED",
+    "v2ClassId": "dominator",
+    "skillsCount": 20
+  },
+  {
+    "id": "warcryer",
+    "race": "orc",
+    "stage": 2,
+    "status": "RESOLVED",
+    "v2ClassId": "warcryer",
+    "skillsCount": 15
+  },
+  {
+    "id": "doomcryer",
+    "race": "orc",
+    "stage": 3,
+    "status": "RESOLVED",
+    "v2ClassId": "doomcryer",
+    "skillsCount": 20
+  },
+  {
+    "id": "orc_rider_0",
+    "race": "orc",
+    "stage": 0,
+    "status": "RESOLVED",
+    "v2ClassId": "rider",
+    "skillsCount": 5
+  },
+  {
+    "id": "orc_rider_1",
+    "race": "orc",
+    "stage": 1,
+    "status": "RESOLVED",
+    "v2ClassId": "dragoon",
+    "skillsCount": 10
+  },
+  {
+    "id": "orc_rider_2",
+    "race": "orc",
+    "stage": 2,
+    "status": "RESOLVED",
+    "v2ClassId": "vanguardRider",
+    "skillsCount": 15
+  },
+  {
+    "id": "orc_rider_3",
+    "race": "orc",
+    "stage": 3,
+    "status": "RESOLVED",
+    "v2ClassId": "grandVanguard",
+    "skillsCount": 20
+  },
+  {
+    "id": "dwarven_fighter",
+    "race": "dwarf",
+    "stage": 0,
+    "status": "RESOLVED",
+    "v2ClassId": "dwarfFighter",
+    "skillsCount": 5
+  },
+  {
+    "id": "scavenger",
+    "race": "dwarf",
+    "stage": 1,
+    "status": "RESOLVED",
+    "v2ClassId": "scavenger",
+    "skillsCount": 10
+  },
+  {
+    "id": "bounty_hunter",
+    "race": "dwarf",
+    "stage": 2,
+    "status": "RESOLVED",
+    "v2ClassId": "bountyHunter",
+    "skillsCount": 15
+  },
+  {
+    "id": "fortune_seeker",
+    "race": "dwarf",
+    "stage": 3,
+    "status": "RESOLVED",
+    "v2ClassId": "fortuneSeeker",
+    "skillsCount": 20
+  },
+  {
+    "id": "artisan",
+    "race": "dwarf",
+    "stage": 1,
+    "status": "RESOLVED",
+    "v2ClassId": "artisanDwarf",
+    "skillsCount": 10
+  },
+  {
+    "id": "warsmith",
+    "race": "dwarf",
+    "stage": 2,
+    "status": "RESOLVED",
+    "v2ClassId": "warsmith",
+    "skillsCount": 15
+  },
+  {
+    "id": "maestro",
+    "race": "dwarf",
+    "stage": 3,
+    "status": "RESOLVED",
+    "v2ClassId": "maestro",
+    "skillsCount": 20
+  },
+  {
+    "id": "shineMakerBase",
+    "race": "dwarf",
+    "stage": 0,
+    "status": "CONTENT_GAP",
+    "v2ClassId": null,
+    "skillsCount": 0
+  },
+  {
+    "id": "shineMakerS1",
+    "race": "dwarf",
+    "stage": 1,
+    "status": "RESOLVED",
+    "v2ClassId": "shineMakerS1",
+    "skillsCount": 5
+  },
+  {
+    "id": "shineMakerS2",
+    "race": "dwarf",
+    "stage": 2,
+    "status": "RESOLVED",
+    "v2ClassId": "shineMakerS2",
+    "skillsCount": 10
+  },
+  {
+    "id": "shinemaker",
+    "race": "dwarf",
+    "stage": 3,
+    "status": "RESOLVED",
+    "v2ClassId": "shinemaker",
+    "skillsCount": 15
+  },
+  {
+    "id": "jin_kamael_soldier",
+    "race": "kamael",
+    "stage": 0,
+    "status": "RESOLVED",
+    "v2ClassId": "kamaelSoldier",
+    "skillsCount": 5
+  },
+  {
+    "id": "trooper",
+    "race": "kamael",
+    "stage": 1,
+    "status": "RESOLVED",
+    "v2ClassId": "trooper",
+    "skillsCount": 10
+  },
+  {
+    "id": "berserker",
+    "race": "kamael",
+    "stage": 2,
+    "status": "RESOLVED",
+    "v2ClassId": "berserker",
+    "skillsCount": 15
+  },
+  {
+    "id": "doombringer",
+    "race": "kamael",
+    "stage": 3,
+    "status": "RESOLVED",
+    "v2ClassId": "doombringer",
+    "skillsCount": 20
+  },
+  {
+    "id": "soul_finder",
+    "race": "kamael",
+    "stage": 1,
+    "status": "RESOLVED",
+    "v2ClassId": "soulFinder",
+    "skillsCount": 10
+  },
+  {
+    "id": "soul_breaker",
+    "race": "kamael",
+    "stage": 2,
+    "status": "RESOLVED",
+    "v2ClassId": "soulBreakerKamael",
+    "skillsCount": 15
+  },
+  {
+    "id": "soul_hound",
+    "race": "kamael",
+    "stage": 3,
+    "status": "RESOLVED",
+    "v2ClassId": "soulHound",
+    "skillsCount": 20
+  },
+  {
+    "id": "warder",
+    "race": "kamael",
+    "stage": 1,
+    "status": "RESOLVED",
+    "v2ClassId": "warder",
+    "skillsCount": 10
+  },
+  {
+    "id": "arbalester",
+    "race": "kamael",
+    "stage": 2,
+    "status": "RESOLVED",
+    "v2ClassId": "soulRanger",
+    "skillsCount": 15
+  },
+  {
+    "id": "trickster",
+    "race": "kamael",
+    "stage": 3,
+    "status": "RESOLVED",
+    "v2ClassId": "trickster",
+    "skillsCount": 20
+  },
+  {
+    "id": "crow_0",
+    "race": "kamael",
+    "stage": 0,
+    "status": "RESOLVED",
+    "v2ClassId": "samuraiBase",
+    "skillsCount": 5
+  },
+  {
+    "id": "crow_1",
+    "race": "kamael",
+    "stage": 1,
+    "status": "RESOLVED",
+    "v2ClassId": "hatamoto",
+    "skillsCount": 10
+  },
+  {
+    "id": "crow_2",
+    "race": "kamael",
+    "stage": 2,
+    "status": "RESOLVED",
+    "v2ClassId": "ronin",
+    "skillsCount": 15
+  },
+  {
+    "id": "crow_3",
+    "race": "kamael",
+    "stage": 3,
+    "status": "RESOLVED",
+    "v2ClassId": "samurai",
+    "skillsCount": 20
+  },
+  {
+    "id": "sylphid",
+    "race": "sylph",
+    "stage": 0,
+    "status": "RESOLVED",
+    "v2ClassId": "sylphGunner",
+    "skillsCount": 5
+  },
+  {
+    "id": "sylph_gunner",
+    "race": "sylph",
+    "stage": 1,
+    "status": "RESOLVED",
+    "v2ClassId": "sharpshooter",
+    "skillsCount": 10
+  },
+  {
+    "id": "wind_hunter",
+    "race": "sylph",
+    "stage": 2,
+    "status": "RESOLVED",
+    "v2ClassId": "windSniper",
+    "skillsCount": 15
+  },
+  {
+    "id": "storm_blaster",
+    "race": "sylph",
+    "stage": 3,
+    "status": "RESOLVED",
+    "v2ClassId": "stormBlaster",
+    "skillsCount": 20
+  },
+  {
+    "id": "sacred_templar_0",
+    "race": "highelf",
+    "stage": 0,
+    "status": "RESOLVED",
+    "v2ClassId": "highElfBase",
+    "skillsCount": 5
+  },
+  {
+    "id": "sacred_templar_1",
+    "race": "highelf",
+    "stage": 1,
+    "status": "RESOLVED",
+    "v2ClassId": "lightTemplar",
+    "skillsCount": 10
+  },
+  {
+    "id": "sacred_templar_2",
+    "race": "highelf",
+    "stage": 2,
+    "status": "RESOLVED",
+    "v2ClassId": "holyTemplar",
+    "skillsCount": 15
+  },
+  {
+    "id": "sacred_templar_3",
+    "race": "highelf",
+    "stage": 3,
+    "status": "RESOLVED",
+    "v2ClassId": "divineTemplar",
+    "skillsCount": 20
+  },
+  {
+    "id": "spirit_0",
+    "race": "highelf",
+    "stage": 0,
+    "status": "CONTENT_GAP",
+    "v2ClassId": null,
+    "skillsCount": 2
+  },
+  {
+    "id": "spirit_1",
+    "race": "highelf",
+    "stage": 1,
+    "status": "RESOLVED",
+    "v2ClassId": "elementWeaverS1",
+    "skillsCount": 10
+  },
+  {
+    "id": "spirit_2",
+    "race": "highelf",
+    "stage": 2,
+    "status": "RESOLVED",
+    "v2ClassId": "elementWeaverS2",
+    "skillsCount": 15
+  },
+  {
+    "id": "spirit_3",
+    "race": "highelf",
+    "stage": 3,
+    "status": "RESOLVED",
+    "v2ClassId": "elementWeaver",
+    "skillsCount": 20
+  },
+  {
+    "id": "marauderBase",
+    "race": "ertheia",
+    "stage": 0,
+    "status": "CONTENT_GAP",
+    "v2ClassId": null,
+    "skillsCount": 0
+  },
+  {
+    "id": "marauder",
+    "race": "ertheia",
+    "stage": 1,
+    "status": "RESOLVED",
+    "v2ClassId": "marauder",
+    "skillsCount": 10
+  },
+  {
+    "id": "ertheiaWarrior",
+    "race": "ertheia",
+    "stage": 2,
+    "status": "RESOLVED",
+    "v2ClassId": "ertheiaWarrior",
+    "skillsCount": 15
+  },
+  {
+    "id": "eviscerator",
+    "race": "ertheia",
+    "stage": 3,
+    "status": "RESOLVED",
+    "v2ClassId": "eviscerator",
+    "skillsCount": 20
+  },
+  {
+    "id": "sayhaMageBase",
+    "race": "ertheia",
+    "stage": 0,
+    "status": "CONTENT_GAP",
+    "v2ClassId": null,
+    "skillsCount": 0
+  },
+  {
+    "id": "sayhaSeer",
+    "race": "ertheia",
+    "stage": 1,
+    "status": "RESOLVED",
+    "v2ClassId": "sayhaSeer",
+    "skillsCount": 10
+  },
+  {
+    "id": "windRiderErth",
+    "race": "ertheia",
+    "stage": 2,
+    "status": "RESOLVED",
+    "v2ClassId": "windRiderErth",
+    "skillsCount": 15
+  },
+  {
+    "id": "sayhaSeeker",
+    "race": "ertheia",
+    "stage": 3,
+    "status": "RESOLVED",
+    "v2ClassId": "sayhaSeeker",
+    "skillsCount": 20
+  }
+]

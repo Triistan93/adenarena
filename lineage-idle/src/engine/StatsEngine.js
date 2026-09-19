@@ -282,7 +282,21 @@ export function getTotalEquipBonuses(state) {
  * @returns {Object}
  */
 export function getCertificationsBonuses(state) {
-  if (!state) return { atk: 0, def: 0, matk: 0, mdef: 0, crit: 0, celestial: false, hpPercent: 0, mpPercent: 0, cpPercent: 0, evaAdd: 0, pAtkPercent: 0, pDefPercent: 0, mAtkPercent: 0, mDefPercent: 0, atkSpdPercent: 0, speedPercent: 0, castSpd: 0 };
+  const emptyBonuses = { atk: 0, def: 0, matk: 0, mdef: 0, crit: 0, celestial: false, hpPercent: 0, mpPercent: 0, cpPercent: 0, evaAdd: 0, pAtkPercent: 0, pDefPercent: 0, mAtkPercent: 0, mDefPercent: 0, atkSpdPercent: 0, speedPercent: 0, castSpd: 0 };
+  if (!state) return emptyBonuses;
+
+  // Regra canônica Lineage II / MasterWork e Aden Arena:
+  // Certificações de Subclasse beneficiam EXCLUSIVAMENTE a Classe Principal!
+  // Valida e normaliza activeSubclassIndex: se for índice válido de subclasse, não aplica bônus.
+  const isSubActive = typeof state.activeSubclassIndex === 'number'
+    && Number.isInteger(state.activeSubclassIndex)
+    && state.activeSubclassIndex >= 0
+    && Array.isArray(state.subclasses)
+    && state.activeSubclassIndex < state.subclasses.length;
+
+  if (isSubActive) {
+    return emptyBonuses;
+  }
   
   const certBonuses = SubclassCertificationService.calculateTotalCertificationBonuses(state);
 

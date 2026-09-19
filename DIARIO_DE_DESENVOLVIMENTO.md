@@ -8,6 +8,7 @@
 ---
 
 ### 📑 Índice Rápido de Páginas
+- [Página 13 — 19 de Setembro de 2026 às 19:30](#página-13--19-de-setembro-de-2026-às-1930) — *Auditoria Canônica Integral do Domínio de Classes, Habilidades e Subclasses, Reconciliação Exata 159 vs 142 Nós, Blindagem de Identidade e Preservação de Inventário Único*
 - [Página 12 — 17 de Setembro de 2026 às 23:45](#página-12--17-de-setembro-de-2026-às-2345) — *Auditoria Canônica de 903 Habilidades (9 Categorias), Sistema de Spellbooks 4★/5★ Master do L2 Essence, Correção de Ranks e Validação Total*
 - [Página 11 — 17 de Setembro de 2026 às 00:40](#página-11--17-de-setembro-de-2026-às-0040) — *Skill Progression 2.0: Sistema de Loadout de Combate com 7 Slots, Táticas de Auto-Batalha, Drag-and-Drop na UI e Blindagem Universal Anti-Cosméticos*
 - [Página 10 — 16 de Setembro de 2026 às 23:50](#página-10--16-de-setembro-de-2026-às-2350) — *Expurgamento Global de Habilidades Cosméticas, Montarias ("Mount") e de Aparência ("Appearance") em 100% das Classes do Jogo*
@@ -20,6 +21,31 @@
 - [Página 3 — 15 de Setembro de 2026 às 00:05](#página-3--15-de-setembro-de-2026-às-0005) — *Extração Massiva L2Bandit & PMfun, 1.991 Ícones WebP, Índices Mestres de 20k Chaves, IconService, UI Modernizada & Deploy*
 - [Página 2 — 14 de Setembro de 2026 às 23:45](#página-2--14-de-setembro-de-2026-às-2345) — *Arquitetura Zero-Trust, Blindagem Admin/Cakto/Firestore, Life Activities 2.0, Economia Fechada & Performance Chunks*
 - [Página 1 — 12 de Setembro de 2026 às 22:30](#página-1--12-de-setembro-de-2026-às-2230) — *Consolidação de Arquitetura, UX do Personagem & Mochila, Motor de Encantamento Canônico, Auto-Equip ERS e Ressonância de Armas*
+
+---
+
+<br/>
+
+## Página 13 — 19 de Setembro de 2026 às 19:30
+### ⚔️ Auditoria Canônica Integral do Domínio de Classes, Habilidades e Subclasses, Reconciliação Exata 159 vs 142 Nós, Blindagem de Identidade e Preservação de Inventário Único
+
+> **Data & Hora**: 19/09/2026 às 19:30 (BRT)  
+> **Branch**: `feature/skill-tree-integration-fix`  
+> **Commit-Base**: `12d913f7f6a851c317af80879241d71519503e3d` (`12d913f`)  
+> **Status de Qualidade**: 
+> - **Testes de Módulo**: **648 testes em 92 suítes passando (100% de aprovação, 0 falhas)**.
+> - **Navegador Real (Microsoft Edge / Chromium Headless)**: **32/32 imagens carregadas, 1 placeholder SVG neutro, 0 falhas, 0 referências a `power_strike.png`**.
+> - **Preservação Sagrada**: `LevelEngine.js`, `MarketService.js`, `ExpeditionService.js` com **0 alterações (`git diff = 0`)**.
+> - **Catálogo Canônico**: 159 classes no Grafo V1, 142 classes no Catálogo V2 (152 PASS, 7 CONTENT_GAP, 0 VIOLATION/UNRESOLVED).
+
+#### 1. Resumo Executivo da Sessão
+Execução da auditoria forense completa do domínio de raças, classes, árvores de promoção, catálogo de habilidades e sistema de subclasses do Aden Arena. A sessão resolveu definitivamente:
+1. **Reconciliação Exata Nó a Nó (159 vs 142)**: Demonstração matemática e estrutural sem deduções inexplicadas: $159 - 8_{\text{DK}} - 4_{\text{Assassin}} - 3_{\text{Werewolf}} - 1_{\text{Element Weaver}} - 1_{\text{Shine Maker}} = 142$. Esclarecimento da contagem de 136 classes da auditoria preliminar ($136 + 7\text{ CONTENT\_GAP} + 16\text{ UNRESOLVED} = 159$) e resolução integral das 16 classes promovidas para o V2 ($152\text{ RESOLVED} + 7\text{ CONTENT\_GAP} = 159$).
+2. **Preservação de IDs do Grafo no Resolvedor Geral**: Em `class_aliases.js`, `resolveCanonicalClassId` preserva identidades do Grafo 159 (`elven_knight`, `ertheiaWarrior`, etc.) e isola prefixos raciais impedindo contaminação por classes humanas. A conversão para nós camelCase do V2 ocorre estritamente no contexto de habilidades via `resolveV2ClassContext`.
+3. **Gerenciamento de Equipamentos em Subclasses sem Duplicação**: Manutenção de inventário único (`state.inventory`). Os snapshots por classe gravam ponteiros para UIDs existentes. Na troca de classe (`switchSubclass`), caso um item tenha sido vendido ou destruído enquanto outra classe estava ativa, o slot é redefinido para `null`, impedindo a criação de itens fantasma.
+4. **Separação entre Troca de Subclasse e Migração de Save**: A troca de classe opera por deep copy de snapshots de `skills`, `legacyPassives`, `skillLoadout` e `equipment`, sem reset, purga ou reembolso de SP, preservando o progresso das classes inativas. Purgas e reembolsos ocorrem exclusivamente na migração inicial de saves corrompidos (`normalizeAndValidateSkills`).
+5. **Certificações de Subclasse Restritas à Main Class**: Conforme o cânone de Lineage II / MasterWork, as certificações são bônus permanentes aplicados **exclusivamente à Main Class**. Em `StatsEngine.js` (`getCertificationsBonuses`), se uma subclasse estiver ativa (`activeSubclassIndex >= 0`), o bônus concedido é rigorosamente **0**.
+6. **Suítes de Reprodução e Testes Automatizados**: Implementação de 3 novas suítes de teste cobrindo reproduções de persistência indevida de loadout (REPRO-1), execução de habilidade estrangeira em combate (REPRO-2), incompatibilidade de equipamentos (REPRO-3), certificações restritas à Main (REPRO-4), contaminação racial (REPRO-5), preservação de estágio (REPRO-6) e ciclo de vida completo de subclasses (Main $\to$ Sub A $\to$ Sub B $\to$ Main).
 
 ---
 

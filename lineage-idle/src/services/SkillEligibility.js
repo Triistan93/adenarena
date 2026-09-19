@@ -187,7 +187,46 @@ const V2_STARTER_MAP = {
 
   'shinemaker_1': 'shineMakerS1',
   'shinemaker_2': 'shineMakerS2',
-  'shinemaker_3': 'shinemaker'
+  'shinemaker_3': 'shinemaker',
+
+  // Promoted Classes mapping to V2 canonical nodes
+  'arcana_lord': 'arcanaLord',
+  'phoenix_knight': 'phoenixKnight',
+  'hell_knight': 'hellKnight',
+  'elven_knight': 'elvenKnight',
+  'elven_scout': 'elfScout',
+  'plain_walker': 'plainsWalker',
+  'elven_wizard': 'elvenWizard',
+  'oracle': 'elfOracle',
+  'elder': 'elfElder',
+  'evas_templar': 'evaTemplar',
+  'evas_saint': 'evaSaint',
+  'swordsinger': 'swordSinger',
+  'sword_muse': 'swordMuse',
+  'palus_knight': 'palusKnight',
+  'dark_wizard': 'darkWizard',
+  'shillien_oracle': 'shillienOracle',
+  'shillien_knight': 'shillienKnight',
+  'shillien_templar': 'shillienTemplar',
+  'bladedancer': 'bladeDancer',
+  'spectral_dancer': 'spectralDancer',
+  'abyss_walker': 'abyssWalker',
+  'ghost_hunter': 'ghostHunter',
+  'phantom_ranger': 'phantomRanger',
+  'ghost_sentinel': 'ghostSentinel',
+  'storm_screamer': 'stormScreamer',
+  'phantom_summoner': 'phantomSummoner',
+  'spectral_master': 'spectralMaster',
+  'shillien_elder': 'shillienElder',
+  'shillien_saint': 'shillienSaint',
+  'orc_raider': 'raider',
+  'orc_monk': 'monk',
+  'orc_shaman': 'shaman',
+  'grand_khavatari': 'grandKhavatari',
+  'soul_finder': 'soulFinder',
+  'soul_breaker': 'soulBreakerKamael',
+  'soul_hound': 'soulHound',
+  'arbalester': 'soulRanger'
 };
 
 const V2_CONTENT_GAP_CLASSES = {
@@ -235,6 +274,7 @@ export function resolveV2ClassContext(classId, race = null) {
   }
   const originalClassId = String(classId || '').trim();
   const lower = originalClassId.toLowerCase();
+  const cleaned = lower.replace(/[-_\s]+/g, '');
 
   // 1. Check CONTENT_GAP classes first
   if (V2_CONTENT_GAP_CLASSES[originalClassId] || V2_CONTENT_GAP_CLASSES[lower]) {
@@ -254,7 +294,14 @@ export function resolveV2ClassContext(classId, race = null) {
   let v2Id = null;
   let v2Def = null;
 
-  if (CANONICAL_CLASS_REGISTRY_V2) {
+  // Desambiguação de Dark Elf Assassin (Stage 1 canônico) vs Assassin Base Especial (Stage 0)
+  const normRace = String(race || '').toLowerCase().trim().replace(/[-_\s]+/g, '');
+  if ((normRace === 'darkelf' || normRace === 'dark_elf') && (lower === 'assassin' || cleaned === 'assassin')) {
+    v2Id = 'assassinDE';
+    v2Def = CANONICAL_CLASS_REGISTRY_V2['assassinDE'];
+  }
+
+  if (!v2Def && CANONICAL_CLASS_REGISTRY_V2) {
     if (CANONICAL_CLASS_REGISTRY_V2[originalClassId]) {
       v2Id = originalClassId;
       v2Def = CANONICAL_CLASS_REGISTRY_V2[originalClassId];
@@ -272,6 +319,14 @@ export function resolveV2ClassContext(classId, race = null) {
       } else if (canonical && V2_STARTER_MAP[canonical] && CANONICAL_CLASS_REGISTRY_V2[V2_STARTER_MAP[canonical]]) {
         v2Id = V2_STARTER_MAP[canonical];
         v2Def = CANONICAL_CLASS_REGISTRY_V2[v2Id];
+      } else {
+        // Conversão determinística de snake_case para camelCase
+        const toCamel = s => s.replace(/_([a-z0-9])/g, (_, g) => g.toUpperCase());
+        const camel = toCamel(originalClassId);
+        if (CANONICAL_CLASS_REGISTRY_V2[camel]) {
+          v2Id = camel;
+          v2Def = CANONICAL_CLASS_REGISTRY_V2[camel];
+        }
       }
     }
   }

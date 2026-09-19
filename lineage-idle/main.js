@@ -4430,48 +4430,106 @@ function confirmAddSubclass(chosenClassId) {
 }
 
 function switchSubclass(targetIndex) {
-  if (state.activeSubclassIndex === targetIndex) return;
+  // Normaliza targetIndex e verifica se uma subclasse é válida
+  const subCount = Array.isArray(state.subclasses) ? state.subclasses.length : 0;
+  const isTargetValidSub = typeof targetIndex === 'number'
+    && Number.isInteger(targetIndex)
+    && targetIndex >= 0
+    && targetIndex < subCount;
 
-  if (state.activeSubclassIndex === null) {
-    state.mainClassData = {
-      level: state.level,
-      xp: state.xp,
-      sp: state.sp,
-      class: state.class,
-      skills: { ...state.skills },
-      legacyPassives: { ...(state.legacyPassives || {}) }
-    };
+  const resolvedTarget = isTargetValidSub ? targetIndex : null;
+
+  // Se já está na classe alvo, não faz nada
+  const isCurrentSubActive = typeof state.activeSubclassIndex === 'number'
+    && Number.isInteger(state.activeSubclassIndex)
+    && state.activeSubclassIndex >= 0
+    && state.activeSubclassIndex < subCount;
+
+  const currentEffectiveIndex = isCurrentSubActive ? state.activeSubclassIndex : null;
+  if (currentEffectiveIndex === resolvedTarget) return;
+
+  // 1. Salva snapshot da classe atual (sem referências compartilhadas)
+  const outgoingSnapshot = {
+    level: state.level,
+    xp: state.xp,
+    sp: state.sp,
+    class: state.class,
+    skills: JSON.parse(JSON.stringify(state.skills || {})),
+    legacyPassives: JSON.parse(JSON.stringify(state.legacyPassives || {})),
+    skillLoadout: JSON.parse(JSON.stringify(state.skillLoadout || { basic: null, core1: null, core2: null, special1: null, special2: null, signature: null, ultimate: null })),
+    equipment: { ...(state.equipment || {}) }
+  };
+
+  if (currentEffectiveIndex === null) {
+    state.mainClassData = outgoingSnapshot;
   } else {
-    const activeSub = state.subclasses[state.activeSubclassIndex];
+    const activeSub = state.subclasses[currentEffectiveIndex];
     if (activeSub) {
-      activeSub.level = state.level;
-      activeSub.xp = state.xp;
-      activeSub.sp = state.sp;
-      activeSub.skills = { ...state.skills };
-      activeSub.legacyPassives = { ...(state.legacyPassives || {}) };
+      activeSub.level = outgoingSnapshot.level;
+      activeSub.xp = outgoingSnapshot.xp;
+      activeSub.sp = outgoingSnapshot.sp;
+      activeSub.skills = outgoingSnapshot.skills;
+      activeSub.legacyPassives = outgoingSnapshot.legacyPassives;
+      activeSub.skillLoadout = outgoingSnapshot.skillLoadout;
+      activeSub.equipment = outgoingSnapshot.equipment;
     }
   }
 
-  if (targetIndex === null) {
+  // 2. Restaura snapshot da classe de destino
+  if (resolvedTarget === null) {
     state.activeSubclassIndex = null;
-    const main = state.mainClassData || { level: 75, xp: 0, sp: 50, class: 'fighter', skills: {}, legacyPassives: {} };
+    const main = state.mainClassData || {
+      level: 75,
+      xp: 0,
+      sp: 50,
+      class: 'fighter',
+      skills: {},
+      legacyPassives: {},
+      skillLoadout: { basic: null, core1: null, core2: null, special1: null, special2: null, signature: null, ultimate: null },
+      equipment: {}
+    };
     state.level = main.level;
     state.xp = main.xp;
     state.sp = main.sp;
     state.class = main.class;
-    state.skills = { ...(main.skills || {}) };
-    state.legacyPassives = { ...(main.legacyPassives || {}) };
+    state.skills = JSON.parse(JSON.stringify(main.skills || {}));
+    state.legacyPassives = JSON.parse(JSON.stringify(main.legacyPassives || {}));
+    state.skillLoadout = JSON.parse(JSON.stringify(main.skillLoadout || { basic: null, core1: null, core2: null, special1: null, special2: null, signature: null, ultimate: null }));
+
+    // Valida itens de equipamento contra o inventário único (sem reviver itens vendidos/destruídos)
+    if (main.equipment) {
+      const invUids = new Set((state.inventory || []).map(i => i.uid));
+      const restoredEquip = {};
+      for (const slot of Object.keys(main.equipment)) {
+        const u = main.equipment[slot];
+        restoredEquip[slot] = (u && invUids.has(u)) ? u : null;
+      }
+      state.equipment = restoredEquip;
+    }
+
     log(`👑 Alternado para a Classe Principal (**${getClass(state.class).name}**)!`, 'system');
   } else {
-    const targetSub = state.subclasses[targetIndex];
+    const targetSub = state.subclasses[resolvedTarget];
     if (targetSub) {
-      state.activeSubclassIndex = targetIndex;
+      state.activeSubclassIndex = resolvedTarget;
       state.level = targetSub.level;
       state.xp = targetSub.xp;
       state.sp = targetSub.sp;
       state.class = targetSub.classId;
-      state.skills = { ...(targetSub.skills || {}) };
-      state.legacyPassives = { ...(targetSub.legacyPassives || {}) };
+      state.skills = JSON.parse(JSON.stringify(targetSub.skills || {}));
+      state.legacyPassives = JSON.parse(JSON.stringify(targetSub.legacyPassives || {}));
+      state.skillLoadout = JSON.parse(JSON.stringify(targetSub.skillLoadout || { basic: null, core1: null, core2: null, special1: null, special2: null, signature: null, ultimate: null }));
+
+      if (targetSub.equipment) {
+        const invUids = new Set((state.inventory || []).map(i => i.uid));
+        const restoredEquip = {};
+        for (const slot of Object.keys(targetSub.equipment)) {
+          const u = targetSub.equipment[slot];
+          restoredEquip[slot] = (u && invUids.has(u)) ? u : null;
+        }
+        state.equipment = restoredEquip;
+      }
+
       log(`⚔️ Alternado para a Subclasse **${getClass(state.class).name}** (Lv.${state.level})!`, 'rarity-rare');
     }
   }
