@@ -231,31 +231,38 @@ const V2_STARTER_MAP = {
 
 const V2_CONTENT_GAP_CLASSES = {
   'werewolf_0': {
-    reason: 'Wiki dataset contains only 1 Stage 0 skill (88401 Direct Strike); Stage 0-2 5-skill tree missing from V2',
+    gapType: 'V2_NODE_ABSENT',
+    reason: 'Nó V2 ausente: dataset L2Wiki contém apenas 1 habilidade de Estágio 0 (88401 Direct Strike); árvore de 5 habilidades ausente no catálogo V2',
     authorizedSkillIds: ['direct_strike']
   },
   'werewolf_1': {
-    reason: 'Stage 1 Warg missing from V2',
+    gapType: 'V2_NODE_ABSENT',
+    reason: 'Nó V2 ausente: Warg de Estágio 1 ausente no catálogo V2',
     authorizedSkillIds: ['direct_strike']
   },
   'werewolf_2': {
-    reason: 'Stage 2 Warg missing from V2',
+    gapType: 'V2_NODE_ABSENT',
+    reason: 'Nó V2 ausente: Warg de Estágio 2 ausente no catálogo V2',
     authorizedSkillIds: ['direct_strike']
   },
   'shineMakerBase': {
-    reason: 'Dwarf ShineMaker Stage 0 not present in L2Wiki dataset or V2 registry',
+    gapType: 'V2_NODE_ABSENT',
+    reason: 'Nó V2 ausente: ShineMaker Anão de Estágio 0 não presente no dataset L2Wiki nem no catálogo V2',
     authorizedSkillIds: []
   },
   'spirit_0': {
-    reason: 'Wiki dataset contains only 2 Stage 0 skills (87701 Fire Sphere, 87702 Ice Sphere); Stage 0 5-skill tree missing from V2',
+    gapType: 'V2_NODE_ABSENT',
+    reason: 'Nó V2 ausente: dataset L2Wiki contém apenas 2 habilidades de Estágio 0 (87701 Fire Sphere, 87702 Ice Sphere); árvore de 5 habilidades ausente no catálogo V2',
     authorizedSkillIds: ['fire_sphere', 'ice_sphere']
   },
   'marauderBase': {
-    reason: 'Ertheia skills absent from scraped wiki dataset; Kamael skills quarantined',
+    gapType: 'UNPROVEN_PROVENANCE',
+    reason: 'Nó V2 existente com habilidades sem proveniência comprovada: nó presente em CanonicalClassRegistryV2, porém habilidades canônicas de Ertheia ausentes no dataset raspado e habilidades Kamael quarentenadas',
     authorizedSkillIds: []
   },
   'sayhaMageBase': {
-    reason: 'Ertheia skills absent from scraped wiki dataset; human mage placeholder quarantined',
+    gapType: 'UNPROVEN_PROVENANCE',
+    reason: 'Nó V2 existente com habilidades sem proveniência comprovada: nó presente em CanonicalClassRegistryV2, porém habilidades canônicas de Ertheia ausentes no dataset raspado e placeholder de mago humano quarentenado',
     authorizedSkillIds: []
   }
 };
@@ -265,7 +272,7 @@ const V2_CONTENT_GAP_CLASSES = {
  * 
  * @param {string|object} classId - Character class ID or character state object
  * @param {string} [race] - Optional race of the character
- * @returns {{ status: 'RESOLVED'|'CONTENT_GAP'|'UNRESOLVED', originalClassId: string, race: string|null, v2ClassId: string|null, v2ClassDef: object|null, authorizedSkillIds: string[], contentGapReason?: string }}
+ * @returns {{ status: 'RESOLVED'|'CONTENT_GAP'|'UNRESOLVED', originalClassId: string, race: string|null, v2ClassId: string|null, v2ClassDef: object|null, authorizedSkillIds: string[], contentGapReason?: string, contentGapType?: 'V2_NODE_ABSENT'|'UNPROVEN_PROVENANCE' }}
  */
 export function resolveV2ClassContext(classId, race = null) {
   if (typeof classId === 'object' && classId !== null) {
@@ -286,7 +293,8 @@ export function resolveV2ClassContext(classId, race = null) {
       v2ClassId: null, // Per Directive 2: strictly null for Stage 0 gaps
       v2ClassDef: null,
       authorizedSkillIds: [...gap.authorizedSkillIds],
-      contentGapReason: gap.reason
+      contentGapReason: gap.reason,
+      contentGapType: gap.gapType
     };
   }
 

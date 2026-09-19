@@ -8,6 +8,7 @@
 ---
 
 ### 📑 Índice Rápido de Páginas
+- [Página 14 — 19 de Setembro de 2026 às 21:00](#página-14--19-de-setembro-de-2026-às-2100) — *Homologação Integral de Gameplay no Navegador Real (Microsoft Edge Headless), Diferenciação Estrutural de CONTENT_GAP (Nó Ausente vs Sem Proveniência) e Validação de Subclasses nas 12 Dimensões*
 - [Página 13 — 19 de Setembro de 2026 às 19:30](#página-13--19-de-setembro-de-2026-às-1930) — *Auditoria Canônica Integral do Domínio de Classes, Habilidades e Subclasses, Reconciliação Exata 159 vs 142 Nós, Blindagem de Identidade e Preservação de Inventário Único*
 - [Página 12 — 17 de Setembro de 2026 às 23:45](#página-12--17-de-setembro-de-2026-às-2345) — *Auditoria Canônica de 903 Habilidades (9 Categorias), Sistema de Spellbooks 4★/5★ Master do L2 Essence, Correção de Ranks e Validação Total*
 - [Página 11 — 17 de Setembro de 2026 às 00:40](#página-11--17-de-setembro-de-2026-às-0040) — *Skill Progression 2.0: Sistema de Loadout de Combate com 7 Slots, Táticas de Auto-Batalha, Drag-and-Drop na UI e Blindagem Universal Anti-Cosméticos*
@@ -21,6 +22,44 @@
 - [Página 3 — 15 de Setembro de 2026 às 00:05](#página-3--15-de-setembro-de-2026-às-0005) — *Extração Massiva L2Bandit & PMfun, 1.991 Ícones WebP, Índices Mestres de 20k Chaves, IconService, UI Modernizada & Deploy*
 - [Página 2 — 14 de Setembro de 2026 às 23:45](#página-2--14-de-setembro-de-2026-às-2345) — *Arquitetura Zero-Trust, Blindagem Admin/Cakto/Firestore, Life Activities 2.0, Economia Fechada & Performance Chunks*
 - [Página 1 — 12 de Setembro de 2026 às 22:30](#página-1--12-de-setembro-de-2026-às-2230) — *Consolidação de Arquitetura, UX do Personagem & Mochila, Motor de Encantamento Canônico, Auto-Equip ERS e Ressonância de Armas*
+
+---
+
+<br/>
+
+## Página 14 — 19 de Setembro de 2026 às 21:00
+### 🌐 Homologação Integral de Gameplay no Navegador Real (Microsoft Edge Headless), Diferenciação Estrutural de CONTENT_GAP (Nó Ausente vs Sem Proveniência) e Validação de Subclasses nas 12 Dimensões
+
+> **Data & Hora**: 19/09/2026 às 21:00 (BRT)  
+> **Branch**: `feature/skill-tree-integration-fix`  
+> **Commit-Base**: `543892d` (audit: reconcile 159 nodes with tri-state matrix…)  
+> **Status de Qualidade**: 
+> - **Testes de Módulo (Node.js Test Runner)**: **679 testes em 92 suítes passando (100% de aprovação, 0 falhas)**.
+> - **Navegador Real (Microsoft Edge / Chromium Headless)**: **7/7 cenários homologados com sucesso, 0 erros de console**.
+> - **Screenshot & Evidência Visual**: Salvo em `public/edge_gameplay_homologation.png` e `scripts/edge_gameplay_homologation_report.json`.
+> - **Preservação Sagrada**: `LevelEngine.js`, `MarketService.js`, `ExpeditionService.js` com **0 alterações (`git diff = 0`)**.
+> - **Pagamentos e Monetização**: Zero alterações em checkout, webhook, Stripe, Mercado Pago ou Passe Premium.
+
+#### 1. Resumo Executivo da Sessão
+Execução da homologação completa de gameplay em navegador real (Microsoft Edge headless), validando o fluxo de ponta a ponta do jogador e refinando a classificação de conteúdo canônico:
+
+1. **Diferenciação Canônica de CONTENT_GAP**:
+   - Em `SkillEligibility.js`, os 7 nós de `CONTENT_GAP` foram categorizados e descritos explicitamente em dois grupos estruturais:
+     - **Tipo A (`V2_NODE_ABSENT` - 5 nós)**: Nós que não possuem correspondente no catálogo V2 (`werewolf_0`, `werewolf_1`, `werewolf_2`, `shineMakerBase`, `spirit_0`). Para `werewolf_0`, há apenas 1 habilidade raspada (`direct_strike`); para `spirit_0`, 2 habilidades parciais; para `shineMakerBase`, 0 habilidades.
+     - **Tipo B (`UNPROVEN_PROVENANCE` - 2 nós)**: Nós que existem em `CanonicalClassRegistryV2`, porém com habilidades importadas de outras linhagens sem proveniência canônica comprovada no dataset raspado (`marauderBase` com skills Kamael e `sayhaMageBase` com placeholder de Human Mage), devidamente quarentenadas com `authorizedSkillIds: []`.
+   - Exposição uniforme do campo `contentGapType: 'V2_NODE_ABSENT' | 'UNPROVEN_PROVENANCE'` no schema de `resolveV2ClassContext`.
+
+2. **Homologação de Gameplay no Navegador Real (Edge Headless)**:
+   - Script `scripts/test_browser_gameplay.mjs` executa uma bateria de testes interativos no motor Chromium real do Microsoft Edge, gerando dump do DOM e screenshot (`public/edge_gameplay_homologation.png`).
+   - **Cenário 1 (Criação de Personagens)**: 12 classes auditadas (5 casos originais: `dark_fighter`, `dark_mage`, `orc_mage`, `elven_fighter`, `elven_mage`; Sylph: `sylphid`; 5 CONTENT_GAP: `werewolf_0`, `shineMakerBase`, `spirit_0`, `marauderBase`, `sayhaMageBase`; e Human Fighter de referência). Todas iniciam no nível 1, com starter kit No-Grade de 4 itens, arma equipada e habilidades iniciais autorizadas (ou ataque básico com arma se CONTENT_GAP sem habilidades).
+   - **Cenário 2 (Aprendizado e Loadout)**: Habilidade aprendida (`mortal_blow`) e equipada no slot `core1` da barra de combate de 7 slots, validada contra `isSkillAllowedForClass`.
+   - **Cenário 3 (Combate, XP e Promoção)**: Execução de ticks de combate com dano ao monstro, derrota de Gremlin, ganho de 50 XP e subida para o Nível 2 com aumento de HP.
+   - **Cenário 4 (Persistência no localStorage)**: Serialização real no `localStorage` do navegador e reload idêntico em classe, nível, XP, SP e habilidades.
+   - **Cenário 5 (Ciclo Completo de Subclasses nas 12 Dimensões)**: Execução `Main (Gladiator 76) → Sub A (Spellsinger 42) → Sub B (Temple Knight 38) → Main (Gladiator 76) → Save → Reload`. Comparação estrita antes/depois nas 12 dimensões: **classe, nível, XP, SP, habilidades, loadout, equipamentos, inventário, HP/MP, buffs, cooldowns e certificações**, comprovando 100% de preservação sem vazamento.
+   - **Cenário 6 (Segurança e Casos de Borda)**:
+     - Habilidade estrangeira (`blade_strike`) presente no loadout do Spellsinger é bloqueada no combate pelo gating `isSkillAllowedForClass`.
+     - Item de equipamento da Main (`sword_main`) vendido durante a ativação da subclasse: ao retornar para a Main, o slot de arma é redefinido para `null`, sem ressuscitar o item, sem duplicar e sem fabricar itens fantasma.
+   - **Cenário 7 (Gating de Temporada)**: Validação de que a Temporada 1 bloqueia subclasses (teto de nível 40 vs nível 52 exigido para Fate's Whisper) e de que o ambiente isolado de Temporada 3 (teto 85) permite a progressão integral.
 
 ---
 

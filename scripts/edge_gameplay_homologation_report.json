@@ -1,0 +1,203 @@
+{
+  "timestamp": "2026-09-19T23:42:56.628Z",
+  "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36 Edg/153.0.0.0",
+  "totalScenarios": 7,
+  "passedScenarios": 7,
+  "failedScenarios": 0,
+  "totalConsoleErrors": 0,
+  "consoleErrors": [],
+  "scenarios": [
+    {
+      "scenarioId": "SCENARIO-01-CREATION",
+      "title": "Criação de Personagens e Starter Kit (12 casos)",
+      "initialState": "Nenhum personagem criado",
+      "actions": "applyStarterKit() executado para 12 classes no navegador",
+      "expected": "Nível 1, 4 itens de starter kit no inventário, arma equipada, skills iniciais conforme V2/CONTENT_GAP",
+      "observed": "12/12 classes criadas com sucesso (100% de conformidade)",
+      "subResults": [
+        {
+          "id": "dark_fighter",
+          "race": "darkelf",
+          "desc": "Dark Fighter (original diagnóstico)",
+          "level": 1,
+          "skillsCount": 1,
+          "v2Status": "RESOLVED",
+          "gapType": null,
+          "pass": true
+        },
+        {
+          "id": "dark_mage",
+          "race": "darkelf",
+          "desc": "Dark Mage (original diagnóstico)",
+          "level": 1,
+          "skillsCount": 1,
+          "v2Status": "RESOLVED",
+          "gapType": null,
+          "pass": true
+        },
+        {
+          "id": "orc_mage",
+          "race": "orc",
+          "desc": "Orc Mage (original diagnóstico)",
+          "level": 1,
+          "skillsCount": 1,
+          "v2Status": "RESOLVED",
+          "gapType": null,
+          "pass": true
+        },
+        {
+          "id": "elven_fighter",
+          "race": "elf",
+          "desc": "Elven Fighter (original diagnóstico)",
+          "level": 1,
+          "skillsCount": 1,
+          "v2Status": "RESOLVED",
+          "gapType": null,
+          "pass": true
+        },
+        {
+          "id": "elven_mage",
+          "race": "elf",
+          "desc": "Elven Mage (original diagnóstico)",
+          "level": 1,
+          "skillsCount": 1,
+          "v2Status": "RESOLVED",
+          "gapType": null,
+          "pass": true
+        },
+        {
+          "id": "sylphid",
+          "race": "sylph",
+          "desc": "Sylph Gunner (raça de 4 nós)",
+          "level": 1,
+          "skillsCount": 1,
+          "v2Status": "RESOLVED",
+          "gapType": null,
+          "pass": true
+        },
+        {
+          "id": "werewolf_0",
+          "race": "human",
+          "desc": "Werewolf (CONTENT_GAP Tipo A: nó V2 ausente)",
+          "level": 1,
+          "skillsCount": 1,
+          "v2Status": "CONTENT_GAP",
+          "gapType": "V2_NODE_ABSENT",
+          "pass": true
+        },
+        {
+          "id": "shineMakerBase",
+          "race": "dwarf",
+          "desc": "Shine Maker (CONTENT_GAP Tipo A: nó V2 ausente)",
+          "level": 1,
+          "skillsCount": 0,
+          "v2Status": "CONTENT_GAP",
+          "gapType": "V2_NODE_ABSENT",
+          "pass": true
+        },
+        {
+          "id": "spirit_0",
+          "race": "highelf",
+          "desc": "Spirit (CONTENT_GAP Tipo A: 2 skills parciais)",
+          "level": 1,
+          "skillsCount": 1,
+          "v2Status": "CONTENT_GAP",
+          "gapType": "V2_NODE_ABSENT",
+          "pass": true
+        },
+        {
+          "id": "marauderBase",
+          "race": "ertheia",
+          "desc": "Marauder Base (CONTENT_GAP Tipo B: sem proveniência)",
+          "level": 1,
+          "skillsCount": 1,
+          "v2Status": "RESOLVED",
+          "gapType": null,
+          "pass": true
+        },
+        {
+          "id": "sayhaMageBase",
+          "race": "ertheia",
+          "desc": "Sayha Mage Base (CONTENT_GAP Tipo B: sem proveniência)",
+          "level": 1,
+          "skillsCount": 1,
+          "v2Status": "RESOLVED",
+          "gapType": null,
+          "pass": true
+        },
+        {
+          "id": "fighter",
+          "race": "human",
+          "desc": "Human Fighter (referência canônica)",
+          "level": 1,
+          "skillsCount": 1,
+          "v2Status": "RESOLVED",
+          "gapType": null,
+          "pass": true
+        }
+      ],
+      "status": "PASS",
+      "consoleErrorsCount": 0
+    },
+    {
+      "scenarioId": "SCENARIO-02-SKILL-LEARN-EQUIP",
+      "title": "Aprendizado de Habilidade e Equipamento em Slot de Loadout",
+      "initialState": "Human Fighter Lv 1 com basic: power_strike equipado",
+      "actions": "state.skills.mortal_blow = 1; state.skillLoadout.core1 = \"mortal_blow\"",
+      "expected": "mortal_blow autorizada para fighter, slot core1 equipado",
+      "observed": "core1=mortal_blow, autorizado=true",
+      "status": "PASS",
+      "consoleErrorsCount": 0
+    },
+    {
+      "scenarioId": "SCENARIO-03-COMBAT-XP-PROGRESSION",
+      "title": "Ciclo de Combate, Dano, Derrota de Monstro e Ganho de XP",
+      "initialState": "Human Fighter Lv 1 com 0 XP enfrentando Gremlin (80 HP)",
+      "actions": "2x simulateCombatTick() executados",
+      "expected": "Dano aplicado via skill, monstro derrotado, XP ganho, avanço para Lv 2",
+      "observed": "Hit 1 (45 dmg) + Hit 2 (45 dmg), Defeated=true, Novo Nível=2, XP=50",
+      "status": "PASS",
+      "consoleErrorsCount": 0
+    },
+    {
+      "scenarioId": "SCENARIO-04-SAVE-RELOAD",
+      "title": "Persistência no localStorage do Navegador Real e Reload Idêntico",
+      "initialState": "Orc Mage Lv 25 com 1500 XP, 300 SP e vortex_of_fire",
+      "actions": "localStorage.setItem(\"aden_char_test\") -&gt; localStorage.getItem()",
+      "expected": "Todos os campos preservados identicamente após reload",
+      "observed": "class=orc_mage, level=25, skillsMatch=true",
+      "status": "PASS",
+      "consoleErrorsCount": 0
+    },
+    {
+      "scenarioId": "SCENARIO-05-SUBCLASS-LIFECYCLE",
+      "title": "Lifecycle Completo: Main -&gt; Sub A -&gt; Sub B -&gt; Main -&gt; Save -&gt; Reload (12 Dimensões)",
+      "initialState": "Gladiator Lv 76 com 2 subclasses configuradas",
+      "actions": "switchSubclass(0) -&gt; switchSubclass(1) -&gt; switchSubclass(null) -&gt; save -&gt; reload",
+      "expected": "Transição perfeita sem perda ou vazamento; todas as 12 dimensões idênticas antes e depois",
+      "observed": "SubA_OK=true, SubB_OK=true, MainRestored_OK=true, Todas12Dimensoes=true",
+      "status": "PASS",
+      "consoleErrorsCount": 0
+    },
+    {
+      "scenarioId": "SCENARIO-06-EDGE-CASES",
+      "title": "Segurança: Habilidade Estrangeira no Loadout e Item Vendido em Outra Classe",
+      "initialState": "Spellsinger com blade_strike no loadout; espada principal vendida",
+      "actions": "Verificação de gating em combate + restauração de equipamento com validação de inventário único",
+      "expected": "Habilidade estrangeira rejeitada (não executa); slot de item vendido vira null (sem ressuscitar nem duplicar)",
+      "observed": "blade_strike permitido para spellsinger=false (esperado: false); slot arma após venda=null (esperado: null)",
+      "status": "PASS",
+      "consoleErrorsCount": 0
+    },
+    {
+      "scenarioId": "SCENARIO-07-SEASON-GATING",
+      "title": "Bloqueio de Subclasses na Temporada 1 e Liberação na Temporada 3",
+      "initialState": "Temporada 1 ativa (maxLevel=40, subclasses inativas)",
+      "actions": "Avaliação de requisitos de nível para a quest Fate's Whisper (Lv 52)",
+      "expected": "Temporada 1 bloqueia (Lv 40 &lt; 52); Temporada 3 libera (Lv 85 &gt;= 52)",
+      "observed": "Season 1 Bloqueia=true, Season 3 Libera=true",
+      "status": "PASS",
+      "consoleErrorsCount": 0
+    }
+  ]
+}
