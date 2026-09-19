@@ -3722,7 +3722,9 @@ function renderLoadoutBar(state) {
       `;
     }
 
-    const iconUrl = getAssetUrl(getSkillIcon(skillId) || def.icon || '/assets/skills/icons/power_strike.png');
+    const iconData = getSkillIcon(skillId, def);
+    const rawPath = iconData?.iconPath || (typeof iconData === 'string' ? iconData : null) || def.icon || '';
+    const iconUrl = rawPath ? getAssetUrl(rawPath) : '';
     const skillLevel = state.skills[skillId] || 0;
     const cond = getSkillCondition(state, slotName);
     const condBadge = getConditionBadgeText(cond);
@@ -3733,7 +3735,7 @@ function renderLoadoutBar(state) {
     return `
       <div class="loadout-slot is-equipped" data-slot="${slotName}" data-skill-id="${skillId}" title="${def.name} (${slotLabel}) — Clique para ver detalhes e configurar táticas">
         <div class="loadout-slot-frame">
-          <img src="${iconUrl}" class="loadout-skill-icon" alt="${def.name}" onerror="this.src='${getAssetUrl('/assets/skills/icons/power_strike.png')}'; this.onerror=null;" />
+          <img src="${iconUrl}" class="loadout-skill-icon" alt="${def.name}" onerror="this.style.opacity='0.4'; this.onerror=null;" />
           ${skillLevel > 1 ? `<span class="loadout-skill-lvl">${skillLevel}</span>` : ''}
           <button class="loadout-slot-unequip-btn" data-slot="${slotName}" title="Desequipar ${def.name}">×</button>
         </div>
@@ -3815,7 +3817,7 @@ function renderSkillCard(skill, state) {
          draggable="${isDraggable ? 'true' : 'false'}"
          title="${skill.name} (${skill.element})${equippedSlot ? ` — Equipado no Loadout: ${SKILL_LOADOUT_SLOT_LABELS[equippedSlot] || equippedSlot}` : ''}">
       <div class="skill-icon-frame-48">
-        <img src="${iconUrl}" class="skill-icon-img" alt="${skill.name}" onerror="this.src='${getAssetUrl('/assets/skills/icons/power_strike.png')}'; this.onerror=null;" />
+        <img src="${iconUrl}" class="skill-icon-img" alt="${skill.name}" onerror="this.style.opacity='0.4'; this.onerror=null;" />
         ${starPill}
         ${rankBadge}
         ${slotPill}

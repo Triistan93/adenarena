@@ -629,4 +629,32 @@ Execução completa, ininterrupta e rigorosa do plano de implementação para o 
 - **Fase 10: Commit e Documentação**:
   - Atualização do diário de desenvolvimento e versionamento completo das alterações no repositório.
 
+---
+
+<br/>
+
+## Página 7 — 19 de Setembro de 2026 às 18:30
+### ⚔️ Integração Definitiva da Árvore de Habilidades & Criação de Personagens (V2 Canonical)
+
+> **Data & Hora**: 19/09/2026 às 18:30 (BRT)  
+> **Status de Qualidade**: 
+> - **Testes Automatizados**: **634 testes em 92 suítes passando (100% de aprovação, 0 falhas)**.
+> - **Build de Produção**: Vite 7.3.6 compilado com sucesso em **12.51s** (280 módulos transformados, código de saída 0).
+> - **Integridade de Linhagem & Gaps**: 25 classes iniciais do criador de personagens normalizadas; zero paternidades espúrias (`warg.parentClass === null`, `shineMakerS1.parentClass === null`); `CONTENT_GAP` explícito com `v2ClassId: null` para gaps de estágio 0; habilidades de Kamael expurgadas de Ertheia; `resolveCanonicalClassId('sylphid') === 'sylphid'` preservado no Grafo 159.
+> - **Renderização de Ícones**: Bug `/[object Object]` eliminado no loadout bar; mascaramento silencioso `onerror="this.src=...power_strike.png"` substituído por opacidade graciosa.
+
+#### 1. Resumo Executivo da Sessão
+Realizada a correção e integração definitiva dos 25 starter classes da tela de criação (`CharacterCreation.tsx`) com o motor V2 e o grafo canônico:
+1. **Preservação Canônica de Sylph**: Corrigida a função `resolveCanonicalClassId` para não decepar erroneamente o prefixo `sylph` de `sylphid`, mantendo a integridade no Grafo 159 e nos saves. A resolução para o contexto de habilidades V2 foi isolada em `resolveV2ClassContext('sylphid', 'sylph')`, retornando `v2ClassId: 'sylphGunner'` com as 5 habilidades oficiais.
+2. **Tratamento Rigoroso de `CONTENT_GAP`**: Classes de estágio inicial sem nó equivalente no catálogo V2 agora retornam `v2ClassId: null`, impedindo que classes de estágio 0 apontem para nós de Lv 76 ou S1. Habilidades autênticas iniciais foram preservadas (`werewolf_0` com `direct_strike`, `spirit_0` com `fire_sphere` e `ice_sphere`), enquanto classes sem evidência (Ertheia `marauderBase` e `sayhaMageBase`) retornam `authorizedSkillIds: []`, com habilidades Kamael (`kamael_s_dignity`, `death_mark`) estritamente bloqueadas.
+3. **Isolamento de Linhagens Autônomas**: Eliminada paternidade espúria em `CanonicalClassRegistryV2.js` (`warg.parentClass === null`, `shineMakerS1.parentClass === null`, `fighter` nunca presente em não-humanos).
+4. **Contrato de Autorização Compartilhada**:
+   - `StatsEngine.js`: Bloqueia passivas não autorizadas pela linhagem do personagem em tempo de execução e mapeia chaves legadas via `LEGACY_PASSIVE_MAP`.
+   - `SkillLoadoutService.js`: Valida elegibilidade através de `isSkillInProgressionPath(state, skillId)` antes de equipar.
+   - `SkillEligibility.js`: Centraliza `resolveV2ClassContext` com schema uniforme `{ status, originalClassId, race, v2ClassId, v2ClassDef, authorizedSkillIds, contentGapReason }`.
+   - `echo-adapter.js`: Conversão segura via `transformV2SkillToEcho` usando `??` em vez de fallbacks arbitrários de poder 20 ou MP 15, com conversão de cooldown de segundos para ms.
+5. **Correção Visual do Loadout Bar**: Corrigido o envio de objetos para `getAssetUrl` em `GameUI.js` (eliminando o erro de rendering `/[object Object]`) e removido o fallback silencioso para `power_strike.png` em caso de erro de carregamento de imagem.
+6. **Bateria de Testes**: Criada nova suíte de regressão `test/character-creation-skill-tree-integration.test.js` (9/9 aprovados) e validados todos os testes legados e forenses (`npm test`, 634/634 aprovados).
+
+
 

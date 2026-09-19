@@ -21,6 +21,7 @@
 
 import { getSkillSlotCategory, isPurgedSkill, SLOT_CATEGORIES } from './SkillTagService.js';
 import { ALL_SLOT_NAMES, getUnlockedSlots, SLOT_PRIORITY_ORDER } from '../data/balance/SkillUnlockSchedule.js';
+import { isSkillInProgressionPath } from './SkillEligibility.js';
 import {
   DEFAULT_CONDITION,
   getSkillCondition,
@@ -168,6 +169,11 @@ export function equipSkill(state, slotName, skillId, skillDefs) {
     if (type === 'passive' || type === 'stat') {
       return { success: false, error: `Passive skills cannot be equipped in loadout slots` };
     }
+  }
+
+  // Validate skill belongs to character's progression path (when not using mock defs)
+  if (state.class && !skillDefs && !isSkillInProgressionPath(state, skillId)) {
+    return { success: false, error: `Skill "${skillId}" does not belong to the progression path of class "${state?.class}"` };
   }
 
   // If skill is already in another slot, remove it from there (move)

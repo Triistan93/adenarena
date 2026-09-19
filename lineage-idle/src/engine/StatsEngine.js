@@ -20,6 +20,7 @@ import { resolveCanonicalClassId } from '../data/classes/class_aliases.js';
 import { CanonicalClassGraph } from '../data/classes/CanonicalClassGraph.js';
 import { CLASS_SAVE_MIGRATION_MAP } from '../services/ClassSaveMigrationMap.js';
 import { WeaponResonanceService } from '../services/WeaponResonanceService.js';
+import { isSkillInProgressionPath } from '../services/SkillEligibility.js';
 
 export const STR_MODIFIERS = {
   10: 0.42, 11: 0.43, 12: 0.45, 13: 0.46, 14: 0.48, 15: 0.50,
@@ -108,7 +109,17 @@ export function getAstralMasteryBonuses(state) {
 export function getClass(classId) {
   if (!classId) return null;
   const rawId = String(classId).trim();
-  const node = CanonicalClassGraph.getClassNode(rawId);
+  let node = CanonicalClassGraph.getClassNode(rawId);
+  if (!node) {
+    const canon = resolveCanonicalClassId(rawId);
+    if (canon && canon !== rawId) node = CanonicalClassGraph.getClassNode(canon);
+  }
+  if (!node) {
+    const stripped = rawId.replace(/^(human|darkelf|dark_elf|elf|elven|orc|dwarf|kamael|sylph|highelf|ertheia)_?/, '');
+    if (stripped && stripped !== rawId) {
+      node = CanonicalClassGraph.getClassNode(stripped) || CanonicalClassGraph.getClassNode(resolveCanonicalClassId(stripped));
+    }
+  }
   if (node) {
     return {
       id: node.id,
@@ -511,12 +522,28 @@ export function getStats(state) {
   const raceKey = state.race ? String(state.race).toLowerCase() : 'human';
   const race = rData?.[raceKey] || rData?.human;
   const cls = getClass(state.class);
-  const skills = state.skills || {};
-
-  const sk = (id) => Number(skills[id]) || 0;
-
   const raceStats = race?.stats || {};
   const clsBase = cls?.base || {};
+  const skills = state.skills || {};
+
+  const LEGACY_PASSIVE_MAP = {
+    wpnMastF: 'weapon_mastery',
+    weaponMastM: 'weapon_mastery',
+    armorMast: 'armor_mastery',
+    robeMast: 'robe_mastery',
+    lightArmor: 'light_armor_mastery',
+    heavyArmor: 'heavy_armor_mastery',
+    antiMagic: 'anti_magic',
+    higherMana: 'higher_mana'
+  };
+
+  const sk = (id) => {
+    const val = Number(skills[id]) || 0;
+    if (val <= 0) return 0;
+    const canonId = LEGACY_PASSIVE_MAP[id] || id;
+    if (state.class && !isSkillInProgressionPath(state, canonId)) return 0;
+    return val;
+  };
 
   const lvl = Number(state?.level) || 1;
   let baseAtk  = (Number(state?.base?.atk)  || 0) + (Number(raceStats.atk)  || 0) + (Number(clsBase.atk)  || 0) + (lvl * 3) + 15;

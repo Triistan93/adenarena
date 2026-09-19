@@ -568,7 +568,9 @@ export function resolveCanonicalClassId(classId, race = null) {
       if (CLASS_ALIASES[stripped]) return CLASS_ALIASES[stripped];
       const strippedClean = stripped.replace(/[-_\s]+/g, '');
       if (CLASS_ALIASES[strippedClean]) return CLASS_ALIASES[strippedClean];
-      if (stripped) return stripped;
+      if (DAG_LOOKUP.has(stripped)) return DAG_LOOKUP.get(stripped);
+      if (DAG_LOOKUP.has(strippedClean)) return DAG_LOOKUP.get(strippedClean);
+      if (ALL_DAG_CLASS_IDS.has(stripped)) return stripped;
     }
   }
 

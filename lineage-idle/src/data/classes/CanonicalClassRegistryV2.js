@@ -2049,7 +2049,7 @@ export const CANONICAL_CLASS_REGISTRY_V2 = Object.freeze({
         "stageName": "FIRST_CLASS",
         "minLevel": 20,
         "maxLevel": 39,
-        "parentClass": "highElfBase",
+        "parentClass": null,
         "desc": "",
         "skillIds": [
             "power_strike",

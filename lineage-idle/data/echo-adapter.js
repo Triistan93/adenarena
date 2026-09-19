@@ -855,85 +855,99 @@ function buildEchoAdapter() {
   CLASS_SKILLS_ECHO['shared_mage'] = [...SHARED_MAGE_SKILL_IDS];
   CLASS_SKILLS_ECHO['shared_fighter'] = [...SHARED_FIGHTER_SKILL_IDS];
 
+  /**
+   * Transforms a V2 canonical skill definition to Echo runtime format without fabricating stats.
+   */
+  function transformV2SkillToEcho(sId, s, existingDef = null) {
+    const starRank = s.starRank || 1;
+    const isUlt = starRank >= 4;
+    let reqBook = null;
+    if (starRank === 2) reqBook = 'book_2star';
+    else if (starRank === 3) reqBook = 'book_3star';
+    else if (starRank === 4) reqBook = 'book_4star';
+    else if (starRank >= 5) reqBook = 'book_5star';
+
+    const spCost = starRank >= 4 ? 100 : (starRank === 3 ? 60 : (starRank === 2 ? 30 : 15));
+    const isBuff = s.type === 'buff';
+    const isPassive = s.type === 'passive';
+    const isToggle = s.type === 'toggle';
+    const sNameLower = String(s.name || '').toLowerCase();
+    const isHeal = sNameLower.includes('heal') || sNameLower.includes('bandage') || sNameLower.includes('recovery');
+    const isVampiric = sNameLower.includes('drain') || sNameLower.includes('vampir') || sNameLower.includes('siphon');
+
+    let reqWeapon = 'any';
+    let reqShield = false;
+    if (/shot|arrow|bow|snipe/.test(sNameLower)) reqWeapon = 'bow';
+    else if (/dagger|backstab|mortal_blow|deadly_blow/.test(sNameLower)) reqWeapon = 'dagger';
+    else if (/dual|sonic/.test(sNameLower)) reqWeapon = 'dual';
+    else if (/spear|polearm|whirlwind/.test(sNameLower)) reqWeapon = 'spear';
+    else if (/blunt|hammer|crush|spoil/.test(sNameLower)) reqWeapon = 'blunt';
+    else if (/twohand|greatsword/.test(sNameLower)) reqWeapon = 'twohand';
+    else if (/fist|claw|punch/.test(sNameLower)) reqWeapon = 'fist';
+    if (/shield|shield_stun|shield_bash/.test(sNameLower)) reqShield = true;
+
+    const pwr = s.balance?.pwr ?? (isPassive || isBuff || isToggle ? 0 : null);
+    const mpCost = s.balance?.mpCost ?? 0;
+    const baseCd = s.canonicalCooldownMs ?? (s.canonicalCooldown ? cdToMs(s.canonicalCooldown) : 8000);
+
+    if (!existingDef) {
+      return {
+        id: sId,
+        name: s.name,
+        type: s.type,
+        tier: starRank,
+        cost: spCost,
+        max: 5,
+        pwr,
+        baseCd,
+        mpCost,
+        effect: isBuff ? 'warcry' : (isPassive ? 'stat' : (isToggle ? 'toggle' : (isHeal ? 'heal' : (isVampiric ? 'vampiric' : 'dmg')))),
+        info: s.desc || s.canonicalEffect || s.name,
+        desc: s.desc || '',
+        effectText: s.canonicalEffect || '',
+        icon: s.icon,
+        iconGap: s.iconGap,
+        iconGapReason: s.iconGapReason,
+        vfxGap: s.vfxGap,
+        sfxGap: s.sfxGap,
+        classes: s.classes || [],
+        classReq: s.classes?.[0] || 'any',
+        reqLvl: 1,
+        requiredWeapon: reqWeapon,
+        requiredShield: reqShield,
+        requiredItemToUnlock: reqBook,
+        isUltimate: isUlt,
+        starRank,
+        overhit: true,
+        toggle: isToggle
+      };
+    }
+
+    return Object.assign(existingDef, {
+      iconGap: s.iconGap,
+      iconGapReason: s.iconGapReason,
+      vfxGap: s.vfxGap,
+      sfxGap: s.sfxGap,
+      canonicalEffect: s.canonicalEffect,
+      canonicalCooldown: s.canonicalCooldown,
+      canonicalCooldownMs: s.canonicalCooldownMs,
+      classes: s.classes || existingDef.classes || []
+    });
+  }
+
   // ─── CANONICAL V2 INTEGRATION (46 Lineages, 142 Class Stages, 825 Skills) ───
   if (CANONICAL_SKILL_REGISTRY_V2) {
     for (const [sId, s] of Object.entries(CANONICAL_SKILL_REGISTRY_V2)) {
       if (s.disabled || isPurgedSkill(sId) || s.removalReason === 'cosmetic_mount_purge') {
         continue;
       }
-      const starRank = s.starRank || 1;
-      const isUlt = starRank >= 4;
-      let reqBook = null;
-      if (starRank === 2) reqBook = 'book_2star';
-      else if (starRank === 3) reqBook = 'book_3star';
-      else if (starRank === 4) reqBook = 'book_4star';
-      else if (starRank >= 5) reqBook = 'book_5star';
-
-      const spCost = starRank >= 4 ? 100 : (starRank === 3 ? 60 : (starRank === 2 ? 30 : 15));
-      const isBuff = s.type === 'buff';
-      const isPassive = s.type === 'passive';
-      const isToggle = s.type === 'toggle';
-      const sNameLower = s.name.toLowerCase();
-      const isHeal = sNameLower.includes('heal') || sNameLower.includes('bandage') || sNameLower.includes('recovery');
-      const isVampiric = sNameLower.includes('drain') || sNameLower.includes('vampir') || sNameLower.includes('siphon');
-
-      let reqWeapon = 'any';
-      let reqShield = false;
-      if (/shot|arrow|bow|snipe/.test(sNameLower)) reqWeapon = 'bow';
-      else if (/dagger|backstab|mortal_blow|deadly_blow/.test(sNameLower)) reqWeapon = 'dagger';
-      else if (/dual|sonic/.test(sNameLower)) reqWeapon = 'dual';
-      else if (/spear|polearm|whirlwind/.test(sNameLower)) reqWeapon = 'spear';
-      else if (/blunt|hammer|crush|spoil/.test(sNameLower)) reqWeapon = 'blunt';
-      else if (/twohand|greatsword/.test(sNameLower)) reqWeapon = 'twohand';
-      else if (/fist|claw|punch/.test(sNameLower)) reqWeapon = 'fist';
-      if (/shield|shield_stun|shield_bash/.test(sNameLower)) reqShield = true;
-
       if (!SKILL_DEFS_ECHO[sId]) {
-        SKILL_DEFS_ECHO[sId] = {
-          id: sId,
-          name: s.name,
-          type: s.type,
-          tier: starRank,
-          cost: spCost,
-          max: 5,
-          pwr: s.balance?.pwr || 20,
-          baseCd: s.canonicalCooldownMs || 8000,
-          mpCost: s.balance?.mpCost || 15,
-          effect: isBuff ? 'warcry' : (isPassive ? 'stat' : (isToggle ? 'toggle' : (isHeal ? 'heal' : (isVampiric ? 'vampiric' : 'dmg')))),
-          info: s.desc || s.canonicalEffect || s.name,
-          desc: s.desc || '',
-          effectText: s.canonicalEffect || '',
-          icon: s.icon,
-          iconGap: s.iconGap,
-          iconGapReason: s.iconGapReason,
-          vfxGap: s.vfxGap,
-          sfxGap: s.sfxGap,
-          classes: s.classes || [],
-          classReq: s.classes?.[0] || 'any',
-          reqLvl: 1,
-          requiredWeapon: reqWeapon,
-          requiredShield: reqShield,
-          requiredItemToUnlock: reqBook,
-          isUltimate: isUlt,
-          starRank,
-          overhit: true,
-          toggle: isToggle
-        };
-
+        SKILL_DEFS_ECHO[sId] = transformV2SkillToEcho(sId, s);
         if (!SKILL_REQS_ECHO[sId]) {
           SKILL_REQS_ECHO[sId] = { reqLvl: 1 };
         }
       } else {
-        Object.assign(SKILL_DEFS_ECHO[sId], {
-          iconGap: s.iconGap,
-          iconGapReason: s.iconGapReason,
-          vfxGap: s.vfxGap,
-          sfxGap: s.sfxGap,
-          canonicalEffect: s.canonicalEffect,
-          canonicalCooldown: s.canonicalCooldown,
-          canonicalCooldownMs: s.canonicalCooldownMs,
-          classes: s.classes || SKILL_DEFS_ECHO[sId].classes || []
-        });
+        transformV2SkillToEcho(sId, s, SKILL_DEFS_ECHO[sId]);
       }
     }
   }

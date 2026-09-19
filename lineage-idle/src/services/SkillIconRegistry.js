@@ -1684,7 +1684,20 @@ export function getSkillIcon(skillOrId, def = null) {
   const skillId = typeof skillOrId === 'string' ? skillOrId : (skillOrId?.id || '');
   const skillDef = def || (typeof skillOrId === 'object' ? skillOrId : null);
 
-  // 1. Direct registry hit
+  // 1. Definition explicit authentic icon (/icons/... or /assets/skills/...)
+  if (skillDef?.icon && typeof skillDef.icon === 'string' && (skillDef.icon.startsWith('/icons/') || skillDef.icon.startsWith('/assets/skills/'))) {
+    return {
+      skillId,
+      iconId: skillId,
+      iconPath: skillDef.icon,
+      source: 'l2_authentic',
+      element: skillDef.element || 'Physical',
+      role: skillDef.role || 'damage',
+      status: ICON_STATUS.UNIQUE
+    };
+  }
+
+  // 2. Direct registry hit
   if (SKILL_ICON_REGISTRY[skillId]) {
     const entry = SKILL_ICON_REGISTRY[skillId];
     return {
@@ -1693,7 +1706,7 @@ export function getSkillIcon(skillOrId, def = null) {
     };
   }
 
-  // 2. Definition explicit icon (if already valid path)
+  // 3. Definition explicit icon (if already valid path)
   if (skillDef?.icon && typeof skillDef.icon === 'string' && (skillDef.icon.endsWith('.png') || skillDef.icon.endsWith('.jpg') || skillDef.icon.endsWith('.webp'))) {
     const path = skillDef.icon.startsWith('/') ? skillDef.icon : `/assets/skills/icons/${skillDef.icon}`;
     return {

@@ -79,6 +79,234 @@ export const HIDDEN_FUTURE = 'HIDDEN_FUTURE';
 export const HIDDEN_FOREIGN = 'HIDDEN_FOREIGN';
 export const HIDDEN_SIBLING_BRANCH = 'HIDDEN_SIBLING_BRANCH';
 
+// ─── V2 Canonical Class Context Resolution ─────────────────────────────────────
+
+const V2_STARTER_MAP = {
+  // Human Stage 0
+  'fighter': 'fighter',
+  'human_fighter': 'fighter',
+  'mage': 'mage',
+  'human_mage': 'mage',
+  'human_mystic': 'mage',
+  'human_deathknight_0': 'deathPilgrim',
+  'secret_assassin_male_0': 'assassinS0',
+
+  // Elf Stage 0
+  'elven_fighter': 'elfFighter',
+  'elf_fighter': 'elfFighter',
+  'elffighter': 'elfFighter',
+  'elven_mage': 'elfMage',
+  'elf_mage': 'elfMage',
+  'elfmage': 'elfMage',
+  'elf_deathknight_0': 'deathPilgrim',
+
+  // Dark Elf Stage 0
+  'dark_fighter': 'darkElfFighter',
+  'darkelf_fighter': 'darkElfFighter',
+  'dark_elf_fighter': 'darkElfFighter',
+  'dark_mage': 'darkElfMage',
+  'darkelf_mage': 'darkElfMage',
+  'dark_elf_mage': 'darkElfMage',
+  'delf_deathknight_0': 'deathPilgrim',
+  'secret_assassin_female_0': 'assassinS0',
+  'rose_vain_0': 'bloodRoseBase',
+
+  // Orc Stage 0
+  'orc_fighter': 'orcFighter',
+  'orcfighter': 'orcFighter',
+  'orc_mage': 'orcMage',
+  'orcmage': 'orcMage',
+  'orc_rider_0': 'rider',
+
+  // Dwarf Stage 0
+  'dwarven_fighter': 'dwarfFighter',
+  'dwarf_fighter': 'dwarfFighter',
+  'dwarffighter': 'dwarfFighter',
+
+  // Kamael Stage 0
+  'jin_kamael_soldier': 'kamaelSoldier',
+  'kamael_soldier': 'kamaelSoldier',
+  'crow_0': 'samuraiBase',
+
+  // Sylph Stage 0
+  'sylphid': 'sylphGunner',
+
+  // High Elf Stage 0
+  'sacred_templar_0': 'highElfBase',
+
+  // Promoted Class DAG nodes (Stage 1, 2, 3)
+  'human_deathknight_1': 'deathBlade',
+  'human_deathknight_2': 'deathMessenger',
+  'human_deathknight_3': 'deathKnight',
+  'elf_deathknight_1': 'deathBlade',
+  'elf_deathknight_2': 'deathMessenger',
+  'elf_deathknight_3': 'deathKnight',
+  'delf_deathknight_1': 'deathBlade',
+  'delf_deathknight_2': 'deathMessenger',
+  'delf_deathknight_3': 'deathKnight',
+
+  'secret_assassin_male_1': 'assassinS1',
+  'secret_assassin_male_2': 'assassinS2',
+  'secret_assassin_male_3': 'assassinS3',
+  'secret_assassin_female_1': 'assassinS1',
+  'secret_assassin_female_2': 'assassinS2',
+  'secret_assassin_female_3': 'assassinS3',
+
+  'rose_vain_1': 'bloodRoseS1',
+  'rose_vain_2': 'bloodRoseS2',
+  'rose_vain_3': 'bloodRose',
+
+  'orc_rider_1': 'dragoon',
+  'orc_rider_2': 'vanguardRider',
+  'orc_rider_3': 'grandVanguard',
+
+  'crow_1': 'hatamoto',
+  'crow_2': 'ronin',
+  'crow_3': 'samurai',
+
+  'sylph_gunner': 'sharpshooter',
+  'wind_hunter': 'windSniper',
+  'storm_blaster': 'stormBlaster',
+
+  'sacred_templar_1': 'lightTemplar',
+  'sacred_templar_2': 'holyTemplar',
+  'sacred_templar_3': 'divineTemplar',
+
+  'spirit_1': 'elementWeaverS1',
+  'spirit_2': 'elementWeaverS2',
+  'spirit_3': 'elementWeaver',
+
+  'werewolf_3': 'warg',
+
+  'artisan': 'artisanDwarf',
+  'warsmith': 'warsmith',
+  'maestro': 'maestro',
+  'scavenger': 'scavenger',
+  'bounty_hunter': 'bountyHunter',
+  'fortune_seeker': 'fortuneSeeker',
+
+  'shinemaker_1': 'shineMakerS1',
+  'shinemaker_2': 'shineMakerS2',
+  'shinemaker_3': 'shinemaker'
+};
+
+const V2_CONTENT_GAP_CLASSES = {
+  'werewolf_0': {
+    reason: 'Wiki dataset contains only 1 Stage 0 skill (88401 Direct Strike); Stage 0-2 5-skill tree missing from V2',
+    authorizedSkillIds: ['direct_strike']
+  },
+  'werewolf_1': {
+    reason: 'Stage 1 Warg missing from V2',
+    authorizedSkillIds: ['direct_strike']
+  },
+  'werewolf_2': {
+    reason: 'Stage 2 Warg missing from V2',
+    authorizedSkillIds: ['direct_strike']
+  },
+  'shineMakerBase': {
+    reason: 'Dwarf ShineMaker Stage 0 not present in L2Wiki dataset or V2 registry',
+    authorizedSkillIds: []
+  },
+  'spirit_0': {
+    reason: 'Wiki dataset contains only 2 Stage 0 skills (87701 Fire Sphere, 87702 Ice Sphere); Stage 0 5-skill tree missing from V2',
+    authorizedSkillIds: ['fire_sphere', 'ice_sphere']
+  },
+  'marauderBase': {
+    reason: 'Ertheia skills absent from scraped wiki dataset; Kamael skills quarantined',
+    authorizedSkillIds: []
+  },
+  'sayhaMageBase': {
+    reason: 'Ertheia skills absent from scraped wiki dataset; human mage placeholder quarantined',
+    authorizedSkillIds: []
+  }
+};
+
+/**
+ * Resolves the authoritative V2 Skill Context for a given character class and race.
+ * 
+ * @param {string|object} classId - Character class ID or character state object
+ * @param {string} [race] - Optional race of the character
+ * @returns {{ status: 'RESOLVED'|'CONTENT_GAP'|'UNRESOLVED', originalClassId: string, race: string|null, v2ClassId: string|null, v2ClassDef: object|null, authorizedSkillIds: string[], contentGapReason?: string }}
+ */
+export function resolveV2ClassContext(classId, race = null) {
+  if (typeof classId === 'object' && classId !== null) {
+    race = race || classId.race;
+    classId = classId.class;
+  }
+  const originalClassId = String(classId || '').trim();
+  const lower = originalClassId.toLowerCase();
+
+  // 1. Check CONTENT_GAP classes first
+  if (V2_CONTENT_GAP_CLASSES[originalClassId] || V2_CONTENT_GAP_CLASSES[lower]) {
+    const gap = V2_CONTENT_GAP_CLASSES[originalClassId] || V2_CONTENT_GAP_CLASSES[lower];
+    return {
+      status: 'CONTENT_GAP',
+      originalClassId,
+      race,
+      v2ClassId: null, // Per Directive 2: strictly null for Stage 0 gaps
+      v2ClassDef: null,
+      authorizedSkillIds: [...gap.authorizedSkillIds],
+      contentGapReason: gap.reason
+    };
+  }
+
+  // 2. Direct hit in CANONICAL_CLASS_REGISTRY_V2 or via V2_STARTER_MAP
+  let v2Id = null;
+  let v2Def = null;
+
+  if (CANONICAL_CLASS_REGISTRY_V2) {
+    if (CANONICAL_CLASS_REGISTRY_V2[originalClassId]) {
+      v2Id = originalClassId;
+      v2Def = CANONICAL_CLASS_REGISTRY_V2[originalClassId];
+    } else if (V2_STARTER_MAP[originalClassId] && CANONICAL_CLASS_REGISTRY_V2[V2_STARTER_MAP[originalClassId]]) {
+      v2Id = V2_STARTER_MAP[originalClassId];
+      v2Def = CANONICAL_CLASS_REGISTRY_V2[v2Id];
+    } else if (V2_STARTER_MAP[lower] && CANONICAL_CLASS_REGISTRY_V2[V2_STARTER_MAP[lower]]) {
+      v2Id = V2_STARTER_MAP[lower];
+      v2Def = CANONICAL_CLASS_REGISTRY_V2[v2Id];
+    } else {
+      const canonical = resolveCanonicalClassId(originalClassId, race);
+      if (canonical && CANONICAL_CLASS_REGISTRY_V2[canonical]) {
+        v2Id = canonical;
+        v2Def = CANONICAL_CLASS_REGISTRY_V2[canonical];
+      } else if (canonical && V2_STARTER_MAP[canonical] && CANONICAL_CLASS_REGISTRY_V2[V2_STARTER_MAP[canonical]]) {
+        v2Id = V2_STARTER_MAP[canonical];
+        v2Def = CANONICAL_CLASS_REGISTRY_V2[v2Id];
+      }
+    }
+  }
+
+  if (v2Def && v2Id) {
+    const authorized = new Set(v2Def.skillIds || []);
+    let curr = v2Def;
+    const visited = new Set([curr.id]);
+    while (curr.parentClass && CANONICAL_CLASS_REGISTRY_V2[curr.parentClass] && !visited.has(curr.parentClass)) {
+      visited.add(curr.parentClass);
+      curr = CANONICAL_CLASS_REGISTRY_V2[curr.parentClass];
+      if (Array.isArray(curr.skillIds)) {
+        for (const sid of curr.skillIds) authorized.add(sid);
+      }
+    }
+    return {
+      status: 'RESOLVED',
+      originalClassId,
+      race,
+      v2ClassId: v2Id,
+      v2ClassDef: v2Def,
+      authorizedSkillIds: Array.from(authorized)
+    };
+  }
+
+  return {
+    status: 'UNRESOLVED',
+    originalClassId,
+    race,
+    v2ClassId: null,
+    v2ClassDef: null,
+    authorizedSkillIds: [],
+    contentGapReason: 'Class not mapped to canonical V2 registry'
+  };
+}
 
 // ─── Archetype & Sibling Branch Detectors ──────────────────────────────────────
 
@@ -168,8 +396,12 @@ export function areSiblingBranches(classA, classB) {
 export function getSkillUnlockLevelForClass(classId, skillId) {
   if (!classId || !skillId || !CANONICAL_CLASS_REGISTRY_V2) return 1;
 
-  const canonical = resolveCanonicalClassId(classId) || classId;
-  const v2Class = CANONICAL_CLASS_REGISTRY_V2[classId] || CANONICAL_CLASS_REGISTRY_V2[canonical];
+  const v2Ctx = resolveV2ClassContext(classId);
+  if (v2Ctx.status === 'CONTENT_GAP') {
+    return 1;
+  }
+
+  const v2Class = v2Ctx.v2ClassDef;
 
   // 1. Authoritative V2 Canonical Class DAG evaluation
   if (v2Class) {
@@ -178,6 +410,10 @@ export function getSkillUnlockLevelForClass(classId, skillId) {
     if (def) {
       if (def.starRank === 5 || def.tier === 5 || def.reqLvl >= 90) return 90;
       if (def.isUltimate || def.starRank === 4 || def.tier === 4 || def.reqLvl >= 80) return 80;
+    }
+
+    if (v2Class.stage === 0 && v2Class.skillIds?.includes(skillId)) {
+      return 1;
     }
 
     // Current and Ancestor classes: find earliest (lowest) minLevel
@@ -227,12 +463,23 @@ export function getSkillUnlockLevelForClass(classId, skillId) {
 
 /**
  * Dynamically resolves the canonical starter skills for a class using:
- * ClassIdentity -> base archetype -> starterSkillIds fallback.
+ * resolveV2ClassContext -> ClassIdentity -> base archetype -> starterSkillIds fallback.
  * @param {string} classId
  * @returns {string[]} Array of starter skill IDs
  */
 export function getStarterSkillsForClass(classId) {
   if (!classId) return ['power_strike'];
+  const v2Ctx = resolveV2ClassContext(classId);
+  if (v2Ctx.status === 'RESOLVED') {
+    if (v2Ctx.v2ClassDef && v2Ctx.v2ClassDef.stage === 0 && Array.isArray(v2Ctx.v2ClassDef.skillIds)) {
+      return [...v2Ctx.v2ClassDef.skillIds];
+    }
+    return [...v2Ctx.authorizedSkillIds];
+  }
+  if (v2Ctx.status === 'CONTENT_GAP') {
+    return [...v2Ctx.authorizedSkillIds];
+  }
+
   const canonical = resolveCanonicalClassId(classId) || classId;
 
   // 1. Check ClassIdentity.js skillPools[1]
@@ -327,26 +574,19 @@ export function resolveSkillDef(skillOrId) {
  */
 function isSkillNativeOrAvailableNow(classId, def) {
   if (!classId || !def) return false;
-  const canonical = resolveCanonicalClassId(classId) || classId;
 
-  // Authoritative Canonical V2 class check
-  if (CANONICAL_CLASS_REGISTRY_V2) {
-    const v2Class = CANONICAL_CLASS_REGISTRY_V2[classId] || CANONICAL_CLASS_REGISTRY_V2[canonical];
-    if (v2Class) {
-      // 1. Native to current class
-      if (v2Class.skillIds?.includes(def.id)) return true;
+  const v2Ctx = resolveV2ClassContext(classId);
+  if (v2Ctx.status === 'CONTENT_GAP') {
+    return v2Ctx.authorizedSkillIds.includes(def.id);
+  }
 
-      // 2. Inherited from ancestor classes
-      let curr = v2Class;
-      const visited = new Set([curr.id]);
-      while (curr.parentClass && CANONICAL_CLASS_REGISTRY_V2[curr.parentClass] && !visited.has(curr.parentClass)) {
-        visited.add(curr.parentClass);
-        curr = CANONICAL_CLASS_REGISTRY_V2[curr.parentClass];
-        if (curr.skillIds?.includes(def.id)) return true;
-      }
+  if (v2Ctx.status === 'RESOLVED') {
+    // 1. Explicitly authorized in current class or ancestor skills
+    if (v2Ctx.authorizedSkillIds.includes(def.id)) return true;
 
-      // 3. Descendant promotion skills: strictly NOT available to current class
-      const queue = [v2Class.id];
+    // 2. Descendant promotion skills: strictly NOT available to current class
+    if (v2Ctx.v2ClassDef) {
+      const queue = [v2Ctx.v2ClassDef.id];
       const visitedDesc = new Set(queue);
       let isDescendantSkill = false;
       while (queue.length > 0) {
@@ -363,13 +603,12 @@ function isSkillNativeOrAvailableNow(classId, def) {
         }
         if (isDescendantSkill) break;
       }
-      if (isDescendantSkill) {
-        return false;
-      }
+      if (isDescendantSkill) return false;
     }
   }
 
-  // Shared skills check (fallback for legacy or un-migrated classes)
+  const canonical = resolveCanonicalClassId(classId) || classId;
+  // Shared skills check (by archetype)
   if (SHARED_MAGE_SKILL_IDS.includes(def.id)) {
     return isMageClass(classId);
   }
@@ -387,38 +626,26 @@ function isSkillNativeOrAvailableNow(classId, def) {
     return def.nativeClasses.includes(classId) || def.nativeClasses.includes(canonical);
   }
 
-  // Class ID equality
+  // Class ID equality or ancestor inheritance
   if (def.classId) {
     const sCanon = resolveCanonicalClassId(def.classId) || def.classId;
-    return def.classId === classId || sCanon === canonical;
+    if (def.classId === classId || sCanon === canonical) return true;
+    const ancestors = getAncestors(canonical).concat(getAncestors(classId));
+    if (ancestors.includes(sCanon) || ancestors.includes(def.classId)) return true;
   }
 
-  // Class requirement equality
+  // Class requirement equality or ancestor inheritance
   if (def.classReq && def.classReq !== 'all' && def.classReq !== 'shared') {
     const rCanon = resolveCanonicalClassId(def.classReq) || def.classReq;
     if (def.classReq === classId || rCanon === canonical) return true;
+    const ancestors = getAncestors(canonical).concat(getAncestors(classId));
+    if (ancestors.includes(rCanon) || ancestors.includes(def.classReq)) return true;
   }
 
   // Explicit CLASS_SKILLS_ECHO mapping
   if (typeof window !== 'undefined' && window.EchoData?.CLASS_SKILLS_ECHO) {
     const echoSkills = window.EchoData.CLASS_SKILLS_ECHO[classId] || window.EchoData.CLASS_SKILLS_ECHO[canonical] || [];
     if (echoSkills.includes(def.id)) return true;
-  }
-
-  // Canonical V2 class skill check
-  if (CANONICAL_CLASS_REGISTRY_V2) {
-    if (CANONICAL_CLASS_REGISTRY_V2[classId]?.skillIds?.includes(def.id)) return true;
-    if (CANONICAL_CLASS_REGISTRY_V2[canonical]?.skillIds?.includes(def.id)) return true;
-  }
-
-  // Ancestor inheritance: Promoted classes (e.g. Archmage) inherit and can learn prior stage skills (e.g. Sorcerer)
-  const ancestors = getAncestors(canonical).concat(getAncestors(classId));
-  const skillOwner = def.classReq || def.classId || (Array.isArray(def.nativeClasses) ? def.nativeClasses[0] : null);
-  if (skillOwner && skillOwner !== 'all' && skillOwner !== 'shared') {
-    const canonOwner = resolveCanonicalClassId(skillOwner) || skillOwner;
-    if (ancestors.includes(canonOwner) || ancestors.includes(skillOwner)) {
-      return true;
-    }
   }
 
   return false;
@@ -431,49 +658,31 @@ function isSkillNativeOrAvailableNow(classId, def) {
  * @returns {boolean}
  */
 export function isSkillInV2Lineage(classId, skillId) {
-  if (!CANONICAL_CLASS_REGISTRY_V2 || !classId || !skillId) return false;
+  if (!classId || !skillId) return false;
   if (isPurgedSkill(skillId)) return false;
 
-  const canonical = resolveCanonicalClassId(classId) || classId;
-  const v2Class = CANONICAL_CLASS_REGISTRY_V2[classId] || CANONICAL_CLASS_REGISTRY_V2[canonical];
-
-  if (v2Class) {
-    // 1. Direct class ownership
-    if (v2Class.skillIds?.includes(skillId)) return true;
-
-    // 2. Ancestor inheritance (parentClass chain)
-    let curr = v2Class;
-    const visitedParents = new Set([curr.id]);
-    while (curr.parentClass && CANONICAL_CLASS_REGISTRY_V2[curr.parentClass] && !visitedParents.has(curr.parentClass)) {
-      visitedParents.add(curr.parentClass);
-      curr = CANONICAL_CLASS_REGISTRY_V2[curr.parentClass];
-      if (curr.skillIds?.includes(skillId)) return true;
-    }
-
-    // 3. Descendant promotions
-    const queue = [v2Class.id];
-    const visitedDesc = new Set(queue);
-    while (queue.length > 0) {
-      const parentId = queue.shift();
-      for (const candidate of Object.values(CANONICAL_CLASS_REGISTRY_V2)) {
-        if (candidate.parentClass === parentId && !visitedDesc.has(candidate.id)) {
-          visitedDesc.add(candidate.id);
-          queue.push(candidate.id);
-          if (candidate.skillIds?.includes(skillId)) return true;
+  const v2Ctx = resolveV2ClassContext(classId);
+  if (v2Ctx.status === 'RESOLVED') {
+    if (v2Ctx.authorizedSkillIds.includes(skillId)) return true;
+    if (v2Ctx.v2ClassDef) {
+      const queue = [v2Ctx.v2ClassDef.id];
+      const visitedDesc = new Set(queue);
+      while (queue.length > 0) {
+        const parentId = queue.shift();
+        for (const candidate of Object.values(CANONICAL_CLASS_REGISTRY_V2)) {
+          if (candidate.parentClass === parentId && !visitedDesc.has(candidate.id)) {
+            visitedDesc.add(candidate.id);
+            queue.push(candidate.id);
+            if (Array.isArray(candidate.skillIds) && candidate.skillIds.includes(skillId)) return true;
+          }
         }
       }
     }
+    return false;
   }
 
-  // Shared skills belong to all classes of matching archetype (fallback if not explicit in V2)
-  if (SHARED_MAGE_SKILL_IDS?.includes(skillId)) {
-    return isMageClass(classId);
-  }
-  if (SHARED_FIGHTER_SKILL_IDS?.includes(skillId)) {
-    return !isMageClass(classId);
-  }
-  if (SHARED_SKILL_IDS?.includes(skillId)) {
-    return true;
+  if (v2Ctx.status === 'CONTENT_GAP') {
+    return v2Ctx.authorizedSkillIds.includes(skillId);
   }
 
   return false;
@@ -494,15 +703,18 @@ export function isSkillInProgressionPath(character, skill) {
   if (!def || def.disabled) return false;
 
   const charClass = (typeof character === 'string') ? character : character?.class;
+  const charRace = (typeof character === 'object' && character?.race) ? character.race : null;
   if (!charClass) return false;
-  const canonicalCharClass = resolveCanonicalClassId(charClass) || charClass;
-  // Authoritative Canonical V2 check
-  if (CANONICAL_CLASS_REGISTRY_V2) {
-    const v2Class = CANONICAL_CLASS_REGISTRY_V2[charClass] || CANONICAL_CLASS_REGISTRY_V2[canonicalCharClass];
-    if (v2Class && isSkillInV2Lineage(charClass, def.id)) {
-      return true;
-    }
+
+  const v2Ctx = resolveV2ClassContext(charClass, charRace);
+  if (v2Ctx.status === 'CONTENT_GAP') {
+    return v2Ctx.authorizedSkillIds.includes(def.id);
   }
+  if (v2Ctx.status === 'RESOLVED' && isSkillInV2Lineage(charClass, def.id)) {
+    return true;
+  }
+
+  const canonicalCharClass = resolveCanonicalClassId(charClass, charRace) || charClass;
 
   // 1. Shared skills isolation
   const charIsMage = isMageClass(charClass);
@@ -548,7 +760,8 @@ export function isSkillInProgressionPath(character, skill) {
       return true;
     }
   }
-  if (skillClass && descendants.includes(resolveCanonicalClassId(skillClass) || skillClass)) {
+  const skillClassOrReq = def.classId || def.classReq || (Array.isArray(def.nativeClasses) ? def.nativeClasses[0] : null);
+  if (skillClassOrReq && descendants.includes(resolveCanonicalClassId(skillClassOrReq) || skillClassOrReq)) {
     return true;
   }
 
@@ -557,7 +770,7 @@ export function isSkillInProgressionPath(character, skill) {
   const skillOwnerClass = def.classReq || def.classId || (Array.isArray(def.nativeClasses) ? def.nativeClasses[0] : null);
   if (skillOwnerClass && skillOwnerClass !== 'all' && skillOwnerClass !== 'shared') {
     const canonOwner = resolveCanonicalClassId(skillOwnerClass) || skillOwnerClass;
-    if (ancestors.includes(canonOwner) || ancestors.includes(skillOwnerClass)) {
+    if (canonOwner === canonicalCharClass || skillOwnerClass === charClass || ancestors.includes(canonOwner) || ancestors.includes(skillOwnerClass)) {
       return true;
     }
   }
@@ -631,9 +844,12 @@ export function getSkillDetailedVisibility(character, skill) {
 
   // 1. LEARNED check (owned by character)
   if ((charSkills[def.id] || 0) > 0 || (def.name && (charSkills[def.name] || 0) > 0)) {
-    const canonical = resolveCanonicalClassId(charClass) || charClass;
-    const isV2Class = !!(CANONICAL_CLASS_REGISTRY_V2 && (CANONICAL_CLASS_REGISTRY_V2[charClass] || CANONICAL_CLASS_REGISTRY_V2[canonical]));
-    if (isV2Class && !isSkillInV2Lineage(charClass, def.id)) {
+    const v2Ctx = resolveV2ClassContext(charClass, charRace);
+    if (v2Ctx.status === 'CONTENT_GAP') {
+      if (!v2Ctx.authorizedSkillIds.includes(def.id)) {
+        return SKILL_DETAILED_VISIBILITY_STATES.HIDDEN_FOREIGN;
+      }
+    } else if (!isSkillInV2Lineage(charClass, def.id) && !isSkillInProgressionPath(character, def)) {
       return SKILL_DETAILED_VISIBILITY_STATES.HIDDEN_FOREIGN;
     }
     return SKILL_DETAILED_VISIBILITY_STATES.LEARNED;
@@ -739,52 +955,42 @@ export function isSkillAvailableForCharacter(character, skill) {
 export function getVisibleSkillsForCharacter(character) {
   const charClass = (typeof character === 'string') ? character : character?.class;
   const charRace = (typeof character === 'object' && character?.race) ? character.race : null;
-  const canonicalClass = resolveCanonicalClassId(charClass, charRace) || charClass;
-  const canonicalDagClass = resolveCanonicalDagClassId(charClass, charRace);
   const charLevel = (typeof character === 'object' && typeof character.level === 'number') ? character.level : 1;
 
-  // Build targeted candidate list from:
   const candidateIds = new Set();
+  const v2Ctx = resolveV2ClassContext(charClass, charRace);
 
-  const v2Class = CANONICAL_CLASS_REGISTRY_V2 && (CANONICAL_CLASS_REGISTRY_V2[charClass] || CANONICAL_CLASS_REGISTRY_V2[canonicalClass] || CANONICAL_CLASS_REGISTRY_V2[canonicalDagClass]);
-  if (v2Class) {
-    if (Array.isArray(v2Class.skillIds)) {
-      for (const sid of v2Class.skillIds) candidateIds.add(sid);
+  if (v2Ctx.status === 'RESOLVED') {
+    for (const sid of v2Ctx.authorizedSkillIds) {
+      candidateIds.add(sid);
     }
-    // Ancestors
-    let curr = v2Class;
-    const visitedParents = new Set([curr.id]);
-    while (curr.parentClass && CANONICAL_CLASS_REGISTRY_V2[curr.parentClass] && !visitedParents.has(curr.parentClass)) {
-      visitedParents.add(curr.parentClass);
-      curr = CANONICAL_CLASS_REGISTRY_V2[curr.parentClass];
-      if (Array.isArray(curr.skillIds)) {
-        for (const sid of curr.skillIds) candidateIds.add(sid);
-      }
-    }
-    // Descendants
-    const queue = [v2Class.id];
-    const visitedDesc = new Set(queue);
-    while (queue.length > 0) {
-      const parentId = queue.shift();
-      for (const candidate of Object.values(CANONICAL_CLASS_REGISTRY_V2)) {
-        if (candidate.parentClass === parentId && !visitedDesc.has(candidate.id)) {
-          visitedDesc.add(candidate.id);
-          queue.push(candidate.id);
-          if (Array.isArray(candidate.skillIds)) {
-            for (const sid of candidate.skillIds) candidateIds.add(sid);
+    if (v2Ctx.v2ClassDef) {
+      const queue = [v2Ctx.v2ClassDef.id];
+      const visitedDesc = new Set(queue);
+      while (queue.length > 0) {
+        const parentId = queue.shift();
+        for (const candidate of Object.values(CANONICAL_CLASS_REGISTRY_V2)) {
+          if (candidate.parentClass === parentId && !visitedDesc.has(candidate.id)) {
+            visitedDesc.add(candidate.id);
+            queue.push(candidate.id);
+            if (Array.isArray(candidate.skillIds)) {
+              for (const sid of candidate.skillIds) candidateIds.add(sid);
+            }
           }
         }
       }
     }
-    if (typeof window !== 'undefined' && window.EchoData?.CLASS_SKILLS_ECHO?.[charClass]) {
-      for (const sid of window.EchoData.CLASS_SKILLS_ECHO[charClass]) candidateIds.add(sid);
+  } else if (v2Ctx.status === 'CONTENT_GAP') {
+    for (const sid of v2Ctx.authorizedSkillIds) {
+      candidateIds.add(sid);
     }
   } else {
-    // 1. Shared skills for character's archetype
+    // UNRESOLVED fallback only
+    const canonicalClass = resolveCanonicalClassId(charClass, charRace) || charClass;
+    const canonicalDagClass = resolveCanonicalDagClassId(charClass, charRace);
     const sharedIds = isMageClass(charClass) ? SHARED_MAGE_SKILL_IDS : SHARED_FIGHTER_SKILL_IDS;
     for (const sid of sharedIds) candidateIds.add(sid);
 
-    // 2. ClassIdentity skillPools for character's class
     const identity = CLASS_IDENTITIES[canonicalDagClass] || CLASS_IDENTITIES[canonicalClass] || CLASS_IDENTITIES[charClass];
     if (identity?.skillPools) {
       for (const pool of Object.values(identity.skillPools)) {
@@ -794,40 +1000,23 @@ export function getVisibleSkillsForCharacter(character) {
       }
     }
 
-    // 3. Native skill trees for character's class
     const nativeSkills = NATIVE_SKILL_TREES[canonicalDagClass] || NATIVE_SKILL_TREES[canonicalClass] || NATIVE_SKILL_TREES[charClass] || [];
     for (const s of nativeSkills) {
       candidateIds.add(s.id);
     }
-
-    // 4. Lineage progression path (ancestors + current + descendants) from CLASS_SKILLS_ECHO
-    if (typeof window !== 'undefined' && window.EchoData?.CLASS_SKILLS_ECHO) {
-      const classSet = new Set([
-        charClass,
-        canonicalClass,
-        canonicalDagClass,
-        ...getLineage(charClass, charRace),
-        ...getLineage(canonicalDagClass, charRace),
-        ...getDescendants(charClass, charRace),
-        ...getDescendants(canonicalDagClass, charRace)
-      ]);
-      for (const c of classSet) {
-        const skills = window.EchoData.CLASS_SKILLS_ECHO[c] || [];
-        for (const sid of skills) candidateIds.add(sid);
-      }
-    }
   }
 
-  // 5. Any skills already learned on character state (for verification/safe rendering)
+  // 5. Learned skills on character state (preserving saves without leaking to DOM if unauthorized)
   if (typeof character === 'object' && character.skills) {
-    const canonical = resolveCanonicalClassId(charClass) || charClass;
-    const isV2Class = !!(CANONICAL_CLASS_REGISTRY_V2 && (CANONICAL_CLASS_REGISTRY_V2[charClass] || CANONICAL_CLASS_REGISTRY_V2[canonical]));
     for (const sid of Object.keys(character.skills)) {
       if (isPurgedSkill(sid)) continue;
-      if (isV2Class && !isSkillInV2Lineage(charClass, sid)) {
-        continue;
+      if (v2Ctx.status === 'RESOLVED' || v2Ctx.status === 'CONTENT_GAP') {
+        if (v2Ctx.authorizedSkillIds.includes(sid)) {
+          candidateIds.add(sid);
+        }
+      } else {
+        candidateIds.add(sid);
       }
-      candidateIds.add(sid);
     }
   }
 
@@ -864,7 +1053,9 @@ export function getVisibleSkillsForCharacter(character) {
     ...result.learned.map(def => ({ skillId: def.id, skillDef: def, visibility: SKILL_VISIBILITY_STATES.LEARNED })),
     ...result.available.map(def => ({ skillId: def.id, skillDef: def, visibility: SKILL_VISIBILITY_STATES.AVAILABLE })),
     ...result.locked.filter(def => {
-      const reqLvl = Number(def.requiredLevel || def.reqLvl || def.identity?.unlockLevel) || 1;
+      const classSpecificReq = getSkillUnlockLevelForClass(charClass, def.id);
+      const baseReq = Number(def.requiredLevel || def.reqLvl || def.identity?.unlockLevel) || 1;
+      const reqLvl = Math.max(classSpecificReq, baseReq);
       return charLevel >= reqLvl;
     }).map(def => ({ skillId: def.id, skillDef: def, visibility: SKILL_VISIBILITY_STATES.LOCKED }))
   ];
