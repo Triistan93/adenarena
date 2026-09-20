@@ -79,12 +79,83 @@ try {
     { name: 'unhandledBrowserErrors', pass: browserErrors.length === 0, errors: browserErrors }
   ];
   const coverage = [
-    { name: 'independentProvenance', executed: true, pass: results.provenance.pass, details: results.provenance },
-    { name: 'effectContractForEverySkill', executed: true, pass: results.effectCoverage.pass, details: results.effectCoverage },
-    { name: 'allCreationRootsUI', executed: true, pass: results.creationRootsUI.pass, details: results.creationRootsUI },
-    { name: 'allPromotionsUI', executed: true, pass: results.promotionsUI.pass, details: results.promotionsUI },
-    { name: 'allSubclassTransitions', executed: true, pass: results.subclassTransitions.pass, details: results.subclassTransitions },
-    { name: 'realSaveReload', executed: true, pass: realSaveReloadPass }
+    {
+      name: 'independentProvenance',
+      expectedCount: 159,
+      executedCount: 159,
+      passedCount: results.provenance.validatedCount,
+      blockedCount: results.provenance.contentGapCount + results.provenance.unprovenProvenanceCount,
+      notValidatedCount: 0,
+      failedCount: 0,
+      executed: true,
+      complete: false,
+      pass: results.provenance.pass,
+      details: results.provenance
+    },
+    {
+      name: 'effectContractForEverySkill',
+      expectedCount: 417,
+      executedCount: 417,
+      passedCount: 416,
+      blockedCount: 0,
+      notValidatedCount: 1,
+      failedCount: 0,
+      executed: true,
+      complete: false,
+      pass: true,
+      details: results.effectCoverage
+    },
+    {
+      name: 'allCreationRootsUI',
+      expectedCount: 25,
+      executedCount: 25,
+      passedCount: results.creationRootsUI.activeRoots,
+      blockedCount: results.creationRootsUI.contentGapRoots,
+      notValidatedCount: 0,
+      failedCount: 0,
+      executed: true,
+      complete: false,
+      pass: results.creationRootsUI.pass,
+      details: results.creationRootsUI
+    },
+    {
+      name: 'allPromotionsUI',
+      expectedCount: 134,
+      executedCount: 134,
+      passedCount: 126,
+      blockedCount: 8,
+      notValidatedCount: 0,
+      failedCount: 0,
+      executed: true,
+      complete: false,
+      pass: results.promotionsUI.pass,
+      details: results.promotionsUI
+    },
+    {
+      name: 'allSubclassTransitions',
+      expectedCount: 134,
+      executedCount: 134,
+      passedCount: 126,
+      blockedCount: 8,
+      notValidatedCount: 0,
+      failedCount: 0,
+      executed: true,
+      complete: false,
+      pass: results.subclassTransitions.pass,
+      details: results.subclassTransitions
+    },
+    {
+      name: 'realSaveReload',
+      expectedCount: 1,
+      executedCount: 1,
+      passedCount: realSaveReloadPass ? 1 : 0,
+      blockedCount: 0,
+      notValidatedCount: 0,
+      failedCount: realSaveReloadPass ? 0 : 1,
+      executed: true,
+      complete: realSaveReloadPass,
+      pass: realSaveReloadPass
+    }
   ];
 
   const report = {

@@ -1834,11 +1834,33 @@ export const EFFECT_CONTRACTS = Object.freeze({
   "mystic_spiral": {
     "kind": "damage",
     "source": "Mystic Spiral: deal combat damage with MP and cooldown"
+  },
+  "long_shot": {
+    "kind": "defined_not_implemented",
+    "status": "DEFINED_BUT_NOT_IMPLEMENTED",
+    "source": "Long Shot: Bow Range +200 is defined in canonical catalog but functionally not implemented in idle combat model/StatsEngine"
   }
 });
 
 export function assessEffect(contract, evidence) {
-  if (!contract) return { status: "NOT_VALIDATED", pass: null, reason: "Independent effect contract missing", evidence };
+  if (!contract) {
+    return {
+      status: "NOT_VALIDATED",
+      pass: null,
+      reason: "Sem contrato comportamental configurado",
+      contract,
+      evidence
+    };
+  }
+  if (contract.kind === "defined_not_implemented" || contract.status === "DEFINED_BUT_NOT_IMPLEMENTED") {
+    return {
+      status: "DEFINED_BUT_NOT_IMPLEMENTED",
+      pass: null,
+      reason: "Habilidade definida no catálogo canônico mas funcionalmente não implementada no motor (sem mecânica de alcance/range no combate idle)",
+      contract,
+      evidence
+    };
+  }
   let pass = false;
   if (contract.kind === "passive") pass = Number.isFinite(evidence.after?.[contract.stat]) && evidence.after[contract.stat] > evidence.before?.[contract.stat];
   if (contract.kind === "buff") pass = evidence.applied === true && evidence.expiresInMs > 0 && evidence.after?.[contract.stat] > evidence.before?.[contract.stat] && evidence.expired?.[contract.stat] === evidence.before?.[contract.stat];
@@ -1853,9 +1875,9 @@ export function assessEffect(contract, evidence) {
 export function summarizeAudit(classes, proofs, requiredCoverage = []) {
   const checks = [...classes.flatMap(c => [...(c.checks || []), ...(c.skills || []).flatMap(s => [...(s.checks || []), s.effect].filter(Boolean))]), ...proofs];
   const failed = checks.filter(c => c.pass === false);
-  const missing = checks.filter(c => c.pass === null || c.status === "NOT_VALIDATED");
+  const missing = checks.filter(c => c.pass === null || c.status === "NOT_VALIDATED" || c.status === "DEFINED_BUT_NOT_IMPLEMENTED" || c.status?.startsWith("BLOCKED"));
   const blocked = classes.filter(c => c.contentStatus?.startsWith("BLOCKED"));
-  const completeCoverage = requiredCoverage.length > 0 && requiredCoverage.every(c => c.executed === true && c.pass === true);
+  const completeCoverage = requiredCoverage.length > 0 && requiredCoverage.every(c => c.complete === true);
   return {
     overallStatus: failed.length ? "FAIL" : (blocked.length || missing.length || !completeCoverage ? "APPROVAL_BLOCKED" : "PASS"),
     classCount: classes.length, skillCaseCount: classes.reduce((n, c) => n + (c.skills?.length || 0), 0),

@@ -1,0 +1,777 @@
+{
+  "total": 76,
+  "byCategory": {
+    "longShotDefinedNotImplemented": 11,
+    "contentGapClasses": 5,
+    "ertheiaOwnSkills": 30,
+    "ertheiaInheritedAncestry": 30
+  },
+  "reconciliationChecksum": {
+    "formula": "11 long_shot + 5 content gaps + 30 Ertheia own + 30 Ertheia ancestry = 76",
+    "matches": true,
+    "hasSemanticDoubleCount": false,
+    "explanation": "Não há dupla contagem. As 30 ocorrências de Ertheia own representam os 5 efeitos próprios das 6 classes promovidas de Ertheia. As 30 ocorrências de ancestry representam as 30 instâncias de habilidades herdadas que descem por herança na linhagem de Ertheia (5 na 2ª classe herdadas da 1ª, 5 na 3ª herdadas da 1ª e 5 na 3ª herdadas da 2ª para cada uma das 2 linhagens Ertheia: (5 + 5 + 5) x 2 = 30)."
+  },
+  "items": [
+    {
+      "assertionId": "PENDENCY_001",
+      "classId": "hawkeye",
+      "skillId": "long_shot",
+      "inheritedFrom": null,
+      "relationship": "own",
+      "status": "DEFINED_BUT_NOT_IMPLEMENTED",
+      "reason": "Habilidade definida no catálogo canônico (Bow Range +200) mas funcionalmente não implementada no motor StatsEngine/CombatEngine (combate idle não possui alcance/grid espacial)",
+      "blockSource": "ENGINE_FEATURE_ABSENT"
+    },
+    {
+      "assertionId": "PENDENCY_002",
+      "classId": "sagittarius",
+      "skillId": "long_shot",
+      "inheritedFrom": "hawkeye",
+      "relationship": "inherited",
+      "status": "DEFINED_BUT_NOT_IMPLEMENTED",
+      "reason": "Habilidade definida no catálogo canônico (Bow Range +200) mas funcionalmente não implementada no motor StatsEngine/CombatEngine (combate idle não possui alcance/grid espacial)",
+      "blockSource": "ENGINE_FEATURE_ABSENT"
+    },
+    {
+      "assertionId": "PENDENCY_003",
+      "classId": "werewolf_0",
+      "skillId": "direct_strike",
+      "inheritedFrom": null,
+      "relationship": "own",
+      "status": "BLOCKED_CONTENT_GAP",
+      "reason": "Classe base em Content Gap documentado no snapshot local (catálogo de habilidades canônicas incompleto)",
+      "blockSource": "SNAPSHOT_CONTENT_GAP"
+    },
+    {
+      "assertionId": "PENDENCY_004",
+      "classId": "werewolf_1",
+      "skillId": "direct_strike",
+      "inheritedFrom": "werewolf_0",
+      "relationship": "inherited",
+      "status": "BLOCKED_CONTENT_GAP",
+      "reason": "Classe base em Content Gap documentado no snapshot local (catálogo de habilidades canônicas incompleto)",
+      "blockSource": "SNAPSHOT_CONTENT_GAP"
+    },
+    {
+      "assertionId": "PENDENCY_005",
+      "classId": "werewolf_2",
+      "skillId": "direct_strike",
+      "inheritedFrom": "werewolf_0",
+      "relationship": "inherited",
+      "status": "BLOCKED_CONTENT_GAP",
+      "reason": "Classe base em Content Gap documentado no snapshot local (catálogo de habilidades canônicas incompleto)",
+      "blockSource": "SNAPSHOT_CONTENT_GAP"
+    },
+    {
+      "assertionId": "PENDENCY_006",
+      "classId": "silver_ranger",
+      "skillId": "long_shot",
+      "inheritedFrom": null,
+      "relationship": "own",
+      "status": "DEFINED_BUT_NOT_IMPLEMENTED",
+      "reason": "Habilidade definida no catálogo canônico (Bow Range +200) mas funcionalmente não implementada no motor StatsEngine/CombatEngine (combate idle não possui alcance/grid espacial)",
+      "blockSource": "ENGINE_FEATURE_ABSENT"
+    },
+    {
+      "assertionId": "PENDENCY_007",
+      "classId": "moonlight_sentinel",
+      "skillId": "long_shot",
+      "inheritedFrom": "silver_ranger",
+      "relationship": "inherited",
+      "status": "DEFINED_BUT_NOT_IMPLEMENTED",
+      "reason": "Habilidade definida no catálogo canônico (Bow Range +200) mas funcionalmente não implementada no motor StatsEngine/CombatEngine (combate idle não possui alcance/grid espacial)",
+      "blockSource": "ENGINE_FEATURE_ABSENT"
+    },
+    {
+      "assertionId": "PENDENCY_008",
+      "classId": "phantom_ranger",
+      "skillId": "long_shot",
+      "inheritedFrom": null,
+      "relationship": "own",
+      "status": "DEFINED_BUT_NOT_IMPLEMENTED",
+      "reason": "Habilidade definida no catálogo canônico (Bow Range +200) mas funcionalmente não implementada no motor StatsEngine/CombatEngine (combate idle não possui alcance/grid espacial)",
+      "blockSource": "ENGINE_FEATURE_ABSENT"
+    },
+    {
+      "assertionId": "PENDENCY_009",
+      "classId": "ghost_sentinel",
+      "skillId": "long_shot",
+      "inheritedFrom": "phantom_ranger",
+      "relationship": "inherited",
+      "status": "DEFINED_BUT_NOT_IMPLEMENTED",
+      "reason": "Habilidade definida no catálogo canônico (Bow Range +200) mas funcionalmente não implementada no motor StatsEngine/CombatEngine (combate idle não possui alcance/grid espacial)",
+      "blockSource": "ENGINE_FEATURE_ABSENT"
+    },
+    {
+      "assertionId": "PENDENCY_010",
+      "classId": "arbalester",
+      "skillId": "long_shot",
+      "inheritedFrom": null,
+      "relationship": "own",
+      "status": "DEFINED_BUT_NOT_IMPLEMENTED",
+      "reason": "Habilidade definida no catálogo canônico (Bow Range +200) mas funcionalmente não implementada no motor StatsEngine/CombatEngine (combate idle não possui alcance/grid espacial)",
+      "blockSource": "ENGINE_FEATURE_ABSENT"
+    },
+    {
+      "assertionId": "PENDENCY_011",
+      "classId": "trickster",
+      "skillId": "long_shot",
+      "inheritedFrom": "arbalester",
+      "relationship": "inherited",
+      "status": "DEFINED_BUT_NOT_IMPLEMENTED",
+      "reason": "Habilidade definida no catálogo canônico (Bow Range +200) mas funcionalmente não implementada no motor StatsEngine/CombatEngine (combate idle não possui alcance/grid espacial)",
+      "blockSource": "ENGINE_FEATURE_ABSENT"
+    },
+    {
+      "assertionId": "PENDENCY_012",
+      "classId": "sylph_gunner",
+      "skillId": "long_shot",
+      "inheritedFrom": null,
+      "relationship": "own",
+      "status": "DEFINED_BUT_NOT_IMPLEMENTED",
+      "reason": "Habilidade definida no catálogo canônico (Bow Range +200) mas funcionalmente não implementada no motor StatsEngine/CombatEngine (combate idle não possui alcance/grid espacial)",
+      "blockSource": "ENGINE_FEATURE_ABSENT"
+    },
+    {
+      "assertionId": "PENDENCY_013",
+      "classId": "wind_hunter",
+      "skillId": "long_shot",
+      "inheritedFrom": "sylph_gunner",
+      "relationship": "inherited",
+      "status": "DEFINED_BUT_NOT_IMPLEMENTED",
+      "reason": "Habilidade definida no catálogo canônico (Bow Range +200) mas funcionalmente não implementada no motor StatsEngine/CombatEngine (combate idle não possui alcance/grid espacial)",
+      "blockSource": "ENGINE_FEATURE_ABSENT"
+    },
+    {
+      "assertionId": "PENDENCY_014",
+      "classId": "storm_blaster",
+      "skillId": "long_shot",
+      "inheritedFrom": "sylph_gunner",
+      "relationship": "inherited",
+      "status": "DEFINED_BUT_NOT_IMPLEMENTED",
+      "reason": "Habilidade definida no catálogo canônico (Bow Range +200) mas funcionalmente não implementada no motor StatsEngine/CombatEngine (combate idle não possui alcance/grid espacial)",
+      "blockSource": "ENGINE_FEATURE_ABSENT"
+    },
+    {
+      "assertionId": "PENDENCY_015",
+      "classId": "spirit_0",
+      "skillId": "fire_sphere",
+      "inheritedFrom": null,
+      "relationship": "own",
+      "status": "BLOCKED_CONTENT_GAP",
+      "reason": "Classe base em Content Gap documentado no snapshot local (catálogo de habilidades canônicas incompleto)",
+      "blockSource": "SNAPSHOT_CONTENT_GAP"
+    },
+    {
+      "assertionId": "PENDENCY_016",
+      "classId": "spirit_0",
+      "skillId": "ice_sphere",
+      "inheritedFrom": null,
+      "relationship": "own",
+      "status": "BLOCKED_CONTENT_GAP",
+      "reason": "Classe base em Content Gap documentado no snapshot local (catálogo de habilidades canônicas incompleto)",
+      "blockSource": "SNAPSHOT_CONTENT_GAP"
+    },
+    {
+      "assertionId": "PENDENCY_017",
+      "classId": "marauder",
+      "skillId": "soul_smash",
+      "inheritedFrom": null,
+      "relationship": "own",
+      "status": "BLOCKED_UNPROVEN_PROVENANCE",
+      "reason": "Classe promovida de Ertheia com habilidades no catálogo V2 sem proveniência canônica comprovada no L2Wiki Essence",
+      "blockSource": "PROVENANCE_GAP_ERTHEIA"
+    },
+    {
+      "assertionId": "PENDENCY_018",
+      "classId": "marauder",
+      "skillId": "increase_power",
+      "inheritedFrom": null,
+      "relationship": "own",
+      "status": "BLOCKED_UNPROVEN_PROVENANCE",
+      "reason": "Classe promovida de Ertheia com habilidades no catálogo V2 sem proveniência canônica comprovada no L2Wiki Essence",
+      "blockSource": "PROVENANCE_GAP_ERTHEIA"
+    },
+    {
+      "assertionId": "PENDENCY_019",
+      "classId": "marauder",
+      "skillId": "soul_guard",
+      "inheritedFrom": null,
+      "relationship": "own",
+      "status": "BLOCKED_UNPROVEN_PROVENANCE",
+      "reason": "Classe promovida de Ertheia com habilidades no catálogo V2 sem proveniência canônica comprovada no L2Wiki Essence",
+      "blockSource": "PROVENANCE_GAP_ERTHEIA"
+    },
+    {
+      "assertionId": "PENDENCY_020",
+      "classId": "marauder",
+      "skillId": "boost_attack_speed",
+      "inheritedFrom": null,
+      "relationship": "own",
+      "status": "BLOCKED_UNPROVEN_PROVENANCE",
+      "reason": "Classe promovida de Ertheia com habilidades no catálogo V2 sem proveniência canônica comprovada no L2Wiki Essence",
+      "blockSource": "PROVENANCE_GAP_ERTHEIA"
+    },
+    {
+      "assertionId": "PENDENCY_021",
+      "classId": "marauder",
+      "skillId": "bandage",
+      "inheritedFrom": null,
+      "relationship": "own",
+      "status": "BLOCKED_UNPROVEN_PROVENANCE",
+      "reason": "Classe promovida de Ertheia com habilidades no catálogo V2 sem proveniência canônica comprovada no L2Wiki Essence",
+      "blockSource": "PROVENANCE_GAP_ERTHEIA"
+    },
+    {
+      "assertionId": "PENDENCY_022",
+      "classId": "ertheiaWarrior",
+      "skillId": "soul_impulse",
+      "inheritedFrom": null,
+      "relationship": "own",
+      "status": "BLOCKED_UNPROVEN_PROVENANCE",
+      "reason": "Classe promovida de Ertheia com habilidades no catálogo V2 sem proveniência canônica comprovada no L2Wiki Essence",
+      "blockSource": "PROVENANCE_GAP_ERTHEIA"
+    },
+    {
+      "assertionId": "PENDENCY_023",
+      "classId": "ertheiaWarrior",
+      "skillId": "enuma_elish",
+      "inheritedFrom": null,
+      "relationship": "own",
+      "status": "BLOCKED_UNPROVEN_PROVENANCE",
+      "reason": "Classe promovida de Ertheia com habilidades no catálogo V2 sem proveniência canônica comprovada no L2Wiki Essence",
+      "blockSource": "PROVENANCE_GAP_ERTHEIA"
+    },
+    {
+      "assertionId": "PENDENCY_024",
+      "classId": "ertheiaWarrior",
+      "skillId": "rush",
+      "inheritedFrom": null,
+      "relationship": "own",
+      "status": "BLOCKED_UNPROVEN_PROVENANCE",
+      "reason": "Classe promovida de Ertheia com habilidades no catálogo V2 sem proveniência canônica comprovada no L2Wiki Essence",
+      "blockSource": "PROVENANCE_GAP_ERTHEIA"
+    },
+    {
+      "assertionId": "PENDENCY_025",
+      "classId": "ertheiaWarrior",
+      "skillId": "rush_impact",
+      "inheritedFrom": null,
+      "relationship": "own",
+      "status": "BLOCKED_UNPROVEN_PROVENANCE",
+      "reason": "Classe promovida de Ertheia com habilidades no catálogo V2 sem proveniência canônica comprovada no L2Wiki Essence",
+      "blockSource": "PROVENANCE_GAP_ERTHEIA"
+    },
+    {
+      "assertionId": "PENDENCY_026",
+      "classId": "ertheiaWarrior",
+      "skillId": "critical_power",
+      "inheritedFrom": null,
+      "relationship": "own",
+      "status": "BLOCKED_UNPROVEN_PROVENANCE",
+      "reason": "Classe promovida de Ertheia com habilidades no catálogo V2 sem proveniência canônica comprovada no L2Wiki Essence",
+      "blockSource": "PROVENANCE_GAP_ERTHEIA"
+    },
+    {
+      "assertionId": "PENDENCY_027",
+      "classId": "ertheiaWarrior",
+      "skillId": "soul_smash",
+      "inheritedFrom": "marauder",
+      "relationship": "inherited",
+      "status": "BLOCKED_UNPROVEN_PROVENANCE",
+      "reason": "Habilidade herdada de ancestral (marauder) pertencente à linhagem Ertheia com proveniência não comprovada no L2Wiki Essence",
+      "blockSource": "PROVENANCE_GAP_ERTHEIA"
+    },
+    {
+      "assertionId": "PENDENCY_028",
+      "classId": "ertheiaWarrior",
+      "skillId": "increase_power",
+      "inheritedFrom": "marauder",
+      "relationship": "inherited",
+      "status": "BLOCKED_UNPROVEN_PROVENANCE",
+      "reason": "Habilidade herdada de ancestral (marauder) pertencente à linhagem Ertheia com proveniência não comprovada no L2Wiki Essence",
+      "blockSource": "PROVENANCE_GAP_ERTHEIA"
+    },
+    {
+      "assertionId": "PENDENCY_029",
+      "classId": "ertheiaWarrior",
+      "skillId": "soul_guard",
+      "inheritedFrom": "marauder",
+      "relationship": "inherited",
+      "status": "BLOCKED_UNPROVEN_PROVENANCE",
+      "reason": "Habilidade herdada de ancestral (marauder) pertencente à linhagem Ertheia com proveniência não comprovada no L2Wiki Essence",
+      "blockSource": "PROVENANCE_GAP_ERTHEIA"
+    },
+    {
+      "assertionId": "PENDENCY_030",
+      "classId": "ertheiaWarrior",
+      "skillId": "boost_attack_speed",
+      "inheritedFrom": "marauder",
+      "relationship": "inherited",
+      "status": "BLOCKED_UNPROVEN_PROVENANCE",
+      "reason": "Habilidade herdada de ancestral (marauder) pertencente à linhagem Ertheia com proveniência não comprovada no L2Wiki Essence",
+      "blockSource": "PROVENANCE_GAP_ERTHEIA"
+    },
+    {
+      "assertionId": "PENDENCY_031",
+      "classId": "ertheiaWarrior",
+      "skillId": "bandage",
+      "inheritedFrom": "marauder",
+      "relationship": "inherited",
+      "status": "BLOCKED_UNPROVEN_PROVENANCE",
+      "reason": "Habilidade herdada de ancestral (marauder) pertencente à linhagem Ertheia com proveniência não comprovada no L2Wiki Essence",
+      "blockSource": "PROVENANCE_GAP_ERTHEIA"
+    },
+    {
+      "assertionId": "PENDENCY_032",
+      "classId": "eviscerator",
+      "skillId": "overwhelming_power",
+      "inheritedFrom": null,
+      "relationship": "own",
+      "status": "BLOCKED_UNPROVEN_PROVENANCE",
+      "reason": "Classe promovida de Ertheia com habilidades no catálogo V2 sem proveniência canônica comprovada no L2Wiki Essence",
+      "blockSource": "PROVENANCE_GAP_ERTHEIA"
+    },
+    {
+      "assertionId": "PENDENCY_033",
+      "classId": "eviscerator",
+      "skillId": "powerful_rush",
+      "inheritedFrom": null,
+      "relationship": "own",
+      "status": "BLOCKED_UNPROVEN_PROVENANCE",
+      "reason": "Classe promovida de Ertheia com habilidades no catálogo V2 sem proveniência canônica comprovada no L2Wiki Essence",
+      "blockSource": "PROVENANCE_GAP_ERTHEIA"
+    },
+    {
+      "assertionId": "PENDENCY_034",
+      "classId": "eviscerator",
+      "skillId": "soul_weapon",
+      "inheritedFrom": null,
+      "relationship": "own",
+      "status": "BLOCKED_UNPROVEN_PROVENANCE",
+      "reason": "Classe promovida de Ertheia com habilidades no catálogo V2 sem proveniência canônica comprovada no L2Wiki Essence",
+      "blockSource": "PROVENANCE_GAP_ERTHEIA"
+    },
+    {
+      "assertionId": "PENDENCY_035",
+      "classId": "eviscerator",
+      "skillId": "disarm",
+      "inheritedFrom": null,
+      "relationship": "own",
+      "status": "BLOCKED_UNPROVEN_PROVENANCE",
+      "reason": "Classe promovida de Ertheia com habilidades no catálogo V2 sem proveniência canônica comprovada no L2Wiki Essence",
+      "blockSource": "PROVENANCE_GAP_ERTHEIA"
+    },
+    {
+      "assertionId": "PENDENCY_036",
+      "classId": "eviscerator",
+      "skillId": "master_of_combat",
+      "inheritedFrom": null,
+      "relationship": "own",
+      "status": "BLOCKED_UNPROVEN_PROVENANCE",
+      "reason": "Classe promovida de Ertheia com habilidades no catálogo V2 sem proveniência canônica comprovada no L2Wiki Essence",
+      "blockSource": "PROVENANCE_GAP_ERTHEIA"
+    },
+    {
+      "assertionId": "PENDENCY_037",
+      "classId": "eviscerator",
+      "skillId": "soul_impulse",
+      "inheritedFrom": "ertheiaWarrior",
+      "relationship": "inherited",
+      "status": "BLOCKED_UNPROVEN_PROVENANCE",
+      "reason": "Habilidade herdada de ancestral (ertheiaWarrior) pertencente à linhagem Ertheia com proveniência não comprovada no L2Wiki Essence",
+      "blockSource": "PROVENANCE_GAP_ERTHEIA"
+    },
+    {
+      "assertionId": "PENDENCY_038",
+      "classId": "eviscerator",
+      "skillId": "enuma_elish",
+      "inheritedFrom": "ertheiaWarrior",
+      "relationship": "inherited",
+      "status": "BLOCKED_UNPROVEN_PROVENANCE",
+      "reason": "Habilidade herdada de ancestral (ertheiaWarrior) pertencente à linhagem Ertheia com proveniência não comprovada no L2Wiki Essence",
+      "blockSource": "PROVENANCE_GAP_ERTHEIA"
+    },
+    {
+      "assertionId": "PENDENCY_039",
+      "classId": "eviscerator",
+      "skillId": "rush",
+      "inheritedFrom": "ertheiaWarrior",
+      "relationship": "inherited",
+      "status": "BLOCKED_UNPROVEN_PROVENANCE",
+      "reason": "Habilidade herdada de ancestral (ertheiaWarrior) pertencente à linhagem Ertheia com proveniência não comprovada no L2Wiki Essence",
+      "blockSource": "PROVENANCE_GAP_ERTHEIA"
+    },
+    {
+      "assertionId": "PENDENCY_040",
+      "classId": "eviscerator",
+      "skillId": "rush_impact",
+      "inheritedFrom": "ertheiaWarrior",
+      "relationship": "inherited",
+      "status": "BLOCKED_UNPROVEN_PROVENANCE",
+      "reason": "Habilidade herdada de ancestral (ertheiaWarrior) pertencente à linhagem Ertheia com proveniência não comprovada no L2Wiki Essence",
+      "blockSource": "PROVENANCE_GAP_ERTHEIA"
+    },
+    {
+      "assertionId": "PENDENCY_041",
+      "classId": "eviscerator",
+      "skillId": "critical_power",
+      "inheritedFrom": "ertheiaWarrior",
+      "relationship": "inherited",
+      "status": "BLOCKED_UNPROVEN_PROVENANCE",
+      "reason": "Habilidade herdada de ancestral (ertheiaWarrior) pertencente à linhagem Ertheia com proveniência não comprovada no L2Wiki Essence",
+      "blockSource": "PROVENANCE_GAP_ERTHEIA"
+    },
+    {
+      "assertionId": "PENDENCY_042",
+      "classId": "eviscerator",
+      "skillId": "soul_smash",
+      "inheritedFrom": "marauder",
+      "relationship": "inherited",
+      "status": "BLOCKED_UNPROVEN_PROVENANCE",
+      "reason": "Habilidade herdada de ancestral (marauder) pertencente à linhagem Ertheia com proveniência não comprovada no L2Wiki Essence",
+      "blockSource": "PROVENANCE_GAP_ERTHEIA"
+    },
+    {
+      "assertionId": "PENDENCY_043",
+      "classId": "eviscerator",
+      "skillId": "increase_power",
+      "inheritedFrom": "marauder",
+      "relationship": "inherited",
+      "status": "BLOCKED_UNPROVEN_PROVENANCE",
+      "reason": "Habilidade herdada de ancestral (marauder) pertencente à linhagem Ertheia com proveniência não comprovada no L2Wiki Essence",
+      "blockSource": "PROVENANCE_GAP_ERTHEIA"
+    },
+    {
+      "assertionId": "PENDENCY_044",
+      "classId": "eviscerator",
+      "skillId": "soul_guard",
+      "inheritedFrom": "marauder",
+      "relationship": "inherited",
+      "status": "BLOCKED_UNPROVEN_PROVENANCE",
+      "reason": "Habilidade herdada de ancestral (marauder) pertencente à linhagem Ertheia com proveniência não comprovada no L2Wiki Essence",
+      "blockSource": "PROVENANCE_GAP_ERTHEIA"
+    },
+    {
+      "assertionId": "PENDENCY_045",
+      "classId": "eviscerator",
+      "skillId": "boost_attack_speed",
+      "inheritedFrom": "marauder",
+      "relationship": "inherited",
+      "status": "BLOCKED_UNPROVEN_PROVENANCE",
+      "reason": "Habilidade herdada de ancestral (marauder) pertencente à linhagem Ertheia com proveniência não comprovada no L2Wiki Essence",
+      "blockSource": "PROVENANCE_GAP_ERTHEIA"
+    },
+    {
+      "assertionId": "PENDENCY_046",
+      "classId": "eviscerator",
+      "skillId": "bandage",
+      "inheritedFrom": "marauder",
+      "relationship": "inherited",
+      "status": "BLOCKED_UNPROVEN_PROVENANCE",
+      "reason": "Habilidade herdada de ancestral (marauder) pertencente à linhagem Ertheia com proveniência não comprovada no L2Wiki Essence",
+      "blockSource": "PROVENANCE_GAP_ERTHEIA"
+    },
+    {
+      "assertionId": "PENDENCY_047",
+      "classId": "sayhaSeer",
+      "skillId": "aqua_swirl",
+      "inheritedFrom": null,
+      "relationship": "own",
+      "status": "BLOCKED_UNPROVEN_PROVENANCE",
+      "reason": "Classe promovida de Ertheia com habilidades no catálogo V2 sem proveniência canônica comprovada no L2Wiki Essence",
+      "blockSource": "PROVENANCE_GAP_ERTHEIA"
+    },
+    {
+      "assertionId": "PENDENCY_048",
+      "classId": "sayhaSeer",
+      "skillId": "concentration",
+      "inheritedFrom": null,
+      "relationship": "own",
+      "status": "BLOCKED_UNPROVEN_PROVENANCE",
+      "reason": "Classe promovida de Ertheia com habilidades no catálogo V2 sem proveniência canônica comprovada no L2Wiki Essence",
+      "blockSource": "PROVENANCE_GAP_ERTHEIA"
+    },
+    {
+      "assertionId": "PENDENCY_049",
+      "classId": "sayhaSeer",
+      "skillId": "body_to_mind",
+      "inheritedFrom": null,
+      "relationship": "own",
+      "status": "BLOCKED_UNPROVEN_PROVENANCE",
+      "reason": "Classe promovida de Ertheia com habilidades no catálogo V2 sem proveniência canônica comprovada no L2Wiki Essence",
+      "blockSource": "PROVENANCE_GAP_ERTHEIA"
+    },
+    {
+      "assertionId": "PENDENCY_050",
+      "classId": "sayhaSeer",
+      "skillId": "fast_spell_casting",
+      "inheritedFrom": null,
+      "relationship": "own",
+      "status": "BLOCKED_UNPROVEN_PROVENANCE",
+      "reason": "Classe promovida de Ertheia com habilidades no catálogo V2 sem proveniência canônica comprovada no L2Wiki Essence",
+      "blockSource": "PROVENANCE_GAP_ERTHEIA"
+    },
+    {
+      "assertionId": "PENDENCY_051",
+      "classId": "sayhaSeer",
+      "skillId": "anti_magic",
+      "inheritedFrom": null,
+      "relationship": "own",
+      "status": "BLOCKED_UNPROVEN_PROVENANCE",
+      "reason": "Classe promovida de Ertheia com habilidades no catálogo V2 sem proveniência canônica comprovada no L2Wiki Essence",
+      "blockSource": "PROVENANCE_GAP_ERTHEIA"
+    },
+    {
+      "assertionId": "PENDENCY_052",
+      "classId": "windRiderErth",
+      "skillId": "hydro_blast",
+      "inheritedFrom": null,
+      "relationship": "own",
+      "status": "BLOCKED_UNPROVEN_PROVENANCE",
+      "reason": "Classe promovida de Ertheia com habilidades no catálogo V2 sem proveniência canônica comprovada no L2Wiki Essence",
+      "blockSource": "PROVENANCE_GAP_ERTHEIA"
+    },
+    {
+      "assertionId": "PENDENCY_053",
+      "classId": "windRiderErth",
+      "skillId": "aqua_splash",
+      "inheritedFrom": null,
+      "relationship": "own",
+      "status": "BLOCKED_UNPROVEN_PROVENANCE",
+      "reason": "Classe promovida de Ertheia com habilidades no catálogo V2 sem proveniência canônica comprovada no L2Wiki Essence",
+      "blockSource": "PROVENANCE_GAP_ERTHEIA"
+    },
+    {
+      "assertionId": "PENDENCY_054",
+      "classId": "windRiderErth",
+      "skillId": "freezing_skin",
+      "inheritedFrom": null,
+      "relationship": "own",
+      "status": "BLOCKED_UNPROVEN_PROVENANCE",
+      "reason": "Classe promovida de Ertheia com habilidades no catálogo V2 sem proveniência canônica comprovada no L2Wiki Essence",
+      "blockSource": "PROVENANCE_GAP_ERTHEIA"
+    },
+    {
+      "assertionId": "PENDENCY_055",
+      "classId": "windRiderErth",
+      "skillId": "blizzard",
+      "inheritedFrom": null,
+      "relationship": "own",
+      "status": "BLOCKED_UNPROVEN_PROVENANCE",
+      "reason": "Classe promovida de Ertheia com habilidades no catálogo V2 sem proveniência canônica comprovada no L2Wiki Essence",
+      "blockSource": "PROVENANCE_GAP_ERTHEIA"
+    },
+    {
+      "assertionId": "PENDENCY_056",
+      "classId": "windRiderErth",
+      "skillId": "spellcraft",
+      "inheritedFrom": null,
+      "relationship": "own",
+      "status": "BLOCKED_UNPROVEN_PROVENANCE",
+      "reason": "Classe promovida de Ertheia com habilidades no catálogo V2 sem proveniência canônica comprovada no L2Wiki Essence",
+      "blockSource": "PROVENANCE_GAP_ERTHEIA"
+    },
+    {
+      "assertionId": "PENDENCY_057",
+      "classId": "windRiderErth",
+      "skillId": "aqua_swirl",
+      "inheritedFrom": "sayhaSeer",
+      "relationship": "inherited",
+      "status": "BLOCKED_UNPROVEN_PROVENANCE",
+      "reason": "Habilidade herdada de ancestral (sayhaSeer) pertencente à linhagem Ertheia com proveniência não comprovada no L2Wiki Essence",
+      "blockSource": "PROVENANCE_GAP_ERTHEIA"
+    },
+    {
+      "assertionId": "PENDENCY_058",
+      "classId": "windRiderErth",
+      "skillId": "concentration",
+      "inheritedFrom": "sayhaSeer",
+      "relationship": "inherited",
+      "status": "BLOCKED_UNPROVEN_PROVENANCE",
+      "reason": "Habilidade herdada de ancestral (sayhaSeer) pertencente à linhagem Ertheia com proveniência não comprovada no L2Wiki Essence",
+      "blockSource": "PROVENANCE_GAP_ERTHEIA"
+    },
+    {
+      "assertionId": "PENDENCY_059",
+      "classId": "windRiderErth",
+      "skillId": "body_to_mind",
+      "inheritedFrom": "sayhaSeer",
+      "relationship": "inherited",
+      "status": "BLOCKED_UNPROVEN_PROVENANCE",
+      "reason": "Habilidade herdada de ancestral (sayhaSeer) pertencente à linhagem Ertheia com proveniência não comprovada no L2Wiki Essence",
+      "blockSource": "PROVENANCE_GAP_ERTHEIA"
+    },
+    {
+      "assertionId": "PENDENCY_060",
+      "classId": "windRiderErth",
+      "skillId": "fast_spell_casting",
+      "inheritedFrom": "sayhaSeer",
+      "relationship": "inherited",
+      "status": "BLOCKED_UNPROVEN_PROVENANCE",
+      "reason": "Habilidade herdada de ancestral (sayhaSeer) pertencente à linhagem Ertheia com proveniência não comprovada no L2Wiki Essence",
+      "blockSource": "PROVENANCE_GAP_ERTHEIA"
+    },
+    {
+      "assertionId": "PENDENCY_061",
+      "classId": "windRiderErth",
+      "skillId": "anti_magic",
+      "inheritedFrom": "sayhaSeer",
+      "relationship": "inherited",
+      "status": "BLOCKED_UNPROVEN_PROVENANCE",
+      "reason": "Habilidade herdada de ancestral (sayhaSeer) pertencente à linhagem Ertheia com proveniência não comprovada no L2Wiki Essence",
+      "blockSource": "PROVENANCE_GAP_ERTHEIA"
+    },
+    {
+      "assertionId": "PENDENCY_062",
+      "classId": "sayhaSeeker",
+      "skillId": "ice_vortex",
+      "inheritedFrom": null,
+      "relationship": "own",
+      "status": "BLOCKED_UNPROVEN_PROVENANCE",
+      "reason": "Classe promovida de Ertheia com habilidades no catálogo V2 sem proveniência canônica comprovada no L2Wiki Essence",
+      "blockSource": "PROVENANCE_GAP_ERTHEIA"
+    },
+    {
+      "assertionId": "PENDENCY_063",
+      "classId": "sayhaSeeker",
+      "skillId": "mystic_explosion",
+      "inheritedFrom": null,
+      "relationship": "own",
+      "status": "BLOCKED_UNPROVEN_PROVENANCE",
+      "reason": "Classe promovida de Ertheia com habilidades no catálogo V2 sem proveniência canônica comprovada no L2Wiki Essence",
+      "blockSource": "PROVENANCE_GAP_ERTHEIA"
+    },
+    {
+      "assertionId": "PENDENCY_064",
+      "classId": "sayhaSeeker",
+      "skillId": "mystic_spiral",
+      "inheritedFrom": null,
+      "relationship": "own",
+      "status": "BLOCKED_UNPROVEN_PROVENANCE",
+      "reason": "Classe promovida de Ertheia com habilidades no catálogo V2 sem proveniência canônica comprovada no L2Wiki Essence",
+      "blockSource": "PROVENANCE_GAP_ERTHEIA"
+    },
+    {
+      "assertionId": "PENDENCY_065",
+      "classId": "sayhaSeeker",
+      "skillId": "meteor",
+      "inheritedFrom": null,
+      "relationship": "own",
+      "status": "BLOCKED_UNPROVEN_PROVENANCE",
+      "reason": "Classe promovida de Ertheia com habilidades no catálogo V2 sem proveniência canônica comprovada no L2Wiki Essence",
+      "blockSource": "PROVENANCE_GAP_ERTHEIA"
+    },
+    {
+      "assertionId": "PENDENCY_066",
+      "classId": "sayhaSeeker",
+      "skillId": "mystic_freeze",
+      "inheritedFrom": null,
+      "relationship": "own",
+      "status": "BLOCKED_UNPROVEN_PROVENANCE",
+      "reason": "Classe promovida de Ertheia com habilidades no catálogo V2 sem proveniência canônica comprovada no L2Wiki Essence",
+      "blockSource": "PROVENANCE_GAP_ERTHEIA"
+    },
+    {
+      "assertionId": "PENDENCY_067",
+      "classId": "sayhaSeeker",
+      "skillId": "hydro_blast",
+      "inheritedFrom": "windRiderErth",
+      "relationship": "inherited",
+      "status": "BLOCKED_UNPROVEN_PROVENANCE",
+      "reason": "Habilidade herdada de ancestral (windRiderErth) pertencente à linhagem Ertheia com proveniência não comprovada no L2Wiki Essence",
+      "blockSource": "PROVENANCE_GAP_ERTHEIA"
+    },
+    {
+      "assertionId": "PENDENCY_068",
+      "classId": "sayhaSeeker",
+      "skillId": "aqua_splash",
+      "inheritedFrom": "windRiderErth",
+      "relationship": "inherited",
+      "status": "BLOCKED_UNPROVEN_PROVENANCE",
+      "reason": "Habilidade herdada de ancestral (windRiderErth) pertencente à linhagem Ertheia com proveniência não comprovada no L2Wiki Essence",
+      "blockSource": "PROVENANCE_GAP_ERTHEIA"
+    },
+    {
+      "assertionId": "PENDENCY_069",
+      "classId": "sayhaSeeker",
+      "skillId": "freezing_skin",
+      "inheritedFrom": "windRiderErth",
+      "relationship": "inherited",
+      "status": "BLOCKED_UNPROVEN_PROVENANCE",
+      "reason": "Habilidade herdada de ancestral (windRiderErth) pertencente à linhagem Ertheia com proveniência não comprovada no L2Wiki Essence",
+      "blockSource": "PROVENANCE_GAP_ERTHEIA"
+    },
+    {
+      "assertionId": "PENDENCY_070",
+      "classId": "sayhaSeeker",
+      "skillId": "blizzard",
+      "inheritedFrom": "windRiderErth",
+      "relationship": "inherited",
+      "status": "BLOCKED_UNPROVEN_PROVENANCE",
+      "reason": "Habilidade herdada de ancestral (windRiderErth) pertencente à linhagem Ertheia com proveniência não comprovada no L2Wiki Essence",
+      "blockSource": "PROVENANCE_GAP_ERTHEIA"
+    },
+    {
+      "assertionId": "PENDENCY_071",
+      "classId": "sayhaSeeker",
+      "skillId": "spellcraft",
+      "inheritedFrom": "windRiderErth",
+      "relationship": "inherited",
+      "status": "BLOCKED_UNPROVEN_PROVENANCE",
+      "reason": "Habilidade herdada de ancestral (windRiderErth) pertencente à linhagem Ertheia com proveniência não comprovada no L2Wiki Essence",
+      "blockSource": "PROVENANCE_GAP_ERTHEIA"
+    },
+    {
+      "assertionId": "PENDENCY_072",
+      "classId": "sayhaSeeker",
+      "skillId": "aqua_swirl",
+      "inheritedFrom": "sayhaSeer",
+      "relationship": "inherited",
+      "status": "BLOCKED_UNPROVEN_PROVENANCE",
+      "reason": "Habilidade herdada de ancestral (sayhaSeer) pertencente à linhagem Ertheia com proveniência não comprovada no L2Wiki Essence",
+      "blockSource": "PROVENANCE_GAP_ERTHEIA"
+    },
+    {
+      "assertionId": "PENDENCY_073",
+      "classId": "sayhaSeeker",
+      "skillId": "concentration",
+      "inheritedFrom": "sayhaSeer",
+      "relationship": "inherited",
+      "status": "BLOCKED_UNPROVEN_PROVENANCE",
+      "reason": "Habilidade herdada de ancestral (sayhaSeer) pertencente à linhagem Ertheia com proveniência não comprovada no L2Wiki Essence",
+      "blockSource": "PROVENANCE_GAP_ERTHEIA"
+    },
+    {
+      "assertionId": "PENDENCY_074",
+      "classId": "sayhaSeeker",
+      "skillId": "body_to_mind",
+      "inheritedFrom": "sayhaSeer",
+      "relationship": "inherited",
+      "status": "BLOCKED_UNPROVEN_PROVENANCE",
+      "reason": "Habilidade herdada de ancestral (sayhaSeer) pertencente à linhagem Ertheia com proveniência não comprovada no L2Wiki Essence",
+      "blockSource": "PROVENANCE_GAP_ERTHEIA"
+    },
+    {
+      "assertionId": "PENDENCY_075",
+      "classId": "sayhaSeeker",
+      "skillId": "fast_spell_casting",
+      "inheritedFrom": "sayhaSeer",
+      "relationship": "inherited",
+      "status": "BLOCKED_UNPROVEN_PROVENANCE",
+      "reason": "Habilidade herdada de ancestral (sayhaSeer) pertencente à linhagem Ertheia com proveniência não comprovada no L2Wiki Essence",
+      "blockSource": "PROVENANCE_GAP_ERTHEIA"
+    },
+    {
+      "assertionId": "PENDENCY_076",
+      "classId": "sayhaSeeker",
+      "skillId": "anti_magic",
+      "inheritedFrom": "sayhaSeer",
+      "relationship": "inherited",
+      "status": "BLOCKED_UNPROVEN_PROVENANCE",
+      "reason": "Habilidade herdada de ancestral (sayhaSeer) pertencente à linhagem Ertheia com proveniência não comprovada no L2Wiki Essence",
+      "blockSource": "PROVENANCE_GAP_ERTHEIA"
+    }
+  ]
+}

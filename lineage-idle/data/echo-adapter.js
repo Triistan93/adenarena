@@ -41,6 +41,36 @@ function toSkillId(classId, skillName) {
   return classId + '_' + slugify(skillName);
 }
 
+/**
+ * Determina se uma habilidade é de natureza mágica ou física.
+ */
+export function isMagicSkill(name = '', sk = null, classDef = null, classId = '') {
+  if (sk?.damageType === 'magic' || sk?.isMagic === true) return true;
+  if (sk?.damageType === 'physical' || sk?.isMagic === false) return false;
+
+  const reqWpn = sk?.gameplay?.requiredWeapon || sk?.reqWeapon;
+  if (reqWpn) {
+    const list = Array.isArray(reqWpn) ? reqWpn : [reqWpn];
+    if (list.some(w => ['staff', 'wand', 'magicblunt', 'magic_sword'].includes(w))) return true;
+    if (list.some(w => ['sword', 'dagger', 'bow', 'spear', 'dual', 'blunt', 'fist', 'twohand'].includes(w))) return false;
+  }
+
+  const s = `${name || ''} ${sk?.id || ''} ${sk?.identity?.id || ''}`.toLowerCase();
+  if (/wind_strike|flame_strike|hydro_blast|ice_bolt|prominence|solar_flare|aura_flare|hurricane|vampiric|drain|shadow_spark|shadow_flare|curse|death_spike|twister|frost_bolt|blizzard|tempest|meteor|inferno|volcano|chain_lightning|aquaswirl|fireball|spellcraft|magic_mastery|surrender|blazing_skin|freezing_skin/.test(s)) {
+    return true;
+  }
+  if (/power_strike|mortal_blow|blade_strike|double_sonic|triple_slash|crush_of_doom|fatal_strike|backstab|deadly_blow|lethal_blow|armor_crush|hammer_crush|whirlwind|thunder_storm|wrath|stun_shot|double_shot|snipe|burst_shot|arrow_rain|iron_punch|force_blaster|hurricane_fist|bison_fist|rush_impact|shield_bash|shield_stun/.test(s)) {
+    return false;
+  }
+
+  const arch = String(classDef?.archetype || classDef?.archetypeGroup || classId || '').toLowerCase();
+  if (/mage|wizard|healer|summoner|enchanter|shaman|sorcerer|spellsinger|spellhowler|necromancer|bishop|elder/.test(arch)) {
+    return true;
+  }
+
+  return false;
+}
+
 /** Mapeia raridade textual para tier numérico */
 function rarityToTier(rarity) {
   if (!rarity) return 0;
@@ -415,11 +445,15 @@ export function transformV2SkillToEcho(sId, s, existingDef = null) {
   const mpCost = s.balance?.mpCost !== undefined ? s.balance.mpCost : (isPassive ? 0 : null);
   const baseCd = s.canonicalCooldownMs !== undefined ? s.canonicalCooldownMs : (parseCooldownToMs(s.canonicalCooldown) ?? (isPassive ? 0 : null));
 
+  const isMagic = isMagicSkill(s.name, s, null, null);
+
   if (!existingDef) {
     return {
       id: sId,
       name: s.name,
       type: s.type,
+      damageType: isMagic ? 'magic' : 'physical',
+      isMagic,
       tier: starRank,
       cost: spCost,
       max: 5,
@@ -449,6 +483,8 @@ export function transformV2SkillToEcho(sId, s, existingDef = null) {
   }
 
   return Object.assign(existingDef, {
+    damageType: isMagic ? 'magic' : 'physical',
+    isMagic,
     iconGap: s.iconGap,
     iconGapReason: s.iconGapReason,
     vfxGap: s.vfxGap,
@@ -591,10 +627,14 @@ function buildEchoAdapter() {
         }
       }
 
+      const isMagic = isMagicSkill(rawName, sk, classDef, classId);
+
       SKILL_DEFS_ECHO[skillId] = {
         id:                   skillId,
         name:                 rawName,
         type:                 type,
+        damageType:           isMagic ? 'magic' : 'physical',
+        isMagic:              isMagic,
         tier:                 tier,
         cost:                 cost,
         max:                  5,
@@ -791,10 +831,14 @@ function buildEchoAdapter() {
         }
       }
 
+      const isMagic = isMagicSkill(rawName, s, null, classId);
+
       SKILL_DEFS_ECHO[id] = {
         id,
         name: rawName,
         type: isBuff ? 'buff' : 'active',
+        damageType: isMagic ? 'magic' : 'physical',
+        isMagic: isMagic,
         tier: tierNum,
         cost: spCost,
         max: 5,

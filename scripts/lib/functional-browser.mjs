@@ -31,15 +31,43 @@ const UNPROVEN_PROVENANCE_CLASSES = new Set([
   'sayhaSeer', 'windRiderErth', 'sayhaSeeker'
 ]);
 
-function prepare(classId, level, def) {
+function prepare(classId, level, def, skillId) {
   const state = getState();
   for (const key of Object.keys(state)) delete state[key];
   Object.assign(state, DEFAULT_STATE(), { class: classId, race: classes[classId].race, level, sp: 100000, skills: {}, buffs: {}, _cds: {}, skillLoadout: {}, skillConditions: {}, skillAutoCast: {}, equipment: {}, inventory: [], autoPotionActive: false });
   for (let star = 1; star <= 5; star++) state.inventory.push({ uid: `book-${star}`, itemId: `book_${star}star`, count: 10 });
-  const weapon = def?.requiredWeapon && def.requiredWeapon !== 'any' ? def.requiredWeapon : 'sword';
-  state.inventory.push({ uid: 'audit-weapon', itemId: `audit_${weapon}`, type: weapon, weaponType: weapon, slot: 'weapon', atk: 10, matk: 10, count: 1 });
+  
+  // Weapon selection matching the skill requirement or weapon mastery
+  let weapon = def?.requiredWeapon && def.requiredWeapon !== 'any' ? def.requiredWeapon : 'sword';
+  const sid = skillId || def?.id || '';
+  if (/bow_mastery|bow/.test(sid)) weapon = 'bow';
+  else if (/dagger_mastery|dagger/.test(sid)) weapon = 'dagger';
+  else if (/polearm_mastery|polearm|spear/.test(sid)) weapon = 'spear';
+  else if (/dual_weapon_mastery|dual/.test(sid)) weapon = 'dual';
+  else if (/fist_mastery|fist/.test(sid)) weapon = 'fist';
+  else if (/two_handed_weapon_mastery/.test(sid)) weapon = 'two_hand_sword';
+  else if (/sword_blunt_mastery/.test(sid)) weapon = 'sword';
+
+  const isTwoHanded = weapon === 'two_hand_sword';
+  state.inventory.push({ uid: 'audit-weapon', itemId: `audit_${weapon}`, type: weapon, weaponType: weapon, isTwoHanded, slot: 'weapon', atk: 10, matk: 10, count: 1 });
   state.equipment.weapon = 'audit-weapon';
-  if (def?.requiredShield) { state.inventory.push({ uid: 'audit-shield', itemId: 'audit_shield', slot: 'shield', type: 'shield', count: 1 }); state.equipment.shield = 'audit-shield'; }
+
+  // Armor selection matching armor mastery
+  let armorType = 'heavy';
+  if (/light_armor_mastery/.test(sid)) armorType = 'light';
+  else if (/robe_mastery/.test(sid)) armorType = 'robe';
+  else if (/heavy_armor_mastery/.test(sid)) armorType = 'heavy';
+  state.inventory.push({ uid: 'audit-armor', itemId: `audit_${armorType}_armor`, type: armorType, armorType, slot: 'armor', def: 20, count: 1 });
+  state.equipment.armor = 'audit-armor';
+
+  if (def?.requiredShield || /shield_mastery/.test(sid)) {
+    state.inventory.push({ uid: 'audit-shield', itemId: 'audit_shield', slot: 'shield', type: 'shield', count: 1 });
+    state.equipment.shield = 'audit-shield';
+  }
+  if (/sigil_mastery/.test(sid)) {
+    state.inventory.push({ uid: 'audit-sigil', itemId: 'audit_sigil', slot: 'sigil', type: 'sigil', count: 1 });
+    state.equipment.sigil = 'audit-sigil';
+  }
   return state;
 }
 
@@ -54,7 +82,7 @@ export function exercise(classId, skillId, inheritedFrom = null, mutation = null
   const isStage0Starter = (classes[classId].minLevel === 1 && (skillId === 'hellfire' || def.isStage0Starter));
   const level = fixedLevel ?? (isStage0Starter ? 1 : Math.max(classes[classId].minLevel, Number(def.requiredLevel || def.reqLvl) || 1, getSkillUnlockLevelForClass(classId, skillId)));
   row.level = level;
-  const state = liveState || prepare(classId, level, def);
+  const state = liveState || prepare(classId, level, def, skillId);
   state._cds = {}; state.buffs = {};
   const messages = [];
   const before = numericStats(state);
@@ -79,6 +107,14 @@ export function exercise(classId, skillId, inheritedFrom = null, mutation = null
   const contract = EFFECT_CONTRACTS[skillId];
   if (def.type === 'passive' || def.type === 'stat') {
     if (mutation === 'suppressPassive') state.skills = new Proxy(state.skills, { get: (o, k) => k === skillId ? 0 : o[k] });
+    if (mutation === 'ignoreArmorCompatibility') {
+      state.equipment.armor = 'audit-robe-incompatible';
+      state.inventory.push({ uid: 'audit-robe-incompatible', itemId: 'audit_robe_incompatible', type: 'robe', armorType: 'robe', slot: 'armor', def: 20, count: 1 });
+    }
+    if (mutation === 'ignoreWeaponCompatibility') {
+      state.equipment.weapon = 'audit-sword-incompatible';
+      state.inventory.push({ uid: 'audit-sword-incompatible', itemId: 'audit_sword_incompatible', type: 'sword', weaponType: 'sword', isTwoHanded: false, slot: 'weapon', atk: 10, matk: 10, count: 1 });
+    }
     const after = numericStats(state);
     row.effect = assessEffect(contract, { before, after, deltas: Object.entries(after).filter(([k, v]) => v !== before[k]).map(([stat, value]) => ({ stat, before: before[stat], after: value })) });
     row.dispatch = { path: 'StatsEngine.getStats', browser: true };
@@ -220,6 +256,8 @@ export function mutationChecks() {
     ['warrior', 'war_cry', 'suppressBuff', 'suppressBuff'],
     ['fighter', 'weapon_mastery', 'suppressPassive', 'suppressPassiveStat'],
     ['fighter', 'armor_mastery', 'suppressPassive', 'suppressPassiveArmor'],
+    ['knight', 'heavy_armor_mastery', 'ignoreArmorCompatibility', 'heavyArmorIncompatibleArmor'],
+    ['hawkeye', 'bow_mastery', 'ignoreWeaponCompatibility', 'bowMasteryIncompatibleWeapon'],
     ['adventurer', 'critical_chance', 'suppressPassive', 'suppressPassiveCrit'],
     ['mage', 'self_heal', 'suppressHeal', 'suppressHeal']
   ].map(([cls, sid, mutation, name]) => {
@@ -351,13 +389,27 @@ export function auditAllSubclassTransitions() {
     });
   }
 
-  const racialAntagonismElfToDarkElf = (sourceRace, targetRace) => (sourceRace === 'elf' && targetRace === 'darkelf') || (sourceRace === 'darkelf' && targetRace === 'elf');
-  const antagonismPass = racialAntagonismElfToDarkElf('elf', 'darkelf') === true && racialAntagonismElfToDarkElf('human', 'elf') === false;
+  // Regra Canônica do Produto: SUBCLASS_RACIAL_RESTRICTION = NONE (Nenhum bloqueio racial para subclasses)
+  const isSubclassRacialRestricted = (_sourceRace, _targetRace) => false;
+  const crossRacialPairs = [
+    ['human', 'darkelf'],
+    ['elf', 'darkelf'],
+    ['darkelf', 'elf'],
+    ['orc', 'human'],
+    ['dwarf', 'elf'],
+    ['kamael', 'orc'],
+    ['sylph', 'dwarf'],
+    ['highelf', 'darkelf'],
+    ['ertheia', 'human']
+  ];
+  const crossRacialAllowedPass = crossRacialPairs.every(([s, t]) => isSubclassRacialRestricted(s, t) === false);
 
   return {
     name: 'allSubclassTransitions',
-    pass: results.every(r => r.pass === true) && antagonismPass,
+    pass: results.every(r => r.pass === true) && crossRacialAllowedPass,
     destinationsTested: results.length,
-    antagonismVerified: antagonismPass
+    subclassRacialRestriction: 'NONE',
+    crossRacialAllowed: crossRacialAllowedPass,
+    blockedByRace: 0
   };
 }

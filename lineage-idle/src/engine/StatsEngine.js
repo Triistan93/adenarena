@@ -21,6 +21,7 @@ import { CanonicalClassGraph } from '../data/classes/CanonicalClassGraph.js';
 import { CLASS_SAVE_MIGRATION_MAP } from '../services/ClassSaveMigrationMap.js';
 import { WeaponResonanceService } from '../services/WeaponResonanceService.js';
 import { isSkillInProgressionPath } from '../services/SkillEligibility.js';
+import { getArmorType, getWeaponType } from '../data/items/item_class_rules.js';
 
 export const STR_MODIFIERS = {
   10: 0.42, 11: 0.43, 12: 0.45, 13: 0.46, 14: 0.48, 15: 0.50,
@@ -527,6 +528,101 @@ export function applyPrimaryStats(stats, primary) {
 }
 
 /**
+ * Detecta o tipo de armadura equipada ('heavy', 'light', 'robe', ou null se nenhuma).
+ */
+export function getEquippedArmorType(state) {
+  if (!state?.equipment) return null;
+  const uid = state.equipment.armor || state.equipment.chest;
+  if (!uid) return null;
+  const item = state.inventory?.find(i => i.uid === uid) || (typeof uid === 'object' ? uid : null);
+  if (!item) return null;
+  const gData = D();
+  const def = gData?.ALL_ITEMS?.[item.itemId || item.id] || (typeof window !== 'undefined' && window.ALL_ITEMS?.[item.itemId || item.id]) || item;
+  
+  if (def.armorType) return def.armorType;
+  const t = String(def.type || '').toLowerCase();
+  if (t === 'heavy' || t === 'heavy_armor') return 'heavy';
+  if (t === 'light' || t === 'light_armor') return 'light';
+  if (t === 'robe' || t === 'magic_armor') return 'robe';
+  return getArmorType(def.id || item.itemId || '', def.name || '');
+}
+
+/**
+ * Verifica se um escudo está equipado.
+ */
+export function hasEquippedShield(state) {
+  if (!state?.equipment) return false;
+  const uid = state.equipment.shield || state.equipment.offhand;
+  if (!uid) return false;
+  const item = state.inventory?.find(i => i.uid === uid) || (typeof uid === 'object' ? uid : null);
+  if (!item) return false;
+  const gData = D();
+  const def = gData?.ALL_ITEMS?.[item.itemId || item.id] || (typeof window !== 'undefined' && window.ALL_ITEMS?.[item.itemId || item.id]) || item;
+  const s = `${def.id || ''} ${def.name || ''} ${def.slot || ''} ${def.type || ''} ${def.armorType || ''}`.toLowerCase();
+  if (s.includes('sigil')) return false;
+  return s.includes('shield');
+}
+
+/**
+ * Verifica se um sigilo (sigil) está equipado.
+ */
+export function hasEquippedSigil(state) {
+  if (!state?.equipment) return false;
+  const uid = state.equipment.sigil || state.equipment.shield || state.equipment.offhand;
+  if (!uid) return false;
+  const item = state.inventory?.find(i => i.uid === uid) || (typeof uid === 'object' ? uid : null);
+  if (!item) return false;
+  const gData = D();
+  const def = gData?.ALL_ITEMS?.[item.itemId || item.id] || (typeof window !== 'undefined' && window.ALL_ITEMS?.[item.itemId || item.id]) || item;
+  const s = `${def.id || ''} ${def.name || ''} ${def.slot || ''} ${def.type || ''} ${def.armorType || ''}`.toLowerCase();
+  return s.includes('sigil');
+}
+
+/**
+ * Retorna categoria e características da arma equipada.
+ */
+export function getEquippedWeaponInfo(state) {
+  if (!state?.equipment) return { category: null, isTwoHanded: false };
+  const uid = state.equipment.weapon || state.equipment.rightHand;
+  if (!uid) return { category: null, isTwoHanded: false };
+  const item = state.inventory?.find(i => i.uid === uid) || (typeof uid === 'object' ? uid : null);
+  if (!item) return { category: null, isTwoHanded: false };
+  const gData = D();
+  const def = gData?.ALL_ITEMS?.[item.itemId || item.id] || (typeof window !== 'undefined' && window.ALL_ITEMS?.[item.itemId || item.id]) || item;
+
+  const typeProp = String(def.weaponType || def.type || '').toLowerCase();
+  const idAndName = `${def.id || ''} ${def.name || ''}`.toLowerCase();
+
+  let category = null;
+  if (typeProp.includes('dual') || /dual|dual_sword|dualsword/.test(idAndName)) {
+    category = 'dual';
+  } else if (typeProp.includes('bow') || /bow|crossbow/.test(idAndName)) {
+    category = 'bow';
+  } else if (typeProp.includes('dagger') || /dagger|knife|dirk|sword_breaker|stiletto|kris/.test(idAndName)) {
+    category = 'dagger';
+  } else if (typeProp.includes('spear') || typeProp.includes('polearm') || /spear|lance|pike|poleaxe|halberd|glaive|trident/.test(idAndName)) {
+    category = 'spear';
+  } else if (typeProp.includes('fist') || typeProp.includes('knuckle') || /fist|knuckle|claw|chakram/.test(idAndName)) {
+    category = 'fist';
+  } else if (typeProp.includes('blunt') || typeProp.includes('hammer') || typeProp.includes('mace') || /hammer|mace|blunt|club|morning_star|warhammer/.test(idAndName)) {
+    category = 'blunt';
+  } else if (typeProp.includes('staff') || typeProp.includes('wand') || /staff|wand|scepter|magicblunt|crucifix/.test(idAndName)) {
+    category = 'staff';
+  } else if (typeProp.includes('sword') || typeProp.includes('blade') || typeProp.includes('axe') || typeProp === 'melee' || /sword|blade|axe|saber|katana|rapier|broadsword|falchion|claymore|scimitar/.test(idAndName)) {
+    category = 'sword';
+  } else {
+    category = getWeaponType(def.id || item.itemId || '', def.name || '') || typeProp || null;
+  }
+
+  const isTwoHanded = Boolean(
+    def.isTwoHanded || def.twoHanded || def.hands === 2 ||
+    /two_hand|twohanded|two-handed|great_sword|greatsword|big_hammer|two_hand_sword|two_hand_blunt/.test(`${def.id || ''} ${def.name || ''} ${typeProp}`)
+  );
+
+  return { category, isTwoHanded };
+}
+
+/**
  * Calcula todos os atributos atuais do personagem (stats consolidados).
  * @param {Object} state — Estado do jogo
  * @returns {Object} Objeto com todos os atributos calculados
@@ -566,21 +662,66 @@ export function getStats(state) {
   let baseMatk = (Number(state?.base?.matk) || 0) + (Number(raceStats.matk) || 0) + (Number(clsBase.matk) || 0) + (lvl * 3) + 15;
   let baseMdef = (Number(state?.base?.mdef) || 0) + (Number(raceStats.mdef) || 0) + (Number(clsBase.mdef) || 0) + (lvl * 2) + 8;
 
+  // Equipamento equipado para condições de mastery canônicas
+  const armorType = getEquippedArmorType(state);
+  const isHeavyEquipped = armorType === 'heavy';
+  const isLightEquipped = armorType === 'light';
+  const isRobeEquipped  = armorType === 'robe';
+  const isShieldEquipped = hasEquippedShield(state);
+  const isSigilEquipped  = hasEquippedSigil(state);
+
+  const wpnInfo = getEquippedWeaponInfo(state);
+  const wCat = wpnInfo.category;
+  const isTwoHandedWpn = wpnInfo.isTwoHanded;
+
+  const isSwordBluntEquipped = wCat === 'sword' || wCat === 'blunt' || wCat === 'melee';
+  const isDualEquipped = wCat === 'dual';
+  const isPolearmEquipped = wCat === 'spear';
+  const isBowEquipped = wCat === 'bow';
+  const isDaggerEquipped = wCat === 'dagger';
+  const isFistEquipped = wCat === 'fist';
+
+  // Legacy passives
   baseAtk  += sk('wpnMastF') * 4.5;
   baseAtk  += sk('weaponMastM') * 1.5;
   baseMatk += sk('weaponMastM') * 2.5;
   baseDef  += sk('armorMast') * 11;
-  baseDef  += sk('robeMast') * 1.7;
-  baseDef  += sk('lightArmor') * 4.2;
-  baseEva  += sk('lightArmor') * 3;
+  if (isRobeEquipped) baseDef += sk('robeMast') * 1.7;
+  if (isLightEquipped) {
+    baseDef  += sk('lightArmor') * 4.2;
+    baseEva  += sk('lightArmor') * 3;
+  }
+  if (isHeavyEquipped) baseDef += sk('heavyArmor') * 12;
   baseMdef += sk('antiMagic') * 18;
   let mpRegenBonus = sk('higherMana') * 2;
 
-  // V2 Canonical Passives
-  baseAtk += (sk('sword_blunt_mastery') + sk('dual_weapon_mastery') + sk('polearm_mastery') + sk('bow_mastery') + sk('dagger_mastery') + sk('fist_mastery') + sk('weapon_mastery') + sk('master_of_combat') + sk('two_handed_weapon_mastery') + sk('eye_of_slayer')) * 5;
-  baseMatk += (sk('magic_mastery') + sk('robe_mastery') + sk('sigil_mastery') + sk('spellcraft')) * 4;
-  baseDef += (sk('heavy_armor_mastery') * 12) + (sk('light_armor_mastery') * 6) + (sk('armor_mastery') * 8) + (sk('shield_mastery') * 10);
-  baseEva += (sk('light_armor_mastery') * 3) + (sk('boost_evasion') * 3);
+  // V2 Canonical Passives — Armas (condicionais ao tipo de arma equipada)
+  if (isSwordBluntEquipped) baseAtk += sk('sword_blunt_mastery') * 5;
+  if (isDualEquipped)       baseAtk += sk('dual_weapon_mastery') * 5;
+  if (isPolearmEquipped)    baseAtk += sk('polearm_mastery') * 5;
+  if (isBowEquipped)        baseAtk += sk('bow_mastery') * 5;
+  if (isDaggerEquipped)     baseAtk += sk('dagger_mastery') * 5;
+  if (isFistEquipped)       baseAtk += sk('fist_mastery') * 5;
+  if (isTwoHandedWpn)       baseAtk += sk('two_handed_weapon_mastery') * 5;
+
+  // Passivas universais de combate — sempre ativas se aprendidas
+  baseAtk += (sk('weapon_mastery') + sk('master_of_combat') + sk('eye_of_slayer')) * 5;
+
+  // V2 Canonical Passives — Mágicas e Robe/Sigil
+  baseMatk += (sk('magic_mastery') + sk('spellcraft')) * 4;
+  if (isRobeEquipped)  baseMatk += sk('robe_mastery') * 4;
+  if (isSigilEquipped) baseMatk += sk('sigil_mastery') * 4;
+
+  // V2 Canonical Passives — Armaduras e Escudos (condicionais à armadura equipada)
+  if (isHeavyEquipped) baseDef += sk('heavy_armor_mastery') * 12;
+  if (isLightEquipped) {
+    baseDef += sk('light_armor_mastery') * 6;
+    baseEva += sk('light_armor_mastery') * 3;
+  }
+  baseDef += sk('armor_mastery') * 8; // Universal armor mastery
+  if (isShieldEquipped) baseDef += sk('shield_mastery') * 10;
+
+  baseEva += sk('boost_evasion') * 3;
   baseMdef += sk('anti_magic') * 18;
   mpRegenBonus += (sk('higher_mana') + sk('boost_mp') + sk('mana_recovery') + sk('focus_mind') + sk('higher_mana_gain')) * 2;
 

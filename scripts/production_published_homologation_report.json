@@ -1,0 +1,707 @@
+{
+  "meta": {
+    "url": "https://adenarena.vercel.app/",
+    "timestamp": "2026-09-20T17:58:38.223Z",
+    "browserVersion": "Edg/153.0.4234.48",
+    "expectedCommit": "6e910b5878bc66588347899c2d805aa716fe9ca5",
+    "deployIdentity": "DEPLOY_IDENTITY_CONFIRMED"
+  },
+  "phases": {
+    "identity": {
+      "status": "PASS",
+      "deployIdentity": "DEPLOY_IDENTITY_CONFIRMED",
+      "observed": {
+        "title": "Aden Arena: Idle Chronicles — RPG Clássico de Navegador",
+        "echoLoaded": true,
+        "classesCount": 327,
+        "v2ClassesCount": 142,
+        "v2SkillsCount": 811,
+        "hasSayhaMageBase": true,
+        "hasElfDeathKnight": true,
+        "selfHealRawType": "Recovery",
+        "selfHealType": "active",
+        "hellfireExists": true,
+        "hellfireRarity": "4★",
+        "hellfireStarRank": 4
+      }
+    },
+    "smoke": {
+      "status": "PASS",
+      "observed": {
+        "rootMounted": true,
+        "hasChildren": true,
+        "bodyHtmlLength": 11667,
+        "buttonLabels": [
+          "🎲 Aleatório",
+          "♂️ Masculino",
+          "♀️ Feminino",
+          "🧑‍🌾Humano",
+          "🧝‍♂️Elfo",
+          "🧝‍♀️Elfo Negro",
+          "👹Orc",
+          "⚒️Anão",
+          "🪶Kamael",
+          "🔫Sylph"
+        ]
+      },
+      "consoleErrorsCount": 0,
+      "uncaughtExceptionsCount": 0
+    },
+    "creationRoots": {
+      "expectedCount": 25,
+      "executedCount": 25,
+      "passedCount": 20,
+      "blockedCount": 5,
+      "failedCount": 0,
+      "complete": false,
+      "pass": true,
+      "results": [
+        {
+          "rootId": "fighter",
+          "race": "human",
+          "name": "fighter",
+          "status": "PASS",
+          "details": {
+            "rootId": "fighter",
+            "race": "human",
+            "resolvedContext": "fighter",
+            "skillsCount": 5,
+            "skills": [
+              "power_strike",
+              "mortal_blow",
+              "power_shot",
+              "weapon_mastery",
+              "armor_mastery"
+            ]
+          }
+        },
+        {
+          "rootId": "mage",
+          "race": "human",
+          "name": "mage",
+          "status": "PASS",
+          "details": {
+            "rootId": "mage",
+            "race": "human",
+            "resolvedContext": "mage",
+            "skillsCount": 5,
+            "skills": [
+              "fireball",
+              "wind_strike",
+              "self_heal",
+              "magic_mastery",
+              "robe_mastery"
+            ]
+          }
+        },
+        {
+          "rootId": "human_deathknight_0",
+          "race": "human",
+          "name": "human_deathknight_0",
+          "status": "PASS",
+          "details": {
+            "rootId": "human_deathknight_0",
+            "race": "human",
+            "resolvedContext": "deathPilgrim",
+            "skillsCount": 5,
+            "skills": [
+              "hellfire",
+              "change_armor",
+              "sword_blunt_mastery",
+              "heavy_armor_mastery",
+              "boost_hp"
+            ]
+          }
+        },
+        {
+          "rootId": "secret_assassin_male_0",
+          "race": "human",
+          "name": "secret_assassin_male_0",
+          "status": "PASS",
+          "details": {
+            "rootId": "secret_assassin_male_0",
+            "race": "human",
+            "resolvedContext": "assassinS0",
+            "skillsCount": 5,
+            "skills": [
+              "blow",
+              "bandage",
+              "dagger_mastery",
+              "light_armor_mastery",
+              "boost_hp"
+            ]
+          }
+        },
+        {
+          "rootId": "werewolf_0",
+          "race": "human",
+          "name": "werewolf_0",
+          "status": "CONTENT_GAP",
+          "details": {
+            "rootId": "werewolf_0",
+            "race": "human",
+            "resolvedContext": null,
+            "skillsCount": 0,
+            "skills": []
+          }
+        },
+        {
+          "rootId": "elven_fighter",
+          "race": "elf",
+          "name": "elven_fighter",
+          "status": "PASS",
+          "details": {
+            "rootId": "elven_fighter",
+            "race": "elf",
+            "resolvedContext": "elfFighter",
+            "skillsCount": 5,
+            "skills": [
+              "power_strike",
+              "mortal_blow",
+              "bandage",
+              "weapon_mastery",
+              "armor_mastery"
+            ]
+          }
+        },
+        {
+          "rootId": "elven_mage",
+          "race": "elf",
+          "name": "elven_mage",
+          "status": "PASS",
+          "details": {
+            "rootId": "elven_mage",
+            "race": "elf",
+            "resolvedContext": "elfMage",
+            "skillsCount": 5,
+            "skills": [
+              "ice_bolt",
+              "wind_strike",
+              "self_heal",
+              "magic_mastery",
+              "robe_mastery"
+            ]
+          }
+        },
+        {
+          "rootId": "elf_deathknight_0",
+          "race": "elf",
+          "name": "elf_deathknight_0",
+          "status": "PASS",
+          "details": {
+            "rootId": "elf_deathknight_0",
+            "race": "elf",
+            "resolvedContext": "deathPilgrim",
+            "skillsCount": 5,
+            "skills": [
+              "hellfire",
+              "change_armor",
+              "sword_blunt_mastery",
+              "heavy_armor_mastery",
+              "boost_hp"
+            ]
+          }
+        },
+        {
+          "rootId": "dark_fighter",
+          "race": "darkelf",
+          "name": "dark_fighter",
+          "status": "PASS",
+          "details": {
+            "rootId": "dark_fighter",
+            "race": "darkelf",
+            "resolvedContext": "darkElfFighter",
+            "skillsCount": 5,
+            "skills": [
+              "power_strike",
+              "mortal_blow",
+              "power_shot",
+              "weapon_mastery",
+              "armor_mastery"
+            ]
+          }
+        },
+        {
+          "rootId": "dark_mage",
+          "race": "darkelf",
+          "name": "dark_mage",
+          "status": "PASS",
+          "details": {
+            "rootId": "dark_mage",
+            "race": "darkelf",
+            "resolvedContext": "darkElfMage",
+            "skillsCount": 5,
+            "skills": [
+              "twister",
+              "fireball",
+              "self_heal",
+              "magic_mastery",
+              "robe_mastery"
+            ]
+          }
+        },
+        {
+          "rootId": "delf_deathknight_0",
+          "race": "darkelf",
+          "name": "delf_deathknight_0",
+          "status": "PASS",
+          "details": {
+            "rootId": "delf_deathknight_0",
+            "race": "darkelf",
+            "resolvedContext": "deathPilgrim",
+            "skillsCount": 5,
+            "skills": [
+              "hellfire",
+              "change_armor",
+              "sword_blunt_mastery",
+              "heavy_armor_mastery",
+              "boost_hp"
+            ]
+          }
+        },
+        {
+          "rootId": "secret_assassin_female_0",
+          "race": "darkelf",
+          "name": "secret_assassin_female_0",
+          "status": "PASS",
+          "details": {
+            "rootId": "secret_assassin_female_0",
+            "race": "darkelf",
+            "resolvedContext": "assassinS0",
+            "skillsCount": 5,
+            "skills": [
+              "blow",
+              "bandage",
+              "dagger_mastery",
+              "light_armor_mastery",
+              "boost_hp"
+            ]
+          }
+        },
+        {
+          "rootId": "rose_vain_0",
+          "race": "darkelf",
+          "name": "rose_vain_0",
+          "status": "PASS",
+          "details": {
+            "rootId": "rose_vain_0",
+            "race": "darkelf",
+            "resolvedContext": "bloodRoseBase",
+            "skillsCount": 5,
+            "skills": [
+              "rose_attack",
+              "bandage",
+              "power_strike",
+              "dagger_mastery",
+              "light_armor_mastery"
+            ]
+          }
+        },
+        {
+          "rootId": "orc_fighter",
+          "race": "orc",
+          "name": "orc_fighter",
+          "status": "PASS",
+          "details": {
+            "rootId": "orc_fighter",
+            "race": "orc",
+            "resolvedContext": "orcFighter",
+            "skillsCount": 5,
+            "skills": [
+              "power_strike",
+              "iron_punch",
+              "battle_roar",
+              "weapon_mastery",
+              "heavy_armor_mastery"
+            ]
+          }
+        },
+        {
+          "rootId": "orc_mage",
+          "race": "orc",
+          "name": "orc_mage",
+          "status": "PASS",
+          "details": {
+            "rootId": "orc_mage",
+            "race": "orc",
+            "resolvedContext": "orcMage",
+            "skillsCount": 5,
+            "skills": [
+              "inferno_strike",
+              "vortex_of_fire",
+              "dreaming_spirit",
+              "magic_mastery",
+              "robe_mastery"
+            ]
+          }
+        },
+        {
+          "rootId": "orc_rider_0",
+          "race": "orc",
+          "name": "orc_rider_0",
+          "status": "PASS",
+          "details": {
+            "rootId": "orc_rider_0",
+            "race": "orc",
+            "resolvedContext": "rider",
+            "skillsCount": 5,
+            "skills": [
+              "blazing_fury",
+              "wild_rush",
+              "battle_roar",
+              "polearm_mastery",
+              "heavy_armor_mastery"
+            ]
+          }
+        },
+        {
+          "rootId": "dwarven_fighter",
+          "race": "dwarf",
+          "name": "dwarven_fighter",
+          "status": "PASS",
+          "details": {
+            "rootId": "dwarven_fighter",
+            "race": "dwarf",
+            "resolvedContext": "dwarfFighter",
+            "skillsCount": 5,
+            "skills": [
+              "power_strike",
+              "iron_punch",
+              "bandage",
+              "weapon_mastery",
+              "heavy_armor_mastery"
+            ]
+          }
+        },
+        {
+          "rootId": "shineMakerBase",
+          "race": "dwarf",
+          "name": "shineMakerBase",
+          "status": "CONTENT_GAP",
+          "details": {
+            "rootId": "shineMakerBase",
+            "race": "dwarf",
+            "resolvedContext": null,
+            "skillsCount": 0,
+            "skills": []
+          }
+        },
+        {
+          "rootId": "jin_kamael_soldier",
+          "race": "kamael",
+          "name": "jin_kamael_soldier",
+          "status": "PASS",
+          "details": {
+            "rootId": "jin_kamael_soldier",
+            "race": "kamael",
+            "resolvedContext": "kamaelSoldier",
+            "skillsCount": 5,
+            "skills": [
+              "pride_of_kamael",
+              "kamael_s_dignity",
+              "death_mark",
+              "weapon_mastery",
+              "light_armor_mastery"
+            ]
+          }
+        },
+        {
+          "rootId": "crow_0",
+          "race": "kamael",
+          "name": "crow_0",
+          "status": "PASS",
+          "details": {
+            "rootId": "crow_0",
+            "race": "kamael",
+            "resolvedContext": "samuraiBase",
+            "skillsCount": 5,
+            "skills": [
+              "single_flash",
+              "power_strike",
+              "bandage",
+              "sword_blunt_mastery",
+              "light_armor_mastery"
+            ]
+          }
+        },
+        {
+          "rootId": "sylphid",
+          "race": "sylph",
+          "name": "sylphid",
+          "status": "PASS",
+          "details": {
+            "rootId": "sylphid",
+            "race": "sylph",
+            "resolvedContext": "sylphGunner",
+            "skillsCount": 5,
+            "skills": [
+              "dual_blow",
+              "elemental_care",
+              "elemental_haste",
+              "bow_mastery",
+              "light_armor_mastery"
+            ]
+          }
+        },
+        {
+          "rootId": "sacred_templar_0",
+          "race": "highelf",
+          "name": "sacred_templar_0",
+          "status": "PASS",
+          "details": {
+            "rootId": "sacred_templar_0",
+            "race": "highelf",
+            "resolvedContext": "highElfBase",
+            "skillsCount": 5,
+            "skills": [
+              "destiny",
+              "lord_knight",
+              "shield",
+              "magic_mastery",
+              "robe_mastery"
+            ]
+          }
+        },
+        {
+          "rootId": "spirit_0",
+          "race": "highelf",
+          "name": "spirit_0",
+          "status": "CONTENT_GAP",
+          "details": {
+            "rootId": "spirit_0",
+            "race": "highelf",
+            "resolvedContext": null,
+            "skillsCount": 0,
+            "skills": []
+          }
+        },
+        {
+          "rootId": "marauderBase",
+          "race": "ertheia",
+          "name": "marauderBase",
+          "status": "CONTENT_GAP",
+          "details": {
+            "rootId": "marauderBase",
+            "race": "ertheia",
+            "resolvedContext": null,
+            "skillsCount": 0,
+            "skills": []
+          }
+        },
+        {
+          "rootId": "sayhaMageBase",
+          "race": "ertheia",
+          "name": "sayhaMageBase",
+          "status": "CONTENT_GAP",
+          "details": {
+            "rootId": "sayhaMageBase",
+            "race": "ertheia",
+            "resolvedContext": null,
+            "skillsCount": 0,
+            "skills": []
+          }
+        }
+      ]
+    },
+    "deathKnights": {
+      "totalExpected": 3,
+      "passedCount": 3,
+      "failedCount": 0,
+      "pass": true,
+      "results": [
+        {
+          "dkId": "human_deathknight_0",
+          "status": "PASS",
+          "details": {
+            "dkId": "human_deathknight_0",
+            "skillsCount": 5,
+            "skills": [
+              "hellfire",
+              "change_armor",
+              "sword_blunt_mastery",
+              "heavy_armor_mastery",
+              "boost_hp"
+            ],
+            "hasHellfire": true,
+            "hellfireDef": {
+              "id": "hellfire",
+              "name": "Hellfire",
+              "type": "active",
+              "rawType": "Ativo",
+              "starRank": 4,
+              "mpCost": 15
+            },
+            "stagesContinuity": [
+              {
+                "stage": 0,
+                "classId": "human_deathknight_0",
+                "hasHellfire": true
+              },
+              {
+                "stage": 1,
+                "classId": "human_deathknight_1",
+                "hasHellfire": true
+              },
+              {
+                "stage": 2,
+                "classId": "human_deathknight_2",
+                "hasHellfire": true
+              },
+              {
+                "stage": 3,
+                "classId": "human_deathknight_3",
+                "hasHellfire": true
+              }
+            ]
+          }
+        },
+        {
+          "dkId": "elf_deathknight_0",
+          "status": "PASS",
+          "details": {
+            "dkId": "elf_deathknight_0",
+            "skillsCount": 5,
+            "skills": [
+              "hellfire",
+              "change_armor",
+              "sword_blunt_mastery",
+              "heavy_armor_mastery",
+              "boost_hp"
+            ],
+            "hasHellfire": true,
+            "hellfireDef": {
+              "id": "hellfire",
+              "name": "Hellfire",
+              "type": "active",
+              "rawType": "Ativo",
+              "starRank": 4,
+              "mpCost": 15
+            },
+            "stagesContinuity": [
+              {
+                "stage": 0,
+                "classId": "elf_deathknight_0",
+                "hasHellfire": true
+              },
+              {
+                "stage": 1,
+                "classId": "elf_deathknight_1",
+                "hasHellfire": true
+              },
+              {
+                "stage": 2,
+                "classId": "elf_deathknight_2",
+                "hasHellfire": true
+              },
+              {
+                "stage": 3,
+                "classId": "elf_deathknight_3",
+                "hasHellfire": true
+              }
+            ]
+          }
+        },
+        {
+          "dkId": "delf_deathknight_0",
+          "status": "PASS",
+          "details": {
+            "dkId": "delf_deathknight_0",
+            "skillsCount": 5,
+            "skills": [
+              "hellfire",
+              "change_armor",
+              "sword_blunt_mastery",
+              "heavy_armor_mastery",
+              "boost_hp"
+            ],
+            "hasHellfire": true,
+            "hellfireDef": {
+              "id": "hellfire",
+              "name": "Hellfire",
+              "type": "active",
+              "rawType": "Ativo",
+              "starRank": 4,
+              "mpCost": 15
+            },
+            "stagesContinuity": [
+              {
+                "stage": 0,
+                "classId": "delf_deathknight_0",
+                "hasHellfire": true
+              },
+              {
+                "stage": 1,
+                "classId": "delf_deathknight_1",
+                "hasHellfire": true
+              },
+              {
+                "stage": 2,
+                "classId": "delf_deathknight_2",
+                "hasHellfire": true
+              },
+              {
+                "stage": 3,
+                "classId": "delf_deathknight_3",
+                "hasHellfire": true
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "saveReload": {
+      "status": "PASS",
+      "observed": {
+        "reloaded": true,
+        "class": "human_deathknight_0",
+        "race": "human",
+        "level": 1,
+        "hasHellfireLearned": true,
+        "hasHellfireEquipped": true
+      }
+    },
+    "promotions": {
+      "status": "PASS",
+      "results": [
+        {
+          "stage": 1,
+          "reqLevel": 20,
+          "belowLevel": 19,
+          "belowBlocked": true,
+          "exactLevel": 20,
+          "exactAllowed": true,
+          "pass": true
+        },
+        {
+          "stage": 2,
+          "reqLevel": 40,
+          "belowLevel": 39,
+          "belowBlocked": true,
+          "exactLevel": 40,
+          "exactAllowed": true,
+          "pass": true
+        },
+        {
+          "stage": 3,
+          "reqLevel": 76,
+          "belowLevel": 75,
+          "belowBlocked": true,
+          "exactLevel": 76,
+          "exactAllowed": true,
+          "pass": true
+        }
+      ]
+    },
+    "subclasses": {
+      "currentImplementedRule": "MasterWork Edition — Sem Restrição Racial (main.js linha 4372)",
+      "currentUiRule": "MasterWork Edition — Sem Restrição Racial. Inicia no Nível 40.",
+      "testExpectation": "Permitir qualquer classe exceto a atual (134 elegíveis x 133 possíveis = 17.822 transições permitidas)",
+      "productDecisionSource": "lineage-idle/main.js (linhas 4371-4403)",
+      "observed": {
+        "classesCount": 327,
+        "hasOpenAddSubclassModal": false,
+        "hasSwitchSubclass": false
+      }
+    }
+  }
+}

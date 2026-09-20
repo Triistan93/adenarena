@@ -108,43 +108,40 @@ function executeSwitchSubclass(st, targetIdx) {
 
 const restrictionResults = [];
 
-// Regra A: Elfo não pode escolher Dark Elf
+// Regra Canônica de Produto: SUBCLASS_RACIAL_RESTRICTION = NONE (Sem Restrição Racial)
 function checkSubclassEligibility(mainRace, mainClass, targetSubClass) {
-  const normMainRace = String(mainRace).toLowerCase().replace(/[-_\s]+/g, '');
-  const targetDef = manifest.classes[targetSubClass] || getClass(targetSubClass);
-  const normTargetRace = targetDef ? String(targetDef.race).toLowerCase().replace(/[-_\s]+/g, '') : null;
-
   // 1. Não pode ser a mesma classe da Main
   if (mainClass === targetSubClass) {
     return { allowed: false, reason: 'SAME_CLASS_PROHIBITED' };
   }
 
-  // 2. Incompatibilidade Élfica (Elfo vs Elfo Negro)
-  if (normMainRace === 'elf' && normTargetRace === 'darkelf') {
-    return { allowed: false, reason: 'ELVEN_RACIAL_ANTAGONISM' };
-  }
-  if (normMainRace === 'darkelf' && normTargetRace === 'elf') {
-    return { allowed: false, reason: 'ELVEN_RACIAL_ANTAGONISM' };
-  }
-
+  // 2. Não existe bloqueio racial: qualquer raça pode selecionar subclasse de qualquer raça
   return { allowed: true };
 }
 
-// Testar Restrições
+// Testar Restrições e Permissões Cross-Raciais
 const elfCheck = checkSubclassEligibility('elf', 'temple_knight', 'shillien_knight');
 restrictionResults.push({
-  test: 'Elf Main tentando escolher Shillien Knight (Dark Elf)',
-  expected: 'BLOCKED (ELVEN_RACIAL_ANTAGONISM)',
+  test: 'Elf Main escolhendo Shillien Knight (Dark Elf) — Cross-Racial Canônico',
+  expected: 'ALLOWED',
   observed: elfCheck.allowed ? 'ALLOWED' : `BLOCKED (${elfCheck.reason})`,
-  status: (!elfCheck.allowed && elfCheck.reason === 'ELVEN_RACIAL_ANTAGONISM') ? 'PASS' : 'FAIL'
+  status: elfCheck.allowed ? 'PASS' : 'FAIL'
 });
 
 const darkElfCheck = checkSubclassEligibility('darkelf', 'shillien_knight', 'temple_knight');
 restrictionResults.push({
-  test: 'Dark Elf Main tentando escolher Temple Knight (Elf)',
-  expected: 'BLOCKED (ELVEN_RACIAL_ANTAGONISM)',
+  test: 'Dark Elf Main escolhendo Temple Knight (Elf) — Cross-Racial Canônico',
+  expected: 'ALLOWED',
   observed: darkElfCheck.allowed ? 'ALLOWED' : `BLOCKED (${darkElfCheck.reason})`,
-  status: (!darkElfCheck.allowed && darkElfCheck.reason === 'ELVEN_RACIAL_ANTAGONISM') ? 'PASS' : 'FAIL'
+  status: darkElfCheck.allowed ? 'PASS' : 'FAIL'
+});
+
+const orcCheck = checkSubclassEligibility('orc', 'destroyer', 'paladin');
+restrictionResults.push({
+  test: 'Orc Main escolhendo Paladin (Human) — Cross-Racial Canônico',
+  expected: 'ALLOWED',
+  observed: orcCheck.allowed ? 'ALLOWED' : `BLOCKED (${orcCheck.reason})`,
+  status: orcCheck.allowed ? 'PASS' : 'FAIL'
 });
 
 const sameClassCheck = checkSubclassEligibility('human', 'paladin', 'paladin');

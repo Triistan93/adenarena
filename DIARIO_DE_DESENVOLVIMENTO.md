@@ -96,7 +96,7 @@
 2. **`effectContractForEverySkill`**: 417 habilidades únicas verificadas. 416 possuem contratos de efeito configurados; exatamente 1 intencionalmente não validada (`long_shot`).
 3. **`allCreationRootsUI`**: Todas as 25 raízes de criação de `CharacterCreation.tsx` exercitadas no DOM do navegador real. 20 raízes ativas aprovadas e 5 identificadas como content gap.
 4. **`allPromotionsUI`**: Todas as 134 arestas de promoção de classe testadas: bloqueadas rigorosamente antes do nível de requisito (Lv. 19, 39, 75) e permitidas no nível exato (Lv. 20, 40, 76), com preservação de starter skills.
-5. **`allSubclassTransitions`**: 125 destinos ativos testados na matriz de subclasses, respeitando isolamento de SP, nível inicial 40, limite de 3 slots e antagonismo racial (ex: Elfo não pode adotar subclasse de Elfo Negro).
+5. **`allSubclassTransitions`**: 125 destinos ativos testados na matriz de subclasses, respeitando isolamento de SP, nível inicial 40 e limite de 3 slots. *(Nota Canônica: Conforme decisão de produto do Product Owner, `SUBCLASS_RACIAL_RESTRICTION = NONE` — qualquer raça pode adotar subclasses de qualquer outra raça, inclusive Elfo ↔ Elfo Negro, com `BLOCKED_BY_RACE = 0`)*.
 6. **`realSaveReload`**: Persistência via `localStorage` do navegador real com reload da página e sanitização por `normalizeAndValidateSkills`.
 
 ---

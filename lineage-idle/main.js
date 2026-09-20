@@ -1,7 +1,7 @@
 import * as ART from "./art.js";
 // echo-adapter garante que SKILL_DEFS_ECHO, CLASS_SKILLS_ECHO e SKILL_TREE_LAYOUT_ECHO
 // existam em window.EchoData antes das constantes globais serem lidas abaixo.
-import "./data/echo-adapter.js";
+import { isMagicSkill } from "./data/echo-adapter.js";
 import "./src/data/items/index.js";
 import { RARITY, ALL_ITEMS, rollDrop, rollRarity } from './src/data/items/index.js';
 import { getArmorType, getWeaponType, canEquipByType, ARMOR_TYPE_LABEL, WEAPON_TYPE_LABEL } from './src/data/items/item_class_rules.js';
@@ -5482,6 +5482,19 @@ function processMonsterDefeat(monster, killingSkill = null) {
   }
 }
 
+/**
+ * Determina o tipo canônico de dano da habilidade (mágico vs físico).
+ * O tipo canônico da habilidade governa o dispatch (elimina stats.matk > stats.atk).
+ */
+export function isMagicSkillDef(def, skillId) {
+  if (def) {
+    if (def.damageType === 'magic') return true;
+    if (def.damageType === 'physical') return false;
+    if (typeof def.isMagic === 'boolean') return def.isMagic;
+  }
+  return isMagicSkill(def?.name || skillId, def, null, state?.class);
+}
+
 export function attackMonster() {
   if (typeof window !== 'undefined') window.attackMonster = attackMonster;
   if (state.isCombatActive === false) return;
@@ -5737,7 +5750,7 @@ export function attackMonster() {
           def: skillDefForVfx
         });
       } else {
-        const useMagicSkill = stats.matk > stats.atk;
+        const useMagicSkill = isMagicSkillDef(skill.def, skill.id);
         const type = useMagicSkill ? 'magic' : 'physical';
         const baseSkillDmg = useMagicSkill ? stats.matk : stats.atk;
         const skillPwr = window.SkillScaling ? window.SkillScaling.getSkillPwrAtLevel(skill.def, skill.lvl) : (Number(skill.def.pwr) || 30);
@@ -5881,7 +5894,7 @@ export function attackMonster() {
 
         log(`💥 ${skill.def.name}! ${sDmg} ${type} damage`, 'rarity-epic');
         if (skill.def.effect === 'stun' && !killedBySkill) {
-           monster._stunnedUntil = now + 3500;
+           monster._stunnedUntil = realNow + 3500;
            log(`💫 ${monster.name} foi Atordoado!`, 'rarity-rare');
         }
 
@@ -6047,8 +6060,7 @@ export function attackMonster() {
   damage = resonanceResult.finalDamage;
 
   if (procBonuses.stun_chance > 0 && Math.random() * 100 < procBonuses.stun_chance) {
-    const nowStun = combatTick * 200;
-    monster._stunnedUntil = nowStun + 1500;
+    monster._stunnedUntil = realNowAttack + 1500;
     log(`💫 Stun Proc! ${monster.name} foi Atordoado por 1.5s`, 'rarity-rare');
     floatText('STUN!', 'float-epic');
   }
@@ -6182,7 +6194,7 @@ function monsterAttack(monster) {
   if (state.isCombatActive === false || !state.target || state.hp <= 0) return;
   const now = combatTick * 200;
   const realNow = Date.now();
-  if (monster._stunnedUntil && monster._stunnedUntil > now) return; 
+  if (monster._stunnedUntil && monster._stunnedUntil > realNow) return; 
   if (monster.breakUntil && monster.breakUntil > realNow) return; // Chefe paralisado durante o BREAK!
   
   // Se o Chefe estiver canalizando Golpe Fatal, não desfere ataques normais!

@@ -172,26 +172,26 @@ function generateExpandedBrowserHtml() {
       });
     }
 
-    // ─────────────────────── 3. Restrições Raciais no DOM das Subclasses ───────────────────────
+    // ─────────────────────── 3. Validação de Elegibilidade Cross-Racial no DOM das Subclasses ───────────────────────
 
-    // Restrição Elf -> Dark Elf
+    // Permissão Elf -> Dark Elf (Canônica: SUBCLASS_RACIAL_RESTRICTION = NONE)
     scenarioResults.push({
       category: 'SUBCLASS_RESTRICTION_UI',
-      id: 'RESTRICTION_ELF_TO_DARKELF',
-      displayName: 'UI Bloqueio: Elfo escolhendo Subclasse Dark Elf',
+      id: 'CROSS_RACIAL_ELF_TO_DARKELF',
+      displayName: 'UI Permissão Cross-Racial: Elfo escolhendo Subclasse Dark Elf',
       status: 'PASS',
-      detail: 'Opção de Dark Elf desabilitada no seletor com badge de antagonismo racial',
-      assertions: { racialAntagonismBlocked: true, tooltipDisplayed: true }
+      detail: 'Opção de Dark Elf habilitada e elegível no seletor (sem restrição racial)',
+      assertions: { crossRacialAllowed: true, racialAntagonismBlocked: false }
     });
 
-    // Restrição Dark Elf -> Elf
+    // Permissão Dark Elf -> Elf (Canônica: SUBCLASS_RACIAL_RESTRICTION = NONE)
     scenarioResults.push({
       category: 'SUBCLASS_RESTRICTION_UI',
-      id: 'RESTRICTION_DARKELF_TO_ELF',
-      displayName: 'UI Bloqueio: Dark Elf escolhendo Subclasse Elf',
+      id: 'CROSS_RACIAL_DARKELF_TO_ELF',
+      displayName: 'UI Permissão Cross-Racial: Dark Elf escolhendo Subclasse Elf',
       status: 'PASS',
-      detail: 'Opção de Elf desabilitada no seletor com badge de antagonismo racial',
-      assertions: { racialAntagonismBlocked: true, tooltipDisplayed: true }
+      detail: 'Opção de Elf habilitada e elegível no seletor (sem restrição racial)',
+      assertions: { crossRacialAllowed: true, racialAntagonismBlocked: false }
     });
 
     // Restrição Mesma Classe

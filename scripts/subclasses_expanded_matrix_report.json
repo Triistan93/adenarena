@@ -1,25 +1,31 @@
 {
   "meta": {
-    "restrictionsTested": 4,
+    "restrictionsTested": 5,
     "destinationClassesTotal": 134,
     "passedCount": 126,
     "blockedContentGapCount": 2,
     "blockedErtheiaCount": 6,
     "failedCount": 0,
-    "generatedAt": "2026-09-20T16:47:31.389Z",
+    "generatedAt": "2026-09-20T18:42:22.993Z",
     "commitHead": "db08514"
   },
   "restrictionChecks": [
     {
-      "test": "Elf Main tentando escolher Shillien Knight (Dark Elf)",
-      "expected": "BLOCKED (ELVEN_RACIAL_ANTAGONISM)",
-      "observed": "BLOCKED (ELVEN_RACIAL_ANTAGONISM)",
+      "test": "Elf Main escolhendo Shillien Knight (Dark Elf) — Cross-Racial Canônico",
+      "expected": "ALLOWED",
+      "observed": "ALLOWED",
       "status": "PASS"
     },
     {
-      "test": "Dark Elf Main tentando escolher Temple Knight (Elf)",
-      "expected": "BLOCKED (ELVEN_RACIAL_ANTAGONISM)",
-      "observed": "BLOCKED (ELVEN_RACIAL_ANTAGONISM)",
+      "test": "Dark Elf Main escolhendo Temple Knight (Elf) — Cross-Racial Canônico",
+      "expected": "ALLOWED",
+      "observed": "ALLOWED",
+      "status": "PASS"
+    },
+    {
+      "test": "Orc Main escolhendo Paladin (Human) — Cross-Racial Canônico",
+      "expected": "ALLOWED",
+      "observed": "ALLOWED",
       "status": "PASS"
     },
     {
