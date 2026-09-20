@@ -41,9 +41,17 @@ console.log(`[Edge Runner] Executável: ${EDGE_PATH}`);
 console.log(`[Edge Runner] URL Alvo:   ${TARGET_URL}`);
 console.log(`[Edge Runner] Screenshot: ${SCREENSHOT_PATH}`);
 
+import os from 'node:os';
+
+const tempUserDataDir = fs.mkdtempSync(path.join(os.tmpdir(), 'edge-homolog-'));
+console.log(`[Edge Runner] Temp User Data: ${tempUserDataDir}`);
+
 const edgeArgs = [
   '--headless=new',
   '--disable-gpu',
+  '--no-first-run',
+  '--no-default-browser-check',
+  `--user-data-dir=${tempUserDataDir}`,
   '--dump-dom',
   '--window-size=1280,2400',
   `--screenshot=${SCREENSHOT_PATH}`,
@@ -55,10 +63,21 @@ const child = spawn(EDGE_PATH, edgeArgs);
 let stdout = '';
 let stderr = '';
 
+const timeoutHandle = setTimeout(() => {
+  if (!child.killed) {
+    console.error('[Edge Runner] Timeout atingido (25s). Encerrando processo do Edge...');
+    child.kill('SIGKILL');
+  }
+}, 25000);
+
 child.stdout.on('data', (d) => { stdout += d.toString(); });
 child.stderr.on('data', (d) => { stderr += d.toString(); });
 
 child.on('close', (code) => {
+  clearTimeout(timeoutHandle);
+  try {
+    fs.rmSync(tempUserDataDir, { recursive: true, force: true });
+  } catch (_) {}
   console.log(`[Edge Runner] Processo Microsoft Edge encerrado com código: ${code}`);
 
   if (code !== 0) {

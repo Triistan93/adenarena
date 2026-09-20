@@ -344,7 +344,7 @@ import { SubclassCertificationService, EMERGENT_ABILITIES, MASTER_ABILITIES_BY_A
 import { CommunityCapService } from './src/services/CommunityCapService.js';
 import { ensureAppLayout, showMenuPanel, updateTabVisibilityByLevel, TAB_UNLOCK_LEVELS } from './src/ui/AppLayout.js';
 import { checkTabGuide, closeTabGuideModal, openTabGuideModal } from './src/ui/TutorialGuide.js';
-import { isFeatureUnlocked, getCurrentSeason, getSeasonForFeature, getCurrentSeasonId } from './src/core/SeasonConfig.js';
+import { isFeatureUnlocked, getCurrentSeason, getSeasonForFeature } from './src/core/SeasonConfig.js';
 import { renderSeasonLockedPanel, updateSeasonTabBadges } from './src/ui/SeasonUI.js';
 import { VFX, initializeVFX } from './vfx.js';
 import { globalVFXOrchestrator } from './src/vfx/VFXOrchestrator.js';
@@ -3981,7 +3981,7 @@ function selectDivineTransformationModal() {
   updateAllUI(); save();
 }
 
-function renderSubclassesUI() {
+export function renderSubclassesUI() {
   const container = el('subclass-list-container'); if (!container) return;
   const summaryEl = el('certifications-summary');
   const countBadge = el('subclass-count-badge');
@@ -3989,7 +3989,7 @@ function renderSubclassesUI() {
   const cpBadge = el('cert-total-cp-badge');
 
   const activeMainLevel = state.activeSubclassIndex === null ? state.level : (state.mainClassData?.level || 1);
-  const isSeasonUnlocked = isFeatureUnlocked('subclasses') || getCurrentSeasonId() >= 3;
+  const isSeasonUnlocked = isFeatureUnlocked('subclasses');
   const isUnlocked = isSeasonUnlocked && (state.fateWhisperQuest || activeMainLevel >= 52);
 
   if (countBadge) {
@@ -4452,7 +4452,7 @@ export function switchSubclass(targetIndex) {
   const resolvedTarget = isTargetValidSub ? targetIndex : null;
 
   // Season gating: subclasses are locked in Seasons prior to Season 3
-  const isSeasonUnlocked = isFeatureUnlocked('subclasses') || getCurrentSeasonId() >= 3;
+  const isSeasonUnlocked = isFeatureUnlocked('subclasses');
   if (!isSeasonUnlocked && resolvedTarget !== null && state.activeSubclassIndex === null) {
     log('O Sistema de Subclasses está bloqueado na Temporada atual (Disponível na Temporada 3).', 'warning');
     return false;
@@ -9600,6 +9600,7 @@ export function init() {
     window.canCraft = canCraft;
     window.setGameMode = setGameMode;
     window.switchSubclass = switchSubclass;
+    window.renderSubclassesUI = renderSubclassesUI;
     window.claimQuestReward = claimQuestReward;
     window.claimPassReward = claimPassReward;
     window.unlockPremiumPass = unlockPremiumPass;

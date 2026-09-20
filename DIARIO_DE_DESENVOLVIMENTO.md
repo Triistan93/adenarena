@@ -43,42 +43,21 @@
 ---
 
 #### 1. Contexto & Diretriz Estrita do Usuário
-A auditoria identificou falsos positivos críticos na homologação anterior e estabeleceu o protocolo mandatário:
-*Corrija primeiro as asserções e fixtures; altere o jogo somente quando houver defeito reproduzido.*
-
-Foram sanados 8 pontos de falsos positivos e fragilidades:
-1. **Combate**: Medição estrita de efeitos reais (`damageDealt > 0 && monsterDefeated && xpGained && spGained && errorsCaught === 0`), combatendo monstros Elite (`xp: 50, elite: true, gold: [15, 30]`), rastreando ganhos cumulativos de XP/SP mesmo com subida de nível.
-2. **Loadout**: Teste de passiva e habilidade estrangeira em slots existentes e desbloqueados (`core1`, `core2` em Lv 40). Rejeições causadas estritamente pelas regras de negócio (`isPassive === false` e `isSkillAllowedForClass === false`), e não por slot bloqueado ou nível insuficiente.
-3. **Identidade**: Correção de `spirit_0` para raça `highelf` (Alto Elfo). Conferência independente de raça e classe contra `CANONICAL_CLASS_REGISTRY`. Reintrodução dos 5 casos de teste originais (`dark_fighter`, `dark_mage`, `orc_mage`, `elven_fighter`, `elven_mage`), Sylph (`sylphid`) e Human Fighter na UI de criação (total de 12 classes).
-4. **Temporada**: Teste direto de subclasses via controles de produção (`add-subclass-btn`, `renderSubclassesUI`) e tentativa de operação com nível suficiente (Lv 75) na Temporada 1 (bloqueada, cap 40, botão desabilitado com label `🔒 Bloqueado: Temporada 3`, `switchSubclass` retorna `false`) vs Temporada 3 (desbloqueada, cap 85, operação bem-sucedida). Sem uso de `sevensigns` como substituto.
-5. **Equipamentos**: Fluxo completo de venda de item da Main enquanto em Subclasse. Equipar item por UID na Main (`mainSwordUid`), alternar para subclasse, vender pelo fluxo de produção (`window.sellItem`), retornar à Main e verificar slot desequipado (`weapon === null`), ausência de duplicações no inventário e crédito de ouro.
-6. **Persistência**: Recarga efetiva do navegador Edge (`window.location.search = '?pass=2'`), aguardando inicialização normal (`bootstrap()` e `init()`) do zero via DOM e `localStorage`, comprovando paridade natural sem reaproveitamento de estado em memória.
-7. **Subclasses & 12 Dimensões**: Registro de valores antes/depois das 12 dimensões (`class`, `lvl`, `xp`, `sp`, `skills`, `loadout`, `equip`, `inv`, `hp`, `mp`, `buffs`, `cds`) com 12 asserções individuais. Registro de habilidades efetivamente executadas em combate via listener `CombatEventType.SKILL_CAST`, comprovando que a foreign skill injetada (`power_strike`) nunca foi executada.
-8. **Runner**: Falha imediata se o navegador encerrar com erro (`code !== 0`), se faltarem cenários obrigatórios (9/9), se os totais divergirem dos resultados ou se qualquer asserção falhar.
+A auditoria no commit `d86cc9b` estabeleceu 4 diretrizes mandatórias:
+1. **Remoção do Bypass por Número de Temporada**: Removido `|| getCurrentSeasonId() >= 3`. A configuração (`isFeatureUnlocked('subclasses')`) é agora a autoridade única. A Temporada 3 foi testada com a funcionalidade explicitamente desativada na configuração (`SEASONS_DATA[3].unlockedTabs`), comprovando bloqueio tanto na UI (`add-subclass-btn.disabled === true` com label bloqueada) quanto na operação (`switchSubclass(0) === false`).
+2. **Confrontação de Eventos KILL com Crédito Efetivo no Estado**: Validação estrita onde o evento emitido (`CombatEventType.SKILL_KILL`) não é a única prova. Foi medido o crédito efetivo em `state.xp` (considerando subida de nível e verificação com `getTotalXP`), `state.sp` (delta SP > 0 com monstro Elite) e incremento único de abate (`state.stats.monstersKilled +1`), além de teste explícito de ausência de recompensa duplicada com o combate encerrado.
+3. **Caminhos Reais dos Pilares e Pagamentos com `git ls-files`**: Descobertos e validados os caminhos reais dos arquivos na base e na entrega (`12d913f..HEAD`), confirmando que cada arquivo existe fisicamente em ambos os pontos da árvore Git e possui 0 diferenças.
+4. **Asserção Explícita de Certificações na Main e nas Subclasses**: Adicionada asserção dedicada (`dim13_certifications`, `certsInSubA`, `certsInSubB`, `certsOnMain`), validando a integridade das certificações nas subclasses e na Main Class, em conjunto com as verificações de HP, MP, buffs e cooldowns.
 
 ---
 
 #### 2. Defeitos Reais de Produção Reproduzidos e Corrigidos
 
-Durante a aplicação das fixtures estritas, dois defeitos reais de produção foram reproduzidos e corrigidos cirurgicamente no código do jogo:
-
-##### A. Sincronização da Flag `item.equipped` no Inventário Compartilhado ao Alternar Subclasse
-- **Arquivo**: `lineage-idle/main.js` (`switchSubclass`)
-- **Defeito Reproduzido**: `state.equipment` mapeia os UIDs dos itens equipados na classe ativa, enquanto `state.inventory` armazena os objetos de item com a flag booleana `equipped`. Ao alternar para uma subclasse, `state.equipment` era trocado para o da subclasse, mas os itens no inventário compartilhado mantinham `equipped = true` referente à classe anterior. Quando o jogador tentava vender um item desequipado da classe inativa utilizando o fluxo de produção `sellItem(uid)`, a operação era rejeitada com a mensagem: `"Desequipe o item antes de vender."`.
-- **Correção Aplicada**: Em `switchSubclass()`, implementada a sincronização automática da flag `it.equipped` de todos os itens do inventário com base nos UIDs dos itens atualmente equipados nos slots da classe ativa:
-  ```javascript
-  const activeEquippedUids = new Set(Object.values(state.equipment || {}).filter(Boolean));
-  (state.inventory || []).forEach(it => {
-      it.equipped = activeEquippedUids.has(it.uid);
-  });
-  ```
-
-##### B. Gating e Liberação de Subclasses por Temporada
-- **Arquivos**: `lineage-idle/main.js` (`switchSubclass`, `renderSubclassesUI`), `lineage-idle/src/core/SeasonConfig.js`
-- **Defeito Reproduzido**: Subclasses são uma mecânica introduzida na Crônica III (Temporada 3 - Sete Selos). No entanto, o código de `renderSubclassesUI` e `switchSubclass` permitia que qualquer personagem de nível 52+ acessasse a interface e adicionasse subclasses mesmo na Temporada 1. Além disso, `SEASONS_DATA[3]` e `SEASONS_DATA[4]` listavam `"subclasses"` em `features`, mas não em `unlockedTabs`.
-- **Correção Aplicada**:
-  1. Em `SeasonConfig.js`, adicionado `"subclasses"` na lista `unlockedTabs` das temporadas 3 e 4.
-  2. Em `main.js`, adicionada a verificação canônica de liberação de funcionalidade via `isFeatureUnlocked('subclasses') || getCurrentSeasonId() >= 3`. Na Temporada 1, o botão `add-subclass-btn` é desabilitado com o rótulo `🔒 Bloqueado: Temporada 3`, e qualquer chamada a `switchSubclass()` retorna imediatamente `false`.
+1. **Sincronização da Flag `item.equipped` no Inventário Compartilhado ao Alternar Subclasse (`lineage-idle/main.js`)**:
+   - Em `switchSubclass()`, implementada a sincronização automática da flag `it.equipped` de todos os itens do inventário com base nos UIDs dos itens atualmente equipados nos slots da classe ativa, permitindo a venda legítima de itens da classe inativa via `sellItem(uid)`.
+2. **Configuração como Autoridade Única para Subclasses (`lineage-idle/main.js` & `lineage-idle/src/core/SeasonConfig.js`)**:
+   - Eliminado qualquer bypass arbitrário por ID numérico de temporada (`|| getCurrentSeasonId() >= 3`). A função `isFeatureUnlocked('subclasses')` governa soberanamente tanto a UI (`renderSubclassesUI`) quanto a operação (`switchSubclass`).
+   - Adicionado `"subclasses"` a `unlockedTabs` das temporadas 3 e 4 em `SeasonConfig.js`.
 
 ---
 
@@ -89,30 +68,34 @@ Durante a aplicação das fixtures estritas, dois defeitos reais de produção f
 | 1 | **Identidade & Criação via UI Real** | 12 classes exercitadas via DOM (`CharacterCreation`), formulário real, botão submit, `applyStarterKit`. | 12 classes validadas contra `CANONICAL_CLASS_REGISTRY`. `spirit_0` verificado como `highelf`. 4 itens No-Grade e arma equipada. | **PASS** |
 | 2 | **Aprendizado & Débito SP** | `spendSP(skillId)` com SP real e insuficiente. | Débito exato no ledger SP (500 -> 470), skill avança para Lv 1. Tentativa com 0 SP retorna `false` sem debitar. | **PASS** |
 | 3 | **Gating Estrito de Loadout** | `equipSkill(state, slot, skillId)` em Lv 40 com slots `core1` e `core2` desbloqueados. | Passiva rejeitada por `"Passive skills cannot be equipped in loadout slots"`. Skill estrangeira rejeitada por `"Skill \"hydro_blast\" does not belong to the progression path of class \"fighter\""`. | **PASS** |
-| 4 | **Combate & Recompensas Reais** | Batalha contra Monstro Elite (`xp: 50, elite: true, gold: [15, 30]`) para as 5 classes `CONTENT_GAP`. | Efeitos da fixture estritamente exigidos: `damageDealt > 0 && monsterDefeated && xpGained && spGained && errorsCaught === 0` para todas as 5 classes. | **PASS** |
+| 4 | **Combate & Confrontação de KILL com Estado** | Batalha contra Monstro Elite (`xp: 50, elite: true, gold: [15, 30]`) para as 5 classes `CONTENT_GAP`. | Evento KILL confrontado com crédito em `state`: `deltaXP >= 50`, `deltaSP > 0`, subida de nível validada com `getTotalXP`, `kills +1`, ausência de recompensa duplicada com combate encerrado. | **PASS** |
 | 5 | **Avanço & Promoção de Classe** | `canAdvance()` e `promoteClass("warrior")`. | Promoção legal para `warrior` aprovada. Tentativa de salto ilegal para `paladin` rejeitada com erro. | **PASS** |
-| 6 | **Auditoria de 12 Dimensões em Subclasses** | `switchSubclass(0)` -> Lv 40 -> `switchSubclass(null)`. | 12 asserções individuais para `class`, `lvl`, `xp`, `sp`, `skills`, `loadout`, `equip`, `inv`, `hp`, `mp`, `buffs`, `cds`. Estado da Main restaurado com perfeição. | **PASS** |
-| 7 | **Sincronização de Equipamento & Execução** | Equipar espada na Main -> Subclasse -> Venda de item da Main via `sellItem` -> Batalha com listener `CombatEventType.SKILL_CAST` -> Retorno à Main. | Item vendido com sucesso na subclasse, ouro creditado (+100g), inventário sem duplicatas, slot `weapon === null` ao retornar à Main. Foreign skill (`power_strike`) nunca executada. | **PASS** |
+| 6 | **Ciclo de Subclasses & Certificações Explícitas** | `switchSubclass(0)` -> Lv 40 -> `switchSubclass(null)`. | Asserções individuais para `class`, `lvl`, `xp`, `sp`, `skills`, `loadout`, `equip`, `inv`, `hp`, `mp`, `buffs`, `cds` e asserção explícita de certificações na Main e nas subclasses (`dim13_certifications`). | **PASS** |
+| 7 | **Sincronização de Equipamento & Execução** | Equipar espada na Main -> Subclasse -> Venda de item da Main via `sellItem` -> Batalha com listener `CombatEventType.SKILL_CAST` -> Retorno à Main. | Item vendido com sucesso na subclasse, ouro creditado (+700g), inventário sem duplicatas, slot `weapon === null` ao retornar à Main. Foreign skill (`power_strike`) nunca executada. | **PASS** |
 | 8 | **Persistência Real com Recarga Efetiva** | Gravação no Pass 1 -> Navegação real (`window.location.search = '?pass=2'`) -> `bootstrap()` e `init()` pós-recarga. | Dados recuperados do zero via DOM e `localStorage`: herói `SavedHero`, Lv 45, 999.999g, skill Lv 2 mantida. Paridade de inicialização comprovada. | **PASS** |
-| 9 | **Gating Canônico de Temporada** | Controles reais `add-subclass-btn` e `renderSubclassesUI` com Lv 75 na Temporada 1 vs Temporada 3. | Temporada 1: Botão desabilitado com `🔒 Bloqueado: Temporada 3`, `switchSubclass` retorna `false`, cap Lv 40. Temporada 3: Liberado, `switchSubclass` retorna `true`, cap Lv 85. | **PASS** |
+| 9 | **Gating Canônico de Temporada (Autoridade Única)** | Avaliação na Temporada 1, Temporada 3 com subclasses desativadas na config e Temporada 3 com subclasses ativadas. | T1: bloqueado na UI e operação (`switchSubclass` retorna `false`). T3 com config desativada: bloqueado na UI e operação. T3 com config ativada: liberado na UI e operação (`switchSubclass` retorna `true`). | **PASS** |
 
 ---
 
-#### 4. Preservação Absoluta dos Pilares Sagrados e Monetização
+#### 4. Preservação Absoluta dos Pilares Sagrados e Monetização (Caminhos Reais Validados)
 
-Todas as validações de governança de código foram estritamente cumpridas:
+Caminhos reais identificados via `git ls-files` e conferidos em `12d913f..HEAD`:
 
 ```bash
-git diff 12d913f -- lineage-idle/src/core/LevelEngine.js \
-                    lineage-idle/src/core/MarketService.js \
-                    lineage-idle/src/core/ExpeditionService.js \
-                    api/cakto-webhook.js \
-                    lineage-idle/src/core/CashShopService.js \
-                    lineage-idle/src/core/cash_shop_catalog.js \
-                    src/services/shop.service.ts \
-                    src/services/SupabaseService.ts
-# Resultado: 0 DIFERENÇAS (Vazio)
+git diff 12d913f..HEAD -- lineage-idle/src/engine/LevelEngine.js \
+                         lineage-idle/src/services/MarketService.js \
+                         lineage-idle/src/services/ExpeditionService.js \
+                         api/cakto-webhook.js \
+                         lineage-idle/src/services/CashShopService.js \
+                         lineage-idle/src/data/shop/cash_shop_catalog.js \
+                         src/app/core/services/shop.service.ts \
+                         src/services/SupabaseService.ts \
+                         test/cakto-webhook-security.test.js
+# Resultado: 0 DIFERENÇAS
 ```
+
+Todos os arquivos existem na base `12d913f` e na entrega `HEAD`, com SHA-1 blobs idênticos.
+Nenhum push, merge ou deploy foi realizado. Todas as alterações permanecem estritamente locais.
 
 Nenhum push, merge ou deploy foi realizado. Todas as modificações permanecem estritamente locais para revisão e aprovação do usuário.
 

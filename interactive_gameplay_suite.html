@@ -89,11 +89,13 @@
       setRoot, 
       promoteClass, 
       switchSubclass, 
+      renderSubclassesUI,
       attackMonster, 
       spendSP,
       equipItem,
       sellItem
     } from '/lineage-idle/main.js';
+    import { getTotalXP } from '/lineage-idle/src/engine/LevelEngine.js';
     import { bootstrap } from '/lineage-idle/src/core/GameBootstrap.js';
     import { equipSkill, unequipSkill } from '/lineage-idle/src/services/SkillLoadoutService.js';
     import { promoteClass as servicePromoteClass, canAdvance } from '/lineage-idle/src/services/CharacterService.js';
@@ -412,6 +414,10 @@
         creationForm.dispatchEvent(new Event('submit'));
 
         const cst = getLiveState();
+        cst.xp = 0;
+        cst.sp = 0;
+        cst.level = 1;
+        cst.stats = { monstersKilled: 0 };
         cst.isCombatActive = true;
         cst.zone = 'talkingIsland';
 
@@ -440,6 +446,15 @@
         const xpInitial = cst.xp || 0;
         const spInitial = cst.sp || 0;
         const levelInitial = cst.level || 1;
+        const killsInitial = cst.stats?.monstersKilled || 0;
+
+        let killEventFired = false;
+        let killEventData = null;
+        const onSkillKill = (ev) => {
+          killEventFired = true;
+          killEventData = ev;
+        };
+        combatEvents.on(CombatEventType.SKILL_KILL, onSkillKill);
 
         let ticks = 0;
         let errorsCaught = 0;
@@ -454,11 +469,47 @@
           ticks++;
         }
 
+        combatEvents.off(CombatEventType.SKILL_KILL, onSkillKill);
+
         const damageDealt = hpInitial - monster.hp;
         const monsterDefeated = monster.hp <= 0;
-        const xpGained = (cst.xp || 0) > xpInitial || (cst.level || 1) > levelInitial;
-        const spGained = (cst.sp || 0) > spInitial;
-        const passed = damageDealt > 0 && monsterDefeated && xpGained && spGained && errorsCaught === 0;
+        const xpAfter = cst.xp || 0;
+        const spAfter = cst.sp || 0;
+        const levelAfter = cst.level || 1;
+        const killsAfter = cst.stats?.monstersKilled || 0;
+
+        // Validação estrita de Crédito Efetivo no Estado:
+        const deltaXP = xpAfter - xpInitial;
+        const deltaSP = spAfter - spInitial;
+        const deltaKills = killsAfter - killsInitial;
+
+        // 1. Validação de XP considerando subida de nível (LevelEngine usa XP cumulativo)
+        const leveledUp = levelAfter > levelInitial;
+        const xpThresholdValid = leveledUp ? (xpAfter >= getTotalXP(levelInitial)) : true;
+        const xpGainedInState = deltaXP > 0 && deltaXP >= monster.xp && xpThresholdValid;
+
+        // 2. Delta de SP: monstro Elite garante baseSp > 0 (+ SP de level up se subiu de nível)
+        const spGainedInState = deltaSP > 0;
+
+        // 3. Incremento único de abate
+        const killsCounted = deltaKills === 1;
+
+        // 4. Ausência de Recompensa Duplicada: com o abate concluído, novo tick com combate encerrado não deve creditar nada
+        cst.isCombatActive = false;
+        const preCheckXp = cst.xp;
+        const preCheckSp = cst.sp;
+        const preCheckKills = cst.stats?.monstersKilled || 0;
+        try {
+          window.attackMonster();
+        } catch (_) {}
+        const noDuplicateXp = cst.xp === preCheckXp;
+        const noDuplicateSp = cst.sp === preCheckSp;
+        const noDuplicateKills = (cst.stats?.monstersKilled || 0) === preCheckKills;
+        const noDuplicateReward = noDuplicateXp && noDuplicateSp && noDuplicateKills;
+
+        // Confrontação: Evento emitido + Crédito efetivo comprovado no estado (evento não é a única prova)
+        const effectiveCreditProven = xpGainedInState && spGainedInState && killsCounted && noDuplicateReward;
+        const passed = killEventFired && effectiveCreditProven && damageDealt > 0 && monsterDefeated && errorsCaught === 0;
 
         combatResults.push({
           classId: c.classId,
@@ -466,8 +517,14 @@
           damageDealt,
           ticksExecuted: ticks,
           monsterDefeated,
-          xpGained,
-          spGained,
+          killEventFired,
+          deltaXP,
+          deltaSP,
+          leveledUp,
+          levelAfter,
+          killsCounted,
+          noDuplicateReward,
+          effectiveCreditProven,
           errorsCaught,
           passed
         });
@@ -476,13 +533,13 @@
       const allCombatPassed = combatResults.every(r => r.passed);
       scenarioResults.push({
         scenarioId: 'SCENARIO_4_PRODUCTION_COMBAT_CONTENT_GAP',
-        title: 'Ciclo de Combate de Produção (attackMonster) & Auto-Ataque com Recompensas Efetivas de XP/SP',
+        title: 'Ciclo de Combate de Produção (attackMonster) & Confrontação de Eventos KILL com Crédito Efetivo no Estado',
         type: 'DIRECT_SERVICE_CALL',
         status: allCombatPassed ? 'PASS' : 'FAIL',
         initialState: '5 classes CONTENT_GAP enfrentando monstro Elite (XP 50, Elite=true, Gold=[15, 30])',
-        actions: 'Execução de ticks do motor de combate real window.attackMonster() até derrota do monstro',
-        expected: 'Auto-ataque com arma para classes sem skills e skills para as demais; dano > 0; derrota; ganho efetivo de XP e SP sem exceções',
-        observed: combatResults.map(r => `${r.classId}: dano=${r.damageDealt}, derrotou=${r.monsterDefeated}, xpGained=${r.xpGained}, spGained=${r.spGained}`).join(' | '),
+        actions: 'attackMonster() até derrota, confronto com evento KILL, validação de delta XP/SP e teste de ausência de recompensa duplicada',
+        expected: 'Evento KILL disparado; crédito efetivo comprovado no estado (deltaXP >= 50, deltaSP > 0, kills +1); ausência de duplicação em tick subsequente',
+        observed: combatResults.map(r => `${r.classId}: dano=${r.damageDealt}, derrotou=${r.monsterDefeated}, eventKILL=${r.killEventFired}, deltaXP=${r.deltaXP}, deltaSP=${r.deltaSP}, creditState=${r.effectiveCreditProven}`).join(' | '),
         details: combatResults,
         consoleErrorsCount: consoleErrors.length
       });
@@ -548,9 +605,14 @@
       st6.buffs = { haste: { amount: 1.15, until: Date.now() + 60000 } };
       st6._cds = { triple_slash: Date.now() + 5000 };
       st6.subclasses = [
-        { classId: 'hawkeye', class: 'hawkeye', level: 40, xp: 5000, sp: 200, skills: { double_shot: 1 }, skillLoadout: { basic: null, core1: 'double_shot', core2: null, special1: null, special2: null, signature: null, ultimate: null }, equipment: { weapon: 'sub_bow_1' } },
-        { classId: 'sorcerer', class: 'sorcerer', level: 40, xp: 5000, sp: 250, skills: { blaze: 1 }, skillLoadout: { basic: null, core1: 'blaze', core2: null, special1: null, special2: null, signature: null, ultimate: null }, equipment: { weapon: 'sub_staff_1' } }
+        { id: 'sub_0', classId: 'hawkeye', class: 'hawkeye', level: 40, xp: 5000, sp: 200, skills: { double_shot: 1 }, skillLoadout: { basic: null, core1: 'double_shot', core2: null, special1: null, special2: null, signature: null, ultimate: null }, equipment: { weapon: 'sub_bow_1' } },
+        { id: 'sub_1', classId: 'sorcerer', class: 'sorcerer', level: 40, xp: 5000, sp: 250, skills: { blaze: 1 }, skillLoadout: { basic: null, core1: 'blaze', core2: null, special1: null, special2: null, signature: null, ultimate: null }, equipment: { weapon: 'sub_staff_1' } }
       ];
+      st6.subclassCertifications = {
+        'sub_0': { lv65: 'emergent_patk', lv70: 'emergent_pdef' },
+        'sub_1': { lv65: 'emergent_matk' }
+      };
+      st6.certifications = { emergent_patk: 1, emergent_pdef: 1, emergent_matk: 1 };
       st6.activeSubclassIndex = null;
 
       const snapBefore = {
@@ -565,22 +627,28 @@
         hp: st6.hp,
         mp: st6.mp,
         buffsCount: Object.keys(st6.buffs || {}).length,
-        cdsCount: Object.keys(st6._cds || {}).length
+        cdsCount: Object.keys(st6._cds || {}).length,
+        subclassCertifications: JSON.stringify(st6.subclassCertifications),
+        certifications: JSON.stringify(st6.certifications)
       };
 
       // 1. Alterna para Sub A (Hawkeye)
       window.switchSubclass(0);
       const isSubA = st6.class === 'hawkeye' && st6.level === 40 && st6.activeSubclassIndex === 0;
+      const certsInSubA = Boolean(st6.subclassCertifications && st6.subclassCertifications['sub_0']?.lv65 === 'emergent_patk');
 
       // 2. Alterna para Sub B (Sorcerer)
       window.switchSubclass(1);
       const isSubB = st6.class === 'sorcerer' && st6.level === 40 && st6.activeSubclassIndex === 1;
+      const certsInSubB = Boolean(st6.subclassCertifications && st6.subclassCertifications['sub_1']?.lv65 === 'emergent_matk');
 
       // 3. Retorna para Main
       window.switchSubclass(null);
       const isBackMain = st6.class === 'gladiator' && st6.level === 75 && st6.activeSubclassIndex === null;
+      const certsOnMain = JSON.stringify(st6.subclassCertifications) === snapBefore.subclassCertifications &&
+                          JSON.stringify(st6.certifications) === snapBefore.certifications;
 
-      // Asserções individuais para cada uma das 12 dimensões
+      // Asserções individuais para cada uma das dimensões auditadas
       const dim1_class = st6.class === snapBefore.class;
       const dim2_level = st6.level === snapBefore.level;
       const dim3_xp = st6.xp === snapBefore.xp;
@@ -593,24 +661,26 @@
       const dim10_mp = st6.mp === snapBefore.mp;
       const dim11_buffs = Object.keys(st6.buffs || {}).length === snapBefore.buffsCount;
       const dim12_cds = Object.keys(st6._cds || {}).length === snapBefore.cdsCount;
+      const dim13_certifications = certsInSubA && certsInSubB && certsOnMain;
 
-      const all12DimsPassed = isSubA && isSubB && isBackMain &&
+      const allDimsPassed = isSubA && isSubB && isBackMain &&
         dim1_class && dim2_level && dim3_xp && dim4_sp && dim5_skills &&
         dim6_loadout && dim7_equipment && dim8_inventory && dim9_hp &&
-        dim10_mp && dim11_buffs && dim12_cds;
+        dim10_mp && dim11_buffs && dim12_cds && dim13_certifications;
 
       scenarioResults.push({
         scenarioId: 'SCENARIO_6_SUBCLASS_12_DIMENSIONS_LIFECYCLE',
-        title: 'Ciclo de Subclasses nas 12 Dimensões com Asserções Individuais',
+        title: 'Ciclo de Subclasses nas Dimensões de Estado com Asserção Explícita de Certificações',
         type: 'DIRECT_SERVICE_CALL',
-        status: all12DimsPassed ? 'PASS' : 'FAIL',
-        initialState: `Main: ${snapBefore.class} Lv ${snapBefore.level}, 2 subclasses configuradas`,
+        status: allDimsPassed ? 'PASS' : 'FAIL',
+        initialState: `Main: ${snapBefore.class} Lv ${snapBefore.level}, 2 subclasses e certificações configuradas`,
         actions: 'switchSubclass(0) [Hawkeye] -> switchSubclass(1) [Sorcerer] -> switchSubclass(null) [Main]',
-        expected: 'Preservação exata de todas as 12 dimensões (classe, nível, xp, sp, skills, loadout, equip, inv, hp, mp, buffs, cds)',
-        observed: `12 Dimensões: class=${dim1_class}, lvl=${dim2_level}, xp=${dim3_xp}, sp=${dim4_sp}, skills=${dim5_skills}, loadout=${dim6_loadout}, equip=${dim7_equipment}, inv=${dim8_inventory}, hp=${dim9_hp}, mp=${dim10_mp}, buffs=${dim11_buffs}, cds=${dim12_cds}`,
+        expected: 'Preservação de classe, nível, xp, sp, skills, loadout, equip, inv, hp, mp, buffs, cds e certificações na Main e subclasses',
+        observed: `Dimensões: class=${dim1_class}, lvl=${dim2_level}, xp=${dim3_xp}, sp=${dim4_sp}, skills=${dim5_skills}, loadout=${dim6_loadout}, equip=${dim7_equipment}, inv=${dim8_inventory}, hp=${dim9_hp}, mp=${dim10_mp}, buffs=${dim11_buffs}, cds=${dim12_cds}, certs=${dim13_certifications} (subA=${certsInSubA}, subB=${certsInSubB}, main=${certsOnMain})`,
         details: {
           dim1_class, dim2_level, dim3_xp, dim4_sp, dim5_skills, dim6_loadout,
           dim7_equipment, dim8_inventory, dim9_hp, dim10_mp, dim11_buffs, dim12_cds,
+          dim13_certifications, certsInSubA, certsInSubB, certsOnMain,
           loadoutBefore: snapBefore.loadout,
           loadoutAfter: JSON.stringify(st6.skillLoadout)
         },
@@ -739,7 +809,7 @@
       });
 
       // ─────────────────────────────────────────────────────────────
-      // CENÁRIO 9: Gating Efetivo de Subclasses por Temporada (Controles Reais da UI e Tentativa com Nível Suficiente)
+      // CENÁRIO 9: Gating Efetivo de Subclasses por Temporada (Configuração como Autoridade Única)
       // ─────────────────────────────────────────────────────────────
       const st9 = getLiveState();
       st9.level = 75; // Nível 75 (suficiente para subclasses Lv 52+)
@@ -750,40 +820,51 @@
       localStorage.removeItem('aden_server_cap');
       delete window.globalServerCap;
 
-      // 1. Temporada 1: Subclasses devem estar bloqueadas na UI e no motor
+      st9.subclasses = [
+        { id: 'sub_0', classId: 'hawkeye', level: 40, xp: 0, sp: 100, skills: {}, skillLoadout: {}, equipment: {} }
+      ];
+      st9.activeSubclassIndex = null;
+
+      const charPane = document.getElementById('tab-character');
+      if (charPane) charPane.classList.add('active');
+      const addSubBtn = document.getElementById('add-subclass-btn');
+
+      // 1. Temporada 1: Subclasses bloqueadas por ausência na configuração da Temporada 1
       window.__serverSeason = 1;
       localStorage.setItem('aden_server_season', '1');
       st9.serverSeason = 1;
 
-      // Atualiza UI de subclasses e inspeciona controles reais do DOM
-      const charPane = document.getElementById('tab-character');
-      if (charPane) charPane.classList.add('active');
-      
-      const addSubBtn = document.getElementById('add-subclass-btn');
-      const countBadgeEl = document.getElementById('subclass-count-badge');
-      
-      // Força renderSubclassesUI através do fluxo real de update
-      const eventUpdate = new CustomEvent('renderSubclasses');
-      window.dispatchEvent(eventUpdate);
-
-      // Dispara render manual dos controles para validação estrita
+      renderSubclassesUI();
       const isSeason1SubUnlocked = isFeatureUnlocked('subclasses');
       const isSeason1MaxLvl = getSeasonMaxLevel();
+      const uiLockedInS1 = addSubBtn ? (addSubBtn.disabled === true && addSubBtn.textContent.includes('🔒 Bloqueado: Temporada 3')) : false;
+      const opAttemptSeason1 = window.switchSubclass(0); // Deve retornar false
 
-      // Tentativa de operação no motor em temporada bloqueada
-      st9.subclasses = [
-        { classId: 'hawkeye', level: 40, xp: 0, sp: 100, skills: {}, skillLoadout: {}, equipment: {} }
-      ];
-      st9.activeSubclassIndex = null;
-      const opAttemptSeason1 = window.switchSubclass(0); // Deve retornar false em temporada bloqueada
-
-      // 2. Temporada 3: Subclasses liberadas na UI e no motor
+      // 2. Temporada 3 com funcionalidade EXPLICITAMENTE DESATIVADA na configuração (sem bypass por número de temporada)
       window.__serverSeason = 3;
       localStorage.setItem('aden_server_season', '3');
       st9.serverSeason = 3;
-      const isSeason3SubUnlocked = isFeatureUnlocked('subclasses');
+
+      const originalS3Tabs = [...(SEASONS_DATA[3].unlockedTabs || [])];
+      // Remove 'subclasses' explicitamente da configuração da Temporada 3
+      SEASONS_DATA[3].unlockedTabs = originalS3Tabs.filter(t => t !== 'subclasses');
+
+      renderSubclassesUI();
+      const isSeason3DisabledSubUnlocked = isFeatureUnlocked('subclasses');
+      const uiDisabledInS3 = addSubBtn ? (addSubBtn.disabled === true && addSubBtn.textContent.includes('🔒 Bloqueado: Temporada 3')) : false;
+      const opAttemptSeason3Disabled = window.switchSubclass(0); // Deve retornar false pois a configuração é autoridade única!
+
+      // 3. Temporada 3 com funcionalidade ATIVADA na configuração
+      SEASONS_DATA[3].unlockedTabs = [...originalS3Tabs];
+      if (!SEASONS_DATA[3].unlockedTabs.includes('subclasses')) {
+        SEASONS_DATA[3].unlockedTabs.push('subclasses');
+      }
+
+      renderSubclassesUI();
+      const isSeason3EnabledSubUnlocked = isFeatureUnlocked('subclasses');
+      const uiEnabledInS3 = addSubBtn ? (addSubBtn.disabled === false) : true;
       const isSeason3MaxLvl = getSeasonMaxLevel();
-      const opAttemptSeason3 = window.switchSubclass(0); // Deve suceder na temporada 3
+      const opAttemptSeason3Enabled = window.switchSubclass(0); // Deve suceder
       window.switchSubclass(null); // Retorna à Main
 
       // Restaura Temporada 1
@@ -791,22 +872,24 @@
       localStorage.setItem('aden_server_season', '1');
       st9.serverSeason = 1;
 
-      const seasonControlsLockedInS1 = (!isSeason1SubUnlocked) && (opAttemptSeason1 === false) && (isSeason1MaxLvl <= 40);
-      const seasonControlsUnlockedInS3 = isSeason3SubUnlocked && (opAttemptSeason3 === true) && (isSeason3MaxLvl >= 85);
-      const seasonGatingPassed = seasonControlsLockedInS1 && seasonControlsUnlockedInS3;
+      const seasonControlsLockedInS1 = (!isSeason1SubUnlocked) && (opAttemptSeason1 === false) && uiLockedInS1 && (isSeason1MaxLvl <= 40);
+      const seasonConfigAuthorityS3Disabled = (!isSeason3DisabledSubUnlocked) && (opAttemptSeason3Disabled === false) && uiDisabledInS3;
+      const seasonControlsUnlockedInS3Enabled = isSeason3EnabledSubUnlocked && (opAttemptSeason3Enabled === true) && uiEnabledInS3 && (isSeason3MaxLvl >= 85);
+      const seasonGatingPassed = seasonControlsLockedInS1 && seasonConfigAuthorityS3Disabled && seasonControlsUnlockedInS3Enabled;
 
       scenarioResults.push({
         scenarioId: 'SCENARIO_9_SEASON_GATING_SERVICE_AND_UI',
-        title: 'Gating Efetivo de Subclasses por Temporada (Controles Reais e Tentativa com Nível 75)',
+        title: 'Gating Efetivo de Subclasses por Temporada (Configuração como Autoridade Única)',
         type: 'UI_AND_SERVICE',
         status: seasonGatingPassed ? 'PASS' : 'FAIL',
         initialState: 'Personagem Lv 75 com quest Fate\'s Whisper concluída (nível suficiente para subclasses)',
-        actions: 'Tentativa de operação de subclasses e avaliação de controles na Temporada 1 (bloqueada) vs Temporada 3 (liberada)',
-        expected: 'Na Temporada 1, subclasses bloqueadas (operação retorna false, cap 40); na Temporada 3, liberadas (operação retorna true, cap 85)',
-        observed: `Temporada 1: subclassesUnlocked=${isSeason1SubUnlocked}, opAttempt=${opAttemptSeason1}, cap=${isSeason1MaxLvl} (BLOQUEADO). Temporada 3: subclassesUnlocked=${isSeason3SubUnlocked}, opAttempt=${opAttemptSeason3}, cap=${isSeason3MaxLvl} (LIBERADO).`,
+        actions: 'Avaliação de UI e operação na Temporada 1 vs Temporada 3 desativada na config vs Temporada 3 ativada na config',
+        expected: 'Configuração como autoridade única: desativada na Temporada 3 bloqueia UI e operação (retorna false); ativada libera ambos; Temporada 1 bloqueia',
+        observed: `T1: locked=${!isSeason1SubUnlocked}, op=${opAttemptSeason1}, uiLocked=${uiLockedInS1}. T3_Desativada: unlocked=${isSeason3DisabledSubUnlocked}, op=${opAttemptSeason3Disabled}, uiDisabled=${uiDisabledInS3}. T3_Ativada: unlocked=${isSeason3EnabledSubUnlocked}, op=${opAttemptSeason3Enabled}, uiEnabled=${uiEnabledInS3}.`,
         details: {
-          season1: { isSeason1SubUnlocked, opAttemptSeason1, isSeason1MaxLvl },
-          season3: { isSeason3SubUnlocked, opAttemptSeason3, isSeason3MaxLvl }
+          season1: { isSeason1SubUnlocked, opAttemptSeason1, uiLockedInS1, isSeason1MaxLvl },
+          season3Disabled: { isSeason3DisabledSubUnlocked, opAttemptSeason3Disabled, uiDisabledInS3 },
+          season3Enabled: { isSeason3EnabledSubUnlocked, opAttemptSeason3Enabled, uiEnabledInS3, isSeason3MaxLvl }
         },
         consoleErrorsCount: consoleErrors.length
       });
