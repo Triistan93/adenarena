@@ -865,7 +865,97 @@ Realizada a correção e integração definitiva dos 25 starter classes da tela 
    - `SkillEligibility.js`: Centraliza `resolveV2ClassContext` com schema uniforme `{ status, originalClassId, race, v2ClassId, v2ClassDef, authorizedSkillIds, contentGapReason }`.
    - `echo-adapter.js`: Conversão segura via `transformV2SkillToEcho` usando `??` em vez de fallbacks arbitrários de poder 20 ou MP 15, com conversão de cooldown de segundos para ms.
 5. **Correção Visual do Loadout Bar**: Corrigido o envio de objetos para `getAssetUrl` em `GameUI.js` (eliminando o erro de rendering `/[object Object]`) e removido o fallback silencioso para `power_strike.png` em caso de erro de carregamento de imagem.
-6. **Bateria de Testes**: Criada nova suíte de regressão `test/character-creation-skill-tree-integration.test.js` (9/9 aprovados) e validados todos os testes legados e forenses (`npm test`, 634/634 aprovados).
+6. **Bateria de Testes**: Criada nova suíte de regressão `test/character-creation-skill-tree-integration.test.js` (9/9 aprovados) e validados todos os testes legados e forenses (`npm test`, 634/634 aprovados).---
 
+<br/>
 
+## Página 8 — 19 de Setembro de 2026 às 22:15
+### 🛡️ Homologação Canônica no Navegador Real (Commit 926f4c5) & Consolidação Documental
+
+> **Data & Hora**: 19/09/2026 às 22:15 (BRT)  
+> **Status Oficial**: **“Correções e homologação local concluídas para os cenários exercitados; lacunas de conteúdo documentadas.”**  
+> **Commit de Homologação/Implementação**: `926f4c5`  
+> **Commit Documental**: Criado subsequentemente para consolidar a documentação (distinto de `926f4c5`)  
+> **Preservação Comprovada (12d913f..926f4c5)**: 0 diff em 100% dos 3 pilares e pagamentos.  
+> **Testes Automatizados**: **679 testes** em 92 suítes passando (100% de aprovação).  
+> **Homologação Real no Edge Headless**: **9 de 9 cenários PASS** (~5s de execução, 0 erros).  
+
+#### 1. Resumo Técnico das Quatro Correções (Commit `926f4c5`)
+
+1. **Configuração como Autoridade Única para Subclasses**:
+   - Eliminado o bypass numérico `|| getCurrentSeasonId() >= 3` em `renderSubclassesUI` e `switchSubclass` em `lineage-idle/main.js`.
+   - `isFeatureUnlocked('subclasses')` governa integralmente o sistema.
+   - Testado e comprovado no Cenário 9 que na Temporada 3 com subclasses desativadas na configuração, o botão na UI é desabilitado e a operação retorna `false`. Ao reativar na configuração, a troca é liberada.
+2. **Confrontação de Eventos KILL com Crédito Real no Estado**:
+   - `CombatEventType.SKILL_KILL` não atua como prova isolada.
+   - Medido e comprovado o crédito efetivo em `state.xp` (considerando subida de nível e cálculo via `getTotalXP`), `state.sp` (`deltaSP > 0`) e incremento de abates (`state.stats.monstersKilled +1`).
+   - Validada a ausência de recompensas duplicadas em ciclos subsequentes de processamento.
+3. **Preservação de 100% dos Pilares e Pagamentos (`12d913f..926f4c5`)**:
+   - Comprovada a existência física e identidade absoluta de hash blob (`git diff 12d913f..926f4c5 = 0`) para os 3 pilares (`LevelEngine.js`, `MarketService.js`, `ExpeditionService.js`) e todo o ecossistema de pagamentos (`cakto-webhook.js`, `CashShopService.js`, `cash_shop_catalog.js`, `shop.service.ts`, `SupabaseService.ts`, `cakto-webhook-security.test.js`).
+4. **Certificações na Main e Subclasses**:
+   - Preservação integral dos dados de certificação armazenados durante todas as trocas de classe (`Main -> Sub A -> Sub B -> Main`).
+   - Bônus destinados à Main Class são estritamente zerados enquanto uma subclasse estiver ativa (`activeSubclassIndex !== null`), ativando-se apenas quando o jogador retorna à Main Class.
+
+---
+
+#### 2. Consolidação Documental Rigorosa (Extraída de `926f4c5`)
+
+##### A. Lista Real de `CONTENT_GAP` em `V2_CONTENT_GAP_CLASSES`
+Extraída diretamente de `lineage-idle/src/services/SkillEligibility.js` (linhas 232–268):
+
+1. **`werewolf_0`**:
+   - `contentGapType`: `V2_NODE_ABSENT`
+   - Motivo: *Nó V2 ausente: dataset L2Wiki contém apenas 1 habilidade de Estágio 0 (88401 Direct Strike); árvore de 5 habilidades ausente no catálogo V2*
+   - `authorizedSkillIds`: `['direct_strike']` (1 habilidade)
+2. **`werewolf_1`**:
+   - `contentGapType`: `V2_NODE_ABSENT`
+   - Motivo: *Nó V2 ausente: Warg de Estágio 1 ausente no catálogo V2*
+   - `authorizedSkillIds`: `['direct_strike']` (1 habilidade)
+3. **`werewolf_2`**:
+   - `contentGapType`: `V2_NODE_ABSENT`
+   - Motivo: *Nó V2 ausente: Warg de Estágio 2 ausente no catálogo V2*
+   - `authorizedSkillIds`: `['direct_strike']` (1 habilidade)
+4. **`shineMakerBase`**:
+   - `contentGapType`: `V2_NODE_ABSENT`
+   - Motivo: *Nó V2 ausente: ShineMaker Anão de Estágio 0 não presente no dataset L2Wiki nem no catálogo V2*
+   - `authorizedSkillIds`: `[]` (0 habilidades)
+5. **`spirit_0`**:
+   - `contentGapType`: `V2_NODE_ABSENT`
+   - Motivo: *Nó V2 ausente: dataset L2Wiki contém apenas 2 habilidades de Estágio 0 (87701 Fire Sphere, 87702 Ice Sphere); árvore de 5 habilidades ausente no catálogo V2*
+   - `authorizedSkillIds`: `['fire_sphere', 'ice_sphere']` (2 habilidades calculadas a partir do array)
+6. **`marauderBase`**:
+   - `contentGapType`: `UNPROVEN_PROVENANCE`
+   - Motivo: *Nó V2 existente com habilidades sem proveniência comprovada: nó presente em CanonicalClassRegistryV2, porém habilidades canônicas de Ertheia ausentes no dataset raspado e habilidades Kamael quarentenadas*
+   - `authorizedSkillIds`: `[]` (0 habilidades)
+7. **`sayhaMageBase`**:
+   - `contentGapType`: `UNPROVEN_PROVENANCE`
+   - Motivo: *Nó V2 existente com habilidades sem proveniência comprovada: nó presente em CanonicalClassRegistryV2, porém habilidades canônicas de Ertheia ausentes no dataset raspado e placeholder de mago humano quarentenado*
+   - `authorizedSkillIds`: `[]` (0 habilidades)
+
+##### B. Reconciliação: `werewolf_1`/`werewolf_2` vs `secret_assassin_male_0`/`secret_assassin_female_0`
+- **Diagnóstico**: No commit `926f4c5`, `werewolf_1` e `werewolf_2` estão catalogadas como `CONTENT_GAP`. `secret_assassin_male_0` e `secret_assassin_female_0` **NÃO são `CONTENT_GAP`**, pois estão mapeadas canonicamente para `assassinS0` em `LEGACY_TO_V2_CLASS_MAP` com árvore e habilidades V2 plenamente funcionais.
+- **Resolução**: Em respeito à diretriz de *não alterar o código para fazê-lo corresponder ao texto*, o código-fonte de `SkillEligibility.js` foi mantido integralmente. A discrepância textual de relatórios prévios foi corrigida, registrando os 7 itens reais de `V2_CONTENT_GAP_CLASSES`.
+
+##### C. IDs Reais das 6 Classes Promovidas de Ertheia
+Extraídos de `lineage-idle/src/data/classes/CanonicalClassRegistry.js` (linhas 6820–6995):
+- **Linhagem Eviscerator (Fighter)**:
+  1. Estágio 1: `id: 'marauder'` (*Marauder*, Lv 20–39, `parentClass: "marauderBase"`)
+  2. Estágio 2: `id: 'ertheiaWarrior'` (*Eviscerator Apprentice*, Lv 40–75, `parentClass: "marauder"`)
+  3. Estágio 3: `id: 'eviscerator'` (*Eviscerator*, Lv 76–120, `parentClass: "ertheiaWarrior"`)
+- **Linhagem Sayha Seeker (Mage)**:
+  4. Estágio 1: `id: 'sayhaSeer'` (*Sayha Seeker Apprentice*, Lv 20–39, `parentClass: "sayhaMageBase"`)
+  5. Estágio 2: `id: 'windRiderErth'` (*Storm Conductor*, Lv 40–75, `parentClass: "sayhaSeer"`)
+  6. Estágio 3: `id: 'sayhaSeeker'` (*Sayha Seeker*, Lv 76–120, `parentClass: "windRiderErth"`)
+- **Nomes Divergentes**: `cloud_breaker`, `stratosphere`, `gravity_ranker`, `storm_sayha` e `wind_summoner` não existem no código nem como classes nem como aliases; foram inteiramente removidos do relatório.
+
+##### D. Habilidades Autorizadas de `spirit_0`
+- **Array no Código**: `['fire_sphere', 'ice_sphere']`
+- **Quantidade Calculada**: `2` (`authorizedSkillIds.length === 2`)
+- **Habilidades**: `fire_sphere` (ID 87701) e `ice_sphere` (ID 87702).
+
+---
+
+#### 3. Governança de Entrega
+- **Branch**: `feature/skill-tree-integration-fix`
+- **Status**: Concluído e homologado localmente. Sem push, merge ou deploy.
 
