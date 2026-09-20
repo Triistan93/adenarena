@@ -344,7 +344,7 @@ import { SubclassCertificationService, EMERGENT_ABILITIES, MASTER_ABILITIES_BY_A
 import { CommunityCapService } from './src/services/CommunityCapService.js';
 import { ensureAppLayout, showMenuPanel, updateTabVisibilityByLevel, TAB_UNLOCK_LEVELS } from './src/ui/AppLayout.js';
 import { checkTabGuide, closeTabGuideModal, openTabGuideModal } from './src/ui/TutorialGuide.js';
-import { isFeatureUnlocked, getCurrentSeason, getSeasonForFeature } from './src/core/SeasonConfig.js';
+import { isFeatureUnlocked, getCurrentSeason, getSeasonForFeature, getCurrentSeasonId } from './src/core/SeasonConfig.js';
 import { renderSeasonLockedPanel, updateSeasonTabBadges } from './src/ui/SeasonUI.js';
 import { VFX, initializeVFX } from './vfx.js';
 import { globalVFXOrchestrator } from './src/vfx/VFXOrchestrator.js';
@@ -1060,7 +1060,7 @@ function withdrawFromWarehouse(uid, amount = 1) {
 }
 
 function resolveEquipSlot(slot) { return serviceResolveEquipSlot(slot, state.equipment); }
-function equipItem(a, b, c = null, silent = false) {
+export function equipItem(a, b, c = null, silent = false) {
   if (typeof hideItemTooltip === 'function') hideItemTooltip();
   const uid = (typeof a === 'string' && a) ? a : (typeof b === 'string' ? b : null);
   const targetSlot = (typeof b === 'string' && (b === 'weapon' || b === 'weapon2' || ALL_EQUIP_SLOTS.includes(b))) ? b : (typeof c === 'string' ? c : null);
@@ -1744,7 +1744,8 @@ function checkLevelUp() {
 }
 
 // --------------------------- SELL ITEM ---------------------------
-function sellItem(uid) {
+export function sellItem(uid) {
+  if (typeof window !== 'undefined') window.sellItem = sellItem;
   const idx = state.inventory.findIndex(i => i.uid === uid);
   if (idx < 0) return;
   const item = state.inventory[idx];
@@ -3988,17 +3989,25 @@ function renderSubclassesUI() {
   const cpBadge = el('cert-total-cp-badge');
 
   const activeMainLevel = state.activeSubclassIndex === null ? state.level : (state.mainClassData?.level || 1);
+  const isSeasonUnlocked = isFeatureUnlocked('subclasses') || getCurrentSeasonId() >= 3;
+  const isUnlocked = isSeasonUnlocked && (state.fateWhisperQuest || activeMainLevel >= 52);
+
   if (countBadge) {
-    countBadge.textContent = `Subclasses (${(state.subclasses || []).length}/3)`;
+    countBadge.textContent = !isSeasonUnlocked ? 'Subclasses (Bloqueado Season 1/2)' : `Subclasses (${(state.subclasses || []).length}/3)`;
   }
 
   if (addBtn) {
-    const isUnlocked = state.fateWhisperQuest || activeMainLevel >= 52;
     const isMax = (state.subclasses || []).length >= 3;
-    addBtn.disabled = !isUnlocked || isMax;
-    addBtn.textContent = isMax ? '🔒 Limite Máximo Atingido (3/3 Subclasses)' : (!isUnlocked ? '🔒 Conclua Quest Fate\'s Whisper (Lv.52)' : '➕ Adicionar Nova Subclasse (Sem Restrição Racial)');
+    addBtn.disabled = isMax || !isSeasonUnlocked || !isUnlocked;
+    addBtn.textContent = isMax
+      ? '🔒 Limite Máximo Atingido (3/3 Subclasses)'
+      : (!isSeasonUnlocked
+        ? '🔒 Bloqueado: Temporada 3 (Crônica III — Os Sete Selos)'
+        : (!isUnlocked ? '🔒 Conclua Quest Fate\'s Whisper (Lv.52)' : '➕ Adicionar Nova Subclasse (Sem Restrição Racial)'));
     addBtn.onclick = () => {
-      if (!state.fateWhisperQuest && activeMainLevel < 52) {
+      if (!isSeasonUnlocked) {
+        log('O Sistema de Subclasses requer a Temporada 3 (Crônica III — Os Sete Selos).', 'warning');
+      } else if (!state.fateWhisperQuest && activeMainLevel < 52) {
         log('Requer Nível 52+ para iniciar a jornada de Subclasses.', 'system');
       } else if (!state.fateWhisperQuest) {
         completeFateWhisperQuest();
@@ -4442,6 +4451,13 @@ export function switchSubclass(targetIndex) {
 
   const resolvedTarget = isTargetValidSub ? targetIndex : null;
 
+  // Season gating: subclasses are locked in Seasons prior to Season 3
+  const isSeasonUnlocked = isFeatureUnlocked('subclasses') || getCurrentSeasonId() >= 3;
+  if (!isSeasonUnlocked && resolvedTarget !== null && state.activeSubclassIndex === null) {
+    log('O Sistema de Subclasses está bloqueado na Temporada atual (Disponível na Temporada 3).', 'warning');
+    return false;
+  }
+
   // Se já está na classe alvo, não faz nada
   const isCurrentSubActive = typeof state.activeSubclassIndex === 'number'
     && Number.isInteger(state.activeSubclassIndex)
@@ -4538,6 +4554,13 @@ export function switchSubclass(targetIndex) {
     }
   }
 
+  // Sincroniza flag item.equipped no inventário compartilhado para refletir os itens da classe ativa
+  const equippedUids = new Set(Object.values(state.equipment || {}).filter(Boolean));
+  for (const it of (state.inventory || [])) {
+    it.equipped = equippedUids.has(it.uid);
+    if (!it.equipped) delete it.equippedSlot;
+  }
+
   const race = state.race ? RACES[state.race] : RACES.human;
   const cls = getClass(state.class);
   state.base = { atk: 0, def: 0, eva: 0, matk: 0, mdef: 0 };
@@ -4546,6 +4569,7 @@ export function switchSubclass(targetIndex) {
   }
 
   updateAllUI(); save();
+  return true;
 }
 
 // --------------------------- VISUALS / STAGE ---------------------------
@@ -11364,6 +11388,7 @@ export function init() {
     window.saveState = save;
     window.equipItem = equipItem;
     window.unequipItem = unequipItem;
+    window.sellItem = sellItem;
     window.promoteClass = promoteClass;
     window.switchSubclass = switchSubclass;
     window.attackMonster = attackMonster;

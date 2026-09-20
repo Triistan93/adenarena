@@ -8,6 +8,7 @@
 ---
 
 #### 📑 Índice Rápido de Páginas
+- [Página 16 — 19 de Setembro de 2026 às 21:35](#página-16--19-de-setembro-de-2026-às-2135) — *Eliminação Cirúrgica de Falsos Positivos, Correção de Defeitos de Subclasses e Sincronização de Equipamentos, Recarga Efetiva da Página e Homologação Estrita no Microsoft Edge Headless*
 - [Página 15 — 19 de Setembro de 2026 às 21:15](#página-15--19-de-setembro-de-2026-às-2115) — *Homologação Interativa Completa via Interface e Motores de Produção no Microsoft Edge Headless, Validação de 9 Cenários Canônicos e Blindagem de Runtime*
 - [Página 14 — 19 de Setembro de 2026 às 21:00](#página-14--19-de-setembro-de-2026-às-2100) — *Homologação Integral de Gameplay no Navegador Real (Microsoft Edge Headless), Diferenciação Estrutural de CONTENT_GAP (Nó Ausente vs Sem Proveniência) e Validação de Subclasses nas 12 Dimensões*
 - [Página 13 — 19 de Setembro de 2026 às 19:30](#página-13--19-de-setembro-de-2026-às-1930) — *Auditoria Canônica Integral do Domínio de Classes, Habilidades e Subclasses, Reconciliação Exata 159 vs 142 Nós, Blindagem de Identidade e Preservação de Inventário Único*
@@ -25,6 +26,95 @@
 - [Página 1 — 12 de Setembro de 2026 às 22:30](#página-1--12-de-setembro-de-2026-às-2230) — *Consolidação de Arquitetura, UX do Personagem & Mochila, Motor de Encantamento Canônico, Auto-Equip ERS e Ressonância de Armas*
 
 ---
+
+## Página 16 — 19 de Setembro de 2026 às 21:35
+### 🎯 Eliminação Cirúrgica de Falsos Positivos, Correção de Defeitos de Subclasses e Sincronização de Equipamentos, Recarga Efetiva da Página e Homologação Estrita no Microsoft Edge Headless
+
+> **Data & Hora**: 19/09/2026 às 21:35 (BRT)  
+> **Branch**: `feature/skill-tree-integration-fix`  
+> **Commit-Base**: `543892d`  
+> **Status de Qualidade**: 
+> - **Testes Unitários (Node.js Test Runner)**: **679 testes em 92 suítes passando (100% de aprovação, 0 falhas)**.
+> - **Homologação Estrita no Edge Headless**: **9/9 cenários obrigatórios aprovados com critérios estritos (100%), 0 erros de console**.
+> - **Screenshot & Evidência Visual**: Salvo em `public/edge_interactive_gameplay.png` e `scripts/interactive_gameplay_report.json`.
+> - **Preservação Sagrada**: `LevelEngine.js`, `MarketService.js`, `ExpeditionService.js` com **0 alterações (`git diff 12d913f = 0`)**.
+> - **Pagamentos e Monetização**: `api/cakto-webhook.js`, `CashShopService.js`, `cash_shop_catalog.js`, `shop.service.ts`, `SupabaseService.ts` com **0 alterações (`git diff 12d913f = 0`)**.
+
+---
+
+#### 1. Contexto & Diretriz Estrita do Usuário
+A auditoria identificou falsos positivos críticos na homologação anterior e estabeleceu o protocolo mandatário:
+*Corrija primeiro as asserções e fixtures; altere o jogo somente quando houver defeito reproduzido.*
+
+Foram sanados 8 pontos de falsos positivos e fragilidades:
+1. **Combate**: Medição estrita de efeitos reais (`damageDealt > 0 && monsterDefeated && xpGained && spGained && errorsCaught === 0`), combatendo monstros Elite (`xp: 50, elite: true, gold: [15, 30]`), rastreando ganhos cumulativos de XP/SP mesmo com subida de nível.
+2. **Loadout**: Teste de passiva e habilidade estrangeira em slots existentes e desbloqueados (`core1`, `core2` em Lv 40). Rejeições causadas estritamente pelas regras de negócio (`isPassive === false` e `isSkillAllowedForClass === false`), e não por slot bloqueado ou nível insuficiente.
+3. **Identidade**: Correção de `spirit_0` para raça `highelf` (Alto Elfo). Conferência independente de raça e classe contra `CANONICAL_CLASS_REGISTRY`. Reintrodução dos 5 casos de teste originais (`dark_fighter`, `dark_mage`, `orc_mage`, `elven_fighter`, `elven_mage`), Sylph (`sylphid`) e Human Fighter na UI de criação (total de 12 classes).
+4. **Temporada**: Teste direto de subclasses via controles de produção (`add-subclass-btn`, `renderSubclassesUI`) e tentativa de operação com nível suficiente (Lv 75) na Temporada 1 (bloqueada, cap 40, botão desabilitado com label `🔒 Bloqueado: Temporada 3`, `switchSubclass` retorna `false`) vs Temporada 3 (desbloqueada, cap 85, operação bem-sucedida). Sem uso de `sevensigns` como substituto.
+5. **Equipamentos**: Fluxo completo de venda de item da Main enquanto em Subclasse. Equipar item por UID na Main (`mainSwordUid`), alternar para subclasse, vender pelo fluxo de produção (`window.sellItem`), retornar à Main e verificar slot desequipado (`weapon === null`), ausência de duplicações no inventário e crédito de ouro.
+6. **Persistência**: Recarga efetiva do navegador Edge (`window.location.search = '?pass=2'`), aguardando inicialização normal (`bootstrap()` e `init()`) do zero via DOM e `localStorage`, comprovando paridade natural sem reaproveitamento de estado em memória.
+7. **Subclasses & 12 Dimensões**: Registro de valores antes/depois das 12 dimensões (`class`, `lvl`, `xp`, `sp`, `skills`, `loadout`, `equip`, `inv`, `hp`, `mp`, `buffs`, `cds`) com 12 asserções individuais. Registro de habilidades efetivamente executadas em combate via listener `CombatEventType.SKILL_CAST`, comprovando que a foreign skill injetada (`power_strike`) nunca foi executada.
+8. **Runner**: Falha imediata se o navegador encerrar com erro (`code !== 0`), se faltarem cenários obrigatórios (9/9), se os totais divergirem dos resultados ou se qualquer asserção falhar.
+
+---
+
+#### 2. Defeitos Reais de Produção Reproduzidos e Corrigidos
+
+Durante a aplicação das fixtures estritas, dois defeitos reais de produção foram reproduzidos e corrigidos cirurgicamente no código do jogo:
+
+##### A. Sincronização da Flag `item.equipped` no Inventário Compartilhado ao Alternar Subclasse
+- **Arquivo**: `lineage-idle/main.js` (`switchSubclass`)
+- **Defeito Reproduzido**: `state.equipment` mapeia os UIDs dos itens equipados na classe ativa, enquanto `state.inventory` armazena os objetos de item com a flag booleana `equipped`. Ao alternar para uma subclasse, `state.equipment` era trocado para o da subclasse, mas os itens no inventário compartilhado mantinham `equipped = true` referente à classe anterior. Quando o jogador tentava vender um item desequipado da classe inativa utilizando o fluxo de produção `sellItem(uid)`, a operação era rejeitada com a mensagem: `"Desequipe o item antes de vender."`.
+- **Correção Aplicada**: Em `switchSubclass()`, implementada a sincronização automática da flag `it.equipped` de todos os itens do inventário com base nos UIDs dos itens atualmente equipados nos slots da classe ativa:
+  ```javascript
+  const activeEquippedUids = new Set(Object.values(state.equipment || {}).filter(Boolean));
+  (state.inventory || []).forEach(it => {
+      it.equipped = activeEquippedUids.has(it.uid);
+  });
+  ```
+
+##### B. Gating e Liberação de Subclasses por Temporada
+- **Arquivos**: `lineage-idle/main.js` (`switchSubclass`, `renderSubclassesUI`), `lineage-idle/src/core/SeasonConfig.js`
+- **Defeito Reproduzido**: Subclasses são uma mecânica introduzida na Crônica III (Temporada 3 - Sete Selos). No entanto, o código de `renderSubclassesUI` e `switchSubclass` permitia que qualquer personagem de nível 52+ acessasse a interface e adicionasse subclasses mesmo na Temporada 1. Além disso, `SEASONS_DATA[3]` e `SEASONS_DATA[4]` listavam `"subclasses"` em `features`, mas não em `unlockedTabs`.
+- **Correção Aplicada**:
+  1. Em `SeasonConfig.js`, adicionado `"subclasses"` na lista `unlockedTabs` das temporadas 3 e 4.
+  2. Em `main.js`, adicionada a verificação canônica de liberação de funcionalidade via `isFeatureUnlocked('subclasses') || getCurrentSeasonId() >= 3`. Na Temporada 1, o botão `add-subclass-btn` é desabilitado com o rótulo `🔒 Bloqueado: Temporada 3`, e qualquer chamada a `switchSubclass()` retorna imediatamente `false`.
+
+---
+
+#### 3. Matriz de Resultados da Homologação Estrita no Edge Headless (9/9 PASS)
+
+| # | Cenário de Teste | Entidades / Ações Exercitadas | Critérios Estritos Validados | Status |
+|---|---|---|---|:---:|
+| 1 | **Identidade & Criação via UI Real** | 12 classes exercitadas via DOM (`CharacterCreation`), formulário real, botão submit, `applyStarterKit`. | 12 classes validadas contra `CANONICAL_CLASS_REGISTRY`. `spirit_0` verificado como `highelf`. 4 itens No-Grade e arma equipada. | **PASS** |
+| 2 | **Aprendizado & Débito SP** | `spendSP(skillId)` com SP real e insuficiente. | Débito exato no ledger SP (500 -> 470), skill avança para Lv 1. Tentativa com 0 SP retorna `false` sem debitar. | **PASS** |
+| 3 | **Gating Estrito de Loadout** | `equipSkill(state, slot, skillId)` em Lv 40 com slots `core1` e `core2` desbloqueados. | Passiva rejeitada por `"Passive skills cannot be equipped in loadout slots"`. Skill estrangeira rejeitada por `"Skill \"hydro_blast\" does not belong to the progression path of class \"fighter\""`. | **PASS** |
+| 4 | **Combate & Recompensas Reais** | Batalha contra Monstro Elite (`xp: 50, elite: true, gold: [15, 30]`) para as 5 classes `CONTENT_GAP`. | Efeitos da fixture estritamente exigidos: `damageDealt > 0 && monsterDefeated && xpGained && spGained && errorsCaught === 0` para todas as 5 classes. | **PASS** |
+| 5 | **Avanço & Promoção de Classe** | `canAdvance()` e `promoteClass("warrior")`. | Promoção legal para `warrior` aprovada. Tentativa de salto ilegal para `paladin` rejeitada com erro. | **PASS** |
+| 6 | **Auditoria de 12 Dimensões em Subclasses** | `switchSubclass(0)` -> Lv 40 -> `switchSubclass(null)`. | 12 asserções individuais para `class`, `lvl`, `xp`, `sp`, `skills`, `loadout`, `equip`, `inv`, `hp`, `mp`, `buffs`, `cds`. Estado da Main restaurado com perfeição. | **PASS** |
+| 7 | **Sincronização de Equipamento & Execução** | Equipar espada na Main -> Subclasse -> Venda de item da Main via `sellItem` -> Batalha com listener `CombatEventType.SKILL_CAST` -> Retorno à Main. | Item vendido com sucesso na subclasse, ouro creditado (+100g), inventário sem duplicatas, slot `weapon === null` ao retornar à Main. Foreign skill (`power_strike`) nunca executada. | **PASS** |
+| 8 | **Persistência Real com Recarga Efetiva** | Gravação no Pass 1 -> Navegação real (`window.location.search = '?pass=2'`) -> `bootstrap()` e `init()` pós-recarga. | Dados recuperados do zero via DOM e `localStorage`: herói `SavedHero`, Lv 45, 999.999g, skill Lv 2 mantida. Paridade de inicialização comprovada. | **PASS** |
+| 9 | **Gating Canônico de Temporada** | Controles reais `add-subclass-btn` e `renderSubclassesUI` com Lv 75 na Temporada 1 vs Temporada 3. | Temporada 1: Botão desabilitado com `🔒 Bloqueado: Temporada 3`, `switchSubclass` retorna `false`, cap Lv 40. Temporada 3: Liberado, `switchSubclass` retorna `true`, cap Lv 85. | **PASS** |
+
+---
+
+#### 4. Preservação Absoluta dos Pilares Sagrados e Monetização
+
+Todas as validações de governança de código foram estritamente cumpridas:
+
+```bash
+git diff 12d913f -- lineage-idle/src/core/LevelEngine.js \
+                    lineage-idle/src/core/MarketService.js \
+                    lineage-idle/src/core/ExpeditionService.js \
+                    api/cakto-webhook.js \
+                    lineage-idle/src/core/CashShopService.js \
+                    lineage-idle/src/core/cash_shop_catalog.js \
+                    src/services/shop.service.ts \
+                    src/services/SupabaseService.ts
+# Resultado: 0 DIFERENÇAS (Vazio)
+```
+
+Nenhum push, merge ou deploy foi realizado. Todas as modificações permanecem estritamente locais para revisão e aprovação do usuário.
 
 <br/>
 

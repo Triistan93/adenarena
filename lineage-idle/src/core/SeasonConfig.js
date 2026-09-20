@@ -66,7 +66,7 @@ export const SEASONS_DATA = {
     releaseDate: "Temporada Futura",
     description: "As forças da Luz e da Escuridão colidem nas Catacumbas e Necrópoles. O Grande Coliseu coroa os primeiros Heróis Supremos de Aden com Armas da Infinidade.",
     unlockedTabs: [
-      "sevensigns", "olympiad", "fortress", "colosseum", "codex"
+      "sevensigns", "olympiad", "fortress", "colosseum", "codex", "subclasses"
     ],
     features: [
       "🏛️ Disputa dos Sete Selos (Dawn vs Dusk & Mercadores de Mammon)",
@@ -92,7 +92,7 @@ export const SEASONS_DATA = {
       "shop", "market", "craft", "alchemy", "astral", "quests", "rankings", "enchant", "dolls", "fishing",
       "hunting", "expeditions", "gathering", "mining", "cosmetics",
       "clan", "tower", "magiclamp", "raids",
-      "sevensigns", "olympiad", "fortress", "colosseum", "codex"
+      "sevensigns", "olympiad", "fortress", "colosseum", "codex", "subclasses"
     ],
     features: [
       "🐉 World Bosses Supremos: Antharas e Valakas",
