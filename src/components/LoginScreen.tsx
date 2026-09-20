@@ -408,7 +408,7 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
 
   const handlePlayGuest = () => {
     try {
-      const localSave = localStorage.getItem('aden_idle_save') || localStorage.getItem('lineage_idle_save');
+      const localSave = localStorage.getItem('lineageIdleSave_v2') || localStorage.getItem('aden_idle_save') || localStorage.getItem('lineage_idle_save');
       if (localSave) {
         const parsed = JSON.parse(localSave);
         if (parsed && (parsed.level || parsed.name || parsed.charName)) {

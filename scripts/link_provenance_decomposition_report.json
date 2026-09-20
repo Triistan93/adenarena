@@ -1,0 +1,1403 @@
+{
+  "meta": {
+    "generatedAt": "2026-09-20T15:00:24.498Z",
+    "theoreticalTotal": 795,
+    "breakdown": {
+      "OWN_PROVEN": 735,
+      "INHERITED": 0,
+      "UNPROVEN_ERTHEIA": 30,
+      "CONTENT_GAP": 30
+    },
+    "checksumValid": true
+  },
+  "inheritedLinks": [],
+  "contentGapPositions": [
+    {
+      "classId": "werewolf_0",
+      "position": 1,
+      "reason": "CONTENT_GAP"
+    },
+    {
+      "classId": "werewolf_0",
+      "position": 2,
+      "reason": "CONTENT_GAP"
+    },
+    {
+      "classId": "werewolf_0",
+      "position": 3,
+      "reason": "CONTENT_GAP"
+    },
+    {
+      "classId": "werewolf_0",
+      "position": 4,
+      "reason": "CONTENT_GAP"
+    },
+    {
+      "classId": "werewolf_1",
+      "position": 1,
+      "reason": "CONTENT_GAP"
+    },
+    {
+      "classId": "werewolf_1",
+      "position": 2,
+      "reason": "CONTENT_GAP"
+    },
+    {
+      "classId": "werewolf_1",
+      "position": 3,
+      "reason": "CONTENT_GAP"
+    },
+    {
+      "classId": "werewolf_1",
+      "position": 4,
+      "reason": "CONTENT_GAP"
+    },
+    {
+      "classId": "werewolf_2",
+      "position": 1,
+      "reason": "CONTENT_GAP"
+    },
+    {
+      "classId": "werewolf_2",
+      "position": 2,
+      "reason": "CONTENT_GAP"
+    },
+    {
+      "classId": "werewolf_2",
+      "position": 3,
+      "reason": "CONTENT_GAP"
+    },
+    {
+      "classId": "werewolf_2",
+      "position": 4,
+      "reason": "CONTENT_GAP"
+    },
+    {
+      "classId": "shineMakerBase",
+      "position": 0,
+      "reason": "CONTENT_GAP"
+    },
+    {
+      "classId": "shineMakerBase",
+      "position": 1,
+      "reason": "CONTENT_GAP"
+    },
+    {
+      "classId": "shineMakerBase",
+      "position": 2,
+      "reason": "CONTENT_GAP"
+    },
+    {
+      "classId": "shineMakerBase",
+      "position": 3,
+      "reason": "CONTENT_GAP"
+    },
+    {
+      "classId": "shineMakerBase",
+      "position": 4,
+      "reason": "CONTENT_GAP"
+    },
+    {
+      "classId": "spirit_0",
+      "position": 2,
+      "reason": "CONTENT_GAP"
+    },
+    {
+      "classId": "spirit_0",
+      "position": 3,
+      "reason": "CONTENT_GAP"
+    },
+    {
+      "classId": "spirit_0",
+      "position": 4,
+      "reason": "CONTENT_GAP"
+    },
+    {
+      "classId": "marauderBase",
+      "position": 0,
+      "reason": "CONTENT_GAP"
+    },
+    {
+      "classId": "marauderBase",
+      "position": 1,
+      "reason": "CONTENT_GAP"
+    },
+    {
+      "classId": "marauderBase",
+      "position": 2,
+      "reason": "CONTENT_GAP"
+    },
+    {
+      "classId": "marauderBase",
+      "position": 3,
+      "reason": "CONTENT_GAP"
+    },
+    {
+      "classId": "marauderBase",
+      "position": 4,
+      "reason": "CONTENT_GAP"
+    },
+    {
+      "classId": "sayhaMageBase",
+      "position": 0,
+      "reason": "CONTENT_GAP"
+    },
+    {
+      "classId": "sayhaMageBase",
+      "position": 1,
+      "reason": "CONTENT_GAP"
+    },
+    {
+      "classId": "sayhaMageBase",
+      "position": 2,
+      "reason": "CONTENT_GAP"
+    },
+    {
+      "classId": "sayhaMageBase",
+      "position": 3,
+      "reason": "CONTENT_GAP"
+    },
+    {
+      "classId": "sayhaMageBase",
+      "position": 4,
+      "reason": "CONTENT_GAP"
+    }
+  ],
+  "unprovenErtheiaLinks": [
+    {
+      "classId": "marauder",
+      "skillId": "soul_smash"
+    },
+    {
+      "classId": "marauder",
+      "skillId": "increase_power"
+    },
+    {
+      "classId": "marauder",
+      "skillId": "soul_guard"
+    },
+    {
+      "classId": "marauder",
+      "skillId": "boost_attack_speed"
+    },
+    {
+      "classId": "marauder",
+      "skillId": "bandage"
+    },
+    {
+      "classId": "ertheiaWarrior",
+      "skillId": "soul_impulse"
+    },
+    {
+      "classId": "ertheiaWarrior",
+      "skillId": "enuma_elish"
+    },
+    {
+      "classId": "ertheiaWarrior",
+      "skillId": "rush"
+    },
+    {
+      "classId": "ertheiaWarrior",
+      "skillId": "rush_impact"
+    },
+    {
+      "classId": "ertheiaWarrior",
+      "skillId": "critical_power"
+    },
+    {
+      "classId": "eviscerator",
+      "skillId": "overwhelming_power"
+    },
+    {
+      "classId": "eviscerator",
+      "skillId": "powerful_rush"
+    },
+    {
+      "classId": "eviscerator",
+      "skillId": "soul_weapon"
+    },
+    {
+      "classId": "eviscerator",
+      "skillId": "disarm"
+    },
+    {
+      "classId": "eviscerator",
+      "skillId": "master_of_combat"
+    },
+    {
+      "classId": "sayhaSeer",
+      "skillId": "aqua_swirl"
+    },
+    {
+      "classId": "sayhaSeer",
+      "skillId": "concentration"
+    },
+    {
+      "classId": "sayhaSeer",
+      "skillId": "body_to_mind"
+    },
+    {
+      "classId": "sayhaSeer",
+      "skillId": "fast_spell_casting"
+    },
+    {
+      "classId": "sayhaSeer",
+      "skillId": "anti_magic"
+    },
+    {
+      "classId": "windRiderErth",
+      "skillId": "hydro_blast"
+    },
+    {
+      "classId": "windRiderErth",
+      "skillId": "aqua_splash"
+    },
+    {
+      "classId": "windRiderErth",
+      "skillId": "freezing_skin"
+    },
+    {
+      "classId": "windRiderErth",
+      "skillId": "blizzard"
+    },
+    {
+      "classId": "windRiderErth",
+      "skillId": "spellcraft"
+    },
+    {
+      "classId": "sayhaSeeker",
+      "skillId": "ice_vortex"
+    },
+    {
+      "classId": "sayhaSeeker",
+      "skillId": "mystic_explosion"
+    },
+    {
+      "classId": "sayhaSeeker",
+      "skillId": "mystic_spiral"
+    },
+    {
+      "classId": "sayhaSeeker",
+      "skillId": "meteor"
+    },
+    {
+      "classId": "sayhaSeeker",
+      "skillId": "mystic_freeze"
+    }
+  ],
+  "perClassSummary": {
+    "fighter": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "warrior": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "gladiator": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "duelist": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "warlord": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "dreadnought": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "knight": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "paladin": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "phoenix_knight": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "dark_avenger": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "hell_knight": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "rogue": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "treasure_hunter": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "adventurer": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "hawkeye": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "sagittarius": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "mage": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "wizard": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "sorcerer": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "archmage": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "necromancer": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "soultaker": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "warlock": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "arcana_lord": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "cleric": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "bishop": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "cardinal": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "prophet": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "hierophant": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "human_deathknight_0": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "human_deathknight_1": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "human_deathknight_2": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "human_deathknight_3": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "secret_assassin_male_0": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "secret_assassin_male_1": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "secret_assassin_male_2": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "secret_assassin_male_3": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "werewolf_0": {
+      "total": 5,
+      "own": 1,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 4
+    },
+    "werewolf_1": {
+      "total": 5,
+      "own": 1,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 4
+    },
+    "werewolf_2": {
+      "total": 5,
+      "own": 1,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 4
+    },
+    "werewolf_3": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "elven_fighter": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "elven_knight": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "temple_knight": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "evas_templar": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "swordsinger": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "sword_muse": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "elven_scout": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "plain_walker": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "wind_rider": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "silver_ranger": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "moonlight_sentinel": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "elven_mage": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "elven_wizard": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "spellsinger": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "mystic_muse": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "elemental_summoner": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "elemental_master": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "oracle": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "elder": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "evas_saint": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "elf_deathknight_0": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "elf_deathknight_1": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "elf_deathknight_2": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "elf_deathknight_3": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "dark_fighter": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "palus_knight": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "shillien_knight": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "shillien_templar": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "bladedancer": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "spectral_dancer": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "assassin": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "abyss_walker": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "ghost_hunter": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "phantom_ranger": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "ghost_sentinel": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "dark_mage": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "dark_wizard": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "spellhowler": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "storm_screamer": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "phantom_summoner": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "spectral_master": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "shillien_oracle": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "shillien_elder": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "shillien_saint": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "delf_deathknight_0": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "delf_deathknight_1": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "delf_deathknight_2": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "delf_deathknight_3": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "secret_assassin_female_0": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "secret_assassin_female_1": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "secret_assassin_female_2": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "secret_assassin_female_3": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "rose_vain_0": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "rose_vain_1": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "rose_vain_2": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "rose_vain_3": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "orc_fighter": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "orc_raider": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "destroyer": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "titan": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "orc_monk": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "tyrant": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "grand_khavatari": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "orc_mage": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "orc_shaman": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "overlord": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "dominator": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "warcryer": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "doomcryer": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "orc_rider_0": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "orc_rider_1": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "orc_rider_2": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "orc_rider_3": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "dwarven_fighter": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "scavenger": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "bounty_hunter": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "fortune_seeker": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "artisan": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "warsmith": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "maestro": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "shineMakerBase": {
+      "total": 5,
+      "own": 0,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 5
+    },
+    "shineMakerS1": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "shineMakerS2": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "shinemaker": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "jin_kamael_soldier": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "trooper": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "berserker": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "doombringer": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "soul_finder": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "soul_breaker": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "soul_hound": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "warder": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "arbalester": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "trickster": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "crow_0": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "crow_1": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "crow_2": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "crow_3": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "sylphid": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "sylph_gunner": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "wind_hunter": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "storm_blaster": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "sacred_templar_0": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "sacred_templar_1": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "sacred_templar_2": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "sacred_templar_3": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "spirit_0": {
+      "total": 5,
+      "own": 2,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 3
+    },
+    "spirit_1": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "spirit_2": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "spirit_3": {
+      "total": 5,
+      "own": 5,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 0
+    },
+    "marauderBase": {
+      "total": 5,
+      "own": 0,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 5
+    },
+    "marauder": {
+      "total": 5,
+      "own": 0,
+      "inherited": 0,
+      "unproven": 5,
+      "gap": 0
+    },
+    "ertheiaWarrior": {
+      "total": 5,
+      "own": 0,
+      "inherited": 0,
+      "unproven": 5,
+      "gap": 0
+    },
+    "eviscerator": {
+      "total": 5,
+      "own": 0,
+      "inherited": 0,
+      "unproven": 5,
+      "gap": 0
+    },
+    "sayhaMageBase": {
+      "total": 5,
+      "own": 0,
+      "inherited": 0,
+      "unproven": 0,
+      "gap": 5
+    },
+    "sayhaSeer": {
+      "total": 5,
+      "own": 0,
+      "inherited": 0,
+      "unproven": 5,
+      "gap": 0
+    },
+    "windRiderErth": {
+      "total": 5,
+      "own": 0,
+      "inherited": 0,
+      "unproven": 5,
+      "gap": 0
+    },
+    "sayhaSeeker": {
+      "total": 5,
+      "own": 0,
+      "inherited": 0,
+      "unproven": 5,
+      "gap": 0
+    }
+  }
+}

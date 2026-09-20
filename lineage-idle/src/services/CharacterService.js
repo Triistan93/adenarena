@@ -13,6 +13,7 @@ import { resolveCanonicalClassId, resolveCanonicalDagClassId, getCanonicalCharac
 import { getAncestors, getDescendants, getLineage, getSuccessors, canAdvance, getClassEntity } from '../data/elemental/ClassLineage.js';
 import { HISTORICAL_CLASS_MAP } from '../data/elemental/HistoricalClasses.js';
 import { CLASS_IDENTITIES } from '../data/elemental/ClassIdentity.js';
+import { CANONICAL_CLASS_REGISTRY } from '../data/classes/CanonicalClassRegistry.js';
 
 import {
   SHARED_MAGE_SKILL_IDS,
@@ -353,7 +354,14 @@ export function promoteClass(state, newClassId, selectedBuffIds = null, callback
   const canonNew = resolveCanonicalDagClassId(newClassId, currentRace) || resolveCanonicalClassId(newClassId, currentRace) || newClassId;
   const successors = getSuccessors(currentClass, currentRace).concat(getSuccessors(canonCurrent, currentRace));
 
+  const isCanonicalChild = Boolean(
+    CANONICAL_CLASS_REGISTRY[newClassId] &&
+    (CANONICAL_CLASS_REGISTRY[newClassId].parentClass === currentClass ||
+     CANONICAL_CLASS_REGISTRY[newClassId].parentClass === canonCurrent)
+  );
+
   const isAuthorizedSuccessor = successors.length === 0 ||
+    isCanonicalChild ||
     successors.some(s => s === newClassId || s === canonNew || resolveCanonicalDagClassId(s, currentRace) === canonNew || resolveCanonicalClassId(s, currentRace) === canonNew) ||
     callbacks.allowAdminOverride;
 
@@ -363,6 +371,12 @@ export function promoteClass(state, newClassId, selectedBuffIds = null, callback
   }
 
   // 2. Validação de Nível de Requisito de Avanço
+  const reqLevel = Number(newClassDef.minLevel || (newClassDef.stage === 1 ? 20 : newClassDef.stage === 2 ? 40 : newClassDef.stage === 3 ? 76 : 1)) || 1;
+  if (!callbacks.allowAdminOverride && state.level < reqLevel) {
+    if (callbacks.log) callbacks.log(`🔒 Nível insuficiente (${state.level}) para avançar para ${newClassDef.name || newClassId}. Requer nível ${reqLevel}.`, 'warning');
+    return false;
+  }
+
   const eligibleAdvancements = canAdvance(currentClass, state.level, currentRace).concat(canAdvance(canonCurrent, state.level, currentRace));
   if (eligibleAdvancements.length > 0 && !callbacks.allowAdminOverride) {
     const isLevelEligible = eligibleAdvancements.some(e => 
@@ -373,7 +387,7 @@ export function promoteClass(state, newClassId, selectedBuffIds = null, callback
       resolveCanonicalDagClassId(e.id, currentRace) === canonNew ||
       resolveCanonicalDagClassId(e.sourceClassId, currentRace) === canonNew
     );
-    if (!isLevelEligible) {
+    if (!isLevelEligible && !isCanonicalChild) {
       if (callbacks.log) callbacks.log(`🔒 Nível insuficiente (${state.level}) para avançar para ${newClassDef.name || newClassId}.`, 'warning');
       return false;
     }

@@ -1,0 +1,975 @@
+{
+  "meta": {
+    "generatedAt": "2026-09-20T15:17:00.392Z",
+    "v1Total": 159,
+    "v2Total": 142,
+    "v1Stages": {
+      "0": 25,
+      "1": 36,
+      "2": 49,
+      "3": 49
+    },
+    "v2Stages": {
+      "0": 19,
+      "1": 32,
+      "2": 45,
+      "3": 46
+    }
+  },
+  "stageDivergenceExplanation": "The current V1 has 36/49 (Stage 1/Stage 3) and V2 has 32/45. The numbers 38/47 likely refer to an intermediate state. The original commit ae750fc registered 38 Stage 3 classes. After later expansions (Death Knights, Assassins, Blood Rose, Warg, ShineMaker, Vanguard, Samurai, Sylph, High Elf, Ertheia), 11 more Stage 3 classes were added to reach 49. So 38 was the Stage 3 count at commit ae750fc, and 47 was a transitional Stage 2 count.",
+  "classesInV1NotInV2": [
+    {
+      "id": "phoenix_knight",
+      "name": "Phoenix Knight",
+      "stage": 3,
+      "race": "human",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "phoenixKnight"
+    },
+    {
+      "id": "dark_avenger",
+      "name": "Dark Avenger",
+      "stage": 2,
+      "race": "human",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "darkAvenger"
+    },
+    {
+      "id": "hell_knight",
+      "name": "Hell Knight",
+      "stage": 3,
+      "race": "human",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "hellKnight"
+    },
+    {
+      "id": "treasure_hunter",
+      "name": "Treasure Hunter",
+      "stage": 2,
+      "race": "human",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "treasureHunter"
+    },
+    {
+      "id": "arcana_lord",
+      "name": "Arcana Lord",
+      "stage": 3,
+      "race": "human",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "arcanaLord"
+    },
+    {
+      "id": "human_deathknight_0",
+      "name": "Death Pilgrim",
+      "stage": 0,
+      "race": "human",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "deathPilgrim"
+    },
+    {
+      "id": "human_deathknight_1",
+      "name": "Death Blade",
+      "stage": 1,
+      "race": "human",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "deathBlade"
+    },
+    {
+      "id": "human_deathknight_2",
+      "name": "Death Knight",
+      "stage": 2,
+      "race": "human",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "deathMessenger"
+    },
+    {
+      "id": "human_deathknight_3",
+      "name": "Death Knight (Master)",
+      "stage": 3,
+      "race": "human",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "deathKnight"
+    },
+    {
+      "id": "secret_assassin_male_0",
+      "name": "Assassin (Male)",
+      "stage": 0,
+      "race": "human",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "assassinS0"
+    },
+    {
+      "id": "secret_assassin_male_1",
+      "name": "Shadow Assassin",
+      "stage": 1,
+      "race": "human",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "assassinS1"
+    },
+    {
+      "id": "secret_assassin_male_2",
+      "name": "Silent Assassin",
+      "stage": 2,
+      "race": "human",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "assassinS2"
+    },
+    {
+      "id": "secret_assassin_male_3",
+      "name": "Grand Assassin",
+      "stage": 3,
+      "race": "human",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "assassinS3"
+    },
+    {
+      "id": "werewolf_0",
+      "name": "Werewolf Warrior",
+      "stage": 0,
+      "race": "human",
+      "resolutionType": "noMapping_contentGap",
+      "resolvedV2Id": null
+    },
+    {
+      "id": "werewolf_1",
+      "name": "Lycanthrope",
+      "stage": 1,
+      "race": "human",
+      "resolutionType": "noMapping_contentGap",
+      "resolvedV2Id": null
+    },
+    {
+      "id": "werewolf_2",
+      "name": "Berserk Wolf",
+      "stage": 2,
+      "race": "human",
+      "resolutionType": "noMapping_contentGap",
+      "resolvedV2Id": null
+    },
+    {
+      "id": "werewolf_3",
+      "name": "Lunar Werewolf",
+      "stage": 3,
+      "race": "human",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "warg"
+    },
+    {
+      "id": "elven_fighter",
+      "name": "Elven Fighter",
+      "stage": 0,
+      "race": "elf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "elfFighter"
+    },
+    {
+      "id": "elven_knight",
+      "name": "Elven Knight",
+      "stage": 1,
+      "race": "elf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "elvenKnight"
+    },
+    {
+      "id": "temple_knight",
+      "name": "Temple Knight",
+      "stage": 2,
+      "race": "elf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "templeKnight"
+    },
+    {
+      "id": "evas_templar",
+      "name": "Eva's Templar",
+      "stage": 3,
+      "race": "elf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "evaTemplar"
+    },
+    {
+      "id": "swordsinger",
+      "name": "Sword Singer",
+      "stage": 2,
+      "race": "elf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "swordSinger"
+    },
+    {
+      "id": "sword_muse",
+      "name": "Sword Muse",
+      "stage": 3,
+      "race": "elf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "swordMuse"
+    },
+    {
+      "id": "elven_scout",
+      "name": "Elven Scout",
+      "stage": 1,
+      "race": "elf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "elfScout"
+    },
+    {
+      "id": "plain_walker",
+      "name": "Plains Walker",
+      "stage": 2,
+      "race": "elf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "plainsWalker"
+    },
+    {
+      "id": "wind_rider",
+      "name": "Wind Rider",
+      "stage": 3,
+      "race": "elf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "windRider"
+    },
+    {
+      "id": "silver_ranger",
+      "name": "Silver Ranger",
+      "stage": 2,
+      "race": "elf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "silverRanger"
+    },
+    {
+      "id": "moonlight_sentinel",
+      "name": "Moonlight Sentinel",
+      "stage": 3,
+      "race": "elf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "moonlightSentinel"
+    },
+    {
+      "id": "elven_mage",
+      "name": "Elven Mystic",
+      "stage": 0,
+      "race": "elf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "elfMage"
+    },
+    {
+      "id": "elven_wizard",
+      "name": "Elven Wizard",
+      "stage": 1,
+      "race": "elf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "elvenWizard"
+    },
+    {
+      "id": "mystic_muse",
+      "name": "Mystic Muse",
+      "stage": 3,
+      "race": "elf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "mysticMuse"
+    },
+    {
+      "id": "elemental_summoner",
+      "name": "Elemental Summoner",
+      "stage": 2,
+      "race": "elf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "elementalSummoner"
+    },
+    {
+      "id": "elemental_master",
+      "name": "Elemental Master",
+      "stage": 3,
+      "race": "elf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "elementalMaster"
+    },
+    {
+      "id": "oracle",
+      "name": "Elven Oracle",
+      "stage": 1,
+      "race": "elf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "elfOracle"
+    },
+    {
+      "id": "elder",
+      "name": "Elven Elder",
+      "stage": 2,
+      "race": "elf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "elfElder"
+    },
+    {
+      "id": "evas_saint",
+      "name": "Eva's Saint",
+      "stage": 3,
+      "race": "elf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "evaSaint"
+    },
+    {
+      "id": "elf_deathknight_0",
+      "name": "Elven Death Pilgrim",
+      "stage": 0,
+      "race": "elf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "deathPilgrim"
+    },
+    {
+      "id": "elf_deathknight_1",
+      "name": "Frost Blade",
+      "stage": 1,
+      "race": "elf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "deathBlade"
+    },
+    {
+      "id": "elf_deathknight_2",
+      "name": "Elven Death Knight",
+      "stage": 2,
+      "race": "elf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "deathMessenger"
+    },
+    {
+      "id": "elf_deathknight_3",
+      "name": "Elven Death Knight (Master)",
+      "stage": 3,
+      "race": "elf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "deathKnight"
+    },
+    {
+      "id": "dark_fighter",
+      "name": "Dark Fighter",
+      "stage": 0,
+      "race": "darkelf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "darkElfFighter"
+    },
+    {
+      "id": "palus_knight",
+      "name": "Palus Knight",
+      "stage": 1,
+      "race": "darkelf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "palusKnight"
+    },
+    {
+      "id": "shillien_knight",
+      "name": "Shillien Knight",
+      "stage": 2,
+      "race": "darkelf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "shillienKnight"
+    },
+    {
+      "id": "shillien_templar",
+      "name": "Shillien Templar",
+      "stage": 3,
+      "race": "darkelf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "shillienTemplar"
+    },
+    {
+      "id": "bladedancer",
+      "name": "Blade Dancer",
+      "stage": 2,
+      "race": "darkelf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "bladeDancer"
+    },
+    {
+      "id": "spectral_dancer",
+      "name": "Spectral Dancer",
+      "stage": 3,
+      "race": "darkelf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "spectralDancer"
+    },
+    {
+      "id": "assassin",
+      "name": "Assassin",
+      "stage": 1,
+      "race": "darkelf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "assassinDE"
+    },
+    {
+      "id": "abyss_walker",
+      "name": "Abyss Walker",
+      "stage": 2,
+      "race": "darkelf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "abyssWalker"
+    },
+    {
+      "id": "ghost_hunter",
+      "name": "Ghost Hunter",
+      "stage": 3,
+      "race": "darkelf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "ghostHunter"
+    },
+    {
+      "id": "phantom_ranger",
+      "name": "Phantom Ranger",
+      "stage": 2,
+      "race": "darkelf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "phantomRanger"
+    },
+    {
+      "id": "ghost_sentinel",
+      "name": "Ghost Sentinel",
+      "stage": 3,
+      "race": "darkelf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "ghostSentinel"
+    },
+    {
+      "id": "dark_mage",
+      "name": "Dark Mystic",
+      "stage": 0,
+      "race": "darkelf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "darkElfMage"
+    },
+    {
+      "id": "dark_wizard",
+      "name": "Dark Wizard",
+      "stage": 1,
+      "race": "darkelf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "darkWizard"
+    },
+    {
+      "id": "storm_screamer",
+      "name": "Storm Screamer",
+      "stage": 3,
+      "race": "darkelf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "stormScreamer"
+    },
+    {
+      "id": "phantom_summoner",
+      "name": "Phantom Summoner",
+      "stage": 2,
+      "race": "darkelf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "phantomSummoner"
+    },
+    {
+      "id": "spectral_master",
+      "name": "Spectral Master",
+      "stage": 3,
+      "race": "darkelf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "spectralMaster"
+    },
+    {
+      "id": "shillien_oracle",
+      "name": "Shillien Oracle",
+      "stage": 1,
+      "race": "darkelf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "shillienOracle"
+    },
+    {
+      "id": "shillien_elder",
+      "name": "Shillien Elder",
+      "stage": 2,
+      "race": "darkelf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "shillienElder"
+    },
+    {
+      "id": "shillien_saint",
+      "name": "Shillien Saint",
+      "stage": 3,
+      "race": "darkelf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "shillienSaint"
+    },
+    {
+      "id": "delf_deathknight_0",
+      "name": "Dark Death Pilgrim",
+      "stage": 0,
+      "race": "darkelf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "deathPilgrim"
+    },
+    {
+      "id": "delf_deathknight_1",
+      "name": "Abyssal Blade",
+      "stage": 1,
+      "race": "darkelf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "deathBlade"
+    },
+    {
+      "id": "delf_deathknight_2",
+      "name": "Dark Death Knight",
+      "stage": 2,
+      "race": "darkelf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "deathMessenger"
+    },
+    {
+      "id": "delf_deathknight_3",
+      "name": "Dark Death Knight (Master)",
+      "stage": 3,
+      "race": "darkelf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "deathKnight"
+    },
+    {
+      "id": "secret_assassin_female_0",
+      "name": "Assassin (Female)",
+      "stage": 0,
+      "race": "darkelf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "assassinS0"
+    },
+    {
+      "id": "secret_assassin_female_1",
+      "name": "Venom Assassin",
+      "stage": 1,
+      "race": "darkelf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "assassinS1"
+    },
+    {
+      "id": "secret_assassin_female_2",
+      "name": "Nightstalker",
+      "stage": 2,
+      "race": "darkelf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "assassinS2"
+    },
+    {
+      "id": "secret_assassin_female_3",
+      "name": "Grand Assassin (Female)",
+      "stage": 3,
+      "race": "darkelf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "assassinS3"
+    },
+    {
+      "id": "rose_vain_0",
+      "name": "Rose Initiate",
+      "stage": 0,
+      "race": "darkelf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "bloodRoseBase"
+    },
+    {
+      "id": "rose_vain_1",
+      "name": "Blood Rose",
+      "stage": 1,
+      "race": "darkelf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "bloodRoseS1"
+    },
+    {
+      "id": "rose_vain_2",
+      "name": "Crimson Thorn",
+      "stage": 2,
+      "race": "darkelf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "bloodRoseS2"
+    },
+    {
+      "id": "rose_vain_3",
+      "name": "Rose Vain",
+      "stage": 3,
+      "race": "darkelf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "bloodRose"
+    },
+    {
+      "id": "orc_fighter",
+      "name": "Orc Fighter",
+      "stage": 0,
+      "race": "orc",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "orcFighter"
+    },
+    {
+      "id": "orc_raider",
+      "name": "Orc Raider",
+      "stage": 1,
+      "race": "orc",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "raider"
+    },
+    {
+      "id": "orc_monk",
+      "name": "Orc Monk",
+      "stage": 1,
+      "race": "orc",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "monk"
+    },
+    {
+      "id": "grand_khavatari",
+      "name": "Grand Khavatari",
+      "stage": 3,
+      "race": "orc",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "grandKhavatari"
+    },
+    {
+      "id": "orc_mage",
+      "name": "Orc Mystic",
+      "stage": 0,
+      "race": "orc",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "orcMage"
+    },
+    {
+      "id": "orc_shaman",
+      "name": "Orc Shaman",
+      "stage": 1,
+      "race": "orc",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "shaman"
+    },
+    {
+      "id": "orc_rider_0",
+      "name": "Vanguard Rider",
+      "stage": 0,
+      "race": "orc",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "rider"
+    },
+    {
+      "id": "orc_rider_1",
+      "name": "Dragoon",
+      "stage": 1,
+      "race": "orc",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "dragoon"
+    },
+    {
+      "id": "orc_rider_2",
+      "name": "Vanguard Lord",
+      "stage": 2,
+      "race": "orc",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "vanguardRider"
+    },
+    {
+      "id": "orc_rider_3",
+      "name": "Grand Vanguard",
+      "stage": 3,
+      "race": "orc",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "grandVanguard"
+    },
+    {
+      "id": "dwarven_fighter",
+      "name": "Dwarven Fighter",
+      "stage": 0,
+      "race": "dwarf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "dwarfFighter"
+    },
+    {
+      "id": "bounty_hunter",
+      "name": "Bounty Hunter",
+      "stage": 2,
+      "race": "dwarf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "bountyHunter"
+    },
+    {
+      "id": "fortune_seeker",
+      "name": "Fortune Seeker",
+      "stage": 3,
+      "race": "dwarf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "fortuneSeeker"
+    },
+    {
+      "id": "artisan",
+      "name": "Artisan",
+      "stage": 1,
+      "race": "dwarf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "artisanDwarf"
+    },
+    {
+      "id": "shineMakerBase",
+      "name": "Shine Maker Initiate",
+      "stage": 0,
+      "race": "dwarf",
+      "resolutionType": "noMapping_contentGap",
+      "resolvedV2Id": null
+    },
+    {
+      "id": "jin_kamael_soldier",
+      "name": "Kamael Soldier",
+      "stage": 0,
+      "race": "kamael",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "kamaelSoldier"
+    },
+    {
+      "id": "soul_finder",
+      "name": "Soul Finder",
+      "stage": 1,
+      "race": "kamael",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "soulFinder"
+    },
+    {
+      "id": "soul_breaker",
+      "name": "Soul Breaker",
+      "stage": 2,
+      "race": "kamael",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "soulBreakerKamael"
+    },
+    {
+      "id": "soul_hound",
+      "name": "Soul Hound",
+      "stage": 3,
+      "race": "kamael",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "soulHound"
+    },
+    {
+      "id": "arbalester",
+      "name": "Arbalester",
+      "stage": 2,
+      "race": "kamael",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "soulRanger"
+    },
+    {
+      "id": "crow_0",
+      "name": "Crow Novice",
+      "stage": 0,
+      "race": "kamael",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "samuraiBase"
+    },
+    {
+      "id": "crow_1",
+      "name": "Hatamoto",
+      "stage": 1,
+      "race": "kamael",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "hatamoto"
+    },
+    {
+      "id": "crow_2",
+      "name": "Ronin",
+      "stage": 2,
+      "race": "kamael",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "ronin"
+    },
+    {
+      "id": "crow_3",
+      "name": "Samurai",
+      "stage": 3,
+      "race": "kamael",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "samurai"
+    },
+    {
+      "id": "sylphid",
+      "name": "Sylphid",
+      "stage": 0,
+      "race": "sylph",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "sylphGunner"
+    },
+    {
+      "id": "sylph_gunner",
+      "name": "Sharpshooter",
+      "stage": 1,
+      "race": "sylph",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "sharpshooter"
+    },
+    {
+      "id": "wind_hunter",
+      "name": "Wind Sniper",
+      "stage": 2,
+      "race": "sylph",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "windSniper"
+    },
+    {
+      "id": "storm_blaster",
+      "name": "Storm Blaster",
+      "stage": 3,
+      "race": "sylph",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "stormBlaster"
+    },
+    {
+      "id": "sacred_templar_0",
+      "name": "Sacred Templar Initiate",
+      "stage": 0,
+      "race": "highelf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "highElfBase"
+    },
+    {
+      "id": "sacred_templar_1",
+      "name": "Sacred Templar Adept",
+      "stage": 1,
+      "race": "highelf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "lightTemplar"
+    },
+    {
+      "id": "sacred_templar_2",
+      "name": "Divine Templar",
+      "stage": 2,
+      "race": "highelf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "holyTemplar"
+    },
+    {
+      "id": "sacred_templar_3",
+      "name": "Divine Templar (Master)",
+      "stage": 3,
+      "race": "highelf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "divineTemplar"
+    },
+    {
+      "id": "spirit_0",
+      "name": "Element Weaver Initiate",
+      "stage": 0,
+      "race": "highelf",
+      "resolutionType": "noMapping_contentGap",
+      "resolvedV2Id": null
+    },
+    {
+      "id": "spirit_1",
+      "name": "Element Weaver Adept",
+      "stage": 1,
+      "race": "highelf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "elementWeaverS1"
+    },
+    {
+      "id": "spirit_2",
+      "name": "Spirit Weaver",
+      "stage": 2,
+      "race": "highelf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "elementWeaverS2"
+    },
+    {
+      "id": "spirit_3",
+      "name": "Element Weaver",
+      "stage": 3,
+      "race": "highelf",
+      "resolutionType": "mappedMatch",
+      "resolvedV2Id": "elementWeaver"
+    }
+  ],
+  "ertheiaReconciliation": [
+    {
+      "v1Id": "marauderBase",
+      "v2Id": "marauderBase",
+      "v2Exists": true,
+      "stage": 0,
+      "aliases": [
+        "marauderbase",
+        "marauderBase",
+        "ertheia_fighter",
+        "ertheia_marauderbase"
+      ],
+      "resolvesDeterministically": true
+    },
+    {
+      "v1Id": "marauder",
+      "v2Id": "marauder",
+      "v2Exists": true,
+      "stage": 1,
+      "aliases": [
+        "marauder"
+      ],
+      "resolvesDeterministically": true
+    },
+    {
+      "v1Id": "ertheiaWarrior",
+      "v2Id": "ertheiaWarrior",
+      "v2Exists": true,
+      "stage": 2,
+      "aliases": [
+        "ertheiawarrior",
+        "ertheiaWarrior"
+      ],
+      "resolvesDeterministically": true
+    },
+    {
+      "v1Id": "eviscerator",
+      "v2Id": "eviscerator",
+      "v2Exists": true,
+      "stage": 3,
+      "aliases": [
+        "eviscerator"
+      ],
+      "resolvesDeterministically": true
+    },
+    {
+      "v1Id": "sayhaMageBase",
+      "v2Id": "sayhaMageBase",
+      "v2Exists": true,
+      "stage": 0,
+      "aliases": [
+        "sayhamage",
+        "sayhaMage",
+        "sayhamagebase",
+        "sayhaMageBase",
+        "sayhaseekerbase",
+        "sayha_mage",
+        "ertheia_mage",
+        "ertheia_sayhamagebase"
+      ],
+      "resolvesDeterministically": true
+    },
+    {
+      "v1Id": "sayhaSeer",
+      "v2Id": "sayhaSeer",
+      "v2Exists": true,
+      "stage": 1,
+      "aliases": [
+        "sayhaseer",
+        "sayhaSeer",
+        "sayha_seer"
+      ],
+      "resolvesDeterministically": true
+    },
+    {
+      "v1Id": "windRiderErth",
+      "v2Id": "windRiderErth",
+      "v2Exists": true,
+      "stage": 2,
+      "aliases": [
+        "windridererth",
+        "windRiderErth"
+      ],
+      "resolvesDeterministically": true
+    },
+    {
+      "v1Id": "sayhaSeeker",
+      "v2Id": "sayhaSeeker",
+      "v2Exists": true,
+      "stage": 3,
+      "aliases": [
+        "sayhaseeker",
+        "sayhaSeeker"
+      ],
+      "resolvesDeterministically": true
+    }
+  ]
+}

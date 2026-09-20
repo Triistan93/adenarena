@@ -210,6 +210,7 @@ const V2_STARTER_MAP = {
   'shillien_templar': 'shillienTemplar',
   'bladedancer': 'bladeDancer',
   'spectral_dancer': 'spectralDancer',
+  'assassin': 'assassinDE',
   'abyss_walker': 'abyssWalker',
   'ghost_hunter': 'ghostHunter',
   'phantom_ranger': 'phantomRanger',
@@ -229,7 +230,7 @@ const V2_STARTER_MAP = {
   'arbalester': 'soulRanger'
 };
 
-const V2_CONTENT_GAP_CLASSES = {
+export const V2_CONTENT_GAP_CLASSES = {
   'werewolf_0': {
     gapType: 'V2_NODE_ABSENT',
     reason: 'Nó V2 ausente: dataset L2Wiki contém apenas 1 habilidade de Estágio 0 (88401 Direct Strike); árvore de 5 habilidades ausente no catálogo V2',
@@ -456,6 +457,17 @@ export function areSiblingBranches(classA, classB) {
  * @param {string} skillId
  * @returns {number}
  */
+export function isExplicitStage0Skill(classId, skillId) {
+  let current = resolveV2ClassContext(classId).v2ClassDef;
+  const visited = new Set();
+  while (current && !visited.has(current.id)) {
+    visited.add(current.id);
+    if (current.stage === 0 && current.skillIds?.includes(skillId)) return true;
+    current = CANONICAL_CLASS_REGISTRY_V2[current.parentClass];
+  }
+  return false;
+}
+
 export function getSkillUnlockLevelForClass(classId, skillId) {
   if (!classId || !skillId || !CANONICAL_CLASS_REGISTRY_V2) return 1;
 
@@ -468,15 +480,15 @@ export function getSkillUnlockLevelForClass(classId, skillId) {
 
   // 1. Authoritative V2 Canonical Class DAG evaluation
   if (v2Class) {
+    if (isExplicitStage0Skill(classId, skillId)) {
+      return 1;
+    }
+
     // Ultimate gating (Lv 80 / Lv 90)
     const def = typeof window !== 'undefined' ? window.EchoData?.SKILL_DEFS_ECHO?.[skillId] : null;
     if (def) {
       if (def.starRank === 5 || def.tier === 5 || def.reqLvl >= 90) return 90;
       if (def.isUltimate || def.starRank === 4 || def.tier === 4 || def.reqLvl >= 80) return 80;
-    }
-
-    if (v2Class.stage === 0 && v2Class.skillIds?.includes(skillId)) {
-      return 1;
     }
 
     // Current and Ancestor classes: find earliest (lowest) minLevel
@@ -720,11 +732,14 @@ function isSkillNativeOrAvailableNow(classId, def) {
  * @param {string} skillId
  * @returns {boolean}
  */
-export function isSkillInV2Lineage(classId, skillId) {
+export function isSkillInV2Lineage(classId, skillId, race = null) {
   if (!classId || !skillId) return false;
   if (isPurgedSkill(skillId)) return false;
 
-  const v2Ctx = resolveV2ClassContext(classId);
+  const charClass = (typeof classId === 'object' && classId !== null) ? classId.class : classId;
+  const charRace = (typeof classId === 'object' && classId !== null) ? (classId.race || race) : race;
+
+  const v2Ctx = resolveV2ClassContext(charClass, charRace);
   if (v2Ctx.status === 'RESOLVED') {
     if (v2Ctx.authorizedSkillIds.includes(skillId)) return true;
     if (v2Ctx.v2ClassDef) {
@@ -773,7 +788,7 @@ export function isSkillInProgressionPath(character, skill) {
   if (v2Ctx.status === 'CONTENT_GAP') {
     return v2Ctx.authorizedSkillIds.includes(def.id);
   }
-  if (v2Ctx.status === 'RESOLVED' && isSkillInV2Lineage(charClass, def.id)) {
+  if (v2Ctx.status === 'RESOLVED' && isSkillInV2Lineage(charClass, def.id, charRace)) {
     return true;
   }
 
@@ -950,9 +965,10 @@ export function getSkillDetailedVisibility(character, skill) {
 
   // 5. Level & Stage Gate -> HIDDEN_FUTURE (Zero vazamento para DOM)
   const classSpecificReq = getSkillUnlockLevelForClass(charClass, def.id);
-  const baseReq = Number(def.requiredLevel || def.reqLvl || def.identity?.unlockLevel) || 1;
+  const isStage0Starter = isExplicitStage0Skill(charClass, def.id);
+  const baseReq = isStage0Starter ? 1 : (Number(def.requiredLevel || def.reqLvl || def.identity?.unlockLevel) || 1);
   const reqLvl = Math.max(classSpecificReq, baseReq);
-  const skillStage = def.progressionStage || def.identity?.progressionStage;
+  const skillStage = isStage0Starter ? 'BASE' : (def.progressionStage || def.identity?.progressionStage);
   const stageReq = (skillStage && STAGE_LEVEL_THRESHOLDS[skillStage]) ? STAGE_LEVEL_THRESHOLDS[skillStage] : 1;
 
   if (charLevel < reqLvl || charLevel < stageReq) {
@@ -1117,7 +1133,8 @@ export function getVisibleSkillsForCharacter(character) {
     ...result.available.map(def => ({ skillId: def.id, skillDef: def, visibility: SKILL_VISIBILITY_STATES.AVAILABLE })),
     ...result.locked.filter(def => {
       const classSpecificReq = getSkillUnlockLevelForClass(charClass, def.id);
-      const baseReq = Number(def.requiredLevel || def.reqLvl || def.identity?.unlockLevel) || 1;
+      const isStage0Starter = isExplicitStage0Skill(charClass, def.id);
+      const baseReq = isStage0Starter ? 1 : (Number(def.requiredLevel || def.reqLvl || def.identity?.unlockLevel) || 1);
       const reqLvl = Math.max(classSpecificReq, baseReq);
       return charLevel >= reqLvl;
     }).map(def => ({ skillId: def.id, skillDef: def, visibility: SKILL_VISIBILITY_STATES.LOCKED }))

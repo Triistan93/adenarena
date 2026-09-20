@@ -1,0 +1,2220 @@
+{
+  "timestamp": "2026-09-20T02:21:49.709Z",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36 Edg/153.0.0.0",
+  "totalScenarios": 166,
+  "passedCount": 153,
+  "contentGapCount": 13,
+  "failedCount": 0,
+  "consoleErrorsCount": 0,
+  "consoleErrors": [],
+  "breakdown": {
+    "creationRoots": 25,
+    "promotedStages": 4,
+    "restrictions": 3,
+    "destinations": 134
+  },
+  "scenarios": [
+    {
+      "category": "CREATION_ROOT",
+      "id": "fighter",
+      "status": "PASS",
+      "detail": "Raiz montada no DOM com 5 habilidades canônicas (V2: fighter)",
+      "assertions": {
+        "domMounted": true,
+        "skillsAuthorizedCount": 5,
+        "starterSkillUnlocked": true
+      }
+    },
+    {
+      "category": "CREATION_ROOT",
+      "id": "mage",
+      "status": "PASS",
+      "detail": "Raiz montada no DOM com 5 habilidades canônicas (V2: mage)",
+      "assertions": {
+        "domMounted": true,
+        "skillsAuthorizedCount": 5,
+        "starterSkillUnlocked": true
+      }
+    },
+    {
+      "category": "CREATION_ROOT",
+      "id": "human_deathknight_0",
+      "status": "PASS",
+      "detail": "Raiz montada no DOM com 5 habilidades canônicas (V2: deathPilgrim)",
+      "assertions": {
+        "domMounted": true,
+        "skillsAuthorizedCount": 5,
+        "starterSkillUnlocked": true
+      }
+    },
+    {
+      "category": "CREATION_ROOT",
+      "id": "werewolf_0",
+      "status": "CONTENT_GAP",
+      "detail": "Linhagem com lacuna de conteúdo documentada",
+      "assertions": {
+        "domMounted": true,
+        "contentGapProtected": true
+      }
+    },
+    {
+      "category": "CREATION_ROOT",
+      "id": "secret_assassin_male_0",
+      "status": "PASS",
+      "detail": "Raiz montada no DOM com 5 habilidades canônicas (V2: assassinS0)",
+      "assertions": {
+        "domMounted": true,
+        "skillsAuthorizedCount": 5,
+        "starterSkillUnlocked": true
+      }
+    },
+    {
+      "category": "CREATION_ROOT",
+      "id": "elven_fighter",
+      "status": "PASS",
+      "detail": "Raiz montada no DOM com 5 habilidades canônicas (V2: elfFighter)",
+      "assertions": {
+        "domMounted": true,
+        "skillsAuthorizedCount": 5,
+        "starterSkillUnlocked": true
+      }
+    },
+    {
+      "category": "CREATION_ROOT",
+      "id": "elven_mage",
+      "status": "PASS",
+      "detail": "Raiz montada no DOM com 5 habilidades canônicas (V2: elfMage)",
+      "assertions": {
+        "domMounted": true,
+        "skillsAuthorizedCount": 5,
+        "starterSkillUnlocked": true
+      }
+    },
+    {
+      "category": "CREATION_ROOT",
+      "id": "elf_deathknight_0",
+      "status": "PASS",
+      "detail": "Raiz montada no DOM com 5 habilidades canônicas (V2: deathPilgrim)",
+      "assertions": {
+        "domMounted": true,
+        "skillsAuthorizedCount": 5,
+        "starterSkillUnlocked": true
+      }
+    },
+    {
+      "category": "CREATION_ROOT",
+      "id": "dark_fighter",
+      "status": "PASS",
+      "detail": "Raiz montada no DOM com 5 habilidades canônicas (V2: darkElfFighter)",
+      "assertions": {
+        "domMounted": true,
+        "skillsAuthorizedCount": 5,
+        "starterSkillUnlocked": true
+      }
+    },
+    {
+      "category": "CREATION_ROOT",
+      "id": "dark_mage",
+      "status": "PASS",
+      "detail": "Raiz montada no DOM com 5 habilidades canônicas (V2: darkElfMage)",
+      "assertions": {
+        "domMounted": true,
+        "skillsAuthorizedCount": 5,
+        "starterSkillUnlocked": true
+      }
+    },
+    {
+      "category": "CREATION_ROOT",
+      "id": "delf_deathknight_0",
+      "status": "PASS",
+      "detail": "Raiz montada no DOM com 5 habilidades canônicas (V2: deathPilgrim)",
+      "assertions": {
+        "domMounted": true,
+        "skillsAuthorizedCount": 5,
+        "starterSkillUnlocked": true
+      }
+    },
+    {
+      "category": "CREATION_ROOT",
+      "id": "secret_assassin_female_0",
+      "status": "PASS",
+      "detail": "Raiz montada no DOM com 5 habilidades canônicas (V2: assassinS0)",
+      "assertions": {
+        "domMounted": true,
+        "skillsAuthorizedCount": 5,
+        "starterSkillUnlocked": true
+      }
+    },
+    {
+      "category": "CREATION_ROOT",
+      "id": "rose_vain_0",
+      "status": "PASS",
+      "detail": "Raiz montada no DOM com 5 habilidades canônicas (V2: bloodRoseBase)",
+      "assertions": {
+        "domMounted": true,
+        "skillsAuthorizedCount": 5,
+        "starterSkillUnlocked": true
+      }
+    },
+    {
+      "category": "CREATION_ROOT",
+      "id": "orc_fighter",
+      "status": "PASS",
+      "detail": "Raiz montada no DOM com 5 habilidades canônicas (V2: orcFighter)",
+      "assertions": {
+        "domMounted": true,
+        "skillsAuthorizedCount": 5,
+        "starterSkillUnlocked": true
+      }
+    },
+    {
+      "category": "CREATION_ROOT",
+      "id": "orc_mage",
+      "status": "PASS",
+      "detail": "Raiz montada no DOM com 5 habilidades canônicas (V2: orcMage)",
+      "assertions": {
+        "domMounted": true,
+        "skillsAuthorizedCount": 5,
+        "starterSkillUnlocked": true
+      }
+    },
+    {
+      "category": "CREATION_ROOT",
+      "id": "orc_rider_0",
+      "status": "PASS",
+      "detail": "Raiz montada no DOM com 5 habilidades canônicas (V2: rider)",
+      "assertions": {
+        "domMounted": true,
+        "skillsAuthorizedCount": 5,
+        "starterSkillUnlocked": true
+      }
+    },
+    {
+      "category": "CREATION_ROOT",
+      "id": "dwarven_fighter",
+      "status": "PASS",
+      "detail": "Raiz montada no DOM com 5 habilidades canônicas (V2: dwarfFighter)",
+      "assertions": {
+        "domMounted": true,
+        "skillsAuthorizedCount": 5,
+        "starterSkillUnlocked": true
+      }
+    },
+    {
+      "category": "CREATION_ROOT",
+      "id": "shineMakerBase",
+      "status": "CONTENT_GAP",
+      "detail": "Linhagem com lacuna de conteúdo documentada",
+      "assertions": {
+        "domMounted": true,
+        "contentGapProtected": true
+      }
+    },
+    {
+      "category": "CREATION_ROOT",
+      "id": "jin_kamael_soldier",
+      "status": "PASS",
+      "detail": "Raiz montada no DOM com 5 habilidades canônicas (V2: kamaelSoldier)",
+      "assertions": {
+        "domMounted": true,
+        "skillsAuthorizedCount": 5,
+        "starterSkillUnlocked": true
+      }
+    },
+    {
+      "category": "CREATION_ROOT",
+      "id": "crow_0",
+      "status": "PASS",
+      "detail": "Raiz montada no DOM com 5 habilidades canônicas (V2: samuraiBase)",
+      "assertions": {
+        "domMounted": true,
+        "skillsAuthorizedCount": 5,
+        "starterSkillUnlocked": true
+      }
+    },
+    {
+      "category": "CREATION_ROOT",
+      "id": "sylphid",
+      "status": "PASS",
+      "detail": "Raiz montada no DOM com 5 habilidades canônicas (V2: sylphGunner)",
+      "assertions": {
+        "domMounted": true,
+        "skillsAuthorizedCount": 5,
+        "starterSkillUnlocked": true
+      }
+    },
+    {
+      "category": "CREATION_ROOT",
+      "id": "sacred_templar_0",
+      "status": "PASS",
+      "detail": "Raiz montada no DOM com 5 habilidades canônicas (V2: highElfBase)",
+      "assertions": {
+        "domMounted": true,
+        "skillsAuthorizedCount": 5,
+        "starterSkillUnlocked": true
+      }
+    },
+    {
+      "category": "CREATION_ROOT",
+      "id": "spirit_0",
+      "status": "CONTENT_GAP",
+      "detail": "Linhagem com lacuna de conteúdo documentada",
+      "assertions": {
+        "domMounted": true,
+        "contentGapProtected": true
+      }
+    },
+    {
+      "category": "CREATION_ROOT",
+      "id": "marauderBase",
+      "status": "CONTENT_GAP",
+      "detail": "Linhagem com lacuna de conteúdo documentada",
+      "assertions": {
+        "domMounted": true,
+        "contentGapProtected": true
+      }
+    },
+    {
+      "category": "CREATION_ROOT",
+      "id": "sayhaMageBase",
+      "status": "CONTENT_GAP",
+      "detail": "Linhagem com lacuna de conteúdo documentada",
+      "assertions": {
+        "domMounted": true,
+        "contentGapProtected": true
+      }
+    },
+    {
+      "category": "PROMOTED_STAGE_INTERFACE",
+      "id": "STAGE_0_fighter",
+      "displayName": "Interface Estágio 0 (fighter)",
+      "status": "PASS",
+      "detail": "Interface de Estágio 0 renderizada; Banner '1ª Troca de Classe' verificado",
+      "assertions": {
+        "stageVerified": true,
+        "advancementBannerSupported": true,
+        "loadoutSlotsAvailable": 2
+      }
+    },
+    {
+      "category": "PROMOTED_STAGE_INTERFACE",
+      "id": "STAGE_1_warrior",
+      "displayName": "Interface Estágio 1 (warrior)",
+      "status": "PASS",
+      "detail": "Interface de Estágio 1 renderizada; Banner '2ª Troca de Classe' verificado",
+      "assertions": {
+        "stageVerified": true,
+        "advancementBannerSupported": true,
+        "loadoutSlotsAvailable": 4
+      }
+    },
+    {
+      "category": "PROMOTED_STAGE_INTERFACE",
+      "id": "STAGE_2_gladiator",
+      "displayName": "Interface Estágio 2 (gladiator)",
+      "status": "PASS",
+      "detail": "Interface de Estágio 2 renderizada; Banner '3ª Troca de Classe' verificado",
+      "assertions": {
+        "stageVerified": true,
+        "advancementBannerSupported": true,
+        "loadoutSlotsAvailable": 4
+      }
+    },
+    {
+      "category": "PROMOTED_STAGE_INTERFACE",
+      "id": "STAGE_3_duelist",
+      "displayName": "Interface Estágio 3 (duelist)",
+      "status": "PASS",
+      "detail": "Interface de Estágio 3 renderizada; Banner 'Despertar Máximo' verificado",
+      "assertions": {
+        "stageVerified": true,
+        "advancementBannerSupported": true,
+        "loadoutSlotsAvailable": 4
+      }
+    },
+    {
+      "category": "SUBCLASS_RESTRICTION_UI",
+      "id": "RESTRICTION_ELF_TO_DARKELF",
+      "displayName": "UI Bloqueio: Elfo escolhendo Subclasse Dark Elf",
+      "status": "PASS",
+      "detail": "Opção de Dark Elf desabilitada no seletor com badge de antagonismo racial",
+      "assertions": {
+        "racialAntagonismBlocked": true,
+        "tooltipDisplayed": true
+      }
+    },
+    {
+      "category": "SUBCLASS_RESTRICTION_UI",
+      "id": "RESTRICTION_DARKELF_TO_ELF",
+      "displayName": "UI Bloqueio: Dark Elf escolhendo Subclasse Elf",
+      "status": "PASS",
+      "detail": "Opção de Elf desabilitada no seletor com badge de antagonismo racial",
+      "assertions": {
+        "racialAntagonismBlocked": true,
+        "tooltipDisplayed": true
+      }
+    },
+    {
+      "category": "SUBCLASS_RESTRICTION_UI",
+      "id": "RESTRICTION_SAME_CLASS",
+      "displayName": "UI Bloqueio: Main Class escolhendo a si mesma",
+      "status": "PASS",
+      "detail": "Classe atual desabilitada no seletor de subclasses",
+      "assertions": {
+        "sameClassBlocked": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "warrior",
+      "displayName": "Subclasse Destino: Warrior",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "gladiator",
+      "displayName": "Subclasse Destino: Gladiator",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "duelist",
+      "displayName": "Subclasse Destino: Duelist",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "warlord",
+      "displayName": "Subclasse Destino: Warlord",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "dreadnought",
+      "displayName": "Subclasse Destino: Dreadnought",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "knight",
+      "displayName": "Subclasse Destino: Human Knight",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "paladin",
+      "displayName": "Subclasse Destino: Paladin",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "phoenix_knight",
+      "displayName": "Subclasse Destino: Phoenix Knight",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "dark_avenger",
+      "displayName": "Subclasse Destino: Dark Avenger",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "hell_knight",
+      "displayName": "Subclasse Destino: Hell Knight",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "rogue",
+      "displayName": "Subclasse Destino: Rogue",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "treasure_hunter",
+      "displayName": "Subclasse Destino: Treasure Hunter",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "adventurer",
+      "displayName": "Subclasse Destino: Adventurer",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "hawkeye",
+      "displayName": "Subclasse Destino: Hawkeye",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "sagittarius",
+      "displayName": "Subclasse Destino: Sagittarius",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "wizard",
+      "displayName": "Subclasse Destino: Human Wizard",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "sorcerer",
+      "displayName": "Subclasse Destino: Sorcerer",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "archmage",
+      "displayName": "Subclasse Destino: Archmage",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "necromancer",
+      "displayName": "Subclasse Destino: Necromancer",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "soultaker",
+      "displayName": "Subclasse Destino: Soultaker",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "warlock",
+      "displayName": "Subclasse Destino: Warlock",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "arcana_lord",
+      "displayName": "Subclasse Destino: Arcana Lord",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "cleric",
+      "displayName": "Subclasse Destino: Cleric",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "bishop",
+      "displayName": "Subclasse Destino: Bishop",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "cardinal",
+      "displayName": "Subclasse Destino: Cardinal",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "prophet",
+      "displayName": "Subclasse Destino: Prophet",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "hierophant",
+      "displayName": "Subclasse Destino: Hierophant",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "human_deathknight_1",
+      "displayName": "Subclasse Destino: Death Blade",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "human_deathknight_2",
+      "displayName": "Subclasse Destino: Death Knight",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "human_deathknight_3",
+      "displayName": "Subclasse Destino: Death Knight (Master)",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "secret_assassin_male_1",
+      "displayName": "Subclasse Destino: Shadow Assassin",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "secret_assassin_male_2",
+      "displayName": "Subclasse Destino: Silent Assassin",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "secret_assassin_male_3",
+      "displayName": "Subclasse Destino: Grand Assassin",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "werewolf_1",
+      "displayName": "Subclasse Destino: Lycanthrope",
+      "status": "CONTENT_GAP",
+      "detail": "Nó V2 ausente: Warg de Estágio 1 ausente no catálogo V2",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "statusPreserved": "CONTENT_GAP"
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "werewolf_2",
+      "displayName": "Subclasse Destino: Berserk Wolf",
+      "status": "CONTENT_GAP",
+      "detail": "Nó V2 ausente: Warg de Estágio 2 ausente no catálogo V2",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "statusPreserved": "CONTENT_GAP"
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "werewolf_3",
+      "displayName": "Subclasse Destino: Lunar Werewolf",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "elven_knight",
+      "displayName": "Subclasse Destino: Elven Knight",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "temple_knight",
+      "displayName": "Subclasse Destino: Temple Knight",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "evas_templar",
+      "displayName": "Subclasse Destino: Eva's Templar",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "swordsinger",
+      "displayName": "Subclasse Destino: Sword Singer",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "sword_muse",
+      "displayName": "Subclasse Destino: Sword Muse",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "elven_scout",
+      "displayName": "Subclasse Destino: Elven Scout",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "plain_walker",
+      "displayName": "Subclasse Destino: Plains Walker",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "wind_rider",
+      "displayName": "Subclasse Destino: Wind Rider",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "silver_ranger",
+      "displayName": "Subclasse Destino: Silver Ranger",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "moonlight_sentinel",
+      "displayName": "Subclasse Destino: Moonlight Sentinel",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "elven_wizard",
+      "displayName": "Subclasse Destino: Elven Wizard",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "spellsinger",
+      "displayName": "Subclasse Destino: Spellsinger",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "mystic_muse",
+      "displayName": "Subclasse Destino: Mystic Muse",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "elemental_summoner",
+      "displayName": "Subclasse Destino: Elemental Summoner",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "elemental_master",
+      "displayName": "Subclasse Destino: Elemental Master",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "oracle",
+      "displayName": "Subclasse Destino: Elven Oracle",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "elder",
+      "displayName": "Subclasse Destino: Elven Elder",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "evas_saint",
+      "displayName": "Subclasse Destino: Eva's Saint",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "elf_deathknight_1",
+      "displayName": "Subclasse Destino: Frost Blade",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "elf_deathknight_2",
+      "displayName": "Subclasse Destino: Elven Death Knight",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "elf_deathknight_3",
+      "displayName": "Subclasse Destino: Elven Death Knight (Master)",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "palus_knight",
+      "displayName": "Subclasse Destino: Palus Knight",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "shillien_knight",
+      "displayName": "Subclasse Destino: Shillien Knight",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "shillien_templar",
+      "displayName": "Subclasse Destino: Shillien Templar",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "bladedancer",
+      "displayName": "Subclasse Destino: Blade Dancer",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "spectral_dancer",
+      "displayName": "Subclasse Destino: Spectral Dancer",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "assassin",
+      "displayName": "Subclasse Destino: Assassin",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "abyss_walker",
+      "displayName": "Subclasse Destino: Abyss Walker",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "ghost_hunter",
+      "displayName": "Subclasse Destino: Ghost Hunter",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "phantom_ranger",
+      "displayName": "Subclasse Destino: Phantom Ranger",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "ghost_sentinel",
+      "displayName": "Subclasse Destino: Ghost Sentinel",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "dark_wizard",
+      "displayName": "Subclasse Destino: Dark Wizard",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "spellhowler",
+      "displayName": "Subclasse Destino: Spellhowler",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "storm_screamer",
+      "displayName": "Subclasse Destino: Storm Screamer",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "phantom_summoner",
+      "displayName": "Subclasse Destino: Phantom Summoner",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "spectral_master",
+      "displayName": "Subclasse Destino: Spectral Master",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "shillien_oracle",
+      "displayName": "Subclasse Destino: Shillien Oracle",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "shillien_elder",
+      "displayName": "Subclasse Destino: Shillien Elder",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "shillien_saint",
+      "displayName": "Subclasse Destino: Shillien Saint",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "delf_deathknight_1",
+      "displayName": "Subclasse Destino: Abyssal Blade",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "delf_deathknight_2",
+      "displayName": "Subclasse Destino: Dark Death Knight",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "delf_deathknight_3",
+      "displayName": "Subclasse Destino: Dark Death Knight (Master)",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "secret_assassin_female_1",
+      "displayName": "Subclasse Destino: Venom Assassin",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "secret_assassin_female_2",
+      "displayName": "Subclasse Destino: Nightstalker",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "secret_assassin_female_3",
+      "displayName": "Subclasse Destino: Grand Assassin (Female)",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "rose_vain_1",
+      "displayName": "Subclasse Destino: Blood Rose",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "rose_vain_2",
+      "displayName": "Subclasse Destino: Crimson Thorn",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "rose_vain_3",
+      "displayName": "Subclasse Destino: Rose Vain",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "orc_raider",
+      "displayName": "Subclasse Destino: Orc Raider",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "destroyer",
+      "displayName": "Subclasse Destino: Destroyer",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "titan",
+      "displayName": "Subclasse Destino: Titan",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "orc_monk",
+      "displayName": "Subclasse Destino: Orc Monk",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "tyrant",
+      "displayName": "Subclasse Destino: Tyrant",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "grand_khavatari",
+      "displayName": "Subclasse Destino: Grand Khavatari",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "orc_shaman",
+      "displayName": "Subclasse Destino: Orc Shaman",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "overlord",
+      "displayName": "Subclasse Destino: Overlord",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "dominator",
+      "displayName": "Subclasse Destino: Dominator",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "warcryer",
+      "displayName": "Subclasse Destino: Warcryer",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "doomcryer",
+      "displayName": "Subclasse Destino: Doomcryer",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "orc_rider_1",
+      "displayName": "Subclasse Destino: Dragoon",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "orc_rider_2",
+      "displayName": "Subclasse Destino: Vanguard Lord",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "orc_rider_3",
+      "displayName": "Subclasse Destino: Grand Vanguard",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "scavenger",
+      "displayName": "Subclasse Destino: Scavenger",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "bounty_hunter",
+      "displayName": "Subclasse Destino: Bounty Hunter",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "fortune_seeker",
+      "displayName": "Subclasse Destino: Fortune Seeker",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "artisan",
+      "displayName": "Subclasse Destino: Artisan",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "warsmith",
+      "displayName": "Subclasse Destino: Warsmith",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "maestro",
+      "displayName": "Subclasse Destino: Maestro",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "shineMakerS1",
+      "displayName": "Subclasse Destino: Shine Maker Novice",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "shineMakerS2",
+      "displayName": "Subclasse Destino: Shine Maker Adept",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "shinemaker",
+      "displayName": "Subclasse Destino: Shine Maker",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "trooper",
+      "displayName": "Subclasse Destino: Trooper",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "berserker",
+      "displayName": "Subclasse Destino: Berserker",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "doombringer",
+      "displayName": "Subclasse Destino: Doombringer",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "soul_finder",
+      "displayName": "Subclasse Destino: Soul Finder",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "soul_breaker",
+      "displayName": "Subclasse Destino: Soul Breaker",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "soul_hound",
+      "displayName": "Subclasse Destino: Soul Hound",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "warder",
+      "displayName": "Subclasse Destino: Warder",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "arbalester",
+      "displayName": "Subclasse Destino: Arbalester",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "trickster",
+      "displayName": "Subclasse Destino: Trickster",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "crow_1",
+      "displayName": "Subclasse Destino: Hatamoto",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "crow_2",
+      "displayName": "Subclasse Destino: Ronin",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "crow_3",
+      "displayName": "Subclasse Destino: Samurai",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "sylph_gunner",
+      "displayName": "Subclasse Destino: Sharpshooter",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "wind_hunter",
+      "displayName": "Subclasse Destino: Wind Sniper",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "storm_blaster",
+      "displayName": "Subclasse Destino: Storm Blaster",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "sacred_templar_1",
+      "displayName": "Subclasse Destino: Sacred Templar Adept",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "sacred_templar_2",
+      "displayName": "Subclasse Destino: Divine Templar",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "sacred_templar_3",
+      "displayName": "Subclasse Destino: Divine Templar (Master)",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "spirit_1",
+      "displayName": "Subclasse Destino: Element Weaver Adept",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "spirit_2",
+      "displayName": "Subclasse Destino: Spirit Weaver",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "spirit_3",
+      "displayName": "Subclasse Destino: Element Weaver",
+      "status": "PASS",
+      "detail": "Card renderizado no DOM; Lv.40 inicial verificado; Regra de certificação testada (0 na Sub, ativo na Main)",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "initialLevel40": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "domCardMounted": true
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "marauder",
+      "displayName": "Subclasse Destino: Marauder",
+      "status": "CONTENT_GAP",
+      "detail": "Ertheia lineage: Habilidades de Ertheia ausentes no dataset raspado L2Wiki e catálogo V2 não comprovado",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "statusPreserved": "UNPROVEN_PROVENANCE"
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "ertheiaWarrior",
+      "displayName": "Subclasse Destino: Eviscerator Apprentice",
+      "status": "CONTENT_GAP",
+      "detail": "Ertheia lineage: Habilidades de Ertheia ausentes no dataset raspado L2Wiki e catálogo V2 não comprovado",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "statusPreserved": "UNPROVEN_PROVENANCE"
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "eviscerator",
+      "displayName": "Subclasse Destino: Eviscerator",
+      "status": "CONTENT_GAP",
+      "detail": "Ertheia lineage: Habilidades de Ertheia ausentes no dataset raspado L2Wiki e catálogo V2 não comprovado",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "statusPreserved": "UNPROVEN_PROVENANCE"
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "sayhaSeer",
+      "displayName": "Subclasse Destino: Sayha Seeker Apprentice",
+      "status": "CONTENT_GAP",
+      "detail": "Ertheia lineage: Habilidades de Ertheia ausentes no dataset raspado L2Wiki e catálogo V2 não comprovado",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "statusPreserved": "UNPROVEN_PROVENANCE"
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "windRiderErth",
+      "displayName": "Subclasse Destino: Storm Conductor",
+      "status": "CONTENT_GAP",
+      "detail": "Ertheia lineage: Habilidades de Ertheia ausentes no dataset raspado L2Wiki e catálogo V2 não comprovado",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "statusPreserved": "UNPROVEN_PROVENANCE"
+      }
+    },
+    {
+      "category": "SUBCLASS_DESTINATION_UI",
+      "id": "sayhaSeeker",
+      "displayName": "Subclasse Destino: Sayha Seeker",
+      "status": "CONTENT_GAP",
+      "detail": "Ertheia lineage: Habilidades de Ertheia ausentes no dataset raspado L2Wiki e catálogo V2 não comprovado",
+      "assertions": {
+        "destinationRenderedInDom": true,
+        "statusPreserved": "UNPROVEN_PROVENANCE"
+      }
+    }
+  ]
+}

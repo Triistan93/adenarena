@@ -118,14 +118,14 @@ export function getStageTitle(stageNum) {
 /**
  * Determines functional category for an eligible skill.
  */
-export function determineSkillCategory(def, characterLevel, isShared) {
-  const reqLvl = Number(def.requiredLevel || def.reqLvl || def.identity?.unlockLevel) || 1;
+export function determineSkillCategory(def, characterLevel, isShared, isStage0Starter = false) {
+  const reqLvl = isStage0Starter ? 1 : (Number(def.requiredLevel || def.reqLvl || def.identity?.unlockLevel) || 1);
   const isPassive = def.type === 'passive' || def.type === 'stat';
-  const isUlt = def.tier >= 4 || def.starRank >= 4 || def.isUltimate || reqLvl >= 80;
+  const isUlt = !isStage0Starter && (def.tier >= 4 || def.starRank >= 4 || def.isUltimate || reqLvl >= 80);
 
   if (isPassive) return SKILL_CATEGORIES.PASSIVE;
   if (isUlt) return SKILL_CATEGORIES.ULTIMATE;
-  if (isShared || reqLvl <= 19 || def.tier === 0 || def.identity?.tier === 'shared') {
+  if (isStage0Starter || isShared || reqLvl <= 19 || def.tier === 0 || def.identity?.tier === 'shared') {
     return SKILL_CATEGORIES.CORE;
   }
   if (reqLvl < 40 || def.tier === 1 || def.identity?.tier === 'core_1' || def.identity?.tier === 'core_2') {
@@ -196,26 +196,28 @@ export function getSkillTreeViewModel(character, options = {}) {
     const def = item.skillDef || resolveSkillDef(sId);
     if (!def || def.disabled || isPurgedSkill(def.id)) continue;
 
-    // Strict future check: requiredLevel > charLevel must NEVER be presented
-    const classSpecificReq = getSkillUnlockLevelForClass(charClass, sId);
-    const baseReq = Number(def.requiredLevel || def.reqLvl || def.identity?.unlockLevel) || 1;
-    const reqLvl = Math.max(classSpecificReq, baseReq);
-    if (charLevel < reqLvl) continue;
-
     const currentRank = charSkills[sId] || 0;
-    const maxRank = Number(def.max || def.maxLevel) || 5;
     const isLearned = currentRank > 0;
+
+    // Strict future check: requiredLevel > charLevel must NEVER be presented (unless already learned or stage 0 starter skill)
+    const classSpecificReq = getSkillUnlockLevelForClass(charClass, sId);
+    const isStage0Starter = classSpecificReq === 1;
+    const baseReq = isStage0Starter ? 1 : (Number(def.requiredLevel || def.reqLvl || def.identity?.unlockLevel) || 1);
+    const reqLvl = Math.max(classSpecificReq, baseReq);
+    if (!isLearned && !isStage0Starter && charLevel < reqLvl) continue;
+
+    const maxRank = Number(def.max || def.maxLevel) || 5;
     const state = isLearned ? 'LEARNED' : 'AVAILABLE';
 
     const isShared = sharedIds.has(sId) || def.identity?.tier === 'shared';
     const isPassive = def.type === 'passive' || def.type === 'stat';
-    const isUlt = def.tier >= 4 || def.starRank >= 4 || def.isUltimate || reqLvl >= 80;
+    const isUlt = !isStage0Starter && (def.tier >= 4 || def.starRank >= 4 || def.isUltimate || reqLvl >= 80);
 
     let tab = SKILL_TABS.ACTIVE;
     if (isPassive) tab = SKILL_TABS.PASSIVE;
     else if (isUlt) tab = SKILL_TABS.ULTIMATE;
 
-    const category = determineSkillCategory(def, charLevel, isShared);
+    const category = determineSkillCategory(def, charLevel, isShared, isStage0Starter);
     const iconData = getSkillIcon(sId, def);
     const semantic = getSkillSemanticData(sId);
 

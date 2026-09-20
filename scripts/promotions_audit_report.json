@@ -1,0 +1,2376 @@
+{
+  "meta": {
+    "expectedTotal": 134,
+    "executedTotal": 134,
+    "passCount": 126,
+    "contentGapCount": 2,
+    "unprovenCount": 6,
+    "failCount": 0
+  },
+  "results": [
+    {
+      "edgeId": "fighter->warrior",
+      "sourceClassId": "fighter",
+      "targetClassId": "warrior",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "warrior->gladiator",
+      "sourceClassId": "warrior",
+      "targetClassId": "gladiator",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "gladiator->duelist",
+      "sourceClassId": "gladiator",
+      "targetClassId": "duelist",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "warrior->warlord",
+      "sourceClassId": "warrior",
+      "targetClassId": "warlord",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "warlord->dreadnought",
+      "sourceClassId": "warlord",
+      "targetClassId": "dreadnought",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "fighter->knight",
+      "sourceClassId": "fighter",
+      "targetClassId": "knight",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "knight->paladin",
+      "sourceClassId": "knight",
+      "targetClassId": "paladin",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "paladin->phoenix_knight",
+      "sourceClassId": "paladin",
+      "targetClassId": "phoenix_knight",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "knight->dark_avenger",
+      "sourceClassId": "knight",
+      "targetClassId": "dark_avenger",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "dark_avenger->hell_knight",
+      "sourceClassId": "dark_avenger",
+      "targetClassId": "hell_knight",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "fighter->rogue",
+      "sourceClassId": "fighter",
+      "targetClassId": "rogue",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "rogue->treasure_hunter",
+      "sourceClassId": "rogue",
+      "targetClassId": "treasure_hunter",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "treasure_hunter->adventurer",
+      "sourceClassId": "treasure_hunter",
+      "targetClassId": "adventurer",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "rogue->hawkeye",
+      "sourceClassId": "rogue",
+      "targetClassId": "hawkeye",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "hawkeye->sagittarius",
+      "sourceClassId": "hawkeye",
+      "targetClassId": "sagittarius",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "mage->wizard",
+      "sourceClassId": "mage",
+      "targetClassId": "wizard",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "wizard->sorcerer",
+      "sourceClassId": "wizard",
+      "targetClassId": "sorcerer",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "sorcerer->archmage",
+      "sourceClassId": "sorcerer",
+      "targetClassId": "archmage",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "wizard->necromancer",
+      "sourceClassId": "wizard",
+      "targetClassId": "necromancer",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "necromancer->soultaker",
+      "sourceClassId": "necromancer",
+      "targetClassId": "soultaker",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "wizard->warlock",
+      "sourceClassId": "wizard",
+      "targetClassId": "warlock",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "warlock->arcana_lord",
+      "sourceClassId": "warlock",
+      "targetClassId": "arcana_lord",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "mage->cleric",
+      "sourceClassId": "mage",
+      "targetClassId": "cleric",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "cleric->bishop",
+      "sourceClassId": "cleric",
+      "targetClassId": "bishop",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "bishop->cardinal",
+      "sourceClassId": "bishop",
+      "targetClassId": "cardinal",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "cleric->prophet",
+      "sourceClassId": "cleric",
+      "targetClassId": "prophet",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "prophet->hierophant",
+      "sourceClassId": "prophet",
+      "targetClassId": "hierophant",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "human_deathknight_0->human_deathknight_1",
+      "sourceClassId": "human_deathknight_0",
+      "targetClassId": "human_deathknight_1",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "human_deathknight_1->human_deathknight_2",
+      "sourceClassId": "human_deathknight_1",
+      "targetClassId": "human_deathknight_2",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "human_deathknight_2->human_deathknight_3",
+      "sourceClassId": "human_deathknight_2",
+      "targetClassId": "human_deathknight_3",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "secret_assassin_male_0->secret_assassin_male_1",
+      "sourceClassId": "secret_assassin_male_0",
+      "targetClassId": "secret_assassin_male_1",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "secret_assassin_male_1->secret_assassin_male_2",
+      "sourceClassId": "secret_assassin_male_1",
+      "targetClassId": "secret_assassin_male_2",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "secret_assassin_male_2->secret_assassin_male_3",
+      "sourceClassId": "secret_assassin_male_2",
+      "targetClassId": "secret_assassin_male_3",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "werewolf_0->werewolf_1",
+      "sourceClassId": "werewolf_0",
+      "targetClassId": "werewolf_1",
+      "status": "CONTENT_GAP",
+      "impediment": "Nó V2 ausente: Warg de Estágio 1 ausente no catálogo V2",
+      "assertions": {
+        "sourceExists": true,
+        "targetExists": true,
+        "reqLevelValid": true
+      }
+    },
+    {
+      "edgeId": "werewolf_1->werewolf_2",
+      "sourceClassId": "werewolf_1",
+      "targetClassId": "werewolf_2",
+      "status": "CONTENT_GAP",
+      "impediment": "Nó V2 ausente: Warg de Estágio 2 ausente no catálogo V2",
+      "assertions": {
+        "sourceExists": true,
+        "targetExists": true,
+        "reqLevelValid": true
+      }
+    },
+    {
+      "edgeId": "werewolf_2->werewolf_3",
+      "sourceClassId": "werewolf_2",
+      "targetClassId": "werewolf_3",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "elven_fighter->elven_knight",
+      "sourceClassId": "elven_fighter",
+      "targetClassId": "elven_knight",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "elven_knight->temple_knight",
+      "sourceClassId": "elven_knight",
+      "targetClassId": "temple_knight",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "temple_knight->evas_templar",
+      "sourceClassId": "temple_knight",
+      "targetClassId": "evas_templar",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "elven_knight->swordsinger",
+      "sourceClassId": "elven_knight",
+      "targetClassId": "swordsinger",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "swordsinger->sword_muse",
+      "sourceClassId": "swordsinger",
+      "targetClassId": "sword_muse",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "elven_fighter->elven_scout",
+      "sourceClassId": "elven_fighter",
+      "targetClassId": "elven_scout",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "elven_scout->plain_walker",
+      "sourceClassId": "elven_scout",
+      "targetClassId": "plain_walker",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "plain_walker->wind_rider",
+      "sourceClassId": "plain_walker",
+      "targetClassId": "wind_rider",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "elven_scout->silver_ranger",
+      "sourceClassId": "elven_scout",
+      "targetClassId": "silver_ranger",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "silver_ranger->moonlight_sentinel",
+      "sourceClassId": "silver_ranger",
+      "targetClassId": "moonlight_sentinel",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "elven_mage->elven_wizard",
+      "sourceClassId": "elven_mage",
+      "targetClassId": "elven_wizard",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "elven_wizard->spellsinger",
+      "sourceClassId": "elven_wizard",
+      "targetClassId": "spellsinger",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "spellsinger->mystic_muse",
+      "sourceClassId": "spellsinger",
+      "targetClassId": "mystic_muse",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "elven_wizard->elemental_summoner",
+      "sourceClassId": "elven_wizard",
+      "targetClassId": "elemental_summoner",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "elemental_summoner->elemental_master",
+      "sourceClassId": "elemental_summoner",
+      "targetClassId": "elemental_master",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "elven_mage->oracle",
+      "sourceClassId": "elven_mage",
+      "targetClassId": "oracle",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "oracle->elder",
+      "sourceClassId": "oracle",
+      "targetClassId": "elder",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "elder->evas_saint",
+      "sourceClassId": "elder",
+      "targetClassId": "evas_saint",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "elf_deathknight_0->elf_deathknight_1",
+      "sourceClassId": "elf_deathknight_0",
+      "targetClassId": "elf_deathknight_1",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "elf_deathknight_1->elf_deathknight_2",
+      "sourceClassId": "elf_deathknight_1",
+      "targetClassId": "elf_deathknight_2",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "elf_deathknight_2->elf_deathknight_3",
+      "sourceClassId": "elf_deathknight_2",
+      "targetClassId": "elf_deathknight_3",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "dark_fighter->palus_knight",
+      "sourceClassId": "dark_fighter",
+      "targetClassId": "palus_knight",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "palus_knight->shillien_knight",
+      "sourceClassId": "palus_knight",
+      "targetClassId": "shillien_knight",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "shillien_knight->shillien_templar",
+      "sourceClassId": "shillien_knight",
+      "targetClassId": "shillien_templar",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "palus_knight->bladedancer",
+      "sourceClassId": "palus_knight",
+      "targetClassId": "bladedancer",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "bladedancer->spectral_dancer",
+      "sourceClassId": "bladedancer",
+      "targetClassId": "spectral_dancer",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "dark_fighter->assassin",
+      "sourceClassId": "dark_fighter",
+      "targetClassId": "assassin",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "assassin->abyss_walker",
+      "sourceClassId": "assassin",
+      "targetClassId": "abyss_walker",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "abyss_walker->ghost_hunter",
+      "sourceClassId": "abyss_walker",
+      "targetClassId": "ghost_hunter",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "assassin->phantom_ranger",
+      "sourceClassId": "assassin",
+      "targetClassId": "phantom_ranger",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "phantom_ranger->ghost_sentinel",
+      "sourceClassId": "phantom_ranger",
+      "targetClassId": "ghost_sentinel",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "dark_mage->dark_wizard",
+      "sourceClassId": "dark_mage",
+      "targetClassId": "dark_wizard",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "dark_wizard->spellhowler",
+      "sourceClassId": "dark_wizard",
+      "targetClassId": "spellhowler",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "spellhowler->storm_screamer",
+      "sourceClassId": "spellhowler",
+      "targetClassId": "storm_screamer",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "dark_wizard->phantom_summoner",
+      "sourceClassId": "dark_wizard",
+      "targetClassId": "phantom_summoner",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "phantom_summoner->spectral_master",
+      "sourceClassId": "phantom_summoner",
+      "targetClassId": "spectral_master",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "dark_mage->shillien_oracle",
+      "sourceClassId": "dark_mage",
+      "targetClassId": "shillien_oracle",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "shillien_oracle->shillien_elder",
+      "sourceClassId": "shillien_oracle",
+      "targetClassId": "shillien_elder",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "shillien_elder->shillien_saint",
+      "sourceClassId": "shillien_elder",
+      "targetClassId": "shillien_saint",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "delf_deathknight_0->delf_deathknight_1",
+      "sourceClassId": "delf_deathknight_0",
+      "targetClassId": "delf_deathknight_1",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "delf_deathknight_1->delf_deathknight_2",
+      "sourceClassId": "delf_deathknight_1",
+      "targetClassId": "delf_deathknight_2",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "delf_deathknight_2->delf_deathknight_3",
+      "sourceClassId": "delf_deathknight_2",
+      "targetClassId": "delf_deathknight_3",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "secret_assassin_female_0->secret_assassin_female_1",
+      "sourceClassId": "secret_assassin_female_0",
+      "targetClassId": "secret_assassin_female_1",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "secret_assassin_female_1->secret_assassin_female_2",
+      "sourceClassId": "secret_assassin_female_1",
+      "targetClassId": "secret_assassin_female_2",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "secret_assassin_female_2->secret_assassin_female_3",
+      "sourceClassId": "secret_assassin_female_2",
+      "targetClassId": "secret_assassin_female_3",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "rose_vain_0->rose_vain_1",
+      "sourceClassId": "rose_vain_0",
+      "targetClassId": "rose_vain_1",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "rose_vain_1->rose_vain_2",
+      "sourceClassId": "rose_vain_1",
+      "targetClassId": "rose_vain_2",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "rose_vain_2->rose_vain_3",
+      "sourceClassId": "rose_vain_2",
+      "targetClassId": "rose_vain_3",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "orc_fighter->orc_raider",
+      "sourceClassId": "orc_fighter",
+      "targetClassId": "orc_raider",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "orc_raider->destroyer",
+      "sourceClassId": "orc_raider",
+      "targetClassId": "destroyer",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "destroyer->titan",
+      "sourceClassId": "destroyer",
+      "targetClassId": "titan",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "orc_fighter->orc_monk",
+      "sourceClassId": "orc_fighter",
+      "targetClassId": "orc_monk",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "orc_monk->tyrant",
+      "sourceClassId": "orc_monk",
+      "targetClassId": "tyrant",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "tyrant->grand_khavatari",
+      "sourceClassId": "tyrant",
+      "targetClassId": "grand_khavatari",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "orc_mage->orc_shaman",
+      "sourceClassId": "orc_mage",
+      "targetClassId": "orc_shaman",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "orc_shaman->overlord",
+      "sourceClassId": "orc_shaman",
+      "targetClassId": "overlord",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "overlord->dominator",
+      "sourceClassId": "overlord",
+      "targetClassId": "dominator",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "orc_shaman->warcryer",
+      "sourceClassId": "orc_shaman",
+      "targetClassId": "warcryer",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "warcryer->doomcryer",
+      "sourceClassId": "warcryer",
+      "targetClassId": "doomcryer",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "orc_rider_0->orc_rider_1",
+      "sourceClassId": "orc_rider_0",
+      "targetClassId": "orc_rider_1",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "orc_rider_1->orc_rider_2",
+      "sourceClassId": "orc_rider_1",
+      "targetClassId": "orc_rider_2",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "orc_rider_2->orc_rider_3",
+      "sourceClassId": "orc_rider_2",
+      "targetClassId": "orc_rider_3",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "dwarven_fighter->scavenger",
+      "sourceClassId": "dwarven_fighter",
+      "targetClassId": "scavenger",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "scavenger->bounty_hunter",
+      "sourceClassId": "scavenger",
+      "targetClassId": "bounty_hunter",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "bounty_hunter->fortune_seeker",
+      "sourceClassId": "bounty_hunter",
+      "targetClassId": "fortune_seeker",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "dwarven_fighter->artisan",
+      "sourceClassId": "dwarven_fighter",
+      "targetClassId": "artisan",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "artisan->warsmith",
+      "sourceClassId": "artisan",
+      "targetClassId": "warsmith",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "warsmith->maestro",
+      "sourceClassId": "warsmith",
+      "targetClassId": "maestro",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "shineMakerBase->shineMakerS1",
+      "sourceClassId": "shineMakerBase",
+      "targetClassId": "shineMakerS1",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "shineMakerS1->shineMakerS2",
+      "sourceClassId": "shineMakerS1",
+      "targetClassId": "shineMakerS2",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "shineMakerS2->shinemaker",
+      "sourceClassId": "shineMakerS2",
+      "targetClassId": "shinemaker",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "jin_kamael_soldier->trooper",
+      "sourceClassId": "jin_kamael_soldier",
+      "targetClassId": "trooper",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "trooper->berserker",
+      "sourceClassId": "trooper",
+      "targetClassId": "berserker",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "berserker->doombringer",
+      "sourceClassId": "berserker",
+      "targetClassId": "doombringer",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "jin_kamael_soldier->soul_finder",
+      "sourceClassId": "jin_kamael_soldier",
+      "targetClassId": "soul_finder",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "soul_finder->soul_breaker",
+      "sourceClassId": "soul_finder",
+      "targetClassId": "soul_breaker",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "soul_breaker->soul_hound",
+      "sourceClassId": "soul_breaker",
+      "targetClassId": "soul_hound",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "jin_kamael_soldier->warder",
+      "sourceClassId": "jin_kamael_soldier",
+      "targetClassId": "warder",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "warder->arbalester",
+      "sourceClassId": "warder",
+      "targetClassId": "arbalester",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "arbalester->trickster",
+      "sourceClassId": "arbalester",
+      "targetClassId": "trickster",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "crow_0->crow_1",
+      "sourceClassId": "crow_0",
+      "targetClassId": "crow_1",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "crow_1->crow_2",
+      "sourceClassId": "crow_1",
+      "targetClassId": "crow_2",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "crow_2->crow_3",
+      "sourceClassId": "crow_2",
+      "targetClassId": "crow_3",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "sylphid->sylph_gunner",
+      "sourceClassId": "sylphid",
+      "targetClassId": "sylph_gunner",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "sylph_gunner->wind_hunter",
+      "sourceClassId": "sylph_gunner",
+      "targetClassId": "wind_hunter",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "wind_hunter->storm_blaster",
+      "sourceClassId": "wind_hunter",
+      "targetClassId": "storm_blaster",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "sacred_templar_0->sacred_templar_1",
+      "sourceClassId": "sacred_templar_0",
+      "targetClassId": "sacred_templar_1",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "sacred_templar_1->sacred_templar_2",
+      "sourceClassId": "sacred_templar_1",
+      "targetClassId": "sacred_templar_2",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "sacred_templar_2->sacred_templar_3",
+      "sourceClassId": "sacred_templar_2",
+      "targetClassId": "sacred_templar_3",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "spirit_0->spirit_1",
+      "sourceClassId": "spirit_0",
+      "targetClassId": "spirit_1",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "spirit_1->spirit_2",
+      "sourceClassId": "spirit_1",
+      "targetClassId": "spirit_2",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "spirit_2->spirit_3",
+      "sourceClassId": "spirit_2",
+      "targetClassId": "spirit_3",
+      "status": "PASS",
+      "assertions": {
+        "lockedBeforeReqLevel": true,
+        "eligibleAtReqLevel": true,
+        "promoteExecutionSuccess": true,
+        "stateClassUpdated": true,
+        "racePreserved": true,
+        "starterSkillSurvives": true,
+        "starterSkillNotRelockedTo80": true,
+        "inheritedSkillsPreserved": true,
+        "siblingSkillsIsolated": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "edgeId": "marauderBase->marauder",
+      "sourceClassId": "marauderBase",
+      "targetClassId": "marauder",
+      "status": "UNPROVEN_PROVENANCE",
+      "impediment": "Ertheia lineage: Habilidades de Ertheia ausentes no dataset raspado L2Wiki e catálogo V2 não comprovado",
+      "assertions": {
+        "sourceExists": true,
+        "targetExists": true,
+        "reqLevelValid": true
+      }
+    },
+    {
+      "edgeId": "marauder->ertheiaWarrior",
+      "sourceClassId": "marauder",
+      "targetClassId": "ertheiaWarrior",
+      "status": "UNPROVEN_PROVENANCE",
+      "impediment": "Ertheia lineage: Habilidades de Ertheia ausentes no dataset raspado L2Wiki e catálogo V2 não comprovado",
+      "assertions": {
+        "sourceExists": true,
+        "targetExists": true,
+        "reqLevelValid": true
+      }
+    },
+    {
+      "edgeId": "ertheiaWarrior->eviscerator",
+      "sourceClassId": "ertheiaWarrior",
+      "targetClassId": "eviscerator",
+      "status": "UNPROVEN_PROVENANCE",
+      "impediment": "Ertheia lineage: Habilidades de Ertheia ausentes no dataset raspado L2Wiki e catálogo V2 não comprovado",
+      "assertions": {
+        "sourceExists": true,
+        "targetExists": true,
+        "reqLevelValid": true
+      }
+    },
+    {
+      "edgeId": "sayhaMageBase->sayhaSeer",
+      "sourceClassId": "sayhaMageBase",
+      "targetClassId": "sayhaSeer",
+      "status": "UNPROVEN_PROVENANCE",
+      "impediment": "Ertheia lineage: Habilidades de Ertheia ausentes no dataset raspado L2Wiki e catálogo V2 não comprovado",
+      "assertions": {
+        "sourceExists": true,
+        "targetExists": true,
+        "reqLevelValid": true
+      }
+    },
+    {
+      "edgeId": "sayhaSeer->windRiderErth",
+      "sourceClassId": "sayhaSeer",
+      "targetClassId": "windRiderErth",
+      "status": "UNPROVEN_PROVENANCE",
+      "impediment": "Ertheia lineage: Habilidades de Ertheia ausentes no dataset raspado L2Wiki e catálogo V2 não comprovado",
+      "assertions": {
+        "sourceExists": true,
+        "targetExists": true,
+        "reqLevelValid": true
+      }
+    },
+    {
+      "edgeId": "windRiderErth->sayhaSeeker",
+      "sourceClassId": "windRiderErth",
+      "targetClassId": "sayhaSeeker",
+      "status": "UNPROVEN_PROVENANCE",
+      "impediment": "Ertheia lineage: Habilidades de Ertheia ausentes no dataset raspado L2Wiki e catálogo V2 não comprovado",
+      "assertions": {
+        "sourceExists": true,
+        "targetExists": true,
+        "reqLevelValid": true
+      }
+    }
+  ]
+}

@@ -7,6 +7,7 @@
 
 import { D } from '../core/GameConfig.js';
 import { getStats, getClass } from './StatsEngine.js';
+import { removeFromInventory } from '../services/InventoryService.js';
 import {
   isSkillAvailableForCharacter,
   getSkillVisibility,
@@ -80,10 +81,17 @@ export function spendSP(state, skillId, callbacks = {}) {
     return false;
   }
 
+  // Validate every prerequisite before consuming resources.
+  const reqs = (typeof window !== 'undefined' && window.EchoData) ? window.EchoData.SKILL_REQS_ECHO[skillId] : D()?.SKILL_REQS?.[skillId];
+  if (reqs && !Object.entries(reqs).every(([s, v]) => s === 'level' || s === 'sp' || s === 'reqLvl' || (state.skills[s] || 0) >= v)) {
+    if (callbacks.log) callbacks.log('Pré-requisitos de habilidades não preenchidos.', 'system');
+    return false;
+  }
+
   // Requisito de livro de habilidade (Spellbooks 1★ a 5★) para habilidades de Lv. 40+ no primeiro nível (lvl === 0)
   const reqBookId = def.requiredItemToUnlock || (def.starRank === 5 ? 'book_5star' : (def.starRank === 4 ? 'book_4star' : null));
   if (reqBookId && lvl === 0) {
-    const bookItem = state.inventory?.find(i => (i.itemId === reqBookId || (reqBookId === 'book_4star' && i.itemId === 'spellbook_4star')) && (i.count || 1) > 0);
+    const bookItem = state.inventory?.find(i => (i.itemId === reqBookId || (reqBookId === 'book_4star' && i.itemId === 'spellbook_4star')) && (i.count ?? 1) > 0);
     if (!bookItem) {
       const bookNames = {
         'book_1star': 'Tomo Sagrado: 1★ (Comum)',
@@ -96,14 +104,12 @@ export function spendSP(state, skillId, callbacks = {}) {
       if (callbacks.log) callbacks.log(`🔒 Exige o **${bName}** na mochila para desbloquear esta habilidade! (Encontre em caçadas/instâncias ou compre no Mercado Global)`, 'warning');
       return false;
     }
+    const countBefore = bookItem.count ?? 1;
     if (callbacks.removeFromInventory) callbacks.removeFromInventory(bookItem.uid, 1);
+    else removeFromInventory(state, bookItem.uid, 1);
+    const countAfter = state.inventory.find(i => i.uid === bookItem.uid)?.count ?? (state.inventory.includes(bookItem) ? 1 : 0);
+    if (countAfter !== countBefore - 1) return false;
     if (callbacks.log) callbacks.log(`📖 **${def.name}** desbloqueada com sucesso! (${bookItem.itemId} consumido)`, 'rarity-legendary');
-  }
-
-  const reqs = (typeof window !== 'undefined' && window.EchoData) ? window.EchoData.SKILL_REQS_ECHO[skillId] : D()?.SKILL_REQS?.[skillId];
-  if (reqs && !Object.entries(reqs).every(([s, v]) => s === 'level' || s === 'sp' || s === 'reqLvl' || (state.skills[s] || 0) >= v)) {
-    if (callbacks.log) callbacks.log('Pré-requisitos de habilidades não preenchidos.', 'system');
-    return false;
   }
 
   state.sp -= cost;

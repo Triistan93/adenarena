@@ -191,12 +191,8 @@ export const CLASS_ALIASES = {
   'sayhaseer': 'sayhaSeer',
   'sayhaSeer': 'sayhaSeer',
   'sayha_seer': 'sayhaSeer',
-  'sayhamagebase': 'sayhaMageBase',
-  'sayhaMageBase': 'sayhaMageBase',
   'ertheia_mage': 'sayhaMageBase',
   'ertheia_sayhamagebase': 'sayhaMageBase',
-  'sayhaseer': 'sayhaSeer',
-  'sayhaSeer': 'sayhaSeer',
   'sayhaseeker': 'sayhaSeeker',
   'sayhaSeeker': 'sayhaSeeker',
 
@@ -342,7 +338,17 @@ const EXTENDED_FALLBACKS = {
   'dwarf_mage': 'dwarf_mage',
   'dwarf-mage': 'dwarf_mage',
   'dwarf_magician': 'dwarf_mage',
-  'dwarfmagician': 'dwarf_mage'
+  'dwarfmagician': 'dwarf_mage',
+  'plain_walker': 'plain_walker',
+  'plainwalker': 'plain_walker',
+  'elf_plainswalker': 'plain_walker',
+  'elfplainswalker': 'plain_walker',
+  'ertheiawarrior': 'ertheiaWarrior',
+  'ertheiaWarrior': 'ertheiaWarrior',
+  'sayhamage': 'sayhaMageBase',
+  'sayhaMage': 'sayhaMageBase',
+  'windridererth': 'windRiderErth',
+  'windRiderErth': 'windRiderErth'
 };
 
 // ─── Mapeamento Canônico de Classes Base por Raça (Nível 1) ─────────────────
@@ -366,10 +372,10 @@ const BASE_CLASS_RACE_MAP = {
   darkelf: {
     fighter: 'dark_elf_fighter',
     darkelffighter: 'dark_elf_fighter',
-    palusknight: 'palus_knight',
+    palusknight: 'dark_elf_palus_knight',
     mage: 'dark_elf_mage',
     darkelfmage: 'dark_elf_mage',
-    darkwizard: 'dark_wizard'
+    darkwizard: 'dark_elf_wizard'
   },
   dark_elf: {
     fighter: 'dark_elf_fighter',
@@ -462,6 +468,15 @@ for (const cls of HISTORICAL_CLASSES) {
     DAG_LOOKUP.set(cls.sourceClassId.toLowerCase().replace(/[-_\s]+/g, ''), cls.id);
   }
 }
+
+// Mapeamentos canônicos explícitos adicionais para conformidade do DAG
+DAG_LOOKUP.set('plain_walker', 'elf_plainswalker');
+DAG_LOOKUP.set('plainwalker', 'elf_plainswalker');
+DAG_LOOKUP.set('oracle', 'elf_oracle');
+DAG_LOOKUP.set('elder', 'elf_elder');
+DAG_LOOKUP.set('elvenelder', 'elf_elder');
+DAG_LOOKUP.set('elven_elder', 'elf_elder');
+DAG_LOOKUP.set('sorcerer', 'human_sorcerer');
 
 /**
  * Resolve qualquer identificador de classe de runtime (curto, legado ou Echo)

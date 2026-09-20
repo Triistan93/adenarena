@@ -86,7 +86,7 @@ export function getStarterKit(race: string, className: string): StarterKitConfig
       weapon: 'falchion_sword',
       armorType: 'heavy',
       ...HEAVY_STARTER,
-      starterSkill: 'cinderblade',
+      starterSkill: 'hellfire',
       shotType: 'soulshot_ng',
       potions: { itemId: 'hp_potion_s', count: 20 },
       shotsCount: 500

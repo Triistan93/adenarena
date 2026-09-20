@@ -1,0 +1,2478 @@
+{
+  "meta": {
+    "expectedTotal": 134,
+    "executedTotal": 134,
+    "passCount": 126,
+    "contentGapCount": 2,
+    "unprovenCount": 6,
+    "failCount": 0
+  },
+  "results": [
+    {
+      "classId": "warrior",
+      "archetype": "warrior",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "gladiator",
+      "archetype": "warrior",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "duelist",
+      "archetype": "warrior",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "warlord",
+      "archetype": "warrior",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "dreadnought",
+      "archetype": "warrior",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "knight",
+      "archetype": "knight",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "paladin",
+      "archetype": "knight",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "phoenix_knight",
+      "archetype": "knight",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "dark_avenger",
+      "archetype": "knight",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "hell_knight",
+      "archetype": "knight",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "rogue",
+      "archetype": "rogue",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "treasure_hunter",
+      "archetype": "rogue",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "adventurer",
+      "archetype": "rogue",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "hawkeye",
+      "archetype": "rogue",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "sagittarius",
+      "archetype": "rogue",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "wizard",
+      "archetype": "wizard",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "sorcerer",
+      "archetype": "wizard",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "archmage",
+      "archetype": "wizard",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "necromancer",
+      "archetype": "wizard",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "soultaker",
+      "archetype": "wizard",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "warlock",
+      "archetype": "summoner",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "arcana_lord",
+      "archetype": "warrior",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "cleric",
+      "archetype": "healer",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "bishop",
+      "archetype": "healer",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "cardinal",
+      "archetype": "healer",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "prophet",
+      "archetype": "healer",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "hierophant",
+      "archetype": "healer",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "human_deathknight_1",
+      "archetype": "knight",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "human_deathknight_2",
+      "archetype": "knight",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "human_deathknight_3",
+      "archetype": "knight",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "secret_assassin_male_1",
+      "archetype": "rogue",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "secret_assassin_male_2",
+      "archetype": "rogue",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "secret_assassin_male_3",
+      "archetype": "rogue",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "werewolf_1",
+      "status": "CONTENT_GAP",
+      "impediment": "Nó V2 ausente: Warg de Estágio 1 ausente no catálogo V2",
+      "assertions": {
+        "registeredInManifest": true,
+        "isEligibleByDesign": true
+      }
+    },
+    {
+      "classId": "werewolf_2",
+      "status": "CONTENT_GAP",
+      "impediment": "Nó V2 ausente: Warg de Estágio 2 ausente no catálogo V2",
+      "assertions": {
+        "registeredInManifest": true,
+        "isEligibleByDesign": true
+      }
+    },
+    {
+      "classId": "werewolf_3",
+      "archetype": "warrior",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "elven_knight",
+      "archetype": "knight",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "temple_knight",
+      "archetype": "knight",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "evas_templar",
+      "archetype": "knight",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "swordsinger",
+      "archetype": "enchanter",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "sword_muse",
+      "archetype": "enchanter",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "elven_scout",
+      "archetype": "rogue",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "plain_walker",
+      "archetype": "warrior",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "wind_rider",
+      "archetype": "rogue",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "silver_ranger",
+      "archetype": "rogue",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "moonlight_sentinel",
+      "archetype": "rogue",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "elven_wizard",
+      "archetype": "wizard",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "spellsinger",
+      "archetype": "wizard",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "mystic_muse",
+      "archetype": "wizard",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "elemental_summoner",
+      "archetype": "summoner",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "elemental_master",
+      "archetype": "summoner",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "oracle",
+      "archetype": "healer",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "elder",
+      "archetype": "healer",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "evas_saint",
+      "archetype": "healer",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "elf_deathknight_1",
+      "archetype": "knight",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "elf_deathknight_2",
+      "archetype": "knight",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "elf_deathknight_3",
+      "archetype": "knight",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "palus_knight",
+      "archetype": "knight",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "shillien_knight",
+      "archetype": "knight",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "shillien_templar",
+      "archetype": "knight",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "bladedancer",
+      "archetype": "enchanter",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "spectral_dancer",
+      "archetype": "enchanter",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "assassin",
+      "archetype": "rogue",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "abyss_walker",
+      "archetype": "rogue",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "ghost_hunter",
+      "archetype": "rogue",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "phantom_ranger",
+      "archetype": "rogue",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "ghost_sentinel",
+      "archetype": "rogue",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "dark_wizard",
+      "archetype": "wizard",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "spellhowler",
+      "archetype": "wizard",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "storm_screamer",
+      "archetype": "wizard",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "phantom_summoner",
+      "archetype": "summoner",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "spectral_master",
+      "archetype": "summoner",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "shillien_oracle",
+      "archetype": "healer",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "shillien_elder",
+      "archetype": "healer",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "shillien_saint",
+      "archetype": "healer",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "delf_deathknight_1",
+      "archetype": "knight",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "delf_deathknight_2",
+      "archetype": "knight",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "delf_deathknight_3",
+      "archetype": "knight",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "secret_assassin_female_1",
+      "archetype": "rogue",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "secret_assassin_female_2",
+      "archetype": "rogue",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "secret_assassin_female_3",
+      "archetype": "rogue",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "rose_vain_1",
+      "archetype": "warrior",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "rose_vain_2",
+      "archetype": "warrior",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "rose_vain_3",
+      "archetype": "warrior",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "orc_raider",
+      "archetype": "warrior",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "destroyer",
+      "archetype": "warrior",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "titan",
+      "archetype": "warrior",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "orc_monk",
+      "archetype": "warrior",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "tyrant",
+      "archetype": "warrior",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "grand_khavatari",
+      "archetype": "warrior",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "orc_shaman",
+      "archetype": "enchanter",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "overlord",
+      "archetype": "enchanter",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "dominator",
+      "archetype": "enchanter",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "warcryer",
+      "archetype": "enchanter",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "doomcryer",
+      "archetype": "enchanter",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "orc_rider_1",
+      "archetype": "warrior",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "orc_rider_2",
+      "archetype": "warrior",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "orc_rider_3",
+      "archetype": "warrior",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "scavenger",
+      "archetype": "warrior",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "bounty_hunter",
+      "archetype": "warrior",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "fortune_seeker",
+      "archetype": "warrior",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "artisan",
+      "archetype": "warrior",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "warsmith",
+      "archetype": "warrior",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "maestro",
+      "archetype": "warrior",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "shineMakerS1",
+      "archetype": "enchanter",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "shineMakerS2",
+      "archetype": "enchanter",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "shinemaker",
+      "archetype": "enchanter",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "trooper",
+      "archetype": "warrior",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "berserker",
+      "archetype": "warrior",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "doombringer",
+      "archetype": "warrior",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "soul_finder",
+      "archetype": "warrior",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "soul_breaker",
+      "archetype": "warrior",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "soul_hound",
+      "archetype": "warrior",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "warder",
+      "archetype": "warrior",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "arbalester",
+      "archetype": "rogue",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "trickster",
+      "archetype": "rogue",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "crow_1",
+      "archetype": "warrior",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "crow_2",
+      "archetype": "warrior",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "crow_3",
+      "archetype": "warrior",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "sylph_gunner",
+      "archetype": "rogue",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "wind_hunter",
+      "archetype": "warrior",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "storm_blaster",
+      "archetype": "rogue",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "sacred_templar_1",
+      "archetype": "knight",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "sacred_templar_2",
+      "archetype": "knight",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "sacred_templar_3",
+      "archetype": "knight",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "spirit_1",
+      "archetype": "warrior",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "spirit_2",
+      "archetype": "warrior",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "spirit_3",
+      "archetype": "warrior",
+      "status": "PASS",
+      "assertions": {
+        "eligibleForSubclass": true,
+        "subclassUnlockLevel": true,
+        "subclassInitialLevel": true,
+        "maxSubclassSlots": true,
+        "seasonGating": true,
+        "archetypeMapping": true,
+        "certificationsStored": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "spAndSkillsIsolation": true,
+        "equipmentIntegrity": true,
+        "persistenceAndReload": true
+      }
+    },
+    {
+      "classId": "marauder",
+      "status": "UNPROVEN_PROVENANCE",
+      "impediment": "Ertheia lineage: Habilidades de Ertheia ausentes no dataset raspado L2Wiki e catálogo V2 não comprovado",
+      "assertions": {
+        "registeredInManifest": true,
+        "isEligibleByDesign": true
+      }
+    },
+    {
+      "classId": "ertheiaWarrior",
+      "status": "UNPROVEN_PROVENANCE",
+      "impediment": "Ertheia lineage: Habilidades de Ertheia ausentes no dataset raspado L2Wiki e catálogo V2 não comprovado",
+      "assertions": {
+        "registeredInManifest": true,
+        "isEligibleByDesign": true
+      }
+    },
+    {
+      "classId": "eviscerator",
+      "status": "UNPROVEN_PROVENANCE",
+      "impediment": "Ertheia lineage: Habilidades de Ertheia ausentes no dataset raspado L2Wiki e catálogo V2 não comprovado",
+      "assertions": {
+        "registeredInManifest": true,
+        "isEligibleByDesign": true
+      }
+    },
+    {
+      "classId": "sayhaSeer",
+      "status": "UNPROVEN_PROVENANCE",
+      "impediment": "Ertheia lineage: Habilidades de Ertheia ausentes no dataset raspado L2Wiki e catálogo V2 não comprovado",
+      "assertions": {
+        "registeredInManifest": true,
+        "isEligibleByDesign": true
+      }
+    },
+    {
+      "classId": "windRiderErth",
+      "status": "UNPROVEN_PROVENANCE",
+      "impediment": "Ertheia lineage: Habilidades de Ertheia ausentes no dataset raspado L2Wiki e catálogo V2 não comprovado",
+      "assertions": {
+        "registeredInManifest": true,
+        "isEligibleByDesign": true
+      }
+    },
+    {
+      "classId": "sayhaSeeker",
+      "status": "UNPROVEN_PROVENANCE",
+      "impediment": "Ertheia lineage: Habilidades de Ertheia ausentes no dataset raspado L2Wiki e catálogo V2 não comprovado",
+      "assertions": {
+        "registeredInManifest": true,
+        "isEligibleByDesign": true
+      }
+    }
+  ]
+}

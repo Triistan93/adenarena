@@ -1,0 +1,419 @@
+{
+  "timestamp": "2026-09-20T02:15:02.690Z",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36 Edg/153.0.0.0",
+  "totalRoots": 25,
+  "executedTotal": 26,
+  "passedCount": 21,
+  "contentGapCount": 5,
+  "failCount": 0,
+  "consoleErrorsCount": 0,
+  "results": [
+    {
+      "rootId": "fighter",
+      "race": "human",
+      "status": "PASS",
+      "assertions": {
+        "createdInDom": true,
+        "starterSkillsUnlocked": true,
+        "starterNotLockedTo80": true,
+        "spLearnSuccess": true,
+        "loadoutEquipped": true,
+        "combatExecuted": true,
+        "advancementAvailableAt20": true,
+        "promotionSuccess": true,
+        "starterSurvivesPromotion": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "rootId": "mage",
+      "race": "human",
+      "status": "PASS",
+      "assertions": {
+        "createdInDom": true,
+        "starterSkillsUnlocked": true,
+        "starterNotLockedTo80": true,
+        "spLearnSuccess": true,
+        "loadoutEquipped": true,
+        "combatExecuted": true,
+        "advancementAvailableAt20": true,
+        "promotionSuccess": true,
+        "starterSurvivesPromotion": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "rootId": "human_deathknight_0",
+      "race": "human",
+      "status": "PASS",
+      "assertions": {
+        "createdInDom": true,
+        "starterSkillsUnlocked": true,
+        "starterNotLockedTo80": true,
+        "spLearnSuccess": true,
+        "loadoutEquipped": true,
+        "combatExecuted": true,
+        "advancementAvailableAt20": true,
+        "promotionSuccess": true,
+        "starterSurvivesPromotion": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "rootId": "werewolf_0",
+      "race": "human",
+      "status": "CONTENT_GAP",
+      "impediment": "Linhagem com lacuna de conteúdo documentada",
+      "assertions": {
+        "createdInDom": true,
+        "racePreserved": true,
+        "contentGapProtected": true
+      }
+    },
+    {
+      "rootId": "secret_assassin_male_0",
+      "race": "human",
+      "status": "PASS",
+      "assertions": {
+        "createdInDom": true,
+        "starterSkillsUnlocked": true,
+        "starterNotLockedTo80": true,
+        "spLearnSuccess": true,
+        "loadoutEquipped": true,
+        "combatExecuted": true,
+        "advancementAvailableAt20": true,
+        "promotionSuccess": true,
+        "starterSurvivesPromotion": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "rootId": "elven_fighter",
+      "race": "elf",
+      "status": "PASS",
+      "assertions": {
+        "createdInDom": true,
+        "starterSkillsUnlocked": true,
+        "starterNotLockedTo80": true,
+        "spLearnSuccess": true,
+        "loadoutEquipped": true,
+        "combatExecuted": true,
+        "advancementAvailableAt20": true,
+        "promotionSuccess": true,
+        "starterSurvivesPromotion": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "rootId": "elven_mage",
+      "race": "elf",
+      "status": "PASS",
+      "assertions": {
+        "createdInDom": true,
+        "starterSkillsUnlocked": true,
+        "starterNotLockedTo80": true,
+        "spLearnSuccess": true,
+        "loadoutEquipped": true,
+        "combatExecuted": true,
+        "advancementAvailableAt20": true,
+        "promotionSuccess": true,
+        "starterSurvivesPromotion": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "rootId": "elf_deathknight_0",
+      "race": "elf",
+      "status": "PASS",
+      "assertions": {
+        "createdInDom": true,
+        "starterSkillsUnlocked": true,
+        "starterNotLockedTo80": true,
+        "spLearnSuccess": true,
+        "loadoutEquipped": true,
+        "combatExecuted": true,
+        "advancementAvailableAt20": true,
+        "promotionSuccess": true,
+        "starterSurvivesPromotion": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "rootId": "dark_fighter",
+      "race": "darkelf",
+      "status": "PASS",
+      "assertions": {
+        "createdInDom": true,
+        "starterSkillsUnlocked": true,
+        "starterNotLockedTo80": true,
+        "spLearnSuccess": true,
+        "loadoutEquipped": true,
+        "combatExecuted": true,
+        "advancementAvailableAt20": true,
+        "promotionSuccess": true,
+        "starterSurvivesPromotion": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "rootId": "dark_mage",
+      "race": "darkelf",
+      "status": "PASS",
+      "assertions": {
+        "createdInDom": true,
+        "starterSkillsUnlocked": true,
+        "starterNotLockedTo80": true,
+        "spLearnSuccess": true,
+        "loadoutEquipped": true,
+        "combatExecuted": true,
+        "advancementAvailableAt20": true,
+        "promotionSuccess": true,
+        "starterSurvivesPromotion": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "rootId": "delf_deathknight_0",
+      "race": "darkelf",
+      "status": "PASS",
+      "assertions": {
+        "createdInDom": true,
+        "starterSkillsUnlocked": true,
+        "starterNotLockedTo80": true,
+        "spLearnSuccess": true,
+        "loadoutEquipped": true,
+        "combatExecuted": true,
+        "advancementAvailableAt20": true,
+        "promotionSuccess": true,
+        "starterSurvivesPromotion": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "rootId": "secret_assassin_female_0",
+      "race": "darkelf",
+      "status": "PASS",
+      "assertions": {
+        "createdInDom": true,
+        "starterSkillsUnlocked": true,
+        "starterNotLockedTo80": true,
+        "spLearnSuccess": true,
+        "loadoutEquipped": true,
+        "combatExecuted": true,
+        "advancementAvailableAt20": true,
+        "promotionSuccess": true,
+        "starterSurvivesPromotion": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "rootId": "rose_vain_0",
+      "race": "darkelf",
+      "status": "PASS",
+      "assertions": {
+        "createdInDom": true,
+        "starterSkillsUnlocked": true,
+        "starterNotLockedTo80": true,
+        "spLearnSuccess": true,
+        "loadoutEquipped": true,
+        "combatExecuted": true,
+        "advancementAvailableAt20": true,
+        "promotionSuccess": true,
+        "starterSurvivesPromotion": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "rootId": "orc_fighter",
+      "race": "orc",
+      "status": "PASS",
+      "assertions": {
+        "createdInDom": true,
+        "starterSkillsUnlocked": true,
+        "starterNotLockedTo80": true,
+        "spLearnSuccess": true,
+        "loadoutEquipped": true,
+        "combatExecuted": true,
+        "advancementAvailableAt20": true,
+        "promotionSuccess": true,
+        "starterSurvivesPromotion": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "rootId": "orc_mage",
+      "race": "orc",
+      "status": "PASS",
+      "assertions": {
+        "createdInDom": true,
+        "starterSkillsUnlocked": true,
+        "starterNotLockedTo80": true,
+        "spLearnSuccess": true,
+        "loadoutEquipped": true,
+        "combatExecuted": true,
+        "advancementAvailableAt20": true,
+        "promotionSuccess": true,
+        "starterSurvivesPromotion": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "rootId": "orc_rider_0",
+      "race": "orc",
+      "status": "PASS",
+      "assertions": {
+        "createdInDom": true,
+        "starterSkillsUnlocked": true,
+        "starterNotLockedTo80": true,
+        "spLearnSuccess": true,
+        "loadoutEquipped": true,
+        "combatExecuted": true,
+        "advancementAvailableAt20": true,
+        "promotionSuccess": true,
+        "starterSurvivesPromotion": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "rootId": "dwarven_fighter",
+      "race": "dwarf",
+      "status": "PASS",
+      "assertions": {
+        "createdInDom": true,
+        "starterSkillsUnlocked": true,
+        "starterNotLockedTo80": true,
+        "spLearnSuccess": true,
+        "loadoutEquipped": true,
+        "combatExecuted": true,
+        "advancementAvailableAt20": true,
+        "promotionSuccess": true,
+        "starterSurvivesPromotion": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "rootId": "shineMakerBase",
+      "race": "dwarf",
+      "status": "CONTENT_GAP",
+      "impediment": "Linhagem com lacuna de conteúdo documentada",
+      "assertions": {
+        "createdInDom": true,
+        "racePreserved": true,
+        "contentGapProtected": true
+      }
+    },
+    {
+      "rootId": "jin_kamael_soldier",
+      "race": "kamael",
+      "status": "PASS",
+      "assertions": {
+        "createdInDom": true,
+        "starterSkillsUnlocked": true,
+        "starterNotLockedTo80": true,
+        "spLearnSuccess": true,
+        "loadoutEquipped": true,
+        "combatExecuted": true,
+        "advancementAvailableAt20": true,
+        "promotionSuccess": true,
+        "starterSurvivesPromotion": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "rootId": "crow_0",
+      "race": "kamael",
+      "status": "PASS",
+      "assertions": {
+        "createdInDom": true,
+        "starterSkillsUnlocked": true,
+        "starterNotLockedTo80": true,
+        "spLearnSuccess": true,
+        "loadoutEquipped": true,
+        "combatExecuted": true,
+        "advancementAvailableAt20": true,
+        "promotionSuccess": true,
+        "starterSurvivesPromotion": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "rootId": "sylphid",
+      "race": "sylph",
+      "status": "PASS",
+      "assertions": {
+        "createdInDom": true,
+        "starterSkillsUnlocked": true,
+        "starterNotLockedTo80": true,
+        "spLearnSuccess": true,
+        "loadoutEquipped": true,
+        "combatExecuted": true,
+        "advancementAvailableAt20": true,
+        "promotionSuccess": true,
+        "starterSurvivesPromotion": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "rootId": "sacred_templar_0",
+      "race": "highelf",
+      "status": "PASS",
+      "assertions": {
+        "createdInDom": true,
+        "starterSkillsUnlocked": true,
+        "starterNotLockedTo80": true,
+        "spLearnSuccess": true,
+        "loadoutEquipped": true,
+        "combatExecuted": true,
+        "advancementAvailableAt20": true,
+        "promotionSuccess": true,
+        "starterSurvivesPromotion": true,
+        "persistencePreserved": true
+      }
+    },
+    {
+      "rootId": "spirit_0",
+      "race": "highelf",
+      "status": "CONTENT_GAP",
+      "impediment": "Linhagem com lacuna de conteúdo documentada",
+      "assertions": {
+        "createdInDom": true,
+        "racePreserved": true,
+        "contentGapProtected": true
+      }
+    },
+    {
+      "rootId": "marauderBase",
+      "race": "ertheia",
+      "status": "CONTENT_GAP",
+      "impediment": "Linhagem com lacuna de conteúdo documentada",
+      "assertions": {
+        "createdInDom": true,
+        "racePreserved": true,
+        "contentGapProtected": true
+      }
+    },
+    {
+      "rootId": "sayhaMageBase",
+      "race": "ertheia",
+      "status": "CONTENT_GAP",
+      "impediment": "Linhagem com lacuna de conteúdo documentada",
+      "assertions": {
+        "createdInDom": true,
+        "racePreserved": true,
+        "contentGapProtected": true
+      }
+    },
+    {
+      "rootId": "SUBCLASS_SYSTEM_LIFECYCLE",
+      "displayName": "Ciclo Completo de Subclasses e Certificações no Navegador",
+      "status": "PASS",
+      "assertions": {
+        "subclassGatedAt75": true,
+        "subclassIsolated": true,
+        "certificationsZeroedOnSub": true,
+        "certificationsActiveOnMain": true,
+        "persistencePreserved": true
+      }
+    }
+  ]
+}
