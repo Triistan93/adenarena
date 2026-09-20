@@ -923,9 +923,10 @@ function openClassTransferModal(classInfo) {
 }
 
 function checkClassAdvancement() { return serviceCheckClassAdvancement(state, { el, openClassTransferModal }); }
-function promoteClass(newClassId, selectedIds = null) { return servicePromoteClass(state, newClassId, selectedIds, { log, floatText, el, updateAllUI, save }); }
+export function promoteClass(newClassId, selectedIds = null) { return servicePromoteClass(state, newClassId, selectedIds, { log, floatText, el, updateAllUI, save }); }
 if (typeof window !== 'undefined') {
   window.openClassTransferModal = openClassTransferModal;
+  window.promoteClass = promoteClass;
 }
 
 
@@ -4425,11 +4426,13 @@ function confirmAddSubclass(chosenClassId) {
   floatText(`🌟 SUBCLASSE APRENDIDA!`, 'float-jackpot');
 
   closeCertificationModal();
-  updateAllUI();
   save();
 }
 
-function switchSubclass(targetIndex) {
+export function switchSubclass(targetIndex) {
+  if (typeof window !== 'undefined') {
+    window.switchSubclass = switchSubclass;
+  }
   // Normaliza targetIndex e verifica se uma subclasse é válida
   const subCount = Array.isArray(state.subclasses) ? state.subclasses.length : 0;
   const isTargetValidSub = typeof targetIndex === 'number'
@@ -4515,7 +4518,7 @@ function switchSubclass(targetIndex) {
       state.level = targetSub.level;
       state.xp = targetSub.xp;
       state.sp = targetSub.sp;
-      state.class = targetSub.classId;
+      state.class = targetSub.classId || targetSub.class;
       state.skills = JSON.parse(JSON.stringify(targetSub.skills || {}));
       state.legacyPassives = JSON.parse(JSON.stringify(targetSub.legacyPassives || {}));
       state.skillLoadout = JSON.parse(JSON.stringify(targetSub.skillLoadout || { basic: null, core1: null, core2: null, special1: null, special2: null, signature: null, ultimate: null }));
@@ -4530,7 +4533,8 @@ function switchSubclass(targetIndex) {
         state.equipment = restoredEquip;
       }
 
-      log(`⚔️ Alternado para a Subclasse **${getClass(state.class).name}** (Lv.${state.level})!`, 'rarity-rare');
+      const clsObj = getClass(state.class);
+      log(`⚔️ Alternado para a Subclasse **${clsObj?.name || state.class}** (Lv.${state.level})!`, 'rarity-rare');
     }
   }
 
@@ -5454,7 +5458,8 @@ function processMonsterDefeat(monster, killingSkill = null) {
   }
 }
 
-function attackMonster() {
+export function attackMonster() {
+  if (typeof window !== 'undefined') window.attackMonster = attackMonster;
   if (state.isCombatActive === false) return;
   if ((!state.zone && !state.isRaidActive) || !state.target) return;
 
@@ -7165,7 +7170,10 @@ function playerDeath(monster) {
 }
 function resurrect(useScroll = false) { return engineResurrect(state, useScroll, { log, el, updateAllUI, save, attackMonster }); }
 
-function spendSP(skillId) { return engineSpendSP(state, skillId, { log, floatText, classSatisfies, removeFromInventory, updateAllUI, save }); }
+export function spendSP(skillId) { return engineSpendSP(state, skillId, { log, floatText, classSatisfies, removeFromInventory, updateAllUI, save }); }
+if (typeof window !== 'undefined') {
+  window.spendSP = spendSP;
+}
 function resetSP() { return engineResetSP(state, { log, floatText, updateAllUI, save }); }
 
 
@@ -11347,6 +11355,7 @@ export function init() {
       delete data._mpRegenAcc;
       return JSON.parse(JSON.stringify(data));
     };
+    window.getRawState = () => state;
 
     window.saveGameState = (immediate = true, forceCloud = true) => {
       save(immediate, forceCloud);
@@ -11355,6 +11364,10 @@ export function init() {
     window.saveState = save;
     window.equipItem = equipItem;
     window.unequipItem = unequipItem;
+    window.promoteClass = promoteClass;
+    window.switchSubclass = switchSubclass;
+    window.attackMonster = attackMonster;
+    window.spendSP = spendSP;
 
     window.loadGameState = (cloudData) => {
       if (!cloudData || typeof cloudData !== 'object') return;

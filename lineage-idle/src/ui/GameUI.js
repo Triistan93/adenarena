@@ -2938,14 +2938,14 @@ export function renderStageHero(state) {
   const heroMpText = structure.card.querySelector('#hero-mp-text, .stage-mp-text-hero');
   if (heroMpText) heroMpText.textContent = `MP: ${curMp} / ${maxMp}`;
 
-  const vitHpText = root.querySelector('#hero-vital-hp');
+  const vitHpText = el('hero-vital-hp');
   if (vitHpText) vitHpText.textContent = `${curHp.toLocaleString()} / ${maxHp.toLocaleString()}`;
-  const vitHpBar = root.querySelector('#hero-vital-bar-hp');
+  const vitHpBar = el('hero-vital-bar-hp');
   if (vitHpBar) vitHpBar.style.width = `${Math.max(0, Math.min(100, (curHp / maxHp) * 100))}%`;
 
-  const vitMpText = root.querySelector('#hero-vital-mp');
+  const vitMpText = el('hero-vital-mp');
   if (vitMpText) vitMpText.textContent = `${curMp.toLocaleString()} / ${maxMp.toLocaleString()}`;
-  const vitMpBar = root.querySelector('#hero-vital-bar-mp');
+  const vitMpBar = el('hero-vital-bar-mp');
   if (vitMpBar) vitMpBar.style.width = `${Math.max(0, Math.min(100, (curMp / maxMp) * 100))}%`;
 
   const maxCp = Math.round(state.maxCp || Math.floor(maxHp * 0.6) || 60);
