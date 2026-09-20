@@ -4435,6 +4435,7 @@ function confirmAddSubclass(chosenClassId) {
   floatText(`🌟 SUBCLASSE APRENDIDA!`, 'float-jackpot');
 
   closeCertificationModal();
+  updateAllUI();
   save();
 }
 
