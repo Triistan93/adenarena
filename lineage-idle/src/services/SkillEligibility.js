@@ -484,11 +484,54 @@ export function getSkillUnlockLevelForClass(classId, skillId) {
       return 1;
     }
 
-    // Ultimate gating (Lv 80 / Lv 90)
-    const def = typeof window !== 'undefined' ? window.EchoData?.SKILL_DEFS_ECHO?.[skillId] : null;
-    if (def) {
-      if (def.starRank === 5 || def.tier === 5 || def.reqLvl >= 90) return 90;
-      if (def.isUltimate || def.starRank === 4 || def.tier === 4 || def.reqLvl >= 80) return 80;
+    // Check canonical skill minLevel from authoritative registry
+    const canonSkill = CANONICAL_SKILL_REGISTRY_V2?.[skillId];
+    if (canonSkill?.minLevel && canonSkill.minLevel > 1) {
+      // Find minLevel from current and ancestor classes, or from canonSkill
+      let minLevelFound = Infinity;
+      if (v2Class.skillIds?.includes(skillId)) {
+        minLevelFound = (canonSkill.minLevel <= (v2Class.maxLevel || 120))
+          ? Math.max(v2Class.minLevel, canonSkill.minLevel)
+          : v2Class.minLevel;
+      }
+      let curr = v2Class;
+      const visited = new Set([curr.id]);
+      while (curr.parentClass && CANONICAL_CLASS_REGISTRY_V2[curr.parentClass] && !visited.has(curr.parentClass)) {
+        visited.add(curr.parentClass);
+        curr = CANONICAL_CLASS_REGISTRY_V2[curr.parentClass];
+        if (curr.skillIds?.includes(skillId)) {
+          const req = (canonSkill.minLevel <= (curr.maxLevel || 120))
+            ? Math.max(curr.minLevel, canonSkill.minLevel)
+            : curr.minLevel;
+          minLevelFound = Math.min(minLevelFound, req);
+        }
+      }
+      if (minLevelFound !== Infinity) {
+        return minLevelFound;
+      }
+      // Descendant classes: find earliest descendant minLevel
+      let minDescLevel = Infinity;
+      const queue = [v2Class.id];
+      const visitedDesc = new Set(queue);
+      while (queue.length > 0) {
+        const parentId = queue.shift();
+        for (const candidate of Object.values(CANONICAL_CLASS_REGISTRY_V2)) {
+          if (candidate.parentClass === parentId && !visitedDesc.has(candidate.id)) {
+            visitedDesc.add(candidate.id);
+            queue.push(candidate.id);
+            if (candidate.skillIds?.includes(skillId)) {
+              const req = (canonSkill.minLevel <= (candidate.maxLevel || 120))
+                ? Math.max(candidate.minLevel, canonSkill.minLevel)
+                : candidate.minLevel;
+              minDescLevel = Math.min(minDescLevel, req);
+            }
+          }
+        }
+      }
+      if (minDescLevel !== Infinity) {
+        return minDescLevel;
+      }
+      return canonSkill.minLevel;
     }
 
     // Current and Ancestor classes: find earliest (lowest) minLevel
@@ -647,7 +690,7 @@ export function resolveSkillDef(skillOrId) {
  * @param {object} def
  * @returns {boolean}
  */
-function isSkillNativeOrAvailableNow(classId, def) {
+export function isSkillNativeOrAvailableNow(classId, def) {
   if (!classId || !def) return false;
 
   const v2Ctx = resolveV2ClassContext(classId);
@@ -679,6 +722,11 @@ function isSkillNativeOrAvailableNow(classId, def) {
         if (isDescendantSkill) break;
       }
       if (isDescendantSkill) return false;
+    }
+    // Autonomous lineages do not inherit generic shared skills
+    const v2Def = v2Ctx.v2ClassDef;
+    if (v2Def && v2Def.lineageId && (v2Def.lineageId.toLowerCase().includes('death') || v2Def.lineageId === 'samurai' || v2Def.lineageId === 'warg' || v2Def.lineageId === 'bloodRose')) {
+      return false;
     }
   }
 
@@ -788,8 +836,15 @@ export function isSkillInProgressionPath(character, skill) {
   if (v2Ctx.status === 'CONTENT_GAP') {
     return v2Ctx.authorizedSkillIds.includes(def.id);
   }
-  if (v2Ctx.status === 'RESOLVED' && isSkillInV2Lineage(charClass, def.id, charRace)) {
-    return true;
+  if (v2Ctx.status === 'RESOLVED') {
+    if (isSkillInV2Lineage(charClass, def.id, charRace)) {
+      return true;
+    }
+    // Autonomous lineages (deathKnight, samurai, warg, bloodRose) strictly do not inherit generic shared skills
+    const v2Def = v2Ctx.v2ClassDef;
+    if (v2Def && v2Def.lineageId && (v2Def.lineageId.toLowerCase().includes('death') || v2Def.lineageId === 'samurai' || v2Def.lineageId === 'warg' || v2Def.lineageId === 'bloodRose')) {
+      return false;
+    }
   }
 
   const canonicalCharClass = resolveCanonicalClassId(charClass, charRace) || charClass;

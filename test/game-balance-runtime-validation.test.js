@@ -114,7 +114,7 @@ describe('MASTER GAME BALANCE — RUNTIME VS SIMULATOR CONFORMANCE', () => {
     let missingMp = 0;
 
     for (const [id, def] of Object.entries(echoDefs)) {
-      if (def.type === 'passive' || def.type === 'stat') continue;
+      if (def.type === 'passive' || def.type === 'stat' || def.combatSkill === false || def.roleType === 'COSMETIC_VISUAL_ONLY') continue;
       checked++;
       if (typeof def.mpCost !== 'number' || def.mpCost <= 0) {
         missingMp++;

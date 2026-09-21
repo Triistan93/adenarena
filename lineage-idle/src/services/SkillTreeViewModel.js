@@ -20,7 +20,9 @@ import {
   SHARED_FIGHTER_SKILL_IDS,
   isMageClass,
   resolveSkillDef,
-  getSkillUnlockLevelForClass
+  getSkillUnlockLevelForClass,
+  isSkillAvailableForCharacter,
+  isSkillNativeOrAvailableNow
 } from './SkillEligibility.js';
 
 import { isPurgedSkill } from './SkillTagService.js';
@@ -207,11 +209,12 @@ export function getSkillTreeViewModel(character, options = {}) {
     if (!isLearned && !isStage0Starter && charLevel < reqLvl) continue;
 
     const maxRank = Number(def.max || def.maxLevel) || 5;
-    const state = isLearned ? 'LEARNED' : 'AVAILABLE';
+    const isAvailable = isSkillAvailableForCharacter(character, def);
+    const isStageEligible = isSkillNativeOrAvailableNow(charClass, def);
 
     const isShared = sharedIds.has(sId) || def.identity?.tier === 'shared';
     const isPassive = def.type === 'passive' || def.type === 'stat';
-    const isUlt = !isStage0Starter && (def.tier >= 4 || def.starRank >= 4 || def.isUltimate || reqLvl >= 80);
+    const isUlt = !isStage0Starter && (def.tier === 'ultimate' || def.identity?.tier === 'ultimate' || (def.isUltimate && reqLvl >= 80) || reqLvl >= 80);
 
     let tab = SKILL_TABS.ACTIVE;
     if (isPassive) tab = SKILL_TABS.PASSIVE;
@@ -228,6 +231,22 @@ export function getSkillTreeViewModel(character, options = {}) {
     const bookReq = def.requiredItemToUnlock || ((def.starRank === 4 || def.tier === 4) ? 'book_4star' : (def.starRank === 5 || def.tier === 5) ? 'book_5star' : null);
     const hasBook = bookReq ? character.inventory?.some?.(i => (i.itemId === bookReq || i.itemId === bookReq.replace('book_', 'spellbook_')) && (i.count || 1) > 0) : true;
     const isBookLocked = Boolean(bookReq && currentRank === 0 && !hasBook);
+
+    // Compositional lock reasons
+    const lockReasons = [];
+    if (!isLearned) {
+      if (!isStageEligible) lockReasons.push('CLASS_STAGE_LOCKED');
+      if (charLevel < reqLvl) lockReasons.push('LEVEL_LOCKED');
+      if (isBookLocked) lockReasons.push('BOOK_LOCKED');
+      if (!canAfford) lockReasons.push('SP_LOCKED');
+    }
+    if (currentRank >= maxRank) {
+      lockReasons.push('MAXED');
+    }
+
+    const state = isLearned ? 'LEARNED' : (isAvailable ? 'AVAILABLE' : 'LOCKED');
+    const primaryLockReason = lockReasons[0] || null;
+    const grade = def.grade || (def.starRank === 4 ? 'LEGENDARY' : (def.starRank === 3 ? 'RARE' : (def.starRank === 2 ? 'ENHANCED' : 'COMMON')));
 
     presentationModels.push({
       skillId: sId,
@@ -247,6 +266,14 @@ export function getSkillTreeViewModel(character, options = {}) {
       shared: isShared,
       ultimate: isUlt,
       starRank: def.starRank || (isUlt ? (def.tier === 5 ? 5 : 4) : 1),
+      grade,
+      lockReasons,
+      primaryLockReason,
+      availability: {
+        learnable: isAvailable && canAfford && !isBookLocked && currentRank < maxRank,
+        lockReasons,
+        primaryLockReason
+      },
       rank: {
         current: currentRank,
         max: maxRank,

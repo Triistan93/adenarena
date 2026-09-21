@@ -1,0 +1,128 @@
+[
+  {
+    "wikiSkillId": "47380",
+    "name": "Legendary Archer",
+    "minLevel": 76,
+    "classes": [
+      "sagittarius"
+    ],
+    "couponItemId": "103041",
+    "couponName": "Legendary Spellbook Coupon",
+    "stars": 4,
+    "tier": "Legendary",
+    "grade": "LEGENDARY",
+    "status": "PROVEN"
+  },
+  {
+    "wikiSkillId": "87351",
+    "name": "Time Distortion",
+    "minLevel": 76,
+    "classes": [
+      "secret_assassin_male_3"
+    ],
+    "couponItemId": "103041",
+    "couponName": "Legendary Spellbook Coupon",
+    "stars": 4,
+    "tier": "Legendary",
+    "grade": "LEGENDARY",
+    "status": "PROVEN"
+  },
+  {
+    "wikiSkillId": "54206",
+    "name": "Ultimate Death Knight",
+    "minLevel": 76,
+    "classes": [
+      "human_deathknight_3"
+    ],
+    "couponItemId": "103041",
+    "couponName": "Legendary Spellbook Coupon",
+    "stars": 4,
+    "tier": "Legendary",
+    "grade": "LEGENDARY",
+    "status": "PROVEN"
+  },
+  {
+    "wikiSkillId": "47384",
+    "name": "Legendary Archer",
+    "minLevel": 76,
+    "classes": [
+      "moonlight_sentinel"
+    ],
+    "couponItemId": "103041",
+    "couponName": "Legendary Spellbook Coupon",
+    "stars": 4,
+    "tier": "Legendary",
+    "grade": "LEGENDARY",
+    "status": "PROVEN"
+  },
+  {
+    "wikiSkillId": "47534",
+    "name": "Ultimate Death Knight",
+    "minLevel": 76,
+    "classes": [
+      "elf_deathknight_3"
+    ],
+    "couponItemId": "103041",
+    "couponName": "Legendary Spellbook Coupon",
+    "stars": 4,
+    "tier": "Legendary",
+    "grade": "LEGENDARY",
+    "status": "PROVEN"
+  },
+  {
+    "wikiSkillId": "47388",
+    "name": "Legendary Archer",
+    "minLevel": 76,
+    "classes": [
+      "ghost_sentinel"
+    ],
+    "couponItemId": "103041",
+    "couponName": "Legendary Spellbook Coupon",
+    "stars": 4,
+    "tier": "Legendary",
+    "grade": "LEGENDARY",
+    "status": "PROVEN"
+  },
+  {
+    "wikiSkillId": "47541",
+    "name": "Ultimate Death Knight",
+    "minLevel": 76,
+    "classes": [
+      "delf_deathknight_3"
+    ],
+    "couponItemId": "103041",
+    "couponName": "Legendary Spellbook Coupon",
+    "stars": 4,
+    "tier": "Legendary",
+    "grade": "LEGENDARY",
+    "status": "PROVEN"
+  },
+  {
+    "wikiSkillId": "87351",
+    "name": "Time Distortion",
+    "minLevel": 76,
+    "classes": [
+      "secret_assassin_female_3"
+    ],
+    "couponItemId": "103041",
+    "couponName": "Legendary Spellbook Coupon",
+    "stars": 4,
+    "tier": "Legendary",
+    "grade": "LEGENDARY",
+    "status": "PROVEN"
+  },
+  {
+    "wikiSkillId": "47392",
+    "name": "Legendary Archer",
+    "minLevel": 76,
+    "classes": [
+      "trickster"
+    ],
+    "couponItemId": "103041",
+    "couponName": "Legendary Spellbook Coupon",
+    "stars": 4,
+    "tier": "Legendary",
+    "grade": "LEGENDARY",
+    "status": "PROVEN"
+  }
+]

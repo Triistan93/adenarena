@@ -1,0 +1,884 @@
+[
+  {
+    "slug": "paladin",
+    "name": "Paladin",
+    "race": "human",
+    "raceName": "Human"
+  },
+  {
+    "slug": "gladiator",
+    "name": "Gladiator",
+    "race": "human",
+    "raceName": "Human"
+  },
+  {
+    "slug": "warlord",
+    "name": "Warlord",
+    "race": "human",
+    "raceName": "Human"
+  },
+  {
+    "slug": "warrior",
+    "name": "Warrior",
+    "race": "human",
+    "raceName": "Human"
+  },
+  {
+    "slug": "fighter",
+    "name": "Fighter",
+    "race": "human",
+    "raceName": "Human"
+  },
+  {
+    "slug": "dark_avenger",
+    "name": "Dark Avenger",
+    "race": "human",
+    "raceName": "Human"
+  },
+  {
+    "slug": "phoenix_knight",
+    "name": "Phoenix Knight",
+    "race": "human",
+    "raceName": "Human"
+  },
+  {
+    "slug": "knight",
+    "name": "Knight",
+    "race": "human",
+    "raceName": "Human"
+  },
+  {
+    "slug": "duelist",
+    "name": "Duelist",
+    "race": "human",
+    "raceName": "Human"
+  },
+  {
+    "slug": "dreadnought",
+    "name": "Dreadnought",
+    "race": "human",
+    "raceName": "Human"
+  },
+  {
+    "slug": "sagittarius",
+    "name": "Sagittarius",
+    "race": "human",
+    "raceName": "Human"
+  },
+  {
+    "slug": "sorcerer",
+    "name": "Sorcerer",
+    "race": "human",
+    "raceName": "Human"
+  },
+  {
+    "slug": "hell_knight",
+    "name": "Hell Knight",
+    "race": "human",
+    "raceName": "Human"
+  },
+  {
+    "slug": "treasure_hunter",
+    "name": "Treasure Hunter",
+    "race": "human",
+    "raceName": "Human"
+  },
+  {
+    "slug": "mage",
+    "name": "Mystic",
+    "race": "human",
+    "raceName": "Human"
+  },
+  {
+    "slug": "rogue",
+    "name": "Rogue",
+    "race": "human",
+    "raceName": "Human"
+  },
+  {
+    "slug": "hawkeye",
+    "name": "Hawkeye",
+    "race": "human",
+    "raceName": "Human"
+  },
+  {
+    "slug": "archmage",
+    "name": "Archmage",
+    "race": "human",
+    "raceName": "Human"
+  },
+  {
+    "slug": "adventurer",
+    "name": "Adventurer",
+    "race": "human",
+    "raceName": "Human"
+  },
+  {
+    "slug": "wizard",
+    "name": "Wizard",
+    "race": "human",
+    "raceName": "Human"
+  },
+  {
+    "slug": "hierophant",
+    "name": "Hierophant",
+    "race": "human",
+    "raceName": "Human"
+  },
+  {
+    "slug": "warlock",
+    "name": "Warlock",
+    "race": "human",
+    "raceName": "Human"
+  },
+  {
+    "slug": "prophet",
+    "name": "Prophet",
+    "race": "human",
+    "raceName": "Human"
+  },
+  {
+    "slug": "human_deathknight_0",
+    "name": "Death Pilgrim",
+    "race": "human",
+    "raceName": "Human"
+  },
+  {
+    "slug": "arcana_lord",
+    "name": "Arcana Lord",
+    "race": "human",
+    "raceName": "Human"
+  },
+  {
+    "slug": "necromancer",
+    "name": "Necromancer",
+    "race": "human",
+    "raceName": "Human"
+  },
+  {
+    "slug": "cardinal",
+    "name": "Cardinal",
+    "race": "human",
+    "raceName": "Human"
+  },
+  {
+    "slug": "soultaker",
+    "name": "Soultaker",
+    "race": "human",
+    "raceName": "Human"
+  },
+  {
+    "slug": "cleric",
+    "name": "Cleric",
+    "race": "human",
+    "raceName": "Human"
+  },
+  {
+    "slug": "bishop",
+    "name": "Bishop",
+    "race": "human",
+    "raceName": "Human"
+  },
+  {
+    "slug": "werewolf_1",
+    "name": "Warg",
+    "race": "human",
+    "raceName": "Human"
+  },
+  {
+    "slug": "secret_assassin_male_1",
+    "name": "Assassin",
+    "race": "human",
+    "raceName": "Human"
+  },
+  {
+    "slug": "human_deathknight_1",
+    "name": "Death Blade",
+    "race": "human",
+    "raceName": "Human"
+  },
+  {
+    "slug": "werewolf_0",
+    "name": "Warg",
+    "race": "human",
+    "raceName": "Human"
+  },
+  {
+    "slug": "secret_assassin_male_2",
+    "name": "Assassin",
+    "race": "human",
+    "raceName": "Human"
+  },
+  {
+    "slug": "secret_assassin_male_0",
+    "name": "Assassin",
+    "race": "human",
+    "raceName": "Human"
+  },
+  {
+    "slug": "secret_assassin_male_3",
+    "name": "Assassin",
+    "race": "human",
+    "raceName": "Human"
+  },
+  {
+    "slug": "human_deathknight_2",
+    "name": "Death Messenger",
+    "race": "human",
+    "raceName": "Human"
+  },
+  {
+    "slug": "human_deathknight_3",
+    "name": "Death Knight",
+    "race": "human",
+    "raceName": "Human"
+  },
+  {
+    "slug": "werewolf_2",
+    "name": "Warg",
+    "race": "human",
+    "raceName": "Human"
+  },
+  {
+    "slug": "elven_scout",
+    "name": "Elven Scout",
+    "race": "elf",
+    "raceName": "Elf"
+  },
+  {
+    "slug": "wind_rider",
+    "name": "Wind Rider",
+    "race": "elf",
+    "raceName": "Elf"
+  },
+  {
+    "slug": "elven_knight",
+    "name": "Elven Knight",
+    "race": "elf",
+    "raceName": "Elf"
+  },
+  {
+    "slug": "sword_muse",
+    "name": "Sword Muse",
+    "race": "elf",
+    "raceName": "Elf"
+  },
+  {
+    "slug": "swordsinger",
+    "name": "Swordsinger",
+    "race": "elf",
+    "raceName": "Elf"
+  },
+  {
+    "slug": "temple_knight",
+    "name": "Temple Knight",
+    "race": "elf",
+    "raceName": "Elf"
+  },
+  {
+    "slug": "elven_fighter",
+    "name": "Elven Fighter",
+    "race": "elf",
+    "raceName": "Elf"
+  },
+  {
+    "slug": "plain_walker",
+    "name": "Plains Walker",
+    "race": "elf",
+    "raceName": "Elf"
+  },
+  {
+    "slug": "werewolf_3",
+    "name": "Warg",
+    "race": "human",
+    "raceName": "Human"
+  },
+  {
+    "slug": "evas_templar",
+    "name": "Eva's Templar",
+    "race": "elf",
+    "raceName": "Elf"
+  },
+  {
+    "slug": "elemental_master",
+    "name": "Elemental Master",
+    "race": "elf",
+    "raceName": "Elf"
+  },
+  {
+    "slug": "oracle",
+    "name": "Elven Oracle",
+    "race": "elf",
+    "raceName": "Elf"
+  },
+  {
+    "slug": "elemental_summoner",
+    "name": "Elemental Summoner",
+    "race": "elf",
+    "raceName": "Elf"
+  },
+  {
+    "slug": "moonlight_sentinel",
+    "name": "Moonlight Sentinel",
+    "race": "elf",
+    "raceName": "Elf"
+  },
+  {
+    "slug": "elven_wizard",
+    "name": "Elven Wizard",
+    "race": "elf",
+    "raceName": "Elf"
+  },
+  {
+    "slug": "spellsinger",
+    "name": "Spellsinger",
+    "race": "elf",
+    "raceName": "Elf"
+  },
+  {
+    "slug": "silver_ranger",
+    "name": "Silver Ranger",
+    "race": "elf",
+    "raceName": "Elf"
+  },
+  {
+    "slug": "elder",
+    "name": "Elven Elder",
+    "race": "elf",
+    "raceName": "Elf"
+  },
+  {
+    "slug": "mystic_muse",
+    "name": "Mystic Muse",
+    "race": "elf",
+    "raceName": "Elf"
+  },
+  {
+    "slug": "elven_mage",
+    "name": "Elven Mystic",
+    "race": "elf",
+    "raceName": "Elf"
+  },
+  {
+    "slug": "elf_deathknight_3",
+    "name": "Death Knight",
+    "race": "elf",
+    "raceName": "Elf"
+  },
+  {
+    "slug": "shillien_knight",
+    "name": "Shillien Knight",
+    "race": "darkelf",
+    "raceName": "Dark Elf"
+  },
+  {
+    "slug": "dark_fighter",
+    "name": "Dark Fighter",
+    "race": "darkelf",
+    "raceName": "Dark Elf"
+  },
+  {
+    "slug": "evas_saint",
+    "name": "Eva's Saint",
+    "race": "elf",
+    "raceName": "Elf"
+  },
+  {
+    "slug": "elf_deathknight_2",
+    "name": "Death Messenger",
+    "race": "elf",
+    "raceName": "Elf"
+  },
+  {
+    "slug": "palus_knight",
+    "name": "Dark Knight",
+    "race": "darkelf",
+    "raceName": "Dark Elf"
+  },
+  {
+    "slug": "bladedancer",
+    "name": "Bladedancer",
+    "race": "darkelf",
+    "raceName": "Dark Elf"
+  },
+  {
+    "slug": "elf_deathknight_1",
+    "name": "Death Blade",
+    "race": "elf",
+    "raceName": "Elf"
+  },
+  {
+    "slug": "elf_deathknight_0",
+    "name": "Death Pilgrim",
+    "race": "elf",
+    "raceName": "Elf"
+  },
+  {
+    "slug": "shillien_templar",
+    "name": "Shillien Templar",
+    "race": "darkelf",
+    "raceName": "Dark Elf"
+  },
+  {
+    "slug": "phantom_ranger",
+    "name": "Phantom Ranger",
+    "race": "darkelf",
+    "raceName": "Dark Elf"
+  },
+  {
+    "slug": "ghost_hunter",
+    "name": "Ghost Hunter",
+    "race": "darkelf",
+    "raceName": "Dark Elf"
+  },
+  {
+    "slug": "storm_screamer",
+    "name": "Storm Screamer",
+    "race": "darkelf",
+    "raceName": "Dark Elf"
+  },
+  {
+    "slug": "spectral_dancer",
+    "name": "Spectral Dancer",
+    "race": "darkelf",
+    "raceName": "Dark Elf"
+  },
+  {
+    "slug": "spellhowler",
+    "name": "Spellhowler",
+    "race": "darkelf",
+    "raceName": "Dark Elf"
+  },
+  {
+    "slug": "dark_mage",
+    "name": "Dark Mystic",
+    "race": "darkelf",
+    "raceName": "Dark Elf"
+  },
+  {
+    "slug": "dark_wizard",
+    "name": "Dark Wizard",
+    "race": "darkelf",
+    "raceName": "Dark Elf"
+  },
+  {
+    "slug": "assassin",
+    "name": "Dark Slayer",
+    "race": "darkelf",
+    "raceName": "Dark Elf"
+  },
+  {
+    "slug": "ghost_sentinel",
+    "name": "Ghost Sentinel",
+    "race": "darkelf",
+    "raceName": "Dark Elf"
+  },
+  {
+    "slug": "abyss_walker",
+    "name": "Abyss Walker",
+    "race": "darkelf",
+    "raceName": "Dark Elf"
+  },
+  {
+    "slug": "spectral_master",
+    "name": "Spectral Master",
+    "race": "darkelf",
+    "raceName": "Dark Elf"
+  },
+  {
+    "slug": "delf_deathknight_2",
+    "name": "Death Messenger",
+    "race": "darkelf",
+    "raceName": "Dark Elf"
+  },
+  {
+    "slug": "delf_deathknight_0",
+    "name": "Death Pilgrim",
+    "race": "darkelf",
+    "raceName": "Dark Elf"
+  },
+  {
+    "slug": "shillien_oracle",
+    "name": "Shillien Oracle",
+    "race": "darkelf",
+    "raceName": "Dark Elf"
+  },
+  {
+    "slug": "delf_deathknight_3",
+    "name": "Death Knight",
+    "race": "darkelf",
+    "raceName": "Dark Elf"
+  },
+  {
+    "slug": "delf_deathknight_1",
+    "name": "Death Blade",
+    "race": "darkelf",
+    "raceName": "Dark Elf"
+  },
+  {
+    "slug": "secret_assassin_female_0",
+    "name": "Assassin",
+    "race": "darkelf",
+    "raceName": "Dark Elf"
+  },
+  {
+    "slug": "shillien_elder",
+    "name": "Shillien Elder",
+    "race": "darkelf",
+    "raceName": "Dark Elf"
+  },
+  {
+    "slug": "phantom_summoner",
+    "name": "Phantom Summoner",
+    "race": "darkelf",
+    "raceName": "Dark Elf"
+  },
+  {
+    "slug": "shillien_saint",
+    "name": "Shillien Saint",
+    "race": "darkelf",
+    "raceName": "Dark Elf"
+  },
+  {
+    "slug": "rose_vain_3",
+    "name": "Blood Rose",
+    "race": "darkelf",
+    "raceName": "Dark Elf"
+  },
+  {
+    "slug": "orc_fighter",
+    "name": "Orc Fighter",
+    "race": "orc",
+    "raceName": "Orc"
+  },
+  {
+    "slug": "destroyer",
+    "name": "Destroyer",
+    "race": "orc",
+    "raceName": "Orc"
+  },
+  {
+    "slug": "orc_raider",
+    "name": "Orc Raider",
+    "race": "orc",
+    "raceName": "Orc"
+  },
+  {
+    "slug": "rose_vain_0",
+    "name": "Blood Rose",
+    "race": "darkelf",
+    "raceName": "Dark Elf"
+  },
+  {
+    "slug": "rose_vain_2",
+    "name": "Blood Rose",
+    "race": "darkelf",
+    "raceName": "Dark Elf"
+  },
+  {
+    "slug": "rose_vain_1",
+    "name": "Blood Rose",
+    "race": "darkelf",
+    "raceName": "Dark Elf"
+  },
+  {
+    "slug": "secret_assassin_female_1",
+    "name": "Assassin",
+    "race": "darkelf",
+    "raceName": "Dark Elf"
+  },
+  {
+    "slug": "secret_assassin_female_3",
+    "name": "Assassin",
+    "race": "darkelf",
+    "raceName": "Dark Elf"
+  },
+  {
+    "slug": "secret_assassin_female_2",
+    "name": "Assassin",
+    "race": "darkelf",
+    "raceName": "Dark Elf"
+  },
+  {
+    "slug": "titan",
+    "name": "Titan",
+    "race": "orc",
+    "raceName": "Orc"
+  },
+  {
+    "slug": "orc_shaman",
+    "name": "Orc Shaman",
+    "race": "orc",
+    "raceName": "Orc"
+  },
+  {
+    "slug": "doomcryer",
+    "name": "Doomcryer",
+    "race": "orc",
+    "raceName": "Orc"
+  },
+  {
+    "slug": "tyrant",
+    "name": "Tyrant",
+    "race": "orc",
+    "raceName": "Orc"
+  },
+  {
+    "slug": "warcryer",
+    "name": "Warcryer",
+    "race": "orc",
+    "raceName": "Orc"
+  },
+  {
+    "slug": "dominator",
+    "name": "Dominator",
+    "race": "orc",
+    "raceName": "Orc"
+  },
+  {
+    "slug": "grand_khavatari",
+    "name": "Grand Khavatari",
+    "race": "orc",
+    "raceName": "Orc"
+  },
+  {
+    "slug": "overlord",
+    "name": "Overlord",
+    "race": "orc",
+    "raceName": "Orc"
+  },
+  {
+    "slug": "orc_monk",
+    "name": "Orc Monk",
+    "race": "orc",
+    "raceName": "Orc"
+  },
+  {
+    "slug": "orc_mage",
+    "name": "Orc Mystic",
+    "race": "orc",
+    "raceName": "Orc"
+  },
+  {
+    "slug": "dwarven_fighter",
+    "name": "Dwarven Fighter",
+    "race": "dwarf",
+    "raceName": "Dwarf"
+  },
+  {
+    "slug": "fortune_seeker",
+    "name": "Fortune Seeker",
+    "race": "dwarf",
+    "raceName": "Dwarf"
+  },
+  {
+    "slug": "orc_rider_0",
+    "name": "Orc Lancer",
+    "race": "orc",
+    "raceName": "Orc"
+  },
+  {
+    "slug": "artisan",
+    "name": "Artisan",
+    "race": "dwarf",
+    "raceName": "Dwarf"
+  },
+  {
+    "slug": "bounty_hunter",
+    "name": "Bounty Hunter",
+    "race": "dwarf",
+    "raceName": "Dwarf"
+  },
+  {
+    "slug": "orc_rider_1",
+    "name": "Rider",
+    "race": "orc",
+    "raceName": "Orc"
+  },
+  {
+    "slug": "scavenger",
+    "name": "Scavenger",
+    "race": "dwarf",
+    "raceName": "Dwarf"
+  },
+  {
+    "slug": "orc_rider_3",
+    "name": "Vanguard Rider",
+    "race": "orc",
+    "raceName": "Orc"
+  },
+  {
+    "slug": "orc_rider_2",
+    "name": "Dragoon",
+    "race": "orc",
+    "raceName": "Orc"
+  },
+  {
+    "slug": "warsmith",
+    "name": "Warsmith",
+    "race": "dwarf",
+    "raceName": "Dwarf"
+  },
+  {
+    "slug": "soul_hound",
+    "name": "Soul Hound",
+    "race": "kamael",
+    "raceName": "Kamael"
+  },
+  {
+    "slug": "doombringer",
+    "name": "Doombringer",
+    "race": "kamael",
+    "raceName": "Kamael"
+  },
+  {
+    "slug": "warder",
+    "name": "Warder",
+    "race": "kamael",
+    "raceName": "Kamael"
+  },
+  {
+    "slug": "soul_finder",
+    "name": "Soul Finder",
+    "race": "kamael",
+    "raceName": "Kamael"
+  },
+  {
+    "slug": "soul_breaker",
+    "name": "Soul Breaker",
+    "race": "kamael",
+    "raceName": "Kamael"
+  },
+  {
+    "slug": "maestro",
+    "name": "Maestro",
+    "race": "dwarf",
+    "raceName": "Dwarf"
+  },
+  {
+    "slug": "trooper",
+    "name": "Trooper",
+    "race": "kamael",
+    "raceName": "Kamael"
+  },
+  {
+    "slug": "jin_kamael_soldier",
+    "name": "Kamael Soldier",
+    "race": "kamael",
+    "raceName": "Kamael"
+  },
+  {
+    "slug": "berserker",
+    "name": "Berserker",
+    "race": "kamael",
+    "raceName": "Kamael"
+  },
+  {
+    "slug": "arbalester",
+    "name": "Soul Ranger",
+    "race": "kamael",
+    "raceName": "Kamael"
+  },
+  {
+    "slug": "wind_hunter",
+    "name": "Wind Sniper",
+    "race": "sylph",
+    "raceName": "Sylph"
+  },
+  {
+    "slug": "crow_2",
+    "name": "Ronin",
+    "race": "kamael",
+    "raceName": "Kamael"
+  },
+  {
+    "slug": "sylph_gunner",
+    "name": "Sharpshooter",
+    "race": "sylph",
+    "raceName": "Sylph"
+  },
+  {
+    "slug": "crow_0",
+    "name": "Ashigaru",
+    "race": "kamael",
+    "raceName": "Kamael"
+  },
+  {
+    "slug": "storm_blaster",
+    "name": "Storm Blaster",
+    "race": "sylph",
+    "raceName": "Sylph"
+  },
+  {
+    "slug": "trickster",
+    "name": "Trickster",
+    "race": "kamael",
+    "raceName": "Kamael"
+  },
+  {
+    "slug": "sylphid",
+    "name": "Sylph Gunner",
+    "race": "sylph",
+    "raceName": "Sylph"
+  },
+  {
+    "slug": "sacred_templar_0",
+    "name": "Divine Templar",
+    "race": "highelf",
+    "raceName": "High Elf"
+  },
+  {
+    "slug": "crow_3",
+    "name": "Samurai",
+    "race": "kamael",
+    "raceName": "Kamael"
+  },
+  {
+    "slug": "crow_1",
+    "name": "Hatamoto",
+    "race": "kamael",
+    "raceName": "Kamael"
+  },
+  {
+    "slug": "sacred_templar_1",
+    "name": "Divine Templar",
+    "race": "highelf",
+    "raceName": "High Elf"
+  },
+  {
+    "slug": "spirit_1",
+    "name": "Element Weaver",
+    "race": "highelf",
+    "raceName": "High Elf"
+  },
+  {
+    "slug": "spirit_0",
+    "name": "Element Weaver",
+    "race": "highelf",
+    "raceName": "High Elf"
+  },
+  {
+    "slug": "spirit_3",
+    "name": "Element Weaver",
+    "race": "highelf",
+    "raceName": "High Elf"
+  },
+  {
+    "slug": "sacred_templar_2",
+    "name": "Divine Templar",
+    "race": "highelf",
+    "raceName": "High Elf"
+  },
+  {
+    "slug": "sacred_templar_3",
+    "name": "Divine Templar",
+    "race": "highelf",
+    "raceName": "High Elf"
+  },
+  {
+    "slug": "spirit_2",
+    "name": "Element Weaver",
+    "race": "highelf",
+    "raceName": "High Elf"
+  }
+]

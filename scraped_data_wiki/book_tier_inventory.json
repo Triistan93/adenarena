@@ -1,0 +1,69 @@
+{
+  "summary": "CANONICAL SPELLBOOK TAXONOMY PROVEN VIA 5 L2 ESSENCE COUPONS",
+  "provenanceSource": "L2Wiki Essence Item Database (Coupons 98075, 97121, 97123, 100053, 103041)",
+  "discovery": "Spellbook requirements in Lineage II Essence are cataloged in the ITEM system rather than skill tables. Each learnable skill with a book requirement is learned through an individual 'Spellbook: [Skill Name]' item, which is acquired via one of five tier-specific Spellbook Coupons.",
+  "canonicalCoupons": [
+    {
+      "tier": "Common",
+      "stars": 1,
+      "couponName": "Common Spellbook Coupon",
+      "couponItemId": "98075",
+      "couponUrl": "https://l2wiki.com/essence/items/98075.html",
+      "spellbookItemPrefix": "Spellbook: [Skill Name] - Sealed",
+      "scope": "General common skills and base buffs",
+      "sampleSpellbooks": [
+        { "name": "Spellbook: Might", "itemId": "95517" },
+        { "name": "Spellbook: Shield", "itemId": "95518" },
+        { "name": "Spellbook: Empower", "itemId": "95533" },
+        { "name": "Spellbook: Magic Barrier", "itemId": "95534" },
+        { "name": "Spellbook: Focus", "itemId": "95535" },
+        { "name": "Spellbook: Death Whisper", "itemId": "95536" },
+        { "name": "Spellbook: Wind Walk", "itemId": "95537" },
+        { "name": "Spellbook: Haste", "itemId": "95538" },
+        { "name": "Spellbook: Acumen", "itemId": "95539" },
+        { "name": "Spellbook: Berserker Spirit", "itemId": "95769" },
+        { "name": "Spellbook: Clarity", "itemId": "95770" },
+        { "name": "Spellbook: Wild Magic", "itemId": "95771" }
+      ]
+    },
+    {
+      "tier": "Enhanced",
+      "stars": 2,
+      "couponName": "Enhanced Spellbook Coupon",
+      "couponItemId": "97121",
+      "couponUrl": "https://l2wiki.com/essence/items/97121.html",
+      "scope": "Enhanced class-specific skills (2-star skills)"
+    },
+    {
+      "tier": "Rare",
+      "stars": 3,
+      "couponName": "Rare Spellbook Coupon",
+      "couponItemId": "97123",
+      "couponUrl": "https://l2wiki.com/essence/items/97123.html",
+      "scope": "Rare class-specific skills (3-star core skills)"
+    },
+    {
+      "tier": "Heroic",
+      "stars": 3,
+      "couponName": "Heroic Spellbook Coupon",
+      "couponItemId": "100053",
+      "couponUrl": "https://l2wiki.com/essence/items/100053.html",
+      "scope": "Heroic advanced signature skills and prophecies"
+    },
+    {
+      "tier": "Legendary",
+      "stars": 4,
+      "couponName": "Legendary Spellbook Coupon",
+      "couponItemId": "103041",
+      "couponUrl": "https://l2wiki.com/essence/items/103041.html",
+      "scope": "All 4-star Legendary pinnacle skills of every class (e.g. Legendary Archer, Master of Combat)"
+    }
+  ],
+  "engineMapping": {
+    "book_1star": "Common Spellbook (1★) — Common Spellbook Coupon (98075)",
+    "book_2star": "Enhanced Spellbook (2★) — Enhanced Spellbook Coupon (97121)",
+    "book_3star": "Rare / Heroic Spellbook (3★) — Rare (97123) / Heroic (100053) Coupon",
+    "book_4star": "Legendary Spellbook (4★) — Legendary Spellbook Coupon (103041)"
+  },
+  "status": "CANONICAL_MODEL_PROVEN"
+}

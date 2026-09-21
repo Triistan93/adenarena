@@ -1,0 +1,37 @@
+{
+  "investigationQuestions": {
+    "A": {
+      "question": "Is SUPERIOR a skill grade?",
+      "answer": false,
+      "evidence": "No skill in skills_detailed.json or L2Wiki Essence skill tables is graded as Superior."
+    },
+    "B": {
+      "question": "Is SUPERIOR a progression grade?",
+      "answer": false,
+      "evidence": "Character progression operates on stages S0, S1, S2, S3."
+    },
+    "C": {
+      "question": "Is SUPERIOR a spellbook tier?",
+      "answer": false,
+      "evidence": "No 'Superior Spellbook' or 'Superior Spellbook Coupon' exists in L2Wiki Essence item databases (coupons are 98075 Common, 97121 Enhanced, 97123 Rare, 100053 Heroic, 103041 Legendary)."
+    },
+    "D": {
+      "question": "Is SUPERIOR a presentation grouping?",
+      "answer": false,
+      "evidence": "Not used in skill tree tabs or UI."
+    },
+    "E": {
+      "question": "What is SUPERIOR canonically in L2 Essence?",
+      "answer": "DOLL_GRADE",
+      "evidence": "In L2Wiki Essence Dolls Overview (/essence/articles/dolls.html), Doll grades are: Mythic, Legendary, Heroic, Rare, Superior, Enhanced, Common."
+    }
+  },
+  "findings": {
+    "superiorOccurrencesCount": 0,
+    "classesUsingSuperiorCount": 0,
+    "skillsUsingSuperiorCount": 0,
+    "bookEvidence": null,
+    "couponEvidence": null
+  },
+  "conclusion": "SUPERIOR must NOT be mapped to any skill grade, star rank, or spellbook tier. UNKNOWN remains UNKNOWN."
+}

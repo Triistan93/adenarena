@@ -1,0 +1,59 @@
+{
+  "provenance": "L2Wiki Essence Item Database — Heroic Spellbook Coupon (100053)",
+  "distinctionFromRare": "Rare uses Coupon 97123 (3-star basic core skills). Heroic uses Coupon 100053 (advanced prophecies and pinnacle 3-star buff/passive signatures).",
+  "couponItemId": "100053",
+  "couponUrl": "https://l2wiki.com/essence/items/100053.html",
+  "stars": 3,
+  "tier": "Heroic",
+  "consumableRepresentation": "In Aden Arena runtime, book_3star is currently a shared consumable item. However, the documentary taxonomy preserves HEROIC !== RARE.",
+  "sampleHeroicSkills": [
+    {
+      "wikiSkillId": "1356",
+      "name": "Prophecy of Fire",
+      "minLevel": 76,
+      "classes": [
+        "hierophant"
+      ]
+    },
+    {
+      "wikiSkillId": "88336",
+      "name": "Divine Power Acquisition",
+      "minLevel": 76,
+      "classes": [
+        "cardinal"
+      ]
+    },
+    {
+      "wikiSkillId": "1459",
+      "name": "Divine Power",
+      "minLevel": 51,
+      "classes": [
+        "bishop"
+      ]
+    },
+    {
+      "wikiSkillId": "1355",
+      "name": "Prophecy of Water",
+      "minLevel": 76,
+      "classes": [
+        "evas_saint"
+      ]
+    },
+    {
+      "wikiSkillId": "1357",
+      "name": "Prophecy of Wind",
+      "minLevel": 76,
+      "classes": [
+        "shillien_saint"
+      ]
+    },
+    {
+      "wikiSkillId": "47970",
+      "name": "Overwhelming Power",
+      "minLevel": 76,
+      "classes": [
+        "doombringer"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,3364 @@
+[
+  {
+    "localSkillId": "powerful_charge",
+    "wikiSkillId": "764",
+    "name": "Powerful Charge",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "knight_s_assault",
+    "wikiSkillId": "47279",
+    "name": "Knight's Assault",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "shield_charge",
+    "wikiSkillId": "1898",
+    "name": "Shield Charge",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "power_of_life",
+    "wikiSkillId": "47274",
+    "name": "Power of Life",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "phoenix_strike",
+    "wikiSkillId": "47315",
+    "name": "Phoenix Strike",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "shield_throwing",
+    "wikiSkillId": "47273",
+    "name": "Shield Throwing",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "battle_will",
+    "wikiSkillId": "47277",
+    "name": "Battle Will",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "chain_strike",
+    "wikiSkillId": "10015",
+    "name": "Chain Strike",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "mass_chain_strike",
+    "wikiSkillId": "53003",
+    "name": "Mass Chain Strike",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "white_guardian_transformation",
+    "wikiSkillId": "54102",
+    "name": "White Guardian Transformation",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 80"
+  },
+  {
+    "localSkillId": "shield_of_faith",
+    "wikiSkillId": "528",
+    "name": "Shield of Faith",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 79"
+  },
+  {
+    "localSkillId": "phoenix_protection",
+    "wikiSkillId": "1621",
+    "name": "Phoenix Protection",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 80"
+  },
+  {
+    "localSkillId": "mount_golden_lion",
+    "wikiSkillId": "1833",
+    "name": "Mount Golden Lion",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "phoenix_shield",
+    "wikiSkillId": "47307",
+    "name": "Phoenix Shield",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "dragon_slayer_appearance",
+    "wikiSkillId": "54231",
+    "name": "Dragon Slayer Appearance",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 82"
+  },
+  {
+    "localSkillId": "phoenix_power",
+    "wikiSkillId": "712",
+    "name": "Phoenix Power",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 85"
+  },
+  {
+    "localSkillId": "detection",
+    "wikiSkillId": "45190",
+    "name": "Detection",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "mount_glorious_steed",
+    "wikiSkillId": "54200",
+    "name": "Mount Glorious Steed",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 87"
+  },
+  {
+    "localSkillId": "glorious_warrior_enhanced_abilities",
+    "wikiSkillId": "45361",
+    "name": "Glorious Warrior: Enhanced Abilities",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 90"
+  },
+  {
+    "localSkillId": "vengeance",
+    "wikiSkillId": "368",
+    "name": "Vengeance",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 77"
+  },
+  {
+    "localSkillId": "touch_of_life",
+    "wikiSkillId": "341",
+    "name": "Touch of Life",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 78"
+  },
+  {
+    "localSkillId": "mount_shining_lady",
+    "wikiSkillId": "54202",
+    "name": "Mount Shining Lady",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 89"
+  },
+  {
+    "localSkillId": "blade_assault",
+    "wikiSkillId": "47654",
+    "name": "Blade Assault",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "blade_rage",
+    "wikiSkillId": "345",
+    "name": "Blade Rage",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "blade_rush",
+    "wikiSkillId": "47667",
+    "name": "Blade Rush",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "final_secret",
+    "wikiSkillId": "917",
+    "name": "Final Secret",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "indestructible_seal",
+    "wikiSkillId": "1624",
+    "name": "Indestructible Seal",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 78"
+  },
+  {
+    "localSkillId": "amazing_blade_strike",
+    "wikiSkillId": "47677",
+    "name": "Amazing Blade Strike",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "indestructible_blade",
+    "wikiSkillId": "47668",
+    "name": "Indestructible Blade",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 85"
+  },
+  {
+    "localSkillId": "challenger",
+    "wikiSkillId": "47927",
+    "name": "Challenger",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "crossed_blades",
+    "wikiSkillId": "47709",
+    "name": "Crossed Blades",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "blade_wave",
+    "wikiSkillId": "47928",
+    "name": "Blade Wave",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "tough_body",
+    "wikiSkillId": "442",
+    "name": "Tough Body",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 77"
+  },
+  {
+    "localSkillId": "blade_punishment",
+    "wikiSkillId": "47930",
+    "name": "Blade Punishment",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "battle_heart",
+    "wikiSkillId": "47714",
+    "name": "Battle Heart",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 78"
+  },
+  {
+    "localSkillId": "gleaming_blade",
+    "wikiSkillId": "47708",
+    "name": "Gleaming Blade",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 85"
+  },
+  {
+    "localSkillId": "tough_body_dual_weapons",
+    "wikiSkillId": "47676",
+    "name": "Tough Body: Dual Weapons",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 83"
+  },
+  {
+    "localSkillId": "final_secret_dual_weapons",
+    "wikiSkillId": "47675",
+    "name": "Final Secret: Dual Weapons",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 85"
+  },
+  {
+    "localSkillId": "braveheart",
+    "wikiSkillId": "440",
+    "name": "Braveheart",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 78"
+  },
+  {
+    "localSkillId": "shocking_burst",
+    "wikiSkillId": "361",
+    "name": "Shocking Burst",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 77"
+  },
+  {
+    "localSkillId": "great_sweep",
+    "wikiSkillId": "47940",
+    "name": "Great Sweep",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "spear_rumble",
+    "wikiSkillId": "47942",
+    "name": "Spear Rumble",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "spike_thrust",
+    "wikiSkillId": "921",
+    "name": "Spike Thrust",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "spear_howl",
+    "wikiSkillId": "1626",
+    "name": "Spear Howl",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 80"
+  },
+  {
+    "localSkillId": "throwing_spear",
+    "wikiSkillId": "1625",
+    "name": "Throwing Spear",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 78"
+  },
+  {
+    "localSkillId": "spear_cage",
+    "wikiSkillId": "47941",
+    "name": "Spear Cage",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "unleashed_power",
+    "wikiSkillId": "47943",
+    "name": "Unleashed Power",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "gust_shot",
+    "wikiSkillId": "47400",
+    "name": "Gust Shot",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "lethal_shot",
+    "wikiSkillId": "343",
+    "name": "Lethal Shot",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "double_shot",
+    "wikiSkillId": "19",
+    "name": "Double Shot",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "incendiary_shot",
+    "wikiSkillId": "47605",
+    "name": "Incendiary Shot",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "buff_thief",
+    "wikiSkillId": "45390",
+    "name": "Buff Thief",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 77"
+  },
+  {
+    "localSkillId": "flame_arrow_rain",
+    "wikiSkillId": "47404",
+    "name": "Flame Arrow Rain",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "real_target",
+    "wikiSkillId": "522",
+    "name": "Real Target",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "steady_aim",
+    "wikiSkillId": "47411",
+    "name": "Steady Aim",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "true_aim",
+    "wikiSkillId": "47396",
+    "name": "True Aim",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "vortex_shot",
+    "wikiSkillId": "47601",
+    "name": "Vortex Shot",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 77"
+  },
+  {
+    "localSkillId": "ultimate_evasion_archer",
+    "wikiSkillId": "111",
+    "name": "Ultimate Evasion: Archer",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "legendary_archer",
+    "wikiSkillId": "47380",
+    "name": "Legendary Archer",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "hamstring_shot",
+    "wikiSkillId": "354",
+    "name": "Hamstring Shot",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "spiral_shot",
+    "wikiSkillId": "47608",
+    "name": "Spiral Shot",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "legendary_shot",
+    "wikiSkillId": "47651",
+    "name": "Legendary Shot",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "legendary_cloak",
+    "wikiSkillId": "88696",
+    "name": "Legendary Cloak",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "binding_shot",
+    "wikiSkillId": "47603",
+    "name": "Binding Shot",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "snipe",
+    "wikiSkillId": "313",
+    "name": "Snipe",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 80"
+  },
+  {
+    "localSkillId": "target_lock",
+    "wikiSkillId": "47681",
+    "name": "Target Lock",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "detect_darkness",
+    "wikiSkillId": "53005",
+    "name": "Detect Darkness",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "hell",
+    "wikiSkillId": "47308",
+    "name": "Hell",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "dark_knight_s_break",
+    "wikiSkillId": "47316",
+    "name": "Dark Knight's Break",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "hell_smashing",
+    "wikiSkillId": "762",
+    "name": "Hell Smashing",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "toughness",
+    "wikiSkillId": "47275",
+    "name": "Toughness",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "dark_might",
+    "wikiSkillId": "713",
+    "name": "Dark Might",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 85"
+  },
+  {
+    "localSkillId": "touch_of_death",
+    "wikiSkillId": "342",
+    "name": "Touch of Death",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "flame_explosion",
+    "wikiSkillId": "45378",
+    "name": "Flame Explosion",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "fire_vortex",
+    "wikiSkillId": "1339",
+    "name": "Fire Vortex",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "meteor",
+    "wikiSkillId": "45538",
+    "name": "Meteor",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "fire_spiral",
+    "wikiSkillId": "47442",
+    "name": "Fire Spiral",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "magic_focus",
+    "wikiSkillId": "88683",
+    "name": "Magic Focus",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "arcane_shield",
+    "wikiSkillId": "1556",
+    "name": "Arcane Shield",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 80"
+  },
+  {
+    "localSkillId": "archmage_s_shield",
+    "wikiSkillId": "87067",
+    "name": "Archmage's Shield",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "heavy_sleep",
+    "wikiSkillId": "47461",
+    "name": "Heavy Sleep",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "arcane_power",
+    "wikiSkillId": "337",
+    "name": "Arcane Power",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 77"
+  },
+  {
+    "localSkillId": "master_of_flame",
+    "wikiSkillId": "89226",
+    "name": "Master of Flame",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "exciting_adventure",
+    "wikiSkillId": "768",
+    "name": "Exciting Adventure",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "lethal_blow",
+    "wikiSkillId": "344",
+    "name": "Lethal Blow",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "flying_dagger",
+    "wikiSkillId": "45477",
+    "name": "Flying Dagger",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "dark_blow",
+    "wikiSkillId": "47341",
+    "name": "Dark Blow",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "critical_assault",
+    "wikiSkillId": "47353",
+    "name": "Critical Assault",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "mirage",
+    "wikiSkillId": "445",
+    "name": "Mirage",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 79"
+  },
+  {
+    "localSkillId": "bluff",
+    "wikiSkillId": "358",
+    "name": "Bluff",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "focus_power",
+    "wikiSkillId": "357",
+    "name": "Focus Power",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 78"
+  },
+  {
+    "localSkillId": "focus_chance",
+    "wikiSkillId": "356",
+    "name": "Focus Chance",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 78"
+  },
+  {
+    "localSkillId": "focus_death",
+    "wikiSkillId": "355",
+    "name": "Focus Death",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 78"
+  },
+  {
+    "localSkillId": "seclusion",
+    "wikiSkillId": "47339",
+    "name": "Seclusion",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "critical_wound",
+    "wikiSkillId": "531",
+    "name": "Critical Wound",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "reversed_pull",
+    "wikiSkillId": "47348",
+    "name": "Reversed Pull",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "clear_movements",
+    "wikiSkillId": "1631",
+    "name": "Clear Movements",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 77"
+  },
+  {
+    "localSkillId": "fatal_crush",
+    "wikiSkillId": "87006",
+    "name": "Fatal Crush",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "might_of_heaven",
+    "wikiSkillId": "1028",
+    "name": "Might of Heaven",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "divine_beam",
+    "wikiSkillId": "45241",
+    "name": "Divine Beam",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "mana_burn",
+    "wikiSkillId": "1398",
+    "name": "Mana Burn",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "dryad_root",
+    "wikiSkillId": "1201",
+    "name": "Dryad Root",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "word_of_fear",
+    "wikiSkillId": "1272",
+    "name": "Word of Fear",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "tower_shield",
+    "wikiSkillId": "87012",
+    "name": "Tower Shield",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 80"
+  },
+  {
+    "localSkillId": "enlightenment",
+    "wikiSkillId": "1533",
+    "name": "Enlightenment",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 78"
+  },
+  {
+    "localSkillId": "prophecy_of_fire",
+    "wikiSkillId": "1356",
+    "name": "Prophecy of Fire",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "perfect_abilities",
+    "wikiSkillId": "1542",
+    "name": "Perfect Abilities",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "great_attack",
+    "wikiSkillId": "87013",
+    "name": "Great Attack",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 80"
+  },
+  {
+    "localSkillId": "turn_to_stone",
+    "wikiSkillId": "1540",
+    "name": "Turn to Stone",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 79"
+  },
+  {
+    "localSkillId": "improved_sleep",
+    "wikiSkillId": "87015",
+    "name": "Improved Sleep",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 85"
+  },
+  {
+    "localSkillId": "unique_seal_of_damage",
+    "wikiSkillId": "87007",
+    "name": "Unique Seal of Damage",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "crusader",
+    "wikiSkillId": "87001",
+    "name": "Crusader",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "ethereal_strike",
+    "wikiSkillId": "45377",
+    "name": "Ethereal Strike",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "warrior_bane",
+    "wikiSkillId": "1350",
+    "name": "Warrior Bane",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "ray_of_light",
+    "wikiSkillId": "47917",
+    "name": "Ray of Light",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "mage_bane",
+    "wikiSkillId": "1351",
+    "name": "Mage Bane",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "summon_feline_queen",
+    "wikiSkillId": "1331",
+    "name": "Summon Feline Queen",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 77"
+  },
+  {
+    "localSkillId": "chains_of_pain",
+    "wikiSkillId": "47916",
+    "name": "Chains of Pain",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "servitor_share",
+    "wikiSkillId": "1557",
+    "name": "Servitor Share",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "summon_feline_king",
+    "wikiSkillId": "1406",
+    "name": "Summon Feline King",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 77"
+  },
+  {
+    "localSkillId": "summon_cubic_of_secrets",
+    "wikiSkillId": "47910",
+    "name": "Summon Cubic of Secrets",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "powerful_servitor_share",
+    "wikiSkillId": "45054",
+    "name": "Powerful Servitor Share",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "summon_cat_emperor",
+    "wikiSkillId": "47901",
+    "name": "Summon Cat Emperor",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "warrior_servitor",
+    "wikiSkillId": "1346",
+    "name": "Warrior Servitor",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 78"
+  },
+  {
+    "localSkillId": "shining_beam",
+    "wikiSkillId": "45566",
+    "name": "Shining Beam",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "mana_effect_boost",
+    "wikiSkillId": "47269",
+    "name": "Mana Effect Boost",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "prophecy_of_light",
+    "wikiSkillId": "45236",
+    "name": "Prophecy of Light",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "paralysis",
+    "wikiSkillId": "1042",
+    "name": "Paralysis",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "favorable_cover_saved_life",
+    "wikiSkillId": "47266",
+    "name": "Favorable Cover: Saved Life",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "dark_side",
+    "wikiSkillId": "88320",
+    "name": "Dark Side",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "unleashing",
+    "wikiSkillId": "88330",
+    "name": "Unleashing",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "greater_heal",
+    "wikiSkillId": "1217",
+    "name": "Greater Heal",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "life_balance",
+    "wikiSkillId": "1335",
+    "name": "Life Balance",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "greater_battle_heal",
+    "wikiSkillId": "1218",
+    "name": "Greater Battle Heal",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "restore_life",
+    "wikiSkillId": "1258",
+    "name": "Restore Life",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "magical_backfire",
+    "wikiSkillId": "1396",
+    "name": "Magical Backfire",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "chain_heal",
+    "wikiSkillId": "1553",
+    "name": "Chain Heal",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "greater_group_heal",
+    "wikiSkillId": "1219",
+    "name": "Greater Group Heal",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "blessing",
+    "wikiSkillId": "1271",
+    "name": "Blessing",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "balanced_body",
+    "wikiSkillId": "47242",
+    "name": "Balanced Body",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "dark_vortex",
+    "wikiSkillId": "1343",
+    "name": "Dark Vortex",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "miracle",
+    "wikiSkillId": "1426",
+    "name": "Miracle",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 80"
+  },
+  {
+    "localSkillId": "salvation",
+    "wikiSkillId": "1410",
+    "name": "Salvation",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 79"
+  },
+  {
+    "localSkillId": "sensation",
+    "wikiSkillId": "47241",
+    "name": "Sensation",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "tranquility",
+    "wikiSkillId": "45530",
+    "name": "Tranquility",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "cleanse",
+    "wikiSkillId": "1409",
+    "name": "Cleanse",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 77"
+  },
+  {
+    "localSkillId": "divine_whisper",
+    "wikiSkillId": "88311",
+    "name": "Divine Whisper",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "advanced_cleanse",
+    "wikiSkillId": "47243",
+    "name": "Advanced Cleanse",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "divine_power_acquisition",
+    "wikiSkillId": "88336",
+    "name": "Divine Power Acquisition",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "void_explosion",
+    "wikiSkillId": "45381",
+    "name": "Void Explosion",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "master_of_void",
+    "wikiSkillId": "89228",
+    "name": "Master of Void",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "dark_spiral",
+    "wikiSkillId": "47445",
+    "name": "Dark Spiral",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "soul_guardian",
+    "wikiSkillId": "47441",
+    "name": "Soul Guardian",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "summon_cursed_man",
+    "wikiSkillId": "1334",
+    "name": "Summon Cursed Man",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 79"
+  },
+  {
+    "localSkillId": "shadow_blast",
+    "wikiSkillId": "87155",
+    "name": "Shadow Blast",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "assassination",
+    "wikiSkillId": "87307",
+    "name": "Assassination",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "resolve_to_kill",
+    "wikiSkillId": "87345",
+    "name": "Resolve to Kill",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "clone_dance",
+    "wikiSkillId": "87309",
+    "name": "Clone Dance",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "relentless_attack",
+    "wikiSkillId": "87319",
+    "name": "Relentless Attack",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "silver_wolf",
+    "wikiSkillId": "54246",
+    "name": "Silver Wolf",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "time_distortion",
+    "wikiSkillId": "87351",
+    "name": "Time Distortion",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "constraint",
+    "wikiSkillId": "87381",
+    "name": "Constraint",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "return_motion",
+    "wikiSkillId": "87323",
+    "name": "Return Motion",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "hellfire",
+    "wikiSkillId": "45312",
+    "name": "Hellfire",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "burning_field",
+    "wikiSkillId": "45313",
+    "name": "Burning Field",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "rage_charge",
+    "wikiSkillId": "47561",
+    "name": "Rage Charge",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 80"
+  },
+  {
+    "localSkillId": "stigma_of_evil",
+    "wikiSkillId": "47553",
+    "name": "Stigma of Evil",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 80"
+  },
+  {
+    "localSkillId": "devour",
+    "wikiSkillId": "45389",
+    "name": "Devour",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "deadly_ligament_rupture",
+    "wikiSkillId": "45343",
+    "name": "Deadly Ligament Rupture",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "ultimate_death_knight",
+    "wikiSkillId": "54206",
+    "name": "Ultimate Death Knight",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "flame_grip",
+    "wikiSkillId": "47493",
+    "name": "Flame Grip",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "mount_night_mare",
+    "wikiSkillId": "54207",
+    "name": "Mount Night Mare",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "synchro_freedom",
+    "wikiSkillId": "47350",
+    "name": "Synchro Freedom",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "fury_blade",
+    "wikiSkillId": "47355",
+    "name": "Fury Blade",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "wind_riding",
+    "wikiSkillId": "769",
+    "name": "Wind Riding",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "evasion",
+    "wikiSkillId": "446",
+    "name": "Evasion",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 79"
+  },
+  {
+    "localSkillId": "mount_pegasus",
+    "wikiSkillId": "1834",
+    "name": "Mount Pegasus",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "deadly_rhythm",
+    "wikiSkillId": "1632",
+    "name": "Deadly Rhythm",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "symphony",
+    "wikiSkillId": "98",
+    "name": "Symphony",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "wild_beat",
+    "wikiSkillId": "45400",
+    "name": "Wild Beat",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "song_of_silence",
+    "wikiSkillId": "437",
+    "name": "Song of Silence",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 85"
+  },
+  {
+    "localSkillId": "song_of_wind",
+    "wikiSkillId": "89011",
+    "name": "Song of Wind",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 80"
+  },
+  {
+    "localSkillId": "song_of_cosmos",
+    "wikiSkillId": "89021",
+    "name": "Song of Cosmos",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 80"
+  },
+  {
+    "localSkillId": "frantic_pace",
+    "wikiSkillId": "45402",
+    "name": "Frantic Pace",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "song_of_hunter",
+    "wikiSkillId": "89015",
+    "name": "Song of Hunter",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 79"
+  },
+  {
+    "localSkillId": "song_of_earth",
+    "wikiSkillId": "89023",
+    "name": "Song of Earth",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 80"
+  },
+  {
+    "localSkillId": "amadeus",
+    "wikiSkillId": "87101",
+    "name": "Amadeus",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "additional_strain",
+    "wikiSkillId": "87133",
+    "name": "Additional Strain",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "enormous_wolf",
+    "wikiSkillId": "88441",
+    "name": "Enormous Wolf",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "powerful_fists",
+    "wikiSkillId": "88420",
+    "name": "Powerful Fists",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "artful_disarm",
+    "wikiSkillId": "88407",
+    "name": "Artful Disarm",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "imminent_piercing",
+    "wikiSkillId": "88408",
+    "name": "Imminent Piercing",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "devastating_assault",
+    "wikiSkillId": "88403",
+    "name": "Devastating Assault",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "moon_influence",
+    "wikiSkillId": "88409",
+    "name": "Moon Influence",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "improved_speed",
+    "wikiSkillId": "88475",
+    "name": "Improved Speed",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "confused_mind",
+    "wikiSkillId": "88486",
+    "name": "Confused Mind",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "tough_skin",
+    "wikiSkillId": "88490",
+    "name": "Tough Skin",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "eva_s_defense",
+    "wikiSkillId": "1623",
+    "name": "Eva's Defense",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "water_shield_throwing",
+    "wikiSkillId": "88054",
+    "name": "Water Shield Throwing",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "templar_s_assault",
+    "wikiSkillId": "88009",
+    "name": "Templar's Assault",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "supernova",
+    "wikiSkillId": "87972",
+    "name": "Supernova",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "templar_s_rush",
+    "wikiSkillId": "87992",
+    "name": "Templar's Rush",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "blessed_by_eva",
+    "wikiSkillId": "47318",
+    "name": "Blessed by Eva",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "battle_shield",
+    "wikiSkillId": "87981",
+    "name": "Battle Shield",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "armor_of_swift_current",
+    "wikiSkillId": "87977",
+    "name": "Armor of Swift Current",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "over_the_rainbow",
+    "wikiSkillId": "88284",
+    "name": "Over the Rainbow",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "elemental_strike",
+    "wikiSkillId": "88201",
+    "name": "Elemental Strike",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "elemental_shackles",
+    "wikiSkillId": "88207",
+    "name": "Elemental Shackles",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "elemental_roots",
+    "wikiSkillId": "88280",
+    "name": "Elemental Roots",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "elemental_discharge",
+    "wikiSkillId": "88279",
+    "name": "Elemental Discharge",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "elemental_vortex",
+    "wikiSkillId": "88204",
+    "name": "Elemental Vortex",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "shelter",
+    "wikiSkillId": "47310",
+    "name": "Shelter",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "elemental_nurture",
+    "wikiSkillId": "88253",
+    "name": "Elemental Nurture",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 88"
+  },
+  {
+    "localSkillId": "elemental_charm",
+    "wikiSkillId": "88254",
+    "name": "Elemental Charm",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "elemental_concentration",
+    "wikiSkillId": "88251",
+    "name": "Elemental Concentration",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "elemental_mastership",
+    "wikiSkillId": "88242",
+    "name": "Elemental Mastership",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "wind_shackles",
+    "wikiSkillId": "1206",
+    "name": "Wind Shackles",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "friendly_walk",
+    "wikiSkillId": "88282",
+    "name": "Friendly Walk",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 92"
+  },
+  {
+    "localSkillId": "elemental_speed",
+    "wikiSkillId": "88281",
+    "name": "Elemental Speed",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "summon_elemental_cubic",
+    "wikiSkillId": "47912",
+    "name": "Summon Elemental Cubic",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "summon_elemental_globe",
+    "wikiSkillId": "88210",
+    "name": "Summon Elemental Globe",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "freezing_shot",
+    "wikiSkillId": "47606",
+    "name": "Freezing Shot",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "water_arrow_rain",
+    "wikiSkillId": "47406",
+    "name": "Water Arrow Rain",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "rapid_fire",
+    "wikiSkillId": "413",
+    "name": "Rapid Fire",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 80"
+  },
+  {
+    "localSkillId": "alacrity",
+    "wikiSkillId": "47412",
+    "name": "Alacrity",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "mystic_freeze",
+    "wikiSkillId": "87056",
+    "name": "Mystic Freeze",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 80"
+  },
+  {
+    "localSkillId": "winter_shackles",
+    "wikiSkillId": "87061",
+    "name": "Winter Shackles",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 85"
+  },
+  {
+    "localSkillId": "mystic_explosion",
+    "wikiSkillId": "45379",
+    "name": "Mystic Explosion",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "mystic_spiral",
+    "wikiSkillId": "47448",
+    "name": "Mystic Spiral",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "ice_vortex",
+    "wikiSkillId": "1340",
+    "name": "Ice Vortex",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "winter_frostbite",
+    "wikiSkillId": "87065",
+    "name": "Winter Frostbite",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 90"
+  },
+  {
+    "localSkillId": "winter_skin",
+    "wikiSkillId": "87092",
+    "name": "Winter Skin",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 82"
+  },
+  {
+    "localSkillId": "faery_shield",
+    "wikiSkillId": "47440",
+    "name": "Faery Shield",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "riot",
+    "wikiSkillId": "87073",
+    "name": "Riot",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 89"
+  },
+  {
+    "localSkillId": "winter_slumber",
+    "wikiSkillId": "87064",
+    "name": "Winter Slumber",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "frozen_field",
+    "wikiSkillId": "45316",
+    "name": "Frozen Field",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "frost_grip",
+    "wikiSkillId": "47497",
+    "name": "Frost Grip",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "call_of_frost",
+    "wikiSkillId": "45324",
+    "name": "Call of Frost",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "saint_s_burst_sea",
+    "wikiSkillId": "45434",
+    "name": "Saint's Burst: Sea",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "prophecy_of_water",
+    "wikiSkillId": "1355",
+    "name": "Prophecy of Water",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "eva_s_grail",
+    "wikiSkillId": "88346",
+    "name": "Eva's Grail",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "mass_vitalize",
+    "wikiSkillId": "1552",
+    "name": "Mass Vitalize",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "eva_s_nocturne",
+    "wikiSkillId": "47248",
+    "name": "Eva's Nocturne",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "mass_cure",
+    "wikiSkillId": "1550",
+    "name": "Mass Cure",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "exclusion",
+    "wikiSkillId": "45533",
+    "name": "Exclusion",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "remove",
+    "wikiSkillId": "47247",
+    "name": "Remove",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "eva_s_blessing",
+    "wikiSkillId": "1506",
+    "name": "Eva's Blessing",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 80"
+  },
+  {
+    "localSkillId": "mass_lightning_strike",
+    "wikiSkillId": "10094",
+    "name": "Mass Lightning Strike",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "shillien_s_curse",
+    "wikiSkillId": "47320",
+    "name": "Shillien's Curse",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "dark_shield_throwing",
+    "wikiSkillId": "88056",
+    "name": "Dark Shield Throwing",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "apocalypse",
+    "wikiSkillId": "88012",
+    "name": "Apocalypse",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "condemnation",
+    "wikiSkillId": "47313",
+    "name": "Condemnation",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "lightning_wave_break",
+    "wikiSkillId": "87993",
+    "name": "Lightning Wave Break",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "mount_saber_toothed_cougar",
+    "wikiSkillId": "1835",
+    "name": "Mount Saber-toothed Cougar",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "mortal_piercing",
+    "wikiSkillId": "47357",
+    "name": "Mortal Piercing",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "counterattack",
+    "wikiSkillId": "447",
+    "name": "Counterattack",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 79"
+  },
+  {
+    "localSkillId": "ethereal_blood",
+    "wikiSkillId": "47351",
+    "name": "Ethereal Blood",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "ghost_walking",
+    "wikiSkillId": "770",
+    "name": "Ghost Walking",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "hurricane",
+    "wikiSkillId": "1239",
+    "name": "Hurricane",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "tempest",
+    "wikiSkillId": "1176",
+    "name": "Tempest",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "wind_vortex",
+    "wikiSkillId": "1341",
+    "name": "Wind Vortex",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "demon_wind",
+    "wikiSkillId": "1291",
+    "name": "Demon Wind",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "storm_screamer_s_shield",
+    "wikiSkillId": "87068",
+    "name": "Storm Screamer's Shield",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "wind_spiral",
+    "wikiSkillId": "47451",
+    "name": "Wind Spiral",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "master_of_thunder",
+    "wikiSkillId": "89227",
+    "name": "Master of Thunder",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "thunder_explosion",
+    "wikiSkillId": "45380",
+    "name": "Thunder Explosion",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "silence",
+    "wikiSkillId": "1064",
+    "name": "Silence",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "flamenco",
+    "wikiSkillId": "87103",
+    "name": "Flamenco",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "crazy_waltz",
+    "wikiSkillId": "45401",
+    "name": "Crazy Waltz",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "dance_of_medusa",
+    "wikiSkillId": "367",
+    "name": "Dance of Medusa",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 85"
+  },
+  {
+    "localSkillId": "storm_arrow_rain",
+    "wikiSkillId": "47408",
+    "name": "Storm Arrow Rain",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "wind_shot",
+    "wikiSkillId": "47607",
+    "name": "Wind Shot",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "eagle_eye",
+    "wikiSkillId": "47413",
+    "name": "Eagle Eye",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "summon_lord_raise",
+    "wikiSkillId": "47907",
+    "name": "Summon Lord Raise",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "summon_nightshade",
+    "wikiSkillId": "1333",
+    "name": "Summon Nightshade",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 77"
+  },
+  {
+    "localSkillId": "summon_spectral_lord",
+    "wikiSkillId": "1408",
+    "name": "Summon Spectral Lord",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 77"
+  },
+  {
+    "localSkillId": "assassin_servitor",
+    "wikiSkillId": "1348",
+    "name": "Assassin Servitor",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 78"
+  },
+  {
+    "localSkillId": "summon_phantom_cubic",
+    "wikiSkillId": "47914",
+    "name": "Summon Phantom Cubic",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "lightning_storm",
+    "wikiSkillId": "45319",
+    "name": "Lightning Storm",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "lightning_grip",
+    "wikiSkillId": "47501",
+    "name": "Lightning Grip",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "saint_s_burst_dark",
+    "wikiSkillId": "45436",
+    "name": "Saint's Burst: Dark",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "prophecy_of_wind",
+    "wikiSkillId": "1357",
+    "name": "Prophecy of Wind",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "nemesis",
+    "wikiSkillId": "47255",
+    "name": "Nemesis",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "shillien_s_power",
+    "wikiSkillId": "47257",
+    "name": "Shillien's Power",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "shillien_s_touch",
+    "wikiSkillId": "1507",
+    "name": "Shillien's Touch",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "shillien_s_grail",
+    "wikiSkillId": "88343",
+    "name": "Shillien's Grail",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "mass_wind_shackles",
+    "wikiSkillId": "45243",
+    "name": "Mass Wind Shackles",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "duress",
+    "wikiSkillId": "47253",
+    "name": "Duress",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "mass_dryad_root",
+    "wikiSkillId": "45242",
+    "name": "Mass Dryad Root",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "parasite_rose",
+    "wikiSkillId": "88572",
+    "name": "Parasite Rose",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "enchanted_rose_s_assault",
+    "wikiSkillId": "88570",
+    "name": "Enchanted Rose's Assault",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "rose_attack",
+    "wikiSkillId": "88550",
+    "name": "Rose Attack",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "dark_disruption",
+    "wikiSkillId": "45534",
+    "name": "Dark Disruption",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "mass_purify",
+    "wikiSkillId": "1551",
+    "name": "Mass Purify",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "aroma_of_death",
+    "wikiSkillId": "88571",
+    "name": "Aroma of Death",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "briar_vortex",
+    "wikiSkillId": "88557",
+    "name": "Briar Vortex",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "vine_embrace",
+    "wikiSkillId": "88562",
+    "name": "Vine Embrace",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "reflecting_illusion",
+    "wikiSkillId": "88580",
+    "name": "Reflecting Illusion",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "crimson_rose",
+    "wikiSkillId": "88597",
+    "name": "Crimson Rose",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "kingdom_of_plants",
+    "wikiSkillId": "88561",
+    "name": "Kingdom of Plants",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "blooming_nightmare",
+    "wikiSkillId": "88583",
+    "name": "Blooming Nightmare",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "bleeding_rose",
+    "wikiSkillId": "88556",
+    "name": "Bleeding Rose",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "rose_thorns",
+    "wikiSkillId": "88587",
+    "name": "Rose Thorns",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "queen_s_garden",
+    "wikiSkillId": "88590",
+    "name": "Queen's Garden",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "titanic_break",
+    "wikiSkillId": "45417",
+    "name": "Titanic Break",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "demolition_formula",
+    "wikiSkillId": "47471",
+    "name": "Demolition Formula",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "armor_crush",
+    "wikiSkillId": "362",
+    "name": "Armor Crush",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 77"
+  },
+  {
+    "localSkillId": "demolition_impact",
+    "wikiSkillId": "777",
+    "name": "Demolition Impact",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "titanic_sweep",
+    "wikiSkillId": "45416",
+    "name": "Titanic Sweep",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "full_sweep",
+    "wikiSkillId": "814",
+    "name": "Full Sweep",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "titans_secrets",
+    "wikiSkillId": "47476",
+    "name": "Titans' Secrets",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "hyper_rush",
+    "wikiSkillId": "88721",
+    "name": "Hyper Rush",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 80"
+  },
+  {
+    "localSkillId": "destroyer_s_roar",
+    "wikiSkillId": "1627",
+    "name": "Destroyer's Roar",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 77"
+  },
+  {
+    "localSkillId": "titanic_weapon",
+    "wikiSkillId": "45414",
+    "name": "Titanic Weapon",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "destructive_shriek",
+    "wikiSkillId": "47487",
+    "name": "Destructive Shriek",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 90"
+  },
+  {
+    "localSkillId": "full_knockdown",
+    "wikiSkillId": "1896",
+    "name": "Full Knockdown",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 81"
+  },
+  {
+    "localSkillId": "over_the_body",
+    "wikiSkillId": "536",
+    "name": "Over the Body",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 78"
+  },
+  {
+    "localSkillId": "mount_black_bear",
+    "wikiSkillId": "1837",
+    "name": "Mount Black Bear",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "titan_champion",
+    "wikiSkillId": "45413",
+    "name": "Titan Champion",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "cold_flames",
+    "wikiSkillId": "45461",
+    "name": "Cold Flames",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "blood_bond",
+    "wikiSkillId": "45458",
+    "name": "Blood Bond",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "crimson_flame",
+    "wikiSkillId": "88354",
+    "name": "Crimson Flame",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "bloody_strike",
+    "wikiSkillId": "45288",
+    "name": "Bloody Strike",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "chant_of_prophecy",
+    "wikiSkillId": "89345",
+    "name": "Chant of Prophecy",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "chant_of_healing",
+    "wikiSkillId": "45463",
+    "name": "Chant of Healing",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "chant_of_glory",
+    "wikiSkillId": "89343",
+    "name": "Chant of Glory",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 85"
+  },
+  {
+    "localSkillId": "chant_of_gate",
+    "wikiSkillId": "1429",
+    "name": "Chant of Gate",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 78"
+  },
+  {
+    "localSkillId": "freezing_flame",
+    "wikiSkillId": "1244",
+    "name": "Freezing Flame",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "team_building",
+    "wikiSkillId": "45455",
+    "name": "Team Building",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "flame_burst",
+    "wikiSkillId": "45453",
+    "name": "Flame Burst",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "debuff_master",
+    "wikiSkillId": "45449",
+    "name": "Debuff Master",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "prophecy_of_pa_agrio",
+    "wikiSkillId": "89342",
+    "name": "Prophecy of Pa'agrio",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "pa_agrio_s_glory",
+    "wikiSkillId": "89340",
+    "name": "Pa'agrio's Glory",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 85"
+  },
+  {
+    "localSkillId": "seal_of_suspension",
+    "wikiSkillId": "1248",
+    "name": "Seal of Suspension",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "seal_of_silence",
+    "wikiSkillId": "1246",
+    "name": "Seal of Silence",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "pa_agrio_s_honor",
+    "wikiSkillId": "1305",
+    "name": "Pa'agrio's Honor",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "seal_of_blockade",
+    "wikiSkillId": "1462",
+    "name": "Seal of Blockade",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 79"
+  },
+  {
+    "localSkillId": "pa_agrio_s_touch",
+    "wikiSkillId": "45446",
+    "name": "Pa'agrio's Touch",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "seal_of_despair",
+    "wikiSkillId": "1366",
+    "name": "Seal of Despair",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 79"
+  },
+  {
+    "localSkillId": "seal_of_infection",
+    "wikiSkillId": "45468",
+    "name": "Seal of Infection",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 77"
+  },
+  {
+    "localSkillId": "seal_of_disease",
+    "wikiSkillId": "1367",
+    "name": "Seal of Disease",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 77"
+  },
+  {
+    "localSkillId": "ritual_of_life",
+    "wikiSkillId": "1306",
+    "name": "Ritual of Life",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "pa_agrio_s_cure",
+    "wikiSkillId": "45448",
+    "name": "Pa'agrio's Cure",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "jump_attack",
+    "wikiSkillId": "88108",
+    "name": "Jump Attack",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "burning_strike",
+    "wikiSkillId": "45423",
+    "name": "Burning Strike",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "burning_assault",
+    "wikiSkillId": "45424",
+    "name": "Burning Assault",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "raging_force",
+    "wikiSkillId": "346",
+    "name": "Raging Force",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "blazing_strike",
+    "wikiSkillId": "45425",
+    "name": "Blazing Strike",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "wondrous_power",
+    "wikiSkillId": "443",
+    "name": "Wondrous Power",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 77"
+  },
+  {
+    "localSkillId": "rushing_retreat",
+    "wikiSkillId": "88110",
+    "name": "Rushing Retreat",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "final_secret_grand_khavatari",
+    "wikiSkillId": "88113",
+    "name": "Final Secret: Grand Khavatari",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "cacophony_of_war",
+    "wikiSkillId": "45439",
+    "name": "Cacophony of War",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "earthquake",
+    "wikiSkillId": "347",
+    "name": "Earthquake",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "golden_stone",
+    "wikiSkillId": "47204",
+    "name": "Golden Stone",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "maphr_s_acumen",
+    "wikiSkillId": "45130",
+    "name": "Maphr’s Acumen",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "adena_stun",
+    "wikiSkillId": "47219",
+    "name": "Adena Stun",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "maphr_s_magic_barrier",
+    "wikiSkillId": "45118",
+    "name": "Maphr's Magic Barrier",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "maphr_s_haste",
+    "wikiSkillId": "45116",
+    "name": "Maphr's Haste",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "trophy_thief",
+    "wikiSkillId": "45281",
+    "name": "Trophy Thief",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "maphr_s_wild_magic",
+    "wikiSkillId": "45132",
+    "name": "Maphr's Wild Magic",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "spoil_crush",
+    "wikiSkillId": "348",
+    "name": "Spoil Crush",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "crushing_leap",
+    "wikiSkillId": "47216",
+    "name": "Crushing Leap",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "maphr_s_wind_walk",
+    "wikiSkillId": "45117",
+    "name": "Maphr's Wind Walk",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "body_crush",
+    "wikiSkillId": "1613",
+    "name": "Body Crush",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 78"
+  },
+  {
+    "localSkillId": "maphr_s_berserker_spirit",
+    "wikiSkillId": "45133",
+    "name": "Maphr's Berserker Spirit",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "rolling_dice",
+    "wikiSkillId": "45539",
+    "name": "Rolling Dice",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "spoil_festival",
+    "wikiSkillId": "302",
+    "name": "Spoil Festival",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "weapon_reinforcement",
+    "wikiSkillId": "1615",
+    "name": "Weapon Reinforcement",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 77"
+  },
+  {
+    "localSkillId": "tenacity",
+    "wikiSkillId": "1617",
+    "name": "Tenacity",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 80"
+  },
+  {
+    "localSkillId": "mount_kukuru",
+    "wikiSkillId": "1836",
+    "name": "Mount Kukuru",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "fortune_time",
+    "wikiSkillId": "47201",
+    "name": "Fortune Time",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "wild_scratch",
+    "wikiSkillId": "47805",
+    "name": "Wild Scratch",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 78"
+  },
+  {
+    "localSkillId": "amazing_piercing",
+    "wikiSkillId": "47802",
+    "name": "Amazing Piercing",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "wild_charge",
+    "wikiSkillId": "47807",
+    "name": "Wild Charge",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "wide_threatening_swing",
+    "wikiSkillId": "47804",
+    "name": "Wide Threatening Swing",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "giant_s_stomp",
+    "wikiSkillId": "47811",
+    "name": "Giant's Stomp",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "wild_growl",
+    "wikiSkillId": "47813",
+    "name": "Wild Growl",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 78"
+  },
+  {
+    "localSkillId": "spirit_weakness",
+    "wikiSkillId": "124",
+    "name": "Spirit Weakness",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "soul_wild_magic",
+    "wikiSkillId": "45148",
+    "name": "Soul Wild Magic",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "rapier_slash",
+    "wikiSkillId": "47988",
+    "name": "Rapier Slash",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "excess_charge",
+    "wikiSkillId": "47979",
+    "name": "Excess Charge",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "soul_haste",
+    "wikiSkillId": "45141",
+    "name": "Soul Haste",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "flash_dash",
+    "wikiSkillId": "45183",
+    "name": "Flash Dash",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "soul_magic_barrier",
+    "wikiSkillId": "45143",
+    "name": "Soul Magic Barrier",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "soul_berserker_spirit",
+    "wikiSkillId": "45149",
+    "name": "Soul Berserker Spirit",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "crescent_swing",
+    "wikiSkillId": "165",
+    "name": "Crescent Swing",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "through_strike",
+    "wikiSkillId": "45160",
+    "name": "Through Strike",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 80"
+  },
+  {
+    "localSkillId": "soul_wind_walk",
+    "wikiSkillId": "45142",
+    "name": "Soul Wind Walk",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "soul_acumen",
+    "wikiSkillId": "45146",
+    "name": "Soul Acumen",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "light_soul_connection",
+    "wikiSkillId": "201",
+    "name": "Light Soul Connection",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "shadow_soul_connection",
+    "wikiSkillId": "202",
+    "name": "Shadow Soul Connection",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "chain_lightning",
+    "wikiSkillId": "167",
+    "name": "Chain Lightning",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "leopold",
+    "wikiSkillId": "174",
+    "name": "Leopold",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "resonance_shield",
+    "wikiSkillId": "87069",
+    "name": "Resonance Shield",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "mount_griffin",
+    "wikiSkillId": "62002",
+    "name": "Mount Griffin",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "soul_reinforcement",
+    "wikiSkillId": "1515",
+    "name": "Soul Reinforcement",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 80"
+  },
+  {
+    "localSkillId": "collect_light_souls",
+    "wikiSkillId": "89301",
+    "name": "Collect Light Souls",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "soul_blade",
+    "wikiSkillId": "47984",
+    "name": "Soul Blade",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "collect_shadow_souls",
+    "wikiSkillId": "89302",
+    "name": "Collect Shadow Souls",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "fragarach",
+    "wikiSkillId": "47981",
+    "name": "Fragarach",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "way_back",
+    "wikiSkillId": "1448",
+    "name": "Way Back",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 80"
+  },
+  {
+    "localSkillId": "enuma_elish",
+    "wikiSkillId": "45157",
+    "name": "Enuma Elish",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 80"
+  },
+  {
+    "localSkillId": "soul_mark",
+    "wikiSkillId": "47976",
+    "name": "Soul Mark",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "rush_impact",
+    "wikiSkillId": "45159",
+    "name": "Rush Impact",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 80"
+  },
+  {
+    "localSkillId": "soul_guard",
+    "wikiSkillId": "1514",
+    "name": "Soul Guard",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "soul_impulse",
+    "wikiSkillId": "45155",
+    "name": "Soul Impulse",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "soul_smash",
+    "wikiSkillId": "477",
+    "name": "Soul Smash",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "increase_power",
+    "wikiSkillId": "1432",
+    "name": "Increase Power",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "soul_prison",
+    "wikiSkillId": "89908",
+    "name": "Soul Prison",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "magic_break",
+    "wikiSkillId": "501",
+    "name": "Magic Break",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "soul_weapon",
+    "wikiSkillId": "89907",
+    "name": "Soul Weapon",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "overwhelming_power",
+    "wikiSkillId": "47970",
+    "name": "Overwhelming Power",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "kamael_symbol",
+    "wikiSkillId": "89924",
+    "name": "Kamael Symbol",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "powerful_rush",
+    "wikiSkillId": "45251",
+    "name": "Powerful Rush",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "disarm",
+    "wikiSkillId": "485",
+    "name": "Disarm",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "earth_tremor",
+    "wikiSkillId": "45249",
+    "name": "Earth Tremor",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "blacksmith_s_attack",
+    "wikiSkillId": "47227",
+    "name": "Blacksmith's Attack",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "hammer_rumble",
+    "wikiSkillId": "45282",
+    "name": "Hammer Rumble",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "prime_master",
+    "wikiSkillId": "47221",
+    "name": "Prime Master",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "mechanical_masterpiece",
+    "wikiSkillId": "47228",
+    "name": "Mechanical Masterpiece",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "greater_wind_shot",
+    "wikiSkillId": "88653",
+    "name": "Greater Wind Shot",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "goring_charge",
+    "wikiSkillId": "47001",
+    "name": "Goring Charge",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "frosty_sting",
+    "wikiSkillId": "88662",
+    "name": "Frosty Sting",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "stealthy_swiftness",
+    "wikiSkillId": "47008",
+    "name": "Stealthy Swiftness",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "wild_dance",
+    "wikiSkillId": "47019",
+    "name": "Wild Dance",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "extra_hit",
+    "wikiSkillId": "47085",
+    "name": "Extra Hit",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "mount_elemental_lyn_draco",
+    "wikiSkillId": "54225",
+    "name": "Mount Elemental Lyn Draco",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "elemental_change",
+    "wikiSkillId": "47045",
+    "name": "Elemental Change",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "cunning_arrow",
+    "wikiSkillId": "1145014",
+    "name": "Cunning Arrow",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "dragon_strike",
+    "wikiSkillId": "47041",
+    "name": "Dragon Strike",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "soul_wound",
+    "wikiSkillId": "1145080",
+    "name": "Soul Wound",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "cunning_arrest",
+    "wikiSkillId": "47402",
+    "name": "Cunning Arrest",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "expert_advantage",
+    "wikiSkillId": "1145038",
+    "name": "Expert Advantage",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "expert_focus",
+    "wikiSkillId": "1145037",
+    "name": "Expert Focus",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "force_unleashed",
+    "wikiSkillId": "1145011",
+    "name": "Force Unleashed",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "expert_sense",
+    "wikiSkillId": "1145036",
+    "name": "Expert Sense",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "ruse",
+    "wikiSkillId": "1145012",
+    "name": "Ruse",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "maneuver",
+    "wikiSkillId": "89125",
+    "name": "Maneuver",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "take_life",
+    "wikiSkillId": "89123",
+    "name": "Take Life",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "thousand_wounds",
+    "wikiSkillId": "89159",
+    "name": "Thousand Wounds",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 78"
+  },
+  {
+    "localSkillId": "crippling_strike",
+    "wikiSkillId": "89151",
+    "name": "Crippling Strike",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 78"
+  },
+  {
+    "localSkillId": "twist",
+    "wikiSkillId": "89143",
+    "name": "Twist",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 77"
+  },
+  {
+    "localSkillId": "walk_in_monster_woods",
+    "wikiSkillId": "89155",
+    "name": "Walk in Monster Woods",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 78"
+  },
+  {
+    "localSkillId": "determination",
+    "wikiSkillId": "89161",
+    "name": "Determination",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 78"
+  },
+  {
+    "localSkillId": "battojutsu",
+    "wikiSkillId": "89171",
+    "name": "Battojutsu",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "omen",
+    "wikiSkillId": "89166",
+    "name": "Omen",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "adamant_will",
+    "wikiSkillId": "89165",
+    "name": "Adamant Will",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "summon_kagami",
+    "wikiSkillId": "54274",
+    "name": "Summon Kagami",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "bright_dance",
+    "wikiSkillId": "87705",
+    "name": "Bright Dance",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "florescence",
+    "wikiSkillId": "87709",
+    "name": "Florescence",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "nature_spirit",
+    "wikiSkillId": "87751",
+    "name": "Nature Spirit",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "glacier_strike",
+    "wikiSkillId": "87704",
+    "name": "Glacier Strike",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "blazing_tempest",
+    "wikiSkillId": "87703",
+    "name": "Blazing Tempest",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "claidheamh_soluis",
+    "wikiSkillId": "87708",
+    "name": "Claidheamh Soluis",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "mount_unicorn",
+    "wikiSkillId": "54256",
+    "name": "Mount Unicorn",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "sephiroth",
+    "wikiSkillId": "87710",
+    "name": "Sephiroth",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "flying_leap",
+    "wikiSkillId": "87821",
+    "name": "Flying Leap",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "judgment",
+    "wikiSkillId": "87807",
+    "name": "Judgment",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "noblesse_circlet",
+    "wikiSkillId": "87890",
+    "name": "Noblesse Circlet",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "light_counter",
+    "wikiSkillId": "87841",
+    "name": "Light Counter",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "decoy",
+    "wikiSkillId": "87824",
+    "name": "Decoy",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "light_discharge",
+    "wikiSkillId": "87810",
+    "name": "Light Discharge",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "divine_guardian",
+    "wikiSkillId": "87850",
+    "name": "Divine Guardian",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "holy_circle",
+    "wikiSkillId": "87813",
+    "name": "Holy Circle",
+    "status": "MATCH",
+    "details": "Canonical match at Lv 76"
+  },
+  {
+    "localSkillId": "master_of_combat",
+    "name": "Master of Combat",
+    "status": "LOCAL_EXTRA",
+    "details": "Exists locally with minLevel >= 76 but no matching canonical record found in wiki dataset."
+  },
+  {
+    "localSkillId": "eye_of_slayer",
+    "name": "Eye of Slayer",
+    "status": "LOCAL_EXTRA",
+    "details": "Exists locally with minLevel >= 76 but no matching canonical record found in wiki dataset."
+  },
+  {
+    "localSkillId": "eye_of_hunter",
+    "name": "Eye of Hunter",
+    "status": "LOCAL_EXTRA",
+    "details": "Exists locally with minLevel >= 76 but no matching canonical record found in wiki dataset."
+  },
+  {
+    "localSkillId": "legendary_archer_master",
+    "name": "Legendary Archer: Master",
+    "status": "LOCAL_EXTRA",
+    "details": "Exists locally with minLevel >= 76 but no matching canonical record found in wiki dataset."
+  },
+  {
+    "localSkillId": "indestructible_blade_master",
+    "name": "Indestructible Blade: Master",
+    "status": "LOCAL_EXTRA",
+    "details": "Exists locally with minLevel >= 76 but no matching canonical record found in wiki dataset."
+  },
+  {
+    "localSkillId": "titan_champion_master",
+    "name": "Titan Champion: Master",
+    "status": "LOCAL_EXTRA",
+    "details": "Exists locally with minLevel >= 76 but no matching canonical record found in wiki dataset."
+  },
+  {
+    "localSkillId": "overwhelming_power_master",
+    "name": "Overwhelming Power: Master",
+    "status": "LOCAL_EXTRA",
+    "details": "Exists locally with minLevel >= 76 but no matching canonical record found in wiki dataset."
+  },
+  {
+    "localSkillId": "cacophony_of_war_master",
+    "name": "Cacophony of War: Master",
+    "status": "LOCAL_EXTRA",
+    "details": "Exists locally with minLevel >= 76 but no matching canonical record found in wiki dataset."
+  },
+  {
+    "localSkillId": "mystic_meteor_master",
+    "name": "Mystic Meteor: Master",
+    "status": "LOCAL_EXTRA",
+    "details": "Exists locally with minLevel >= 76 but no matching canonical record found in wiki dataset."
+  },
+  {
+    "localSkillId": "ultimate_death_knight_master",
+    "name": "Ultimate Death Knight: Master",
+    "status": "LOCAL_EXTRA",
+    "details": "Exists locally with minLevel >= 76 but no matching canonical record found in wiki dataset."
+  },
+  {
+    "localSkillId": "holy_circle_master",
+    "name": "Holy Circle: Master",
+    "status": "LOCAL_EXTRA",
+    "details": "Exists locally with minLevel >= 76 but no matching canonical record found in wiki dataset."
+  },
+  {
+    "localSkillId": "condemnation_master",
+    "name": "Condemnation: Master",
+    "status": "LOCAL_EXTRA",
+    "details": "Exists locally with minLevel >= 76 but no matching canonical record found in wiki dataset."
+  },
+  {
+    "localSkillId": "sephiroth_master",
+    "name": "Sephiroth: Master",
+    "status": "LOCAL_EXTRA",
+    "details": "Exists locally with minLevel >= 76 but no matching canonical record found in wiki dataset."
+  },
+  {
+    "localSkillId": "time_distortion_master",
+    "name": "Time Distortion: Master",
+    "status": "LOCAL_EXTRA",
+    "details": "Exists locally with minLevel >= 76 but no matching canonical record found in wiki dataset."
+  },
+  {
+    "localSkillId": "shelter_master",
+    "name": "Shelter: Master",
+    "status": "LOCAL_EXTRA",
+    "details": "Exists locally with minLevel >= 76 but no matching canonical record found in wiki dataset."
+  },
+  {
+    "localSkillId": "exclusion_master",
+    "name": "Exclusion: Master",
+    "status": "LOCAL_EXTRA",
+    "details": "Exists locally with minLevel >= 76 but no matching canonical record found in wiki dataset."
+  },
+  {
+    "localSkillId": "dark_disruption_master",
+    "name": "Dark Disruption: Master",
+    "status": "LOCAL_EXTRA",
+    "details": "Exists locally with minLevel >= 76 but no matching canonical record found in wiki dataset."
+  },
+  {
+    "localSkillId": "paagrios_touch_master",
+    "name": "Pa'agrio's Touch: Master",
+    "status": "LOCAL_EXTRA",
+    "details": "Exists locally with minLevel >= 76 but no matching canonical record found in wiki dataset."
+  },
+  {
+    "localSkillId": "leopold_master",
+    "name": "Leopold: Master",
+    "status": "LOCAL_EXTRA",
+    "details": "Exists locally with minLevel >= 76 but no matching canonical record found in wiki dataset."
+  }
+]

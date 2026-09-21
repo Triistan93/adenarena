@@ -415,7 +415,7 @@ export function parseCooldownToMs(cdStr) {
  */
 export function transformV2SkillToEcho(sId, s, existingDef = null) {
   const starRank = s.starRank || 1;
-  const isUlt = starRank >= 4;
+  const isUlt = s.isUltimate === true || s.tier === 'ultimate' || (existingDef && existingDef.isUltimate);
   let reqBook = null;
   if (starRank === 2) reqBook = 'book_2star';
   else if (starRank === 3) reqBook = 'book_3star';
@@ -471,14 +471,17 @@ export function transformV2SkillToEcho(sId, s, existingDef = null) {
       sfxGap: s.sfxGap,
       classes: s.classes || [],
       classReq: s.classes?.[0] || 'any',
-      reqLvl: 1,
+      reqLvl: s.minLevel !== undefined ? s.minLevel : 1,
       requiredWeapon: reqWeapon,
       requiredShield: reqShield,
       requiredItemToUnlock: reqBook,
       isUltimate: isUlt,
       starRank,
       overhit: true,
-      toggle: isToggle
+      toggle: isToggle,
+      grade: s.grade || (starRank === 4 ? 'LEGENDARY' : (starRank === 3 ? 'RARE' : (starRank === 2 ? 'ENHANCED' : 'COMMON'))),
+      bookRequirement: s.bookRequirement || null,
+      combatSkill: sId === 'change_armor' ? false : (s.combatSkill !== undefined ? s.combatSkill : true)
     };
   }
 
@@ -1038,8 +1041,8 @@ function buildEchoAdapter() {
           if (SKILL_DEFS_ECHO[sid]) {
             const sDef = SKILL_DEFS_ECHO[sid];
             const currentReq = sDef.reqLvl;
-            const isMasterUlt = sDef.starRank === 5 || sDef.tier === 5 || currentReq >= 90;
-            const isUlt = sDef.isUltimate || sDef.starRank === 4 || sDef.tier === 4 || currentReq >= 80;
+            const isMasterUlt = sDef.tier === 'master_ultimate' || sDef.identity?.tier === 'master_ultimate' || (sDef.starRank === 5 && sDef.isUltimate === true) || currentReq >= 90;
+            const isUlt = sDef.tier === 'ultimate' || sDef.identity?.tier === 'ultimate' || (sDef.isUltimate === true && sDef.id !== 'legendary_archer' && sDef.id !== 'hellfire');
 
             let targetReq = classDef.minLevel;
             if (isMasterUlt) {
@@ -1062,13 +1065,16 @@ function buildEchoAdapter() {
       }
     }
 
-    // Ensure all Stage 0 (Base class) skills have strictly reqLvl = 1
+    // Ensure Stage 0 (Base class) starter skills have strictly reqLvl = 1 (unless canonically higher)
     for (const classDef of Object.values(CANONICAL_CLASS_REGISTRY_V2)) {
       if (classDef.stage === 0 && Array.isArray(classDef.skillIds)) {
         for (const sid of classDef.skillIds) {
           if (SKILL_DEFS_ECHO[sid]) {
-            SKILL_DEFS_ECHO[sid].reqLvl = 1;
-            SKILL_REQS_ECHO[sid] = { reqLvl: 1 };
+            const canonMinLevel = CANONICAL_SKILL_REGISTRY_V2?.[sid]?.minLevel;
+            if (!canonMinLevel || canonMinLevel <= 1) {
+              SKILL_DEFS_ECHO[sid].reqLvl = 1;
+              SKILL_REQS_ECHO[sid] = { reqLvl: 1 };
+            }
           }
         }
       }

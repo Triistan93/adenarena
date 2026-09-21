@@ -1,0 +1,2177 @@
+[
+  {
+    "wikiSkillId": 87462,
+    "rank": 2,
+    "subrank": 0,
+    "href": "/essence/skills/secret_assassin_male_1/87462_2_0.html",
+    "url": "https://l2wiki.com/essence/skills/secret_assassin_male_1/87462_2_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill1040.png",
+    "iconFile": "skill1040.png",
+    "categories": [
+      "Doll effect"
+    ],
+    "classes": [
+      "secret_assassin_male_1",
+      "secret_assassin_male_2",
+      "secret_assassin_male_0",
+      "secret_assassin_male_3",
+      "secret_assassin_female_0",
+      "secret_assassin_female_1",
+      "secret_assassin_female_3",
+      "secret_assassin_female_2"
+    ],
+    "sampleClass": "secret_assassin_male_1",
+    "name": "Skill 87462",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 87463,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/secret_assassin_male_1/87463_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/secret_assassin_male_1/87463_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill1059.png",
+    "iconFile": "skill1059.png",
+    "categories": [
+      "Doll effect"
+    ],
+    "classes": [
+      "secret_assassin_male_1",
+      "secret_assassin_male_2",
+      "secret_assassin_male_3",
+      "secret_assassin_female_1",
+      "secret_assassin_female_3",
+      "secret_assassin_female_2"
+    ],
+    "sampleClass": "secret_assassin_male_1",
+    "name": "Skill 87463",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 87469,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/secret_assassin_male_1/87469_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/secret_assassin_male_1/87469_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill1077.png",
+    "iconFile": "skill1077.png",
+    "categories": [
+      "Doll effect"
+    ],
+    "classes": [
+      "secret_assassin_male_1",
+      "secret_assassin_male_2",
+      "secret_assassin_male_3",
+      "secret_assassin_female_1",
+      "secret_assassin_female_3",
+      "secret_assassin_female_2"
+    ],
+    "sampleClass": "secret_assassin_male_1",
+    "name": "Skill 87469",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 87470,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/secret_assassin_male_1/87470_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/secret_assassin_male_1/87470_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill1242.png",
+    "iconFile": "skill1242.png",
+    "categories": [
+      "Doll effect"
+    ],
+    "classes": [
+      "secret_assassin_male_1",
+      "secret_assassin_male_2",
+      "secret_assassin_male_3",
+      "secret_assassin_female_1",
+      "secret_assassin_female_3",
+      "secret_assassin_female_2"
+    ],
+    "sampleClass": "secret_assassin_male_1",
+    "name": "Skill 87470",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 87472,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/secret_assassin_male_1/87472_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/secret_assassin_male_1/87472_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill1397.png",
+    "iconFile": "skill1397.png",
+    "categories": [
+      "Doll effect"
+    ],
+    "classes": [
+      "secret_assassin_male_1",
+      "secret_assassin_male_2",
+      "secret_assassin_male_3",
+      "secret_assassin_female_1",
+      "secret_assassin_female_3",
+      "secret_assassin_female_2"
+    ],
+    "sampleClass": "secret_assassin_male_1",
+    "name": "Skill 87472",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 87781,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/spirit_1/87781_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/spirit_1/87781_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_sp_spirit_orb_mastery.png",
+    "iconFile": "s_sp_spirit_orb_mastery.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "spirit_1",
+      "spirit_3",
+      "spirit_2"
+    ],
+    "sampleClass": "spirit_1",
+    "name": "Skill 87781",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 87782,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/spirit_1/87782_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/spirit_1/87782_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_sp_spirit_armor_mastery.png",
+    "iconFile": "s_sp_spirit_armor_mastery.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "spirit_1",
+      "spirit_3",
+      "spirit_2"
+    ],
+    "sampleClass": "spirit_1",
+    "name": "Element Weaver's Armor Mastery",
+    "skillType": "Passive: Unique Skills",
+    "description": "It is easier to handle magic with robe equipped.Equipped robe effectP. Def. +20M. Def. +30Max HP +100MP Recovery Rate +3M. Skill Cooldown -15%",
+    "minLevel": 20,
+    "autoGet": false,
+    "status": "ok"
+  },
+  {
+    "wikiSkillId": 87783,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/spirit_0/87783_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/spirit_0/87783_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_sp_children_of_world_tree.png",
+    "iconFile": "s_sp_children_of_world_tree.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "spirit_0"
+    ],
+    "sampleClass": "spirit_0",
+    "name": "Children of the Mother Tree",
+    "skillType": "Passive: Unique Skills",
+    "description": "Grants the blessing of the Mother Tree.HP Recovery Rate +10%MP Recovery Rate +10%M. Skill Critical Rate +8%Max Speed +10",
+    "minLevel": 1,
+    "autoGet": true,
+    "status": "ok"
+  },
+  {
+    "wikiSkillId": 87784,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/spirit_0/87784_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/spirit_0/87784_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_sp_serenade_of_mana.png",
+    "iconFile": "s_sp_serenade_of_mana.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "spirit_0"
+    ],
+    "sampleClass": "spirit_0",
+    "name": "Serenade of Mana",
+    "skillType": "Passive: Unique Skills",
+    "description": "Changes the form of magic two-handed blunt weapon turning it into a more suitable weapon touched by mana.When using magic two-handed blunt weapon:- Turns the weapon into an elemental sphere.- Increases Casting Spd.- Allows to use various kinds of magic.",
+    "minLevel": 1,
+    "autoGet": true,
+    "status": "ok"
+  },
+  {
+    "wikiSkillId": 87785,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/spirit_3/87785_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/spirit_3/87785_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_sp_talent_of_magic.png",
+    "iconFile": "s_sp_talent_of_magic.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "spirit_3"
+    ],
+    "sampleClass": "spirit_3",
+    "name": "Talent for Magic",
+    "skillType": "Passive: Unique Skills",
+    "description": "The inherent magic gift allows to handle magic even more skillfully.M. Atk. +10%M. Skill Cooldown -5%",
+    "minLevel": 76,
+    "autoGet": false,
+    "status": "ok"
+  },
+  {
+    "wikiSkillId": 87786,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/spirit_3/87786_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/spirit_3/87786_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_sp_mana_extension.png",
+    "iconFile": "s_sp_mana_extension.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "spirit_3"
+    ],
+    "sampleClass": "spirit_3",
+    "name": "Mana Extension",
+    "skillType": "Passive: Unique Skills",
+    "description": "Increases the character's MP.Max MP +15%Max MP +2000",
+    "minLevel": 76,
+    "autoGet": false,
+    "status": "ok"
+  },
+  {
+    "wikiSkillId": 87787,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/spirit_3/87787_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/spirit_3/87787_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_sp_ordinary_meditation.png",
+    "iconFile": "s_sp_ordinary_meditation.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "spirit_3"
+    ],
+    "sampleClass": "spirit_3",
+    "name": "Simple Meditation",
+    "skillType": "Passive: Unique Skills",
+    "description": "Contemplation and reflection can strengthen the spirit just as well as physical training.Max HP +300Max MP +300M. Atk. +10%M. Skill Power +5%Spiritshot damage +5%",
+    "minLevel": 76,
+    "autoGet": false,
+    "status": "ok"
+  },
+  {
+    "wikiSkillId": 87788,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/spirit_3/87788_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/spirit_3/87788_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_sp_critical_magic.png",
+    "iconFile": "s_sp_critical_magic.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "spirit_3"
+    ],
+    "sampleClass": "spirit_3",
+    "name": "Skill 87788",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 87789,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/spirit_3/87789_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/spirit_3/87789_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_sp_light_mastery.png",
+    "iconFile": "s_sp_light_mastery.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "spirit_3"
+    ],
+    "sampleClass": "spirit_3",
+    "name": "Skill 87789",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 87790,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/spirit_3/87790_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/spirit_3/87790_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_sp_extream_magic.png",
+    "iconFile": "s_sp_extream_magic.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "spirit_3"
+    ],
+    "sampleClass": "spirit_3",
+    "name": "Extreme Magic",
+    "skillType": "Passive: Unique Skills",
+    "description": "Enhances fire magic and ice magic to the maximim.Fire Sphere/ Ice SphereIncreases attack power and the number of attacks.Blazing Tempest/ Glacier StrikeIncreases power and attack range.",
+    "minLevel": 76,
+    "autoGet": false,
+    "status": "ok"
+  },
+  {
+    "wikiSkillId": 87791,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/spirit_3/87791_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/spirit_3/87791_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_sp_natural_assimilation.png",
+    "iconFile": "s_sp_natural_assimilation.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "spirit_3"
+    ],
+    "sampleClass": "spirit_3",
+    "name": "One With Nature",
+    "skillType": "Passive: Unique Skills",
+    "description": "Grants the feeling of unity with nature and better understanding of its power.Nature Spirit → Nature's BlessingIncreases HP/ MP Recovery Rate.Decreases debuff/ anomaly duration.When using light magic, with a 100% chance applies the enhanced buff.When using light magic, enhanced the applied buff.Florescence → Full FlorescenceImmediately summons Twining Plants.Immediately triggers the combination of influences with light magic.Upon getting the skill, Spirit Ore consumption for enhanced magic increases.",
+    "minLevel": 76,
+    "autoGet": false,
+    "status": "ok"
+  },
+  {
+    "wikiSkillId": 87881,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/sacred_templar_1/87881_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/sacred_templar_1/87881_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_st_weapon_mastery.png",
+    "iconFile": "s_st_weapon_mastery.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "sacred_templar_1",
+      "sacred_templar_2"
+    ],
+    "sampleClass": "sacred_templar_1",
+    "name": "Sacral Weapon Mastery",
+    "skillType": "Passive: Unique Skills",
+    "description": "The energy of light grants knowledge about the weapon power.When using a one-handed sword and shield:P. Atk. +60",
+    "minLevel": 20,
+    "autoGet": false,
+    "status": "ok"
+  },
+  {
+    "wikiSkillId": 87882,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/sacred_templar_1/87882_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/sacred_templar_1/87882_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_st_armor_mastery.png",
+    "iconFile": "s_st_armor_mastery.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "sacred_templar_1",
+      "sacred_templar_2"
+    ],
+    "sampleClass": "sacred_templar_1",
+    "name": "Sacral Armor Mastery",
+    "skillType": "Passive: Unique Skills",
+    "description": "The energy of light grants knowledge about armor strength.Equipped heavy armor effectP. Def. +50M. Def. +50",
+    "minLevel": 20,
+    "autoGet": false,
+    "status": "ok"
+  },
+  {
+    "wikiSkillId": 87911,
+    "rank": 2,
+    "subrank": 0,
+    "href": "/essence/skills/sacred_templar_1/87911_2_0.html",
+    "url": "https://l2wiki.com/essence/skills/sacred_templar_1/87911_2_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill1068.png",
+    "iconFile": "skill1068.png",
+    "categories": [
+      "Doll effect"
+    ],
+    "classes": [
+      "sacred_templar_1",
+      "spirit_1",
+      "spirit_0",
+      "spirit_3",
+      "sacred_templar_2",
+      "spirit_2"
+    ],
+    "sampleClass": "sacred_templar_1",
+    "name": "Might",
+    "skillType": "Passive: Doll effect",
+    "description": "P. Atk. +150",
+    "minLevel": 20,
+    "autoGet": false,
+    "status": "ok"
+  },
+  {
+    "wikiSkillId": 87912,
+    "rank": 2,
+    "subrank": 0,
+    "href": "/essence/skills/sacred_templar_1/87912_2_0.html",
+    "url": "https://l2wiki.com/essence/skills/sacred_templar_1/87912_2_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill1040.png",
+    "iconFile": "skill1040.png",
+    "categories": [
+      "Doll effect"
+    ],
+    "classes": [
+      "sacred_templar_1",
+      "spirit_1",
+      "spirit_0",
+      "spirit_3",
+      "sacred_templar_2",
+      "spirit_2"
+    ],
+    "sampleClass": "sacred_templar_1",
+    "name": "Shield",
+    "skillType": "Passive: Doll effect",
+    "description": "P. Def. +200",
+    "minLevel": 20,
+    "autoGet": false,
+    "status": "ok"
+  },
+  {
+    "wikiSkillId": 87913,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/sacred_templar_1/87913_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/sacred_templar_1/87913_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill1059.png",
+    "iconFile": "skill1059.png",
+    "categories": [
+      "Doll effect"
+    ],
+    "classes": [
+      "sacred_templar_1",
+      "spirit_1",
+      "spirit_3",
+      "sacred_templar_2",
+      "spirit_2"
+    ],
+    "sampleClass": "sacred_templar_1",
+    "name": "Skill 87913",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 87919,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/sacred_templar_1/87919_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/sacred_templar_1/87919_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill1077.png",
+    "iconFile": "skill1077.png",
+    "categories": [
+      "Doll effect"
+    ],
+    "classes": [
+      "sacred_templar_1",
+      "spirit_1",
+      "spirit_3",
+      "sacred_templar_2",
+      "spirit_2"
+    ],
+    "sampleClass": "sacred_templar_1",
+    "name": "Skill 87919",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 87920,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/sacred_templar_1/87920_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/sacred_templar_1/87920_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill1242.png",
+    "iconFile": "skill1242.png",
+    "categories": [
+      "Doll effect"
+    ],
+    "classes": [
+      "sacred_templar_1",
+      "spirit_1",
+      "spirit_3",
+      "sacred_templar_2",
+      "spirit_2"
+    ],
+    "sampleClass": "sacred_templar_1",
+    "name": "Skill 87920",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 87922,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/sacred_templar_1/87922_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/sacred_templar_1/87922_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill1397.png",
+    "iconFile": "skill1397.png",
+    "categories": [
+      "Doll effect"
+    ],
+    "classes": [
+      "sacred_templar_1",
+      "spirit_1",
+      "spirit_3",
+      "sacred_templar_2",
+      "spirit_2"
+    ],
+    "sampleClass": "sacred_templar_1",
+    "name": "Skill 87922",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 88026,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/sword_muse/88026_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/sword_muse/88026_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_vivace_muse.png",
+    "iconFile": "s_vivace_muse.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "sword_muse"
+    ],
+    "sampleClass": "sword_muse",
+    "name": "Cantabile",
+    "skillType": "Passive: Unique Skills",
+    "description": "Max HP/ MP +1000P. Atk. +25%P./ M. Def. +1000PvE damage bonus +15%<Skill upgrade>Amadeus → Amadeus: CantabileSong of Earth → Song of Earth: CantabileAmadeus: CantabileIncreases Max HP, momentarily recovers bonus HP. Increases P. Atk., P. Def., M. Def., P. Skill Power, P. Skill Critical Rate/ Damage, Speed. Decreases received Skill Critical Damage and received AoE Skill Damage. Enhances the Ultimate Defense and Additional Strain skills.Song of Earth: CantabileIncreases nearby allies' P. Def., M. Def., Skill Critical Rate, Speed. Additionally, increases Elves' STR/ INT/ DEX/ WIT.",
+    "minLevel": 76,
+    "autoGet": false,
+    "status": "ok"
+  },
+  {
+    "wikiSkillId": 88028,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/spectral_dancer/88028_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/spectral_dancer/88028_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_vivace_dancer.png",
+    "iconFile": "s_vivace_dancer.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "spectral_dancer"
+    ],
+    "sampleClass": "spectral_dancer",
+    "name": "Vivace",
+    "skillType": "Passive: Unique Skills",
+    "description": "Max HP/ MP +1000P. Atk. +25%P./ M. Def. +1000PvE damage bonus +15%<Skill upgrade>Flamenco → Flamenco: VivaceDance of Warrior → Dance of Warrior: VivaceFlamenco: VivaceIncreases Max HP, momentarily recovers bonus HP. Increases P. Atk., P. Def., M. Def., P. Skill Power, P. Skill Critical Rate/ Damage, Speed. Decreases received Skill Critical Damage and received AoE Skill Damage. Enhances the Ultimate Defense and Break skills.Dance of Warrior: VivaceIncreases nearby allies' P. Atk., M. Atk., Skill Critical Damage, Atk. Spd., Casting Spd. Additionally, increases Dark Elves' STR/ INT/ CON/ MEN.",
+    "minLevel": 76,
+    "autoGet": false,
+    "status": "ok"
+  },
+  {
+    "wikiSkillId": 88031,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/shillien_templar/88031_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/shillien_templar/88031_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_owner_of_thunder.png",
+    "iconFile": "s_owner_of_thunder.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "shillien_templar"
+    ],
+    "sampleClass": "shillien_templar",
+    "name": "Thunder Master",
+    "skillType": "Passive: Unique Skills",
+    "description": "Lets you control powerful lightning storms.P. Atk. +3%P. Skill Critical Damage +5%PvE damage bonus +10%Paralysis Atk. Rate +15%Mass Lightning Strike → Shillien's Tempest- Increases the number of attacks: 1 → 2.- Increases number of targets.- Increases the number of Paralysis effects: 1 → 2.- Applies a debuff that decreases Paralysis Resistance.- Increases attack angle.Templar's Assault- Adds an additional strike triggered on attack with a 50% chance.",
+    "minLevel": 76,
+    "autoGet": false,
+    "status": "ok"
+  },
+  {
+    "wikiSkillId": 88040,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/evas_templar/88040_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/evas_templar/88040_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_strength_of_knight_eva.png",
+    "iconFile": "s_strength_of_knight_eva.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "evas_templar"
+    ],
+    "sampleClass": "evas_templar",
+    "name": "Templar's Power",
+    "skillType": "Passive: Unique Skills",
+    "description": "P. Def. +500Applies the following effects based on your combat power:<Combat power 0-999>- P. Atk. +1000<Combat power 1000-1999>- P. Atk. +1500<Combat power 2000+>- P. Atk. +2000",
+    "minLevel": 76,
+    "autoGet": false,
+    "status": "ok"
+  },
+  {
+    "wikiSkillId": 88044,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/shillien_templar/88044_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/shillien_templar/88044_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_strength_of_knight_shilen.png",
+    "iconFile": "s_strength_of_knight_shilen.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "shillien_templar"
+    ],
+    "sampleClass": "shillien_templar",
+    "name": "Templar's Power",
+    "skillType": "Passive: Unique Skills",
+    "description": "P. Def. +500Applies the following effects based on your combat power:<Combat power 0-999>- P. Atk. +1000<Combat power 1000-1999>- P. Atk. +1500<Combat power 2000+>- P. Atk. +2000",
+    "minLevel": 76,
+    "autoGet": false,
+    "status": "ok"
+  },
+  {
+    "wikiSkillId": 88049,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/evas_templar/88049_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/evas_templar/88049_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_templar_weapon_mastery.png",
+    "iconFile": "s_templar_weapon_mastery.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "evas_templar",
+      "shillien_templar"
+    ],
+    "sampleClass": "evas_templar",
+    "name": "Templar's Weapon Mastery",
+    "skillType": "Passive: Unique Skills",
+    "description": "When using a sword or a blunt weapon:P. Atk. +10%P. Atk. +585Shock Atk. Rate +15%",
+    "minLevel": 76,
+    "autoGet": false,
+    "status": "ok"
+  },
+  {
+    "wikiSkillId": 88050,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/evas_templar/88050_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/evas_templar/88050_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_templar_armor_mastery.png",
+    "iconFile": "s_templar_armor_mastery.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "evas_templar",
+      "shillien_templar"
+    ],
+    "sampleClass": "evas_templar",
+    "name": "Skill 88050",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 88053,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/evas_templar/88053_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/evas_templar/88053_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_perfect_shield_eva.png",
+    "iconFile": "s_perfect_shield_eva.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "evas_templar"
+    ],
+    "sampleClass": "evas_templar",
+    "name": "Skill 88053",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 88055,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/shillien_templar/88055_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/shillien_templar/88055_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_perfect_shield_shilen.png",
+    "iconFile": "s_perfect_shield_shilen.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "shillien_templar"
+    ],
+    "sampleClass": "shillien_templar",
+    "name": "Skill 88055",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 88071,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/evas_templar/88071_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/evas_templar/88071_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_owner_of_water.png",
+    "iconFile": "s_owner_of_water.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "evas_templar"
+    ],
+    "sampleClass": "evas_templar",
+    "name": "Skill 88071",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 88080,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/shillien_knight/88080_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/shillien_knight/88080_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill0000.png",
+    "iconFile": "skill0000.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "shillien_knight"
+    ],
+    "sampleClass": "shillien_knight",
+    "name": "Skill 88080",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 88082,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/secret_assassin_male_3/88082_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/secret_assassin_male_3/88082_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_find_weakness.png",
+    "iconFile": "s_find_weakness.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "secret_assassin_male_3",
+      "secret_assassin_female_3"
+    ],
+    "sampleClass": "secret_assassin_male_3",
+    "name": "Skill 88082",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 88118,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/grand_khavatari/88118_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/grand_khavatari/88118_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill10335.png",
+    "iconFile": "skill10335.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "grand_khavatari"
+    ],
+    "sampleClass": "grand_khavatari",
+    "name": "Skill 88118",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 88119,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/grand_khavatari/88119_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/grand_khavatari/88119_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/zealot_3.png",
+    "iconFile": "zealot_3.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "grand_khavatari"
+    ],
+    "sampleClass": "grand_khavatari",
+    "name": "Skill 88119",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 88123,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/grand_khavatari/88123_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/grand_khavatari/88123_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_dethrone_fire_combat_1.png",
+    "iconFile": "s_dethrone_fire_combat_1.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "grand_khavatari"
+    ],
+    "sampleClass": "grand_khavatari",
+    "name": "Skill 88123",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 88241,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/elemental_master/88241_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/elemental_master/88241_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_elemental_mastery.png",
+    "iconFile": "s_elemental_mastery.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "elemental_master"
+    ],
+    "sampleClass": "elemental_master",
+    "name": "Skill 88241",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 88243,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/elemental_summoner/88243_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/elemental_summoner/88243_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_elemental_sync.png",
+    "iconFile": "s_elemental_sync.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "elemental_summoner"
+    ],
+    "sampleClass": "elemental_summoner",
+    "name": "Skill 88243",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 88244,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/elemental_master/88244_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/elemental_master/88244_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_heart_sync.png",
+    "iconFile": "s_heart_sync.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "elemental_master"
+    ],
+    "sampleClass": "elemental_master",
+    "name": "Skill 88244",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 88245,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/elemental_master/88245_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/elemental_master/88245_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_unicorn_training.png",
+    "iconFile": "s_unicorn_training.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "elemental_master"
+    ],
+    "sampleClass": "elemental_master",
+    "name": "Skill 88245",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 88246,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/elemental_master/88246_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/elemental_master/88246_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_unicorn_potential.png",
+    "iconFile": "s_unicorn_potential.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "elemental_master"
+    ],
+    "sampleClass": "elemental_master",
+    "name": "Skill 88246",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 88247,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/elemental_master/88247_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/elemental_master/88247_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_unicorn_communion.png",
+    "iconFile": "s_unicorn_communion.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "elemental_master"
+    ],
+    "sampleClass": "elemental_master",
+    "name": "Skill 88247",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 88248,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/elemental_master/88248_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/elemental_master/88248_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_fantastic_rainbow.png",
+    "iconFile": "s_fantastic_rainbow.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "elemental_master"
+    ],
+    "sampleClass": "elemental_master",
+    "name": "Skill 88248",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 88249,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/elemental_master/88249_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/elemental_master/88249_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill0913.png",
+    "iconFile": "skill0913.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "elemental_master"
+    ],
+    "sampleClass": "elemental_master",
+    "name": "Skill 88249",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 88250,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/elemental_master/88250_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/elemental_master/88250_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill1527.png",
+    "iconFile": "skill1527.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "elemental_master"
+    ],
+    "sampleClass": "elemental_master",
+    "name": "Skill 88250",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 88317,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/cardinal/88317_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/cardinal/88317_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_twilight.png",
+    "iconFile": "s_twilight.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "cardinal"
+    ],
+    "sampleClass": "cardinal",
+    "name": "Skill 88317",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 88331,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/cardinal/88331_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/cardinal/88331_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_buff_boost_archangel1.png",
+    "iconFile": "s_buff_boost_archangel1.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "cardinal"
+    ],
+    "sampleClass": "cardinal",
+    "name": "Skill 88331",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 88335,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/cardinal/88335_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/cardinal/88335_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_bless_of_einhasad2.png",
+    "iconFile": "s_bless_of_einhasad2.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "cardinal"
+    ],
+    "sampleClass": "cardinal",
+    "name": "Skill 88335",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 88348,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/evas_saint/88348_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/evas_saint/88348_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_children_of_eva2.png",
+    "iconFile": "s_children_of_eva2.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "evas_saint"
+    ],
+    "sampleClass": "evas_saint",
+    "name": "Skill 88348",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 88356,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/doomcryer/88356_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/doomcryer/88356_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_flame_heart.png",
+    "iconFile": "s_flame_heart.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "doomcryer"
+    ],
+    "sampleClass": "doomcryer",
+    "name": "Skill 88356",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 88357,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/dominator/88357_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/dominator/88357_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_flame_heart2.png",
+    "iconFile": "s_flame_heart2.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "dominator"
+    ],
+    "sampleClass": "dominator",
+    "name": "Skill 88357",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 88360,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/orc_shaman/88360_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/orc_shaman/88360_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_flame_mark.png",
+    "iconFile": "s_flame_mark.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "orc_shaman",
+      "doomcryer",
+      "warcryer",
+      "dominator",
+      "overlord"
+    ],
+    "sampleClass": "orc_shaman",
+    "name": "Skill 88360",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 88451,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/werewolf_1/88451_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/werewolf_1/88451_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill11837.png",
+    "iconFile": "skill11837.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "werewolf_1",
+      "werewolf_2",
+      "werewolf_3"
+    ],
+    "sampleClass": "werewolf_1",
+    "name": "Skill 88451",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 88452,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/werewolf_1/88452_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/werewolf_1/88452_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill10253.png",
+    "iconFile": "skill10253.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "werewolf_1",
+      "werewolf_2",
+      "werewolf_3"
+    ],
+    "sampleClass": "werewolf_1",
+    "name": "Skill 88452",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 88453,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/werewolf_2/88453_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/werewolf_2/88453_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_werewolf_awaken_potential.png",
+    "iconFile": "s_werewolf_awaken_potential.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "werewolf_2"
+    ],
+    "sampleClass": "werewolf_2",
+    "name": "Skill 88453",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 88454,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/werewolf_3/88454_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/werewolf_3/88454_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_werewolf_evolving_potential.png",
+    "iconFile": "s_werewolf_evolving_potential.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "werewolf_3"
+    ],
+    "sampleClass": "werewolf_3",
+    "name": "Skill 88454",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 88456,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/werewolf_3/88456_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/werewolf_3/88456_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_werewolf_high_agility.png",
+    "iconFile": "s_werewolf_high_agility.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "werewolf_3"
+    ],
+    "sampleClass": "werewolf_3",
+    "name": "Skill 88456",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 88457,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/werewolf_3/88457_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/werewolf_3/88457_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_werewolf_savage_instinct.png",
+    "iconFile": "s_werewolf_savage_instinct.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "werewolf_3"
+    ],
+    "sampleClass": "werewolf_3",
+    "name": "Skill 88457",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 88458,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/werewolf_3/88458_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/werewolf_3/88458_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_werewolf_strong_body.png",
+    "iconFile": "s_werewolf_strong_body.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "werewolf_3"
+    ],
+    "sampleClass": "werewolf_3",
+    "name": "Skill 88458",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 88459,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/werewolf_3/88459_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/werewolf_3/88459_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_werewolf_physical_might.png",
+    "iconFile": "s_werewolf_physical_might.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "werewolf_3"
+    ],
+    "sampleClass": "werewolf_3",
+    "name": "Skill 88459",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 88460,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/werewolf_3/88460_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/werewolf_3/88460_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_transform_ancient_werewolf.png",
+    "iconFile": "s_transform_ancient_werewolf.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "werewolf_3"
+    ],
+    "sampleClass": "werewolf_3",
+    "name": "Skill 88460",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 88461,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/werewolf_3/88461_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/werewolf_3/88461_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_werewolf_health.png",
+    "iconFile": "s_werewolf_health.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "werewolf_3"
+    ],
+    "sampleClass": "werewolf_3",
+    "name": "Skill 88461",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 88462,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/werewolf_3/88462_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/werewolf_3/88462_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_werewolf_movement.png",
+    "iconFile": "s_werewolf_movement.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "werewolf_3"
+    ],
+    "sampleClass": "werewolf_3",
+    "name": "Skill 88462",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 88499,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/werewolf_3/88499_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/werewolf_3/88499_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_stigma_chasing.png",
+    "iconFile": "s_stigma_chasing.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "werewolf_3"
+    ],
+    "sampleClass": "werewolf_3",
+    "name": "Skill 88499",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 88574,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/rose_vain_3/88574_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/rose_vain_3/88574_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_solid_vine_robe.png",
+    "iconFile": "s_solid_vine_robe.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "rose_vain_3"
+    ],
+    "sampleClass": "rose_vain_3",
+    "name": "Skill 88574",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 88582,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/rose_vain_3/88582_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/rose_vain_3/88582_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_eternal_nightmare.png",
+    "iconFile": "s_eternal_nightmare.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "rose_vain_3"
+    ],
+    "sampleClass": "rose_vain_3",
+    "name": "Skill 88582",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 88596,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/rose_vain_0/88596_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/rose_vain_0/88596_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_ghost_step.png",
+    "iconFile": "s_ghost_step.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "rose_vain_0"
+    ],
+    "sampleClass": "rose_vain_0",
+    "name": "Skill 88596",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 88598,
+    "rank": 4,
+    "subrank": 0,
+    "href": "/essence/skills/rose_vain_3/88598_4_0.html",
+    "url": "https://l2wiki.com/essence/skills/rose_vain_3/88598_4_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_eternal_blossom.png",
+    "iconFile": "s_eternal_blossom.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "rose_vain_3",
+      "rose_vain_0",
+      "rose_vain_2",
+      "rose_vain_1"
+    ],
+    "sampleClass": "rose_vain_3",
+    "name": "Skill 88598",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 88603,
+    "rank": 5,
+    "subrank": 0,
+    "href": "/essence/skills/rose_vain_3/88603_5_0.html",
+    "url": "https://l2wiki.com/essence/skills/rose_vain_3/88603_5_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_magic_dagger_mastery.png",
+    "iconFile": "s_magic_dagger_mastery.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "rose_vain_3",
+      "rose_vain_2",
+      "rose_vain_1"
+    ],
+    "sampleClass": "rose_vain_3",
+    "name": "Skill 88603",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 88604,
+    "rank": 5,
+    "subrank": 0,
+    "href": "/essence/skills/rose_vain_3/88604_5_0.html",
+    "url": "https://l2wiki.com/essence/skills/rose_vain_3/88604_5_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_rose_robe_mastery.png",
+    "iconFile": "s_rose_robe_mastery.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "rose_vain_3",
+      "rose_vain_2",
+      "rose_vain_1"
+    ],
+    "sampleClass": "rose_vain_3",
+    "name": "Skill 88604",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 88605,
+    "rank": 5,
+    "subrank": 0,
+    "href": "/essence/skills/rose_vain_3/88605_5_0.html",
+    "url": "https://l2wiki.com/essence/skills/rose_vain_3/88605_5_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_rose_and_dagger.png",
+    "iconFile": "s_rose_and_dagger.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "rose_vain_3",
+      "rose_vain_0",
+      "rose_vain_2",
+      "rose_vain_1"
+    ],
+    "sampleClass": "rose_vain_3",
+    "name": "Skill 88605",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 88606,
+    "rank": 5,
+    "subrank": 0,
+    "href": "/essence/skills/rose_vain_3/88606_5_0.html",
+    "url": "https://l2wiki.com/essence/skills/rose_vain_3/88606_5_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_solid_robe.png",
+    "iconFile": "s_solid_robe.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "rose_vain_3",
+      "rose_vain_2",
+      "rose_vain_1"
+    ],
+    "sampleClass": "rose_vain_3",
+    "name": "Skill 88606",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 88607,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/rose_vain_3/88607_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/rose_vain_3/88607_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_recovery_seed.png",
+    "iconFile": "s_recovery_seed.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "rose_vain_3"
+    ],
+    "sampleClass": "rose_vain_3",
+    "name": "Skill 88607",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 88609,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/rose_vain_3/88609_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/rose_vain_3/88609_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_vine_guard.png",
+    "iconFile": "s_vine_guard.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "rose_vain_3"
+    ],
+    "sampleClass": "rose_vain_3",
+    "name": "Skill 88609",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 88610,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/rose_vain_3/88610_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/rose_vain_3/88610_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_vine_forest.png",
+    "iconFile": "s_vine_forest.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "rose_vain_3"
+    ],
+    "sampleClass": "rose_vain_3",
+    "name": "Skill 88610",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 88638,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/grand_khavatari/88638_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/grand_khavatari/88638_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/master_combat_kv.png",
+    "iconFile": "master_combat_kv.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "grand_khavatari"
+    ],
+    "sampleClass": "grand_khavatari",
+    "name": "Skill 88638",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 88680,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/dominator/88680_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/dominator/88680_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_ev_season_red_aura_buff.png",
+    "iconFile": "s_ev_season_red_aura_buff.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "dominator"
+    ],
+    "sampleClass": "dominator",
+    "name": "Skill 88680",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 88681,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/doomcryer/88681_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/doomcryer/88681_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_blazing_flame.png",
+    "iconFile": "s_blazing_flame.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "doomcryer"
+    ],
+    "sampleClass": "doomcryer",
+    "name": "Skill 88681",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 88710,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/adventurer/88710_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/adventurer/88710_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill31328_1.png",
+    "iconFile": "skill31328_1.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "adventurer"
+    ],
+    "sampleClass": "adventurer",
+    "name": "Skill 88710",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 88711,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/wind_rider/88711_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/wind_rider/88711_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill30928.png",
+    "iconFile": "skill30928.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "wind_rider"
+    ],
+    "sampleClass": "wind_rider",
+    "name": "Skill 88711",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 88712,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/ghost_hunter/88712_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/ghost_hunter/88712_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill11029.png",
+    "iconFile": "skill11029.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "ghost_hunter"
+    ],
+    "sampleClass": "ghost_hunter",
+    "name": "Skill 88712",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 89177,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/crow_2/89177_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/crow_2/89177_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_straw_training.png",
+    "iconFile": "s_straw_training.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "crow_2",
+      "crow_3"
+    ],
+    "sampleClass": "crow_2",
+    "name": "Skill 89177",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 89178,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/crow_2/89178_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/crow_2/89178_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_acuity_training.png",
+    "iconFile": "s_acuity_training.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "crow_2",
+      "crow_3"
+    ],
+    "sampleClass": "crow_2",
+    "name": "Skill 89178",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 89179,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/crow_2/89179_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/crow_2/89179_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_grabbing_training_low.png",
+    "iconFile": "s_grabbing_training_low.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "crow_2",
+      "crow_3"
+    ],
+    "sampleClass": "crow_2",
+    "name": "Skill 89179",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 89180,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/crow_3/89180_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/crow_3/89180_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_centripetal_training.png",
+    "iconFile": "s_centripetal_training.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "crow_3"
+    ],
+    "sampleClass": "crow_3",
+    "name": "Skill 89180",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 89181,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/crow_3/89181_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/crow_3/89181_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_physical_training.png",
+    "iconFile": "s_physical_training.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "crow_3"
+    ],
+    "sampleClass": "crow_3",
+    "name": "Skill 89181",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 89182,
+    "rank": 2,
+    "subrank": 0,
+    "href": "/essence/skills/crow_2/89182_2_0.html",
+    "url": "https://l2wiki.com/essence/skills/crow_2/89182_2_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_avowed_pledge_low.png",
+    "iconFile": "s_avowed_pledge_low.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "crow_2",
+      "crow_0",
+      "crow_3"
+    ],
+    "sampleClass": "crow_2",
+    "name": "Skill 89182",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 89183,
+    "rank": 2,
+    "subrank": 0,
+    "href": "/essence/skills/crow_2/89183_2_0.html",
+    "url": "https://l2wiki.com/essence/skills/crow_2/89183_2_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_fighting_spirit_low.png",
+    "iconFile": "s_fighting_spirit_low.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "crow_2",
+      "crow_0",
+      "crow_3"
+    ],
+    "sampleClass": "crow_2",
+    "name": "Skill 89183",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 89186,
+    "rank": 2,
+    "subrank": 0,
+    "href": "/essence/skills/crow_2/89186_2_0.html",
+    "url": "https://l2wiki.com/essence/skills/crow_2/89186_2_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_heart_sword.png",
+    "iconFile": "s_heart_sword.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "crow_2",
+      "crow_0",
+      "crow_3"
+    ],
+    "sampleClass": "crow_2",
+    "name": "Skill 89186",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 89187,
+    "rank": 3,
+    "subrank": 0,
+    "href": "/essence/skills/crow_2/89187_3_0.html",
+    "url": "https://l2wiki.com/essence/skills/crow_2/89187_3_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_crow_weapon_mastery.png",
+    "iconFile": "s_crow_weapon_mastery.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "crow_2",
+      "crow_0",
+      "crow_3"
+    ],
+    "sampleClass": "crow_2",
+    "name": "Skill 89187",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 89188,
+    "rank": 3,
+    "subrank": 0,
+    "href": "/essence/skills/crow_2/89188_3_0.html",
+    "url": "https://l2wiki.com/essence/skills/crow_2/89188_3_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_crow_armour_mastery.png",
+    "iconFile": "s_crow_armour_mastery.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "crow_2",
+      "crow_0",
+      "crow_3"
+    ],
+    "sampleClass": "crow_2",
+    "name": "Skill 89188",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 89196,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/crow_0/89196_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/crow_0/89196_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill0000.png",
+    "iconFile": "skill0000.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "crow_0"
+    ],
+    "sampleClass": "crow_0",
+    "name": "Skill 89196",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 89229,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/archmage/89229_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/archmage/89229_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill1292.png",
+    "iconFile": "skill1292.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "archmage"
+    ],
+    "sampleClass": "archmage",
+    "name": "Skill 89229",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 89230,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/storm_screamer/89230_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/storm_screamer/89230_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill1292.png",
+    "iconFile": "skill1292.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "storm_screamer"
+    ],
+    "sampleClass": "storm_screamer",
+    "name": "Skill 89230",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 89231,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/soultaker/89231_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/soultaker/89231_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill1292.png",
+    "iconFile": "skill1292.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "soultaker"
+    ],
+    "sampleClass": "soultaker",
+    "name": "Skill 89231",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 89232,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/mystic_muse/89232_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/mystic_muse/89232_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill1292.png",
+    "iconFile": "skill1292.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "mystic_muse"
+    ],
+    "sampleClass": "mystic_muse",
+    "name": "Skill 89232",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 89334,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/soul_finder/89334_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/soul_finder/89334_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill_jinkama_white1.png",
+    "iconFile": "skill_jinkama_white1.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "soul_finder",
+      "soul_breaker"
+    ],
+    "sampleClass": "soul_finder",
+    "name": "Skill 89334",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 89335,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/soul_finder/89335_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/soul_finder/89335_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill_jinkama_black1.png",
+    "iconFile": "skill_jinkama_black1.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "soul_finder",
+      "soul_breaker"
+    ],
+    "sampleClass": "soul_finder",
+    "name": "Skill 89335",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 89336,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/soul_hound/89336_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/soul_hound/89336_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_hound_training.png",
+    "iconFile": "s_hound_training.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "soul_hound"
+    ],
+    "sampleClass": "soul_hound",
+    "name": "Skill 89336",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 89918,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/trooper/89918_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/trooper/89918_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill_jinkama_white1.png",
+    "iconFile": "skill_jinkama_white1.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "trooper",
+      "berserker"
+    ],
+    "sampleClass": "trooper",
+    "name": "Skill 89918",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 89919,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/trooper/89919_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/trooper/89919_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill_jinkama_black1.png",
+    "iconFile": "skill_jinkama_black1.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "trooper",
+      "berserker"
+    ],
+    "sampleClass": "trooper",
+    "name": "Skill 89919",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 89970,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/sagittarius/89970_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/sagittarius/89970_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_agile.png",
+    "iconFile": "s_agile.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "sagittarius",
+      "moonlight_sentinel",
+      "ghost_sentinel"
+    ],
+    "sampleClass": "sagittarius",
+    "name": "Skill 89970",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 1145040,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/trickster/1145040_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/trickster/1145040_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_kamaelic_resilience.png",
+    "iconFile": "s_kamaelic_resilience.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "trickster"
+    ],
+    "sampleClass": "trickster",
+    "name": "Skill 1145040",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 1145062,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/trickster/1145062_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/trickster/1145062_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_kamaelic_supremacy.png",
+    "iconFile": "s_kamaelic_supremacy.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "trickster"
+    ],
+    "sampleClass": "trickster",
+    "name": "Skill 1145062",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 1145078,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/arbalester/1145078_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/arbalester/1145078_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_increase_critical.png",
+    "iconFile": "s_increase_critical.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "arbalester"
+    ],
+    "sampleClass": "arbalester",
+    "name": "Skill 1145078",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 1145079,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/arbalester/1145079_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/arbalester/1145079_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_aim_intelligence.png",
+    "iconFile": "s_aim_intelligence.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "arbalester"
+    ],
+    "sampleClass": "arbalester",
+    "name": "Skill 1145079",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 1145081,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/warder/1145081_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/warder/1145081_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_bow_trick_mastery.png",
+    "iconFile": "s_bow_trick_mastery.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "warder",
+      "arbalester",
+      "trickster"
+    ],
+    "sampleClass": "warder",
+    "name": "Skill 1145081",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 1145082,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/warder/1145082_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/warder/1145082_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_armor_trick_mastery.png",
+    "iconFile": "s_armor_trick_mastery.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "warder",
+      "arbalester",
+      "trickster"
+    ],
+    "sampleClass": "warder",
+    "name": "Skill 1145082",
+    "status": "timeout"
+  }
+]

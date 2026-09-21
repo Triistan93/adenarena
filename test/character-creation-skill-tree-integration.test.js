@@ -191,7 +191,12 @@ test('5. Uniform Resolution Object Schema for All 25 Creator Starter Classes', (
     assert.ok(Array.isArray(ctx.authorizedSkillIds), `authorizedSkillIds must be array for ${starter.id}`);
 
     if (ctx.status === 'RESOLVED') {
-      assert.equal(ctx.authorizedSkillIds.length, 5, `RESOLVED class ${starter.id} must have exactly 5 Stage 0 skills`);
+      // [CANONICAL 3.0] Death Pilgrim (human_deathknight_0, elf_deathknight_0, delf_deathknight_0)
+      // canonically has 4 Stage 0 skills (Change Armor + 3 fighter passives; Hellfire is strictly Stage 3 Lv 76+).
+      // Other standard starter classes have 5 Stage 0 skills.
+      const isDeathKnightStage0 = starter.id.includes('deathknight_0');
+      const expectedSkillsCount = isDeathKnightStage0 ? 4 : 5;
+      assert.equal(ctx.authorizedSkillIds.length, expectedSkillsCount, `RESOLVED class ${starter.id} must have exactly ${expectedSkillsCount} Stage 0 skills`);
       assert.ok(ctx.v2ClassId, `RESOLVED class ${starter.id} must have v2ClassId`);
       assert.ok(ctx.v2ClassDef, `RESOLVED class ${starter.id} must have v2ClassDef`);
     } else if (ctx.status === 'CONTENT_GAP') {

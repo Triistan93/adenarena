@@ -1,0 +1,884 @@
+[
+  {
+    "classId": "duelist",
+    "displayName": "Duelist",
+    "race": "human",
+    "raceName": "Humano (Human)",
+    "parentClassId": "gladiator",
+    "stage": 3,
+    "minimumPromotionLevel": 76,
+    "lineageRoot": "fighter",
+    "ancestry": {
+      "S0": "fighter",
+      "S1": "warrior",
+      "S2": "gladiator",
+      "S3": "duelist"
+    },
+    "specialLineage": false,
+    "sourceEvidence": "scraped_data_wiki/classes_tree_canonical.json"
+  },
+  {
+    "classId": "dreadnought",
+    "displayName": "Dreadnought",
+    "race": "human",
+    "raceName": "Humano (Human)",
+    "parentClassId": "warlord",
+    "stage": 3,
+    "minimumPromotionLevel": 76,
+    "lineageRoot": "fighter",
+    "ancestry": {
+      "S0": "fighter",
+      "S1": "warrior",
+      "S2": "warlord",
+      "S3": "dreadnought"
+    },
+    "specialLineage": false,
+    "sourceEvidence": "scraped_data_wiki/classes_tree_canonical.json"
+  },
+  {
+    "classId": "phoenix_knight",
+    "displayName": "Phoenix Knight",
+    "race": "human",
+    "raceName": "Humano (Human)",
+    "parentClassId": "paladin",
+    "stage": 3,
+    "minimumPromotionLevel": 76,
+    "lineageRoot": "fighter",
+    "ancestry": {
+      "S0": "fighter",
+      "S1": "knight",
+      "S2": "paladin",
+      "S3": "phoenix_knight"
+    },
+    "specialLineage": false,
+    "sourceEvidence": "scraped_data_wiki/classes_tree_canonical.json"
+  },
+  {
+    "classId": "hell_knight",
+    "displayName": "Hell Knight",
+    "race": "human",
+    "raceName": "Humano (Human)",
+    "parentClassId": "dark_avenger",
+    "stage": 3,
+    "minimumPromotionLevel": 76,
+    "lineageRoot": "fighter",
+    "ancestry": {
+      "S0": "fighter",
+      "S1": "knight",
+      "S2": "dark_avenger",
+      "S3": "hell_knight"
+    },
+    "specialLineage": false,
+    "sourceEvidence": "scraped_data_wiki/classes_tree_canonical.json"
+  },
+  {
+    "classId": "adventurer",
+    "displayName": "Adventurer",
+    "race": "human",
+    "raceName": "Humano (Human)",
+    "parentClassId": "treasure_hunter",
+    "stage": 3,
+    "minimumPromotionLevel": 76,
+    "lineageRoot": "fighter",
+    "ancestry": {
+      "S0": "fighter",
+      "S1": "rogue",
+      "S2": "treasure_hunter",
+      "S3": "adventurer"
+    },
+    "specialLineage": false,
+    "sourceEvidence": "scraped_data_wiki/classes_tree_canonical.json"
+  },
+  {
+    "classId": "sagittarius",
+    "displayName": "Sagittarius",
+    "race": "human",
+    "raceName": "Humano (Human)",
+    "parentClassId": "hawkeye",
+    "stage": 3,
+    "minimumPromotionLevel": 76,
+    "lineageRoot": "fighter",
+    "ancestry": {
+      "S0": "fighter",
+      "S1": "rogue",
+      "S2": "hawkeye",
+      "S3": "sagittarius"
+    },
+    "specialLineage": false,
+    "sourceEvidence": "scraped_data_wiki/classes_tree_canonical.json"
+  },
+  {
+    "classId": "archmage",
+    "displayName": "Archmage",
+    "race": "human",
+    "raceName": "Humano (Human)",
+    "parentClassId": "sorcerer",
+    "stage": 3,
+    "minimumPromotionLevel": 76,
+    "lineageRoot": "mage",
+    "ancestry": {
+      "S0": "mage",
+      "S1": "wizard",
+      "S2": "sorcerer",
+      "S3": "archmage"
+    },
+    "specialLineage": false,
+    "sourceEvidence": "scraped_data_wiki/classes_tree_canonical.json"
+  },
+  {
+    "classId": "soultaker",
+    "displayName": "Soultaker",
+    "race": "human",
+    "raceName": "Humano (Human)",
+    "parentClassId": "necromancer",
+    "stage": 3,
+    "minimumPromotionLevel": 76,
+    "lineageRoot": "mage",
+    "ancestry": {
+      "S0": "mage",
+      "S1": "wizard",
+      "S2": "necromancer",
+      "S3": "soultaker"
+    },
+    "specialLineage": false,
+    "sourceEvidence": "scraped_data_wiki/classes_tree_canonical.json"
+  },
+  {
+    "classId": "arcana_lord",
+    "displayName": "Arcana Lord",
+    "race": "human",
+    "raceName": "Humano (Human)",
+    "parentClassId": "warlock",
+    "stage": 3,
+    "minimumPromotionLevel": 76,
+    "lineageRoot": "mage",
+    "ancestry": {
+      "S0": "mage",
+      "S1": "wizard",
+      "S2": "warlock",
+      "S3": "arcana_lord"
+    },
+    "specialLineage": false,
+    "sourceEvidence": "scraped_data_wiki/classes_tree_canonical.json"
+  },
+  {
+    "classId": "cardinal",
+    "displayName": "Cardinal",
+    "race": "human",
+    "raceName": "Humano (Human)",
+    "parentClassId": "bishop",
+    "stage": 3,
+    "minimumPromotionLevel": 76,
+    "lineageRoot": "mage",
+    "ancestry": {
+      "S0": "mage",
+      "S1": "cleric",
+      "S2": "bishop",
+      "S3": "cardinal"
+    },
+    "specialLineage": false,
+    "sourceEvidence": "scraped_data_wiki/classes_tree_canonical.json"
+  },
+  {
+    "classId": "hierophant",
+    "displayName": "Hierophant",
+    "race": "human",
+    "raceName": "Humano (Human)",
+    "parentClassId": "prophet",
+    "stage": 3,
+    "minimumPromotionLevel": 76,
+    "lineageRoot": "mage",
+    "ancestry": {
+      "S0": "mage",
+      "S1": "cleric",
+      "S2": "prophet",
+      "S3": "hierophant"
+    },
+    "specialLineage": false,
+    "sourceEvidence": "scraped_data_wiki/classes_tree_canonical.json"
+  },
+  {
+    "classId": "human_deathknight_3",
+    "displayName": "Death Knight Human",
+    "race": "human",
+    "raceName": "Humano (Human)",
+    "parentClassId": "human_deathknight_2",
+    "stage": 3,
+    "minimumPromotionLevel": 76,
+    "lineageRoot": "human_deathknight_0",
+    "ancestry": {
+      "S0": "human_deathknight_0",
+      "S1": "human_deathknight_1",
+      "S2": "human_deathknight_2",
+      "S3": "human_deathknight_3"
+    },
+    "specialLineage": true,
+    "sourceEvidence": "scraped_data_wiki/classes_tree_canonical.json"
+  },
+  {
+    "classId": "secret_assassin_male_3",
+    "displayName": "Assassin Male",
+    "race": "human",
+    "raceName": "Humano (Human)",
+    "parentClassId": "secret_assassin_male_2",
+    "stage": 3,
+    "minimumPromotionLevel": 76,
+    "lineageRoot": "secret_assassin_male_0",
+    "ancestry": {
+      "S0": "secret_assassin_male_0",
+      "S1": "secret_assassin_male_1",
+      "S2": "secret_assassin_male_2",
+      "S3": "secret_assassin_male_3"
+    },
+    "specialLineage": true,
+    "sourceEvidence": "scraped_data_wiki/classes_tree_canonical.json"
+  },
+  {
+    "classId": "werewolf_3",
+    "displayName": "Warg / Werewolf",
+    "race": "human",
+    "raceName": "Humano (Human)",
+    "parentClassId": "werewolf_2",
+    "stage": 3,
+    "minimumPromotionLevel": 76,
+    "lineageRoot": "werewolf_0",
+    "ancestry": {
+      "S0": "werewolf_0",
+      "S1": "werewolf_1",
+      "S2": "werewolf_2",
+      "S3": "werewolf_3"
+    },
+    "specialLineage": true,
+    "sourceEvidence": "scraped_data_wiki/classes_tree_canonical.json"
+  },
+  {
+    "classId": "evas_templar",
+    "displayName": "Eva's Templar",
+    "race": "elf",
+    "raceName": "Elfo (Elf)",
+    "parentClassId": "temple_knight",
+    "stage": 3,
+    "minimumPromotionLevel": 76,
+    "lineageRoot": "elven_fighter",
+    "ancestry": {
+      "S0": "elven_fighter",
+      "S1": "elven_knight",
+      "S2": "temple_knight",
+      "S3": "evas_templar"
+    },
+    "specialLineage": false,
+    "sourceEvidence": "scraped_data_wiki/classes_tree_canonical.json"
+  },
+  {
+    "classId": "sword_muse",
+    "displayName": "Sword Muse",
+    "race": "elf",
+    "raceName": "Elfo (Elf)",
+    "parentClassId": "swordsinger",
+    "stage": 3,
+    "minimumPromotionLevel": 76,
+    "lineageRoot": "elven_fighter",
+    "ancestry": {
+      "S0": "elven_fighter",
+      "S1": "elven_knight",
+      "S2": "swordsinger",
+      "S3": "sword_muse"
+    },
+    "specialLineage": false,
+    "sourceEvidence": "scraped_data_wiki/classes_tree_canonical.json"
+  },
+  {
+    "classId": "wind_rider",
+    "displayName": "Wind Rider",
+    "race": "elf",
+    "raceName": "Elfo (Elf)",
+    "parentClassId": "plain_walker",
+    "stage": 3,
+    "minimumPromotionLevel": 76,
+    "lineageRoot": "elven_fighter",
+    "ancestry": {
+      "S0": "elven_fighter",
+      "S1": "elven_scout",
+      "S2": "plain_walker",
+      "S3": "wind_rider"
+    },
+    "specialLineage": false,
+    "sourceEvidence": "scraped_data_wiki/classes_tree_canonical.json"
+  },
+  {
+    "classId": "moonlight_sentinel",
+    "displayName": "Moonlight Sentinel",
+    "race": "elf",
+    "raceName": "Elfo (Elf)",
+    "parentClassId": "silver_ranger",
+    "stage": 3,
+    "minimumPromotionLevel": 76,
+    "lineageRoot": "elven_fighter",
+    "ancestry": {
+      "S0": "elven_fighter",
+      "S1": "elven_scout",
+      "S2": "silver_ranger",
+      "S3": "moonlight_sentinel"
+    },
+    "specialLineage": false,
+    "sourceEvidence": "scraped_data_wiki/classes_tree_canonical.json"
+  },
+  {
+    "classId": "mystic_muse",
+    "displayName": "Mystic Muse",
+    "race": "elf",
+    "raceName": "Elfo (Elf)",
+    "parentClassId": "spellsinger",
+    "stage": 3,
+    "minimumPromotionLevel": 76,
+    "lineageRoot": "elven_mage",
+    "ancestry": {
+      "S0": "elven_mage",
+      "S1": "elven_wizard",
+      "S2": "spellsinger",
+      "S3": "mystic_muse"
+    },
+    "specialLineage": false,
+    "sourceEvidence": "scraped_data_wiki/classes_tree_canonical.json"
+  },
+  {
+    "classId": "elemental_master",
+    "displayName": "Elemental Master",
+    "race": "elf",
+    "raceName": "Elfo (Elf)",
+    "parentClassId": "elemental_summoner",
+    "stage": 3,
+    "minimumPromotionLevel": 76,
+    "lineageRoot": "elven_mage",
+    "ancestry": {
+      "S0": "elven_mage",
+      "S1": "elven_wizard",
+      "S2": "elemental_summoner",
+      "S3": "elemental_master"
+    },
+    "specialLineage": false,
+    "sourceEvidence": "scraped_data_wiki/classes_tree_canonical.json"
+  },
+  {
+    "classId": "evas_saint",
+    "displayName": "Eva's Saint",
+    "race": "elf",
+    "raceName": "Elfo (Elf)",
+    "parentClassId": "elder",
+    "stage": 3,
+    "minimumPromotionLevel": 76,
+    "lineageRoot": "elven_mage",
+    "ancestry": {
+      "S0": "elven_mage",
+      "S1": "oracle",
+      "S2": "elder",
+      "S3": "evas_saint"
+    },
+    "specialLineage": false,
+    "sourceEvidence": "scraped_data_wiki/classes_tree_canonical.json"
+  },
+  {
+    "classId": "elf_deathknight_3",
+    "displayName": "Death Knight Elf",
+    "race": "elf",
+    "raceName": "Elfo (Elf)",
+    "parentClassId": "elf_deathknight_2",
+    "stage": 3,
+    "minimumPromotionLevel": 76,
+    "lineageRoot": "elf_deathknight_0",
+    "ancestry": {
+      "S0": "elf_deathknight_0",
+      "S1": "elf_deathknight_1",
+      "S2": "elf_deathknight_2",
+      "S3": "elf_deathknight_3"
+    },
+    "specialLineage": true,
+    "sourceEvidence": "scraped_data_wiki/classes_tree_canonical.json"
+  },
+  {
+    "classId": "shillien_templar",
+    "displayName": "Shillien Templar",
+    "race": "darkelf",
+    "raceName": "Elfo Negro (Dark Elf)",
+    "parentClassId": "shillien_knight",
+    "stage": 3,
+    "minimumPromotionLevel": 76,
+    "lineageRoot": "dark_fighter",
+    "ancestry": {
+      "S0": "dark_fighter",
+      "S1": "palus_knight",
+      "S2": "shillien_knight",
+      "S3": "shillien_templar"
+    },
+    "specialLineage": false,
+    "sourceEvidence": "scraped_data_wiki/classes_tree_canonical.json"
+  },
+  {
+    "classId": "spectral_dancer",
+    "displayName": "Spectral Dancer",
+    "race": "darkelf",
+    "raceName": "Elfo Negro (Dark Elf)",
+    "parentClassId": "bladedancer",
+    "stage": 3,
+    "minimumPromotionLevel": 76,
+    "lineageRoot": "dark_fighter",
+    "ancestry": {
+      "S0": "dark_fighter",
+      "S1": "palus_knight",
+      "S2": "bladedancer",
+      "S3": "spectral_dancer"
+    },
+    "specialLineage": false,
+    "sourceEvidence": "scraped_data_wiki/classes_tree_canonical.json"
+  },
+  {
+    "classId": "ghost_hunter",
+    "displayName": "Ghost Hunter",
+    "race": "darkelf",
+    "raceName": "Elfo Negro (Dark Elf)",
+    "parentClassId": "abyss_walker",
+    "stage": 3,
+    "minimumPromotionLevel": 76,
+    "lineageRoot": "dark_fighter",
+    "ancestry": {
+      "S0": "dark_fighter",
+      "S1": "assassin",
+      "S2": "abyss_walker",
+      "S3": "ghost_hunter"
+    },
+    "specialLineage": false,
+    "sourceEvidence": "scraped_data_wiki/classes_tree_canonical.json"
+  },
+  {
+    "classId": "ghost_sentinel",
+    "displayName": "Ghost Sentinel",
+    "race": "darkelf",
+    "raceName": "Elfo Negro (Dark Elf)",
+    "parentClassId": "phantom_ranger",
+    "stage": 3,
+    "minimumPromotionLevel": 76,
+    "lineageRoot": "dark_fighter",
+    "ancestry": {
+      "S0": "dark_fighter",
+      "S1": "assassin",
+      "S2": "phantom_ranger",
+      "S3": "ghost_sentinel"
+    },
+    "specialLineage": false,
+    "sourceEvidence": "scraped_data_wiki/classes_tree_canonical.json"
+  },
+  {
+    "classId": "storm_screamer",
+    "displayName": "Storm Screamer",
+    "race": "darkelf",
+    "raceName": "Elfo Negro (Dark Elf)",
+    "parentClassId": "spellhowler",
+    "stage": 3,
+    "minimumPromotionLevel": 76,
+    "lineageRoot": "dark_mage",
+    "ancestry": {
+      "S0": "dark_mage",
+      "S1": "dark_wizard",
+      "S2": "spellhowler",
+      "S3": "storm_screamer"
+    },
+    "specialLineage": false,
+    "sourceEvidence": "scraped_data_wiki/classes_tree_canonical.json"
+  },
+  {
+    "classId": "spectral_master",
+    "displayName": "Spectral Master",
+    "race": "darkelf",
+    "raceName": "Elfo Negro (Dark Elf)",
+    "parentClassId": "phantom_summoner",
+    "stage": 3,
+    "minimumPromotionLevel": 76,
+    "lineageRoot": "dark_mage",
+    "ancestry": {
+      "S0": "dark_mage",
+      "S1": "dark_wizard",
+      "S2": "phantom_summoner",
+      "S3": "spectral_master"
+    },
+    "specialLineage": false,
+    "sourceEvidence": "scraped_data_wiki/classes_tree_canonical.json"
+  },
+  {
+    "classId": "shillien_saint",
+    "displayName": "Shillien Saint",
+    "race": "darkelf",
+    "raceName": "Elfo Negro (Dark Elf)",
+    "parentClassId": "shillien_elder",
+    "stage": 3,
+    "minimumPromotionLevel": 76,
+    "lineageRoot": "dark_mage",
+    "ancestry": {
+      "S0": "dark_mage",
+      "S1": "shillien_oracle",
+      "S2": "shillien_elder",
+      "S3": "shillien_saint"
+    },
+    "specialLineage": false,
+    "sourceEvidence": "scraped_data_wiki/classes_tree_canonical.json"
+  },
+  {
+    "classId": "delf_deathknight_3",
+    "displayName": "Death Knight Dark Elf",
+    "race": "darkelf",
+    "raceName": "Elfo Negro (Dark Elf)",
+    "parentClassId": "delf_deathknight_2",
+    "stage": 3,
+    "minimumPromotionLevel": 76,
+    "lineageRoot": "delf_deathknight_0",
+    "ancestry": {
+      "S0": "delf_deathknight_0",
+      "S1": "delf_deathknight_1",
+      "S2": "delf_deathknight_2",
+      "S3": "delf_deathknight_3"
+    },
+    "specialLineage": true,
+    "sourceEvidence": "scraped_data_wiki/classes_tree_canonical.json"
+  },
+  {
+    "classId": "secret_assassin_female_3",
+    "displayName": "Assassin Female",
+    "race": "darkelf",
+    "raceName": "Elfo Negro (Dark Elf)",
+    "parentClassId": "secret_assassin_female_2",
+    "stage": 3,
+    "minimumPromotionLevel": 76,
+    "lineageRoot": "secret_assassin_female_0",
+    "ancestry": {
+      "S0": "secret_assassin_female_0",
+      "S1": "secret_assassin_female_1",
+      "S2": "secret_assassin_female_2",
+      "S3": "secret_assassin_female_3"
+    },
+    "specialLineage": true,
+    "sourceEvidence": "scraped_data_wiki/classes_tree_canonical.json"
+  },
+  {
+    "classId": "rose_vain_3",
+    "displayName": "Blood Rose",
+    "race": "darkelf",
+    "raceName": "Elfo Negro (Dark Elf)",
+    "parentClassId": "rose_vain_2",
+    "stage": 3,
+    "minimumPromotionLevel": 76,
+    "lineageRoot": "rose_vain_0",
+    "ancestry": {
+      "S0": "rose_vain_0",
+      "S1": "rose_vain_1",
+      "S2": "rose_vain_2",
+      "S3": "rose_vain_3"
+    },
+    "specialLineage": true,
+    "sourceEvidence": "scraped_data_wiki/classes_tree_canonical.json"
+  },
+  {
+    "classId": "titan",
+    "displayName": "Titan",
+    "race": "orc",
+    "raceName": "Orc (Orc)",
+    "parentClassId": "destroyer",
+    "stage": 3,
+    "minimumPromotionLevel": 76,
+    "lineageRoot": "orc_fighter",
+    "ancestry": {
+      "S0": "orc_fighter",
+      "S1": "orc_raider",
+      "S2": "destroyer",
+      "S3": "titan"
+    },
+    "specialLineage": false,
+    "sourceEvidence": "scraped_data_wiki/classes_tree_canonical.json"
+  },
+  {
+    "classId": "grand_khavatari",
+    "displayName": "Grand Khavatari",
+    "race": "orc",
+    "raceName": "Orc (Orc)",
+    "parentClassId": "tyrant",
+    "stage": 3,
+    "minimumPromotionLevel": 76,
+    "lineageRoot": "orc_fighter",
+    "ancestry": {
+      "S0": "orc_fighter",
+      "S1": "orc_monk",
+      "S2": "tyrant",
+      "S3": "grand_khavatari"
+    },
+    "specialLineage": false,
+    "sourceEvidence": "scraped_data_wiki/classes_tree_canonical.json"
+  },
+  {
+    "classId": "dominator",
+    "displayName": "Dominator",
+    "race": "orc",
+    "raceName": "Orc (Orc)",
+    "parentClassId": "overlord",
+    "stage": 3,
+    "minimumPromotionLevel": 76,
+    "lineageRoot": "orc_mage",
+    "ancestry": {
+      "S0": "orc_mage",
+      "S1": "orc_shaman",
+      "S2": "overlord",
+      "S3": "dominator"
+    },
+    "specialLineage": false,
+    "sourceEvidence": "scraped_data_wiki/classes_tree_canonical.json"
+  },
+  {
+    "classId": "doomcryer",
+    "displayName": "Doomcryer",
+    "race": "orc",
+    "raceName": "Orc (Orc)",
+    "parentClassId": "warcryer",
+    "stage": 3,
+    "minimumPromotionLevel": 76,
+    "lineageRoot": "orc_mage",
+    "ancestry": {
+      "S0": "orc_mage",
+      "S1": "orc_shaman",
+      "S2": "warcryer",
+      "S3": "doomcryer"
+    },
+    "specialLineage": false,
+    "sourceEvidence": "scraped_data_wiki/classes_tree_canonical.json"
+  },
+  {
+    "classId": "orc_rider_3",
+    "displayName": "Grand Vanguard",
+    "race": "orc",
+    "raceName": "Orc (Orc)",
+    "parentClassId": "orc_rider_2",
+    "stage": 3,
+    "minimumPromotionLevel": 76,
+    "lineageRoot": "orc_rider_0",
+    "ancestry": {
+      "S0": "orc_rider_0",
+      "S1": "orc_rider_1",
+      "S2": "orc_rider_2",
+      "S3": "orc_rider_3"
+    },
+    "specialLineage": true,
+    "sourceEvidence": "scraped_data_wiki/classes_tree_canonical.json"
+  },
+  {
+    "classId": "fortune_seeker",
+    "displayName": "Fortune Seeker",
+    "race": "dwarf",
+    "raceName": "Anão (Dwarf)",
+    "parentClassId": "bounty_hunter",
+    "stage": 3,
+    "minimumPromotionLevel": 76,
+    "lineageRoot": "dwarven_fighter",
+    "ancestry": {
+      "S0": "dwarven_fighter",
+      "S1": "scavenger",
+      "S2": "bounty_hunter",
+      "S3": "fortune_seeker"
+    },
+    "specialLineage": false,
+    "sourceEvidence": "scraped_data_wiki/classes_tree_canonical.json"
+  },
+  {
+    "classId": "maestro",
+    "displayName": "Maestro",
+    "race": "dwarf",
+    "raceName": "Anão (Dwarf)",
+    "parentClassId": "warsmith",
+    "stage": 3,
+    "minimumPromotionLevel": 76,
+    "lineageRoot": "dwarven_fighter",
+    "ancestry": {
+      "S0": "dwarven_fighter",
+      "S1": "artisan",
+      "S2": "warsmith",
+      "S3": "maestro"
+    },
+    "specialLineage": false,
+    "sourceEvidence": "scraped_data_wiki/classes_tree_canonical.json"
+  },
+  {
+    "classId": "shinemaker",
+    "displayName": "ShineMaker",
+    "race": "dwarf",
+    "raceName": "Anão (Dwarf)",
+    "parentClassId": "shineMakerS2",
+    "stage": 3,
+    "minimumPromotionLevel": 76,
+    "lineageRoot": "shineMakerBase",
+    "ancestry": {
+      "S0": "shineMakerBase",
+      "S1": "shineMakerS1",
+      "S2": "shineMakerS2",
+      "S3": "shinemaker"
+    },
+    "specialLineage": false,
+    "sourceEvidence": "scraped_data_wiki/classes_tree_canonical.json"
+  },
+  {
+    "classId": "doombringer",
+    "displayName": "Doombringer",
+    "race": "kamael",
+    "raceName": "Kamael (Kamael)",
+    "parentClassId": "berserker",
+    "stage": 3,
+    "minimumPromotionLevel": 76,
+    "lineageRoot": "jin_kamael_soldier",
+    "ancestry": {
+      "S0": "jin_kamael_soldier",
+      "S1": "trooper",
+      "S2": "berserker",
+      "S3": "doombringer"
+    },
+    "specialLineage": false,
+    "sourceEvidence": "scraped_data_wiki/classes_tree_canonical.json"
+  },
+  {
+    "classId": "soul_hound",
+    "displayName": "Soul Hound",
+    "race": "kamael",
+    "raceName": "Kamael (Kamael)",
+    "parentClassId": "soul_breaker",
+    "stage": 3,
+    "minimumPromotionLevel": 76,
+    "lineageRoot": "jin_kamael_soldier",
+    "ancestry": {
+      "S0": "jin_kamael_soldier",
+      "S1": "soul_finder",
+      "S2": "soul_breaker",
+      "S3": "soul_hound"
+    },
+    "specialLineage": false,
+    "sourceEvidence": "scraped_data_wiki/classes_tree_canonical.json"
+  },
+  {
+    "classId": "trickster",
+    "displayName": "Trickster",
+    "race": "kamael",
+    "raceName": "Kamael (Kamael)",
+    "parentClassId": "arbalester",
+    "stage": 3,
+    "minimumPromotionLevel": 76,
+    "lineageRoot": "jin_kamael_soldier",
+    "ancestry": {
+      "S0": "jin_kamael_soldier",
+      "S1": "warder",
+      "S2": "arbalester",
+      "S3": "trickster"
+    },
+    "specialLineage": false,
+    "sourceEvidence": "scraped_data_wiki/classes_tree_canonical.json"
+  },
+  {
+    "classId": "crow_3",
+    "displayName": "Samurai",
+    "race": "kamael",
+    "raceName": "Kamael (Kamael)",
+    "parentClassId": "crow_2",
+    "stage": 3,
+    "minimumPromotionLevel": 76,
+    "lineageRoot": "crow_0",
+    "ancestry": {
+      "S0": "crow_0",
+      "S1": "crow_1",
+      "S2": "crow_2",
+      "S3": "crow_3"
+    },
+    "specialLineage": true,
+    "sourceEvidence": "scraped_data_wiki/classes_tree_canonical.json"
+  },
+  {
+    "classId": "storm_blaster",
+    "displayName": "Storm Blaster",
+    "race": "sylph",
+    "raceName": "Sylph (Sylph)",
+    "parentClassId": "wind_hunter",
+    "stage": 3,
+    "minimumPromotionLevel": 76,
+    "lineageRoot": "sylphid",
+    "ancestry": {
+      "S0": "sylphid",
+      "S1": "sylph_gunner",
+      "S2": "wind_hunter",
+      "S3": "storm_blaster"
+    },
+    "specialLineage": false,
+    "sourceEvidence": "scraped_data_wiki/classes_tree_canonical.json"
+  },
+  {
+    "classId": "sacred_templar_3",
+    "displayName": "Divine Templar",
+    "race": "highelf",
+    "raceName": "Alto Elfo (High Elf)",
+    "parentClassId": "sacred_templar_2",
+    "stage": 3,
+    "minimumPromotionLevel": 76,
+    "lineageRoot": "sacred_templar_0",
+    "ancestry": {
+      "S0": "sacred_templar_0",
+      "S1": "sacred_templar_1",
+      "S2": "sacred_templar_2",
+      "S3": "sacred_templar_3"
+    },
+    "specialLineage": true,
+    "sourceEvidence": "scraped_data_wiki/classes_tree_canonical.json"
+  },
+  {
+    "classId": "spirit_3",
+    "displayName": "Element Weaver",
+    "race": "highelf",
+    "raceName": "Alto Elfo (High Elf)",
+    "parentClassId": "spirit_2",
+    "stage": 3,
+    "minimumPromotionLevel": 76,
+    "lineageRoot": "spirit_0",
+    "ancestry": {
+      "S0": "spirit_0",
+      "S1": "spirit_1",
+      "S2": "spirit_2",
+      "S3": "spirit_3"
+    },
+    "specialLineage": true,
+    "sourceEvidence": "scraped_data_wiki/classes_tree_canonical.json"
+  },
+  {
+    "classId": "eviscerator",
+    "displayName": "Eviscerator",
+    "race": "ertheia",
+    "raceName": "Ertheia (Ertheia)",
+    "parentClassId": "ertheiaWarrior",
+    "stage": 3,
+    "minimumPromotionLevel": 76,
+    "lineageRoot": "marauderBase",
+    "ancestry": {
+      "S0": "marauderBase",
+      "S1": "marauder",
+      "S2": "ertheiaWarrior",
+      "S3": "eviscerator"
+    },
+    "specialLineage": false,
+    "sourceEvidence": "scraped_data_wiki/classes_tree_canonical.json"
+  },
+  {
+    "classId": "sayhaSeeker",
+    "displayName": "Sayha Seeker",
+    "race": "ertheia",
+    "raceName": "Ertheia (Ertheia)",
+    "parentClassId": "windRiderErth",
+    "stage": 3,
+    "minimumPromotionLevel": 76,
+    "lineageRoot": "sayhaMageBase",
+    "ancestry": {
+      "S0": "sayhaMageBase",
+      "S1": "sayhaSeer",
+      "S2": "windRiderErth",
+      "S3": "sayhaSeeker"
+    },
+    "specialLineage": false,
+    "sourceEvidence": "scraped_data_wiki/classes_tree_canonical.json"
+  }
+]

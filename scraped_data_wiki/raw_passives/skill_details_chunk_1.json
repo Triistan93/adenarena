@@ -1,0 +1,3231 @@
+[
+  {
+    "wikiSkillId": 1297,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/sorcerer/1297_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/sorcerer/1297_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill1297.png",
+    "iconFile": "skill1297.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "sorcerer",
+      "spellsinger",
+      "spellhowler"
+    ],
+    "sampleClass": "sorcerer",
+    "name": "Clear Mind",
+    "skillType": "Passive: Unique Skills",
+    "description": "MP Recovery Rate (standing) +2.6MP Recovery Rate (walking) +3.2",
+    "minLevel": 40,
+    "autoGet": false,
+    "status": "ok"
+  },
+  {
+    "wikiSkillId": 1308,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/orc_shaman/1308_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/orc_shaman/1308_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill1077.png",
+    "iconFile": "skill1077.png",
+    "categories": [
+      "Doll effect"
+    ],
+    "classes": [
+      "orc_shaman",
+      "doomcryer",
+      "warcryer",
+      "dominator",
+      "overlord"
+    ],
+    "sampleClass": "orc_shaman",
+    "name": "Focus",
+    "skillType": "Passive: Doll effect",
+    "description": "Basic Critical Rate +20",
+    "minLevel": 20,
+    "autoGet": false,
+    "status": "ok"
+  },
+  {
+    "wikiSkillId": 1368,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/dwarven_fighter/1368_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/dwarven_fighter/1368_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_expand_dwarven_craft.png",
+    "iconFile": "s_expand_dwarven_craft.png",
+    "categories": [
+      "Other Skills - Passive"
+    ],
+    "classes": [
+      "dwarven_fighter"
+    ],
+    "sampleClass": "dwarven_fighter",
+    "name": "Skill 1368",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 1370,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/fighter/1370_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/fighter/1370_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_expand_trade.png",
+    "iconFile": "s_expand_trade.png",
+    "categories": [
+      "Other Skills - Passive"
+    ],
+    "classes": [
+      "fighter",
+      "mage",
+      "human_deathknight_0",
+      "secret_assassin_male_0",
+      "elven_fighter",
+      "elven_mage",
+      "dark_fighter",
+      "elf_deathknight_0",
+      "dark_mage",
+      "delf_deathknight_0",
+      "secret_assassin_female_0",
+      "orc_fighter",
+      "rose_vain_0",
+      "orc_mage",
+      "dwarven_fighter",
+      "orc_rider_0",
+      "crow_0",
+      "spirit_0"
+    ],
+    "sampleClass": "fighter",
+    "name": "Skill 1370",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 1371,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/fighter/1371_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/fighter/1371_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_expand_storage.png",
+    "iconFile": "s_expand_storage.png",
+    "categories": [
+      "Other Skills - Passive"
+    ],
+    "classes": [
+      "fighter",
+      "mage",
+      "human_deathknight_0",
+      "secret_assassin_male_0",
+      "elven_fighter",
+      "elven_mage",
+      "dark_fighter",
+      "elf_deathknight_0",
+      "dark_mage",
+      "delf_deathknight_0",
+      "secret_assassin_female_0",
+      "orc_fighter",
+      "rose_vain_0",
+      "orc_mage",
+      "dwarven_fighter",
+      "orc_rider_0",
+      "crow_0",
+      "spirit_0"
+    ],
+    "sampleClass": "fighter",
+    "name": "Skill 1371",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 1372,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/fighter/1372_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/fighter/1372_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_expand_inventory.png",
+    "iconFile": "s_expand_inventory.png",
+    "categories": [
+      "Other Skills - Passive"
+    ],
+    "classes": [
+      "fighter",
+      "mage",
+      "human_deathknight_0",
+      "secret_assassin_male_0",
+      "elven_fighter",
+      "elven_mage",
+      "dark_fighter",
+      "elf_deathknight_0",
+      "dark_mage",
+      "delf_deathknight_0",
+      "secret_assassin_female_0",
+      "orc_fighter",
+      "rose_vain_0",
+      "orc_mage",
+      "dwarven_fighter",
+      "orc_rider_0",
+      "crow_0",
+      "spirit_0"
+    ],
+    "sampleClass": "fighter",
+    "name": "Skill 1372",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 1378,
+    "rank": 5,
+    "subrank": 0,
+    "href": "/essence/skills/soul_hound/1378_5_0.html",
+    "url": "https://l2wiki.com/essence/skills/soul_hound/1378_5_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill11820.png",
+    "iconFile": "skill11820.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "soul_hound",
+      "soul_finder",
+      "soul_breaker"
+    ],
+    "sampleClass": "soul_hound",
+    "name": "Skill 1378",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 1380,
+    "rank": 3,
+    "subrank": 0,
+    "href": "/essence/skills/soul_hound/1380_3_0.html",
+    "url": "https://l2wiki.com/essence/skills/soul_hound/1380_3_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill0338.png",
+    "iconFile": "skill0338.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "soul_hound",
+      "soul_finder",
+      "soul_breaker"
+    ],
+    "sampleClass": "soul_hound",
+    "name": "Skill 1380",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 1388,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/prophet/1388_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/prophet/1388_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill1502.png",
+    "iconFile": "skill1502.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "prophet"
+    ],
+    "sampleClass": "prophet",
+    "name": "Enhanced Attack",
+    "skillType": "Passive: Unique Skills",
+    "description": "P. Atk. +10%M. Atk. +10%",
+    "minLevel": 58,
+    "autoGet": false,
+    "status": "ok"
+  },
+  {
+    "wikiSkillId": 1389,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/prophet/1389_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/prophet/1389_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill1503.png",
+    "iconFile": "skill1503.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "prophet"
+    ],
+    "sampleClass": "prophet",
+    "name": "Enhanced Defense",
+    "skillType": "Passive: Unique Skills",
+    "description": "P. Def. +10%M. Def. +10%",
+    "minLevel": 58,
+    "autoGet": false,
+    "status": "ok"
+  },
+  {
+    "wikiSkillId": 1397,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/oracle/1397_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/oracle/1397_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill1397.png",
+    "iconFile": "skill1397.png",
+    "categories": [
+      "Doll effect"
+    ],
+    "classes": [
+      "oracle",
+      "elder",
+      "evas_saint"
+    ],
+    "sampleClass": "oracle",
+    "name": "Clarity",
+    "skillType": "Passive: Doll effect",
+    "description": "P. Skill MP Consumption -10%M. Skill MP Consumption -4%",
+    "minLevel": 20,
+    "autoGet": false,
+    "status": "ok"
+  },
+  {
+    "wikiSkillId": 1405,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/paladin/1405_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/paladin/1405_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill1405.png",
+    "iconFile": "skill1405.png",
+    "categories": [
+      "Other Skills - Passive"
+    ],
+    "classes": [
+      "paladin",
+      "gladiator",
+      "warlord",
+      "dark_avenger",
+      "phoenix_knight",
+      "duelist",
+      "dreadnought",
+      "sagittarius",
+      "sorcerer",
+      "hell_knight",
+      "treasure_hunter",
+      "hawkeye",
+      "archmage",
+      "adventurer",
+      "hierophant",
+      "warlock",
+      "prophet",
+      "cardinal",
+      "soultaker",
+      "bishop",
+      "secret_assassin_male_2",
+      "secret_assassin_male_3",
+      "human_deathknight_2",
+      "human_deathknight_3",
+      "werewolf_2",
+      "wind_rider",
+      "sword_muse",
+      "plain_walker",
+      "werewolf_3",
+      "evas_templar",
+      "elemental_master",
+      "elemental_summoner",
+      "moonlight_sentinel",
+      "spellsinger",
+      "silver_ranger",
+      "elder",
+      "mystic_muse",
+      "elf_deathknight_3",
+      "shillien_knight",
+      "evas_saint",
+      "elf_deathknight_2",
+      "bladedancer",
+      "shillien_templar",
+      "phantom_ranger",
+      "ghost_hunter",
+      "storm_screamer",
+      "spectral_dancer",
+      "spellhowler",
+      "ghost_sentinel",
+      "abyss_walker",
+      "spectral_master",
+      "delf_deathknight_2",
+      "delf_deathknight_3",
+      "shillien_elder",
+      "phantom_summoner",
+      "shillien_saint",
+      "rose_vain_3",
+      "destroyer",
+      "rose_vain_2",
+      "secret_assassin_female_3",
+      "secret_assassin_female_2",
+      "titan",
+      "doomcryer",
+      "tyrant",
+      "warcryer",
+      "dominator",
+      "grand_khavatari",
+      "overlord",
+      "fortune_seeker",
+      "bounty_hunter",
+      "orc_rider_3",
+      "orc_rider_2",
+      "warsmith",
+      "soul_hound",
+      "soul_breaker",
+      "maestro",
+      "berserker",
+      "arbalester",
+      "wind_hunter",
+      "crow_2",
+      "trickster",
+      "crow_3",
+      "spirit_3",
+      "sacred_templar_2",
+      "spirit_2"
+    ],
+    "sampleClass": "paladin",
+    "name": "Divine Inspiration",
+    "skillType": "Passive: Other Skills - Passive",
+    "description": "Max Buffs +1",
+    "minLevel": 52,
+    "autoGet": false,
+    "status": "ok"
+  },
+  {
+    "wikiSkillId": 1435,
+    "rank": 4,
+    "subrank": 0,
+    "href": "/essence/skills/soul_hound/1435_4_0.html",
+    "url": "https://l2wiki.com/essence/skills/soul_hound/1435_4_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill1435.png",
+    "iconFile": "skill1435.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "soul_hound",
+      "warder",
+      "soul_finder",
+      "soul_breaker",
+      "trooper",
+      "berserker",
+      "arbalester",
+      "trickster"
+    ],
+    "sampleClass": "soul_hound",
+    "name": "Death Mark",
+    "skillType": "Passive: Unique Skills",
+    "description": "HP Recovery Rate +12On attack, applies Death Mark on the enemyTrigger rate: 10%Duration: 8 sec.Trigger cooldown: 10 sec.Death MarkAll received Critical Damage +12%",
+    "minLevel": 78,
+    "autoGet": false,
+    "status": "ok"
+  },
+  {
+    "wikiSkillId": 1460,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/hierophant/1460_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/hierophant/1460_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/mana_gain.png",
+    "iconFile": "mana_gain.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "hierophant",
+      "cardinal",
+      "evas_saint",
+      "shillien_saint",
+      "doomcryer",
+      "dominator"
+    ],
+    "sampleClass": "hierophant",
+    "name": "Mana Gain",
+    "skillType": "Passive: Unique Skills",
+    "description": "Max MP +240Grants bonuses depending on Max MP:<4000+>- M. Atk. +200- M. Accuracy +6<8000+>- M. Atk. +400- M. Accuracy +7<15,000+>- M. Atk. +600- M. Accuracy +8<20,000+>- M. Atk. +800- M. Accuracy +10<30,000+>- M. Atk. +1000- M. Accuracy +12",
+    "minLevel": 76,
+    "autoGet": false,
+    "status": "ok"
+  },
+  {
+    "wikiSkillId": 1474,
+    "rank": 3,
+    "subrank": 0,
+    "href": "/essence/skills/soul_hound/1474_3_0.html",
+    "url": "https://l2wiki.com/essence/skills/soul_hound/1474_3_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill1474.png",
+    "iconFile": "skill1474.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "soul_hound",
+      "soul_breaker"
+    ],
+    "sampleClass": "soul_hound",
+    "name": "Abyssal Power",
+    "skillType": "Passive: Unique Skills",
+    "description": "P. Atk. +1000M. Atk. +500",
+    "minLevel": 80,
+    "autoGet": false,
+    "status": "ok"
+  },
+  {
+    "wikiSkillId": 1543,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/doomcryer/1543_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/doomcryer/1543_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill1543.png",
+    "iconFile": "skill1543.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "doomcryer"
+    ],
+    "sampleClass": "doomcryer",
+    "name": "Great Fury",
+    "skillType": "Passive: Unique Skills",
+    "description": "Triggers Great Fury on attack.Great FuryAtk. Spd. +30%Basic Critical Damage +1000Trigger rate: 60%Duration: 8 sec.Trigger cooldown: 15 sec.",
+    "minLevel": 80,
+    "autoGet": false,
+    "status": "ok"
+  },
+  {
+    "wikiSkillId": 1565,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/soul_breaker/1565_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/soul_breaker/1565_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill19168.png",
+    "iconFile": "skill19168.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "soul_breaker"
+    ],
+    "sampleClass": "soul_breaker",
+    "name": "Mana Pump",
+    "skillType": "Passive: Unique Skills",
+    "description": "Max MP +70",
+    "minLevel": 40,
+    "autoGet": false,
+    "status": "ok"
+  },
+  {
+    "wikiSkillId": 1609,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/destroyer/1609_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/destroyer/1609_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill1609.png",
+    "iconFile": "skill1609.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "destroyer",
+      "titan"
+    ],
+    "sampleClass": "destroyer",
+    "name": "Sword Expert",
+    "skillType": "Passive: Unique Skills",
+    "description": "When using a two-handed sword:Atk. Spd. +30P. Atk. +40P. Accuracy +2",
+    "minLevel": 46,
+    "autoGet": false,
+    "status": "ok"
+  },
+  {
+    "wikiSkillId": 1628,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/titan/1628_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/titan/1628_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill1628.png",
+    "iconFile": "skill1628.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "titan"
+    ],
+    "sampleClass": "titan",
+    "name": "Two-handed Weapon's Ranged Attack",
+    "skillType": "Passive: Unique Skills",
+    "description": "When using two-handed swords:Basic attack range +50",
+    "minLevel": 76,
+    "autoGet": false,
+    "status": "ok"
+  },
+  {
+    "wikiSkillId": 1829,
+    "rank": 4,
+    "subrank": 0,
+    "href": "/essence/skills/hierophant/1829_4_0.html",
+    "url": "https://l2wiki.com/essence/skills/hierophant/1829_4_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill1901.png",
+    "iconFile": "skill1901.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "hierophant",
+      "warlock",
+      "prophet",
+      "cardinal",
+      "bishop"
+    ],
+    "sampleClass": "hierophant",
+    "name": "Spell Master",
+    "skillType": "Passive: Unique Skills",
+    "description": "M. Atk. +80Casting Spd. +50",
+    "minLevel": 80,
+    "autoGet": false,
+    "status": "ok"
+  },
+  {
+    "wikiSkillId": 1830,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/elemental_summoner/1830_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/elemental_summoner/1830_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill1908.png",
+    "iconFile": "skill1908.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "elemental_summoner",
+      "elder",
+      "evas_saint"
+    ],
+    "sampleClass": "elemental_summoner",
+    "name": "Spell Master",
+    "skillType": "Passive: Unique Skills",
+    "description": "M. Atk. +10Casting Spd. +50",
+    "minLevel": 40,
+    "autoGet": true,
+    "status": "ok"
+  },
+  {
+    "wikiSkillId": 1831,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/shillien_elder/1831_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/shillien_elder/1831_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill1911.png",
+    "iconFile": "skill1911.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "shillien_elder",
+      "phantom_summoner",
+      "shillien_saint"
+    ],
+    "sampleClass": "shillien_elder",
+    "name": "Spell Master",
+    "skillType": "Passive: Unique Skills",
+    "description": "M. Atk. +10Casting Spd. +50",
+    "minLevel": 40,
+    "autoGet": true,
+    "status": "ok"
+  },
+  {
+    "wikiSkillId": 1832,
+    "rank": 4,
+    "subrank": 0,
+    "href": "/essence/skills/doomcryer/1832_4_0.html",
+    "url": "https://l2wiki.com/essence/skills/doomcryer/1832_4_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill1916.png",
+    "iconFile": "skill1916.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "doomcryer",
+      "warcryer",
+      "dominator",
+      "overlord"
+    ],
+    "sampleClass": "doomcryer",
+    "name": "Spell Master",
+    "skillType": "Passive: Unique Skills",
+    "description": "M. Atk. +80Casting Spd. +50",
+    "minLevel": 80,
+    "autoGet": false,
+    "status": "ok"
+  },
+  {
+    "wikiSkillId": 45056,
+    "rank": 5,
+    "subrank": 0,
+    "href": "/essence/skills/doomcryer/45056_5_0.html",
+    "url": "https://l2wiki.com/essence/skills/doomcryer/45056_5_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill0146.png",
+    "iconFile": "skill0146.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "doomcryer",
+      "warcryer",
+      "dominator",
+      "overlord"
+    ],
+    "sampleClass": "doomcryer",
+    "name": "Shaman's Attack Mastery",
+    "skillType": "Passive: Unique Skills",
+    "description": "P. Atk. +45%P. Atk. +200M. Atk. +17%M. Atk. +900Casting Spd. +95P. Accuracy +5Cooldown -20%Shock Atk. Rate +15%Recovers 1% MP on killing monsters.(Trigger cooldown: 5 sec.)When using bows/ spearsP. Accuracy -8Casting Spd. -30%",
+    "minLevel": 81,
+    "autoGet": false,
+    "status": "ok"
+  },
+  {
+    "wikiSkillId": 45057,
+    "rank": 5,
+    "subrank": 0,
+    "href": "/essence/skills/doomcryer/45057_5_0.html",
+    "url": "https://l2wiki.com/essence/skills/doomcryer/45057_5_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill1915.png",
+    "iconFile": "skill1915.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "doomcryer",
+      "warcryer",
+      "dominator",
+      "overlord"
+    ],
+    "sampleClass": "doomcryer",
+    "name": "Shaman's Defense Mastery",
+    "skillType": "Passive: Unique Skills",
+    "description": "P. Def. +330M. Def. +330M. Damage Resistance +30%P. Evasion +5",
+    "minLevel": 80,
+    "autoGet": false,
+    "status": "ok"
+  },
+  {
+    "wikiSkillId": 45058,
+    "rank": 5,
+    "subrank": 0,
+    "href": "/essence/skills/doomcryer/45058_5_0.html",
+    "url": "https://l2wiki.com/essence/skills/doomcryer/45058_5_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill0228.png",
+    "iconFile": "skill0228.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "doomcryer",
+      "warcryer",
+      "dominator",
+      "overlord"
+    ],
+    "sampleClass": "doomcryer",
+    "name": "Shaman's Recovery Mastery",
+    "skillType": "Passive: Unique Skills",
+    "description": "Max HP +450Max MP +300HP Recovery Rate +2.7MP Recovery Rate +3.4",
+    "minLevel": 79,
+    "autoGet": false,
+    "status": "ok"
+  },
+  {
+    "wikiSkillId": 45059,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/archmage/45059_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/archmage/45059_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_bless_of_einhasad2.png",
+    "iconFile": "s_bless_of_einhasad2.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "archmage",
+      "soultaker"
+    ],
+    "sampleClass": "archmage",
+    "name": "Skill 45059",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45061,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/hierophant/45061_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/hierophant/45061_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_bless_of_einhasad2.png",
+    "iconFile": "s_bless_of_einhasad2.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "hierophant"
+    ],
+    "sampleClass": "hierophant",
+    "name": "Skill 45061",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45105,
+    "rank": 3,
+    "subrank": 0,
+    "href": "/essence/skills/paladin/45105_3_0.html",
+    "url": "https://l2wiki.com/essence/skills/paladin/45105_3_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill1059.png",
+    "iconFile": "skill1059.png",
+    "categories": [
+      "Doll effect"
+    ],
+    "classes": [
+      "paladin",
+      "gladiator",
+      "warlord",
+      "warrior",
+      "dark_avenger",
+      "phoenix_knight",
+      "knight",
+      "duelist",
+      "dreadnought",
+      "sagittarius",
+      "sorcerer",
+      "hell_knight",
+      "treasure_hunter",
+      "rogue",
+      "hawkeye",
+      "archmage",
+      "adventurer",
+      "wizard",
+      "warlock",
+      "soultaker",
+      "werewolf_1",
+      "human_deathknight_1",
+      "human_deathknight_2",
+      "human_deathknight_3",
+      "werewolf_2",
+      "elven_scout",
+      "wind_rider",
+      "sword_muse",
+      "plain_walker",
+      "werewolf_3",
+      "evas_templar",
+      "elemental_master",
+      "oracle",
+      "elemental_summoner",
+      "moonlight_sentinel",
+      "elven_wizard",
+      "spellsinger",
+      "silver_ranger",
+      "elder",
+      "mystic_muse",
+      "elf_deathknight_3",
+      "shillien_knight",
+      "evas_saint",
+      "elf_deathknight_2",
+      "palus_knight",
+      "bladedancer",
+      "elf_deathknight_1",
+      "shillien_templar",
+      "phantom_ranger",
+      "ghost_hunter",
+      "storm_screamer",
+      "spectral_dancer",
+      "spellhowler",
+      "dark_wizard",
+      "assassin",
+      "ghost_sentinel",
+      "abyss_walker",
+      "spectral_master",
+      "delf_deathknight_2",
+      "delf_deathknight_3",
+      "delf_deathknight_1",
+      "phantom_summoner",
+      "rose_vain_3",
+      "rose_vain_2",
+      "rose_vain_1"
+    ],
+    "sampleClass": "paladin",
+    "name": "Skill 45105",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45109,
+    "rank": 3,
+    "subrank": 0,
+    "href": "/essence/skills/paladin/45109_3_0.html",
+    "url": "https://l2wiki.com/essence/skills/paladin/45109_3_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill1077.png",
+    "iconFile": "skill1077.png",
+    "categories": [
+      "Doll effect"
+    ],
+    "classes": [
+      "paladin",
+      "gladiator",
+      "warlord",
+      "warrior",
+      "dark_avenger",
+      "phoenix_knight",
+      "knight",
+      "duelist",
+      "dreadnought",
+      "sagittarius",
+      "sorcerer",
+      "hell_knight",
+      "treasure_hunter",
+      "rogue",
+      "hawkeye",
+      "archmage",
+      "adventurer",
+      "wizard",
+      "warlock",
+      "soultaker",
+      "werewolf_1",
+      "human_deathknight_1",
+      "human_deathknight_2",
+      "human_deathknight_3",
+      "werewolf_2",
+      "elven_scout",
+      "wind_rider",
+      "sword_muse",
+      "plain_walker",
+      "werewolf_3",
+      "evas_templar",
+      "elemental_master",
+      "oracle",
+      "elemental_summoner",
+      "moonlight_sentinel",
+      "elven_wizard",
+      "spellsinger",
+      "silver_ranger",
+      "elder",
+      "mystic_muse",
+      "elf_deathknight_3",
+      "shillien_knight",
+      "evas_saint",
+      "elf_deathknight_2",
+      "palus_knight",
+      "bladedancer",
+      "elf_deathknight_1",
+      "shillien_templar",
+      "phantom_ranger",
+      "ghost_hunter",
+      "storm_screamer",
+      "spectral_dancer",
+      "spellhowler",
+      "dark_wizard",
+      "assassin",
+      "ghost_sentinel",
+      "abyss_walker",
+      "spectral_master",
+      "delf_deathknight_2",
+      "delf_deathknight_3",
+      "delf_deathknight_1",
+      "phantom_summoner",
+      "rose_vain_3",
+      "rose_vain_2",
+      "rose_vain_1"
+    ],
+    "sampleClass": "paladin",
+    "name": "Skill 45109",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45110,
+    "rank": 3,
+    "subrank": 0,
+    "href": "/essence/skills/paladin/45110_3_0.html",
+    "url": "https://l2wiki.com/essence/skills/paladin/45110_3_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill1242.png",
+    "iconFile": "skill1242.png",
+    "categories": [
+      "Doll effect"
+    ],
+    "classes": [
+      "paladin",
+      "gladiator",
+      "warlord",
+      "warrior",
+      "dark_avenger",
+      "phoenix_knight",
+      "knight",
+      "duelist",
+      "dreadnought",
+      "sagittarius",
+      "sorcerer",
+      "hell_knight",
+      "treasure_hunter",
+      "rogue",
+      "hawkeye",
+      "archmage",
+      "adventurer",
+      "wizard",
+      "warlock",
+      "soultaker",
+      "werewolf_1",
+      "human_deathknight_1",
+      "human_deathknight_2",
+      "human_deathknight_3",
+      "werewolf_2",
+      "elven_scout",
+      "wind_rider",
+      "sword_muse",
+      "plain_walker",
+      "werewolf_3",
+      "evas_templar",
+      "elemental_master",
+      "oracle",
+      "elemental_summoner",
+      "moonlight_sentinel",
+      "elven_wizard",
+      "spellsinger",
+      "silver_ranger",
+      "elder",
+      "mystic_muse",
+      "elf_deathknight_3",
+      "shillien_knight",
+      "evas_saint",
+      "elf_deathknight_2",
+      "palus_knight",
+      "bladedancer",
+      "elf_deathknight_1",
+      "shillien_templar",
+      "phantom_ranger",
+      "ghost_hunter",
+      "storm_screamer",
+      "spectral_dancer",
+      "spellhowler",
+      "dark_wizard",
+      "assassin",
+      "ghost_sentinel",
+      "abyss_walker",
+      "spectral_master",
+      "delf_deathknight_2",
+      "delf_deathknight_3",
+      "delf_deathknight_1",
+      "phantom_summoner",
+      "rose_vain_3",
+      "rose_vain_2",
+      "rose_vain_1"
+    ],
+    "sampleClass": "paladin",
+    "name": "Death Whisper",
+    "skillType": "Passive: Doll effect",
+    "description": "Basic Critical Damage +35%",
+    "minLevel": 40,
+    "autoGet": false,
+    "status": "ok"
+  },
+  {
+    "wikiSkillId": 45113,
+    "rank": 3,
+    "subrank": 0,
+    "href": "/essence/skills/paladin/45113_3_0.html",
+    "url": "https://l2wiki.com/essence/skills/paladin/45113_3_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill1397.png",
+    "iconFile": "skill1397.png",
+    "categories": [
+      "Doll effect"
+    ],
+    "classes": [
+      "paladin",
+      "gladiator",
+      "warlord",
+      "warrior",
+      "dark_avenger",
+      "phoenix_knight",
+      "knight",
+      "duelist",
+      "dreadnought",
+      "sagittarius",
+      "sorcerer",
+      "hell_knight",
+      "treasure_hunter",
+      "rogue",
+      "hawkeye",
+      "archmage",
+      "adventurer",
+      "wizard",
+      "hierophant",
+      "warlock",
+      "prophet",
+      "cardinal",
+      "soultaker",
+      "cleric",
+      "bishop",
+      "werewolf_1",
+      "human_deathknight_1",
+      "human_deathknight_2",
+      "human_deathknight_3",
+      "werewolf_2",
+      "elven_scout",
+      "wind_rider",
+      "sword_muse",
+      "plain_walker",
+      "werewolf_3",
+      "evas_templar",
+      "elemental_master",
+      "elemental_summoner",
+      "moonlight_sentinel",
+      "elven_wizard",
+      "spellsinger",
+      "silver_ranger",
+      "mystic_muse",
+      "elf_deathknight_3",
+      "shillien_knight",
+      "elf_deathknight_2",
+      "palus_knight",
+      "bladedancer",
+      "elf_deathknight_1",
+      "shillien_templar",
+      "phantom_ranger",
+      "ghost_hunter",
+      "storm_screamer",
+      "spectral_dancer",
+      "spellhowler",
+      "dark_wizard",
+      "assassin",
+      "ghost_sentinel",
+      "abyss_walker",
+      "spectral_master",
+      "delf_deathknight_2",
+      "shillien_oracle",
+      "delf_deathknight_3",
+      "delf_deathknight_1",
+      "shillien_elder",
+      "phantom_summoner",
+      "shillien_saint",
+      "rose_vain_3",
+      "rose_vain_2",
+      "rose_vain_1"
+    ],
+    "sampleClass": "paladin",
+    "name": "Clarity",
+    "skillType": "Passive: Doll effect",
+    "description": "P. Skill MP Consumption -20%M. Skill MP Consumption -10%",
+    "minLevel": 40,
+    "autoGet": false,
+    "status": "ok"
+  },
+  {
+    "wikiSkillId": 45114,
+    "rank": 4,
+    "subrank": 0,
+    "href": "/essence/skills/fortune_seeker/45114_4_0.html",
+    "url": "https://l2wiki.com/essence/skills/fortune_seeker/45114_4_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill1077.png",
+    "iconFile": "skill1077.png",
+    "categories": [
+      "Doll effect"
+    ],
+    "classes": [
+      "fortune_seeker",
+      "artisan",
+      "bounty_hunter",
+      "scavenger",
+      "warsmith",
+      "maestro"
+    ],
+    "sampleClass": "fortune_seeker",
+    "name": "Focus",
+    "skillType": "Passive: Doll effect",
+    "description": "Basic Critical Rate +42",
+    "minLevel": 76,
+    "autoGet": false,
+    "status": "ok"
+  },
+  {
+    "wikiSkillId": 45115,
+    "rank": 4,
+    "subrank": 0,
+    "href": "/essence/skills/fortune_seeker/45115_4_0.html",
+    "url": "https://l2wiki.com/essence/skills/fortune_seeker/45115_4_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill1242.png",
+    "iconFile": "skill1242.png",
+    "categories": [
+      "Doll effect"
+    ],
+    "classes": [
+      "fortune_seeker",
+      "artisan",
+      "bounty_hunter",
+      "scavenger",
+      "warsmith",
+      "maestro"
+    ],
+    "sampleClass": "fortune_seeker",
+    "name": "Death Whisper",
+    "skillType": "Passive: Doll effect",
+    "description": "Basic Critical Damage +38%",
+    "minLevel": 76,
+    "autoGet": false,
+    "status": "ok"
+  },
+  {
+    "wikiSkillId": 45119,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/dwarven_fighter/45119_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/dwarven_fighter/45119_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill1068.png",
+    "iconFile": "skill1068.png",
+    "categories": [
+      "Doll effect"
+    ],
+    "classes": [
+      "dwarven_fighter",
+      "fortune_seeker",
+      "artisan",
+      "bounty_hunter",
+      "scavenger",
+      "warsmith",
+      "maestro"
+    ],
+    "sampleClass": "dwarven_fighter",
+    "name": "Skill 45119",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45120,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/dwarven_fighter/45120_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/dwarven_fighter/45120_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill1040.png",
+    "iconFile": "skill1040.png",
+    "categories": [
+      "Doll effect"
+    ],
+    "classes": [
+      "dwarven_fighter",
+      "fortune_seeker",
+      "artisan",
+      "bounty_hunter",
+      "scavenger",
+      "warsmith",
+      "maestro"
+    ],
+    "sampleClass": "dwarven_fighter",
+    "name": "Skill 45120",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45121,
+    "rank": 3,
+    "subrank": 0,
+    "href": "/essence/skills/destroyer/45121_3_0.html",
+    "url": "https://l2wiki.com/essence/skills/destroyer/45121_3_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill1077.png",
+    "iconFile": "skill1077.png",
+    "categories": [
+      "Doll effect"
+    ],
+    "classes": [
+      "destroyer",
+      "orc_raider",
+      "titan",
+      "tyrant",
+      "grand_khavatari",
+      "orc_monk",
+      "orc_rider_1",
+      "orc_rider_3",
+      "orc_rider_2"
+    ],
+    "sampleClass": "destroyer",
+    "name": "Skill 45121",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45122,
+    "rank": 3,
+    "subrank": 0,
+    "href": "/essence/skills/destroyer/45122_3_0.html",
+    "url": "https://l2wiki.com/essence/skills/destroyer/45122_3_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill1242.png",
+    "iconFile": "skill1242.png",
+    "categories": [
+      "Doll effect"
+    ],
+    "classes": [
+      "destroyer",
+      "orc_raider",
+      "titan",
+      "tyrant",
+      "grand_khavatari",
+      "orc_monk",
+      "orc_rider_1",
+      "orc_rider_3",
+      "orc_rider_2"
+    ],
+    "sampleClass": "destroyer",
+    "name": "Skill 45122",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45126,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/orc_fighter/45126_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/orc_fighter/45126_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill1068.png",
+    "iconFile": "skill1068.png",
+    "categories": [
+      "Doll effect"
+    ],
+    "classes": [
+      "orc_fighter",
+      "destroyer",
+      "orc_raider",
+      "titan",
+      "tyrant",
+      "grand_khavatari",
+      "orc_monk",
+      "orc_rider_0",
+      "orc_rider_1",
+      "orc_rider_3",
+      "orc_rider_2"
+    ],
+    "sampleClass": "orc_fighter",
+    "name": "Skill 45126",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45127,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/orc_fighter/45127_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/orc_fighter/45127_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill1040.png",
+    "iconFile": "skill1040.png",
+    "categories": [
+      "Doll effect"
+    ],
+    "classes": [
+      "orc_fighter",
+      "destroyer",
+      "orc_raider",
+      "titan",
+      "tyrant",
+      "grand_khavatari",
+      "orc_monk",
+      "orc_rider_0",
+      "orc_rider_1",
+      "orc_rider_3",
+      "orc_rider_2"
+    ],
+    "sampleClass": "orc_fighter",
+    "name": "Skill 45127",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45129,
+    "rank": 3,
+    "subrank": 0,
+    "href": "/essence/skills/destroyer/45129_3_0.html",
+    "url": "https://l2wiki.com/essence/skills/destroyer/45129_3_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill1397.png",
+    "iconFile": "skill1397.png",
+    "categories": [
+      "Doll effect"
+    ],
+    "classes": [
+      "destroyer",
+      "orc_raider",
+      "titan",
+      "tyrant",
+      "grand_khavatari",
+      "orc_monk",
+      "orc_rider_1",
+      "orc_rider_3",
+      "orc_rider_2"
+    ],
+    "sampleClass": "destroyer",
+    "name": "Skill 45129",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45131,
+    "rank": 4,
+    "subrank": 0,
+    "href": "/essence/skills/fortune_seeker/45131_4_0.html",
+    "url": "https://l2wiki.com/essence/skills/fortune_seeker/45131_4_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill1059.png",
+    "iconFile": "skill1059.png",
+    "categories": [
+      "Doll effect"
+    ],
+    "classes": [
+      "fortune_seeker",
+      "artisan",
+      "bounty_hunter",
+      "scavenger",
+      "warsmith",
+      "maestro"
+    ],
+    "sampleClass": "fortune_seeker",
+    "name": "Skill 45131",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45134,
+    "rank": 4,
+    "subrank": 0,
+    "href": "/essence/skills/fortune_seeker/45134_4_0.html",
+    "url": "https://l2wiki.com/essence/skills/fortune_seeker/45134_4_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill1397.png",
+    "iconFile": "skill1397.png",
+    "categories": [
+      "Doll effect"
+    ],
+    "classes": [
+      "fortune_seeker",
+      "artisan",
+      "bounty_hunter",
+      "scavenger",
+      "warsmith",
+      "maestro"
+    ],
+    "sampleClass": "fortune_seeker",
+    "name": "Skill 45134",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45136,
+    "rank": 3,
+    "subrank": 0,
+    "href": "/essence/skills/destroyer/45136_3_0.html",
+    "url": "https://l2wiki.com/essence/skills/destroyer/45136_3_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill1059.png",
+    "iconFile": "skill1059.png",
+    "categories": [
+      "Doll effect"
+    ],
+    "classes": [
+      "destroyer",
+      "orc_raider",
+      "titan",
+      "tyrant",
+      "grand_khavatari",
+      "orc_monk",
+      "orc_rider_1",
+      "orc_rider_3",
+      "orc_rider_2"
+    ],
+    "sampleClass": "destroyer",
+    "name": "Skill 45136",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45138,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/orc_shaman/45138_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/orc_shaman/45138_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill1397.png",
+    "iconFile": "skill1397.png",
+    "categories": [
+      "Doll effect"
+    ],
+    "classes": [
+      "orc_shaman",
+      "doomcryer",
+      "warcryer",
+      "dominator",
+      "overlord"
+    ],
+    "sampleClass": "orc_shaman",
+    "name": "Skill 45138",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45139,
+    "rank": 4,
+    "subrank": 0,
+    "href": "/essence/skills/soul_hound/45139_4_0.html",
+    "url": "https://l2wiki.com/essence/skills/soul_hound/45139_4_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill1077.png",
+    "iconFile": "skill1077.png",
+    "categories": [
+      "Doll effect"
+    ],
+    "classes": [
+      "soul_hound",
+      "warder",
+      "soul_finder",
+      "soul_breaker",
+      "trooper",
+      "berserker",
+      "arbalester",
+      "trickster"
+    ],
+    "sampleClass": "soul_hound",
+    "name": "Skill 45139",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45140,
+    "rank": 4,
+    "subrank": 0,
+    "href": "/essence/skills/soul_hound/45140_4_0.html",
+    "url": "https://l2wiki.com/essence/skills/soul_hound/45140_4_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill1242.png",
+    "iconFile": "skill1242.png",
+    "categories": [
+      "Doll effect"
+    ],
+    "classes": [
+      "soul_hound",
+      "warder",
+      "soul_finder",
+      "soul_breaker",
+      "trooper",
+      "berserker",
+      "arbalester",
+      "trickster"
+    ],
+    "sampleClass": "soul_hound",
+    "name": "Skill 45140",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45144,
+    "rank": 4,
+    "subrank": 0,
+    "href": "/essence/skills/soul_hound/45144_4_0.html",
+    "url": "https://l2wiki.com/essence/skills/soul_hound/45144_4_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill1068.png",
+    "iconFile": "skill1068.png",
+    "categories": [
+      "Doll effect"
+    ],
+    "classes": [
+      "soul_hound",
+      "warder",
+      "soul_finder",
+      "soul_breaker",
+      "trooper",
+      "berserker",
+      "arbalester",
+      "trickster"
+    ],
+    "sampleClass": "soul_hound",
+    "name": "Skill 45144",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45145,
+    "rank": 4,
+    "subrank": 0,
+    "href": "/essence/skills/soul_hound/45145_4_0.html",
+    "url": "https://l2wiki.com/essence/skills/soul_hound/45145_4_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill1040.png",
+    "iconFile": "skill1040.png",
+    "categories": [
+      "Doll effect"
+    ],
+    "classes": [
+      "soul_hound",
+      "warder",
+      "soul_finder",
+      "soul_breaker",
+      "trooper",
+      "berserker",
+      "arbalester",
+      "trickster"
+    ],
+    "sampleClass": "soul_hound",
+    "name": "Skill 45145",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45147,
+    "rank": 4,
+    "subrank": 0,
+    "href": "/essence/skills/soul_hound/45147_4_0.html",
+    "url": "https://l2wiki.com/essence/skills/soul_hound/45147_4_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill1059.png",
+    "iconFile": "skill1059.png",
+    "categories": [
+      "Doll effect"
+    ],
+    "classes": [
+      "soul_hound",
+      "warder",
+      "soul_finder",
+      "soul_breaker",
+      "trooper",
+      "berserker",
+      "arbalester",
+      "trickster"
+    ],
+    "sampleClass": "soul_hound",
+    "name": "Skill 45147",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45150,
+    "rank": 4,
+    "subrank": 0,
+    "href": "/essence/skills/soul_hound/45150_4_0.html",
+    "url": "https://l2wiki.com/essence/skills/soul_hound/45150_4_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill1397.png",
+    "iconFile": "skill1397.png",
+    "categories": [
+      "Doll effect"
+    ],
+    "classes": [
+      "soul_hound",
+      "warder",
+      "soul_finder",
+      "soul_breaker",
+      "trooper",
+      "berserker",
+      "arbalester",
+      "trickster"
+    ],
+    "sampleClass": "soul_hound",
+    "name": "Skill 45150",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45178,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/warder/45178_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/warder/45178_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill_jinkama_white1.png",
+    "iconFile": "skill_jinkama_white1.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "warder",
+      "arbalester"
+    ],
+    "sampleClass": "warder",
+    "name": "Skill 45178",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45179,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/arbalester/45179_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/arbalester/45179_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill_jinkama_black1.png",
+    "iconFile": "skill_jinkama_black1.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "arbalester"
+    ],
+    "sampleClass": "arbalester",
+    "name": "Skill 45179",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45184,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/paladin/45184_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/paladin/45184_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill19225.png",
+    "iconFile": "skill19225.png",
+    "categories": [
+      "Doll effect"
+    ],
+    "classes": [
+      "paladin",
+      "gladiator",
+      "warlord",
+      "dark_avenger",
+      "sorcerer",
+      "treasure_hunter",
+      "hawkeye",
+      "warlock",
+      "prophet",
+      "secret_assassin_male_2",
+      "human_deathknight_2",
+      "werewolf_2",
+      "plain_walker",
+      "elemental_summoner",
+      "spellsinger",
+      "silver_ranger",
+      "shillien_knight",
+      "elf_deathknight_2",
+      "bladedancer",
+      "phantom_ranger",
+      "spellhowler",
+      "abyss_walker",
+      "delf_deathknight_2",
+      "phantom_summoner",
+      "destroyer",
+      "rose_vain_2",
+      "secret_assassin_female_2",
+      "tyrant",
+      "bounty_hunter",
+      "orc_rider_2",
+      "warsmith",
+      "soul_breaker",
+      "berserker",
+      "arbalester",
+      "wind_hunter",
+      "crow_2",
+      "sacred_templar_2",
+      "spirit_2"
+    ],
+    "sampleClass": "paladin",
+    "name": "Skill 45184",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45185,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/bladedancer/45185_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/bladedancer/45185_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill19435.png",
+    "iconFile": "skill19435.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "bladedancer"
+    ],
+    "sampleClass": "bladedancer",
+    "name": "Skill 45185",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45188,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/phoenix_knight/45188_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/phoenix_knight/45188_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill19131.png",
+    "iconFile": "skill19131.png",
+    "categories": [
+      "Doll effect"
+    ],
+    "classes": [
+      "phoenix_knight",
+      "duelist",
+      "dreadnought",
+      "sagittarius",
+      "hell_knight",
+      "archmage",
+      "adventurer",
+      "hierophant",
+      "cardinal",
+      "soultaker",
+      "secret_assassin_male_3",
+      "human_deathknight_3",
+      "wind_rider",
+      "sword_muse",
+      "werewolf_3",
+      "evas_templar",
+      "elemental_master",
+      "moonlight_sentinel",
+      "mystic_muse",
+      "elf_deathknight_3",
+      "evas_saint",
+      "shillien_templar",
+      "ghost_hunter",
+      "storm_screamer",
+      "spectral_dancer",
+      "ghost_sentinel",
+      "spectral_master",
+      "delf_deathknight_3",
+      "shillien_saint",
+      "rose_vain_3",
+      "secret_assassin_female_3",
+      "titan",
+      "doomcryer",
+      "dominator",
+      "grand_khavatari",
+      "fortune_seeker",
+      "orc_rider_3",
+      "soul_hound",
+      "maestro",
+      "trickster",
+      "crow_3",
+      "spirit_3"
+    ],
+    "sampleClass": "phoenix_knight",
+    "name": "Skill 45188",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45189,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/phoenix_knight/45189_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/phoenix_knight/45189_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill19132.png",
+    "iconFile": "skill19132.png",
+    "categories": [
+      "Doll effect"
+    ],
+    "classes": [
+      "phoenix_knight",
+      "duelist",
+      "dreadnought",
+      "sagittarius",
+      "hell_knight",
+      "archmage",
+      "adventurer",
+      "hierophant",
+      "cardinal",
+      "soultaker",
+      "secret_assassin_male_3",
+      "human_deathknight_3",
+      "wind_rider",
+      "sword_muse",
+      "werewolf_3",
+      "evas_templar",
+      "elemental_master",
+      "moonlight_sentinel",
+      "mystic_muse",
+      "elf_deathknight_3",
+      "evas_saint",
+      "shillien_templar",
+      "ghost_hunter",
+      "storm_screamer",
+      "spectral_dancer",
+      "ghost_sentinel",
+      "spectral_master",
+      "delf_deathknight_3",
+      "shillien_saint",
+      "rose_vain_3",
+      "secret_assassin_female_3",
+      "titan",
+      "doomcryer",
+      "dominator",
+      "grand_khavatari",
+      "fortune_seeker",
+      "orc_rider_3",
+      "soul_hound",
+      "maestro",
+      "trickster",
+      "crow_3",
+      "spirit_3"
+    ],
+    "sampleClass": "phoenix_knight",
+    "name": "Skill 45189",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45203,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/phoenix_knight/45203_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/phoenix_knight/45203_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_master_of_hate.png",
+    "iconFile": "s_master_of_hate.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "phoenix_knight"
+    ],
+    "sampleClass": "phoenix_knight",
+    "name": "Skill 45203",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45226,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/hell_knight/45226_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/hell_knight/45226_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_master_of_hate.png",
+    "iconFile": "s_master_of_hate.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "hell_knight"
+    ],
+    "sampleClass": "hell_knight",
+    "name": "Skill 45226",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45234,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/phoenix_knight/45234_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/phoenix_knight/45234_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/glory_expand_inventory.png",
+    "iconFile": "glory_expand_inventory.png",
+    "categories": [
+      "Level-up Achievement - Glory Skill"
+    ],
+    "classes": [
+      "phoenix_knight",
+      "duelist",
+      "dreadnought",
+      "sagittarius",
+      "hell_knight",
+      "archmage",
+      "adventurer",
+      "hierophant",
+      "cardinal",
+      "soultaker",
+      "secret_assassin_male_3",
+      "human_deathknight_3",
+      "wind_rider",
+      "sword_muse",
+      "werewolf_3",
+      "evas_templar",
+      "elemental_master",
+      "moonlight_sentinel",
+      "mystic_muse",
+      "elf_deathknight_3",
+      "evas_saint",
+      "shillien_templar",
+      "ghost_hunter",
+      "storm_screamer",
+      "spectral_dancer",
+      "ghost_sentinel",
+      "spectral_master",
+      "delf_deathknight_3",
+      "shillien_saint",
+      "rose_vain_3",
+      "secret_assassin_female_3",
+      "titan",
+      "doomcryer",
+      "dominator",
+      "grand_khavatari",
+      "fortune_seeker",
+      "orc_rider_3",
+      "soul_hound",
+      "maestro",
+      "trickster",
+      "crow_3",
+      "spirit_3"
+    ],
+    "sampleClass": "phoenix_knight",
+    "name": "Skill 45234",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45235,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/phoenix_knight/45235_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/phoenix_knight/45235_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/glory_expand_limit_weight.png",
+    "iconFile": "glory_expand_limit_weight.png",
+    "categories": [
+      "Level-up Achievement - Glory Skill"
+    ],
+    "classes": [
+      "phoenix_knight",
+      "duelist",
+      "dreadnought",
+      "sagittarius",
+      "hell_knight",
+      "archmage",
+      "adventurer",
+      "hierophant",
+      "cardinal",
+      "soultaker",
+      "secret_assassin_male_3",
+      "human_deathknight_3",
+      "wind_rider",
+      "sword_muse",
+      "werewolf_3",
+      "evas_templar",
+      "elemental_master",
+      "moonlight_sentinel",
+      "mystic_muse",
+      "elf_deathknight_3",
+      "evas_saint",
+      "shillien_templar",
+      "ghost_hunter",
+      "storm_screamer",
+      "spectral_dancer",
+      "ghost_sentinel",
+      "spectral_master",
+      "delf_deathknight_3",
+      "shillien_saint",
+      "rose_vain_3",
+      "secret_assassin_female_3",
+      "titan",
+      "doomcryer",
+      "dominator",
+      "grand_khavatari",
+      "fortune_seeker",
+      "orc_rider_3",
+      "soul_hound",
+      "maestro",
+      "trickster",
+      "crow_3",
+      "spirit_3"
+    ],
+    "sampleClass": "phoenix_knight",
+    "name": "Skill 45235",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45238,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/hierophant/45238_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/hierophant/45238_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill2514.png",
+    "iconFile": "skill2514.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "hierophant",
+      "cardinal",
+      "evas_saint",
+      "shillien_saint"
+    ],
+    "sampleClass": "hierophant",
+    "name": "Skill 45238",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45239,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/hierophant/45239_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/hierophant/45239_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill10268.png",
+    "iconFile": "skill10268.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "hierophant",
+      "cardinal",
+      "evas_saint",
+      "shillien_saint"
+    ],
+    "sampleClass": "hierophant",
+    "name": "Skill 45239",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45240,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/mage/45240_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/mage/45240_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill10317.png",
+    "iconFile": "skill10317.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "mage"
+    ],
+    "sampleClass": "mage",
+    "name": "Skill 45240",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45248,
+    "rank": 2,
+    "subrank": 0,
+    "href": "/essence/skills/fortune_seeker/45248_2_0.html",
+    "url": "https://l2wiki.com/essence/skills/fortune_seeker/45248_2_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill1921.png",
+    "iconFile": "skill1921.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "fortune_seeker",
+      "bounty_hunter"
+    ],
+    "sampleClass": "fortune_seeker",
+    "name": "Skill 45248",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45269,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/phoenix_knight/45269_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/phoenix_knight/45269_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_expand_dye_potential.png",
+    "iconFile": "s_expand_dye_potential.png",
+    "categories": [
+      "Other Skills - Passive"
+    ],
+    "classes": [
+      "phoenix_knight",
+      "duelist",
+      "dreadnought",
+      "sagittarius",
+      "hell_knight",
+      "archmage",
+      "adventurer",
+      "hierophant",
+      "cardinal",
+      "soultaker",
+      "secret_assassin_male_3",
+      "human_deathknight_3",
+      "wind_rider",
+      "sword_muse",
+      "werewolf_3",
+      "evas_templar",
+      "elemental_master",
+      "moonlight_sentinel",
+      "mystic_muse",
+      "elf_deathknight_3",
+      "evas_saint",
+      "shillien_templar",
+      "ghost_hunter",
+      "storm_screamer",
+      "spectral_dancer",
+      "ghost_sentinel",
+      "spectral_master",
+      "delf_deathknight_3",
+      "shillien_saint",
+      "rose_vain_3",
+      "secret_assassin_female_3",
+      "titan",
+      "doomcryer",
+      "dominator",
+      "grand_khavatari",
+      "fortune_seeker",
+      "orc_rider_3",
+      "soul_hound",
+      "maestro",
+      "trickster",
+      "crow_3",
+      "spirit_3"
+    ],
+    "sampleClass": "phoenix_knight",
+    "name": "Skill 45269",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45271,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/phoenix_knight/45271_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/phoenix_knight/45271_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill11752.png",
+    "iconFile": "skill11752.png",
+    "categories": [
+      "Doll effect"
+    ],
+    "classes": [
+      "phoenix_knight",
+      "duelist",
+      "dreadnought",
+      "sagittarius",
+      "hell_knight",
+      "archmage",
+      "adventurer",
+      "hierophant",
+      "cardinal",
+      "soultaker",
+      "secret_assassin_male_3",
+      "human_deathknight_3",
+      "wind_rider",
+      "sword_muse",
+      "werewolf_3",
+      "evas_templar",
+      "elemental_master",
+      "moonlight_sentinel",
+      "mystic_muse",
+      "elf_deathknight_3",
+      "evas_saint",
+      "shillien_templar",
+      "ghost_hunter",
+      "storm_screamer",
+      "spectral_dancer",
+      "ghost_sentinel",
+      "spectral_master",
+      "delf_deathknight_3",
+      "shillien_saint",
+      "rose_vain_3",
+      "secret_assassin_female_3",
+      "titan",
+      "doomcryer",
+      "dominator",
+      "grand_khavatari",
+      "fortune_seeker",
+      "orc_rider_3",
+      "soul_hound",
+      "maestro",
+      "trickster",
+      "crow_3",
+      "spirit_3"
+    ],
+    "sampleClass": "phoenix_knight",
+    "name": "Skill 45271",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45272,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/human_deathknight_3/45272_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/human_deathknight_3/45272_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_death_endurance.png",
+    "iconFile": "s_death_endurance.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "human_deathknight_3",
+      "elf_deathknight_3",
+      "delf_deathknight_3"
+    ],
+    "sampleClass": "human_deathknight_3",
+    "name": "Skill 45272",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45273,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/sword_muse/45273_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/sword_muse/45273_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_sound_of_muse.png",
+    "iconFile": "s_sound_of_muse.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "sword_muse"
+    ],
+    "sampleClass": "sword_muse",
+    "name": "Skill 45273",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45274,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/spectral_dancer/45274_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/spectral_dancer/45274_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_play_of_dancer.png",
+    "iconFile": "s_play_of_dancer.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "spectral_dancer"
+    ],
+    "sampleClass": "spectral_dancer",
+    "name": "Skill 45274",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45275,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/dominator/45275_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/dominator/45275_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_spell_of_force.png",
+    "iconFile": "s_spell_of_force.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "dominator"
+    ],
+    "sampleClass": "dominator",
+    "name": "Skill 45275",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45276,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/doomcryer/45276_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/doomcryer/45276_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_spell_of_fatal.png",
+    "iconFile": "s_spell_of_fatal.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "doomcryer"
+    ],
+    "sampleClass": "doomcryer",
+    "name": "Skill 45276",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45277,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/dreadnought/45277_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/dreadnought/45277_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_splash_attack.png",
+    "iconFile": "s_splash_attack.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "dreadnought"
+    ],
+    "sampleClass": "dreadnought",
+    "name": "Skill 45277",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45278,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/titan/45278_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/titan/45278_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_titan_spirit.png",
+    "iconFile": "s_titan_spirit.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "titan"
+    ],
+    "sampleClass": "titan",
+    "name": "Skill 45278",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45279,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/grand_khavatari/45279_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/grand_khavatari/45279_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_khavatari_spirit.png",
+    "iconFile": "s_khavatari_spirit.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "grand_khavatari"
+    ],
+    "sampleClass": "grand_khavatari",
+    "name": "Skill 45279",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45280,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/orc_rider_3/45280_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/orc_rider_3/45280_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_spearhead.png",
+    "iconFile": "s_spearhead.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "orc_rider_3"
+    ],
+    "sampleClass": "orc_rider_3",
+    "name": "Skill 45280",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45283,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/hierophant/45283_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/hierophant/45283_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill11763.png",
+    "iconFile": "skill11763.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "hierophant"
+    ],
+    "sampleClass": "hierophant",
+    "name": "Skill 45283",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45284,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/elemental_master/45284_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/elemental_master/45284_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_children_of_eva2.png",
+    "iconFile": "s_children_of_eva2.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "elemental_master"
+    ],
+    "sampleClass": "elemental_master",
+    "name": "Skill 45284",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45285,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/spectral_master/45285_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/spectral_master/45285_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_children_of_shilen2.png",
+    "iconFile": "s_children_of_shilen2.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "spectral_master"
+    ],
+    "sampleClass": "spectral_master",
+    "name": "Skill 45285",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45290,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/shillien_saint/45290_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/shillien_saint/45290_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_children_of_shilen2.png",
+    "iconFile": "s_children_of_shilen2.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "shillien_saint"
+    ],
+    "sampleClass": "shillien_saint",
+    "name": "Skill 45290",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45291,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/storm_screamer/45291_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/storm_screamer/45291_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_children_of_shilen2.png",
+    "iconFile": "s_children_of_shilen2.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "storm_screamer"
+    ],
+    "sampleClass": "storm_screamer",
+    "name": "Skill 45291",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45294,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/mystic_muse/45294_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/mystic_muse/45294_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_children_of_eva2.png",
+    "iconFile": "s_children_of_eva2.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "mystic_muse"
+    ],
+    "sampleClass": "mystic_muse",
+    "name": "Skill 45294",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45295,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/hell_knight/45295_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/hell_knight/45295_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/strength_of_knight.png",
+    "iconFile": "strength_of_knight.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "hell_knight"
+    ],
+    "sampleClass": "hell_knight",
+    "name": "Skill 45295",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45337,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/human_deathknight_2/45337_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/human_deathknight_2/45337_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/acceleration.png",
+    "iconFile": "acceleration.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "human_deathknight_2",
+      "human_deathknight_3",
+      "elf_deathknight_3",
+      "elf_deathknight_2",
+      "delf_deathknight_2",
+      "delf_deathknight_3"
+    ],
+    "sampleClass": "human_deathknight_2",
+    "name": "Skill 45337",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45349,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/human_deathknight_0/45349_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/human_deathknight_0/45349_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/born_to_be_death.png",
+    "iconFile": "born_to_be_death.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "human_deathknight_0",
+      "elf_deathknight_0",
+      "delf_deathknight_0"
+    ],
+    "sampleClass": "human_deathknight_0",
+    "name": "Skill 45349",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45350,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/human_deathknight_0/45350_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/human_deathknight_0/45350_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill19405.png",
+    "iconFile": "skill19405.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "human_deathknight_0",
+      "human_deathknight_2",
+      "human_deathknight_3",
+      "elf_deathknight_3",
+      "elf_deathknight_2",
+      "elf_deathknight_0",
+      "delf_deathknight_2",
+      "delf_deathknight_0",
+      "delf_deathknight_3"
+    ],
+    "sampleClass": "human_deathknight_0",
+    "name": "Skill 45350",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45351,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/human_deathknight_0/45351_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/human_deathknight_0/45351_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill19187.png",
+    "iconFile": "skill19187.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "human_deathknight_0",
+      "elf_deathknight_0",
+      "delf_deathknight_0"
+    ],
+    "sampleClass": "human_deathknight_0",
+    "name": "Skill 45351",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45352,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/human_deathknight_0/45352_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/human_deathknight_0/45352_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/death_point.png",
+    "iconFile": "death_point.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "human_deathknight_0",
+      "human_deathknight_2",
+      "human_deathknight_3",
+      "elf_deathknight_3",
+      "elf_deathknight_2",
+      "elf_deathknight_0",
+      "delf_deathknight_2",
+      "delf_deathknight_0",
+      "delf_deathknight_3"
+    ],
+    "sampleClass": "human_deathknight_0",
+    "name": "Skill 45352",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45353,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/human_deathknight_0/45353_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/human_deathknight_0/45353_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/death_sword.png",
+    "iconFile": "death_sword.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "human_deathknight_0",
+      "human_deathknight_1",
+      "human_deathknight_2",
+      "elf_deathknight_2",
+      "elf_deathknight_1",
+      "elf_deathknight_0",
+      "delf_deathknight_2",
+      "delf_deathknight_0",
+      "delf_deathknight_1"
+    ],
+    "sampleClass": "human_deathknight_0",
+    "name": "Skill 45353",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45354,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/human_deathknight_0/45354_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/human_deathknight_0/45354_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/change_death_armor.png",
+    "iconFile": "change_death_armor.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "human_deathknight_0",
+      "human_deathknight_1",
+      "human_deathknight_2",
+      "human_deathknight_3",
+      "elf_deathknight_3",
+      "elf_deathknight_2",
+      "elf_deathknight_1",
+      "elf_deathknight_0",
+      "delf_deathknight_2",
+      "delf_deathknight_0",
+      "delf_deathknight_3",
+      "delf_deathknight_1"
+    ],
+    "sampleClass": "human_deathknight_0",
+    "name": "Skill 45354",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45359,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/human_deathknight_2/45359_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/human_deathknight_2/45359_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill19169.png",
+    "iconFile": "skill19169.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "human_deathknight_2",
+      "elf_deathknight_2",
+      "delf_deathknight_2"
+    ],
+    "sampleClass": "human_deathknight_2",
+    "name": "Skill 45359",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45363,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/duelist/45363_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/duelist/45363_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/skill0340.png",
+    "iconFile": "skill0340.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "duelist"
+    ],
+    "sampleClass": "duelist",
+    "name": "Skill 45363",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45367,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/dreadnought/45367_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/dreadnought/45367_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/arc_thunder_storm.png",
+    "iconFile": "arc_thunder_storm.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "dreadnought"
+    ],
+    "sampleClass": "dreadnought",
+    "name": "Skill 45367",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45369,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/phoenix_knight/45369_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/phoenix_knight/45369_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/assist_of_phoenix.png",
+    "iconFile": "assist_of_phoenix.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "phoenix_knight"
+    ],
+    "sampleClass": "phoenix_knight",
+    "name": "Skill 45369",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45370,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/hell_knight/45370_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/hell_knight/45370_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/assist_of_hatred.png",
+    "iconFile": "assist_of_hatred.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "hell_knight"
+    ],
+    "sampleClass": "hell_knight",
+    "name": "Skill 45370",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45371,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/evas_templar/45371_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/evas_templar/45371_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/assist_of_eva.png",
+    "iconFile": "assist_of_eva.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "evas_templar"
+    ],
+    "sampleClass": "evas_templar",
+    "name": "Skill 45371",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45372,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/shillien_templar/45372_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/shillien_templar/45372_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/assist_of_shilen.png",
+    "iconFile": "assist_of_shilen.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "shillien_templar"
+    ],
+    "sampleClass": "shillien_templar",
+    "name": "Skill 45372",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45383,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/dreadnought/45383_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/dreadnought/45383_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/arc_gust_pierce.png",
+    "iconFile": "arc_gust_pierce.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "dreadnought"
+    ],
+    "sampleClass": "dreadnought",
+    "name": "Skill 45383",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45387,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/ghost_sentinel/45387_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/ghost_sentinel/45387_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/darkness_sense.png",
+    "iconFile": "darkness_sense.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "ghost_sentinel"
+    ],
+    "sampleClass": "ghost_sentinel",
+    "name": "Skill 45387",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45408,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/phoenix_knight/45408_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/phoenix_knight/45408_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/ev_magic_flame_game_wind1.png",
+    "iconFile": "ev_magic_flame_game_wind1.png",
+    "categories": [
+      "Doll effect"
+    ],
+    "classes": [
+      "phoenix_knight",
+      "duelist",
+      "dreadnought",
+      "sagittarius",
+      "hell_knight",
+      "archmage",
+      "adventurer",
+      "hierophant",
+      "cardinal",
+      "soultaker",
+      "secret_assassin_male_3",
+      "human_deathknight_3",
+      "wind_rider",
+      "sword_muse",
+      "werewolf_3",
+      "evas_templar",
+      "elemental_master",
+      "moonlight_sentinel",
+      "mystic_muse",
+      "elf_deathknight_3",
+      "evas_saint",
+      "shillien_templar",
+      "ghost_hunter",
+      "storm_screamer",
+      "spectral_dancer",
+      "ghost_sentinel",
+      "spectral_master",
+      "delf_deathknight_3",
+      "shillien_saint",
+      "rose_vain_3",
+      "secret_assassin_female_3",
+      "titan",
+      "doomcryer",
+      "dominator",
+      "grand_khavatari",
+      "fortune_seeker",
+      "orc_rider_3",
+      "soul_hound",
+      "maestro",
+      "trickster",
+      "spirit_3"
+    ],
+    "sampleClass": "phoenix_knight",
+    "name": "Skill 45408",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45409,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/grand_khavatari/45409_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/grand_khavatari/45409_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/orc_vitality0.png",
+    "iconFile": "orc_vitality0.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "grand_khavatari"
+    ],
+    "sampleClass": "grand_khavatari",
+    "name": "Skill 45409",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45429,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/phoenix_knight/45429_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/phoenix_knight/45429_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_glory_trenscendence_teleport.png",
+    "iconFile": "s_glory_trenscendence_teleport.png",
+    "categories": [
+      "Level-up Achievement - Glory Skill"
+    ],
+    "classes": [
+      "phoenix_knight",
+      "duelist",
+      "dreadnought",
+      "sagittarius",
+      "hell_knight",
+      "archmage",
+      "adventurer",
+      "hierophant",
+      "cardinal",
+      "soultaker",
+      "secret_assassin_male_3",
+      "human_deathknight_3",
+      "wind_rider",
+      "sword_muse",
+      "werewolf_3",
+      "evas_templar",
+      "elemental_master",
+      "moonlight_sentinel",
+      "mystic_muse",
+      "elf_deathknight_3",
+      "evas_saint",
+      "shillien_templar",
+      "ghost_hunter",
+      "storm_screamer",
+      "spectral_dancer",
+      "ghost_sentinel",
+      "spectral_master",
+      "delf_deathknight_3",
+      "shillien_saint",
+      "rose_vain_3",
+      "secret_assassin_female_3",
+      "titan",
+      "doomcryer",
+      "dominator",
+      "grand_khavatari",
+      "fortune_seeker",
+      "orc_rider_3",
+      "soul_hound",
+      "maestro",
+      "trickster",
+      "crow_3",
+      "spirit_3"
+    ],
+    "sampleClass": "phoenix_knight",
+    "name": "Skill 45429",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45430,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/evas_saint/45430_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/evas_saint/45430_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_aquatic_oath.png",
+    "iconFile": "s_aquatic_oath.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "evas_saint"
+    ],
+    "sampleClass": "evas_saint",
+    "name": "Skill 45430",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45431,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/shillien_saint/45431_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/shillien_saint/45431_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_darkness_oath.png",
+    "iconFile": "s_darkness_oath.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "shillien_saint"
+    ],
+    "sampleClass": "shillien_saint",
+    "name": "Skill 45431",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45432,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/cardinal/45432_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/cardinal/45432_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_shining_buster.png",
+    "iconFile": "s_shining_buster.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "cardinal"
+    ],
+    "sampleClass": "cardinal",
+    "name": "Skill 45432",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45472,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/phoenix_knight/45472_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/phoenix_knight/45472_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/lv_benefit_spt.png",
+    "iconFile": "lv_benefit_spt.png",
+    "categories": [
+      "Level-up Achievement - Glory Skill"
+    ],
+    "classes": [
+      "phoenix_knight",
+      "duelist",
+      "dreadnought",
+      "sagittarius",
+      "hell_knight",
+      "archmage",
+      "adventurer",
+      "hierophant",
+      "cardinal",
+      "soultaker",
+      "secret_assassin_male_3",
+      "human_deathknight_3",
+      "wind_rider",
+      "sword_muse",
+      "werewolf_3",
+      "evas_templar",
+      "elemental_master",
+      "moonlight_sentinel",
+      "mystic_muse",
+      "elf_deathknight_3",
+      "evas_saint",
+      "shillien_templar",
+      "ghost_hunter",
+      "storm_screamer",
+      "spectral_dancer",
+      "ghost_sentinel",
+      "spectral_master",
+      "delf_deathknight_3",
+      "shillien_saint",
+      "rose_vain_3",
+      "secret_assassin_female_3",
+      "titan",
+      "doomcryer",
+      "dominator",
+      "grand_khavatari",
+      "fortune_seeker",
+      "orc_rider_3",
+      "soul_hound",
+      "maestro",
+      "trickster",
+      "crow_3",
+      "spirit_3"
+    ],
+    "sampleClass": "phoenix_knight",
+    "name": "Skill 45472",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45473,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/phoenix_knight/45473_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/phoenix_knight/45473_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/lv_benefit_frt.png",
+    "iconFile": "lv_benefit_frt.png",
+    "categories": [
+      "Level-up Achievement - Glory Skill"
+    ],
+    "classes": [
+      "phoenix_knight",
+      "duelist",
+      "dreadnought",
+      "sagittarius",
+      "hell_knight",
+      "archmage",
+      "adventurer",
+      "hierophant",
+      "cardinal",
+      "soultaker",
+      "secret_assassin_male_3",
+      "human_deathknight_3",
+      "wind_rider",
+      "sword_muse",
+      "werewolf_3",
+      "evas_templar",
+      "elemental_master",
+      "moonlight_sentinel",
+      "mystic_muse",
+      "elf_deathknight_3",
+      "evas_saint",
+      "shillien_templar",
+      "ghost_hunter",
+      "storm_screamer",
+      "spectral_dancer",
+      "ghost_sentinel",
+      "spectral_master",
+      "delf_deathknight_3",
+      "shillien_saint",
+      "rose_vain_3",
+      "secret_assassin_female_3",
+      "titan",
+      "doomcryer",
+      "dominator",
+      "grand_khavatari",
+      "fortune_seeker",
+      "orc_rider_3",
+      "soul_hound",
+      "maestro",
+      "trickster",
+      "crow_3",
+      "spirit_3"
+    ],
+    "sampleClass": "phoenix_knight",
+    "name": "Skill 45473",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45474,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/phoenix_knight/45474_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/phoenix_knight/45474_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/lv_benefit_nick.png",
+    "iconFile": "lv_benefit_nick.png",
+    "categories": [
+      "Level-up Achievement - Glory Skill"
+    ],
+    "classes": [
+      "phoenix_knight",
+      "duelist",
+      "dreadnought",
+      "sagittarius",
+      "hell_knight",
+      "archmage",
+      "adventurer",
+      "hierophant",
+      "cardinal",
+      "soultaker",
+      "secret_assassin_male_3",
+      "human_deathknight_3",
+      "wind_rider",
+      "sword_muse",
+      "werewolf_3",
+      "evas_templar",
+      "elemental_master",
+      "moonlight_sentinel",
+      "mystic_muse",
+      "elf_deathknight_3",
+      "evas_saint",
+      "shillien_templar",
+      "ghost_hunter",
+      "storm_screamer",
+      "spectral_dancer",
+      "ghost_sentinel",
+      "spectral_master",
+      "delf_deathknight_3",
+      "shillien_saint",
+      "rose_vain_3",
+      "secret_assassin_female_3",
+      "titan",
+      "doomcryer",
+      "dominator",
+      "grand_khavatari",
+      "fortune_seeker",
+      "orc_rider_3",
+      "soul_hound",
+      "maestro",
+      "trickster",
+      "crow_3",
+      "spirit_3"
+    ],
+    "sampleClass": "phoenix_knight",
+    "name": "Skill 45474",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45475,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/fighter/45475_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/fighter/45475_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/lv_benefit_hair.png",
+    "iconFile": "lv_benefit_hair.png",
+    "categories": [
+      "Level-up Achievement - Glory Skill"
+    ],
+    "classes": [
+      "fighter",
+      "mage",
+      "human_deathknight_0",
+      "secret_assassin_male_0",
+      "elven_fighter",
+      "elven_mage",
+      "dark_fighter",
+      "elf_deathknight_0",
+      "dark_mage",
+      "delf_deathknight_0",
+      "secret_assassin_female_0",
+      "orc_fighter",
+      "rose_vain_0",
+      "orc_mage",
+      "dwarven_fighter",
+      "orc_rider_0",
+      "crow_0",
+      "spirit_0"
+    ],
+    "sampleClass": "fighter",
+    "name": "Skill 45475",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45525,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/cardinal/45525_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/cardinal/45525_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_shining_oath.png",
+    "iconFile": "s_shining_oath.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "cardinal"
+    ],
+    "sampleClass": "cardinal",
+    "name": "Skill 45525",
+    "status": "timeout"
+  },
+  {
+    "wikiSkillId": 45561,
+    "rank": 1,
+    "subrank": 0,
+    "href": "/essence/skills/adventurer/45561_1_0.html",
+    "url": "https://l2wiki.com/essence/skills/adventurer/45561_1_0.html",
+    "icon": "https://l2wiki.com/upload/images/icon/s_hidden_dagger.png",
+    "iconFile": "s_hidden_dagger.png",
+    "categories": [
+      "Unique Skills"
+    ],
+    "classes": [
+      "adventurer",
+      "wind_rider",
+      "ghost_hunter"
+    ],
+    "sampleClass": "adventurer",
+    "name": "Skill 45561",
+    "status": "timeout"
+  }
+]

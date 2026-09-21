@@ -1,0 +1,4734 @@
+{
+  "summary": {
+    "wikiSkillRecords": 2947,
+    "uniqueWikiSkillIds": 839,
+    "uniqueWikiSkillNames": 761,
+    "localSkillIds": 1622,
+    "matchedByName": 761,
+    "wikiOnly": 0,
+    "localOnly": 174,
+    "ambiguous": 0
+  },
+  "matches": [
+    {
+      "wikiName": "Majesty",
+      "wikiId": "82",
+      "localId": "majesty",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Haste",
+      "wikiId": "45111",
+      "localId": "haste",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Acumen",
+      "wikiId": "45104",
+      "localId": "acumen",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "HP Recovery",
+      "wikiId": "45176",
+      "localId": "hp_recovery",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Berserker Spirit",
+      "wikiId": "45112",
+      "localId": "berserker_spirit",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Wild Magic",
+      "wikiId": "45106",
+      "localId": "wild_magic",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Shield Stun",
+      "wikiId": "47282",
+      "localId": "shield_stun",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Magic Barrier",
+      "wikiId": "45108",
+      "localId": "magic_barrier",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Shield Strike",
+      "wikiId": "984",
+      "localId": "shield_strike",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Holy Strike",
+      "wikiId": "49",
+      "localId": "holy_strike",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Knight's Protection",
+      "wikiId": "53010",
+      "localId": "knight_s_protection",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Angelic Archon",
+      "wikiId": "406",
+      "localId": "angelic_archon",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "MP Recovery",
+      "wikiId": "45177",
+      "localId": "mp_recovery",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Ultimate Defense",
+      "wikiId": "110",
+      "localId": "ultimate_defense",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Shield Deflect Magic",
+      "wikiId": "916",
+      "localId": "shield_deflect_magic",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Quick Heal",
+      "wikiId": "45",
+      "localId": "quick_heal",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Sanctuary",
+      "wikiId": "97",
+      "localId": "sanctuary",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Shackle",
+      "wikiId": "402",
+      "localId": "shackle",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Remedy",
+      "wikiId": "44",
+      "localId": "remedy",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Dark Assassin Transformation",
+      "wikiId": "1801",
+      "localId": "dark_assassin_transformation",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Aggression Aura",
+      "wikiId": "18",
+      "localId": "aggression_aura",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Sacrifice",
+      "wikiId": "69",
+      "localId": "sacrifice",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Aggression",
+      "wikiId": "28",
+      "localId": "aggression_aura",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Blade Strike",
+      "wikiId": "1",
+      "localId": "blade_strike",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Blade Storm Dance",
+      "wikiId": "7",
+      "localId": "blade_storm_dance",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Light Assassin Transformation",
+      "wikiId": "1802",
+      "localId": "light_assassin_transformation",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Transformation: Pirate",
+      "wikiId": "1800",
+      "localId": "transformation_pirate",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Slashing Blade",
+      "wikiId": "261",
+      "localId": "slashing_blade",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Rush",
+      "wikiId": "994",
+      "localId": "rush",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Mass Shackling",
+      "wikiId": "404",
+      "localId": "mass_shackling",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Blade Movement",
+      "wikiId": "451",
+      "localId": "blade_movement",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Dual Weapon Defense",
+      "wikiId": "1605",
+      "localId": "dual_weapon_defense",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Lionheart",
+      "wikiId": "287",
+      "localId": "lionheart",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Battle Roar",
+      "wikiId": "121",
+      "localId": "battle_roar",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "War Cry",
+      "wikiId": "78",
+      "localId": "war_cry",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Fatal Strike",
+      "wikiId": "190",
+      "localId": "fatal_strike",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Thunder Storm",
+      "wikiId": "48",
+      "localId": "thunder_storm",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Power Crash",
+      "wikiId": "260",
+      "localId": "power_crash",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Purify",
+      "wikiId": "88",
+      "localId": "purify",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Vortex",
+      "wikiId": "36",
+      "localId": "vortex",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Bandage",
+      "wikiId": "34",
+      "localId": "bandage",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Quick Spear",
+      "wikiId": "1606",
+      "localId": "quick_spear",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Focus Attack",
+      "wikiId": "317",
+      "localId": "focus_attack",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Revival",
+      "wikiId": "181",
+      "localId": "revival",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Provoke",
+      "wikiId": "47950",
+      "localId": "provoke",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Howl",
+      "wikiId": "116",
+      "localId": "howl",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Thrill Fight",
+      "wikiId": "130",
+      "localId": "thrill_fight",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Power Strike",
+      "wikiId": "3",
+      "localId": "power_strike",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Wind Walk",
+      "wikiId": "45107",
+      "localId": "wind_walk",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Wild Sweep",
+      "wikiId": "245",
+      "localId": "wild_sweep",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Detect Weakness",
+      "wikiId": "75",
+      "localId": "detect_weakness",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Damage Reflection",
+      "wikiId": "86",
+      "localId": "damage_reflection",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Dark Panther's Help",
+      "wikiId": "283",
+      "localId": "dark_panther_s_help",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Power Shot",
+      "wikiId": "56",
+      "localId": "power_shot",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Mortal Blow",
+      "wikiId": "16",
+      "localId": "mortal_blow",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Dark Strike",
+      "wikiId": "45257",
+      "localId": "dark_strike",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Powerful Charge",
+      "wikiId": "764",
+      "localId": "powerful_charge",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Horror",
+      "wikiId": "65",
+      "localId": "horror",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Hamstring",
+      "wikiId": "127",
+      "localId": "hamstring",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Life Scavenge",
+      "wikiId": "46",
+      "localId": "life_scavenge",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Knight's Assault",
+      "wikiId": "47279",
+      "localId": "knight_s_assault",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Shield Charge",
+      "wikiId": "1898",
+      "localId": "shield_charge",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Power of Life",
+      "wikiId": "47274",
+      "localId": "power_of_life",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Phoenix Strike",
+      "wikiId": "47315",
+      "localId": "phoenix_strike",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Shield Throwing",
+      "wikiId": "47273",
+      "localId": "shield_throwing",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Battle Will",
+      "wikiId": "47277",
+      "localId": "battle_will",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Chain Strike",
+      "wikiId": "10015",
+      "localId": "chain_strike",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Mass Chain Strike",
+      "wikiId": "53003",
+      "localId": "chain_strike",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "White Guardian Transformation",
+      "wikiId": "54102",
+      "localId": "white_guardian_transformation",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Shield of Faith",
+      "wikiId": "528",
+      "localId": "shield_of_faith",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Phoenix Protection",
+      "wikiId": "1621",
+      "localId": "phoenix_protection",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Mount Golden Lion",
+      "wikiId": "1833",
+      "localId": "mount_golden_lion",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Phoenix Shield",
+      "wikiId": "47307",
+      "localId": "phoenix_shield",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Dragon Slayer Appearance",
+      "wikiId": "54231",
+      "localId": "dragon_slayer_appearance",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Phoenix Power",
+      "wikiId": "712",
+      "localId": "phoenix_power",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Detection",
+      "wikiId": "45190",
+      "localId": "detection",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Mount Glorious Steed",
+      "wikiId": "54200",
+      "localId": "mount_glorious_steed",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Glorious Warrior: Enhanced Abilities",
+      "wikiId": "45361",
+      "localId": "glorious_warrior_enhanced_abilities",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Vengeance",
+      "wikiId": "368",
+      "localId": "vengeance",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Touch of Life",
+      "wikiId": "341",
+      "localId": "touch_of_life",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Mount Shining Lady",
+      "wikiId": "54202",
+      "localId": "mount_shining_lady",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Blade Assault",
+      "wikiId": "47654",
+      "localId": "blade_assault",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Blade Rage",
+      "wikiId": "345",
+      "localId": "blade_rage",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Blade Rush",
+      "wikiId": "47667",
+      "localId": "rush",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Final Secret",
+      "wikiId": "917",
+      "localId": "final_secret",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Indestructible Seal",
+      "wikiId": "1624",
+      "localId": "indestructible_seal",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Amazing Blade Strike",
+      "wikiId": "47677",
+      "localId": "blade_strike",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Indestructible Blade",
+      "wikiId": "47668",
+      "localId": "indestructible_blade",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Challenger",
+      "wikiId": "47927",
+      "localId": "challenger",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Crossed Blades",
+      "wikiId": "47709",
+      "localId": "crossed_blades",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Blade Wave",
+      "wikiId": "47928",
+      "localId": "blade_wave",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Tough Body",
+      "wikiId": "442",
+      "localId": "tough_body",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Blade Punishment",
+      "wikiId": "47930",
+      "localId": "blade_punishment",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Battle Heart",
+      "wikiId": "47714",
+      "localId": "battle_heart",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Gleaming Blade",
+      "wikiId": "47708",
+      "localId": "gleaming_blade",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Tough Body: Dual Weapons",
+      "wikiId": "47676",
+      "localId": "tough_body",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Final Secret: Dual Weapons",
+      "wikiId": "47675",
+      "localId": "final_secret",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Braveheart",
+      "wikiId": "440",
+      "localId": "braveheart",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Shocking Burst",
+      "wikiId": "361",
+      "localId": "shocking_burst",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Great Sweep",
+      "wikiId": "47940",
+      "localId": "great_sweep",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Spear Rumble",
+      "wikiId": "47942",
+      "localId": "spear_rumble",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Spike Thrust",
+      "wikiId": "921",
+      "localId": "spike_thrust",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Spear Howl",
+      "wikiId": "1626",
+      "localId": "howl",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Throwing Spear",
+      "wikiId": "1625",
+      "localId": "throwing_spear",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Spear Cage",
+      "wikiId": "47941",
+      "localId": "spear_cage",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Unleashed Power",
+      "wikiId": "47943",
+      "localId": "unleashed_power",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Gust Shot",
+      "wikiId": "47400",
+      "localId": "gust_shot",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Lethal Shot",
+      "wikiId": "343",
+      "localId": "lethal_shot",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Double Shot",
+      "wikiId": "19",
+      "localId": "double_shot",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Incendiary Shot",
+      "wikiId": "47605",
+      "localId": "incendiary_shot",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Buff Thief",
+      "wikiId": "45390",
+      "localId": "buff_thief",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Flame Arrow Rain",
+      "wikiId": "47404",
+      "localId": "flame_arrow_rain",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Real Target",
+      "wikiId": "522",
+      "localId": "real_target",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Steady Aim",
+      "wikiId": "47411",
+      "localId": "steady_aim",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "True Aim",
+      "wikiId": "47396",
+      "localId": "true_aim",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Vortex Shot",
+      "wikiId": "47601",
+      "localId": "vortex",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Ultimate Evasion: Archer",
+      "wikiId": "111",
+      "localId": "ultimate_evasion_archer",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Legendary Archer",
+      "wikiId": "47380",
+      "localId": "legendary_archer",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Hamstring Shot",
+      "wikiId": "354",
+      "localId": "hamstring",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Spiral Shot",
+      "wikiId": "47608",
+      "localId": "spiral_shot",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Legendary Shot",
+      "wikiId": "47651",
+      "localId": "legendary_shot",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Legendary Cloak",
+      "wikiId": "88696",
+      "localId": "legendary_cloak",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Binding Shot",
+      "wikiId": "47603",
+      "localId": "binding_shot",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Snipe",
+      "wikiId": "313",
+      "localId": "snipe",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Rain of Fire",
+      "wikiId": "1296",
+      "localId": "rain_of_fire",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Target Lock",
+      "wikiId": "47681",
+      "localId": "target_lock",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Prominence",
+      "wikiId": "1230",
+      "localId": "prominence",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Detect Darkness",
+      "wikiId": "53005",
+      "localId": "detect_darkness",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Mana Regeneration",
+      "wikiId": "1047",
+      "localId": "mana_regeneration",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Blazing Skin",
+      "wikiId": "1232",
+      "localId": "blazing_skin",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Inferno",
+      "wikiId": "1289",
+      "localId": "inferno",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Sleep",
+      "wikiId": "47462",
+      "localId": "sleep",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Concentration",
+      "wikiId": "1078",
+      "localId": "concentration",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Magic Wound",
+      "wikiId": "1263",
+      "localId": "magic_wound",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Weakness",
+      "wikiId": "1164",
+      "localId": "detect_weakness",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Hell",
+      "wikiId": "47308",
+      "localId": "hell",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Dark Knight's Break",
+      "wikiId": "47316",
+      "localId": "dark_knight_s_break",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Body to Mind",
+      "wikiId": "1157",
+      "localId": "body_to_mind",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Hell Smashing",
+      "wikiId": "762",
+      "localId": "hell",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Toughness",
+      "wikiId": "47275",
+      "localId": "toughness",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Dark Might",
+      "wikiId": "713",
+      "localId": "dark_might",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Touch of Death",
+      "wikiId": "342",
+      "localId": "touch_of_death",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Backstab",
+      "wikiId": "47334",
+      "localId": "backstab",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Deadly Blow",
+      "wikiId": "263",
+      "localId": "deadly_blow",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Fake Death",
+      "wikiId": "60",
+      "localId": "fake_death",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Silent Move",
+      "wikiId": "221",
+      "localId": "silent_move",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Open",
+      "wikiId": "27",
+      "localId": "open",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Ultimate Evasion",
+      "wikiId": "111",
+      "localId": "ultimate_evasion_archer",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Shadow Step",
+      "wikiId": "821",
+      "localId": "shadow_step",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Hide",
+      "wikiId": "922",
+      "localId": "hide",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Ice Bolt",
+      "wikiId": "1184",
+      "localId": "ice_bolt",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Fireball",
+      "wikiId": "1147",
+      "localId": "fireball",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Battle Heal",
+      "wikiId": "1015",
+      "localId": "battle_heal",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Self Heal",
+      "wikiId": "1216",
+      "localId": "self_heal",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Wind Strike",
+      "wikiId": "1177",
+      "localId": "wind_strike",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Flame Explosion",
+      "wikiId": "45378",
+      "localId": "flame_explosion",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Fire Vortex",
+      "wikiId": "1339",
+      "localId": "vortex",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Meteor",
+      "wikiId": "45538",
+      "localId": "meteor",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Fire Spiral",
+      "wikiId": "47442",
+      "localId": "fire_spiral",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Magic Focus",
+      "wikiId": "88683",
+      "localId": "magic_focus",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Arcane Shield",
+      "wikiId": "1556",
+      "localId": "arcane_shield",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Archmage's Shield",
+      "wikiId": "87067",
+      "localId": "archmage_s_shield",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Heavy Sleep",
+      "wikiId": "47461",
+      "localId": "sleep",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Arcane Power",
+      "wikiId": "337",
+      "localId": "arcane_power",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Master of Flame",
+      "wikiId": "89226",
+      "localId": "master_of_flame",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Exciting Adventure",
+      "wikiId": "768",
+      "localId": "exciting_adventure",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Lethal Blow",
+      "wikiId": "344",
+      "localId": "lethal_blow",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Flying Dagger",
+      "wikiId": "45477",
+      "localId": "flying_dagger",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Dark Blow",
+      "wikiId": "47341",
+      "localId": "dark_blow",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Critical Assault",
+      "wikiId": "47353",
+      "localId": "critical_assault",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Mirage",
+      "wikiId": "445",
+      "localId": "mirage",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Bluff",
+      "wikiId": "358",
+      "localId": "bluff",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Focus Power",
+      "wikiId": "357",
+      "localId": "focus_power",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Focus Chance",
+      "wikiId": "356",
+      "localId": "focus_chance",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Focus Death",
+      "wikiId": "355",
+      "localId": "focus_death",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Seclusion",
+      "wikiId": "47339",
+      "localId": "seclusion",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Critical Wound",
+      "wikiId": "531",
+      "localId": "critical_wound",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Reversed Pull",
+      "wikiId": "47348",
+      "localId": "reversed_pull",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Blaze",
+      "wikiId": "1220",
+      "localId": "blaze",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Clear Movements",
+      "wikiId": "1631",
+      "localId": "clear_movements",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Fatal Crush",
+      "wikiId": "87006",
+      "localId": "rush",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Might of Heaven",
+      "wikiId": "1028",
+      "localId": "might_of_heaven",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Divine Beam",
+      "wikiId": "45241",
+      "localId": "divine_beam",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Mana Burn",
+      "wikiId": "1398",
+      "localId": "mana_burn",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Dryad Root",
+      "wikiId": "1201",
+      "localId": "dryad_root",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Word of Fear",
+      "wikiId": "1272",
+      "localId": "word_of_fear",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Tower Shield",
+      "wikiId": "87012",
+      "localId": "tower_shield",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Enlightenment",
+      "wikiId": "1533",
+      "localId": "enlightenment",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Prophecy of Fire",
+      "wikiId": "1356",
+      "localId": "prophecy_of_fire",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Perfect Abilities",
+      "wikiId": "1542",
+      "localId": "perfect_abilities",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Great Attack",
+      "wikiId": "87013",
+      "localId": "great_attack",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Turn to Stone",
+      "wikiId": "1540",
+      "localId": "turn_to_stone",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Improved Sleep",
+      "wikiId": "87015",
+      "localId": "sleep",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Unique Seal of Damage",
+      "wikiId": "87007",
+      "localId": "unique_seal_of_damage",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Crusader",
+      "wikiId": "87001",
+      "localId": "crusader",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Summon Mew the Cat",
+      "wikiId": "1225",
+      "localId": "summon_mew_the_cat",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Servitor Heal",
+      "wikiId": "1127",
+      "localId": "servitor_heal",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Servitor Recharge",
+      "wikiId": "1126",
+      "localId": "servitor_recharge",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Summon Kat the Cat",
+      "wikiId": "1111",
+      "localId": "summon_kat_the_cat",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Transfer Pain",
+      "wikiId": "1262",
+      "localId": "transfer_pain",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Summon Kai the Cat",
+      "wikiId": "1276",
+      "localId": "summon_kai_the_cat",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Power Supremacy",
+      "wikiId": "1611",
+      "localId": "power_supremacy",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Servitor Cure",
+      "wikiId": "1300",
+      "localId": "servitor_cure",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Servitor Ultimate Defense",
+      "wikiId": "1299",
+      "localId": "ultimate_defense",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Swift Servitor Heal",
+      "wikiId": "45362",
+      "localId": "servitor_heal",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Servitor Wind Walk",
+      "wikiId": "1144",
+      "localId": "wind_walk",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Blessed Shield",
+      "wikiId": "1243",
+      "localId": "blessed_shield",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Servitor Blessing",
+      "wikiId": "1301",
+      "localId": "servitor_blessing",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Summon Friend",
+      "wikiId": "1403",
+      "localId": "summon_friend",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Return",
+      "wikiId": "1050",
+      "localId": "return",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Change Armor",
+      "wikiId": "45355",
+      "localId": "change_armor",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Mystic Resilience",
+      "wikiId": "1411",
+      "localId": "mystic_resilience",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Ethereal Strike",
+      "wikiId": "45377",
+      "localId": "ethereal_strike",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Advanced Block",
+      "wikiId": "1304",
+      "localId": "advanced_block",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Warrior Bane",
+      "wikiId": "1350",
+      "localId": "warrior_bane",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Ray of Light",
+      "wikiId": "47917",
+      "localId": "ray_of_light",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Mage Bane",
+      "wikiId": "1351",
+      "localId": "mage_bane",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Summon Feline Queen",
+      "wikiId": "1331",
+      "localId": "summon_feline_queen",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Chains of Pain",
+      "wikiId": "47916",
+      "localId": "chains_of_pain",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Servitor Share",
+      "wikiId": "1557",
+      "localId": "servitor_share",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Summon Feline King",
+      "wikiId": "1406",
+      "localId": "summon_feline_king",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Summon Cubic of Secrets",
+      "wikiId": "47910",
+      "localId": "summon_cubic_of_secrets",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Powerful Servitor Share",
+      "wikiId": "45054",
+      "localId": "servitor_share",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Summon Cat Emperor",
+      "wikiId": "47901",
+      "localId": "summon_cat_emperor",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Warrior Servitor",
+      "wikiId": "1346",
+      "localId": "warrior_servitor",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Dark Burst",
+      "wikiId": "1155",
+      "localId": "dark_burst",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Curse Fear",
+      "wikiId": "1169",
+      "localId": "curse_fear",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Anchor",
+      "wikiId": "1170",
+      "localId": "anchor",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Death Spike",
+      "wikiId": "1148",
+      "localId": "death_spike",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Summon Reanimated Man",
+      "wikiId": "1129",
+      "localId": "summon_reanimated_man",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Summon Corrupted Man",
+      "wikiId": "1154",
+      "localId": "summon_corrupted_man",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Shining Beam",
+      "wikiId": "45566",
+      "localId": "shining_beam",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Mana Effect Boost",
+      "wikiId": "47269",
+      "localId": "mana_effect_boost",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Prophecy of Light",
+      "wikiId": "45236",
+      "localId": "prophecy_of_light",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Paralysis",
+      "wikiId": "1042",
+      "localId": "paralysis",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Favorable Cover: Saved Life",
+      "wikiId": "47266",
+      "localId": "favorable_cover_saved_life",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Dark Side",
+      "wikiId": "88320",
+      "localId": "dark_side",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Unleashing",
+      "wikiId": "88330",
+      "localId": "unleashing",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Greater Heal",
+      "wikiId": "1217",
+      "localId": "greater_heal",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Life Balance",
+      "wikiId": "1335",
+      "localId": "balance",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Greater Battle Heal",
+      "wikiId": "1218",
+      "localId": "battle_heal",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Restore Life",
+      "wikiId": "1258",
+      "localId": "restore_life",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Magical Backfire",
+      "wikiId": "1396",
+      "localId": "magical_backfire",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Chain Heal",
+      "wikiId": "1553",
+      "localId": "chain_heal",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Greater Group Heal",
+      "wikiId": "1219",
+      "localId": "greater_group_heal",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Blessing",
+      "wikiId": "1271",
+      "localId": "servitor_blessing",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Balanced Body",
+      "wikiId": "47242",
+      "localId": "balance",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Dark Vortex",
+      "wikiId": "1343",
+      "localId": "vortex",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Miracle",
+      "wikiId": "1426",
+      "localId": "miracle",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Salvation",
+      "wikiId": "1410",
+      "localId": "salvation",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Sensation",
+      "wikiId": "47241",
+      "localId": "sensation",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Tranquility",
+      "wikiId": "45530",
+      "localId": "tranquility",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Cleanse",
+      "wikiId": "1409",
+      "localId": "cleanse",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Divine Whisper",
+      "wikiId": "88311",
+      "localId": "divine_whisper",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Advanced Cleanse",
+      "wikiId": "47243",
+      "localId": "cleanse",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Divine Power Acquisition",
+      "wikiId": "88336",
+      "localId": "divine_power_acquisition",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Void Explosion",
+      "wikiId": "45381",
+      "localId": "void_explosion",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Master of Void",
+      "wikiId": "89228",
+      "localId": "master_of_void",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Dark Spiral",
+      "wikiId": "47445",
+      "localId": "dark_spiral",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Soul Guardian",
+      "wikiId": "47441",
+      "localId": "soul_guardian",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Divine Strike",
+      "wikiId": "1031",
+      "localId": "divine_strike",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Summon Cursed Man",
+      "wikiId": "1334",
+      "localId": "summon_cursed_man",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Heal",
+      "wikiId": "1011",
+      "localId": "quick_heal",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Group Heal",
+      "wikiId": "1027",
+      "localId": "greater_group_heal",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Peace",
+      "wikiId": "1075",
+      "localId": "peace",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Cure",
+      "wikiId": "1012",
+      "localId": "servitor_cure",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Resurrection",
+      "wikiId": "1016",
+      "localId": "resurrection",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Divine Power",
+      "wikiId": "1459",
+      "localId": "divine_power_acquisition",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Body of Avatar",
+      "wikiId": "1311",
+      "localId": "body_of_avatar",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Favorable Cover",
+      "wikiId": "47266",
+      "localId": "favorable_cover_saved_life",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Requiem",
+      "wikiId": "1049",
+      "localId": "requiem",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Quick Dash",
+      "wikiId": "88404",
+      "localId": "quick_dash",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Repose",
+      "wikiId": "1034",
+      "localId": "repose",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Mass Resurrection",
+      "wikiId": "1254",
+      "localId": "resurrection",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Vitalize",
+      "wikiId": "1020",
+      "localId": "vitalize",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Direct Strike",
+      "wikiId": "88401",
+      "localId": "direct_strike",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Punishment",
+      "wikiId": "45301",
+      "localId": "blade_punishment",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Blow",
+      "wikiId": "87301",
+      "localId": "mortal_blow",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Roar of Death",
+      "wikiId": "45328",
+      "localId": "roar_of_death",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Forward Move",
+      "wikiId": "87321",
+      "localId": "forward_move",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Shadow Attack",
+      "wikiId": "87304",
+      "localId": "shadow_attack",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Shadow Blast",
+      "wikiId": "87155",
+      "localId": "shadow_blast",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Change Appearance",
+      "wikiId": "87344",
+      "localId": "change_appearance",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Assassination",
+      "wikiId": "87307",
+      "localId": "assassination",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Sharp Blade",
+      "wikiId": "87367",
+      "localId": "sharp_blade",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Erosion",
+      "wikiId": "87361",
+      "localId": "erosion",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Murder Attempt",
+      "wikiId": "87362",
+      "localId": "murder_attempt",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Assassin's Secret Notes - 2nd Page",
+      "wikiId": "54244",
+      "localId": "assassin_s_secret_notes_2nd_page",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Assassin's Secret Notes - 1st Page",
+      "wikiId": "54243",
+      "localId": "assassin_s_secret_notes_1st_page",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Assassin's Secret Notes - 3rd Page",
+      "wikiId": "54245",
+      "localId": "assassin_s_secret_notes_3rd_page",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Resolve to Kill",
+      "wikiId": "87345",
+      "localId": "resolve_to_kill",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Clone Dance",
+      "wikiId": "87309",
+      "localId": "clone_dance",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Relentless Attack",
+      "wikiId": "87319",
+      "localId": "relentless_attack",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Silver Wolf",
+      "wikiId": "54246",
+      "localId": "silver_wolf",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Wipeout",
+      "wikiId": "45303",
+      "localId": "wipeout",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Time Distortion",
+      "wikiId": "87351",
+      "localId": "time_distortion",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Deadly Pull",
+      "wikiId": "45311",
+      "localId": "deadly_pull",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Constraint",
+      "wikiId": "87381",
+      "localId": "constraint",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Stigma of Death",
+      "wikiId": "45335",
+      "localId": "stigma_of_death",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Fist of Fury",
+      "wikiId": "45305",
+      "localId": "fist_of_fury",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Return Motion",
+      "wikiId": "87323",
+      "localId": "return",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Flaming Body",
+      "wikiId": "45332",
+      "localId": "flaming_body",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Bone Cage",
+      "wikiId": "45338",
+      "localId": "bone_cage",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Hellfire",
+      "wikiId": "45312",
+      "localId": "hell",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Burning Field",
+      "wikiId": "45313",
+      "localId": "burning_field",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Death Guard",
+      "wikiId": "45329",
+      "localId": "death_guard",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Call of Flame",
+      "wikiId": "45322",
+      "localId": "call_of_flame",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Rage Charge",
+      "wikiId": "47561",
+      "localId": "rage_charge",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Stigma of Evil",
+      "wikiId": "47553",
+      "localId": "stigma_of_evil",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Upward Strike",
+      "wikiId": "88402",
+      "localId": "upward_strike",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Devour",
+      "wikiId": "45389",
+      "localId": "devour",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Deadly Ligament Rupture",
+      "wikiId": "45343",
+      "localId": "deadly_ligament_rupture",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Ultimate Death Knight",
+      "wikiId": "54206",
+      "localId": "ultimate_death_knight",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Flame Grip",
+      "wikiId": "47493",
+      "localId": "flame_grip",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Mount Night Mare",
+      "wikiId": "54207",
+      "localId": "mount_night_mare",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Howling",
+      "wikiId": "88474",
+      "localId": "howl",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Moon's Grace",
+      "wikiId": "88478",
+      "localId": "moon_s_grace",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Young Moon's Grace",
+      "wikiId": "88477",
+      "localId": "moon_s_grace",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Full Moon's Grace",
+      "wikiId": "88479",
+      "localId": "moon_s_grace",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Recovery",
+      "wikiId": "21",
+      "localId": "hp_recovery",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Synchro Freedom",
+      "wikiId": "47350",
+      "localId": "synchro_freedom",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Fury Blade",
+      "wikiId": "47355",
+      "localId": "fury_blade",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Wind Riding",
+      "wikiId": "769",
+      "localId": "wind_riding",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Evasion",
+      "wikiId": "446",
+      "localId": "ultimate_evasion_archer",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Mount Pegasus",
+      "wikiId": "1834",
+      "localId": "mount_pegasus",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Deadly Rhythm",
+      "wikiId": "1632",
+      "localId": "deadly_rhythm",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Entangle",
+      "wikiId": "102",
+      "localId": "entangle",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Symphony",
+      "wikiId": "98",
+      "localId": "symphony",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Wild Beat",
+      "wikiId": "45400",
+      "localId": "wild_beat",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Slowdown",
+      "wikiId": "47284",
+      "localId": "slowdown",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Song of Silence",
+      "wikiId": "437",
+      "localId": "song_of_silence",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Song of Wind",
+      "wikiId": "89011",
+      "localId": "song_of_wind",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Song of Cosmos",
+      "wikiId": "89021",
+      "localId": "song_of_cosmos",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Frantic Pace",
+      "wikiId": "45402",
+      "localId": "frantic_pace",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Song of Hunter",
+      "wikiId": "89015",
+      "localId": "song_of_hunter",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Song of Earth",
+      "wikiId": "89023",
+      "localId": "song_of_earth",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Amadeus",
+      "wikiId": "87101",
+      "localId": "amadeus",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Guard Crush",
+      "wikiId": "45187",
+      "localId": "rush",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Additional Strain",
+      "wikiId": "87133",
+      "localId": "additional_strain",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Eliminate Obstruction",
+      "wikiId": "914",
+      "localId": "eliminate_obstruction",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Sword Symphony",
+      "wikiId": "45391",
+      "localId": "symphony",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Aqua Strike",
+      "wikiId": "400",
+      "localId": "aqua_strike",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Life Magic Harmony - Defense",
+      "wikiId": "88068",
+      "localId": "life_magic_harmony_defense",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Battle Training",
+      "wikiId": "88067",
+      "localId": "battle_training",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Shield Bash",
+      "wikiId": "352",
+      "localId": "shield_bash",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Chameleon Rest",
+      "wikiId": "296",
+      "localId": "chameleon_rest",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Enormous Wolf",
+      "wikiId": "88441",
+      "localId": "enormous_wolf",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Powerful Fists",
+      "wikiId": "88420",
+      "localId": "powerful_fists",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Artful Disarm",
+      "wikiId": "88407",
+      "localId": "artful_disarm",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Imminent Piercing",
+      "wikiId": "88408",
+      "localId": "imminent_piercing",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Devastating Assault",
+      "wikiId": "88403",
+      "localId": "devastating_assault",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Moon Influence",
+      "wikiId": "88409",
+      "localId": "moon_influence",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Improved Speed",
+      "wikiId": "88475",
+      "localId": "improved_speed",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Confused Mind",
+      "wikiId": "88486",
+      "localId": "confused_mind",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Tough Skin",
+      "wikiId": "88490",
+      "localId": "tough_skin",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Eva's Defense",
+      "wikiId": "1623",
+      "localId": "eva_s_defense",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Water Shield Throwing",
+      "wikiId": "88054",
+      "localId": "shield_throwing",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Templar's Assault",
+      "wikiId": "88009",
+      "localId": "templar_s_assault",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Supernova",
+      "wikiId": "87972",
+      "localId": "supernova",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Templar's Rush",
+      "wikiId": "87992",
+      "localId": "rush",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Blessed by Eva",
+      "wikiId": "47318",
+      "localId": "blessed_by_eva",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Battle Shield",
+      "wikiId": "87981",
+      "localId": "battle_shield",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Armor of Swift Current",
+      "wikiId": "87977",
+      "localId": "armor_of_swift_current",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Over the Rainbow",
+      "wikiId": "88284",
+      "localId": "over_the_rainbow",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Elemental Strike",
+      "wikiId": "88201",
+      "localId": "elemental_strike",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Elemental Shackles",
+      "wikiId": "88207",
+      "localId": "shackle",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Elemental Roots",
+      "wikiId": "88280",
+      "localId": "elemental_roots",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Elemental Discharge",
+      "wikiId": "88279",
+      "localId": "elemental_discharge",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Elemental Vortex",
+      "wikiId": "88204",
+      "localId": "vortex",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Shelter",
+      "wikiId": "47310",
+      "localId": "shelter",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Elemental Nurture",
+      "wikiId": "88253",
+      "localId": "elemental_nurture",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Elemental Charm",
+      "wikiId": "88254",
+      "localId": "elemental_charm",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Elemental Concentration",
+      "wikiId": "88251",
+      "localId": "concentration",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Elemental Mastership",
+      "wikiId": "88242",
+      "localId": "elemental_mastership",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Wind Shackles",
+      "wikiId": "1206",
+      "localId": "shackle",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Friendly Walk",
+      "wikiId": "88282",
+      "localId": "friendly_walk",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Elemental Speed",
+      "wikiId": "88281",
+      "localId": "elemental_speed",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Summon Elemental Cubic",
+      "wikiId": "47912",
+      "localId": "summon_elemental_cubic",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Summon Elemental Globe",
+      "wikiId": "88210",
+      "localId": "summon_elemental_globe",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Summon Elemental Unicorn",
+      "wikiId": "88291",
+      "localId": "summon_elemental_unicorn",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Freezing Shot",
+      "wikiId": "47606",
+      "localId": "freezing_shot",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Water Arrow Rain",
+      "wikiId": "47406",
+      "localId": "water_arrow_rain",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Rapid Fire",
+      "wikiId": "413",
+      "localId": "rapid_fire",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Alacrity",
+      "wikiId": "47412",
+      "localId": "alacrity",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Aqua Swirl",
+      "wikiId": "1175",
+      "localId": "aqua_swirl",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Freezing Skin",
+      "wikiId": "1238",
+      "localId": "freezing_skin",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Aqua Splash",
+      "wikiId": "1295",
+      "localId": "aqua_splash",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Hydro Blast",
+      "wikiId": "1235",
+      "localId": "hydro_blast",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Blizzard",
+      "wikiId": "1290",
+      "localId": "blizzard",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Mystic Freeze",
+      "wikiId": "87056",
+      "localId": "mystic_freeze",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Winter Shackles",
+      "wikiId": "87061",
+      "localId": "shackle",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Mystic Explosion",
+      "wikiId": "45379",
+      "localId": "mystic_explosion",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Mystic Spiral",
+      "wikiId": "47448",
+      "localId": "mystic_spiral",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Ice Vortex",
+      "wikiId": "1340",
+      "localId": "vortex",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Eva's Serenade",
+      "wikiId": "1273",
+      "localId": "eva_s_serenade",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Party Return",
+      "wikiId": "1255",
+      "localId": "return",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Winter Frostbite",
+      "wikiId": "87065",
+      "localId": "winter_frostbite",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Winter Skin",
+      "wikiId": "87092",
+      "localId": "winter_skin",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Faery Shield",
+      "wikiId": "47440",
+      "localId": "faery_shield",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Riot",
+      "wikiId": "87073",
+      "localId": "riot",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Winter Slumber",
+      "wikiId": "87064",
+      "localId": "winter_slumber",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Frozen Field",
+      "wikiId": "45316",
+      "localId": "frozen_field",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Frost Grip",
+      "wikiId": "47497",
+      "localId": "frost_grip",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Call of Frost",
+      "wikiId": "45324",
+      "localId": "call_of_frost",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Drain HP",
+      "wikiId": "45250",
+      "localId": "drain_hp",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Life Leech",
+      "wikiId": "289",
+      "localId": "life_leech",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Abyss Strike",
+      "wikiId": "401",
+      "localId": "abyss_strike",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Lightning Strike",
+      "wikiId": "279",
+      "localId": "lightning_strike",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Confusion",
+      "wikiId": "2",
+      "localId": "confusion",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Power Break",
+      "wikiId": "115",
+      "localId": "power_break",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Life Magic Harmony - Attack",
+      "wikiId": "88069",
+      "localId": "life_magic_harmony_attack",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Hex",
+      "wikiId": "122",
+      "localId": "hex",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Saint's Burst: Sea",
+      "wikiId": "45434",
+      "localId": "saint_s_burst_sea",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Prophecy of Water",
+      "wikiId": "1355",
+      "localId": "prophecy_of_water",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Eva's Grail",
+      "wikiId": "88346",
+      "localId": "eva_s_grail",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Mass Vitalize",
+      "wikiId": "1552",
+      "localId": "vitalize",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Eva's Nocturne",
+      "wikiId": "47248",
+      "localId": "eva_s_nocturne",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Mass Cure",
+      "wikiId": "1550",
+      "localId": "cure",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Exclusion",
+      "wikiId": "45533",
+      "localId": "exclusion",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Remove",
+      "wikiId": "47247",
+      "localId": "remove",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Eva's Blessing",
+      "wikiId": "1506",
+      "localId": "blessing",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Dance of Fury",
+      "wikiId": "89013",
+      "localId": "dance_of_fury",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Poison Blade Dance",
+      "wikiId": "84",
+      "localId": "poison_blade_dance",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Dance of Blood",
+      "wikiId": "45395",
+      "localId": "dance_of_blood",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Dance of Fire",
+      "wikiId": "89016",
+      "localId": "dance_of_fire",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Moving Shadows",
+      "wikiId": "915",
+      "localId": "moving_shadows",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Dance of Cosmos",
+      "wikiId": "89025",
+      "localId": "dance_of_cosmos",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Dance of Warrior",
+      "wikiId": "89024",
+      "localId": "dance_of_warrior",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Break",
+      "wikiId": "87134",
+      "localId": "dark_knight_s_break",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Mass Lightning Strike",
+      "wikiId": "10094",
+      "localId": "lightning_strike",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Shillien's Curse",
+      "wikiId": "47320",
+      "localId": "shillien_s_curse",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Dark Shield Throwing",
+      "wikiId": "88056",
+      "localId": "shield_throwing",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Apocalypse",
+      "wikiId": "88012",
+      "localId": "apocalypse",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Condemnation",
+      "wikiId": "47313",
+      "localId": "condemnation",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Lightning Wave Break",
+      "wikiId": "87993",
+      "localId": "break",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Mount Saber-toothed Cougar",
+      "wikiId": "1835",
+      "localId": "mount_saber_toothed_cougar",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Dead Eye",
+      "wikiId": "414",
+      "localId": "dead_eye",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Mortal Piercing",
+      "wikiId": "47357",
+      "localId": "mortal_piercing",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Counterattack",
+      "wikiId": "447",
+      "localId": "counterattack",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Ethereal Blood",
+      "wikiId": "47351",
+      "localId": "ethereal_blood",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Ghost Walking",
+      "wikiId": "770",
+      "localId": "ghost_walking",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Hurricane",
+      "wikiId": "1239",
+      "localId": "hurricane",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Tempest",
+      "wikiId": "1176",
+      "localId": "tempest",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Wind Vortex",
+      "wikiId": "1341",
+      "localId": "vortex",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Demon Wind",
+      "wikiId": "1291",
+      "localId": "demon_wind",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Storm Screamer's Shield",
+      "wikiId": "87068",
+      "localId": "storm_screamer_s_shield",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Wind Spiral",
+      "wikiId": "47451",
+      "localId": "wind_spiral",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Master of Thunder",
+      "wikiId": "89227",
+      "localId": "master_of_thunder",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Thunder Explosion",
+      "wikiId": "45380",
+      "localId": "thunder_explosion",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Silence",
+      "wikiId": "1064",
+      "localId": "song_of_silence",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Flamenco",
+      "wikiId": "87103",
+      "localId": "flamenco",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Crazy Waltz",
+      "wikiId": "45401",
+      "localId": "crazy_waltz",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Dance of Medusa",
+      "wikiId": "367",
+      "localId": "dance_of_medusa",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Twister",
+      "wikiId": "1178",
+      "localId": "twister",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Storm Arrow Rain",
+      "wikiId": "47408",
+      "localId": "storm_arrow_rain",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Wind Shot",
+      "wikiId": "47607",
+      "localId": "wind_shot",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Eagle Eye",
+      "wikiId": "47413",
+      "localId": "eagle_eye",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Summon Lord Raise",
+      "wikiId": "47907",
+      "localId": "summon_lord_raise",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Summon Nightshade",
+      "wikiId": "1333",
+      "localId": "summon_nightshade",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Summon Spectral Lord",
+      "wikiId": "1408",
+      "localId": "summon_spectral_lord",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Assassin Servitor",
+      "wikiId": "1348",
+      "localId": "assassin_servitor",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Summon Phantom Cubic",
+      "wikiId": "47914",
+      "localId": "summon_phantom_cubic",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Call of Lightning",
+      "wikiId": "45326",
+      "localId": "call_of_lightning",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Vampiric Rage",
+      "wikiId": "1268",
+      "localId": "vampiric_rage",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Lightning Storm",
+      "wikiId": "45319",
+      "localId": "lightning_storm",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Lightning Grip",
+      "wikiId": "47501",
+      "localId": "lightning_grip",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Shillien's Mass Stigma",
+      "wikiId": "1897",
+      "localId": "shillien_s_mass_stigma",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Shillien's Stigma",
+      "wikiId": "1539",
+      "localId": "shillien_s_stigma",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Rapid Recharge",
+      "wikiId": "1428",
+      "localId": "rapid_recharge",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Mighty Servitor",
+      "wikiId": "1146",
+      "localId": "mighty_servitor",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Summon Soulless",
+      "wikiId": "1278",
+      "localId": "summon_soulless",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Summon Silhouette",
+      "wikiId": "1228",
+      "localId": "summon_silhouette",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Summon Shadow",
+      "wikiId": "1128",
+      "localId": "summon_shadow",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Saint's Burst: Dark",
+      "wikiId": "45436",
+      "localId": "saint_s_burst_dark",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Prophecy of Wind",
+      "wikiId": "1357",
+      "localId": "prophecy_of_wind",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Nemesis",
+      "wikiId": "47255",
+      "localId": "nemesis",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Shillien's Power",
+      "wikiId": "47257",
+      "localId": "shillien_s_power",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Shillien's Touch",
+      "wikiId": "1507",
+      "localId": "shillien_s_touch",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Shillien's Grail",
+      "wikiId": "88343",
+      "localId": "shillien_s_grail",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Mass Wind Shackles",
+      "wikiId": "45243",
+      "localId": "shackle",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Duress",
+      "wikiId": "47253",
+      "localId": "duress",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Mass Dryad Root",
+      "wikiId": "45242",
+      "localId": "dryad_root",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Parasite Rose",
+      "wikiId": "88572",
+      "localId": "parasite_rose",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Enchanted Rose's Assault",
+      "wikiId": "88570",
+      "localId": "enchanted_rose_s_assault",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Rose Attack",
+      "wikiId": "88550",
+      "localId": "rose_attack",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Dark Disruption",
+      "wikiId": "45534",
+      "localId": "dark_disruption",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Mass Purify",
+      "wikiId": "1551",
+      "localId": "purify",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Aroma of Death",
+      "wikiId": "88571",
+      "localId": "aroma_of_death",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Briar Vortex",
+      "wikiId": "88557",
+      "localId": "vortex",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Vine Embrace",
+      "wikiId": "88562",
+      "localId": "vine_embrace",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Reflecting Illusion",
+      "wikiId": "88580",
+      "localId": "reflecting_illusion",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Crimson Rose",
+      "wikiId": "88597",
+      "localId": "crimson_rose",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Kingdom of Plants",
+      "wikiId": "88561",
+      "localId": "kingdom_of_plants",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Blooming Nightmare",
+      "wikiId": "88583",
+      "localId": "blooming_nightmare",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Bleeding Rose",
+      "wikiId": "88556",
+      "localId": "bleeding_rose",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Rose Thorns",
+      "wikiId": "88587",
+      "localId": "rose_thorns",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Excruciating Strike",
+      "wikiId": "1607",
+      "localId": "excruciating_strike",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Queen's Garden",
+      "wikiId": "88590",
+      "localId": "queen_s_garden",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Iron Punch",
+      "wikiId": "29",
+      "localId": "iron_punch",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Chant of Wild Magic",
+      "wikiId": "45137",
+      "localId": "wild_magic",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Zealot",
+      "wikiId": "420",
+      "localId": "zealot",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Chant of Berserker Spirit",
+      "wikiId": "45128",
+      "localId": "berserker_spirit",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Guts",
+      "wikiId": "139",
+      "localId": "guts",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Chant of Haste",
+      "wikiId": "45123",
+      "localId": "haste",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Rage",
+      "wikiId": "94",
+      "localId": "blade_rage",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Chant of Magic Barrier",
+      "wikiId": "45125",
+      "localId": "magic_barrier",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Frenzy",
+      "wikiId": "176",
+      "localId": "frenzy",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Chant of Acumen",
+      "wikiId": "45135",
+      "localId": "acumen",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Chant of Wind Walk",
+      "wikiId": "45124",
+      "localId": "wind_walk",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Enchanted Rose's Gentle Magic",
+      "wikiId": "54270",
+      "localId": "enchanted_rose_s_gentle_magic",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Enchanted Rose's Weak Magic",
+      "wikiId": "54269",
+      "localId": "enchanted_rose_s_weak_magic",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Enchanted Rose's Strong Magic",
+      "wikiId": "54271",
+      "localId": "enchanted_rose_s_strong_magic",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Titanic Break",
+      "wikiId": "45417",
+      "localId": "break",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Demolition Formula",
+      "wikiId": "47471",
+      "localId": "demolition_formula",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Armor Crush",
+      "wikiId": "362",
+      "localId": "rush",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Demolition Impact",
+      "wikiId": "777",
+      "localId": "demolition_impact",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Titanic Sweep",
+      "wikiId": "45416",
+      "localId": "titanic_sweep",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Full Sweep",
+      "wikiId": "814",
+      "localId": "full_sweep",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Titans' Secrets",
+      "wikiId": "47476",
+      "localId": "titans_secrets",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Hyper Rush",
+      "wikiId": "88721",
+      "localId": "rush",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Destroyer's Roar",
+      "wikiId": "1627",
+      "localId": "destroyer_s_roar",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Titanic Weapon",
+      "wikiId": "45414",
+      "localId": "titanic_weapon",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Destructive Shriek",
+      "wikiId": "47487",
+      "localId": "destructive_shriek",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Full Knockdown",
+      "wikiId": "1896",
+      "localId": "full_knockdown",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Over the Body",
+      "wikiId": "536",
+      "localId": "over_the_body",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Mount Black Bear",
+      "wikiId": "1837",
+      "localId": "mount_black_bear",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Inferno Strike",
+      "wikiId": "88682",
+      "localId": "inferno",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Vortex of Fire",
+      "wikiId": "88352",
+      "localId": "vortex",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Titan Champion",
+      "wikiId": "45413",
+      "localId": "titan_champion",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Shining Prison",
+      "wikiId": "1208",
+      "localId": "shining_prison",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Life Rescue",
+      "wikiId": "1610",
+      "localId": "life_rescue",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Fear",
+      "wikiId": "1092",
+      "localId": "word_of_fear",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Madness",
+      "wikiId": "1105",
+      "localId": "madness",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Dreaming Spirit",
+      "wikiId": "1097",
+      "localId": "dreaming_spirit",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Frost Flame",
+      "wikiId": "1107",
+      "localId": "frost_flame",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Cold Flames",
+      "wikiId": "45461",
+      "localId": "cold_flames",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Blood Bond",
+      "wikiId": "45458",
+      "localId": "blood_bond",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Crimson Flame",
+      "wikiId": "88354",
+      "localId": "crimson_flame",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Bloody Strike",
+      "wikiId": "45288",
+      "localId": "bloody_strike",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Chant of Prophecy",
+      "wikiId": "89345",
+      "localId": "chant_of_prophecy",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Chant of Healing",
+      "wikiId": "45463",
+      "localId": "heal",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Chant of Glory",
+      "wikiId": "89343",
+      "localId": "chant_of_glory",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Chant of Gate",
+      "wikiId": "1429",
+      "localId": "chant_of_gate",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Freezing Flame",
+      "wikiId": "1244",
+      "localId": "freezing_flame",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Team Building",
+      "wikiId": "45455",
+      "localId": "team_building",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Hurricane Assault",
+      "wikiId": "284",
+      "localId": "hurricane",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Iron Fist",
+      "wikiId": "281",
+      "localId": "iron_fist",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Force Burst",
+      "wikiId": "17",
+      "localId": "force_burst",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Punch of Doom",
+      "wikiId": "81",
+      "localId": "punch_of_doom",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Burning Fist",
+      "wikiId": "280",
+      "localId": "burning_fist",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Force Storm",
+      "wikiId": "35",
+      "localId": "force_storm",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Force Blaster",
+      "wikiId": "54",
+      "localId": "force_blaster",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Break Duress",
+      "wikiId": "461",
+      "localId": "break",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Bison Spirit Totem",
+      "wikiId": "292",
+      "localId": "bison_spirit_totem",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Ogre's Essence",
+      "wikiId": "109",
+      "localId": "ogre_s_essence",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Cripple",
+      "wikiId": "95",
+      "localId": "cripple",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Chant of Vampire",
+      "wikiId": "89344",
+      "localId": "chant_of_vampire",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Swap Defense",
+      "wikiId": "1392",
+      "localId": "swap_defense",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Convert",
+      "wikiId": "1393",
+      "localId": "convert",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Swap Attack",
+      "wikiId": "45237",
+      "localId": "swap_attack",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Flame Burst",
+      "wikiId": "45453",
+      "localId": "flame_burst",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Debuff Master",
+      "wikiId": "45449",
+      "localId": "debuff_master",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Prophecy of Pa'agrio",
+      "wikiId": "89342",
+      "localId": "prophecy_of_pa_agrio",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Pa'agrio's Glory",
+      "wikiId": "89340",
+      "localId": "pa_agrio_s_glory",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Seal of Suspension",
+      "wikiId": "1248",
+      "localId": "seal_of_suspension",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Seal of Silence",
+      "wikiId": "1246",
+      "localId": "silence",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Pa'agrio's Honor",
+      "wikiId": "1305",
+      "localId": "pa_agrio_s_honor",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Seal of Blockade",
+      "wikiId": "1462",
+      "localId": "seal_of_blockade",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Pa'agrio's Touch",
+      "wikiId": "45446",
+      "localId": "pa_agrio_s_touch",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Seal of Despair",
+      "wikiId": "1366",
+      "localId": "seal_of_despair",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Seal of Infection",
+      "wikiId": "45468",
+      "localId": "seal_of_infection",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Seal of Disease",
+      "wikiId": "1367",
+      "localId": "seal_of_disease",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Ritual of Life",
+      "wikiId": "1306",
+      "localId": "ritual_of_life",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Pa'agrio's Cure",
+      "wikiId": "45448",
+      "localId": "cure",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Jump Attack",
+      "wikiId": "88108",
+      "localId": "jump_attack",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Burning Strike",
+      "wikiId": "45423",
+      "localId": "burning_strike",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Burning Assault",
+      "wikiId": "45424",
+      "localId": "burning_assault",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Raging Force",
+      "wikiId": "346",
+      "localId": "raging_force",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Blazing Strike",
+      "wikiId": "45425",
+      "localId": "blazing_strike",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Wondrous Power",
+      "wikiId": "443",
+      "localId": "wondrous_power",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Rushing Retreat",
+      "wikiId": "88110",
+      "localId": "rush",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Final Secret: Grand Khavatari",
+      "wikiId": "88113",
+      "localId": "final_secret",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Cacophony of War",
+      "wikiId": "45439",
+      "localId": "cacophony_of_war",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Pa'agrio's Immunity",
+      "wikiId": "89341",
+      "localId": "pa_agrio_s_immunity",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Seal of Mirage",
+      "wikiId": "1213",
+      "localId": "mirage",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Spoil",
+      "wikiId": "254",
+      "localId": "spoil",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Sweeper",
+      "wikiId": "42",
+      "localId": "sweeper",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Earthquake",
+      "wikiId": "347",
+      "localId": "earthquake",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Golden Stone",
+      "wikiId": "47204",
+      "localId": "golden_stone",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Maphr’s Acumen",
+      "wikiId": "45130",
+      "localId": "acumen",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Adena Stun",
+      "wikiId": "47219",
+      "localId": "adena_stun",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Maphr's Magic Barrier",
+      "wikiId": "45118",
+      "localId": "magic_barrier",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Maphr's Haste",
+      "wikiId": "45116",
+      "localId": "haste",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Trophy Thief",
+      "wikiId": "45281",
+      "localId": "trophy_thief",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Maphr's Wild Magic",
+      "wikiId": "45132",
+      "localId": "wild_magic",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Spoil Crush",
+      "wikiId": "348",
+      "localId": "rush",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Crushing Leap",
+      "wikiId": "47216",
+      "localId": "rush",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Maphr's Wind Walk",
+      "wikiId": "45117",
+      "localId": "wind_walk",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Body Crush",
+      "wikiId": "1613",
+      "localId": "rush",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Maphr's Berserker Spirit",
+      "wikiId": "45133",
+      "localId": "berserker_spirit",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Rolling Dice",
+      "wikiId": "45539",
+      "localId": "rolling_dice",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Spoil Festival",
+      "wikiId": "302",
+      "localId": "spoil",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Weapon Reinforcement",
+      "wikiId": "1615",
+      "localId": "weapon_reinforcement",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Tenacity",
+      "wikiId": "1617",
+      "localId": "tenacity",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Mount Kukuru",
+      "wikiId": "1836",
+      "localId": "mount_kukuru",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Fortune Time",
+      "wikiId": "47201",
+      "localId": "fortune_time",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Blazing Fury",
+      "wikiId": "47831",
+      "localId": "blazing_fury",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Blazing Beast",
+      "wikiId": "47855",
+      "localId": "blazing_beast",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Summon Mechanic Golem",
+      "wikiId": "25",
+      "localId": "summon_mechanic_golem",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Wild Rush",
+      "wikiId": "47822",
+      "localId": "rush",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Piercing",
+      "wikiId": "47801",
+      "localId": "imminent_piercing",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Wild Scratch",
+      "wikiId": "47805",
+      "localId": "wild_scratch",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Amazing Piercing",
+      "wikiId": "47802",
+      "localId": "piercing",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Sweeper Festival",
+      "wikiId": "444",
+      "localId": "sweeper",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Wild Charge",
+      "wikiId": "47807",
+      "localId": "wild_charge",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Wide Threatening Swing",
+      "wikiId": "47804",
+      "localId": "wide_threatening_swing",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Giant's Stomp",
+      "wikiId": "47811",
+      "localId": "giant_s_stomp",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Wild Growl",
+      "wikiId": "47813",
+      "localId": "wild_growl",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Threatening Swing",
+      "wikiId": "47803",
+      "localId": "wide_threatening_swing",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Wild Assault",
+      "wikiId": "47821",
+      "localId": "wild_assault",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Machine Assistance",
+      "wikiId": "45245",
+      "localId": "machine_assistance",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Golem Reinforcement",
+      "wikiId": "824",
+      "localId": "golem_reinforcement",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Repair Golem",
+      "wikiId": "822",
+      "localId": "repair_golem",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Strengthen Golem",
+      "wikiId": "823",
+      "localId": "strengthen_golem",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Spirit Weakness",
+      "wikiId": "124",
+      "localId": "weakness",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Summon Siege Golem",
+      "wikiId": "13",
+      "localId": "summon_siege_golem",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Summon Wild Hog Cannon",
+      "wikiId": "299",
+      "localId": "summon_wild_hog_cannon",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Soul Wild Magic",
+      "wikiId": "45148",
+      "localId": "wild_magic",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Rapier Slash",
+      "wikiId": "47988",
+      "localId": "rapier_slash",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Excess Charge",
+      "wikiId": "47979",
+      "localId": "excess_charge",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Soul Haste",
+      "wikiId": "45141",
+      "localId": "haste",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Flash Dash",
+      "wikiId": "45183",
+      "localId": "flash_dash",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Soul Magic Barrier",
+      "wikiId": "45143",
+      "localId": "magic_barrier",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Soul Berserker Spirit",
+      "wikiId": "45149",
+      "localId": "berserker_spirit",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Crescent Swing",
+      "wikiId": "165",
+      "localId": "crescent_swing",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Through Strike",
+      "wikiId": "45160",
+      "localId": "through_strike",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Soul Wind Walk",
+      "wikiId": "45142",
+      "localId": "wind_walk",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Soul Acumen",
+      "wikiId": "45146",
+      "localId": "acumen",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Light Soul Connection",
+      "wikiId": "201",
+      "localId": "light_soul_connection",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Shadow Soul Connection",
+      "wikiId": "202",
+      "localId": "shadow_soul_connection",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Chain Lightning",
+      "wikiId": "167",
+      "localId": "chain_lightning",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Leopold",
+      "wikiId": "174",
+      "localId": "leopold",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Resonance Shield",
+      "wikiId": "87069",
+      "localId": "resonance_shield",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Mount Griffin",
+      "wikiId": "62002",
+      "localId": "mount_griffin",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Soul Reinforcement",
+      "wikiId": "1515",
+      "localId": "soul_reinforcement",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Collect Light Souls",
+      "wikiId": "89301",
+      "localId": "collect_light_souls",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Soul Blade",
+      "wikiId": "47984",
+      "localId": "soul_blade",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Collect Shadow Souls",
+      "wikiId": "89302",
+      "localId": "collect_shadow_souls",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Fragarach",
+      "wikiId": "47981",
+      "localId": "fragarach",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Way Back",
+      "wikiId": "1448",
+      "localId": "way_back",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Enuma Elish",
+      "wikiId": "45157",
+      "localId": "enuma_elish",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Soul Mark",
+      "wikiId": "47976",
+      "localId": "soul_mark",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Rush Impact",
+      "wikiId": "45159",
+      "localId": "rush",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Soul Guard",
+      "wikiId": "1514",
+      "localId": "soul_guardian",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Soul Impulse",
+      "wikiId": "45155",
+      "localId": "soul_impulse",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Soul Smash",
+      "wikiId": "477",
+      "localId": "soul_smash",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Increase Power",
+      "wikiId": "1432",
+      "localId": "increase_power",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Soul Prison",
+      "wikiId": "89908",
+      "localId": "soul_prison",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Magic Break",
+      "wikiId": "501",
+      "localId": "break",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Soul Weapon",
+      "wikiId": "89907",
+      "localId": "soul_weapon",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Overwhelming Power",
+      "wikiId": "47970",
+      "localId": "overwhelming_power",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Kamael Symbol",
+      "wikiId": "89924",
+      "localId": "kamael_symbol",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Powerful Rush",
+      "wikiId": "45251",
+      "localId": "rush",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Disarm",
+      "wikiId": "485",
+      "localId": "artful_disarm",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Cunning Throw",
+      "wikiId": "1145007",
+      "localId": "cunning_throw",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Cunning Shot",
+      "wikiId": "1145001",
+      "localId": "cunning_shot",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Earth Tremor",
+      "wikiId": "45249",
+      "localId": "earth_tremor",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Blacksmith's Attack",
+      "wikiId": "47227",
+      "localId": "blacksmith_s_attack",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Hammer Rumble",
+      "wikiId": "45282",
+      "localId": "hammer_rumble",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Prime Master",
+      "wikiId": "47221",
+      "localId": "prime_master",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Mechanical Masterpiece",
+      "wikiId": "47228",
+      "localId": "mechanical_masterpiece",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Death Mark",
+      "wikiId": "1435",
+      "localId": "death_mark",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Might",
+      "wikiId": "45144",
+      "localId": "dark_might",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Expand Head Accessory Slots",
+      "wikiId": "45475",
+      "localId": "expand_head_accessory_slots",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Kamael's Dignity",
+      "wikiId": "328",
+      "localId": "kamael_s_dignity",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Expand World Trade (L-Coins)",
+      "wikiId": "1370",
+      "localId": "expand_world_trade_l_coins",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Expand Warehouse",
+      "wikiId": "1371",
+      "localId": "expand_warehouse",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Shield",
+      "wikiId": "45145",
+      "localId": "shield_stun",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Soul Roar",
+      "wikiId": "1441",
+      "localId": "soul_roar",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Pride of Kamael",
+      "wikiId": "329",
+      "localId": "pride_of_kamael",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Expand Inventory",
+      "wikiId": "1372",
+      "localId": "expand_inventory",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Magic Lamp",
+      "wikiId": "52042",
+      "localId": "magic_lamp",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Scorn",
+      "wikiId": "503",
+      "localId": "scorn",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Freezing Wound",
+      "wikiId": "47011",
+      "localId": "freezing_wound",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Elemental Magic Barrier",
+      "wikiId": "47025",
+      "localId": "magic_barrier",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Elemental Haste",
+      "wikiId": "47023",
+      "localId": "haste",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Blessing of Winds",
+      "wikiId": "47061",
+      "localId": "blessing",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Elemental Berserker Spirit",
+      "wikiId": "47031",
+      "localId": "berserker_spirit",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Elemental Wild Magic",
+      "wikiId": "47030",
+      "localId": "wild_magic",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Elemental Insight",
+      "wikiId": "47028",
+      "localId": "elemental_insight",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Dual Blow",
+      "wikiId": "47002",
+      "localId": "blow",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Fire Explosion",
+      "wikiId": "47062",
+      "localId": "fire_explosion",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Pursuit",
+      "wikiId": "89113",
+      "localId": "pursuit",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Strike",
+      "wikiId": "89137",
+      "localId": "shield_strike",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Atsumori",
+      "wikiId": "89136",
+      "localId": "atsumori",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Forest",
+      "wikiId": "89118",
+      "localId": "forest",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Fire",
+      "wikiId": "89119",
+      "localId": "rain_of_fire",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Mountain",
+      "wikiId": "89120",
+      "localId": "mountain",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Elemental Care",
+      "wikiId": "47054",
+      "localId": "elemental_care",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Wind",
+      "wikiId": "89117",
+      "localId": "wind_walk",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Single Flash",
+      "wikiId": "89101",
+      "localId": "single_flash",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Elemental Wind Walk",
+      "wikiId": "47024",
+      "localId": "wind_walk",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Greater Wind Shot",
+      "wikiId": "88653",
+      "localId": "wind_shot",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Goring Charge",
+      "wikiId": "47001",
+      "localId": "goring_charge",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Frosty Sting",
+      "wikiId": "88662",
+      "localId": "frosty_sting",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Stealthy Swiftness",
+      "wikiId": "47008",
+      "localId": "stealthy_swiftness",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Wild Dance",
+      "wikiId": "47019",
+      "localId": "wild_dance",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Extra Hit",
+      "wikiId": "47085",
+      "localId": "extra_hit",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Mount Elemental Lyn Draco",
+      "wikiId": "54225",
+      "localId": "mount_elemental_lyn_draco",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Elemental Change",
+      "wikiId": "47045",
+      "localId": "elemental_change",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Cunning Arrow",
+      "wikiId": "1145014",
+      "localId": "cunning_arrow",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Dragon Strike",
+      "wikiId": "47041",
+      "localId": "strike",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Soul Wound",
+      "wikiId": "1145080",
+      "localId": "soul_wound",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Cunning Arrest",
+      "wikiId": "47402",
+      "localId": "cunning_arrest",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Expert Advantage",
+      "wikiId": "1145038",
+      "localId": "expert_advantage",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Expert Focus",
+      "wikiId": "1145037",
+      "localId": "expert_focus",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Force Unleashed",
+      "wikiId": "1145011",
+      "localId": "force_unleashed",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Expert Sense",
+      "wikiId": "1145036",
+      "localId": "expert_sense",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Ruse",
+      "wikiId": "1145012",
+      "localId": "ruse",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Ability to Protect",
+      "wikiId": "91",
+      "localId": "ability_to_protect",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Ability to Attack",
+      "wikiId": "77",
+      "localId": "ability_to_attack",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Elemental Spirit",
+      "wikiId": "47101",
+      "localId": "elemental_spirit",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Elemental Connection",
+      "wikiId": "47104",
+      "localId": "elemental_connection",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Armor Mastery",
+      "wikiId": "142",
+      "localId": "armor_mastery",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Weapon Mastery",
+      "wikiId": "141",
+      "localId": "weapon_mastery",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Lord Knight",
+      "wikiId": "87884",
+      "localId": "lord_knight",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Maneuver",
+      "wikiId": "89125",
+      "localId": "maneuver",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Destiny",
+      "wikiId": "87883",
+      "localId": "destiny",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Take Life",
+      "wikiId": "89123",
+      "localId": "take_life",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Thousand Wounds",
+      "wikiId": "89159",
+      "localId": "thousand_wounds",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Crippling Strike",
+      "wikiId": "89151",
+      "localId": "strike",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Twist",
+      "wikiId": "89143",
+      "localId": "twister",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Walk in Monster Woods",
+      "wikiId": "89155",
+      "localId": "walk_in_monster_woods",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Determination",
+      "wikiId": "89161",
+      "localId": "determination",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Battojutsu",
+      "wikiId": "89171",
+      "localId": "battojutsu",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Omen",
+      "wikiId": "89166",
+      "localId": "omen",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Adamant Will",
+      "wikiId": "89165",
+      "localId": "adamant_will",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Summon Kagami",
+      "wikiId": "54274",
+      "localId": "summon_kagami",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Fire Sphere",
+      "wikiId": "87701",
+      "localId": "fire",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Ice Sphere",
+      "wikiId": "87702",
+      "localId": "ice_sphere",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Sacral Strike",
+      "wikiId": "87801",
+      "localId": "strike",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Bright Dance",
+      "wikiId": "87705",
+      "localId": "bright_dance",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Florescence",
+      "wikiId": "87709",
+      "localId": "florescence",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Nature Spirit",
+      "wikiId": "87751",
+      "localId": "nature_spirit",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Glacier Strike",
+      "wikiId": "87704",
+      "localId": "strike",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Blazing Tempest",
+      "wikiId": "87703",
+      "localId": "tempest",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Claidheamh Soluis",
+      "wikiId": "87708",
+      "localId": "claidheamh_soluis",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Mount Unicorn",
+      "wikiId": "54256",
+      "localId": "mount_unicorn",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Sephiroth",
+      "wikiId": "87710",
+      "localId": "sephiroth",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Sacral Power",
+      "wikiId": "87827",
+      "localId": "sacral_power",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Large Protection of Light",
+      "wikiId": "54253",
+      "localId": "large_protection_of_light",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Flying Leap",
+      "wikiId": "87821",
+      "localId": "flying_leap",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Small Protection of Light",
+      "wikiId": "54251",
+      "localId": "small_protection_of_light",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Judgment",
+      "wikiId": "87807",
+      "localId": "judgment",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Protection of Light",
+      "wikiId": "54252",
+      "localId": "large_protection_of_light",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Noblesse Circlet",
+      "wikiId": "87890",
+      "localId": "noblesse_circlet",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Light Counter",
+      "wikiId": "87841",
+      "localId": "light_counter",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Decoy",
+      "wikiId": "87824",
+      "localId": "decoy",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Light Discharge",
+      "wikiId": "87810",
+      "localId": "light_discharge",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Divine Guardian",
+      "wikiId": "87850",
+      "localId": "divine_guardian",
+      "status": "MATCH"
+    },
+    {
+      "wikiName": "Holy Circle",
+      "wikiId": "87813",
+      "localId": "holy_circle",
+      "status": "MATCH"
+    }
+  ],
+  "wikiOnly": [],
+  "localOnly": [
+    {
+      "localId": "aggression"
+    },
+    {
+      "localId": "mass_chain_strike"
+    },
+    {
+      "localId": "blade_rush"
+    },
+    {
+      "localId": "amazing_blade_strike"
+    },
+    {
+      "localId": "tough_body_dual_weapons"
+    },
+    {
+      "localId": "final_secret_dual_weapons"
+    },
+    {
+      "localId": "spear_howl"
+    },
+    {
+      "localId": "vortex_shot"
+    },
+    {
+      "localId": "hamstring_shot"
+    },
+    {
+      "localId": "hell_smashing"
+    },
+    {
+      "localId": "ultimate_evasion"
+    },
+    {
+      "localId": "fire_vortex"
+    },
+    {
+      "localId": "heavy_sleep"
+    },
+    {
+      "localId": "fatal_crush"
+    },
+    {
+      "localId": "improved_sleep"
+    },
+    {
+      "localId": "servitor_ultimate_defense"
+    },
+    {
+      "localId": "swift_servitor_heal"
+    },
+    {
+      "localId": "servitor_wind_walk"
+    },
+    {
+      "localId": "powerful_servitor_share"
+    },
+    {
+      "localId": "life_balance"
+    },
+    {
+      "localId": "greater_battle_heal"
+    },
+    {
+      "localId": "balanced_body"
+    },
+    {
+      "localId": "dark_vortex"
+    },
+    {
+      "localId": "advanced_cleanse"
+    },
+    {
+      "localId": "group_heal"
+    },
+    {
+      "localId": "divine_power"
+    },
+    {
+      "localId": "favorable_cover"
+    },
+    {
+      "localId": "mass_resurrection"
+    },
+    {
+      "localId": "punishment"
+    },
+    {
+      "localId": "return_motion"
+    },
+    {
+      "localId": "hellfire"
+    },
+    {
+      "localId": "howling"
+    },
+    {
+      "localId": "young_moon_s_grace"
+    },
+    {
+      "localId": "full_moon_s_grace"
+    },
+    {
+      "localId": "recovery"
+    },
+    {
+      "localId": "evasion"
+    },
+    {
+      "localId": "guard_crush"
+    },
+    {
+      "localId": "sword_symphony"
+    },
+    {
+      "localId": "water_shield_throwing"
+    },
+    {
+      "localId": "templar_s_rush"
+    },
+    {
+      "localId": "elemental_shackles"
+    },
+    {
+      "localId": "elemental_vortex"
+    },
+    {
+      "localId": "elemental_concentration"
+    },
+    {
+      "localId": "wind_shackles"
+    },
+    {
+      "localId": "winter_shackles"
+    },
+    {
+      "localId": "ice_vortex"
+    },
+    {
+      "localId": "party_return"
+    },
+    {
+      "localId": "mass_vitalize"
+    },
+    {
+      "localId": "mass_cure"
+    },
+    {
+      "localId": "eva_s_blessing"
+    }
+  ],
+  "ambiguous": []
+}

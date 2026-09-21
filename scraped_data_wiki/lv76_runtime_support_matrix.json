@@ -1,0 +1,70 @@
+{
+  "summary": "Comprehensive matrix of combat and game feel effects found in Lv76+ skills and their status in the Aden Arena engine.",
+  "effects": [
+    {
+      "effect": "damage_physical",
+      "status": "RUNTIME_IMPLEMENTED",
+      "consumer": "CombatEngine.js / calculatePhysicalDamage"
+    },
+    {
+      "effect": "damage_magical",
+      "status": "RUNTIME_IMPLEMENTED",
+      "consumer": "CombatEngine.js / calculateMagicalDamage"
+    },
+    {
+      "effect": "mp_consumption",
+      "status": "RUNTIME_IMPLEMENTED",
+      "consumer": "SkillEngine.js / spendMP & validateMpCost"
+    },
+    {
+      "effect": "stat_buff",
+      "status": "RUNTIME_IMPLEMENTED",
+      "consumer": "SkillEngine.js / getStats & applyBuff"
+    },
+    {
+      "effect": "vampiric_heal",
+      "status": "RUNTIME_IMPLEMENTED",
+      "consumer": "CombatEngine.js / drainHp & life_leech"
+    },
+    {
+      "effect": "pvp_pve_split",
+      "status": "RUNTIME_IMPLEMENTED",
+      "consumer": "balance.pveMultiplier & balance.pvpMultiplier"
+    },
+    {
+      "effect": "stun",
+      "status": "RUNTIME_PARTIAL",
+      "consumer": "CombatEngine.js (statusEffects duration, but missing boss-specific resist formulas)"
+    },
+    {
+      "effect": "hold_paralysis",
+      "status": "RUNTIME_PARTIAL",
+      "consumer": "CombatEngine.js (hold duration works, paralysis action interruption partial)"
+    },
+    {
+      "effect": "shield_ignore",
+      "status": "RUNTIME_PARTIAL",
+      "consumer": "CombatEngine.js (bypasses shield block calculation, partial)"
+    },
+    {
+      "effect": "defense_penetration",
+      "status": "RUNTIME_PARTIAL",
+      "consumer": "CombatEngine.js (mitigation formulas partially support % penetration)"
+    },
+    {
+      "effect": "pull",
+      "status": "RUNTIME_NOT_IMPLEMENTED",
+      "consumer": "No radial/1D coordinate drag physics implemented in CombatEngine"
+    },
+    {
+      "effect": "knockback_airborne",
+      "status": "RUNTIME_NOT_IMPLEMENTED",
+      "consumer": "No vertical Z-axis or displace physics in 2D combat loop"
+    },
+    {
+      "effect": "transformation_mounting",
+      "status": "RUNTIME_NOT_IMPLEMENTED",
+      "consumer": "Cosmetic mount purge applied; transformation stats not in combat engine"
+    }
+  ]
+}

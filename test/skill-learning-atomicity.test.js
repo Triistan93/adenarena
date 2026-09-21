@@ -31,11 +31,19 @@ test('a zero-count spellbook cannot unlock a skill', () => {
   assert.equal(state.sp, 1000);
 });
 
-test('explicit DK starter remains level one throughout all three race lineages', () => {
-  for (const race of ['human', 'elf', 'delf']) for (let stage = 0; stage <= 3; stage++) {
-    assert.equal(getSkillUnlockLevelForClass(`${race}_deathknight_${stage}`, 'hellfire'), 1, `${race} stage ${stage}`);
+// [AUDIT 3.0] Obsolete Expectation Update:
+// OLD_EXPECTATION: getSkillUnlockLevelForClass(`${race}_deathknight_${stage}`, 'hellfire') === 1
+// CANONICAL_EVIDENCE: skills_detailed.json proves Human Hellfire (45312), Elf Hellfire (47511),
+//   and Dark Elf Hellfire (47513) are all minLevel 76 (Stage 3). Stage 0 starter is Change Armor (45355).
+// NEW_EXPECTATION: Change Armor unlocks at Lv 1 for Stage 0; Hellfire is strictly Stage 3 Lv 76+.
+test('canonical DK starter is Change Armor (Lv 1) and Hellfire is Stage 3 (Lv 76)', () => {
+  for (const race of ['human', 'elf', 'delf']) {
+    // Stage 0 canonical starter is change_armor at Lv 1
+    assert.equal(getSkillUnlockLevelForClass(`${race}_deathknight_0`, 'change_armor'), 1, `${race} stage 0 starter`);
+    // Stage 3 unlocks hellfire at Lv 76+
+    assert.equal(getSkillUnlockLevelForClass(`${race}_deathknight_3`, 'hellfire'), 76, `${race} stage 3 hellfire`);
   }
-  assert.equal(getSkillUnlockLevelForClass('sagittarius', 'legendary_archer'), 80);
+  assert.equal(getSkillUnlockLevelForClass('sagittarius', 'legendary_archer'), 76);
 });
 
 test('Self Heal is dispatched as healing, never an attack buff', () => {

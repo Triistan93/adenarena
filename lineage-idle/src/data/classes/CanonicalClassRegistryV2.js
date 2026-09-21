@@ -570,7 +570,6 @@ export const CANONICAL_CLASS_REGISTRY_V2 = Object.freeze({
         "parentClass": null,
         "desc": "Peregrino da morte — começo da jornada dark.",
         "skillIds": [
-            "hellfire",
             "change_armor",
             "sword_blunt_mastery",
             "heavy_armor_mastery",
@@ -628,6 +627,7 @@ export const CANONICAL_CLASS_REGISTRY_V2 = Object.freeze({
         "desc": "Cavaleiro da Morte — devastação dark absoluta com Death Points.",
         "skillIds": [
             "ultimate_death_knight",
+            "hellfire",
             "burning_field",
             "stigma_of_evil",
             "flame_grip",

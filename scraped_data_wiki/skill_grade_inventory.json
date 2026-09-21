@@ -1,0 +1,44 @@
+{
+  "summary": "SKILL & SPELLBOOK GRADE TAXONOMY PROVEN",
+  "provenanceSource": "L2Wiki Essence Spellbook Coupon System",
+  "explanation": "In Lineage II Essence, Skill Grades are defined by the Spellbook Tier required to learn or enhance the skill. These correspond directly to the 5 canonical Spellbook Coupons:",
+  "gradeTiers": [
+    {
+      "grade": "Common",
+      "stars": 1,
+      "sourceCoupon": "Common Spellbook Coupon (98075)",
+      "description": "Skills aprendidas com Tomos Comuns de 1 estrela. Inclui buffs fundamentais universais (Might, Shield, Focus, Haste, Acumen, Wind Walk, Berserker Spirit, etc.)."
+    },
+    {
+      "grade": "Enhanced",
+      "stars": 2,
+      "sourceCoupon": "Enhanced Spellbook Coupon (97121)",
+      "description": "Skills aprimoradas de classe de 2 estrelas. Habilidades ativas e passivas táticas intermediárias."
+    },
+    {
+      "grade": "Rare",
+      "stars": 3,
+      "sourceCoupon": "Rare Spellbook Coupon (97123)",
+      "description": "Skills raras de 3 estrelas de classes. Arsenal central avançado de combate."
+    },
+    {
+      "grade": "Heroic",
+      "stars": 3,
+      "sourceCoupon": "Heroic Spellbook Coupon (100053)",
+      "description": "Skills heróicas de assinatura elevada e profecias (Heroic Prophecies / Overwhelming Power)."
+    },
+    {
+      "grade": "Legendary",
+      "stars": 4,
+      "sourceCoupon": "Legendary Spellbook Coupon (103041)",
+      "description": "Skills lendárias supremas de 4 estrelas (Lv 76+) exclusivas de cada classe (ex: Legendary Archer, Ultimate Death Knight, Battojutsu Master)."
+    }
+  ],
+  "correlationWithAdenArena": {
+    "book_1star": "Common (1★)",
+    "book_2star": "Enhanced (2★)",
+    "book_3star": "Rare / Heroic (3★)",
+    "book_4star": "Legendary (4★)"
+  },
+  "status": "GRADE_TAXONOMY_PROVEN"
+}

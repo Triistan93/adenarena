@@ -3770,10 +3770,10 @@ function renderLoadoutBar(state) {
 
 function renderSkillCard(skill, state, activeLoadoutSlot = null) {
   const isLearned = skill.isLearned;
-  const isLocked = skill.isLocked;
-  const isAvailable = skill.isAvailable;
-  const isBookLocked = skill.isBookLocked;
-  const isMaxed = skill.isMaxed;
+  const isLocked = skill.isLocked ?? (skill.state === 'LOCKED');
+  const isAvailable = skill.isAvailable ?? (skill.state === 'AVAILABLE');
+  const isBookLocked = skill.isBookLocked ?? skill.cost?.isBookLocked ?? false;
+  const isMaxed = skill.isMaxed ?? (typeof skill.rank === 'object' ? skill.rank?.isMaxed : false);
   const cost = skill.cost || { sp: 0, adena: 0 };
   const canAfford = (state.sp || 0) >= cost.sp;
   const isEquipped = !!skill.equippedSlot;
@@ -3793,8 +3793,12 @@ function renderSkillCard(skill, state, activeLoadoutSlot = null) {
     ? `<span class="skill-star-pill star-${skill.starRank}">${'★'.repeat(Math.min(skill.starRank, 5))}</span>`
     : '';
 
-  const rankBadge = skill.rank
-    ? `<span class="skill-rank-badge rank-${String(skill.rank).toLowerCase()}">${skill.rank}</span>`
+  // P0 FIX: skill.rank is an object { current, max, isMaxed } from SkillTreeViewModel.
+  // Extracting scalar values prevents [object Object] from appearing in the DOM.
+  const currentRank = typeof skill.rank === 'object' ? (skill.rank?.current || 0) : (Number(skill.rank) || 0);
+  const maxRank = typeof skill.rank === 'object' ? (skill.rank?.max || 5) : 5;
+  const rankBadge = currentRank > 0
+    ? `<span class="skill-rank-badge">Lv.${currentRank}/${maxRank}</span>`
     : '';
 
   const slotPill = equippedSlot
@@ -3804,11 +3808,24 @@ function renderSkillCard(skill, state, activeLoadoutSlot = null) {
     : '';
 
   const elemClass = `element-${String(skill.element || 'physical').toLowerCase()}`;
-  const costBadge = isMaxed
-    ? `<span class="skill-cost-badge cost-maxed">MAX</span>`
-    : isBookLocked
-      ? `<span class="skill-cost-badge cost-book">🔒 Livro ${skill.starRank || 4}★</span>`
-      : `<span class="skill-cost-badge ${canAfford ? 'cost-affordable' : 'cost-expensive'}">✦ ${cost.sp} SP</span>`;
+  let costBadge = '';
+  if (isMaxed) {
+    costBadge = `<span class="skill-cost-badge cost-maxed">MAX</span>`;
+  } else if (isLocked) {
+    if (skill.primaryLockReason === 'CLASS_STAGE_LOCKED') {
+      costBadge = `<span class="skill-cost-badge cost-locked" title="Requer avanço de classe">🔒 Troca de Classe</span>`;
+    } else if (skill.primaryLockReason === 'LEVEL_LOCKED') {
+      costBadge = `<span class="skill-cost-badge cost-locked" title="Nível ${skill.requiredLevel} necessário">🔒 Lv.${skill.requiredLevel}</span>`;
+    } else if (isBookLocked) {
+      costBadge = `<span class="skill-cost-badge cost-book" title="Livro necessário">🔒 Livro ${skill.starRank || 4}★</span>`;
+    } else {
+      costBadge = `<span class="skill-cost-badge cost-locked">🔒 Bloqueada</span>`;
+    }
+  } else if (isBookLocked) {
+    costBadge = `<span class="skill-cost-badge cost-book">🔒 Livro ${skill.starRank || 4}★</span>`;
+  } else {
+    costBadge = `<span class="skill-cost-badge ${canAfford ? 'cost-affordable' : 'cost-expensive'}">✦ ${cost.sp} SP</span>`;
+  }
 
   const rawSkillPath = skill.iconPath || skill.icon || '';
   const iconUrl = rawSkillPath ? getAssetUrl(rawSkillPath) : NEUTRAL_SKILL_PLACEHOLDER;
@@ -3829,6 +3846,7 @@ function renderSkillCard(skill, state, activeLoadoutSlot = null) {
       <div class="skill-card-body">
         <div class="skill-card-title">${skill.name}</div>
         <div class="skill-card-tags">
+          <span class="skill-grade-tag grade-${String(skill.grade || 'common').toLowerCase()}">${skill.grade || 'COMMON'}</span>
           <span class="skill-element-tag ${elemClass}">${skill.element}</span>
           <span class="skill-role-tag">${skill.role}</span>
         </div>

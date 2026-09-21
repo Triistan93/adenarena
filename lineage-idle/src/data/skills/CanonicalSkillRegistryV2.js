@@ -4556,6 +4556,15 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxId": "sfx_action",
         "sfxGap": false,
         "minLevel": 76,
+        "grade": "LEGENDARY",
+        "bookRequirement": {
+            "required": true,
+            "tier": "LEGENDARY",
+            "stars": 4,
+            "itemId": "book_4star",
+            "quantity": 1,
+            "sourceCoupon": "Legendary Spellbook Coupon (103041)"
+        },
         "classes": [
             "ghostSentinel",
             "moonlightSentinel",
@@ -7596,18 +7605,21 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "rawType": "Ativo",
         "rarity": "1★",
         "starRank": 1,
+        "grade": "COMMON",
+        "combatSkill": false,
+        "roleType": "COSMETIC_VISUAL_ONLY",
         "icon": "/icons/change_death_armor.webp",
         "iconGap": false,
         "iconGapReason": null,
-        "canonicalEffect": "Change Armor effect",
+        "canonicalEffect": "Alterna a aparência visual da armadura do Death Knight. Efeito puramente cosmético.",
         "canonicalCooldown": "1s",
         "canonicalCooldownMs": 1000,
-        "desc": "Change Armor",
+        "desc": "Skill cosmética de visual de armadura do Death Knight. Não causa dano.",
         "balance": {
-            "mpCost": 15,
-            "pwr": 20,
-            "pveMultiplier": 1,
-            "pvpMultiplier": 0.85
+            "mpCost": 0,
+            "pwr": 0,
+            "pveMultiplier": 0,
+            "pvpMultiplier": 0
         },
         "vfxId": "vfx_change_armor",
         "vfxGap": false,
@@ -10488,9 +10500,15 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "sfxId": "sfx_action",
         "sfxGap": false,
         "minLevel": 76,
+        "grade": "UNPROVEN",
+        "bookRequirement": {
+            "required": null,
+            "tier": "UNPROVEN",
+            "stars": null,
+            "itemId": null
+        },
         "classes": [
-            "deathKnight",
-            "deathPilgrim"
+            "deathKnight"
         ]
     },
     "burning_field": {
@@ -13586,7 +13604,7 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "vfxGap": false,
         "sfxId": "sfx_action",
         "sfxGap": false,
-        "minLevel": 40,
+        "minLevel": 20,
         "classes": [
             "palusKnight",
             "shillienKnight",
