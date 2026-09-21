@@ -3778,15 +3778,19 @@ function renderSkillCard(skill, state, activeLoadoutSlot = null) {
   const canAfford = (state.sp || 0) >= cost.sp;
   const isEquipped = !!skill.equippedSlot;
   const equippedSlot = skill.equippedSlot;
+  const isCanAfford = canAfford && !isMaxed && !isLocked && !isBookLocked;
+  const isSelected = state.selectedSkill === skill.skillId;
   const isDraggable = isLearned;
-
-  const cardClasses = ['skill-card'];
+  const cardClasses = ['skill-node-card', 'skill-card'];
   if (isLearned) cardClasses.push('is-learned');
   if (isAvailable) cardClasses.push('is-available');
   if (isLocked) cardClasses.push('is-locked');
-  if (isBookLocked) cardClasses.push('is-book-locked');
+  if (isBookLocked) cardClasses.push('book-locked', 'is-book-locked');
   if (isEquipped) cardClasses.push('is-equipped');
   if (isMaxed) cardClasses.push('is-maxed');
+  if (isCanAfford) cardClasses.push('can-afford', 'can-buy');
+  if (isSelected) cardClasses.push('is-selected');
+  if (skill.ultimate) cardClasses.push('is-ultimate');
   if (activeLoadoutSlot && isLearned) cardClasses.push('is-selectable-for-slot');
 
   const starPill = skill.starRank
@@ -4176,7 +4180,7 @@ export function updateSkillUI(state, callbacks = {}) {
   });
 
   // 8. Wire Skill Cards
-  wrap.querySelectorAll('.skill-node-card').forEach(card => {
+  wrap.querySelectorAll('.skill-node-card, .skill-card').forEach(card => {
     const sId = card.dataset.skillId;
     if (!sId) return;
 
@@ -4202,11 +4206,15 @@ export function updateSkillUI(state, callbacks = {}) {
 
     card.onclick = () => {
       state.selectedSkill = sId;
-      wrap.querySelectorAll('.skill-node-card').forEach(c => {
+      wrap.querySelectorAll('.skill-node-card, .skill-card').forEach(c => {
         c.classList.toggle('is-selected', c.dataset.skillId === sId);
       });
 
-      if (callbacks.spendSP && card.classList.contains('can-afford') && !card.classList.contains('is-maxed') && !card.classList.contains('book-locked')) {
+      const isMax = card.classList.contains('is-maxed');
+      const isBookReq = card.classList.contains('book-locked') || card.classList.contains('is-book-locked');
+      const canAfford = card.classList.contains('can-afford') || card.classList.contains('can-buy');
+
+      if (callbacks.spendSP && canAfford && !isMax && !isBookReq) {
         callbacks.spendSP(sId);
       }
 
@@ -4423,11 +4431,16 @@ export function updateSkillInfoPanel(state, callbacks = {}) {
     }
   }
 
+  const rawDesc = (def.desc || def.note || '').trim();
+  const descHtml = (rawDesc && (!effectText || !effectText.includes(rawDesc)))
+    ? `<p class="si-desc">${rawDesc}</p>`
+    : '';
+
   panel.innerHTML = `
     <div class="si-head">${siIconHtml}<div class="si-title"><h3>${def.name}</h3><div style="display:flex; align-items:center; gap:4px; margin-top:2px;"><p class="si-tier">${tier} · Lv.${lvl}/${max}</p>${elemTag}${roleTag}</div></div></div>
     ${weaponReqBadge}
     ${star4BoxHtml}
-    <p class="si-desc">${def.desc || def.note || ''}</p><div class="si-effect">${effectText}</div>
+    ${descHtml}<div class="si-effect">${effectText}</div>
     <div class="si-reqs"><span class="si-label">Requires</span>${reqHtml}</div>
     <button class="si-btn" data-skillup="${id}" ${!canLearn ? 'disabled' : ''} style="${requiresBookNow && hasRequiredBook ? 'background:linear-gradient(180deg,#f59e0b,#b45309); color:#fff; font-weight:bold;' : ''}">${btnLabel}</button>
     <p class="si-sp">SP available: <strong>${(state.sp || 0).toLocaleString()}</strong></p>

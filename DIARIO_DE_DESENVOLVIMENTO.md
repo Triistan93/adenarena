@@ -1418,8 +1418,56 @@ Atendendo à demanda do usuário quanto ao mapeamento das habilidades exclusivas
   - **715 / 715 testes PASS** (92 suites, 0 falhas).
 - **Compilação de Produção (Vite)**: Executada via `npm run build`:
   - Compilação concluída com sucesso em **20.79 segundos** gerando bundles otimizados em `dist/`.
-- **Preservação Estrita dos Arquivos Sagrados**: `git diff = 0` garantido para `LevelEngine.js`, `MarketService.js`, `ExpeditionService.js`, `cakto-webhook.js`, `CashShopService.js`.
-- **Políticas de Entrega**: `NO PUSH, NO MERGE, NO DEPLOY` rigorosamente cumpridas.
+---
+
+## Página 22 — 21 de Setembro de 2026 às 00:22
+### 🛠️ Correção da Árvore de Habilidades (Skill Tree UI): Restauração do Layout MMORPG, Interatividade de Clique/Upgrade de SP e Deduplicação de Textos
+
+> **Data & Hora**: 21/09/2026 às 00:22 (BRT)  
+> **Branch**: `main`  
+> **Status de Conclusão**: **100% CONCLUÍDO E VALIDADO (`100% PASS`)**  
+> **Métricas de Validação**: 715/715 Testes Unitários Aprovados (92 suites) | Vite Build OK (13.72s)  
+> **Preservação Sagrada**: `git diff = 0` estritamente mantido em `LevelEngine.js`, `MarketService.js`, `ExpeditionService.js`, `cakto-webhook.js`, `CashShopService.js`.  
+
+---
+
+#### 1. Diagnóstico do Problema Relatado
+O usuário relatou que a Skill Tree havia quebrado: não era possível clicar para upar habilidades e o layout estava com visual estranho (cards sem moldura, badges flutuando fora de alinhamento e descrição duplicada no painel inferior).
+
+**Causas Raízes Identificadas**:
+1. **Descompasso de Classes CSS (`skill-node-card` vs `skill-card`)**:
+   - Em `lineage-idle/src/ui/GameUI.js` (função `renderSkillCard`), a lista de classes do card continha apenas `['skill-card']` em vez de `['skill-node-card', 'skill-card']`.
+   - As regras de layout estilizadas em `GameUI.css` e `style.css` miravam exclusivamente `.skill-node-card` (`display: flex; align-items: center; gap: 8px; padding: 6px 8px; position: relative; overflow: hidden;`).
+   - A ausência da classe `.skill-node-card` colapsava os cards para divs desformatadas e quebrava o contexto de posicionamento (`position: relative`), fazendo badges flutuarem soltas pela tela.
+2. **Falha de Binding de Eventos de Clique**:
+   - Em `GameUI.js` (função `updateSkillUI`), o seletor de eventos executava `wrap.querySelectorAll('.skill-node-card')`. Como os cards não continham essa classe, a lista retornava vazia (`length: 0`). **Nenhum card recebia listeners de clique**.
+   - Isso impedia selecionar qualquer habilidade: `state.selectedSkill` ficava preso na primeira skill (muitas vezes já maximizada em 5/5), bloqueando tanto o clique direto no card quanto o botão do painel inferior.
+3. **Ausência de Classes de Estado**:
+   - `can-afford`, `can-buy`, `is-selected` não eram adicionadas aos cards, e `book-locked` era adicionada como `is-book-locked`.
+4. **Duplicação de Descrição no Drawer Inferior**:
+   - `panel.innerHTML` renderizava `<p class="si-desc">${def.desc}</p>` seguido imediatamente por `<div class="si-effect">${effectText}</div>`, onde `effectText` já concatenava a descrição e a fórmula de poder, duplicando o texto na tela.
+5. **Estilização Ausente para `.skill-grade-tag`**:
+   - A tag de raridade/grade da skill (`COMMON`, `ENHANCED`, `RARE`, `HEROIC`, `LEGENDARY`, `MYTHIC`) não possuía regras CSS de coloração.
+
+---
+
+#### 2. Solução Implementada
+1. **`lineage-idle/src/ui/GameUI.js`**:
+   - `renderSkillCard`: Adicionadas classes `'skill-node-card'`, `'can-afford'`, `'can-buy'`, `'is-selected'`, `'book-locked'` e `'is-book-locked'`.
+   - `updateSkillUI`: Seletor atualizado defensivamente para `wrap.querySelectorAll('.skill-node-card, .skill-card')`.
+   - Interatividade de clique refinada: seleciona o card, atualiza a classe `.is-selected`, consome SP para upar a habilidade se acessível/desbloqueada, e atualiza imediatamente o painel inferior.
+   - `updateSkillInfoPanel`: Deduplicação inteligente de texto (`descHtml` só é exibido se `effectText` não contiver o texto descritivo).
+2. **`lineage-idle/src/ui/GameUI.css` e `lineage-idle/style.css`**:
+   - Implementadas regras CSS completas para `.skill-grade-tag` com paleta temática para `grade-common`, `grade-enhanced`, `grade-rare`, `grade-heroic`, `grade-legendary` e `grade-mythic`.
+   - Adicionado `cursor: pointer` e feedback visual de `:hover` para `.skill-cost-badge`.
+
+---
+
+#### 3. Validação de Engenharia
+- **Testes Unitários**: 715 / 715 PASS (92 suites, 0 falhas).
+- **Vite Production Build**: 100% OK em 13.72s.
+- **Arquivos Sagrados**: Intocados (`git diff = 0`).
+
 
 
 
