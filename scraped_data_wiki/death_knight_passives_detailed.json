@@ -1,0 +1,56 @@
+[
+  {
+    "id": 45349,
+    "name": "Born to Die",
+    "skillType": "Passive: Unique Skills",
+    "icon": "https://l2wiki.com/upload/images/icon/born_to_be_death.png",
+    "description": "On dying from attack:Triggers Reviving After Death.Invincibility for 3 sec.HP/ MP recovery unavailableWhen the invincibility effect expires, fully recovers HP/ CP.Recovers 5% MP.(Trigger cooldown: 400 sec.)",
+    "minLevel": 1,
+    "status": "ok"
+  },
+  {
+    "id": 45350,
+    "name": "Undying Body",
+    "skillType": "Passive: Unique Skills",
+    "icon": "https://l2wiki.com/upload/images/icon/skill19405.png",
+    "description": "Immunity to absorption skills and vulnerability to Holy attacks.Received Healing -5%",
+    "minLevel": 1,
+    "status": "ok"
+  },
+  {
+    "id": 45351,
+    "name": "Appetite for Destruction",
+    "skillType": "Passive: Unique Skills",
+    "icon": "https://l2wiki.com/upload/images/icon/skill19187.png",
+    "description": "Death Knight is craving for destruction.P. Atk. +10%PvE damage bonus +5%Atk. Spd. +100",
+    "minLevel": 1,
+    "status": "ok"
+  },
+  {
+    "id": 45352,
+    "name": "Death Points",
+    "skillType": "Passive: Unique Skills",
+    "icon": "https://l2wiki.com/upload/images/icon/death_point.png",
+    "description": "Death Knight uses their rage power in combat.Max 500 DP.P. Atk. +5%HP/ MP Recovery Rate +3Speed +3",
+    "minLevel": 1,
+    "status": "ok"
+  },
+  {
+    "id": 45353,
+    "name": "Death Sword Mastery",
+    "skillType": "Passive: Unique Skills",
+    "icon": "https://l2wiki.com/upload/images/icon/death_sword.png",
+    "description": "Makes you more skillful with one-handed swords.When using a one-handed sword:P. Atk. +25",
+    "minLevel": 5,
+    "status": "ok"
+  },
+  {
+    "id": 45354,
+    "name": "Death Armor Mastery",
+    "skillType": "Passive: Unique Skills",
+    "icon": "https://l2wiki.com/upload/images/icon/change_death_armor.png",
+    "description": "Increases defense when using heavy or light armor.Heavy/ light armor effectP. Def. +15",
+    "minLevel": 5,
+    "status": "ok"
+  }
+]
