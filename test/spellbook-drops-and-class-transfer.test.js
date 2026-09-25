@@ -14,6 +14,9 @@ import { promoteClass, checkClassAdvancement } from '../lineage-idle/src/service
 import { RACES } from '../lineage-idle/src/data/races.js';
 import { getStats } from '../lineage-idle/src/engine/StatsEngine.js';
 import EventBus from '../lineage-idle/src/core/EventBus.js';
+import { getSkillTreeViewModel } from '../lineage-idle/src/services/SkillTreeViewModel.js';
+import { resolveV2ClassContext } from '../lineage-idle/src/services/SkillEligibility.js';
+import { CANONICAL_SKILL_REGISTRY_V2 } from '../lineage-idle/src/data/skills/CanonicalSkillRegistryV2.js';
 
 // ---------------------------------------------------------------------------
 // 1. Etapa 2 — Drop de Tomos / Spellbooks (1★ a 4★) nas 32 Zonas Existentes
@@ -647,4 +650,121 @@ test('Etapa 2.8 — getRequiredBookId processa objetos e campos sem disparar Typ
   assert.strictEqual(getRequiredBookId({ starRank: 1, reqLvl: 40 }), 'book_1star');
   assert.strictEqual(getRequiredBookId({ starRank: 1, reqLvl: 20 }), null);
 });
+
+test('Etapa 2.9 — Progressão Canônica do Warg: Habilidades autorizadas e visíveis por estágio (Lv 1, Lv 20, Lv 40, Lv 76)', () => {
+  // 1. Estágio 0 (werewolf_0, Lv 1) -> Direct Strike strictly (SP only)
+  const char0 = { class: 'werewolf_0', race: 'human', level: 1, skills: {}, sp: 200 };
+  const vm0 = getSkillTreeViewModel(char0);
+  const s0Ids = vm0.allVisibleSkills.map(s => s.skillId);
+  assert.deepEqual(s0Ids, ['direct_strike'], 'Estágio 0 deve mostrar strictly direct_strike');
+  assert.strictEqual(vm0.allVisibleSkills[0].state, 'AVAILABLE');
+  assert.strictEqual(getRequiredBookId(CANONICAL_SKILL_REGISTRY_V2['direct_strike']), null, 'direct_strike não exige livro');
+
+  // 2. Estágio 1 (werewolf_1, Lv 20) -> Desbloqueia Quick Dash e Wind Walk
+  const char1 = { class: 'werewolf_1', race: 'human', level: 20, skills: {}, sp: 200 };
+  const vm1 = getSkillTreeViewModel(char1);
+  const s1Ids = vm1.allVisibleSkills.map(s => s.skillId);
+  assert.ok(s1Ids.includes('direct_strike'), 'werewolf_1 herda direct_strike');
+  assert.ok(s1Ids.includes('quick_dash'), 'werewolf_1 desbloqueia quick_dash no Lv 20');
+  assert.ok(s1Ids.includes('wind_walk'), 'werewolf_1 desbloqueia wind_walk no Lv 20');
+  assert.strictEqual(getRequiredBookId(CANONICAL_SKILL_REGISTRY_V2['quick_dash']), null, 'quick_dash é 1★ Lv 20 e não exige livro');
+  assert.strictEqual(getRequiredBookId(CANONICAL_SKILL_REGISTRY_V2['wind_walk']), null, 'wind_walk é 1★ Lv 20 e não exige livro');
+
+  // 3. Estágio 2 (werewolf_2, Lv 40) -> Desbloqueia Upward Strike (2★) e Howling (2★)
+  const char2 = { class: 'werewolf_2', race: 'human', level: 40, skills: {}, sp: 500 };
+  const vm2 = getSkillTreeViewModel(char2);
+  const s2Ids = vm2.allVisibleSkills.map(s => s.skillId);
+  assert.ok(s2Ids.includes('upward_strike'), 'werewolf_2 desbloqueia upward_strike no Lv 40');
+  assert.ok(s2Ids.includes('howling'), 'werewolf_2 desbloqueia howling no Lv 40');
+  assert.ok(s2Ids.includes('haste'), 'werewolf_2 desbloqueia haste no Lv 40');
+
+  // 4. Estágio 3 (warg / werewolf_3, Lv 76) -> Desbloqueia Enormous Wolf (3★) e Devastating Assault (3★)
+  const char3 = { class: 'warg', race: 'human', level: 76, skills: {}, sp: 1000 };
+  const vm3 = getSkillTreeViewModel(char3);
+  const s3Ids = vm3.allVisibleSkills.map(s => s.skillId);
+  assert.ok(s3Ids.includes('enormous_wolf'), 'warg desbloqueia enormous_wolf no Lv 76');
+  assert.ok(s3Ids.includes('devastating_assault'), 'warg desbloqueia devastating_assault no Lv 76');
+  assert.ok(s3Ids.includes('master_of_combat'), 'warg desbloqueia master_of_combat no Lv 76');
+  assert.ok(s3Ids.includes('upward_strike'), 'warg herda upward_strike');
+  assert.ok(s3Ids.includes('quick_dash'), 'warg herda quick_dash');
+});
+
+test('Etapa 2.10 — Requisitos de Tomos por Raridade (2★ Enhanced e 3★ Rare exigem Tomo 2★ e 3★)', () => {
+  // 2★ Enhanced -> book_2star
+  const upwardStrikeDef = CANONICAL_SKILL_REGISTRY_V2['upward_strike'];
+  assert.strictEqual(upwardStrikeDef.starRank, 2);
+  assert.strictEqual(getRequiredBookId(upwardStrikeDef), 'book_2star', 'Habilidades 2★ devem exigir book_2star');
+
+  const howlingDef = CANONICAL_SKILL_REGISTRY_V2['howling'];
+  assert.strictEqual(howlingDef.starRank, 2);
+  assert.strictEqual(getRequiredBookId(howlingDef), 'book_2star', 'Habilidades 2★ devem exigir book_2star');
+
+  // 3★ Rare -> book_3star
+  const devastatingAssaultDef = CANONICAL_SKILL_REGISTRY_V2['devastating_assault'];
+  assert.strictEqual(devastatingAssaultDef.starRank, 3);
+  assert.strictEqual(getRequiredBookId(devastatingAssaultDef), 'book_3star', 'Habilidades 3★ devem exigir book_3star');
+
+  const enormousWolfDef = CANONICAL_SKILL_REGISTRY_V2['enormous_wolf'];
+  assert.strictEqual(enormousWolfDef.starRank, 3);
+  assert.strictEqual(getRequiredBookId(enormousWolfDef), 'book_3star', 'Habilidades 3★ devem exigir book_3star');
+
+  // 4★ Legendary -> book_4star
+  assert.strictEqual(getRequiredBookId({ starRank: 4, reqLvl: 76 }), 'book_4star');
+
+  // 5★ Mythic / Transcendent -> book_5star
+  const glorDef = CANONICAL_SKILL_REGISTRY_V2['glorious_warrior_enhanced_abilities'];
+  assert.strictEqual(glorDef.starRank, 5);
+  assert.strictEqual(getRequiredBookId(glorDef), 'book_5star', 'Habilidades 5★ devem exigir book_5star');
+});
+
+test('Etapa 2.11 — spendSP consome Tomo 2★ para Upward Strike e Tomo 3★ para Devastating Assault', () => {
+  // Teste 1: Upward Strike rejeita quando não tem book_2star
+  const charWithoutBook = {
+    class: 'werewolf_2',
+    race: 'human',
+    level: 40,
+    sp: 500,
+    skills: {},
+    inventory: []
+  };
+
+  const learnWithoutBook = spendSP(charWithoutBook, 'upward_strike');
+  assert.strictEqual(learnWithoutBook, false, 'spendSP deve rejeitar aprendizado de upward_strike sem book_2star');
+  assert.strictEqual(charWithoutBook.skills['upward_strike'], undefined);
+
+  // Teste 2: Upward Strike aprende e consome book_2star quando disponível
+  const charWithBook2 = {
+    class: 'werewolf_2',
+    race: 'human',
+    level: 40,
+    sp: 500,
+    skills: {},
+    inventory: [
+      { uid: 'book_c_grade', itemId: 'book_2star', count: 1 }
+    ]
+  };
+
+  const learnWithBook2 = spendSP(charWithBook2, 'upward_strike');
+  assert.strictEqual(learnWithBook2, true, 'spendSP deve aprovar aprendizado de upward_strike com book_2star');
+  assert.strictEqual(charWithBook2.skills['upward_strike'], 1, 'upward_strike deve ser aprendida no nível 1');
+  assert.strictEqual(charWithBook2.inventory.find(i => i.itemId === 'book_2star')?.count ?? 0, 0, 'book_2star deve ser consumido');
+
+  // Teste 3: Devastating Assault rejeita sem book_3star e aprova com book_3star
+  const charWithBook3 = {
+    class: 'warg',
+    race: 'human',
+    level: 76,
+    sp: 1000,
+    skills: {},
+    inventory: [
+      { uid: 'book_b_grade', itemId: 'book_3star', count: 1 }
+    ]
+  };
+
+  const learnWithBook3 = spendSP(charWithBook3, 'devastating_assault');
+  assert.strictEqual(learnWithBook3, true, 'spendSP deve aprovar aprendizado de devastating_assault com book_3star');
+  assert.strictEqual(charWithBook3.skills['devastating_assault'], 1, 'devastating_assault deve ser aprendida no nível 1');
+  assert.strictEqual(charWithBook3.inventory.find(i => i.itemId === 'book_3star')?.count ?? 0, 0, 'book_3star deve ser consumido');
+});
+
 

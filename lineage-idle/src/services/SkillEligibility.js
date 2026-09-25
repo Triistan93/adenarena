@@ -238,13 +238,37 @@ export const V2_CONTENT_GAP_CLASSES = {
   },
   'werewolf_1': {
     gapType: 'V2_NODE_ABSENT',
-    reason: 'Nó V2 ausente: Warg de Estágio 1 ausente no catálogo V2',
-    authorizedSkillIds: ['direct_strike']
+    reason: 'Nó V2 ausente: Warg de Estágio 1 (Lycanthrope) ausente no catálogo V2; autorizado conjunto canônico de Estágio 1',
+    authorizedSkillIds: [
+      'direct_strike',
+      'quick_dash',
+      'wind_walk',
+      'death_whisper',
+      'clarity'
+    ]
   },
   'werewolf_2': {
     gapType: 'V2_NODE_ABSENT',
-    reason: 'Nó V2 ausente: Warg de Estágio 2 ausente no catálogo V2',
-    authorizedSkillIds: ['direct_strike']
+    reason: 'Nó V2 ausente: Warg de Estágio 2 (Berserk Wolf) ausente no catálogo V2; autorizado conjunto canônico de Estágio 2',
+    authorizedSkillIds: [
+      'direct_strike',
+      'quick_dash',
+      'wind_walk',
+      'death_whisper',
+      'clarity',
+      'upward_strike',
+      'howling',
+      'haste',
+      'acumen',
+      'berserker_spirit',
+      'wild_magic',
+      'magic_barrier',
+      'hp_recovery',
+      'mp_recovery',
+      'potion_mastery',
+      'unleashed_potential',
+      'divine_inspiration'
+    ]
   },
   'shineMakerBase': {
     gapType: 'V2_NODE_ABSENT',

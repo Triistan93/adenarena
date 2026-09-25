@@ -26,7 +26,7 @@ import { getArmorType, getWeaponType } from '../data/items/item_class_rules.js';
 import { classSatisfies, getClassSkills, checkClassAdvancement, SHARED_SKILL_IDS, getSharedSkills, isMageClass, getSharedSkillIdsForClass, getVisibleSkillsForCharacter, getSkillVisibility, SKILL_VISIBILITY_STATES, getCharacterProgressionState, isSkillAvailableForCharacter, isSkillAllowedForClass } from '../services/CharacterService.js';
 import { getClass, getStats, getActiveSetBonuses, getBaseAttributes } from '../engine/StatsEngine.js';
 import { CP_WEIGHTS } from '../data/balance/cpBalance.js';
-import { getSkillCost } from '../engine/SkillEngine.js';
+import { getSkillCost, getRequiredBookId } from '../engine/SkillEngine.js';
 import { getSkillTreeViewModel, SKILL_TABS, SKILL_CATEGORIES } from '../services/SkillTreeViewModel.js';
 import { getSkillIcon, getSkillSemanticData } from '../services/SkillIconRegistry.js';
 import { getLoadout, equipSkill, unequipSkill, isSkillEquipped, getEquippedSkillIds, autoEquipLoadout, getSkillSlot, getSkillCondition, setSkillCondition, clearSkillCondition, getConditionBadgeText } from '../services/SkillLoadoutService.js';
@@ -4311,16 +4311,23 @@ export function updateSkillInfoPanel(state, callbacks = {}) {
     `;
   }
 
-  const reqBookId = def.requiredItemToUnlock || (def.starRank === 5 ? 'book_5star' : (def.starRank === 4 ? 'book_4star' : null));
+  const reqBookId = getRequiredBookId(def);
   const requiresBookNow = !!reqBookId && lvl === 0;
-  const hasRequiredBook = reqBookId ? (state.inventory?.some(i => (i.itemId === reqBookId || (reqBookId === 'book_4star' && i.itemId === 'spellbook_4star')) && (i.count || 1) > 0)) : true;
+  const hasRequiredBook = reqBookId
+    ? (state.inventory?.some(i => (i.itemId === reqBookId || i.itemId === reqBookId.replace('book_', 'spellbook_') || i.itemId === reqBookId.replace('spellbook_', 'book_')) && (i.count || 1) > 0))
+    : true;
 
   const bookNames = {
     'book_1star': 'Tomo 1★ (Comum)',
     'book_2star': 'Tomo 2★ (Raro)',
     'book_3star': 'Tomo 3★ (Épico)',
     'book_4star': 'Tomo 4★ (Lendário)',
-    'book_5star': 'Tomo 5★ (Transcendente)'
+    'book_5star': 'Tomo 5★ (Transcendente)',
+    'spellbook_1star': 'Tomo 1★ (Comum)',
+    'spellbook_2star': 'Tomo 2★ (Raro)',
+    'spellbook_3star': 'Tomo 3★ (Épico)',
+    'spellbook_4star': 'Tomo 4★ (Lendário)',
+    'spellbook_5star': 'Tomo 5★ (Transcendente)'
   };
   const bName = reqBookId ? (bookNames[reqBookId] || 'Livro de Magia') : '';
 

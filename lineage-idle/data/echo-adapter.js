@@ -1041,6 +1041,7 @@ function buildEchoAdapter() {
           if (SKILL_DEFS_ECHO[sid]) {
             const sDef = SKILL_DEFS_ECHO[sid];
             const currentReq = sDef.reqLvl;
+            const canonMinLevel = CANONICAL_SKILL_REGISTRY_V2?.[sid]?.minLevel;
             const isMasterUlt = sDef.tier === 'master_ultimate' || sDef.identity?.tier === 'master_ultimate' || (sDef.starRank === 5 && sDef.isUltimate === true) || currentReq >= 90;
             const isUlt = sDef.tier === 'ultimate' || sDef.identity?.tier === 'ultimate' || (sDef.isUltimate === true && sDef.id !== 'legendary_archer' && sDef.id !== 'hellfire');
 
@@ -1051,7 +1052,9 @@ function buildEchoAdapter() {
               targetReq = 80;
             } else if (classDef.stage === 0) {
               targetReq = 1;
-            } else if (currentReq && currentReq > 1 && currentReq < classDef.minLevel) {
+            } else if (canonMinLevel !== undefined && canonMinLevel < classDef.minLevel) {
+              targetReq = canonMinLevel;
+            } else if (currentReq && currentReq >= 1 && currentReq < classDef.minLevel) {
               targetReq = currentReq;
             }
 
