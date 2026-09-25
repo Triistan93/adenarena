@@ -707,6 +707,30 @@ export function getStats(state) {
   // Passivas universais de combate — sempre ativas se aprendidas
   baseAtk += (sk('weapon_mastery') + sk('master_of_combat') + sk('eye_of_slayer')) * 5;
 
+  // Death Knight Unique Passives
+  if (isSwordBluntEquipped) baseAtk += sk('death_sword_mastery') * 5;
+  if (isHeavyEquipped || isLightEquipped) baseDef += sk('death_armor_mastery') * 10;
+  baseAtk += sk('death_points') * 5;
+  baseAtk += sk('appetite_for_destruction') * 10;
+
+  // Canonical Race & Archetype Specific Passives (Dwarf, Kamael, Sylph, High Elf, Orc, Assassin, Elves)
+  baseAtk += sk('dwarven_weapon_mastery') * 5;
+  baseDef += sk('dwarven_armor_mastery') * 10;
+  baseAtk += sk('sacral_weapon_mastery') * 5;
+  baseDef += sk('sacral_armor_mastery') * 10;
+  baseAtk += sk('ancient_sword_mastery') * 5;
+  baseAtk += sk('wild_weapon_mastery') * 5;
+  baseDef += sk('wild_armor_mastery') * 10;
+  baseAtk += sk('firearm_mastery') * 5;
+  baseMatk += sk('elemental_sphere_mastery') * 5;
+  baseDef += sk('element_weaver_s_armor_mastery') * 8;
+  baseMdef += sk('element_weaver_s_armor_mastery') * 8;
+  baseMdef += sk('magic_immunity') * 15;
+  baseAtk += sk('titan_spirit') * 10;
+  baseAtk += sk('khavatari_spirit') * 5;
+  baseAtk += sk('assassin_passive_weapon') * 5;
+  baseDef += sk('assassin_passive_armor') * 8;
+
   // V2 Canonical Passives — Mágicas e Robe/Sigil
   baseMatk += (sk('magic_mastery') + sk('spellcraft')) * 4;
   if (isRobeEquipped)  baseMatk += sk('robe_mastery') * 4;
@@ -721,9 +745,9 @@ export function getStats(state) {
   baseDef += sk('armor_mastery') * 8; // Universal armor mastery
   if (isShieldEquipped) baseDef += sk('shield_mastery') * 10;
 
-  baseEva += sk('boost_evasion') * 3;
+  baseEva += (sk('boost_evasion') * 3) + (sk('elven_senses') * 3);
   baseMdef += sk('anti_magic') * 18;
-  mpRegenBonus += (sk('higher_mana') + sk('boost_mp') + sk('mana_recovery') + sk('focus_mind') + sk('higher_mana_gain')) * 2;
+  mpRegenBonus += (sk('higher_mana') + sk('boost_mp') + sk('mana_recovery') + sk('focus_mind') + sk('higher_mana_gain') + sk('death_points') + sk('children_of_the_mother_tree') + sk('elemental_recovery')) * 2;
 
   const eb = getTotalEquipBonuses(state);
   const setRes = getActiveSetBonuses(state);
@@ -745,9 +769,9 @@ export function getStats(state) {
 
   const now = Date.now();
   let buffAtk = 0, buffDef = 0, buffMatk = 0, buffMdef = 0, buffAtkMult = 0;
-  let buffCrit = (sk('focus') * 5) + (sk('critical_chance') * 5) + (sk('eye_of_slayer') * 2);
-  let buffCritDmg = (sk('critical_power') * 0.05);
-  let buffSpd = (sk('quick_step') * 5) + (sk('boost_attack_speed') * 5) + (sk('fast_spell_casting') * 4);
+  let buffCrit = (sk('focus') * 5) + (sk('critical_chance') * 5) + (sk('eye_of_slayer') * 2) + (sk('assassin_critical_dagger') * 5) + (sk('shadow_sense') * 5);
+  let buffCritDmg = (sk('critical_power') * 0.05) + (sk('assassin_critical_dagger') * 0.05);
+  let buffSpd = (sk('quick_step') * 5) + (sk('boost_attack_speed') * 5) + (sk('fast_spell_casting') * 4) + (sk('appetite_for_destruction') * 10) + (sk('death_points') * 3) + (sk('wind_shooting') * 5) + (sk('khavatari_spirit') * 5);
 
   let xpBoost = 0, goldBoost = 0, luckBoost = 0, autoPotion = false;
   state.buffs = state.buffs || {};

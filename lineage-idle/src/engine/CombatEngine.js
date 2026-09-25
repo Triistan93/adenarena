@@ -317,6 +317,30 @@ export function updateSagaProgress(state, silent = true, callbacks = {}) {
  */
 export function playerDeath(state, monster, callbacks = {}) {
   if (!hasValidState(state)) return false;
+
+  // CANONICAL PASSIVE: Born to Die (Death Knight unique fatal survival)
+  // On dying from attack: Triggers Reviving After Death.
+  // Invincibility for 3 sec. Fully recovers HP/CP. Recovers 5% MP. (Cooldown: 400s)
+  const now = Date.now();
+  if (state.skills?.born_to_die > 0 && (!state._bornToDieCooldown || now >= state._bornToDieCooldown)) {
+    state._bornToDieCooldown = now + 400000;
+    const stats = getStats(state);
+    state.maxHp = stats.maxHp || state.maxHp || 1000;
+    state.hp = state.maxHp;
+    state.cp = stats.maxCp || state.hp;
+    state.mp = Math.min(stats.maxMp || state.maxMp || 500, (state.mp || 0) + Math.floor((stats.maxMp || state.maxMp || 500) * 0.05));
+    state.buffs = state.buffs || {};
+    state.buffs.born_to_die_invincibility = {
+      name: 'Reviving After Death',
+      until: now + 3000,
+      invulnerable: true
+    };
+    if (callbacks.log) {
+      callbacks.log('💀 [Born to Die] Revivendo da morte! 3s de invencibilidade e restauração total de HP/CP!', 'rarity-legendary');
+    }
+    return false;
+  }
+
   stopCombat(state);
   const scroll = state.inventory?.find(i => i.itemId === 'scroll_of_rebirth' && (i.count || 1) > 0);
   let lossRate = 0.2;

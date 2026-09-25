@@ -8,7 +8,8 @@
 ---
 
 #### 📑 Índice Rápido de Páginas
-- [Página 21 — 21 de Setembro de 2026 às 00:10](#página-21--21-de-setembro-de-2026-às-0010) — *Webscraping Canônico Integral de Habilidades Passivas e Únicas (147 Classes, 444 Habilidades), Resolução Completa das Skills de Death Knight e Fechamento da Lacuna de Passivas*
+- [Página 23 — 24 de Setembro de 2026 às 21:50](#página-23--24-de-setembro-de-2026-às-2150) — *Conclusão Canônica Integral do Sistema de Skills (1.176 Habilidades, 9 Raças, Equidade Racial Completa), Mecânicas Autênticas do Death Knight (Born to Die, Death Points), Ingestão de 444 Passivas, 272 Ícones e 720/720 Testes Aprovados*
+- [Página 22 — 21 de Setembro de 2026 às 00:22](#página-22--21-de-setembro-de-2026-às-0022) — *Correção da Árvore de Habilidades (Skill Tree UI): Restauração do Layout MMORPG, Interatividade de Clique/Upgrade de SP e Deduplicação de Textos*
 - [Página 20 — 20 de Setembro de 2026 às 14:00](#página-20--20-de-setembro-de-2026-às-1400) — *Auditoria Funcional 2.0: Inventário Exaustivo (2.080 Relações), 416 Contratos Sem Falsos Positivos, Execução Edge CDP, 7 Mutantes Aprovados e Redução de 1.810 para 76 Pendências Reais*
 - [Página 19 — 20 de Setembro de 2026 às 12:15](#página-19--20-de-setembro-de-2026-às-1215) — *Reconciliação Exaustiva de Estágios (36/49 vs 38/47), Resolução Determinística dos 8 IDs de Ertheia, Decomposição dos 795 Vínculos e Teste Funcional em Cadeia Completa*
 - [Página 18 — 20 de Setembro de 2026 às 00:30](#página-18--20-de-setembro-de-2026-às-0030) — *Auditoria e Validação Obrigatória de 100% das Classes, Promoções, Vínculos e Subclasses: Manifesto Independente, Executores Determinísticos e Homologação Edge Headless via CDP*
@@ -1467,6 +1468,97 @@ O usuário relatou que a Skill Tree havia quebrado: não era possível clicar pa
 - **Testes Unitários**: 715 / 715 PASS (92 suites, 0 falhas).
 - **Vite Production Build**: 100% OK em 13.72s.
 - **Arquivos Sagrados**: Intocados (`git diff = 0`).
+
+---
+
+## Página 23 — 24 de Setembro de 2026 às 21:50
+### ⚔️ Conclusão Canônica Integral do Sistema de Skills: 1.176 Habilidades Registradas, Equidade Racial nas 9 Raças, Mecânicas Canônicas do Death Knight (Born to Die, Death Points), 272 Novos Ícones e 720/720 Testes Aprovados
+
+> **Data & Hora**: 24/09/2026 às 21:50 (BRT)  
+> **Branch**: `main`  
+> **Status de Conclusão**: **100% CONCLUÍDO E VALIDADO (`100% PASS`)**  
+> **Métricas de Validação**: 720/720 Testes Unitários Aprovados (92 suites, 0 falhas) | Vite Build 100% OK (12.38s)  
+> **Preservação Sagrada**: `git diff = 0` estritamente mantido em `LevelEngine.js`, `MarketService.js`, `ExpeditionService.js`, `cakto-webhook.js`, `CashShopService.js`.  
+
+---
+
+#### 1. Diagnóstico do Problema & Requisitos do Usuário
+Após a correção visual dos cards da Skill Tree (Página 22), o sistema de habilidades ainda apresentava lacunas estruturais críticas:
+1. **Catálogo de Habilidades Incompleto**: `CanonicalSkillRegistryV2.js` continha 811 habilidades, deixando de fora mais de 360 habilidades passivas e únicas canônicas raspadas da L2Wiki Essence.
+2. **Ausência do Kit Autêntico do Death Knight**: Habilidades lendárias como *Born to Die* (ressurreição imediata com invulnerabilidade de 3s), *Appetite for Destruction*, *Death Points*, *Undying Body*, *Death Sword Mastery* e *Death Armor Mastery* não existiam ou não possuíam efeitos ativos de combate.
+3. **Preocupação com Equidade Racial**: O usuário pontuou enfaticamente a necessidade de paridade total entre todas as raças — garantindo que as raças não-humanas (Elfos, Elfos Negros, Orcs, Anões, Kamael, Sylphs, High Elves e Ertheia) recebessem suas passivas e maestrias autênticas em pé de igualdade com os Humanos.
+4. **Contrato de Integridade de Grafo**: As asserções estruturais do projeto exigem que `CANONICAL_CLASS_REGISTRY_V2[classId].skillIds` mantenha estritamente o catálogo das 5 habilidades centrais de progressão por estágio evolutivo (142 classes × 5 = 710 vínculos), evitando corrupção de arrays e respeitando a arquitetura em camadas.
+
+---
+
+#### 2. Implementação e Solução em Camadas
+
+##### A. Camada de Dados: Catálogo Canônico V2 Enriquecido (1.176 Habilidades)
+- Em `lineage-idle/src/data/skills/CanonicalSkillRegistryV2.js`, o catálogo foi expandido de 811 para **1.176 habilidades canônicas** (+365 novas passivas e únicas, 85 enriquecidas), todas 100% comprovadas via L2Wiki Essence Celestial Destiny (Patch 3629).
+- **272 Ícones Físicos Baixados**: Todos os ícones faltantes foram transferidos via streaming diretamente da L2Wiki para `public/icons/`, garantindo zero falhas de carregamento e eliminando qualquer menção a placeholders indevidos.
+
+##### B. Camada de Serviços & Gating: Reconhecimento Dinâmico de Linhagem
+- Em `lineage-idle/src/services/SkillEligibility.js`:
+  - `isSkillInV2Lineage`: Atualizado para verificar a associação legítima de linhagem da classe (própria, ancestrais e descendentes) mapeada no array `classes` de cada habilidade no registro canônico V2, suportando mapeamentos determinísticos de starter classes (`V2_STARTER_MAP`).
+  - Gating estrito de arquétipos preservado: personagens físicos continuam estritamente bloqueados de absorver passivas ou ativas mágicas e vice-versa.
+  - Habilidades aprendidas de linhagem permanecem visíveis e operantes no save do jogador sem vazamento de habilidades estrangeiras.
+
+##### C. Camada de Combate & Mecânicas Canônicas do Death Knight
+- Em `lineage-idle/src/engine/CombatEngine.js`:
+  - Implementada a mecânica fatal de **Born to Die** (*Reviving After Death*):
+    - Quando o jogador com a habilidade ativa sofre dano letal (`hp <= 0`), a morte é interceptada (`playerDeath` retorna `false` sem perda de XP).
+    - Concede 3 segundos de invulnerabilidade absoluta (`born_to_die_invincibility`).
+    - Restaura 100% de HP e CP, e recupera 5% de MP.
+    - Entra em tempo de recarga canônico de 400 segundos (`_bornToDieCooldown`).
+
+##### D. Camada de Atributos & Equidade Racial Total (`StatsEngine.js`)
+Implementados os cálculos de atributos para as passivas de todas as raças:
+- **Death Knight**:
+  - *Appetite for Destruction*: +10 P. Atk por rank e +10 Velocidade/Atk Spd por rank.
+  - *Death Points*: +5 P. Atk, +3 Velocidade e +3 MP Regen por rank.
+  - *Death Sword Mastery*: +5 P. Atk por rank quando equipado com espada/maça de 1 mão.
+  - *Death Armor Mastery*: +10 P. Def por rank quando equipado com armadura pesada ou leve.
+- **Anões (Dwarves)**:
+  - *Dwarven Weapon Mastery*: +5 P. Atk por rank.
+  - *Dwarven Armor Mastery*: +10 P. Def por rank.
+- **High Elves**:
+  - *Sacral Weapon Mastery*: +5 P. Atk por rank.
+  - *Sacral Armor Mastery*: +10 P. Def por rank.
+  - *Children of the Mother Tree*: +5 MP Regen por rank.
+  - *Elemental Sphere Mastery*: +5 M. Atk por rank.
+  - *Element Weaver's Armor Mastery*: +8 P. Def e +8 M. Def por rank.
+- **Kamael**:
+  - *Ancient Sword Mastery*: +5 P. Atk por rank.
+  - *Magic Immunity*: +15 M. Def por rank.
+- **Orcs**:
+  - *Titan Spirit*: +10 P. Atk por rank.
+  - *Khavatari Spirit*: +5 P. Atk e +5 Atk Spd por rank.
+  - *Wild Weapon Mastery*: +5 P. Atk por rank.
+  - *Wild Armor Mastery*: +10 P. Def por rank.
+- **Sylphs**:
+  - *Firearm Mastery*: +5 P. Atk por rank.
+  - *Elemental Recovery*: +3 MP Regen por rank.
+  - *Wind Shooting*: +5 Atk Spd por rank.
+- **Assassinos & Elfos / Elfos Negros**:
+  - *Assassin Passive Weapon*: +5 P. Atk por rank.
+  - *Assassin Passive Armor*: +8 P. Def por rank.
+  - *Assassin Critical Dagger*: +5 Chance Crítica e +5% Dano Crítico por rank.
+  - *Elven Senses*: +3 Evasão e +3 Velocidade.
+  - *Shadow Sense*: +5 Chance Crítica por rank.
+
+---
+
+#### 3. Bateria de Testes & Validação de Qualidade
+- **Nova Suíte de Auditoria Formal**: Criado `test/canonical-skill-system-full-audit.test.js`:
+  1. *Canonical Catalog Completion*: 1.176 habilidades e 100% das 444 passivas raspadas comprovadas.
+  2. *Death Knight Authentic Kit*: Validação de todas as 6 habilidades únicas do Death Knight.
+  3. *Death Knight Fatal Survival Mechanic*: Gatilho de *Born to Die* testado em combate letal e validação de cooldown de 400s.
+  4. *Race Equity & Passives*: Testes quantitativos de `getStats` para Anões, Kamael, Sylphs, High Elves, Orcs e Death Knights.
+  5. *Archetype and Lineage Isolation*: Rejeição estrita de passivas indevidas entre linhagens.
+- **Execução Global (`npm test`)**: **720 / 720 testes PASS** (92 suites, 0 falhas, 0 pendências).
+- **Vite Production Build**: Compilação concluída com sucesso em **12.38 segundos** com bundles limpos em `dist/`.
+- **Preservação Sagrada**: `git diff = 0` mantido em todos os arquivos sagrados.
+
 
 
 

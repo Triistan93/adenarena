@@ -804,6 +804,64 @@ export function isSkillInV2Lineage(classId, skillId, race = null) {
         }
       }
     }
+
+    // Check if canonical skill registry authorizes this class lineage in its classes manifest
+    const sDef = CANONICAL_SKILL_REGISTRY_V2[skillId];
+    if (sDef && Array.isArray(sDef.classes) && sDef.classes.length > 0) {
+      const isMage = isMageClass(charClass);
+      // Archetype guard: Never allow mage skills on pure fighters or fighter skills on pure mages
+      if (isMage && (sDef.category === 'Combat' || sDef.name?.toLowerCase().includes('armor mastery') && sDef.id === 'heavy_armor_mastery')) {
+        return false;
+      }
+      if (!isMage && (sDef.category === 'Magic' || sDef.id === 'robe_mastery')) {
+        return false;
+      }
+
+      const candidateKeys = new Set([
+        charClass,
+        v2Ctx.v2ClassId,
+        v2Ctx.originalClassId
+      ]);
+
+      if (v2Ctx.v2ClassDef) {
+        candidateKeys.add(v2Ctx.v2ClassDef.id);
+        candidateKeys.add(v2Ctx.v2ClassDef.lineageId);
+        // Ancestors
+        let anc = v2Ctx.v2ClassDef;
+        while (anc.parentClass && CANONICAL_CLASS_REGISTRY_V2[anc.parentClass]) {
+          candidateKeys.add(anc.parentClass);
+          anc = CANONICAL_CLASS_REGISTRY_V2[anc.parentClass];
+        }
+        // Descendants
+        const q = [v2Ctx.v2ClassDef.id];
+        const vis = new Set(q);
+        while (q.length > 0) {
+          const pid = q.shift();
+          for (const cand of Object.values(CANONICAL_CLASS_REGISTRY_V2)) {
+            if (cand.parentClass === pid && !vis.has(cand.id)) {
+              vis.add(cand.id);
+              candidateKeys.add(cand.id);
+              q.push(cand.id);
+            }
+          }
+        }
+      }
+
+      for (const k of candidateKeys) {
+        if (!k) continue;
+        if (sDef.classes.includes(k)) return true;
+        const mapped = V2_STARTER_MAP[k];
+        if (mapped && sDef.classes.includes(mapped)) return true;
+        const snake = k.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
+        if (sDef.classes.includes(snake)) return true;
+      }
+
+      for (const sCls of sDef.classes) {
+        const mapped = V2_STARTER_MAP[sCls];
+        if (mapped && candidateKeys.has(mapped)) return true;
+      }
+    }
+
     return false;
   }
 
@@ -1145,7 +1203,7 @@ export function getVisibleSkillsForCharacter(character) {
     for (const sid of Object.keys(character.skills)) {
       if (isPurgedSkill(sid)) continue;
       if (v2Ctx.status === 'RESOLVED' || v2Ctx.status === 'CONTENT_GAP') {
-        if (v2Ctx.authorizedSkillIds.includes(sid)) {
+        if (v2Ctx.authorizedSkillIds.includes(sid) || isSkillInV2Lineage(charClass, sid, charRace)) {
           candidateIds.add(sid);
         }
       } else {
