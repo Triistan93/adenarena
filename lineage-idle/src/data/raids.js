@@ -46,6 +46,7 @@ export const RAID_BOSSES = {
       { name: 'Chamado das Formigas Nutrizes', triggerHp: 0.35, healPercent: 0.20, text: '✨ Formigas Nutrizes curaram a Rainha em +20% HP!' }
     ],
     drops: [
+      { itemId: 'book_4star', name: 'Tomo Sagrado: 4★ (Lendário Divino)', chance: 0.25 },
       { itemId: 'jewel_ring_queen_ant', name: 'Ring of Queen Ant', chance: 0.25, isEpicJewel: true },
       { itemId: 'scroll_blessed_armor', name: 'Blessed Scroll: Enchant Armor', chance: 0.40 },
       { itemId: 'scroll_blessed_weapon', name: 'Blessed Scroll: Enchant Weapon', chance: 0.25 },
@@ -160,6 +161,7 @@ export const RAID_BOSSES = {
       { name: 'Banquete de Sangue Vampírico', triggerHp: 0.30, healPercent: 0.20, damagePercent: 0.15, text: '🩸 Banquete de Sangue: Zaken drenou sua vida e recuperou +20% HP!' }
     ],
     drops: [
+      { itemId: 'book_4star', name: 'Tomo Sagrado: 4★ (Lendário Divino)', chance: 0.25 },
       { itemId: 'jewel_earring_of_zaken', name: 'Earring of Zaken', chance: 0.25, isEpicJewel: true },
       { itemId: 'armor_zaken_cloack', name: 'Capa Pirata de Zaken', chance: 0.30 },
       { itemId: 'scroll_blessed_weapon', name: 'Blessed Scroll: Enchant Weapon', chance: 0.40 },
@@ -198,6 +200,7 @@ export const RAID_BOSSES = {
       { name: 'Fúria da Divindade Aprisionada', triggerHp: 0.30, damagePercent: 0.35, text: '🌩️ Fúria Imperial: Baium aumentou seu poder de ataque massivamente!' }
     ],
     drops: [
+      { itemId: 'book_4star', name: 'Tomo Sagrado: 4★ (Lendário Divino)', chance: 0.25 },
       { itemId: 'jewel_ring_of_baium', name: 'Ring of Baium', chance: 0.25, isEpicJewel: true },
       { itemId: 'weapon_samurai_longsword', name: 'Samurai Longsword +5', chance: 0.35 },
       { itemId: 'scroll_blessed_weapon', name: 'Blessed Scroll: Enchant Weapon', chance: 0.50 },
@@ -274,6 +277,7 @@ export const RAID_BOSSES = {
       { name: 'Rugido do Pavor Ancestral', triggerHp: 0.35, damagePercent: 0.40, text: '🐉 Rugido Aterrorizante de Antharas rompe as barreiras de defesa!' }
     ],
     drops: [
+      { itemId: 'book_4star', name: 'Tomo Sagrado: 4★ (Lendário Divino)', chance: 0.25 },
       { itemId: 'jewel_earring_of_antharas', name: 'Earring of Antharas', chance: 0.25, isEpicJewel: true },
       { itemId: 'weapon_frost_lord_two_hand_sword', name: 'Frost Lord Greatsword (Tier 6 Apex)', chance: 0.25 },
       { itemId: 'scroll_blessed_weapon', name: 'Blessed Scroll: Enchant Weapon', chance: 0.60 },
@@ -313,6 +317,7 @@ export const RAID_BOSSES = {
       { name: 'Aura da Caldeira Ardente', triggerHp: 0.15, damagePercent: 0.50, text: '🌋 Valakas entra em Fúria Vulcânica Máxima!' }
     ],
     drops: [
+      { itemId: 'book_4star', name: 'Tomo Sagrado: 4★ (Lendário Divino)', chance: 0.25 },
       { itemId: 'jewel_necklace_of_valakas', name: 'Necklace of Valakas', chance: 0.25, isEpicJewel: true },
       { itemId: 'jewel_ring_of_valakas', name: 'Ring of Valakas', chance: 0.25, isEpicJewel: true },
       { itemId: 'armor_valakas_cloack', name: 'Valakas Dragon Cloak', chance: 0.35 },

@@ -7,13 +7,15 @@
 
 import { D } from '../core/GameConfig.js';
 import { RACES, CLASSES } from '../data/races.js';
-import { getClass } from '../engine/StatsEngine.js';
+import { getClass, getStats } from '../engine/StatsEngine.js';
 import { getSkillCost } from '../engine/SkillEngine.js';
 import { resolveCanonicalClassId, resolveCanonicalDagClassId, getCanonicalCharacterClass } from '../data/classes/class_aliases.js';
 import { getAncestors, getDescendants, getLineage, getSuccessors, canAdvance, getClassEntity } from '../data/elemental/ClassLineage.js';
 import { HISTORICAL_CLASS_MAP } from '../data/elemental/HistoricalClasses.js';
 import { CLASS_IDENTITIES } from '../data/elemental/ClassIdentity.js';
 import { CANONICAL_CLASS_REGISTRY } from '../data/classes/CanonicalClassRegistry.js';
+import { CanonicalClassGraph } from '../data/classes/CanonicalClassGraph.js';
+import EventBus from '../core/EventBus.js';
 
 import {
   SHARED_MAGE_SKILL_IDS,
@@ -250,7 +252,8 @@ export function getClassSkills(classId) {
  * @param {Object} [callbacks] — { el, openClassTransferModal }
  */
 export function checkClassAdvancement(state, callbacks = {}) {
-  const currentClassDef = getClass(state.class);
+  const currentClassId = state.character?.classId || state.class;
+  const currentClassDef = getClass(currentClassId);
   const currentStage = currentClassDef?.stage || 0;
 
   let canAdvance = false;
@@ -260,7 +263,7 @@ export function checkClassAdvancement(state, callbacks = {}) {
   if (state.level >= 20 && currentStage === 0) {
     canAdvance = true;
     advTitle = '⚡ 1ª Troca de Classe Disponível!';
-    advSub = `Atingiu o Nível ${state.level}! Escolha o caminho de evolução para a Ordem de ${currentClassDef?.name || state.class}.`;
+    advSub = `Atingiu o Nível ${state.level}! Escolha o caminho de evolução para a Ordem de ${currentClassDef?.name || currentClassId}.`;
   } else if (state.level >= 40 && currentStage === 1) {
     canAdvance = true;
     advTitle = '⚔️ 2ª Troca de Classe Disponível!';
@@ -341,23 +344,32 @@ export function promoteClass(state, newClassId, selectedBuffIds = null, callback
     selectedBuffIds = null;
   }
 
-  const newClassDef = getClass(newClassId) || getClass(resolveCanonicalClassId(newClassId));
+  const currentClass = state.class;
+  const currentRace = state.race;
+  const canonCurrent = resolveCanonicalDagClassId(currentClass, currentRace) || resolveCanonicalClassId(currentClass, currentRace) || currentClass;
+  const canonNew = resolveCanonicalDagClassId(newClassId, currentRace) || resolveCanonicalClassId(newClassId, currentRace) || newClassId;
+
+  // Idempotência estrita: se o personagem já avançou para esta classe alvo
+  if ((state.class === newClassId || state.class === canonNew) &&
+      (state.character?.classId === newClassId || state.character?.classId === canonNew)) {
+    return true;
+  }
+
+  const newClassDef = getClass(newClassId) || getClass(canonNew) || CanonicalClassGraph.getClassNode(newClassId) || CanonicalClassGraph.getClassNode(canonNew);
   if (!newClassDef) {
     if (callbacks.log) callbacks.log(`❌ Classe de destino inválida: ${newClassId}`, 'warning');
     return false;
   }
 
-  // 1. Validação estrita do Grafo DAG de Linhagem (User Correction 3)
-  const currentClass = state.class;
-  const currentRace = state.race;
-  const canonCurrent = resolveCanonicalDagClassId(currentClass, currentRace) || resolveCanonicalClassId(currentClass, currentRace) || currentClass;
-  const canonNew = resolveCanonicalDagClassId(newClassId, currentRace) || resolveCanonicalClassId(newClassId, currentRace) || newClassId;
+  // 1. Validação estrita do Grafo DAG de Linhagem
+  const targetNode = CanonicalClassGraph.getClassNode(newClassId) || CanonicalClassGraph.getClassNode(canonNew) || CANONICAL_CLASS_REGISTRY[newClassId] || CANONICAL_CLASS_REGISTRY[canonNew];
   const successors = getSuccessors(currentClass, currentRace).concat(getSuccessors(canonCurrent, currentRace));
 
   const isCanonicalChild = Boolean(
-    CANONICAL_CLASS_REGISTRY[newClassId] &&
-    (CANONICAL_CLASS_REGISTRY[newClassId].parentClass === currentClass ||
-     CANONICAL_CLASS_REGISTRY[newClassId].parentClass === canonCurrent)
+    targetNode &&
+    (targetNode.parentClass === currentClass ||
+     targetNode.parentClass === canonCurrent ||
+     targetNode.parentClass === resolveCanonicalDagClassId(currentClass, currentRace))
   );
 
   const isAuthorizedSuccessor = successors.length === 0 ||
@@ -394,13 +406,29 @@ export function promoteClass(state, newClassId, selectedBuffIds = null, callback
   }
 
   state.class = newClassId;
+  state.className = newClassDef.name;
+  state.character = state.character || {};
+  state.character.classId = newClassDef.id || newClassId;
+  state.character.className = newClassDef.name;
 
-  const race = RACES[state.race];
+  const racesDict = (typeof window !== 'undefined' && window.EchoData?.RACES_ECHO)
+    ? window.EchoData.RACES_ECHO
+    : RACES;
+  const race = racesDict[state.race];
   state.base = { atk: 0, def: 0, eva: 0, matk: 0, mdef: 0 };
-  if (race) {
-    for (const k of ['atk', 'def', 'eva', 'matk', 'mdef']) {
-      state.base[k] = (race.stats[k] || 0) + (newClassDef.base[k] || 0);
-    }
+  for (const k of ['atk', 'def', 'eva', 'matk', 'mdef']) {
+    state.base[k] = (race?.stats?.[k] || 0) + (newClassDef.base?.[k] || newClassDef.baseStats?.[k] || 0);
+  }
+
+  try {
+    const recalculatedStats = getStats(state);
+    state.stats = state.stats || {};
+    state.maxHp = recalculatedStats.maxHp;
+    state.maxMp = recalculatedStats.maxMp;
+    state.hp = Math.min(state.hp || state.maxHp, state.maxHp);
+    state.mp = Math.min(state.mp || state.maxMp, state.maxMp);
+  } catch (e) {
+    console.warn('[CharacterService] Erro ao recalcular status pós-promoção:', e);
   }
 
   let totalRefunded = 0;
@@ -536,12 +564,21 @@ export function promoteClass(state, newClassId, selectedBuffIds = null, callback
     callbacks.floatText(`🎉 ${newClassDef.name.toUpperCase()}! (+${totalRefunded + transferSpBonus} SP)`, 'float-jackpot');
   }
 
+  EventBus.emit('classTransferred', {
+    previousClass: currentClass,
+    newClass: newClassDef.id || newClassId,
+    stage: newClassDef.stage,
+    classNode: newClassDef
+  });
+
   if (callbacks.el) {
     const modal = callbacks.el('class-transfer-modal');
     if (modal) modal.classList.remove('active');
   }
 
-  if (callbacks.updateAllUI) callbacks.updateAllUI();
+  checkClassAdvancement(state, callbacks);
+  if (callbacks.updateSkillUI) callbacks.updateSkillUI();
+  if (callbacks.updateAllUI) callbacks.updateAllUI(true);
   if (callbacks.save) callbacks.save();
   return true;
 }

@@ -7,6 +7,9 @@
 
 import { CanonicalClassGraph } from '../data/classes/CanonicalClassGraph.js';
 import { SeasonAvailabilityService } from '../services/SeasonAvailabilityService.js';
+import { resolveCanonicalClassId, resolveCanonicalDagClassId } from '../data/classes/class_aliases.js';
+import { RACES } from '../data/races.js';
+import { getStats, getClass } from './StatsEngine.js';
 import EventBus from '../core/EventBus.js';
 
 export class ClassProgressionEngine {
@@ -17,7 +20,7 @@ export class ClassProgressionEngine {
    * @param {string} currentClassId
    * @param {number} playerLevel
    * @param {string} [playerRace]
-   * @param {number} [season=1]
+   * @param {number|null} [season=null]
    * @returns {Array<{
    *   targetClass: Object,
    *   isEligible: boolean,
@@ -27,11 +30,31 @@ export class ClassProgressionEngine {
    *   isSeasonGated: boolean
    * }>}
    */
-  static getPromotionOptions(currentClassId, playerLevel, playerRace = null, season = SeasonAvailabilityService.CURRENT_SEASON) {
-    const currentNode = CanonicalClassGraph.getClassNode(currentClassId);
+  static getPromotionOptions(currentClassId, playerLevel, playerRace = null, season = null) {
+    let currentNode = CanonicalClassGraph.getClassNode(currentClassId);
+    let resolvedId = currentClassId;
+
+    if (!currentNode) {
+      const dagId = resolveCanonicalDagClassId(currentClassId, playerRace);
+      if (dagId) {
+        currentNode = CanonicalClassGraph.getClassNode(dagId);
+        if (currentNode) resolvedId = dagId;
+      }
+    }
+    if (!currentNode) {
+      const canonId = resolveCanonicalClassId(currentClassId, playerRace);
+      if (canonId) {
+        currentNode = CanonicalClassGraph.getClassNode(canonId);
+        if (currentNode) resolvedId = canonId;
+      }
+    }
     if (!currentNode) return [];
 
-    const successors = CanonicalClassGraph.getSuccessors(currentClassId);
+    const effectiveSeason = (season !== null && season !== undefined)
+      ? season
+      : (playerLevel >= 76 ? 3 : SeasonAvailabilityService.CURRENT_SEASON);
+
+    const successors = CanonicalClassGraph.getSuccessors(resolvedId);
 
     return successors.map(targetNode => {
       const reasons = [];
@@ -51,11 +74,11 @@ export class ClassProgressionEngine {
       }
 
       // 3. Season Rule
-      const seasonCheck = SeasonAvailabilityService.getClassAvailability(targetNode.id, season);
+      const seasonCheck = SeasonAvailabilityService.getClassAvailability(targetNode.id, effectiveSeason);
       const isSeasonGated = !seasonCheck.available;
       if (isSeasonGated) {
         isEligible = false;
-        reasons.push(`Bloqueado na Temporada ${season}: Disponível em temporadas futuras (Nível 76+).`);
+        reasons.push(`Bloqueado na Temporada ${effectiveSeason}: Disponível em temporadas futuras (Nível 76+).`);
       }
 
       return {
@@ -74,10 +97,11 @@ export class ClassProgressionEngine {
    * @param {string} currentClassId
    * @param {number} playerLevel
    * @param {string} [playerRace]
+   * @param {number|null} [season=null]
    * @returns {Array<Object>}
    */
-  static getAvailablePromotions(currentClassId, playerLevel, playerRace = null) {
-    const options = ClassProgressionEngine.getPromotionOptions(currentClassId, playerLevel, playerRace);
+  static getAvailablePromotions(currentClassId, playerLevel, playerRace = null, season = null) {
+    const options = ClassProgressionEngine.getPromotionOptions(currentClassId, playerLevel, playerRace, season);
     return options.filter(opt => opt.isEligible).map(opt => opt.targetClass);
   }
 
@@ -87,11 +111,13 @@ export class ClassProgressionEngine {
    * @param {string} targetClassId
    * @param {number} playerLevel
    * @param {string} [playerRace]
+   * @param {number|null} [season=null]
    * @returns {{ canPromote: boolean, reason: string|null }}
    */
-  static canPromote(currentClassId, targetClassId, playerLevel, playerRace = null) {
-    const options = ClassProgressionEngine.getPromotionOptions(currentClassId, playerLevel, playerRace);
-    const targetOption = options.find(opt => opt.targetClass.id === targetClassId);
+  static canPromote(currentClassId, targetClassId, playerLevel, playerRace = null, season = null) {
+    const options = ClassProgressionEngine.getPromotionOptions(currentClassId, playerLevel, playerRace, season);
+    const targetCanon = resolveCanonicalDagClassId(targetClassId, playerRace) || resolveCanonicalClassId(targetClassId, playerRace) || targetClassId;
+    const targetOption = options.find(opt => opt.targetClass.id === targetClassId || opt.targetClass.id === targetCanon || resolveCanonicalDagClassId(opt.targetClass.id, playerRace) === targetCanon);
 
     if (!targetOption) {
       return { canPromote: false, reason: 'Classe alvo não é sucessora direta no grafo canônico.' };
@@ -108,23 +134,61 @@ export class ClassProgressionEngine {
    * Executes class transfer on character state.
    * @param {Object} state
    * @param {string} targetClassId
+   * @param {number|null} [season=null]
    * @returns {boolean}
    */
-  static executeClassTransfer(state, targetClassId) {
+  static executeClassTransfer(state, targetClassId, season = null) {
     if (!state) return false;
-    const currentClass = state.class;
+    const currentClass = state.character?.classId || state.class;
     const level = state.level || 1;
-    const race = state.race;
+    const race = state.race || state.character?.race;
 
-    const check = ClassProgressionEngine.canPromote(currentClass, targetClassId, level, race);
+    // Idempotência estrita: se já transferido para esta classe alvo
+    const targetCanon = resolveCanonicalDagClassId(targetClassId, race) || resolveCanonicalClassId(targetClassId, race) || targetClassId;
+    if ((state.class === targetClassId || state.class === targetCanon) &&
+        (state.character?.classId === targetClassId || state.character?.classId === targetCanon)) {
+      return true;
+    }
+
+    const check = ClassProgressionEngine.canPromote(currentClass, targetClassId, level, race, season);
     if (!check.canPromote) {
       console.warn(`[ClassProgressionEngine] Falha ao avançar classe: ${check.reason}`);
       return false;
     }
 
-    const targetNode = CanonicalClassGraph.getClassNode(targetClassId);
+    const targetNode = CanonicalClassGraph.getClassNode(targetClassId) ||
+                       CanonicalClassGraph.getClassNode(targetCanon);
+    if (!targetNode) return false;
+
     const prevClass = state.class;
     state.class = targetNode.id;
+    state.className = targetNode.name;
+    state.character = state.character || {};
+    state.character.classId = targetNode.id;
+    state.character.className = targetNode.name;
+
+    // Atualiza atributos base de raça e classe
+    const newClassDef = getClass(targetNode.id) || getClass(targetCanon) || targetNode;
+    const racesDict = (typeof window !== 'undefined' && window.EchoData?.RACES_ECHO)
+      ? window.EchoData.RACES_ECHO
+      : RACES;
+    const raceDef = (typeof racesDict === 'object' && racesDict) ? (racesDict[race] || racesDict[state.race]) : null;
+    state.base = { atk: 0, def: 0, eva: 0, matk: 0, mdef: 0 };
+    for (const k of ['atk', 'def', 'eva', 'matk', 'mdef']) {
+      state.base[k] = (raceDef?.stats?.[k] || 0) + (newClassDef.base?.[k] || newClassDef.baseStats?.[k] || 0);
+    }
+
+    // Recalcular status via StatsEngine
+    try {
+      const stats = getStats(state);
+      state.stats = state.stats || {};
+      state.maxHp = stats.maxHp;
+      state.maxMp = stats.maxMp;
+      state.hp = Math.min(state.hp || state.maxHp, state.maxHp);
+      state.mp = Math.min(state.mp || state.maxMp, state.maxMp);
+    } catch (e) {
+      console.warn('[ClassProgressionEngine] Erro ao recalcular status:', e);
+    }
 
     // Dispara evento desacoplado para UI e sistemas ouvintes
     EventBus.emit('classTransferred', {

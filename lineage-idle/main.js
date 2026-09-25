@@ -577,7 +577,8 @@ function openClassTransferModal(classInfo) {
     if (e.target === modal) modal.classList.remove('active');
   };
 
-  const currentClassDef = getClass(state.class);
+  const currentClassId = state.character?.classId || state.class;
+  const currentClassDef = getClass(currentClassId);
   const currentStage = currentClassDef?.stage || 0;
   const targetStage = currentStage + 1;
 
@@ -591,7 +592,7 @@ function openClassTransferModal(classInfo) {
     ? window.EchoData.CLASSES_ECHO
     : {};
   const allClasses = Object.keys(echoClasses).length ? echoClasses : (D()?.CLASSES || {});
-  const canonStateClass = resolveCanonicalClassId(state.class);
+  const canonStateClass = resolveCanonicalClassId(currentClassId);
   const seenClassIds = new Set();
 
   const progState = getCharacterProgressionState(state);
@@ -600,7 +601,12 @@ function openClassTransferModal(classInfo) {
   const candidates = [];
 
   // 1. Prioridade Canônica: Avalia pelo Grafo Oficial e Motor de Progressão
-  const canonicalPromotions = ClassProgressionEngine.getPromotionOptions(state.class, state.level, state.race);
+  const canonicalPromotions = ClassProgressionEngine.getPromotionOptions(
+    currentClassId,
+    state.level,
+    state.race || state.character?.race,
+    state.season || (state.level >= 76 ? 3 : null)
+  );
   if (canonicalPromotions && canonicalPromotions.length > 0) {
     for (const opt of canonicalPromotions) {
       const target = opt.targetClass;
@@ -672,12 +678,15 @@ function openClassTransferModal(classInfo) {
       return;
     }
 
-    for (const { id: clsId, def: clsDef } of candidates) {
+    for (const { id: clsId, def: clsDef, isEligible, isSeasonGated, reasons } of candidates) {
+      const eligible = isEligible !== false;
+      const reasonText = (reasons && reasons.length > 0) ? reasons.join(' · ') : null;
+
       const card = mkEl('div');
       card.className = 'class-option-card';
       card.style.cssText = `
         background: linear-gradient(180deg, rgba(24, 18, 12, 0.98), rgba(12, 9, 5, 0.99));
-        border: 1px solid var(--border-gilt);
+        border: 1px solid ${eligible ? 'var(--border-gilt)' : 'rgba(255,255,255,0.15)'};
         border-radius: 8px;
         padding: 16px;
         margin-bottom: 12px;
@@ -685,6 +694,7 @@ function openClassTransferModal(classInfo) {
         display: flex;
         flex-direction: column;
         gap: 8px;
+        opacity: ${eligible ? '1' : '0.75'};
       `;
 
       const statsStr = Object.entries(clsDef.base || {})
@@ -714,6 +724,14 @@ function openClassTransferModal(classInfo) {
           })
         : '';
 
+      const btnHtml = eligible
+        ? `<button class="action-btn action-btn--primary promote-btn" data-class-id="${clsId}" style="margin-top:8px; padding:10px; width:100%; font-weight:bold; font-family:'Cinzel',serif; font-size:13px; cursor:pointer;">
+            ⚔️ Escolher &amp; Avançar para ${clsDef.name}
+          </button>`
+        : `<button class="action-btn promote-btn" disabled style="margin-top:8px; padding:10px; width:100%; font-weight:bold; font-family:'Cinzel',serif; font-size:12px; opacity:0.6; cursor:not-allowed; background:rgba(50,30,20,0.6); border:1px solid rgba(255,255,255,0.2); color:#cbd5e1;">
+            🔒 ${reasonText || 'Requisitos não preenchidos'}
+          </button>`;
+
       card.innerHTML = `
         <div style="display:flex; gap:14px; align-items:center;">
           <div style="width:72px; height:72px; min-width:72px; min-height:72px; border-radius:50%; border:2px solid var(--border-gilt); overflow:hidden; background:radial-gradient(circle, #2a1f14 0%, #0d0a06 100%); box-shadow:0 4px 12px rgba(0,0,0,0.8); position:relative; flex-shrink:0;">
@@ -732,13 +750,11 @@ function openClassTransferModal(classInfo) {
             ${statsStr ? `<div style="font-size:11px; color:#6ee7b7; font-weight:bold; background:rgba(110,231,183,0.1); padding:4px 8px; border-radius:4px; border:1px solid rgba(110,231,183,0.2); margin-top:4px;">✨ Bônus de Atributos: ${statsStr}</div>` : ''}
           </div>
         </div>
-        <button class="action-btn action-btn--primary promote-btn" data-class-id="${clsId}" style="margin-top:8px; padding:10px; width:100%; font-weight:bold; font-family:'Cinzel',serif; font-size:13px; cursor:pointer;">
-          ⚔️ Escolher &amp; Avançar para ${clsDef.name}
-        </button>
+        ${btnHtml}
       `;
 
       const btn = card.querySelector('.promote-btn');
-      if (btn) {
+      if (btn && eligible) {
         btn.onclick = () => onSelectClassOption(clsId, clsDef);
       }
 
@@ -923,11 +939,18 @@ function openClassTransferModal(classInfo) {
 }
 
 function checkClassAdvancement() { return serviceCheckClassAdvancement(state, { el, openClassTransferModal }); }
-export function promoteClass(newClassId, selectedIds = null) { return servicePromoteClass(state, newClassId, selectedIds, { log, floatText, el, updateAllUI, save }); }
+export function promoteClass(newClassId, selectedIds = null) { return servicePromoteClass(state, newClassId, selectedIds, { log, floatText, el, updateAllUI, updateSkillUI, save }); }
 if (typeof window !== 'undefined') {
   window.openClassTransferModal = openClassTransferModal;
   window.promoteClass = promoteClass;
 }
+
+EventBus.on('classTransferred', () => {
+  if (typeof updateSkillUI === 'function') updateSkillUI();
+  if (typeof updateAllUI === 'function') updateAllUI(true);
+  if (typeof save === 'function') save();
+  if (typeof checkClassAdvancement === 'function') checkClassAdvancement();
+});
 
 
 // --------------------------- INVENTORY / SALVAGE (Sprint 3: Delegados) ---------------------------
@@ -5382,15 +5405,36 @@ function processMonsterDefeat(monster, killingSkill = null) {
     }
   }
 
-  // Drop de Livros de Magia (Spellbooks 1★, 2★, 3★, 4★)
-  if (mLevel >= 38) {
-    const bookChance = (monster.isRaid ? 0.30 : (monster.boss ? 0.08 : 0.005)) * levelGapPenalty * bookRate;
+  // Avaliação de Drops Canônicos configurados no monstro (incluindo Tomos / Spellbooks 1★ a 4★)
+  // Raids têm resolução exclusiva de drops em serviceHandleRaidVictory para evitar drop triplo/duplo
+  if (!monster.isRaid && Array.isArray(monster.drops)) {
+    for (const drop of monster.drops) {
+      const dropRoll = Math.random();
+      const isBook = drop.itemId && (drop.itemId.startsWith('book_') || drop.itemId.startsWith('spellbook_'));
+      const effectiveRate = isBook ? bookRate : dropRate;
+      const dropChance = (drop.chance || 0) * levelGapPenalty * effectiveRate;
+      if (dropRoll < dropChance) {
+        addToInventory(drop.itemId, drop.count || 1);
+        const allDict = (typeof D === 'function' && D()?.ALL_ITEMS) ? D().ALL_ITEMS : ALL_ITEMS;
+        const def = allDict ? allDict[drop.itemId] : null;
+        const name = def?.name || drop.name || drop.itemId;
+        log(`📖 DROP DE GRIMÓRIO! Obteve **${name}** de ${monster.name}!`, 'rarity-legendary', 'loot');
+        floatText(`📖 ${name}!`, 'float-jackpot');
+      }
+    }
+  }
+
+  // Drop de Livros de Magia (Spellbooks 1★, 2★, 3★, 4★) fallback apenas para monstros sem drops configurados e Lv >= 40
+  const hasConfiguredBook = Array.isArray(monster.drops) && monster.drops.some(d => d.itemId && (d.itemId.startsWith('book_') || d.itemId.startsWith('spellbook_')));
+  if (!monster.isRaid && !hasConfiguredBook && mLevel >= 40) {
+    const bookChance = (monster.boss ? 0.08 : 0.005) * levelGapPenalty * bookRate;
     if (Math.random() < bookChance) {
       let droppedBookId = 'book_1star';
-      // Tomo 4★ é EXCLUSIVO de Epic Bosses, Raids e Chefes de Dungeon Lv 70+
-      if (monster.isRaid || (monster.boss && mLevel >= 70)) droppedBookId = 'book_4star';
+      // Tomo 4★ em zonas endgame Lv 76+ (Forge of the Gods)
+      if (mLevel >= 76) droppedBookId = 'book_4star';
       else if (mLevel >= 56) droppedBookId = 'book_3star';
       else if (mLevel >= 48) droppedBookId = 'book_2star';
+      else if (mLevel >= 40) droppedBookId = 'book_1star';
 
       const bookDef = D().ALL_ITEMS[droppedBookId];
       if (bookDef) {

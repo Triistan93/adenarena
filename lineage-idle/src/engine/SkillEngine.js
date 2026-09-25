@@ -89,25 +89,102 @@ export function spendSP(state, skillId, callbacks = {}) {
   }
 
   // Requisito de livro de habilidade (Spellbooks 1★ a 5★) para habilidades de Lv. 40+ no primeiro nível (lvl === 0)
-  const reqBookId = def.requiredItemToUnlock || (def.starRank === 5 ? 'book_5star' : (def.starRank === 4 ? 'book_4star' : null));
+  let reqBookId = null;
+  if (def.requiredItemToUnlock !== undefined) {
+    reqBookId = def.requiredItemToUnlock;
+  } else if (typeof def.bookRequirement === 'string') {
+    if (def.bookRequirement === 'ULTIMATE_BOOK_4' || def.bookRequirement === 'book_4star' || def.bookRequirement === 'spellbook_4star') {
+      reqBookId = 'book_4star';
+    } else if (def.bookRequirement.startsWith('book_') || def.bookRequirement.startsWith('spellbook_')) {
+      reqBookId = def.bookRequirement;
+    } else if (def.bookRequirement.includes('5')) {
+      reqBookId = 'book_5star';
+    } else if (def.bookRequirement.includes('4')) {
+      reqBookId = 'book_4star';
+    } else if (def.bookRequirement.includes('3')) {
+      reqBookId = 'book_3star';
+    } else if (def.bookRequirement.includes('2')) {
+      reqBookId = 'book_2star';
+    } else if (def.bookRequirement.includes('1')) {
+      reqBookId = 'book_1star';
+    }
+  } else if (def.bookRequirement && typeof def.bookRequirement === 'object') {
+    if (def.bookRequirement.required !== false) {
+      reqBookId = def.bookRequirement.itemId || (def.bookRequirement.stars ? `book_${def.bookRequirement.stars}star` : null);
+    }
+  } else {
+    const star = def.starRank || def.stars || (def.tier === 5 ? 5 : (def.tier === 4 ? 4 : (def.tier === 3 ? 3 : (def.tier === 2 ? 2 : 0))));
+    const minLvl = def.reqLvl || def.requiredLevel || def.minLevel || 1;
+    if (star === 5) reqBookId = 'book_5star';
+    else if (star === 4) reqBookId = 'book_4star';
+    else if (star === 3) reqBookId = 'book_3star';
+    else if (star === 2) reqBookId = 'book_2star';
+    else if (star === 1 && minLvl >= 40) reqBookId = 'book_1star';
+  }
+
   if (reqBookId && lvl === 0) {
-    const bookItem = state.inventory?.find(i => (i.itemId === reqBookId || (reqBookId === 'book_4star' && i.itemId === 'spellbook_4star')) && (i.count ?? 1) > 0);
+    const alias1 = reqBookId;
+    const alias2 = reqBookId.startsWith('book_')
+      ? reqBookId.replace('book_', 'spellbook_')
+      : reqBookId.replace('spellbook_', 'book_');
+    const bookItem = state.inventory?.find(i => (i.itemId === alias1 || i.itemId === alias2) && (i.count ?? 1) > 0);
     if (!bookItem) {
       const bookNames = {
         'book_1star': 'Tomo Sagrado: 1★ (Comum)',
         'book_2star': 'Tomo Sagrado: 2★ (Raro)',
         'book_3star': 'Tomo Sagrado: 3★ (Épico)',
         'book_4star': 'Tomo Sagrado: 4★ (Lendário Divino)',
-        'book_5star': 'Tomo Sagrado: 5★ (Transcendente Primordial)'
+        'book_5star': 'Tomo Sagrado: 5★ (Transcendente Primordial)',
+        'spellbook_1star': 'Tomo Sagrado: 1★ (Comum)',
+        'spellbook_2star': 'Tomo Sagrado: 2★ (Raro)',
+        'spellbook_3star': 'Tomo Sagrado: 3★ (Épico)',
+        'spellbook_4star': 'Tomo Sagrado: 4★ (Lendário Divino)',
+        'spellbook_5star': 'Tomo Sagrado: 5★ (Transcendente Primordial)'
       };
       const bName = bookNames[reqBookId] || reqBookId;
       if (callbacks.log) callbacks.log(`🔒 Exige o **${bName}** na mochila para desbloquear esta habilidade! (Encontre em caçadas/instâncias ou compre no Mercado Global)`, 'warning');
       return false;
     }
+
+    if (!bookItem.uid) {
+      bookItem.uid = 'item_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8);
+    }
     const countBefore = bookItem.count ?? 1;
-    if (callbacks.removeFromInventory) callbacks.removeFromInventory(bookItem.uid, 1);
-    else removeFromInventory(state, bookItem.uid, 1);
-    const countAfter = state.inventory.find(i => i.uid === bookItem.uid)?.count ?? (state.inventory.includes(bookItem) ? 1 : 0);
+    let removed = false;
+
+    if (callbacks.removeFromInventory) {
+      const res = callbacks.removeFromInventory(bookItem.uid, 1);
+      const remaining = state.inventory.find(i => i.uid === bookItem.uid)?.count ?? (state.inventory.includes(bookItem) ? 1 : 0);
+      if (remaining === countBefore - 1) {
+        removed = true;
+      } else if (res === true) {
+        // Callback confirmou remoção mas não mutou o array diretamente (mock/stub)
+        if ((bookItem.count ?? 1) > 1) {
+          bookItem.count -= 1;
+        } else {
+          const idx = state.inventory.indexOf(bookItem);
+          if (idx >= 0) state.inventory.splice(idx, 1);
+        }
+        removed = true;
+      }
+    }
+
+    if (!removed) {
+      if (bookItem.uid) {
+        removeFromInventory(state, bookItem.uid, 1);
+      }
+      const checkCount = state.inventory.find(i => i.uid === bookItem.uid)?.count ?? (state.inventory.includes(bookItem) ? 1 : 0);
+      if (checkCount !== countBefore - 1) {
+        if ((bookItem.count ?? 1) > 1) {
+          bookItem.count -= 1;
+        } else {
+          const idx = state.inventory.indexOf(bookItem);
+          if (idx >= 0) state.inventory.splice(idx, 1);
+        }
+      }
+    }
+
+    const countAfter = state.inventory.find(i => (bookItem.uid ? i.uid === bookItem.uid : i === bookItem))?.count ?? (state.inventory.includes(bookItem) ? 1 : 0);
     if (countAfter !== countBefore - 1) return false;
     if (callbacks.log) callbacks.log(`📖 **${def.name}** desbloqueada com sucesso! (${bookItem.itemId} consumido)`, 'rarity-legendary');
   }

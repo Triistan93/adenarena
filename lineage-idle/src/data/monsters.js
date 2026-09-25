@@ -315,6 +315,50 @@ export const MONSTERS = {
 for (const [key, m] of Object.entries(MONSTERS)) {
   m.id    = key;
   m.level = m.level ?? m.lvl ?? 1;
+
+  // Drops canônicos de Tomos e Livros de Habilidade (1★ a 4★)
+  m.drops = m.drops || [];
+  if (m.level >= 76) {
+    if (!m.drops.some(d => d.itemId === 'book_4star')) {
+      m.drops.push({
+        itemId: 'book_4star',
+        name: 'Tomo Sagrado: 4★ (Lendário Divino)',
+        chance: m.boss ? 0.20 : (m.elite ? 0.05 : 0.01),
+        grade: 'A',
+        stars: 4
+      });
+    }
+  } else if (m.level >= 56) {
+    if (!m.drops.some(d => d.itemId === 'book_3star')) {
+      m.drops.push({
+        itemId: 'book_3star',
+        name: 'Tomo Sagrado: 3★ (Épico)',
+        chance: m.boss ? 0.25 : (m.elite ? 0.06 : 0.015),
+        grade: 'B',
+        stars: 3
+      });
+    }
+  } else if (m.level >= 48) {
+    if (!m.drops.some(d => d.itemId === 'book_2star')) {
+      m.drops.push({
+        itemId: 'book_2star',
+        name: 'Tomo Sagrado: 2★ (Raro)',
+        chance: m.boss ? 0.30 : (m.elite ? 0.08 : 0.02),
+        grade: 'C',
+        stars: 2
+      });
+    }
+  } else if (m.level >= 40) {
+    if (!m.drops.some(d => d.itemId === 'book_1star')) {
+      m.drops.push({
+        itemId: 'book_1star',
+        name: 'Tomo Sagrado: 1★ (Comum)',
+        chance: m.boss ? 0.35 : (m.elite ? 0.10 : 0.025),
+        grade: 'D',
+        stars: 1
+      });
+    }
+  }
 }
 
 /** Índice reverso: 'goblin mage' -> 'goblinMage' */

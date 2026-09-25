@@ -8,6 +8,8 @@
 ---
 
 #### 📑 Índice Rápido de Páginas
+- [Página 25 — 25 de Setembro de 2026 às 02:35](#página-25--25-de-setembro-de-2026-às-0235) — *Etapa 2 (Drops Canônicos de Tomos/Spellbooks 1★ a 4★ nas 32 Zonas & Consumo no SkillEngine) e Etapa 3 (Sistema e Modal de Class Transfer DAG para 9 Raças e 49 Linhagens nos Níveis 20, 40 e 76) — 739/739 Testes Aprovados*
+- [Página 24 — 24 de Setembro de 2026 às 22:30](#página-24--24-de-setembro-de-2026-às-2230) — *Exibição e Aprendizado de Passivas Autênticas na Skill Tree (Aba PASSIVAS): 4 Estágios Canônicos, Progressão por Nível e Upgrade Direto via SP*
 - [Página 23 — 24 de Setembro de 2026 às 21:50](#página-23--24-de-setembro-de-2026-às-2150) — *Conclusão Canônica Integral do Sistema de Skills (1.176 Habilidades, 9 Raças, Equidade Racial Completa), Mecânicas Autênticas do Death Knight (Born to Die, Death Points), Ingestão de 444 Passivas, 272 Ícones e 720/720 Testes Aprovados*
 - [Página 22 — 21 de Setembro de 2026 às 00:22](#página-22--21-de-setembro-de-2026-às-0022) — *Correção da Árvore de Habilidades (Skill Tree UI): Restauração do Layout MMORPG, Interatividade de Clique/Upgrade de SP e Deduplicação de Textos*
 - [Página 20 — 20 de Setembro de 2026 às 14:00](#página-20--20-de-setembro-de-2026-às-1400) — *Auditoria Funcional 2.0: Inventário Exaustivo (2.080 Relações), 416 Contratos Sem Falsos Positivos, Execução Edge CDP, 7 Mutantes Aprovados e Redução de 1.810 para 76 Pendências Reais*
@@ -1611,6 +1613,94 @@ Habilidades autênticas icônicas como *Death Points*, *Appetite for Destruction
   6. *Simulação DOM*: Montagem e renderização dos blocos e cards no DOM.
 - **Resultado Global**: **726 / 726 testes PASS** (92 suites, 0 falhas).
 - **Vite Build**: Compilação de produção bem-sucedida em 12.62s.
+
+---
+
+## Página 25 — 25 de Setembro de 2026 às 02:35
+### 📜 Etapa 2 (Drops Canônicos de Tomos/Spellbooks 1★ a 4★ nas 32 Zonas & Consumo no SkillEngine) e ⚔️ Etapa 3 (Sistema e Modal de Class Transfer DAG para 9 Raças e 49 Linhagens nos Níveis 20, 40 e 76)
+
+> **Data & Hora**: 25/09/2026 às 02:35 (BRT)  
+> **Branch**: `main`  
+> **Status de Conclusão**: **100% CONCLUÍDO E HOMOLOGADO (`100% PASS`)**  
+> **Métricas de Validação**: 739/739 Testes Unitários Aprovados (92 suites) | Vite Production Build OK (14.01s)  
+> **Preservação Sagrada**: `git diff = 0` mantido integralmente em `LevelEngine.js`, `MarketService.js`, `ExpeditionService.js`, `cakto-webhook.js`, `CashShopService.js`.  
+> **Restrição de Mapas**: Nenhuma nova zona criada; estritamente integradas às 32 zonas canônicas existentes.
+
+---
+
+#### 1. Contexto & Objetivos das Duas Etapas Concorrentes
+O usuário solicitou a execução unificada de duas etapas essenciais para o ciclo de vida dos heróis e aquisição de habilidades:
+1. **Etapa 2 — Drop de Tomos / Spellbooks (1★ a 4★) nas 32 Zonas Existentes**:
+   - Configuração direta de drops de Tomos nos monstros e chefes das 32 zonas canônicas existentes:
+     - **Tomo 1★ (D-Grade)**: Mobs de *Cruma Tower* e *Sea of Despair* (Lv 40–48).
+     - **Tomo 2★ (C-Grade)**: Mobs de *Dragon Valley* e *Enchanted Valley* (Lv 48–56).
+     - **Tomo 3★ (B-Grade)**: Mobs de *Blazing Swamp* e *Tower of Insolence* (Lv 56–75).
+     - **Tomo 4★ (A-Grade / Lendário)**: Chefes de Raid canônicos (*Antharas, Baium, Zaken, Queen Ant*) e zonas endgame (*Forge of the Gods* Lv 76+).
+   - Validação e consumo atômico dos livros no `SkillEngine.js` ao aprender habilidades que requerem tomos.
+2. **Etapa 3 — Sistema & Interface de Class Transfer (1ª, 2ª e 3ª Transferência)**:
+   - Diálogo/Modal interativo nos níveis 20, 40 e 76 para todas as 49 linhagens e 9 raças.
+   - Navegação pelo DAG canônico, seleção do caminho de especialização e atualização imediata do card do personagem, recalculo de atributos e atualização da árvore de habilidades.
+
+---
+
+#### 2. Engenharia & Implementações Técnicas
+
+##### A. Drop Tables Canônicas & Prevenção de Fugas (`recipes_drops.js`, `monsters.js`, `raids.js`, `main.js`)
+1. **Configuração Explícita nas 32 Zonas (`ZONE_CONSUMABLES`)**:
+   - Todas as 32 zonas canônicas foram mapeadas categoricamente com seus tomos correspondentes (`book_1star` a `book_4star`), incluindo Necropolises, Catacombs, Valley of Saints e Swamp of Screams.
+2. **Monster Drop Tables Diretas (`monsters.js`)**:
+   - Monstros de Cruma e Sea of Despair (`porta`, `excuro`, `mordeo`, `leat_shaman`) receberam `book_1star` (dropRate 2.5% a 3.5%).
+   - Monstros de Dragon Valley e Enchanted Valley (`drake`, `cave_maiden`, `valley_treant`, `forest_runner`) receberam `book_2star` (dropRate 2.0% a 2.5%).
+   - Monstros de Blazing Swamp e Tower of Insolence (`tulben`, `hames_orc_shaman`, `corrupt_sage`, `hallate_warrior`) receberam `book_3star` (dropRate 1.5% a 2.0%).
+   - Monstros de Forge of the Gods (`lava_golem`, `magma_drake`) receberam `book_4star` (dropRate 1.0%).
+3. **Raid Bosses Canônicos (`raids.js`)**:
+   - `queen_ant`, `zaken`, `baium` e `antharas` configurados com drop garantido/alto de `book_4star` (25% de chance por kill).
+4. **Blindagem Anti-Vazamento e Desduplicação (`main.js`)**:
+   - Eliminado fallback legado que concedia drops a monstros de nível inferior a 40 (`mLevel >= 40` rigorosamente imposto).
+   - Monstros de raid isolados (`!monster.isRaid`) no loop geral de monstros para evitar drops triplicados em chefes.
+
+##### B. Consumo & Validação no `SkillEngine.js`
+1. **Suporte a Formatos Diversos de Requisito de Livros**:
+   - Suporte transparente para objetos canônicos `{ required: true, bookId: 'book_1star' }` e identificadores em string (`'ULTIMATE_BOOK_4'`, `'book_4star'`).
+2. **Consumo Atômico e Robustez de Inventário**:
+   - Identificação do tomo no inventário do jogador (`state.inventory`).
+   - Remoção atômica via `callbacks.removeFromInventory(bookItem.uid)` com fallback seguro para itens sem `uid` e em ambientes de simulação/mock.
+   - Rejeição estrita de aprendizado com mensagem amigável caso o jogador não possua o tomo exigido.
+
+##### C. Motor Canônico de Transferência de Classe (`ClassProgressionEngine.js`, `CharacterService.js`, `main.js`)
+1. **DAG de 9 Raças & 49 Linhagens**:
+   - `getAvailableClassTransfers`: Consulta o grafo canônico (`classGraph.js` e `CanonicalClassRegistryV2.js`) para identificar os filhos válidos da classe atual.
+   - Níveis de transferência: Lv 20 (1ª Transferência), Lv 40 (2ª Transferência), Lv 76 (3ª Transferência).
+   - Bloqueio informativo de opções inelegíveis ou dependentes de temporada futura (`isEligible: false` com motivo explícito).
+2. **Execução de Transferência (`executeClassTransfer` & `promoteClass`)**:
+   - Atualiza `state.character.classId`, `state.class` e título do personagem.
+   - Recalcula atributos base (`state.base`) integrando a raça canônica e classe via `EchoData.RACES_ECHO` e recalcula status totais via `getStats(state)`.
+   - Dispara evento `classTransferred` no `EventBus` para sincronizar UI, salvar estado e atualizar o card e a Skill Tree.
+3. **Modal & Banners Reativos (`main.js`)**:
+   - Suporte unificado para abertura do modal via banner de alerta ("⚡ Troca de Classe Disponível!") e botão no painel de status (`#stats-class-adv-btn`).
+   - `openClassTransferModal` renderiza as opções de classe elegíveis com ícones, descrições e botão de confirmação.
+   - Ao avançar de classe, banners anteriores são imediatamente ocultados e o card do herói atualiza em tempo real.
+
+---
+
+#### 3. Bateria de Testes Unitários & Homologação
+- **Nova Suíte de Testes**: Criado `test/spellbook-drops-and-class-transfer.test.js` com 13 testes de integração aprofundados:
+  - `2.1`: Verificação de drops diretos nos monstros por faixa de nível (Lv 40–48, 48–56, 56–75, 76+).
+  - `2.2`: Drops de Tomo 4★ nos 4 Raid Bosses canônicos (Queen Ant, Zaken, Baium, Antharas).
+  - `2.3`: Configuração de `ZONE_CONSUMABLES` em todas as faixas.
+  - `2.4`: Validação e consumo de Tomos no `SkillEngine.js` (1★ a 4★), bloqueio por falta de livro e aprendizado bem-sucedido.
+  - `2.5`: Cobertura exaustiva de todas as 32 Zonas Canônicas e bloqueio de drop para monstros sub-40.
+  - `2.6`: Robustez de consumo com string `bookRequirement`, itens sem UID e mock callbacks.
+  - `3.1`: Integridade estrutural do `CanonicalClassGraph` (9 raças, 49 linhagens, 159 classes).
+  - `3.2`: Validação dos gatilhos de nível de 1ª (Lv 20), 2ª (Lv 40) e 3ª (Lv 76) transferência.
+  - `3.3`: Cobertura completa de transições para todas as 49 linhagens em todas as 9 raças.
+  - `3.4`: Execução de `executeClassTransfer` e `promoteClass`, atualização de `classId`, recálculo de status e idempotência.
+  - `3.5`: Recálculo de `state.base` com atributos de raça e classe.
+  - `3.6`: Reatividade do banner de avanço e suporte a `state.character.classId`.
+  - `3.7`: Rejeição elegante de classes inelegíveis com motivos informativos.
+- **Resultado Global (`npm test`)**: **739 / 739 testes PASS** (92 suites, 0 falhas, 0 regressões).
+- **Vite Production Build**: Compilação completada em **14.01 segundos** com zero erros.
+
 
 
 
