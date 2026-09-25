@@ -27231,7 +27231,7 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "vfxGap": false,
         "sfxId": null,
         "sfxGap": false,
-        "minLevel": 1,
+        "minLevel": 20,
         "classes": [
             "mage",
             "elven_mage",
@@ -32299,7 +32299,7 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "vfxGap": false,
         "sfxId": null,
         "sfxGap": false,
-        "minLevel": 1,
+        "minLevel": 20,
         "classes": [
             "mage"
         ]

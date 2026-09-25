@@ -22,9 +22,12 @@ import {
   resolveSkillDef,
   getSkillUnlockLevelForClass,
   isSkillAvailableForCharacter,
-  isSkillNativeOrAvailableNow
+  isSkillNativeOrAvailableNow,
+  isSkillInV2Lineage,
+  isExplicitStage0Skill
 } from './SkillEligibility.js';
 
+import { CANONICAL_SKILL_REGISTRY_V2 } from '../data/skills/CanonicalSkillRegistryV2.js';
 import { isPurgedSkill } from './SkillTagService.js';
 
 import {
@@ -182,7 +185,7 @@ export function getSkillTreeViewModel(character, options = {}) {
     icon: theme.icon
   };
 
-  // Query eligible visible skills from single source of truth
+  // Query eligible visible skills from single source of truth (Core active & starter skills)
   const visibleItems = getVisibleSkillsForCharacter(character);
   const visibleList = Array.isArray(visibleItems)
     ? visibleItems
@@ -203,7 +206,7 @@ export function getSkillTreeViewModel(character, options = {}) {
 
     // Strict future check: requiredLevel > charLevel must NEVER be presented (unless already learned or stage 0 starter skill)
     const classSpecificReq = getSkillUnlockLevelForClass(charClass, sId);
-    const isStage0Starter = classSpecificReq === 1;
+    const isStage0Starter = isExplicitStage0Skill(charClass, sId) || classSpecificReq === 1;
     const baseReq = isStage0Starter ? 1 : (Number(def.requiredLevel || def.reqLvl || def.identity?.unlockLevel) || 1);
     const reqLvl = Math.max(classSpecificReq, baseReq);
     if (!isLearned && !isStage0Starter && charLevel < reqLvl) continue;
@@ -253,7 +256,7 @@ export function getSkillTreeViewModel(character, options = {}) {
       name: def.name || sId,
       category,
       tab,
-      role: semantic.role || def.identity?.role || (def.type === 'buff' ? 'buff' : 'damage'),
+      role: semantic.role || def.identity?.role || (def.type === 'buff' ? 'buff' : (isPassive ? 'passive' : 'damage')),
       element: semantic.element || def.identity?.element || def.element || 'Physical',
       iconId: iconData.iconId,
       iconPath: iconData.iconPath,
@@ -287,14 +290,14 @@ export function getSkillTreeViewModel(character, options = {}) {
       },
       cooldown: def.baseCd || def.gameplay?.cooldown || 5000,
       description: def.desc || def.info || def.identity?.description || def.name,
-      effectText: def.effectText || `Multiplicador: ${(def.pwr ? def.pwr / 10 : 1.4).toFixed(1)}x`,
+      effectText: def.effectText || (def.canonicalEffect ? def.canonicalEffect : `Multiplicador: ${(def.pwr ? def.pwr / 10 : 1.4).toFixed(1)}x`),
       classReq: def.classReq || def.identity?.classId || canonicalClass
     });
   }
 
   // Group presentation models into tabs and categories
   const activeSkills = presentationModels.filter(m => m.tab === SKILL_TABS.ACTIVE);
-  const passiveSkills = presentationModels.filter(m => m.tab === SKILL_TABS.PASSIVE);
+  const basePassiveSkills = presentationModels.filter(m => m.tab === SKILL_TABS.PASSIVE);
   const ultimateSkills = presentationModels.filter(m => m.tab === SKILL_TABS.ULTIMATE);
 
   // Group Active tab skills by category
@@ -321,6 +324,132 @@ export function getSkillTreeViewModel(character, options = {}) {
     }
   ].filter(cat => cat.skills.length > 0); // Omit empty categories
 
+  // Assemble complete list of authentic passives belonging to this class lineage
+  const allPassiveModels = [...basePassiveSkills];
+  const seenPassiveIds = new Set(allPassiveModels.map(p => p.skillId));
+
+  if (CANONICAL_SKILL_REGISTRY_V2) {
+    for (const [pId, pDef] of Object.entries(CANONICAL_SKILL_REGISTRY_V2)) {
+      if (pDef.type !== 'passive' && pDef.type !== 'stat') continue;
+      if (isPurgedSkill(pId) || pId.startsWith('expand_') || pId === 'magic_lamp' || pId.startsWith('skill_')) continue;
+      if (seenPassiveIds.has(pId)) continue;
+      if (!isSkillInV2Lineage(charClass, pId, charRace)) continue;
+
+      const classSpecificReq = getSkillUnlockLevelForClass(charClass, pId);
+      const isStage0Starter = isExplicitStage0Skill(charClass, pId);
+      const baseReq = isStage0Starter ? 1 : (Number(pDef.requiredLevel || pDef.reqLvl || pDef.minLevel || pDef.identity?.unlockLevel) || 1);
+      const reqLvl = Math.max(classSpecificReq, baseReq);
+
+      const isLearned = Boolean(charSkills[pId] && charSkills[pId] > 0);
+      if (!isLearned && !isStage0Starter && charLevel < reqLvl) continue;
+
+      seenPassiveIds.add(pId);
+      const def = resolveSkillDef(pId) || pDef;
+      const currentRank = charSkills[pId] || 0;
+      const maxRank = Number(def.max || def.maxLevel) || 5;
+      const isAvailable = isSkillAvailableForCharacter(character, def);
+      const isStageEligible = isSkillNativeOrAvailableNow(charClass, def);
+      const spCost = calculateSkillCost(pId, currentRank, def);
+      const canAfford = charSp >= spCost && currentRank < maxRank;
+      const iconData = getSkillIcon(pId, def);
+      const semantic = getSkillSemanticData(pId);
+
+      const bookReq = def.requiredItemToUnlock || ((def.starRank === 4 || def.tier === 4) ? 'book_4star' : (def.starRank === 5 || def.tier === 5) ? 'book_5star' : null);
+      const hasBook = bookReq ? character.inventory?.some?.(i => (i.itemId === bookReq || i.itemId === bookReq.replace('book_', 'spellbook_')) && (i.count || 1) > 0) : true;
+      const isBookLocked = Boolean(bookReq && currentRank === 0 && !hasBook);
+
+      const lockReasons = [];
+      if (!isLearned) {
+        if (!isStageEligible) lockReasons.push('CLASS_STAGE_LOCKED');
+        if (charLevel < reqLvl) lockReasons.push('LEVEL_LOCKED');
+        if (isBookLocked) lockReasons.push('BOOK_LOCKED');
+        if (!canAfford) lockReasons.push('SP_LOCKED');
+      }
+      if (currentRank >= maxRank) {
+        lockReasons.push('MAXED');
+      }
+
+      const state = isLearned ? 'LEARNED' : (isAvailable ? 'AVAILABLE' : 'LOCKED');
+      const primaryLockReason = lockReasons[0] || null;
+      const grade = def.grade || (def.starRank === 4 ? 'LEGENDARY' : (def.starRank === 3 ? 'RARE' : (def.starRank === 2 ? 'ENHANCED' : 'COMMON')));
+
+      allPassiveModels.push({
+        skillId: pId,
+        name: def.name || pId,
+        category: SKILL_CATEGORIES.PASSIVE,
+        tab: SKILL_TABS.PASSIVE,
+        role: semantic.role || def.identity?.role || 'passive',
+        element: semantic.element || def.identity?.element || def.element || 'Physical',
+        iconId: iconData.iconId,
+        iconPath: iconData.iconPath,
+        requiredLevel: reqLvl,
+        progressionStage: def.progressionStage || def.identity?.progressionStage || stageNum,
+        state,
+        isLearned,
+        native: true,
+        inherited: false,
+        shared: false,
+        ultimate: false,
+        starRank: def.starRank || 1,
+        grade,
+        lockReasons,
+        primaryLockReason,
+        availability: {
+          learnable: isAvailable && canAfford && !isBookLocked && currentRank < maxRank,
+          lockReasons,
+          primaryLockReason
+        },
+        rank: {
+          current: currentRank,
+          max: maxRank,
+          isMaxed: currentRank >= maxRank
+        },
+        cost: {
+          sp: spCost,
+          canAfford,
+          itemReq: bookReq,
+          isBookLocked
+        },
+        cooldown: def.baseCd || def.gameplay?.cooldown || 0,
+        description: def.desc || def.info || def.identity?.description || def.name,
+        effectText: def.effectText || (def.canonicalEffect ? def.canonicalEffect : `Multiplicador: ${(def.pwr ? def.pwr / 10 : 1.4).toFixed(1)}x`),
+        classReq: def.classReq || def.identity?.classId || canonicalClass
+      });
+    }
+  }
+
+  // Group Passive tab skills into 4 canonical stage sections
+  const passiveCategories = [
+    {
+      id: 'PASSIVE_BASE',
+      title: 'Passivas Básicas (Lv. 1–19)',
+      icon: '🌱',
+      minLevel: 1,
+      skills: allPassiveModels.filter(s => s.requiredLevel < 20)
+    },
+    {
+      id: 'PASSIVE_FIRST',
+      title: 'Passivas de 1ª Transferência (Lv. 20–39)',
+      icon: '🛡️',
+      minLevel: 20,
+      skills: allPassiveModels.filter(s => s.requiredLevel >= 20 && s.requiredLevel < 40)
+    },
+    {
+      id: 'PASSIVE_SECOND',
+      title: 'Passivas de Especialização (Lv. 40–75)',
+      icon: '⚔️',
+      minLevel: 40,
+      skills: allPassiveModels.filter(s => s.requiredLevel >= 40 && s.requiredLevel < 76)
+    },
+    {
+      id: 'PASSIVE_THIRD',
+      title: 'Maestrias Supremas (Lv. 76+)',
+      icon: '👑',
+      minLevel: 76,
+      skills: allPassiveModels.filter(s => s.requiredLevel >= 76)
+    }
+  ].filter(cat => cat.skills.length > 0);
+
   // Append legacy lineage passives if present on character
   const legacyPassives = Object.values(character?.legacyPassives || {});
 
@@ -337,8 +466,9 @@ export function getSkillTreeViewModel(character, options = {}) {
       id: SKILL_TABS.PASSIVE,
       label: 'Passivas',
       icon: '🛡️',
-      count: passiveSkills.length + legacyPassives.length,
-      skills: passiveSkills,
+      count: allPassiveModels.length + legacyPassives.length,
+      categories: passiveCategories,
+      skills: allPassiveModels,
       legacyPassives
     },
     [SKILL_TABS.ULTIMATE]: {

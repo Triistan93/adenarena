@@ -1559,6 +1559,60 @@ Implementados os cálculos de atributos para as passivas de todas as raças:
 - **Vite Production Build**: Compilação concluída com sucesso em **12.38 segundos** com bundles limpos em `dist/`.
 - **Preservação Sagrada**: `git diff = 0` mantido em todos os arquivos sagrados.
 
+---
+
+## Página 24 — 24 de Setembro de 2026 às 22:30
+### 🛡️ Exibição e Aprendizado de Passivas Autênticas na Skill Tree (Aba PASSIVAS): 4 Estágios Canônicos, Progressão por Nível e Upgrade Direto via SP
+
+> **Data & Hora**: 24/09/2026 às 22:30 (BRT)  
+> **Branch**: `main`  
+> **Status de Conclusão**: **100% CONCLUÍDO E VALIDADO (`100% PASS`)**  
+> **Métricas de Validação**: 726/726 Testes Unitários Aprovados (92 suites) | Vite Build OK (12.62s)  
+> **Preservação Sagrada**: `git diff = 0` estritamente mantido em `LevelEngine.js`, `MarketService.js`, `ExpeditionService.js`, `cakto-webhook.js`, `CashShopService.js`.  
+
+---
+
+#### 1. Contexto & Diagnóstico
+Embora as 1.176 habilidades e 444 passivas raspadas da Lineage II Essence já estivessem integradas ao catálogo canônico (`CanonicalSkillRegistryV2.js`) e ativas nos cálculos de combate do `StatsEngine.js`, a interface da Skill Tree (`Aba PASSIVAS`) apresentava uma limitação: exibia somente passivas já aprendidas e as 2 maestrias do catálogo base.
+Habilidades autênticas icônicas como *Death Points*, *Appetite for Destruction*, *Dwarven Mastery*, *Titan Spirit* e *Sacral Mastery* não estavam visíveis para desbloqueio ou evolução na aba PASSIVAS.
+
+---
+
+#### 2. Solução Implementada
+1. **Autorização Canônica no Gating de Passivas (`SkillEligibility.js`)**:
+   - `isSkillNativeOrAvailableNow`: Autoriza imediatamente habilidades de tipo `passive` e `stat` pertencentes à linhagem canônica da classe (`isSkillInV2Lineage`).
+   - `isSkillInProgressionPath`: Reconhece todas as passivas canônicas da linhagem V2 como parte legítima da progressão do personagem.
+   - Proteções de arquétipo e raça aprimoradas: bloqueia maestrias pesadas/armas físicas em magos puros, robe/magia em guerreiros puros, e isola passivas raciais estritas (ex: `elven_spirit` restrito a Elfos, `shadow_sense` restrito a Elfos Negros).
+2. **ViewModel Especializado para Passivas (`SkillTreeViewModel.js`)**:
+   - Preserva estritamente o contrato de 5 habilidades ativas por estágio em `allVisibleSkills` (Lv. 1 = 5, Lv. 20 = 10, Lv. 40 = 15).
+   - Monta dinamicamente a coleção `allPassiveModels` contendo todas as passivas autênticas que a linhagem da classe possui direito até o nível atual.
+   - Organiza a aba `PASSIVAS` em **4 Seções Canônicas de Nível/Estágio**:
+     1. **Passivas Básicas (Lv. 1–19)** (`PASSIVE_BASE`)
+     2. **Passivas de 1ª Transferência (Lv. 20–39)** (`PASSIVE_FIRST`)
+     3. **Passivas de Especialização (Lv. 40–75)** (`PASSIVE_SECOND`)
+     4. **Maestrias Supremas (Lv. 76+)** (`PASSIVE_THIRD`)
+   - Omissão inteligente de categorias vazias (`.filter(cat => cat.skills.length > 0)`).
+3. **Renderização e Interatividade de Cards (`GameUI.js`)**:
+   - Na aba PASSIVAS, itera sobre `viewModel.tabs[SKILL_TABS.PASSIVE].categories`.
+   - Renderiza cabeçalhos estilizados para cada estágio com ícone, título descritivo e contador de habilidades, seguidos pelo grid de cards.
+   - Clique em qualquer card de passiva executa `spendSP(skillId)`, debitando SP, incrementando o nível da passiva (`Lv.1/5`, `Lv.2/5`, etc.) e recalculando atributos com feedback visual imediato.
+4. **Nível Canônico de Passivas Únicas (`CanonicalSkillRegistryV2.js`)**:
+   - Ajustado `minLevel: 20` para `magician_s_curiosity` e `einhasad_s_blessing` (transferência de 1ª classe), garantindo consistência matemática rigorosa com o baseline de Lv. 1 do Mago Humano (exatas 2 passivas básicas).
+
+---
+
+#### 3. Bateria de Testes & Validação
+- **Nova Suíte de Testes**: Criado `test/passives-tab-forensic.test.js`:
+  1. *Death Knight*: Exibição de *Death Points* e *Appetite for Destruction*, gasto de SP e evolução para rank 2.
+  2. *Titan*: Exibição de *Titan Spirit* e agrupamento sob *Maestrias Supremas (Lv. 76+)*.
+  3. *Maestro (Anão)*: Exibição de *Dwarven Weapon Mastery* e *Dwarven Armor Mastery* sob *Maestrias Supremas*.
+  4. *Sacred Templar*: Exibição de *Sacral Weapon Mastery* sob *Passivas de 1ª Transferência*.
+  5. *4 Seções Canônicas*: Verificação estrutural e limiares de progressão do Duelista Lv. 76.
+  6. *Simulação DOM*: Montagem e renderização dos blocos e cards no DOM.
+- **Resultado Global**: **726 / 726 testes PASS** (92 suites, 0 falhas).
+- **Vite Build**: Compilação de produção bem-sucedida em 12.62s.
+
+
 
 
 

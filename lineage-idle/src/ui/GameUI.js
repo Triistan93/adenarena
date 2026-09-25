@@ -3927,11 +3927,27 @@ export function updateSkillUI(state, callbacks = {}) {
       `;
     }
   } else if (activeTab === SKILL_TABS.PASSIVE) {
+    const categories = viewModel.tabs[SKILL_TABS.PASSIVE].categories || [];
     const passiveSkills = viewModel.tabs[SKILL_TABS.PASSIVE].skills || [];
     const legacyPassives = viewModel.tabs[SKILL_TABS.PASSIVE].legacyPassives || [];
 
     const passiveBlocks = [];
-    if (passiveSkills.length > 0) {
+    if (categories.length > 0) {
+      for (const cat of categories) {
+        passiveBlocks.push(`
+          <div class="skill-category-block">
+            <div class="skill-category-header">
+              <span class="category-icon">${cat.icon || '🛡️'}</span>
+              <h4 class="category-title">${cat.title}</h4>
+              <span class="category-count">${cat.skills.length}</span>
+            </div>
+            <div class="skill-grid-dense">
+              ${cat.skills.map(s => renderSkillCard(s, state)).join('')}
+            </div>
+          </div>
+        `);
+      }
+    } else if (passiveSkills.length > 0) {
       passiveBlocks.push(`
         <div class="skill-category-block">
           <div class="skill-category-header">

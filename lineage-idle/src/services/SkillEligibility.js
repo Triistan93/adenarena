@@ -723,6 +723,12 @@ export function isSkillNativeOrAvailableNow(classId, def) {
       }
       if (isDescendantSkill) return false;
     }
+
+    // Canonical passives belonging to this class lineage
+    if ((def.type === 'passive' || def.type === 'stat') && isSkillInV2Lineage(classId, def.id)) {
+      return true;
+    }
+
     // Autonomous lineages do not inherit generic shared skills
     const v2Def = v2Ctx.v2ClassDef;
     if (v2Def && v2Def.lineageId && (v2Def.lineageId.toLowerCase().includes('death') || v2Def.lineageId === 'samurai' || v2Def.lineageId === 'warg' || v2Def.lineageId === 'bloodRose')) {
@@ -810,10 +816,18 @@ export function isSkillInV2Lineage(classId, skillId, race = null) {
     if (sDef && Array.isArray(sDef.classes) && sDef.classes.length > 0) {
       const isMage = isMageClass(charClass);
       // Archetype guard: Never allow mage skills on pure fighters or fighter skills on pure mages
-      if (isMage && (sDef.category === 'Combat' || sDef.name?.toLowerCase().includes('armor mastery') && sDef.id === 'heavy_armor_mastery')) {
+      if (isMage && (sDef.category === 'Combat' || (sDef.name?.toLowerCase().includes('armor mastery') && sDef.id === 'heavy_armor_mastery') || sDef.id === 'armor_mastery' || sDef.id === 'weapon_mastery')) {
         return false;
       }
-      if (!isMage && (sDef.category === 'Magic' || sDef.id === 'robe_mastery')) {
+      if (!isMage && (sDef.category === 'Magic' || sDef.id === 'robe_mastery' || sDef.id === 'magic_mastery')) {
+        return false;
+      }
+
+      // Race guard: Prevent racial passive leakage across distinct races
+      if (sDef.id === 'elven_spirit' && charRace && charRace !== 'elf') {
+        return false;
+      }
+      if (sDef.id === 'shadow_sense' && charRace && charRace !== 'darkelf' && charRace !== 'dark_elf') {
         return false;
       }
 
@@ -1000,6 +1014,11 @@ export function isSkillInProgressionPath(character, skill) {
             if (candidate.skillIds?.includes(def.id)) return true;
           }
         }
+      }
+
+      // Canonical passives belonging to this class lineage
+      if (def.type === 'passive' || def.type === 'stat') {
+        if (isSkillInV2Lineage(charClass, def.id)) return true;
       }
     }
   }
