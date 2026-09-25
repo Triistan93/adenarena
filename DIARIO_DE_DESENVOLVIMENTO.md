@@ -1632,10 +1632,10 @@ Habilidades autênticas icônicas como *Death Points*, *Appetite for Destruction
 O usuário solicitou a execução unificada de duas etapas essenciais para o ciclo de vida dos heróis e aquisição de habilidades:
 1. **Etapa 2 — Drop de Tomos / Spellbooks (1★ a 4★) nas 32 Zonas Existentes**:
    - Configuração direta de drops de Tomos nos monstros e chefes das 32 zonas canônicas existentes:
-     - **Tomo 1★ (D-Grade)**: Mobs de *Cruma Tower* e *Sea of Despair* (Lv 40–48).
-     - **Tomo 2★ (C-Grade)**: Mobs de *Dragon Valley* e *Enchanted Valley* (Lv 48–56).
-     - **Tomo 3★ (B-Grade)**: Mobs de *Blazing Swamp* e *Tower of Insolence* (Lv 56–75).
-     - **Tomo 4★ (A-Grade / Lendário)**: Chefes de Raid canônicos (*Antharas, Baium, Zaken, Queen Ant*) e zonas endgame (*Forge of the Gods* Lv 76+).
+     - **Tomo 1★ (D-Grade)**: Mobs Lv 40–47 de zonas como *Black Citadel*, *Necropolis of Pilgrims* e *Gludio Castle*.
+     - **Tomo 2★ (C-Grade)**: Mobs Lv 48–55 de zonas como *Wolf Mountain*, *Rift of the Void* e *Necropolis of Worship*.
+     - **Tomo 3★ (B-Grade)**: Mobs Lv 56–75 de zonas como *Emerald Grove*, *Gates of the Underworld*, *Valley of Saints*, *Swamp of Screams*, *Necropolis of Patriots* e *Catacomb of the Ascetics*.
+     - **Tomo 4★ (A-Grade / Lendário)**: Chefes de Raid canônicos (*Antharas, Baium, Zaken, Queen Ant, Frintezza*) e zonas endgame (*Aden City, Dragon Valley, Imperial Tomb, Antharas' Lair, Forge of the Gods, Catacomb of the Martyrs/Apostles, Disciples Necropolis* Lv 76+).
    - Validação e consumo atômico dos livros no `SkillEngine.js` ao aprender habilidades que requerem tomos.
 2. **Etapa 3 — Sistema & Interface de Class Transfer (1ª, 2ª e 3ª Transferência)**:
    - Diálogo/Modal interativo nos níveis 20, 40 e 76 para todas as 49 linhagens e 9 raças.
@@ -1649,12 +1649,12 @@ O usuário solicitou a execução unificada de duas etapas essenciais para o cic
 1. **Configuração Explícita nas 32 Zonas (`ZONE_CONSUMABLES`)**:
    - Todas as 32 zonas canônicas foram mapeadas categoricamente com seus tomos correspondentes (`book_1star` a `book_4star`), incluindo Necropolises, Catacombs, Valley of Saints e Swamp of Screams.
 2. **Monster Drop Tables Diretas (`monsters.js`)**:
-   - Monstros de Cruma e Sea of Despair (`porta`, `excuro`, `mordeo`, `leat_shaman`) receberam `book_1star` (dropRate 2.5% a 3.5%).
-   - Monstros de Dragon Valley e Enchanted Valley (`drake`, `cave_maiden`, `valley_treant`, `forest_runner`) receberam `book_2star` (dropRate 2.0% a 2.5%).
-   - Monstros de Blazing Swamp e Tower of Insolence (`tulben`, `hames_orc_shaman`, `corrupt_sage`, `hallate_warrior`) receberam `book_3star` (dropRate 1.5% a 2.0%).
-   - Monstros de Forge of the Gods (`lava_golem`, `magma_drake`) receberam `book_4star` (dropRate 1.0%).
+   - Monstros reais de nível 40 a 47 de zonas como `blackCitadel`, `necro_pilgrim` e `gludioCastle` (`deathKnight`, `deathWizard`, `citadelDarkPriest`, `necro_lilim_assassin`, `knight`, `gludioRoyalArcher`) receberam `book_1star` (dropRate 2.5% a 3.5%).
+   - Monstros reais de nível 48 a 55 de zonas como `wolfMountain`, `riftOfTheVoid` e `necro_worship` (`mountainWolf`, `voidCreature`, `voidBrute`, `beholder`, `necro_gargoyle_watcher`) receberam `book_2star` (dropRate 2.0% a 2.5%).
+   - Monstros reais de nível 56 a 75 de zonas como `emeraldGrove`, `underworldGate`, `valleyOfSaints`, `swampOfScreams`, `necro_patriot` e `necro_ascetics` (`emeraldSnake`, `blazingWerewolf`, `saintEye`, `swampStrikers`, `necro_patriot_berserker`) receberam `book_3star` (dropRate 1.5% a 2.0%).
+   - Monstros reais de nível 76+ de zonas como `adenCity`, `dragonValley`, `imperialTomb`, `antharasLair`, `forgeOfGods`, `necro_martyrs`, `necro_apostles` e `necro_disciple` (`royalKnight`, `dragonKnight`, `tombGuardian`, `caveDrake`, `lavaGolem`) receberam `book_4star` (dropRate 1.0%).
 3. **Raid Bosses Canônicos (`raids.js`)**:
-   - `queen_ant`, `zaken`, `baium` e `antharas` configurados com drop garantido/alto de `book_4star` (25% de chance por kill).
+   - `queen_ant`, `zaken`, `baium`, `antharas` e `frintezza` configurados com drop garantido/alto de `book_4star` (20% a 25% de chance por kill).
 4. **Blindagem Anti-Vazamento e Desduplicação (`main.js`)**:
    - Eliminado fallback legado que concedia drops a monstros de nível inferior a 40 (`mLevel >= 40` rigorosamente imposto).
    - Monstros de raid isolados (`!monster.isRaid`) no loop geral de monstros para evitar drops triplicados em chefes.
