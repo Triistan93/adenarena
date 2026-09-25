@@ -39,6 +39,53 @@ export function getSkillCost(skillId, currentLvl) {
 }
 
 /**
+ * Retorna o ID canônico do Tomo/Livro exigido para desbloquear a habilidade, ou null.
+ * @param {Object} def — Definição da habilidade
+ * @returns {string|null} ID do item (ex: 'book_1star', 'book_4star')
+ */
+export function getRequiredBookId(def) {
+  if (!def) return null;
+
+  if (def.requiredItemToUnlock !== undefined) {
+    if (def.requiredItemToUnlock === null || def.requiredItemToUnlock === false || def.requiredItemToUnlock === '') {
+      return null;
+    }
+    if (typeof def.requiredItemToUnlock === 'string') return def.requiredItemToUnlock;
+    if (typeof def.requiredItemToUnlock === 'object') {
+      return def.requiredItemToUnlock.itemId || def.requiredItemToUnlock.id || (def.requiredItemToUnlock.stars ? `book_${def.requiredItemToUnlock.stars}star` : null);
+    }
+  }
+
+  if (typeof def.bookRequirement === 'string') {
+    if (def.bookRequirement === 'none' || def.bookRequirement === 'null') return null;
+    if (def.bookRequirement === 'ULTIMATE_BOOK_4' || def.bookRequirement === 'book_4star' || def.bookRequirement === 'spellbook_4star') {
+      return 'book_4star';
+    }
+    if (def.bookRequirement.startsWith('book_') || def.bookRequirement.startsWith('spellbook_')) {
+      return def.bookRequirement;
+    }
+    if (def.bookRequirement.includes('5')) return 'book_5star';
+    if (def.bookRequirement.includes('4')) return 'book_4star';
+    if (def.bookRequirement.includes('3')) return 'book_3star';
+    if (def.bookRequirement.includes('2')) return 'book_2star';
+    if (def.bookRequirement.includes('1')) return 'book_1star';
+  } else if (def.bookRequirement && typeof def.bookRequirement === 'object') {
+    if (def.bookRequirement.required === false) return null;
+    return def.bookRequirement.itemId || def.bookRequirement.id || (def.bookRequirement.stars ? `book_${def.bookRequirement.stars}star` : null);
+  }
+
+  const star = def.starRank || def.stars || (def.tier === 5 ? 5 : (def.tier === 4 ? 4 : (def.tier === 3 ? 3 : (def.tier === 2 ? 2 : (def.tier === 1 ? 1 : 0)))));
+  const minLvl = def.reqLvl || def.requiredLevel || def.minLevel || 1;
+  if (star === 5) return 'book_5star';
+  if (star === 4) return 'book_4star';
+  if (star === 3) return 'book_3star';
+  if (star === 2) return 'book_2star';
+  if (star === 1 && minLvl >= 40) return 'book_1star';
+
+  return null;
+}
+
+/**
  * Aprende ou sobe de nível uma habilidade gastando SP.
  * @param {Object} state — Estado mutável do jogo
  * @param {string} skillId — ID da habilidade
@@ -89,38 +136,7 @@ export function spendSP(state, skillId, callbacks = {}) {
   }
 
   // Requisito de livro de habilidade (Spellbooks 1★ a 5★) para habilidades de Lv. 40+ no primeiro nível (lvl === 0)
-  let reqBookId = null;
-  if (def.requiredItemToUnlock !== undefined) {
-    reqBookId = def.requiredItemToUnlock;
-  } else if (typeof def.bookRequirement === 'string') {
-    if (def.bookRequirement === 'ULTIMATE_BOOK_4' || def.bookRequirement === 'book_4star' || def.bookRequirement === 'spellbook_4star') {
-      reqBookId = 'book_4star';
-    } else if (def.bookRequirement.startsWith('book_') || def.bookRequirement.startsWith('spellbook_')) {
-      reqBookId = def.bookRequirement;
-    } else if (def.bookRequirement.includes('5')) {
-      reqBookId = 'book_5star';
-    } else if (def.bookRequirement.includes('4')) {
-      reqBookId = 'book_4star';
-    } else if (def.bookRequirement.includes('3')) {
-      reqBookId = 'book_3star';
-    } else if (def.bookRequirement.includes('2')) {
-      reqBookId = 'book_2star';
-    } else if (def.bookRequirement.includes('1')) {
-      reqBookId = 'book_1star';
-    }
-  } else if (def.bookRequirement && typeof def.bookRequirement === 'object') {
-    if (def.bookRequirement.required !== false) {
-      reqBookId = def.bookRequirement.itemId || (def.bookRequirement.stars ? `book_${def.bookRequirement.stars}star` : null);
-    }
-  } else {
-    const star = def.starRank || def.stars || (def.tier === 5 ? 5 : (def.tier === 4 ? 4 : (def.tier === 3 ? 3 : (def.tier === 2 ? 2 : 0))));
-    const minLvl = def.reqLvl || def.requiredLevel || def.minLevel || 1;
-    if (star === 5) reqBookId = 'book_5star';
-    else if (star === 4) reqBookId = 'book_4star';
-    else if (star === 3) reqBookId = 'book_3star';
-    else if (star === 2) reqBookId = 'book_2star';
-    else if (star === 1 && minLvl >= 40) reqBookId = 'book_1star';
-  }
+  const reqBookId = getRequiredBookId(def);
 
   if (reqBookId && lvl === 0) {
     const alias1 = reqBookId;
@@ -152,9 +168,9 @@ export function spendSP(state, skillId, callbacks = {}) {
     const countBefore = bookItem.count ?? 1;
     let removed = false;
 
-    if (callbacks.removeFromInventory) {
+    if (typeof callbacks.removeFromInventory === 'function') {
       const res = callbacks.removeFromInventory(bookItem.uid, 1);
-      const remaining = state.inventory.find(i => i.uid === bookItem.uid)?.count ?? (state.inventory.includes(bookItem) ? 1 : 0);
+      const remaining = state.inventory.find(i => (bookItem.uid ? i.uid === bookItem.uid : i === bookItem))?.count ?? (state.inventory.includes(bookItem) ? 1 : 0);
       if (remaining === countBefore - 1) {
         removed = true;
       } else if (res === true) {
@@ -166,21 +182,26 @@ export function spendSP(state, skillId, callbacks = {}) {
           if (idx >= 0) state.inventory.splice(idx, 1);
         }
         removed = true;
+      } else {
+        // Callback explicitamente rejeitou remoção
+        if (callbacks.log) callbacks.log('❌ Falha ao consumir o livro de magia do inventário.', 'warning');
+        return false;
       }
-    }
-
-    if (!removed) {
+    } else {
       if (bookItem.uid) {
         removeFromInventory(state, bookItem.uid, 1);
       }
-      const checkCount = state.inventory.find(i => i.uid === bookItem.uid)?.count ?? (state.inventory.includes(bookItem) ? 1 : 0);
-      if (checkCount !== countBefore - 1) {
+      const checkCount = state.inventory.find(i => (bookItem.uid ? i.uid === bookItem.uid : i === bookItem))?.count ?? (state.inventory.includes(bookItem) ? 1 : 0);
+      if (checkCount === countBefore - 1) {
+        removed = true;
+      } else {
         if ((bookItem.count ?? 1) > 1) {
           bookItem.count -= 1;
         } else {
           const idx = state.inventory.indexOf(bookItem);
           if (idx >= 0) state.inventory.splice(idx, 1);
         }
+        removed = true;
       }
     }
 

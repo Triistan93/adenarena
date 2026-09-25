@@ -15,6 +15,7 @@ import { HISTORICAL_CLASS_MAP } from '../data/elemental/HistoricalClasses.js';
 import { CLASS_IDENTITIES } from '../data/elemental/ClassIdentity.js';
 import { CANONICAL_CLASS_REGISTRY } from '../data/classes/CanonicalClassRegistry.js';
 import { CanonicalClassGraph } from '../data/classes/CanonicalClassGraph.js';
+import { ClassProgressionEngine } from '../engine/ClassProgressionEngine.js';
 import EventBus from '../core/EventBus.js';
 
 import {
@@ -344,25 +345,26 @@ export function promoteClass(state, newClassId, selectedBuffIds = null, callback
     selectedBuffIds = null;
   }
 
-  const currentClass = state.class;
-  const currentRace = state.race;
+  const currentClass = state.character?.classId || state.class;
+  const currentRace = state.race || state.character?.race;
+  const targetNode = ClassProgressionEngine.resolveNode(newClassId, currentRace);
+  const targetClassId = targetNode ? targetNode.id : newClassId;
   const canonCurrent = resolveCanonicalDagClassId(currentClass, currentRace) || resolveCanonicalClassId(currentClass, currentRace) || currentClass;
-  const canonNew = resolveCanonicalDagClassId(newClassId, currentRace) || resolveCanonicalClassId(newClassId, currentRace) || newClassId;
+  const canonNew = targetClassId;
 
   // Idempotência estrita: se o personagem já avançou para esta classe alvo
-  if ((state.class === newClassId || state.class === canonNew) &&
-      (state.character?.classId === newClassId || state.character?.classId === canonNew)) {
+  if ((state.class === newClassId || state.class === targetClassId) &&
+      (state.character?.classId === newClassId || state.character?.classId === targetClassId)) {
     return true;
   }
 
-  const newClassDef = getClass(newClassId) || getClass(canonNew) || CanonicalClassGraph.getClassNode(newClassId) || CanonicalClassGraph.getClassNode(canonNew);
+  const newClassDef = getClass(newClassId) || getClass(targetClassId) || targetNode;
   if (!newClassDef) {
     if (callbacks.log) callbacks.log(`❌ Classe de destino inválida: ${newClassId}`, 'warning');
     return false;
   }
 
   // 1. Validação estrita do Grafo DAG de Linhagem
-  const targetNode = CanonicalClassGraph.getClassNode(newClassId) || CanonicalClassGraph.getClassNode(canonNew) || CANONICAL_CLASS_REGISTRY[newClassId] || CANONICAL_CLASS_REGISTRY[canonNew];
   const successors = getSuccessors(currentClass, currentRace).concat(getSuccessors(canonCurrent, currentRace));
 
   const isCanonicalChild = Boolean(
@@ -374,7 +376,7 @@ export function promoteClass(state, newClassId, selectedBuffIds = null, callback
 
   const isAuthorizedSuccessor = successors.length === 0 ||
     isCanonicalChild ||
-    successors.some(s => s === newClassId || s === canonNew || resolveCanonicalDagClassId(s, currentRace) === canonNew || resolveCanonicalClassId(s, currentRace) === canonNew) ||
+    successors.some(s => s === newClassId || s === targetClassId || resolveCanonicalDagClassId(s, currentRace) === targetClassId || resolveCanonicalClassId(s, currentRace) === targetClassId) ||
     callbacks.allowAdminOverride;
 
   if (!isAuthorizedSuccessor) {
@@ -414,7 +416,7 @@ export function promoteClass(state, newClassId, selectedBuffIds = null, callback
   const racesDict = (typeof window !== 'undefined' && window.EchoData?.RACES_ECHO)
     ? window.EchoData.RACES_ECHO
     : RACES;
-  const race = racesDict[state.race];
+  const race = racesDict[currentRace] || racesDict[state.race];
   state.base = { atk: 0, def: 0, eva: 0, matk: 0, mdef: 0 };
   for (const k of ['atk', 'def', 'eva', 'matk', 'mdef']) {
     state.base[k] = (race?.stats?.[k] || 0) + (newClassDef.base?.[k] || newClassDef.baseStats?.[k] || 0);

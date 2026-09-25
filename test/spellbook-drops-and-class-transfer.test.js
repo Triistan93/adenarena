@@ -6,7 +6,7 @@ import { RAID_BOSSES } from '../lineage-idle/src/data/raids.js';
 import { ZONES } from '../lineage-idle/src/data/zones.js';
 import { ZONE_CONSUMABLES } from '../lineage-idle/src/data/items/recipes_drops.js';
 import { SPELLBOOK_ITEMS } from '../lineage-idle/src/data/spellbooks.js';
-import { spendSP, getSkillCost } from '../lineage-idle/src/engine/SkillEngine.js';
+import { spendSP, getSkillCost, getRequiredBookId } from '../lineage-idle/src/engine/SkillEngine.js';
 import { CanonicalClassGraph } from '../lineage-idle/src/data/classes/CanonicalClassGraph.js';
 import { CANONICAL_CLASS_REGISTRY } from '../lineage-idle/src/data/classes/CanonicalClassRegistry.js';
 import { ClassProgressionEngine } from '../lineage-idle/src/engine/ClassProgressionEngine.js';
@@ -62,7 +62,7 @@ test('Etapa 2.1 — Drops de Tomos configurados diretamente nos monstros por fai
 });
 
 test('Etapa 2.2 — Drops de Tomo 4★ nos Chefes de Raid Canônicos', () => {
-  const canonicalRaids = ['queen_ant', 'zaken', 'baium', 'antharas', 'valakas'];
+  const canonicalRaids = ['queen_ant', 'zaken', 'baium', 'antharas', 'valakas', 'frintezza'];
   for (const rId of canonicalRaids) {
     const raid = RAID_BOSSES[rId];
     assert.ok(raid, `Raid ${rId} deve existir no catálogo de raids`);
@@ -83,6 +83,12 @@ test('Etapa 2.3 — ZONE_CONSUMABLES contém tomos nos tiers correspondentes', (
   assert.ok(ZONE_CONSUMABLES.wolfMountain.includes('book_2star'), 'wolfMountain deve conter book_2star');
   assert.ok(ZONE_CONSUMABLES.emeraldGrove.includes('book_3star'), 'emeraldGrove deve conter book_3star');
   assert.ok(ZONE_CONSUMABLES.forgeOfGods.includes('book_4star'), 'forgeOfGods deve conter book_4star');
+
+  // Alinhamento exaustivo das zonas canônicas
+  assert.ok(ZONE_CONSUMABLES.forsakenCrypt.includes('book_1star'), 'forsakenCrypt deve conter book_1star');
+  assert.ok(ZONE_CONSUMABLES.gludioCastle.includes('book_2star'), 'gludioCastle deve conter book_2star');
+  assert.ok(ZONE_CONSUMABLES.riftOfTheVoid.includes('book_3star'), 'riftOfTheVoid deve conter book_3star');
+  assert.ok(ZONE_CONSUMABLES.swampOfScreams.includes('book_4star'), 'swampOfScreams deve conter book_4star');
 });
 
 // Ensure Window & EchoData are initialized in Node test environment
@@ -554,5 +560,91 @@ test('Etapa 3.7 — ClassProgressionEngine: Opções inelegíveis retornam isEli
   // Raça incompatível
   const optionsWrongRace = ClassProgressionEngine.getPromotionOptions('fighter', 20, 'orc');
   assert.ok(optionsWrongRace.every(o => !o.isEligible), 'Fighter humano não é elegível para orc');
+});
+
+test('Etapa 3.8 — ClassProgressionEngine resolve IDs runtime camelCase para raças não-humanas (Dwarf, Elf, Dark Elf, Kamael, Sylph)', () => {
+  // Anão Fighter Lv 20 -> Scavenger & Artisan
+  const dwarfFighterOpts = ClassProgressionEngine.getPromotionOptions('dwarfFighter', 20, 'dwarf');
+  const dwarfTargets = dwarfFighterOpts.map(o => o.targetClass.id);
+  assert.ok(dwarfTargets.includes('scavenger'), 'dwarfFighter deve poder avançar para scavenger');
+  assert.ok(dwarfTargets.includes('artisan'), 'dwarfFighter deve poder avançar para artisan');
+
+  // Artisan Lv 40 -> Warsmith
+  const artisanOpts = ClassProgressionEngine.getPromotionOptions('artisanDwarf', 40, 'dwarf');
+  const artisanTargets = artisanOpts.map(o => o.targetClass.id);
+  assert.ok(artisanTargets.includes('warsmith'), 'artisanDwarf deve poder avançar para warsmith');
+
+  // Elfo Knight Lv 40 -> Temple Knight & Swordsinger
+  const elfKnightOpts = ClassProgressionEngine.getPromotionOptions('elvenKnight', 40, 'elf');
+  const elfTargets = elfKnightOpts.map(o => o.targetClass.id);
+  assert.ok(elfTargets.includes('temple_knight'), 'elvenKnight deve poder avançar para temple_knight');
+  assert.ok(elfTargets.includes('swordsinger'), 'elvenKnight deve poder avançar para swordsinger');
+
+  // Dark Elf Palus Knight Lv 40 -> Shillien Knight & Blade Dancer
+  const palusKnightOpts = ClassProgressionEngine.getPromotionOptions('palusKnight', 40, 'dark_elf');
+  const palusTargets = palusKnightOpts.map(o => o.targetClass.id);
+  assert.ok(palusTargets.includes('shillien_knight'), 'palusKnight deve poder avançar para shillien_knight');
+  assert.ok(palusTargets.includes('bladedancer'), 'palusKnight deve poder avançar para bladedancer');
+
+  // Kamael Soldier Lv 20 -> Trooper & Warder
+  const kamaelOpts = ClassProgressionEngine.getPromotionOptions('kamaelSoldier', 20, 'kamael');
+  const kamaelTargets = kamaelOpts.map(o => o.targetClass.id);
+  assert.ok(kamaelTargets.includes('trooper'), 'kamaelSoldier deve poder avançar para trooper');
+  assert.ok(kamaelTargets.includes('warder'), 'kamaelSoldier deve poder avançar para warder');
+
+  // Sylph starter (sylphid) Lv 20 -> Sharpshooter (sylph_gunner)
+  const sylphLv20Opts = ClassProgressionEngine.getPromotionOptions('sylphid', 20, 'sylph');
+  const sylphLv20Targets = sylphLv20Opts.map(o => o.targetClass.id);
+  assert.ok(sylphLv20Targets.includes('sylph_gunner'), 'sylphid deve poder avançar para sylph_gunner');
+
+  // Sylph Gunner (sylph_gunner) Lv 40 -> Wind Sniper (wind_hunter)
+  const sylphOpts = ClassProgressionEngine.getPromotionOptions('sylph_gunner', 40, 'sylph');
+  const sylphTargets = sylphOpts.map(o => o.targetClass.id);
+  assert.ok(sylphTargets.includes('wind_hunter'), 'sylph_gunner deve poder avançar para wind_hunter');
+});
+
+test('Etapa 2.7 — spendSP aborta atomicamente quando callbacks.removeFromInventory retorna false', () => {
+  const state = {
+    class: 'sagittarius',
+    race: 'human',
+    level: 80,
+    sp: 2000,
+    skills: { legendary_archer: 0 },
+    inventory: [
+      { uid: 'book_leg_fail', itemId: 'book_4star', count: 1 }
+    ]
+  };
+
+  let callbackCalled = false;
+  const result = spendSP(state, 'legendary_archer', {
+    log: () => {},
+    removeFromInventory: (uid, count) => {
+      callbackCalled = true;
+      return false; // Callback rejeita consumo explicitamente
+    }
+  });
+
+  assert.strictEqual(callbackCalled, true, 'removeFromInventory deve ser invocado');
+  assert.strictEqual(result, false, 'spendSP deve falhar e retornar false');
+  assert.strictEqual(state.sp, 2000, 'SP não deve ser consumido');
+  assert.strictEqual(state.skills.legendary_archer, 0, 'Habilidade não deve subir de nível');
+  assert.strictEqual(state.inventory[0].count, 1, 'Livro não deve ser consumido');
+});
+
+test('Etapa 2.8 — getRequiredBookId processa objetos e campos sem disparar TypeError: startsWith', () => {
+  // String
+  assert.strictEqual(getRequiredBookId({ bookRequirement: 'book_1star' }), 'book_1star');
+  assert.strictEqual(getRequiredBookId({ bookRequirement: 'ULTIMATE_BOOK_4' }), 'book_4star');
+
+  // Object
+  assert.strictEqual(getRequiredBookId({ requiredItemToUnlock: { itemId: 'book_3star' } }), 'book_3star');
+  assert.strictEqual(getRequiredBookId({ bookRequirement: { id: 'book_2star' } }), 'book_2star');
+  assert.strictEqual(getRequiredBookId({ bookRequirement: { stars: 4 } }), 'book_4star');
+
+  // StarRank / Tier fallback
+  assert.strictEqual(getRequiredBookId({ starRank: 4, reqLvl: 76 }), 'book_4star');
+  assert.strictEqual(getRequiredBookId({ tier: 2 }), 'book_2star');
+  assert.strictEqual(getRequiredBookId({ starRank: 1, reqLvl: 40 }), 'book_1star');
+  assert.strictEqual(getRequiredBookId({ starRank: 1, reqLvl: 20 }), null);
 });
 

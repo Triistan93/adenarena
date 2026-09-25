@@ -28,6 +28,7 @@ import {
 } from './SkillEligibility.js';
 
 import { CANONICAL_SKILL_REGISTRY_V2 } from '../data/skills/CanonicalSkillRegistryV2.js';
+import { getRequiredBookId } from '../engine/SkillEngine.js';
 import { isPurgedSkill } from './SkillTagService.js';
 
 import {
@@ -231,7 +232,7 @@ export function getSkillTreeViewModel(character, options = {}) {
     const canAfford = charSp >= spCost && currentRank < maxRank;
 
     // Check book requirement
-    const bookReq = def.requiredItemToUnlock || ((def.starRank === 4 || def.tier === 4) ? 'book_4star' : (def.starRank === 5 || def.tier === 5) ? 'book_5star' : null);
+    const bookReq = getRequiredBookId(def);
     const hasBook = bookReq ? character.inventory?.some?.(i => (i.itemId === bookReq || i.itemId === bookReq.replace('book_', 'spellbook_')) && (i.count || 1) > 0) : true;
     const isBookLocked = Boolean(bookReq && currentRank === 0 && !hasBook);
 
@@ -354,7 +355,7 @@ export function getSkillTreeViewModel(character, options = {}) {
       const iconData = getSkillIcon(pId, def);
       const semantic = getSkillSemanticData(pId);
 
-      const bookReq = def.requiredItemToUnlock || ((def.starRank === 4 || def.tier === 4) ? 'book_4star' : (def.starRank === 5 || def.tier === 5) ? 'book_5star' : null);
+      const bookReq = getRequiredBookId(def);
       const hasBook = bookReq ? character.inventory?.some?.(i => (i.itemId === bookReq || i.itemId === bookReq.replace('book_', 'spellbook_')) && (i.count || 1) > 0) : true;
       const isBookLocked = Boolean(bookReq && currentRank === 0 && !hasBook);
 

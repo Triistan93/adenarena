@@ -239,6 +239,7 @@ export const RAID_BOSSES = {
       { name: 'Transformação Demoníaca de Halisha', triggerHp: 0.25, damagePercent: 0.40, text: '👹 Scarlet van Halisha assume sua Forma de Demônio Alado!' }
     ],
     drops: [
+      { itemId: 'book_4star', name: 'Tomo Sagrado: 4★ (Lendário Divino)', chance: 0.25 },
       { itemId: 'jewel_necklace_of_frintezza', name: 'Necklace of Frintezza', chance: 0.25, isEpicJewel: true },
       { itemId: 'weapon_frost_lord_sword', name: 'Frost Lord Sword (Tier 6 Apex)', chance: 0.20 },
       { itemId: 'scroll_blessed_weapon', name: 'Blessed Scroll: Enchant Weapon', chance: 0.55 },

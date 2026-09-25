@@ -5418,8 +5418,13 @@ function processMonsterDefeat(monster, killingSkill = null) {
         const allDict = (typeof D === 'function' && D()?.ALL_ITEMS) ? D().ALL_ITEMS : ALL_ITEMS;
         const def = allDict ? allDict[drop.itemId] : null;
         const name = def?.name || drop.name || drop.itemId;
-        log(`📖 DROP DE GRIMÓRIO! Obteve **${name}** de ${monster.name}!`, 'rarity-legendary', 'loot');
-        floatText(`📖 ${name}!`, 'float-jackpot');
+        if (isBook) {
+          log(`📖 DROP DE GRIMÓRIO! Obteve **${name}** de ${monster.name}!`, 'rarity-legendary', 'loot');
+          floatText(`📖 ${name}!`, 'float-jackpot');
+        } else {
+          log(`📦 Obteve **${drop.count || 1}x ${name}** de ${monster.name}!`, 'loot', 'loot');
+          floatText(`✦ ${name}!`, 'float-loot');
+        }
       }
     }
   }
