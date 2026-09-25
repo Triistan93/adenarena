@@ -9639,7 +9639,7 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "vfxGap": false,
         "sfxId": "sfx_action",
         "sfxGap": false,
-        "minLevel": 25,
+        "minLevel": 1,
         "classes": [
             "warg"
         ]

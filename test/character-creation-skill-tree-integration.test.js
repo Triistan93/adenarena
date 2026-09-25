@@ -119,6 +119,8 @@ test('4. CONTENT_GAP Handling — No Fallbacks, v2ClassId null on Stage 0 Gaps, 
   const vmWarg = getSkillTreeViewModel(charWarg);
   const skillsWarg = vmWarg.allVisibleSkills.map(s => s.skillId);
   assert.deepEqual(skillsWarg, ['direct_strike'], 'werewolf_0 ViewModel must contain strictly direct_strike');
+  assert.equal(vmWarg.allVisibleSkills[0].requiredLevel, 1, 'direct_strike requiredLevel must be 1 for Lv 1 starter');
+  assert.equal(vmWarg.allVisibleSkills[0].state, 'AVAILABLE', 'direct_strike must be AVAILABLE at Lv 1');
 
   // werewolf_0 can learn direct_strike and equip in loadout
   charWarg.skills['direct_strike'] = 1;
