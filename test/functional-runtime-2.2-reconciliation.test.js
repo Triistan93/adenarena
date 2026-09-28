@@ -212,7 +212,7 @@ test('Lifesteal: Atomic validation of damage dealt, HP recovered, and strict max
 test('Subclasses: Decomposes 17,822 universe into 15,750 allowed and 2,072 blocked transitions', () => {
   const CONTENT_GAP_CLASSES = new Set([
     'werewolf_0', 'werewolf_1', 'werewolf_2',
-    'shineMakerBase', 'spirit_0', 'marauderBase', 'sayhaMageBase'
+    'shineMakerBase', 'marauderBase', 'sayhaMageBase'
   ]);
   const UNPROVEN_PROVENANCE_CLASSES = new Set([
     'marauder', 'ertheiaWarrior', 'eviscerator',

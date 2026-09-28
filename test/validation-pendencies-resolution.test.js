@@ -161,7 +161,14 @@ test('4. Classes ainda bloqueadas mantêm fallback seguro; ShineMaker já resolv
     const v2Ctx = resolveV2ClassContext(cls);
     assert.equal(v2Ctx.status, 'CONTENT_GAP', `${cls} deve ser CONTENT_GAP`);
     assert.equal(v2Ctx.v2ClassId, null, `${cls} deve ter v2ClassId null`);
-    assert.deepEqual(v2Ctx.authorizedSkillIds, [], `${cls} deve ter authorizedSkillIds vazio (zero vínculos inventados)`);
+    const expectedAuthorizedSkills = cls === 'marauderBase'
+      ? ['fist_mastery', 'iron_punch', 'light_armor_mastery']
+      : ['hydro_attack'];
+    assert.deepEqual(
+      v2Ctx.authorizedSkillIds.slice().sort(),
+      expectedAuthorizedSkills,
+      `${cls} deve expor somente as skills explicitamente liberadas para o estágio-base`
+    );
 
     // 1. Criação do estado do personagem
     const state = {
@@ -209,7 +216,10 @@ test('4. Classes ainda bloqueadas mantêm fallback seguro; ShineMaker já resolv
     assert.equal(validated.class, cls, 'Classe deve ser preservada no reload');
     assert.equal(validated.level, 2, 'Nível 2 deve ser preservado');
     assert.equal(validated.sp, 50, 'SP acumulado deve ser preservado');
-    assert.deepEqual(validated.skills, {}, 'Skills devem permanecer vazias sem inventar habilidades');
+    const expectedStarterSkills = cls === 'marauderBase'
+      ? { iron_punch: 1, fist_mastery: 1, light_armor_mastery: 1 }
+      : { hydro_attack: 1 };
+    assert.deepEqual(validated.skills, expectedStarterSkills, `${cls} deve restaurar apenas o kit-base explicitamente autorizado`);
   }
 });
 

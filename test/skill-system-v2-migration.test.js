@@ -4,7 +4,7 @@
  * Lineage II Essence — Celestial Destiny (Patch 3629, 29/07/2026)
  * 
  * Validates:
- * 1. Catalog Integrity: 46 Lineages, 142 Classes, 825 Semantic Skills, 0 Silent Gaps.
+ * 1. Catalog Integrity: 46 Lineages, 146 Classes, 1176 Skills, 0 Silent Gaps.
  * 2. Save Migration: Deterministic translation, 100% historical SP refund, audit ledger emission.
  * 3. Progression Gating: Strict 4-tier lifecycle (Base Lv 1-19, First Lv 20-39, Second Lv 40-75, Third Lv 76+).
  * 4. Sibling Branch Isolation: Cross-branch skill access is strictly blocked.
@@ -32,16 +32,16 @@ import { isSkillInProgressionPath, resolveSkillDef, isMageClass, areSiblingBranc
 import { isSkillAllowedForClass } from '../lineage-idle/src/services/CharacterService.js';
 import { getStats } from '../lineage-idle/src/engine/StatsEngine.js';
 
-test('1. V2 Catalog Integrity: 46 Lineages, 145 Classes, 1176 Skills, 0 Silent Gaps', () => {
+test('1. V2 Catalog Integrity: 46 Lineages, 146 Classes, 1176 Skills, 0 Silent Gaps', () => {
   const report = SkillSystemV2Validator.validateCanonicalCatalog();
   assert.equal(report.valid, true, `Catalog audit failed: ${report.errors.join('; ')}`);
   assert.equal(report.metrics.totalSkills, 1176, 'Must contain all 1176 unique canonical skills');
-  assert.equal(report.metrics.totalClasses, 145, 'Must contain 145 canonical classes including the three researched Warg promotion stages');
+  assert.equal(report.metrics.totalClasses, 146, 'Must contain 146 canonical classes including the restored High Elf Stage 0 and researched Warg stages');
   assert.equal(report.metrics.localAdaptationClasses, 1, 'Aden Arena-authored ShineMaker base class must be tracked separately from the sourced class catalog');
   assert.equal(report.metrics.totalLineages, 46, 'Must contain all 46 source-backed class lineages');
 
   // Verify stage distribution
-  assert.equal(report.metrics.stageCounts.BASE, 20, 'Must have 20 Base classes');
+  assert.equal(report.metrics.stageCounts.BASE, 21, 'Must have 21 Base classes, including Element Weaver Initiate');
   assert.equal(report.metrics.stageCounts.FIRST_CLASS, 33, 'Must have 33 1st classes');
   assert.equal(report.metrics.stageCounts.SECOND_CLASS, 46, 'Must have 46 2nd classes');
   assert.equal(report.metrics.stageCounts.THIRD_CLASS, 46, 'Must have 46 3rd classes');

@@ -100,11 +100,12 @@ function generateExpandedBrowserHtml() {
       orcmage: 'orcMage', orc_mage: 'orcMage', rider: 'rider', orc_rider_0: 'rider',
       dwarffighter: 'dwarfFighter', dwarven_fighter: 'dwarfFighter', kamaelsoldier: 'kamaelSoldier',
       jin_kamael_soldier: 'kamaelSoldier', samuraibase: 'samuraiBase', crow_0: 'samuraiBase',
-      sylphgunner: 'sylphGunner', sylphid: 'sylphGunner', highelfbase: 'highElfBase', sacred_templar_0: 'highElfBase'
+      sylphgunner: 'sylphGunner', sylphid: 'sylphGunner', highelfbase: 'highElfBase', sacred_templar_0: 'highElfBase',
+      spirit_0: 'spirit_0', elementweaverbase: 'spirit_0'
     };
 
     const CONTENT_GAP_ROOTS = new Set([
-      'werewolf_0', 'shineMakerBase', 'spirit_0', 'marauderBase', 'sayhaMageBase'
+      'werewolf_0', 'shineMakerBase', 'marauderBase', 'sayhaMageBase'
     ]);
 
     for (const root of CLIENT_DATA.roots) {

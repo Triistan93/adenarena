@@ -36,7 +36,7 @@ test('1. Canonical Catalog Completion: 1,176 skills with 100% scraped passives p
   const totalSkills = Object.values(CANONICAL_SKILL_REGISTRY_V2).filter(skill => skill.source !== 'adenarena-local-adaptation').length;
   const localAdaptationSkills = Object.values(CANONICAL_SKILL_REGISTRY_V2).filter(skill => skill.source === 'adenarena-local-adaptation').length;
   assert.equal(totalSkills, 1176, 'The sourced Lineage II skill roster must remain 1,176 entries');
-  assert.equal(localAdaptationSkills, 18, 'Aden Arena-authored ShineMaker abilities must stay separately identified from sourced skills');
+  assert.equal(localAdaptationSkills, 19, 'Aden Arena-authored skills, including Hydro Attack, must stay separately identified from sourced skills');
 
   // Verify that all 444 scraped passives exist
   const scrapedPassives = JSON.parse(fs.readFileSync('scraped_data_wiki/passives_detailed.json', 'utf8'));

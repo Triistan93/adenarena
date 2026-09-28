@@ -108,11 +108,13 @@ function generateBrowserSuiteHtml() {
       sylphgunner: 'sylphGunner',
       sylphid: 'sylphGunner',
       highelfbase: 'highElfBase',
-      sacred_templar_0: 'highElfBase'
+      sacred_templar_0: 'highElfBase',
+      spirit_0: 'spirit_0',
+      elementweaverbase: 'spirit_0'
     };
 
     const CONTENT_GAP_ROOTS = new Set([
-      'werewolf_0', 'shineMakerBase', 'spirit_0', 'marauderBase', 'sayhaMageBase'
+      'werewolf_0', 'shineMakerBase', 'marauderBase', 'sayhaMageBase'
     ]);
 
     function resolveContext(classId, race) {

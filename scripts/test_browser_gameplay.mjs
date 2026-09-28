@@ -144,6 +144,9 @@ function generateGameplayHtml() {
         'dark_fighter': 'palusKnight',
         'dark_mage': 'darkWizard',
         'orc_mage': 'orcMage',
+        'spirit_0': 'spirit_0',
+        'elementWeaverBase': 'spirit_0',
+        'elementweaverbase': 'spirit_0',
         'elven_fighter': 'elvenKnight',
         'elven_mage': 'elvenWizard',
         'fighter': 'fighter',
@@ -164,7 +167,6 @@ function generateGameplayHtml() {
         'werewolf_1': { type: 'V2_NODE_ABSENT', skills: ['direct_strike'], reason: 'Nó V2 ausente' },
         'werewolf_2': { type: 'V2_NODE_ABSENT', skills: ['direct_strike'], reason: 'Nó V2 ausente' },
         'shineMakerBase': { type: 'V2_NODE_ABSENT', skills: [], reason: 'Nó V2 ausente (não presente no catálogo V2)' },
-        'spirit_0': { type: 'V2_NODE_ABSENT', skills: ['fire_sphere', 'ice_sphere'], reason: 'Nó V2 ausente (dataset possui 2 skills)' },
         'marauderBase': { type: 'UNPROVEN_PROVENANCE', skills: [], reason: 'Nó V2 existente com habilidades sem proveniência comprovada' },
         'sayhaMageBase': { type: 'UNPROVEN_PROVENANCE', skills: [], reason: 'Nó V2 existente com habilidades sem proveniência comprovada' }
       };
@@ -285,7 +287,7 @@ function generateGameplayHtml() {
       { race: 'sylph', id: 'sylphid', desc: 'Sylph Gunner (raça de 4 nós)' },
       { race: 'human', id: 'werewolf_0', desc: 'Warg (estágio 0 com skill comprovada)' },
       { race: 'dwarf', id: 'shineMakerBase', desc: 'Shine Maker (raiz local fonte-verificada)' },
-      { race: 'highelf', id: 'spirit_0', desc: 'Spirit (CONTENT_GAP Tipo A: 2 skills parciais)' },
+      { race: 'highelf', id: 'spirit_0', desc: 'Element Weaver Initiate (nó inicial V2 com Fire Sphere e Ice Sphere)' },
       { race: 'ertheia', id: 'marauderBase', desc: 'Marauder Base (CONTENT_GAP Tipo B: sem proveniência)' },
       { race: 'ertheia', id: 'sayhaMageBase', desc: 'Sayha Mage Base (CONTENT_GAP Tipo B: sem proveniência)' },
       { race: 'human', id: 'fighter', desc: 'Human Fighter (referência canônica)' }

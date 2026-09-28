@@ -189,6 +189,7 @@ export const CLASS_ALIASES = {
   'eviscerator': 'eviscerator',
   'sayhamagebase': 'sayhaMageBase',
   'sayhaMageBase': 'sayhaMageBase',
+  'ertheia mage': 'sayhaMageBase',
   'sayha mystic': 'sayhaMageBase',
   'sayhamystic': 'sayhaMageBase',
   'sayhaseekerbase': 'sayhaMageBase',

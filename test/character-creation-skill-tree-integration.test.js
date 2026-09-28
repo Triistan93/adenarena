@@ -131,10 +131,10 @@ test('4. CONTENT_GAP Handling — No Fallbacks, v2ClassId null on Stage 0 Gaps, 
   assert.equal(equipRes.success, true, 'direct_strike must be equipable in loadout');
   assert.equal(loadout.basic, 'direct_strike');
 
-  // 4.2 spirit_0: Stage 0 CONTENT_GAP -> v2ClassId MUST BE NULL (elementWeaverS1 is Stage 1 Lv 20+)
+  // 4.2 spirit_0: source-listed Stage 0 skills have a dedicated V2 node.
   const ctxSpirit = resolveV2ClassContext('spirit_0', 'highelf');
-  assert.equal(ctxSpirit.status, 'CONTENT_GAP');
-  assert.equal(ctxSpirit.v2ClassId, null, 'spirit_0 has no Stage 0 node in V2, v2ClassId must be null');
+  assert.equal(ctxSpirit.status, 'RESOLVED');
+  assert.equal(ctxSpirit.v2ClassId, 'spirit_0');
   assert.deepEqual(ctxSpirit.authorizedSkillIds.slice().sort(), ['fire_sphere', 'ice_sphere'].sort());
 
   // 4.3 shineMakerBase: source-backed Dwarf class with its local four-skill starter kit
@@ -144,7 +144,7 @@ test('4. CONTENT_GAP Handling — No Fallbacks, v2ClassId null on Stage 0 Gaps, 
   assert.equal(ctxShine.authorizedSkillIds.length, 4);
   assert.ok(ctxShine.authorizedSkillIds.includes('shineMakerBase_light_spark'));
 
-  // 4.4 Ertheia (marauderBase, sayhaMageBase) -> Stage 0 CONTENT_GAP without arbitrary Kamael / Mage skills
+  // 4.4 Ertheia (marauderBase, sayhaMageBase) -> Stage 0 CONTENT_GAP with only individually authorized skills
   const ctxMarauder = resolveV2ClassContext('marauderBase', 'ertheia');
   assert.equal(ctxMarauder.status, 'CONTENT_GAP');
   assert.equal(ctxMarauder.v2ClassId, null);
@@ -154,6 +154,10 @@ test('4. CONTENT_GAP Handling — No Fallbacks, v2ClassId null on Stage 0 Gaps, 
   const ctxSayha = resolveV2ClassContext('sayhaMageBase', 'ertheia');
   assert.equal(ctxSayha.status, 'CONTENT_GAP');
   assert.equal(ctxSayha.v2ClassId, null);
+  assert.deepEqual(ctxSayha.authorizedSkillIds, ['hydro_attack']);
+  for (const placeholderId of ['fireball', 'wind_strike', 'self_heal', 'magic_mastery', 'robe_mastery']) {
+    assert.equal(ctxSayha.authorizedSkillIds.includes(placeholderId), false, `${placeholderId} must not be used as Ertheia starter content`);
+  }
 });
 
 test('5. Uniform Resolution Object Schema for All 25 Creator Starter Classes', (t) => {
@@ -198,9 +202,11 @@ test('5. Uniform Resolution Object Schema for All 25 Creator Starter Classes', (
     if (ctx.status === 'RESOLVED') {
       // [CANONICAL 3.0] Death Pilgrim (human_deathknight_0, elf_deathknight_0, delf_deathknight_0)
       // canonically has 4 Stage 0 skills (Change Armor + 3 fighter passives; Hellfire is strictly Stage 3 Lv 76+).
-      // Warg Stage 0 has one source-confirmed skill (Direct Strike); standard starters have 5.
+      // Warg Stage 0 has one source-confirmed skill; Spirit Stage 0 has two source-listed spheres.
       const isDeathKnightStage0 = starter.id.includes('deathknight_0');
-      const expectedSkillsCount = starter.id === 'werewolf_0' ? 1 : (isDeathKnightStage0 ? 4 : (starter.id === 'shineMakerBase' ? 4 : 5));
+      const expectedSkillsCount = starter.id === 'werewolf_0' ? 1
+        : (starter.id === 'spirit_0' ? 2
+          : (isDeathKnightStage0 ? 4 : (starter.id === 'shineMakerBase' ? 4 : 5)));
       assert.equal(ctx.authorizedSkillIds.length, expectedSkillsCount, `RESOLVED class ${starter.id} must have exactly ${expectedSkillsCount} Stage 0 skills`);
       assert.ok(ctx.v2ClassId, `RESOLVED class ${starter.id} must have v2ClassId`);
       assert.ok(ctx.v2ClassDef, `RESOLVED class ${starter.id} must have v2ClassDef`);

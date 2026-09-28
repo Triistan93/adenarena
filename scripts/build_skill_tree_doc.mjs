@@ -204,7 +204,7 @@ const CANONICAL_TO_ECHO_MAP = {
 
   // High Elf
   sacred_templar_0: 'highElfBase', sacred_templar_1: 'divineTemplarS1', sacred_templar_2: 'divineTemplarS2', sacred_templar_3: 'divineTemplar',
-  spirit_0: 'elementWeaverBase', spirit_1: 'elementWeaverS1', spirit_2: 'elementWeaverS2', spirit_3: 'elementWeaver',
+  spirit_0: 'spirit_0', spirit_1: 'elementWeaverS1', spirit_2: 'elementWeaverS2', spirit_3: 'elementWeaver',
 
   // Ertheia
   marauderBase: 'marauderBase', marauder: 'marauder', ertheiaWarrior: 'ertheiaWarrior', eviscerator: 'eviscerator',

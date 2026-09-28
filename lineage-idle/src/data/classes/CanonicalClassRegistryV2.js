@@ -2594,16 +2594,34 @@ export const CANONICAL_CLASS_REGISTRY_V2 = Object.freeze({
             "divine_guardian"
         ]
     },
+    "spirit_0": {
+        "id": "spirit_0",
+        "name": "Element Weaver Initiate",
+        "race": "highelf",
+        "lineageId": "elementWeaver",
+        "lineageName": "Element Weaver",
+        "stage": 0,
+        "stageName": "BASE",
+        "minLevel": 1,
+        "maxLevel": 19,
+        "parentClass": null,
+        "desc": "Iniciante Alto Elfo que desperta as esferas de fogo e gelo.",
+        "skillIds": [
+            "fire_sphere",
+            "ice_sphere"
+        ]
+    },
     "elementWeaverS1": {
         "id": "elementWeaverS1",
         "name": "Element Weaver",
+        "race": "highelf",
         "lineageId": "elementWeaver",
         "lineageName": "Element Weaver",
         "stage": 1,
         "stageName": "FIRST_CLASS",
         "minLevel": 20,
         "maxLevel": 39,
-        "parentClass": "highElfBase",
+        "parentClass": "spirit_0",
         "desc": "",
         "skillIds": [
             "fire_sphere",
@@ -2616,6 +2634,7 @@ export const CANONICAL_CLASS_REGISTRY_V2 = Object.freeze({
     "elementWeaverS2": {
         "id": "elementWeaverS2",
         "name": "Element Weaver",
+        "race": "highelf",
         "lineageId": "elementWeaver",
         "lineageName": "Element Weaver",
         "stage": 2,
@@ -2635,6 +2654,7 @@ export const CANONICAL_CLASS_REGISTRY_V2 = Object.freeze({
     "elementWeaver": {
         "id": "elementWeaver",
         "name": "Element Weaver",
+        "race": "highelf",
         "lineageId": "elementWeaver",
         "lineageName": "Element Weaver",
         "stage": 3,
@@ -2664,7 +2684,6 @@ export const CANONICAL_CLASS_REGISTRY_V2 = Object.freeze({
         "desc": "Lutadora Ertheia — mestre veloz de combate corporal com ventos de Sayha.",
         "skillIds": [
             "iron_punch",
-            "death_mark",
             "fist_mastery",
             "light_armor_mastery"
         ]
@@ -2737,11 +2756,7 @@ export const CANONICAL_CLASS_REGISTRY_V2 = Object.freeze({
         "parentClass": null,
         "desc": "Mística Ertheia — invocadora elemental dos vendavais de Sayha.",
         "skillIds": [
-            "fireball",
-            "wind_strike",
-            "self_heal",
-            "magic_mastery",
-            "robe_mastery"
+            "hydro_attack"
         ]
     },
     "sayhaSeer": {

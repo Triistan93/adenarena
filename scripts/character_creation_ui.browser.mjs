@@ -46,7 +46,7 @@ export async function run() {
   const raceButton = name => [...host.querySelectorAll('button[data-race-id]')].find(button => button.textContent.trim().endsWith(name));
   const rows = [];
   const failures = [];
-  const contentGaps = new Set(['spirit_0', 'marauderBase', 'sayhaMageBase']);
+  const contentGaps = new Set(['marauderBase', 'sayhaMageBase']);
 
   for (const [raceName, raceId] of Object.entries(raceNameToId)) {
     const button = raceButton(raceName);

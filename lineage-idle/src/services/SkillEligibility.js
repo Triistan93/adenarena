@@ -133,6 +133,9 @@ const V2_STARTER_MAP = {
 
   // High Elf Stage 0
   'sacred_templar_0': 'highElfBase',
+  'spirit_0': 'spirit_0',
+  'elementWeaverBase': 'spirit_0',
+  'elementweaverbase': 'spirit_0',
 
   // Promoted Class DAG nodes (Stage 1, 2, 3)
   'human_deathknight_1': 'deathBlade',
@@ -251,20 +254,15 @@ function resolveDeathKnightCallSkill(classId, race, v2ClassId) {
 }
 
 export const V2_CONTENT_GAP_CLASSES = {
-  'spirit_0': {
-    gapType: 'V2_NODE_ABSENT',
-    reason: 'Nó V2 ausente: dataset L2Wiki contém apenas 2 habilidades de Estágio 0 (87701 Fire Sphere, 87702 Ice Sphere); árvore de 5 habilidades ausente no catálogo V2',
-    authorizedSkillIds: ['fire_sphere', 'ice_sphere']
-  },
   'marauderBase': {
     gapType: 'UNPROVEN_PROVENANCE',
-    reason: 'Nó V2 existente com habilidades sem proveniência comprovada: nó presente em CanonicalClassRegistryV2, porém habilidades canônicas de Ertheia ausentes no dataset raspado e habilidades Kamael quarentenadas',
-    authorizedSkillIds: []
+    reason: 'Nó V2 existente com proveniência parcial: somente habilidades explicitamente atribuídas ao estágio base e compatíveis com a linhagem Ertheia são liberadas; nomes de exibição não podem contornar essa quarentena',
+    authorizedSkillIds: ['iron_punch', 'fist_mastery', 'light_armor_mastery']
   },
   'sayhaMageBase': {
     gapType: 'UNPROVEN_PROVENANCE',
-    reason: 'Nó V2 existente com habilidades sem proveniência comprovada: nó presente em CanonicalClassRegistryV2, porém habilidades canônicas de Ertheia ausentes no dataset raspado e placeholder de mago humano quarentenado',
-    authorizedSkillIds: []
+    reason: 'Nó V2 existente com proveniência parcial: libera somente Hydro Attack como habilidade ofensiva elemental inicial; placeholders genéricos de mago permanecem quarentenados',
+    authorizedSkillIds: ['hydro_attack']
   }
 };
 
@@ -283,10 +281,12 @@ export function resolveV2ClassContext(classId, race = null) {
   const originalClassId = String(classId || '').trim();
   const lower = originalClassId.toLowerCase();
   const cleaned = lower.replace(/[-_\s]+/g, '');
+  const canonicalInputClassId = resolveCanonicalClassId(originalClassId, race) || originalClassId;
+  const canonicalInputLower = String(canonicalInputClassId).toLowerCase();
 
   // 1. Check CONTENT_GAP classes first
-  if (V2_CONTENT_GAP_CLASSES[originalClassId] || V2_CONTENT_GAP_CLASSES[lower]) {
-    const gap = V2_CONTENT_GAP_CLASSES[originalClassId] || V2_CONTENT_GAP_CLASSES[lower];
+  if (V2_CONTENT_GAP_CLASSES[originalClassId] || V2_CONTENT_GAP_CLASSES[lower] || V2_CONTENT_GAP_CLASSES[canonicalInputClassId] || V2_CONTENT_GAP_CLASSES[canonicalInputLower]) {
+    const gap = V2_CONTENT_GAP_CLASSES[originalClassId] || V2_CONTENT_GAP_CLASSES[lower] || V2_CONTENT_GAP_CLASSES[canonicalInputClassId] || V2_CONTENT_GAP_CLASSES[canonicalInputLower];
     return {
       status: 'CONTENT_GAP',
       originalClassId,

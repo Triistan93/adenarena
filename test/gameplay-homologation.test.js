@@ -167,7 +167,7 @@ const CREATION_CASES = [
   // Source-backed special roots and currently quarantined Ertheia roots
   { race: 'human', classId: 'werewolf_0', label: 'Warg (source-backed V2 stage 0)' },
   { race: 'dwarf', classId: 'shineMakerBase', label: 'Shine Maker (local source-backed root)' },
-  { race: 'highelf', classId: 'spirit_0', label: 'Spirit (CONTENT_GAP: partial skills)' },
+  { race: 'highelf', classId: 'spirit_0', label: 'Element Weaver Initiate (two source-listed starter skills)' },
   { race: 'ertheia', classId: 'marauderBase', label: 'Marauder Base (CONTENT_GAP: Ertheia S0)' },
   { race: 'ertheia', classId: 'sayhaMageBase', label: 'Sayha Mage Base (CONTENT_GAP: Ertheia S0)' },
   // Normal varied
@@ -667,7 +667,7 @@ test('HOM-10: Season 1 bloqueia subclasses (maxLevel=40), Season 3 libera (maxLe
 const SPECIAL_ROOT_CASES = [
   { race: 'human', classId: 'werewolf_0', label: 'Warg (estágio 0 com skill de fonte)' },
   { race: 'dwarf', classId: 'shineMakerBase', label: 'Shine Maker (raiz local fonte-verificada)' },
-  { race: 'highelf', classId: 'spirit_0', label: 'Spirit (nó V2 ausente — 2 skills parciais)' },
+  { race: 'highelf', classId: 'spirit_0', label: 'Element Weaver Initiate (nó V2 com 2 skills do estágio 0)' },
   { race: 'ertheia', classId: 'marauderBase', label: 'Marauder Base (Ertheia S0 sem proveniência)' },
   { race: 'ertheia', classId: 'sayhaMageBase', label: 'Sayha Mage Base (Ertheia S0 sem proveniência)' },
 ];
@@ -749,7 +749,7 @@ test('HOM-12: Diferenciação de CONTENT_GAP — V2 ausente vs habilidades sem p
     }
   }
 
-  assert.equal(gapEntries.length, 3, 'Warg source stages and ShineMaker are resolved; only the three documented roots remain blocked');
+  assert.equal(gapEntries.length, 2, 'Warg stages, ShineMaker, and the source-listed High Elf root are resolved');
   assert.equal(gapEntries.some(entry => entry.id === 'shineMakerBase'), false, 'source-backed ShineMaker must no longer be a CONTENT_GAP');
 
   // Categorize
@@ -766,10 +766,10 @@ test('HOM-12: Diferenciação de CONTENT_GAP — V2 ausente vs habilidades sem p
     console.log(`    - ${e.id} (${e.race} S${e.stage}): ${e.reason}`);
   }
 
-  assert.equal(typeA.length, 1, 'should have 1 V2_NODE_ABSENT entry (spirit_0)');
+  assert.equal(typeA.length, 0, 'High Elf spirit_0 now has a V2 node; no V2_NODE_ABSENT gap should remain');
   assert.equal(typeB.length, 2, 'should have 2 UNPROVEN_PROVENANCE entries (marauderBase, sayhaMageBase)');
 
-  console.log(`  ✓ Differentiated 3 CONTENT_GAP entries into 1 V2_NODE_ABSENT + 2 UNPROVEN_PROVENANCE`);
+  console.log(`  ✓ Remaining CONTENT_GAP entries are limited to 2 UNPROVEN_PROVENANCE roots`);
 });
 
 // ─────────────── HOM-13: ERTHEIA IDENTITY_RESOLVED — Proveniência pendente ────────────────

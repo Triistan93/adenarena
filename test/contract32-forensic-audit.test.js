@@ -108,8 +108,8 @@ test('Game Data Contract 3.2.1 — Forensic Audit Integrity Suite', async (t) =>
     assert.equal(fireballArch.renderImplementation, 'STRUCTURAL_ONLY');
   });
 
-  await t.test('9. Aliases: 288 aliases and verified normalizations', () => {
-    assert.equal(audit.aliasesCount, 288, 'Expected 288 class aliases');
+  await t.test('9. Aliases: 289 aliases and verified normalizations', () => {
+    assert.equal(audit.aliasesCount, 289, 'Expected 289 class aliases');
     const added = audit.contractAddedAliases.find(a => a.alias === 'ertheia_vanguard_rider');
     assert.ok(added, 'ertheia_vanguard_rider must be mapped in aliases');
     assert.equal(added.target, 'orc_vanguard_rider');

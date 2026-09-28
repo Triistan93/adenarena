@@ -2,7 +2,40 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { CANONICAL_CLASS_REGISTRY_V2 } from '../lineage-idle/src/data/classes/CanonicalClassRegistryV2.js';
 import { CANONICAL_SKILL_REGISTRY_V2 } from '../lineage-idle/src/data/skills/CanonicalSkillRegistryV2.js';
-import { isSkillNativeOrAvailableNow } from '../lineage-idle/src/services/SkillEligibility.js';
+import {
+  getVisibleSkillsForCharacter,
+  isSkillInProgressionPath,
+  isSkillAvailableForCharacter,
+  isSkillNativeOrAvailableNow,
+  resolveV2ClassContext
+} from '../lineage-idle/src/services/SkillEligibility.js';
+import { getSkillTreeViewModel } from '../lineage-idle/src/services/SkillTreeViewModel.js';
+
+test('Ertheia Marauder Base shows its authorized starter skills at level 1', () => {
+  const character = { class: 'marauderBase', race: 'ertheia', level: 1, skills: {}, sp: 12000 };
+  const context = resolveV2ClassContext(character.class, character.race);
+  const visibility = getVisibleSkillsForCharacter(character);
+  const tree = getSkillTreeViewModel(character);
+
+  assert.equal(context.status, 'CONTENT_GAP');
+  assert.deepEqual(context.authorizedSkillIds.slice().sort(), ['fist_mastery', 'iron_punch', 'light_armor_mastery']);
+  assert.deepEqual(visibility.visibleList.map(({ skillId }) => skillId).sort(), context.authorizedSkillIds.slice().sort());
+  assert.deepEqual(tree.tabs.active.skills.map(({ skillId }) => skillId), ['iron_punch']);
+  assert.deepEqual(tree.tabs.passive.skills.map(({ skillId }) => skillId).sort(), ['fist_mastery', 'light_armor_mastery']);
+  assert.equal(isSkillAvailableForCharacter(character, 'iron_punch'), true);
+  assert.equal(tree.tabs.active.count, 1);
+  assert.equal(tree.tabs.passive.count, 2);
+});
+
+test('Kamael Death Mark is not assigned to Ertheia Marauder Base', () => {
+  const context = resolveV2ClassContext('marauderBase', 'ertheia');
+  const deathMark = CANONICAL_SKILL_REGISTRY_V2.death_mark;
+
+  assert.ok(!CANONICAL_CLASS_REGISTRY_V2.marauderBase.skillIds.includes('death_mark'));
+  assert.ok(!deathMark.classes.includes('marauderBase'));
+  assert.equal(context.authorizedSkillIds.includes('death_mark'), false);
+  assert.equal(isSkillInProgressionPath({ class: 'marauderBase', race: 'ertheia' }, deathMark), false);
+});
 
 test('Kamael-specific skills are not assigned to the Ertheia Fighter tree', () => {
   const ertheiaFighter = CANONICAL_CLASS_REGISTRY_V2.marauderBase;

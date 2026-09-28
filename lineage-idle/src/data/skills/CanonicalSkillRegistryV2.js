@@ -5740,7 +5740,6 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
             "elfMage",
             "elvenWizard",
             "mage",
-            "sayhaMageBase",
             "sayhaSeer",
             "wizard"
         ]
@@ -5777,7 +5776,6 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
             "elfMage",
             "elvenWizard",
             "mage",
-            "sayhaMageBase",
             "sayhaSeer",
             "wizard"
         ]
@@ -5814,7 +5812,6 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
             "elfMage",
             "elfOracle",
             "mage",
-            "sayhaMageBase",
             "shillienOracle"
         ]
     },
@@ -5850,7 +5847,6 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
             "elfMage",
             "elfOracle",
             "mage",
-            "sayhaMageBase",
             "shillienOracle"
         ]
     },
@@ -5883,8 +5879,7 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "classes": [
             "darkElfMage",
             "elfMage",
-            "mage",
-            "sayhaMageBase"
+            "mage"
         ]
     },
     "flame_explosion": {
@@ -13092,6 +13087,18 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
             "windRiderErth"
         ]
     },
+    "hydro_attack": localSkill(
+        "hydro_attack",
+        "Hydro Attack",
+        "active",
+        1,
+        "Concentra água e vento de Sayha em um ataque mágico contra um único alvo, adaptado para o combate do Aden Arena.",
+        5000,
+        14,
+        3,
+        1,
+        "sayhaMageBase"
+    ),
     "hydro_blast": {
         "id": "hydro_blast",
         "name": "Hydro Blast",
@@ -22049,7 +22056,6 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "minLevel": 15,
         "classes": [
             "kamaelSoldier",
-            "marauderBase",
             "soul_hound",
             "warder",
             "soul_finder",
@@ -24406,6 +24412,7 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "minLevel": 30,
         "classes": [
             "elementWeaver",
+            "spirit_0",
             "elementWeaverS1",
             "elementWeaverS2"
         ]
@@ -24438,6 +24445,7 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
         "minLevel": 30,
         "classes": [
             "elementWeaver",
+            "spirit_0",
             "elementWeaverS1",
             "elementWeaverS2"
         ]
@@ -25354,8 +25362,7 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
             "elfMage",
             "highElfBase",
             "mage",
-            "orcMage",
-            "sayhaMageBase"
+            "orcMage"
         ]
     },
     "heavy_armor_mastery": {
@@ -25478,7 +25485,6 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
             "highElfBase",
             "mage",
             "orcMage",
-            "sayhaMageBase",
             "wizard",
             "elven_wizard",
             "dark_wizard"

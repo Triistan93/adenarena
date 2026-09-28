@@ -18,7 +18,7 @@ const defs = globalThis.EchoData.SKILL_DEFS_ECHO;
 
 const CONTENT_GAP_CLASSES = new Set([
   'werewolf_0', 'werewolf_1', 'werewolf_2',
-  'shineMakerBase', 'spirit_0', 'marauderBase', 'sayhaMageBase'
+  'shineMakerBase', 'marauderBase', 'sayhaMageBase'
 ]);
 
 const UNPROVEN_PROVENANCE_CLASSES = new Set([

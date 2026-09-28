@@ -44,9 +44,8 @@ console.log('\nV1 Werewolf nodes (' + warg_v1.length + '):', warg_v1);
 const spirit_v1 = Object.keys(v1).filter(k => k.startsWith('spirit_'));
 console.log('\nV1 Spirit nodes (' + spirit_v1.length + '):', spirit_v1);
 // spirit_0, spirit_1, spirit_2, spirit_3 (4 nodes)
-// In V2: elementWeaverS1, elementWeaverS2, elementWeaver (3 nodes).
-// spirit_0 has no node in V2.
-// Node delta: 4 - 3 = -1 node.
+// In V2: spirit_0, elementWeaverS1, elementWeaverS2, elementWeaver (4 nodes).
+// All four lineage stages have a corresponding node.
 
 // Dwarf Shine Maker analysis
 const sm_v1 = Object.keys(v1).filter(k => k.toLowerCase().includes('shinemaker'));
@@ -56,20 +55,7 @@ console.log('\nV1 ShineMaker nodes (' + sm_v1.length + '):', sm_v1);
 // shineMakerBase has no node in V2.
 // Node delta: 4 - 3 = -1 node.
 
-// Sum the deltas:
-// V1 total = 159
-// Death Knight: -8
-// Secret Assassin: -4
-// Werewolf (0, 1, 2): -3
-// High Elf spirit_0: -1
-// Dwarf shineMakerBase: -1
-// Total reduction = 8 + 4 + 3 + 1 + 1 = 17!
-// 159 - 17 = 142!
-console.log('\n=== EXACT ARITHMETIC VERIFICATION ===');
-console.log('159 (V1 total)');
-console.log('- 8 (Death Knight racial triplication: 12 nodes in V1 -> 4 nodes in V2)');
-console.log('- 4 (Secret Assassin gender duplication: 8 nodes in V1 -> 4 nodes in V2)');
-console.log('- 3 (Werewolf early stages: werewolf_0, werewolf_1, werewolf_2 in V1 -> absent in V2)');
-console.log('- 1 (Element Weaver early stage: spirit_0 in V1 -> absent in V2)');
-console.log('- 1 (Shine Maker early stage: shineMakerBase in V1 -> absent in V2)');
-console.log('= ' + (159 - 8 - 4 - 3 - 1 - 1) + ' (EXACTLY 142 in V2!)');
+console.log('\n=== CURRENT CATALOG COUNTS ===');
+console.log(`V1 canonical classes: ${Object.keys(v1).length}`);
+console.log(`V2 canonical classes: ${Object.keys(v2).length}`);
+console.log(`High Elf Element Weaver nodes: ${['spirit_0', 'elementWeaverS1', 'elementWeaverS2', 'elementWeaver'].filter(id => v2[id]).length}/4`);

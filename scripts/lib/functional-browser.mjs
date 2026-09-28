@@ -37,7 +37,7 @@ const numericTargetStats = (target, now = Date.now()) => ({
 const bookCount = state => state.inventory.filter(i => /book/.test(i.itemId)).reduce((n, i) => n + (i.count ?? 1), 0);
 
 const CONTENT_GAP_CLASSES = new Set([
-  'spirit_0', 'marauderBase', 'sayhaMageBase'
+  'marauderBase', 'sayhaMageBase'
 ]);
 
 const UNPROVEN_PROVENANCE_CLASSES = new Set([
