@@ -391,17 +391,12 @@ export const MonsterAIEngine = {
     let isCrit = false;
     let critMultiplier = 1.0;
 
-    // Assassin critical strikes: 25% chance for 2.2x damage
-    if (archetype === MONSTER_ARCHETYPES.ASSASSIN) {
-      if (Math.random() < 0.25) {
-        isCrit = true;
-        critMultiplier = 2.2;
-      }
-    } else {
-      if (Math.random() < 0.08) {
-        isCrit = true;
-        critMultiplier = 1.6;
-      }
+    // Received critical-rate effects reduce the chance before the combat roll.
+    const receivedCritRateReduction = Math.max(0, Math.min(1, Number(playerStats?.receivedCritRateReductionPercent) || 0));
+    const criticalChance = (archetype === MONSTER_ARCHETYPES.ASSASSIN ? 0.25 : 0.08) * (1 - receivedCritRateReduction);
+    if (Math.random() < criticalChance) {
+      isCrit = true;
+      critMultiplier = archetype === MONSTER_ARCHETYPES.ASSASSIN ? 2.2 : 1.6;
     }
 
     // Caster Elemental Spellcraft
@@ -423,9 +418,12 @@ export const MonsterAIEngine = {
       rawAtk = Math.floor(rawAtk * sp.bonus);
     }
 
-    // Support Hex / Gloom Debuff: 25% chance
+    // Support Hex / Gloom Debuff: 25% base chance, reduced by the player's
+    // status resistance. This gives Concentration a combat-relevant analogue
+    // in a game where player skills do not have interruptible cast windows.
     let appliedDebuff = null;
-    if (archetype === MONSTER_ARCHETYPES.SUPPORT && Math.random() < 0.25) {
+    const debuffResistance = Math.max(0, Math.min(1, Number(playerStats?.debuffResistancePercent) || 0));
+    if (archetype === MONSTER_ARCHETYPES.SUPPORT && Math.random() < 0.25 * (1 - debuffResistance)) {
       const debuffType = Math.random() < 0.5 ? 'hex' : 'gloom';
       state.buffs = state.buffs || {};
       const now = Date.now();
@@ -450,6 +448,7 @@ export const MonsterAIEngine = {
 
     return {
       atkType,
+      weaponType: monster.weaponType || null,
       baseAtk: rawAtk,
       isCrit,
       critMultiplier,

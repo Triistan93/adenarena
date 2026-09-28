@@ -1,0 +1,372 @@
+{
+  "generatedAt": "2026-09-27T16:26:40.456Z",
+  "reportPath": "scripts/functional_chain_test_report.json",
+  "executionPath": "main.attackMonster",
+  "source": "https://eu.4game.com/patchnotes/lineage2essence/436/",
+  "scope": "Three Death Knight class relations; does not imply other classes or skills",
+  "entries": [
+    {
+      "classId": "human_deathknight_3",
+      "relation": {
+        "classId": "human_deathknight_3",
+        "skillId": "flame_grip",
+        "inheritedFrom": null,
+        "mutation": null,
+        "checks": [
+          {
+            "name": "learning",
+            "pass": true,
+            "messages": [
+              "📖 **Flame Grip** desbloqueada com sucesso! (book_3star consumido)",
+              "✦ Flame Grip → Lv.1 [Ascendancy] (-60 SP)"
+            ]
+          },
+          {
+            "name": "spDebit",
+            "expected": 60,
+            "observed": 60,
+            "pass": true
+          },
+          {
+            "name": "bookDebit",
+            "expected": 1,
+            "observed": 1,
+            "pass": true
+          },
+          {
+            "name": "equip",
+            "success": true,
+            "pass": true
+          },
+          {
+            "name": "productionCast",
+            "pass": true
+          },
+          {
+            "name": "productionMpDebit",
+            "expected": 70,
+            "observed": 70,
+            "pass": true
+          }
+        ],
+        "level": 76,
+        "effect": {
+          "status": "PASS",
+          "pass": true,
+          "contract": {
+            "kind": "target_debuff",
+            "expectedDeltas": [
+              {
+                "stat": "actionsDisabled",
+                "direction": "increase"
+              }
+            ],
+            "source": "Lineage II Essence Death Knight notes: Flame Grip holds the target for 5 seconds; the single-target combat adaptation blocks monster actions for the same duration"
+          },
+          "evidence": {
+            "before": {
+              "atk": 100,
+              "matk": 100,
+              "attackSpeed": 2,
+              "skillCooldown": 1,
+              "damageTakenPercent": 0,
+              "magicSkillsSilenced": 0,
+              "actionsDisabled": 0,
+              "def": 100,
+              "mdef": 100
+            },
+            "after": {
+              "atk": 100,
+              "matk": 100,
+              "attackSpeed": 2,
+              "skillCooldown": 1,
+              "damageTakenPercent": 0,
+              "magicSkillsSilenced": 0,
+              "actionsDisabled": 1,
+              "def": 100,
+              "mdef": 100
+            },
+            "expired": {
+              "atk": 100,
+              "matk": 100,
+              "attackSpeed": 2,
+              "skillCooldown": 1,
+              "damageTakenPercent": 0,
+              "magicSkillsSilenced": 0,
+              "actionsDisabled": 0,
+              "def": 100,
+              "mdef": 100
+            },
+            "applied": true,
+            "expiresInMs": 5000,
+            "preconditionsMet": true
+          }
+        },
+        "observed": {
+          "events": [],
+          "buffs": {},
+          "targetDebuffs": {
+            "flame_grip": {
+              "stats": {
+                "actionsDisabled": 1
+              },
+              "until": 1790526396784,
+              "source": "flame_grip"
+            }
+          },
+          "playerHpBefore": 614,
+          "playerHpAfter": 614,
+          "enemyHpBefore": 1000000000,
+          "enemyHpAfter": 1000000000
+        },
+        "dispatch": {
+          "path": "main.attackMonster",
+          "browser": true,
+          "fullBootstrap": false
+        }
+      }
+    },
+    {
+      "classId": "elf_deathknight_3",
+      "relation": {
+        "classId": "elf_deathknight_3",
+        "skillId": "flame_grip",
+        "inheritedFrom": null,
+        "mutation": null,
+        "checks": [
+          {
+            "name": "learning",
+            "pass": true,
+            "messages": [
+              "📖 **Flame Grip** desbloqueada com sucesso! (book_3star consumido)",
+              "✦ Flame Grip → Lv.1 [Ascendancy] (-60 SP)"
+            ]
+          },
+          {
+            "name": "spDebit",
+            "expected": 60,
+            "observed": 60,
+            "pass": true
+          },
+          {
+            "name": "bookDebit",
+            "expected": 1,
+            "observed": 1,
+            "pass": true
+          },
+          {
+            "name": "equip",
+            "success": true,
+            "pass": true
+          },
+          {
+            "name": "productionCast",
+            "pass": true
+          },
+          {
+            "name": "productionMpDebit",
+            "expected": 70,
+            "observed": 70,
+            "pass": true
+          }
+        ],
+        "level": 76,
+        "effect": {
+          "status": "PASS",
+          "pass": true,
+          "contract": {
+            "kind": "target_debuff",
+            "expectedDeltas": [
+              {
+                "stat": "actionsDisabled",
+                "direction": "increase"
+              }
+            ],
+            "source": "Lineage II Essence Death Knight notes: Flame Grip holds the target for 5 seconds; the single-target combat adaptation blocks monster actions for the same duration"
+          },
+          "evidence": {
+            "before": {
+              "atk": 100,
+              "matk": 100,
+              "attackSpeed": 2,
+              "skillCooldown": 1,
+              "damageTakenPercent": 0,
+              "magicSkillsSilenced": 0,
+              "actionsDisabled": 0,
+              "def": 100,
+              "mdef": 100
+            },
+            "after": {
+              "atk": 100,
+              "matk": 100,
+              "attackSpeed": 2,
+              "skillCooldown": 1,
+              "damageTakenPercent": 0,
+              "magicSkillsSilenced": 0,
+              "actionsDisabled": 1,
+              "def": 100,
+              "mdef": 100
+            },
+            "expired": {
+              "atk": 100,
+              "matk": 100,
+              "attackSpeed": 2,
+              "skillCooldown": 1,
+              "damageTakenPercent": 0,
+              "magicSkillsSilenced": 0,
+              "actionsDisabled": 0,
+              "def": 100,
+              "mdef": 100
+            },
+            "applied": true,
+            "expiresInMs": 5000,
+            "preconditionsMet": true
+          }
+        },
+        "observed": {
+          "events": [],
+          "buffs": {},
+          "targetDebuffs": {
+            "flame_grip": {
+              "stats": {
+                "actionsDisabled": 1
+              },
+              "until": 1790526396987,
+              "source": "flame_grip"
+            }
+          },
+          "playerHpBefore": 584,
+          "playerHpAfter": 584,
+          "enemyHpBefore": 1000000000,
+          "enemyHpAfter": 1000000000
+        },
+        "dispatch": {
+          "path": "main.attackMonster",
+          "browser": true,
+          "fullBootstrap": false
+        }
+      }
+    },
+    {
+      "classId": "delf_deathknight_3",
+      "relation": {
+        "classId": "delf_deathknight_3",
+        "skillId": "flame_grip",
+        "inheritedFrom": null,
+        "mutation": null,
+        "checks": [
+          {
+            "name": "learning",
+            "pass": true,
+            "messages": [
+              "📖 **Flame Grip** desbloqueada com sucesso! (book_3star consumido)",
+              "✦ Flame Grip → Lv.1 [Ascendancy] (-60 SP)"
+            ]
+          },
+          {
+            "name": "spDebit",
+            "expected": 60,
+            "observed": 60,
+            "pass": true
+          },
+          {
+            "name": "bookDebit",
+            "expected": 1,
+            "observed": 1,
+            "pass": true
+          },
+          {
+            "name": "equip",
+            "success": true,
+            "pass": true
+          },
+          {
+            "name": "productionCast",
+            "pass": true
+          },
+          {
+            "name": "productionMpDebit",
+            "expected": 70,
+            "observed": 70,
+            "pass": true
+          }
+        ],
+        "level": 76,
+        "effect": {
+          "status": "PASS",
+          "pass": true,
+          "contract": {
+            "kind": "target_debuff",
+            "expectedDeltas": [
+              {
+                "stat": "actionsDisabled",
+                "direction": "increase"
+              }
+            ],
+            "source": "Lineage II Essence Death Knight notes: Flame Grip holds the target for 5 seconds; the single-target combat adaptation blocks monster actions for the same duration"
+          },
+          "evidence": {
+            "before": {
+              "atk": 100,
+              "matk": 100,
+              "attackSpeed": 2,
+              "skillCooldown": 1,
+              "damageTakenPercent": 0,
+              "magicSkillsSilenced": 0,
+              "actionsDisabled": 0,
+              "def": 100,
+              "mdef": 100
+            },
+            "after": {
+              "atk": 100,
+              "matk": 100,
+              "attackSpeed": 2,
+              "skillCooldown": 1,
+              "damageTakenPercent": 0,
+              "magicSkillsSilenced": 0,
+              "actionsDisabled": 1,
+              "def": 100,
+              "mdef": 100
+            },
+            "expired": {
+              "atk": 100,
+              "matk": 100,
+              "attackSpeed": 2,
+              "skillCooldown": 1,
+              "damageTakenPercent": 0,
+              "magicSkillsSilenced": 0,
+              "actionsDisabled": 0,
+              "def": 100,
+              "mdef": 100
+            },
+            "applied": true,
+            "expiresInMs": 5000,
+            "preconditionsMet": true
+          }
+        },
+        "observed": {
+          "events": [],
+          "buffs": {},
+          "targetDebuffs": {
+            "flame_grip": {
+              "stats": {
+                "actionsDisabled": 1
+              },
+              "until": 1790526397131,
+              "source": "flame_grip"
+            }
+          },
+          "playerHpBefore": 567,
+          "playerHpAfter": 567,
+          "enemyHpBefore": 1000000000,
+          "enemyHpAfter": 1000000000
+        },
+        "dispatch": {
+          "path": "main.attackMonster",
+          "browser": true,
+          "fullBootstrap": false
+        }
+      }
+    }
+  ]
+}

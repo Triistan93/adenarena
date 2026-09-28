@@ -363,7 +363,7 @@ test('Subclasses: Exhaustive service breakdown by functional reasons with RACE =
     RACE: 0
   };
 
-  const CONTENT_GAP = new Set(['werewolf_1', 'werewolf_2']);
+  const CONTENT_GAP = new Set([]);
   const UNPROVEN = new Set(['marauder', 'ertheiaWarrior', 'eviscerator', 'sayhaSeer', 'windRiderErth', 'sayhaSeeker']);
 
   let evaluatedPairs = 0;

@@ -5,7 +5,7 @@
  * 1. Forja Universal com Craft em Lote e Cálculo "Máx" O(1).
  * 2. Critical Craft (Double Craft e Foundation / Masterwork).
  * 3. Localizador de Fontes de Drop (Drop & Spoil Locator).
- * 4. Soul Crystals (Níveis 1 a 15, Drenagem de Alma & Epic Boss Stage 15 com 50% de chance).
+ * 4. Soul Crystals (Níveis clássicos 1 a 13, absorção por monstros e progressão de chefes).
  * 5. Ferreiro Pushkin (Mestre Armeiro: Unseal, Masterwork e Troca de Armas de Mesmo Grau).
  * 6. Symbol Maker (Dyes & Tatuagens Sagradas em Estágios 1 a 5).
  * 7. Atributos Elementais (Consumo Real de Pedras, Roda de Oposição e Drop Sources).
@@ -15,6 +15,7 @@
  */
 
 import { D } from '../core/GameConfig.js';
+import { getItemGradeCode } from '../data/items/item_grade.js';
 import { addToInventory, getInventoryCount, getSelectedSet } from './InventoryService.js';
 import {
   RANDOM_CRAFT_POINTS_PER_CHARGE,
@@ -298,6 +299,22 @@ export const SA_DEFINITIONS = {
   }
 };
 
+const SOUL_CRYSTAL_EPIC_BOSS_IDS = new Set([
+  'queen_ant', 'core', 'orfen', 'zaken', 'baium', 'frintezza', 'antharas', 'valakas'
+]);
+
+function setSoulCrystalStage(crystal, stage) {
+  const itemIdColor = String(crystal.itemId || '').match(/^soul_crystal_(red|green|blue)_stage\d+$/)?.[1];
+  const requestedColor = String(crystal.color || itemIdColor || 'red').toLowerCase();
+  const color = ['red', 'green', 'blue'].includes(requestedColor) ? requestedColor : 'red';
+  crystal.isSoulCrystal = true;
+  crystal.color = color;
+  crystal.stage = stage;
+  crystal.crystalLevel = stage;
+  crystal.itemId = `soul_crystal_${color}_stage${stage}`;
+  crystal.name = `Soul Crystal ${color} - Estágio ${stage}${stage === 15 ? ' (Lendário)' : ''}`;
+}
+
 /**
  * Processa a absorção de almas ao derrotar um monstro ou chefe.
  * @param {Object} state
@@ -308,34 +325,27 @@ export function processSoulDrainOnKill(state, monster = {}, callbacks = {}) {
   const crystal = (state.inventory || []).find(i => (i.itemId?.startsWith('soul_crystal_') || i.isSoulCrystal) && !i.equipped);
   if (!crystal) return;
 
-  const currentLevel = crystal.stage || crystal.crystalLevel || 1;
-  const isEpicBoss = monster.isEpicBoss || ['valakas', 'antharas', 'baium', 'frintezza', 'barakiel'].includes(monster.id || monster.key);
-  const isRaidBoss = monster.isBoss || monster.isRaid || isEpicBoss;
+  const itemStage = Number(String(crystal.itemId || '').match(/_stage(\d+)$/)?.[1]);
+  const currentLevel = Number(crystal.stage || crystal.crystalLevel || itemStage || 1);
+  const monsterId = String(monster.id || monster.key || '').toLowerCase();
+  const canonicalMonsterId = monsterId.replace(/_world$/, '');
+  const isEpicBoss = monster.isEpicBoss === true || SOUL_CRYSTAL_EPIC_BOSS_IDS.has(monsterId) || SOUL_CRYSTAL_EPIC_BOSS_IDS.has(canonicalMonsterId);
+  const isRaidBoss = Boolean(monster.isBoss || monster.boss || monster.isRaid || monster.raid || isEpicBoss);
+  const isElite = Boolean(monster.isElite || monster.elite);
 
-  // Estágio Máximo Lendário: Nível 14 -> 15 Requer Derrotar um Epic Boss com 50% de chance!
+  // Conteúdo clássico chega ao estágio 13; Aden Arena acrescenta o desafio final 14 -> 15.
   if (currentLevel === 14) {
-    if (isEpicBoss) {
-      const resonanceSuccess = Math.random() < 0.50; // 50% de chance canônica
-      if (resonanceSuccess) {
-        crystal.stage = 15;
-        crystal.crystalLevel = 15;
-        crystal.name = `Soul Crystal - Estágio 15 (Lendário)`;
-        if (callbacks.log) {
-          callbacks.log(`🌟 RESSONÂNCIA ÉPICA! A alma de ${monster.name || 'Epic Boss'} elevou o Soul Crystal ao Nível 15 (MÁXIMO)!`, 'rarity-sovereign');
-        }
-        if (callbacks.floatText) callbacks.floatText('🌟 SOUL CRYSTAL STAGE 15!', 'float-jackpot');
-      } else {
-        if (callbacks.log) {
-          callbacks.log(`💨 A alma do Epic Boss escapou... O Soul Crystal Lv.14 não conseguiu ressonar (50% de chance).`, 'system');
-        }
-      }
+    if (isEpicBoss && Math.random() < 0.50) {
+      setSoulCrystalStage(crystal, 15);
+      if (callbacks.log) callbacks.log(`🌟 RESSONÂNCIA ÉPICA! A alma de ${monster.name || 'Epic Boss'} elevou o Soul Crystal ao Nível 15 (MÁXIMO)!`, 'rarity-sovereign');
+      if (callbacks.floatText) callbacks.floatText('🌟 SOUL CRYSTAL STAGE 15!', 'float-jackpot');
       if (callbacks.updateAllUI) callbacks.updateAllUI();
       if (callbacks.save) callbacks.save();
     }
     return;
   }
 
-  if (currentLevel >= 15) return; // Já no teto máximo
+  if (currentLevel >= 15) return; // Estágio máximo.
 
   // Progressão de Níveis 1 a 10 (Monstros Comuns / Campeões)
   if (currentLevel < 10) {
@@ -345,8 +355,7 @@ export function processSoulDrainOnKill(state, monster = {}, callbacks = {}) {
       crystal.absorbedSouls = 0;
       const successChance = 0.70 - (currentLevel * 0.04);
       if (Math.random() < successChance) {
-        crystal.stage = currentLevel + 1;
-        crystal.crystalLevel = crystal.stage;
+        setSoulCrystalStage(crystal, currentLevel + 1);
         if (callbacks.log) callbacks.log(`🔮 SOUL UPGRADE! Soul Crystal absorveu almas e subiu para o Nível ${crystal.stage}!`, 'rarity-epic');
       } else {
         if (callbacks.log) callbacks.log(`⚠️ Falha na absorção de almas! O cristal manteve o Nível ${currentLevel}.`, 'system');
@@ -355,17 +364,17 @@ export function processSoulDrainOnKill(state, monster = {}, callbacks = {}) {
     return;
   }
 
-  // Progressão de Níveis 10 a 13 (Masmorras e Raids Médios)
+  // Progressão de Níveis 10 a 14 (elites/chefes; estágio 13 exige Epic Boss).
   if (currentLevel >= 10 && currentLevel < 14) {
-    if (isRaidBoss || monster.level >= 50) {
+    if (isRaidBoss || isElite) {
       crystal.absorbedSouls = (crystal.absorbedSouls || 0) + (isRaidBoss ? 10 : 1);
       const reqSouls = currentLevel * 20;
-      if (crystal.absorbedSouls >= reqSouls) {
+      const epicGateSatisfied = currentLevel !== 12 || isEpicBoss;
+      if (crystal.absorbedSouls >= reqSouls && epicGateSatisfied) {
         crystal.absorbedSouls = 0;
         const successChance = 0.45;
         if (Math.random() < successChance) {
-          crystal.stage = currentLevel + 1;
-          crystal.crystalLevel = crystal.stage;
+          setSoulCrystalStage(crystal, currentLevel + 1);
           if (callbacks.log) callbacks.log(`🔮 SOUL UPGRADE! Soul Crystal absorveu almas de elite e subiu para o Nível ${crystal.stage}!`, 'rarity-legendary');
         }
       }
@@ -504,8 +513,13 @@ export function swapWeaponSameGrade(state, weaponUid, targetWeaponId, callbacks 
   const currentDef = allItems[item.itemId || item.id] || item;
   const targetDef = allItems[targetWeaponId];
 
-  if (!targetDef || targetDef.slot !== 'weapon') {
+  if (!targetDef || targetDef.slot !== 'weapon' || currentDef.slot !== 'weapon') {
     if (callbacks.log) callbacks.log('Arma de destino inválida.', 'system');
+    return false;
+  }
+
+  if (getItemGradeCode(currentDef) !== getItemGradeCode(targetDef)) {
+    if (callbacks.log) callbacks.log('A troca exige uma arma de destino do mesmo grau.', 'system');
     return false;
   }
 

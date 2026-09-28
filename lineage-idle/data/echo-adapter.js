@@ -63,6 +63,9 @@ export function isMagicSkill(name = '', sk = null, classDef = null, classId = ''
     return false;
   }
 
+  const classIdentity = `${classId || ''} ${classDef?.name || ''} ${classDef?.lineageId || ''}`.toLowerCase();
+  if (/shine\s*maker|shinemaker/.test(classIdentity)) return true;
+
   const arch = String(classDef?.archetype || classDef?.archetypeGroup || classId || '').toLowerCase();
   if (/mage|wizard|healer|summoner|enchanter|shaman|sorcerer|spellsinger|spellhowler|necromancer|bishop|elder/.test(arch)) {
     return true;
@@ -156,10 +159,12 @@ function buildSkillEffectText(def, lvl) {
     return effectBase;
   }
 
-  // Buffs/Warcry
+  // Only War Cry receives the project's attack scaling. Other buffs show their own canonical effect.
   if (def.effect === 'warcry' || type === 'buff') {
+    if (def.id === 'acumen') return 'Reduz a recarga das habilidades em 15% por 60s.';
+    if (def.id !== 'war_cry') return effectBase;
     const current = getSkillBuffAtLevel(currentLvl);
-    let text = `Buff: +${Math.round(current * 100)}% por 60s`;
+    let text = `P. Atk.: +${Math.round(current * 100)}% por 60s`;
     if (currentLvl < max) {
       const next = getSkillBuffAtLevel(currentLvl + 1);
       text += ` (Lv.${currentLvl + 1} → +${Math.round(next * 100)}%)`;
@@ -441,29 +446,39 @@ export function transformV2SkillToEcho(sId, s, existingDef = null) {
   else if (/fist|claw|punch/.test(sNameLower)) reqWeapon = 'fist';
   if (/shield|shield_stun|shield_bash/.test(sNameLower)) reqShield = true;
 
-  const pwr = s.balance?.pwr !== undefined ? s.balance.pwr : (isPassive || isBuff || isToggle ? 0 : null);
+  const adaptedDamageMultiplier = Number(s.gameplay?.damageMultiplier);
+  const isDamageWithTargetDebuff = s.gameplay?.combatMode === 'damage_with_target_debuff';
+  const effect = isDamageWithTargetDebuff ? 'dmg' : (isBuff ? 'buff' : (isPassive ? 'stat' : (isToggle ? 'toggle' : (isHeal ? 'heal' : (isVampiric ? 'vampiric' : 'dmg')))));
+  const pwr = Number.isFinite(adaptedDamageMultiplier) && adaptedDamageMultiplier > 0
+    ? Math.round(adaptedDamageMultiplier * 10)
+    : (s.balance?.pwr !== undefined ? s.balance.pwr : (isPassive || isBuff || isToggle ? 0 : null));
   const mpCost = s.balance?.mpCost !== undefined ? s.balance.mpCost : (isPassive ? 0 : null);
   const baseCd = s.canonicalCooldownMs !== undefined ? s.canonicalCooldownMs : (parseCooldownToMs(s.canonicalCooldown) ?? (isPassive ? 0 : null));
 
-  const isMagic = isMagicSkill(s.name, s, null, null);
+  const isMagic = isMagicSkill(s.name, s, null, s.classes?.[0] || '');
 
   if (!existingDef) {
     return {
       id: sId,
       name: s.name,
-      type: s.type,
+      type: isDamageWithTargetDebuff ? 'active' : s.type,
       damageType: isMagic ? 'magic' : 'physical',
       isMagic,
       tier: starRank,
       cost: spCost,
-      max: 5,
+      max: s.maxLevel || 5,
+      ...(Array.isArray(s.levelRequirements) ? { levelRequirements: [...s.levelRequirements] } : {}),
+      ...(s.spCostsByClass ? { spCostsByClass: structuredClone(s.spCostsByClass) } : {}),
       pwr,
       baseCd,
       mpCost,
-      effect: isBuff ? 'warcry' : (isPassive ? 'stat' : (isToggle ? 'toggle' : (isHeal ? 'heal' : (isVampiric ? 'vampiric' : 'dmg')))),
+      effect,
       info: s.desc || s.canonicalEffect || s.name,
       desc: s.desc || '',
       effectText: s.canonicalEffect || '',
+      canonicalEffect: s.canonicalEffect,
+      canonicalCooldown: s.canonicalCooldown,
+      canonicalCooldownMs: s.canonicalCooldownMs,
       icon: s.icon,
       iconGap: s.iconGap,
       iconGapReason: s.iconGapReason,
@@ -474,6 +489,7 @@ export function transformV2SkillToEcho(sId, s, existingDef = null) {
       reqLvl: s.minLevel !== undefined ? s.minLevel : 1,
       requiredWeapon: reqWeapon,
       requiredShield: reqShield,
+      gameplay: s.gameplay || null,
       requiredItemToUnlock: reqBook,
       isUltimate: isUlt,
       starRank,
@@ -486,6 +502,29 @@ export function transformV2SkillToEcho(sId, s, existingDef = null) {
   }
 
   return Object.assign(existingDef, {
+    ...(isDamageWithTargetDebuff ? {
+      type: 'active',
+      effect,
+      pwr,
+      gameplay: s.gameplay
+    } : {}),
+    // These two legacy records were explicitly verified as misclassified.
+    // Keep the correction narrow because other old entries carry runtime
+    // behavior that is intentionally richer than their canonical catalog row.
+    ...(sId === 'inferno' || sId === 'touch_of_death' ? {
+      type: 'active',
+      effect: sId === 'inferno' ? 'dmg' : 'debuff',
+      ...(pwr !== null ? { pwr } : {}),
+      ...(mpCost !== null ? { mpCost } : {}),
+      ...(baseCd !== null ? { baseCd } : {}),
+      info: s.desc || s.canonicalEffect || s.name,
+      desc: s.desc || '',
+      effectText: s.canonicalEffect || ''
+    } : {}),
+    ...(sId === 'focus_power' ? { requiredWeapon: 'dagger' } : {}),
+    ...(s.maxLevel ? { max: s.maxLevel } : {}),
+    ...(Array.isArray(s.levelRequirements) ? { levelRequirements: [...s.levelRequirements] } : {}),
+    ...(s.spCostsByClass ? { spCostsByClass: structuredClone(s.spCostsByClass) } : {}),
     damageType: isMagic ? 'magic' : 'physical',
     isMagic,
     iconGap: s.iconGap,
@@ -528,8 +567,9 @@ function buildEchoAdapter() {
       const rawName = sk.name || `Skill_${idx + 1}`;
       const skillId = toSkillId(classId, rawName);
 
+      const isShineMakerAegis = /^shinemaker/i.test(classId) && /divine crystal aegis/i.test(sk.name || '');
       const type = (sk.type === 'Passivo' || sk.type === 'passive') ? 'passive'
-                 : ((sk.type || '').toLowerCase().includes('buff') || (sk.type || '').toLowerCase().includes('toggle')) ? 'buff'
+                 : (isShineMakerAegis || (sk.type || '').toLowerCase().includes('buff') || (sk.type || '').toLowerCase().includes('toggle')) ? 'buff'
                  : 'active';
 
       const pwr = effectToPwr(sk.effect, sk.type);
@@ -567,7 +607,7 @@ function buildEchoAdapter() {
           reqWeapon = 'fist';
         } else if (sName.includes('ancientsword') || sName.includes('rush impact') || sName.includes('slashing blade')) {
           reqWeapon = 'ancientsword';
-        } else if (sName.includes('hammer') || sName.includes('blunt') || sName.includes('armor crush') || sName.includes('spoil')) {
+        } else if (sName.includes('hammer') || sName.includes('blunt') || sName.includes('armor crush') || sName.includes('spoil') || (classId === 'shineMakerBase' && sName.includes('crystal weapon mastery'))) {
           reqWeapon = 'blunt';
         } else if (sName.includes('staff') || sName.includes('hydro') || sName.includes('prominence') || sName.includes('hurricane') || sName.includes('solar flare') || sName.includes('vampiric')) {
           reqWeapon = 'staff';
@@ -644,7 +684,7 @@ function buildEchoAdapter() {
         pwr:                  pwr,
         baseCd:               cd,
         mpCost:               mpCost,
-        effect:               type === 'buff' ? 'warcry' : (type === 'passive' ? 'stat' : (sNameLower.includes('heal') || sNameLower.includes('bandage') ? 'heal' : 'dmg')),
+        effect:               /purifying light/i.test(rawName) ? 'heal' : (type === 'buff' ? 'buff' : (type === 'passive' ? 'stat' : (sNameLower.includes('heal') || sNameLower.includes('bandage') ? 'heal' : 'dmg'))),
         info:                 sk.desc || sk.effect || rawName,
         desc:                 sk.desc || '',
         effectText:           sk.effect || '',
@@ -848,7 +888,7 @@ function buildEchoAdapter() {
         pwr: Math.round(dmgMult * 10),
         baseCd: cd,
         mpCost,
-        effect: isBuff ? 'warcry' : (isHeal ? 'heal' : (isVampiric ? 'vampiric' : 'dmg')),
+        effect: isBuff ? 'buff' : (isHeal ? 'heal' : (isVampiric ? 'vampiric' : 'dmg')),
         info: s.identity?.description || rawName,
         desc: s.identity?.description || '',
         effectText: `Multiplicador: ${dmgMult.toFixed(1)}x | Stagger: ${staggerDmg}`,
@@ -1034,7 +1074,14 @@ function buildEchoAdapter() {
     for (const [classId, classDef] of Object.entries(CANONICAL_CLASS_REGISTRY_V2)) {
       if (Array.isArray(classDef.skillIds)) {
         CLASS_SKILLS_V2_ECHO[classId] = [...classDef.skillIds];
-        CLASS_SKILLS_ECHO[classId] = [...classDef.skillIds];
+        // ShineMaker's authored Echo tree is a distinct Dwarf magic/support
+        // branch. Its V2 lineage rows still contain unrelated Warrior skills;
+        // keep those out of the production class panel until the canonical
+        // source roster is reconciled.
+        const keepAuthoredShineMakerSkills = ['shineMakerS1', 'shineMakerS2', 'shinemaker'].includes(classId);
+        if (!keepAuthoredShineMakerSkills) {
+          CLASS_SKILLS_ECHO[classId] = [...classDef.skillIds];
+        }
 
         for (const sid of classDef.skillIds) {
           if (SHARED_SKILL_IDS.includes(sid)) continue;

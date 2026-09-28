@@ -273,8 +273,8 @@ export const GUIDES_DATA = {
       },
       {
         heading: '🔮 Soul Crystals (SA)',
-        text: 'Forje e engaste Soul Crystals (Red, Green, Blue) em armas para liberar Special Abilities (SA) como Health (+25% HP), Focus (+80 Crit) ou Acumen (+15% Cast).',
-        tip: 'Você pode fundir 2 Soul Crystals do mesmo nível para subir seu grau.'
+        text: 'Adquira um Soul Crystal vermelho, verde ou azul e mantenha-o na mochila durante o combate para absorver almas. Cristais evoluídos podem ser engastados em armas para liberar uma Special Ability (SA).',
+        tip: 'Estágios iniciais avançam com abates; estágios altos exigem elites e chefes. A promoção final para o estágio 15 exige derrotar um Epic Boss.'
       },
       {
         heading: '✨ Mestre Pushkin MW (Masterwork)',

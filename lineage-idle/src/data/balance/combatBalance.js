@@ -41,6 +41,14 @@ export const COMBAT_CONFIG = {
   healSkillLevelBonus: 0.05                // +5% por nível de habilidade investido
 };
 
+/** Reduces the level-gap miss penalty by 5 percentage points per matching accuracy point. */
+export function calculatePlayerMissChance(levelGap, accuracy = 0) {
+  const gap = Number(levelGap) || 0;
+  const baseChance = gap >= 10 ? 0.70 : (gap >= 5 ? 0.35 : (gap >= 3 ? 0.15 : 0));
+  const effectiveAccuracy = Math.max(0, Number(accuracy) || 0);
+  return Math.max(0, Math.round((baseChance - effectiveAccuracy * 0.05) * 1e6) / 1e6);
+}
+
 /**
  * Calcula a redução de dano proporcionada pela defesa.
  * @param {number} rawDmg 
@@ -53,6 +61,21 @@ export function calculateDefenseMitigation(rawDmg, def, isMagic = false) {
   const safeDef = Math.max(0, Number(def) || 0);
   const factor = k / (safeDef + k);
   return Math.max(COMBAT_CONFIG.minimumDamage, Math.floor(rawDmg * factor));
+}
+
+/** Applies the game's shield-block rule to incoming physical damage only. */
+export function resolvePlayerBlock(damage, blockChancePercent, attackType = 'physical', roll) {
+  const safeDamage = Math.max(0, Math.floor(Number(damage) || 0));
+  const normalizedType = String(attackType || '').toLowerCase();
+  const chance = Math.max(0, Math.min(80, Number(blockChancePercent) || 0)) / 100;
+  const canBlock = safeDamage > 0 && normalizedType !== 'magic' && normalizedType !== 'magical' && chance > 0;
+  const safeRoll = canBlock ? Number(roll === undefined ? Math.random() : roll) : NaN;
+  const blocked = canBlock && Number.isFinite(safeRoll) && safeRoll >= 0 && safeRoll < chance;
+
+  return {
+    blocked,
+    damage: blocked ? Math.max(1, Math.floor(safeDamage * 0.5)) : safeDamage
+  };
 }
 
 /**

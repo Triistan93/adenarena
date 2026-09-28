@@ -39,6 +39,8 @@ export const ROLE_MODIFIERS = {
 export function getSkillMpCost(def) {
   if (!def) return 0;
   if (def.type === 'passive' || def.type === 'stat') return 0;
+  // The L2Wiki Body to Mind contract spends HP to recover MP and has no MP cost.
+  if (String(def.id || '').toLowerCase() === 'body_to_mind') return 0;
 
   // 1. Custo explícito da gameplay canonical
   if (typeof def.gameplay?.mpCost === 'number' && def.gameplay.mpCost > 0) {
@@ -73,14 +75,31 @@ export function canCastSkill(character, def, now = Date.now(), cds = {}) {
   }
 
   // 1. Verificação de Cooldown
-  const cd = (def.baseCd || def.gameplay?.cooldown || 5000) * (1 - (character.stats?.cdr || character.cdr || 0));
+  const damageType = String(def.damageType || '').toLowerCase();
+  const typedCooldownReduction = damageType === 'magic' || damageType === 'magical' || def.isMagic === true
+    ? Number(character.stats?.mSkillCdr) || 0
+    : damageType === 'physical' || damageType === 'phys' || def.isMagic === false
+      ? Number(character.stats?.pSkillCdr) || 0
+      : 0;
+  const totalCooldownReduction = (Number(character.stats?.cdr || character.cdr) || 0) + typedCooldownReduction;
+  const cd = (def.baseCd || def.gameplay?.cooldown || 5000) * (1 - totalCooldownReduction);
   const lastCast = cds[def.id];
   if (lastCast !== undefined && (now - lastCast < cd)) {
     return { canCast: false, reason: 'Habilidade em recarga (cooldown ativo).', mpCost: 0 };
   }
 
   // 2. Verificação de Custo de MP
-  const mpCost = getSkillMpCost(def);
+  const baseMpCost = getSkillMpCost(def);
+  // Negative reduction represents increased MP consumption. Physical source
+  // passives can grant 60% savings, with Clarity stacking up to a 75% ceiling.
+  const typedReduction = damageType === 'magic' || damageType === 'magical' || def.isMagic === true
+    ? Number(character.stats?.mSkillMpCostReduction) || 0
+    : damageType === 'physical' || damageType === 'phys' || def.isMagic === false
+      ? Number(character.stats?.pSkillMpCostReduction) || 0
+      : 0;
+  const generalReduction = Number(character.stats?.mpCostReduction ?? character.mpCostReduction) || 0;
+  const mpReduction = Math.max(-1, Math.min(0.75, generalReduction + typedReduction));
+  const mpCost = Math.ceil(baseMpCost * (1 - mpReduction));
   const currentMp = Number(character.mp) || 0;
   if (currentMp < mpCost) {
     return { canCast: false, reason: `MP insuficiente (${mpCost} necessário, atual: ${currentMp}).`, mpCost };

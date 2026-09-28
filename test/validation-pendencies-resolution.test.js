@@ -68,6 +68,8 @@ test('1. Sylph Gunner: exatamente 5 habilidades canônicas oficiais do L2Wiki Es
 test('2. Ausência de rawPath e onerror utilizam NEUTRAL_SKILL_PLACEHOLDER, nunca power_strike.png', async () => {
   assert.ok(NEUTRAL_SKILL_PLACEHOLDER.startsWith('data:image/svg+xml'), 'Placeholder deve ser data URI SVG neutro');
   assert.ok(!NEUTRAL_SKILL_PLACEHOLDER.includes('power_strike'), 'Placeholder não pode citar power_strike');
+  assert.ok(!NEUTRAL_SKILL_PLACEHOLDER.includes("'"), 'Placeholder usado dentro do onerror precisa ser seguro para atributo entre aspas simples');
+  assert.match(decodeURIComponent(NEUTRAL_SKILL_PLACEHOLDER.slice('data:image/svg+xml,'.length)), /xmlns="http:\/\/www\.w3\.org\/2000\/svg"/);
 
   // Import GameUI
   const GameUI = await import('../lineage-idle/src/ui/GameUI.js');
@@ -148,8 +150,12 @@ test('3. Ciclo de combate rejeita habilidade estrangeira pré-equipada e passiva
 });
 
 // ─── 4. CLASSES CONTENT_GAP (CRIAÇÃO -> ATAQUE BÁSICO -> XP -> SAVE -> RELOAD)
-test('4. Classes CONTENT_GAP com authorizedSkillIds vazio executam criação, ataque básico, XP, save e reload perfeitamente', () => {
-  const contentGapClasses = ['shineMakerBase', 'marauderBase', 'sayhaMageBase'];
+test('4. Classes ainda bloqueadas mantêm fallback seguro; ShineMaker já resolve suas habilidades', () => {
+  const shineMaker = resolveV2ClassContext('shineMakerBase', 'dwarf');
+  assert.equal(shineMaker.status, 'RESOLVED');
+  assert.ok(shineMaker.authorizedSkillIds.includes('shineMakerBase_light_spark'));
+
+  const contentGapClasses = ['marauderBase', 'sayhaMageBase'];
 
   for (const cls of contentGapClasses) {
     const v2Ctx = resolveV2ClassContext(cls);
@@ -259,4 +265,22 @@ test('5. transformV2SkillToEcho preserva zero legítimo, campos ausentes (sem va
   assert.equal(echoStringCd.baseCd, 12000, '12 sec. deve ser convertido para 12000 ms no adaptador');
   assert.equal(echoStringCd.pwr, 150);
   assert.equal(echoStringCd.mpCost, 20);
+});
+
+test('5.4 transformV2SkillToEcho corrige o tipo legado quando o catálogo canônico muda o comportamento', () => {
+  const canonicalInferno = {
+    id: 'inferno', name: 'Inferno', type: 'active', effect: 'dmg', pwr: 150,
+    canonicalEffect: 'Deals Fire damage. For 10 sec., deals damage over time.',
+    canonicalCooldownMs: 30_000, balance: { pwr: 150, mpCost: 100 }
+  };
+  const staleEchoBuff = { id: 'inferno', name: 'Inferno', type: 'buff', effect: 'warcry', pwr: 20, mpCost: 100, baseCd: 30_000 };
+  const corrected = transformV2SkillToEcho('inferno', canonicalInferno, staleEchoBuff);
+  assert.equal(corrected.type, 'active');
+  assert.equal(corrected.effect, 'dmg');
+  assert.equal(corrected.pwr, 150);
+  assert.match(corrected.effectText, /damage over time/);
+
+  const generated = transformV2SkillToEcho('inferno', canonicalInferno);
+  assert.match(generated.canonicalEffect, /damage over time/);
+  assert.equal(generated.canonicalCooldownMs, 30_000);
 });

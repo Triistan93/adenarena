@@ -97,20 +97,20 @@ const RACES_INFO: Record<string, {
     ],
     image: {
       dark_fighter: { M: '/img/darkelfskM.png', F: '/img/darkelfskF.png' },
-      dark_mage: { M: '/img/darkelfmageM.png', F: '/img/darkelfmageF.png' },
+      dark_mage: { M: '/img/darkelf_mage.png', F: '/img/darkelfmageF.png' },
       delf_deathknight_0: { M: '/img/darkelfskM.png', F: '/img/darkelfskF.png' },
       secret_assassin_female_0: { M: '/img/darkelfskM.png', F: '/img/darkelfskF.png' },
-      rose_vain_0: { M: '/img/darkelfmageM.png', F: '/img/darkelfmageF.png' },
+      rose_vain_0: { M: '/img/darkelf_mage.png', F: '/img/darkelfmageF.png' },
       darkElfFighter: { M: '/img/darkelfskM.png', F: '/img/darkelfskF.png' },
-      darkElfMage: { M: '/img/darkelfmageM.png', F: '/img/darkelfmageF.png' },
+      darkElfMage: { M: '/img/darkelf_mage.png', F: '/img/darkelfmageF.png' },
       deathPilgrim: { M: '/img/darkelfskM.png', F: '/img/darkelfskF.png' },
       elfDeathPilgrim: { M: '/img/darkelfskM.png', F: '/img/darkelfskF.png' },
       assassinS0: { M: '/img/darkelfskM.png', F: '/img/darkelfskF.png' },
       assassinBase: { M: '/img/darkelfskM.png', F: '/img/darkelfskF.png' },
-      bloodRoseBase: { M: '/img/darkelfmageM.png', F: '/img/darkelfmageF.png' },
-      bloodRoseS1: { M: '/img/darkelfmageM.png', F: '/img/darkelfmageF.png' },
+      bloodRoseBase: { M: '/img/darkelf_mage.png', F: '/img/darkelfmageF.png' },
+      bloodRoseS1: { M: '/img/darkelf_mage.png', F: '/img/darkelfmageF.png' },
       fighter: { M: '/img/darkelfskM.png', F: '/img/darkelfskF.png' },
-      mage: { M: '/img/darkelfmageM.png', F: '/img/darkelfmageF.png' }
+      mage: { M: '/img/darkelf_mage.png', F: '/img/darkelfmageF.png' }
     },
     startZoneName: 'Ilha de Falar (Talking Island)'
   },
@@ -169,10 +169,10 @@ const RACES_INFO: Record<string, {
       { id: 'crow_0', name: 'Samurai ⛩️', desc: 'Mestre da katana ancestral e técnica de corte veloz Iaijutsu.', icon: '⛩️' }
     ],
     image: {
-      jin_kamael_soldier: { M: '/img/kamaelshM.png', F: '/img/kamaelshF.png' },
+      jin_kamael_soldier: { M: '/img/kamael_soulbreaker.png', F: '/img/kamaelshF.png' },
       crow_0: { M: '/img/kamaelDM.png', F: '/img/kamaelDF.png' },
-      kamaelSoldier: { M: '/img/kamaelshM.png', F: '/img/kamaelshF.png' },
-      soulbreaker: { M: '/img/kamaelshM.png', F: '/img/kamaelshF.png' },
+      kamaelSoldier: { M: '/img/kamael_soulbreaker.png', F: '/img/kamaelshF.png' },
+      soulbreaker: { M: '/img/kamael_soulbreaker.png', F: '/img/kamaelshF.png' },
       fighter: { M: '/img/kamaelDM.png', F: '/img/kamaelDF.png' },
       samuraiBase: { M: '/img/kamaelDM.png', F: '/img/kamaelDF.png' },
       hatamoto: { M: '/img/kamaelDM.png', F: '/img/kamaelDF.png' }
@@ -415,6 +415,8 @@ export const CharacterCreation: React.FC<CharacterCreationProps> = ({
                 <button
                   type="button"
                   onClick={() => setGender('M')}
+                  data-gender="M"
+                  aria-pressed={gender === 'M'}
                   className={`flex-1 py-2.5 rounded-xl border font-bold flex items-center justify-center gap-2 transition ${
                     gender === 'M'
                       ? 'border-blue-500 bg-blue-500/20 text-blue-200 ring-1 ring-blue-500/50'
@@ -426,6 +428,8 @@ export const CharacterCreation: React.FC<CharacterCreationProps> = ({
                 <button
                   type="button"
                   onClick={() => setGender('F')}
+                  data-gender="F"
+                  aria-pressed={gender === 'F'}
                   className={`flex-1 py-2.5 rounded-xl border font-bold flex items-center justify-center gap-2 transition ${
                     gender === 'F'
                       ? 'border-pink-500 bg-pink-500/20 text-pink-200 ring-1 ring-pink-500/50'
@@ -450,6 +454,8 @@ export const CharacterCreation: React.FC<CharacterCreationProps> = ({
                       key={r.id}
                       type="button"
                       onClick={() => handleSelectRace(r.id)}
+                      data-race-id={r.id}
+                      aria-pressed={isSelected}
                       className={`flex flex-col items-center justify-center p-3 rounded-xl border text-center transition ${
                         isSelected
                           ? 'border-amber-400 bg-amber-500/20 text-amber-200 ring-1 ring-amber-400/50 shadow-lg'
@@ -477,6 +483,8 @@ export const CharacterCreation: React.FC<CharacterCreationProps> = ({
                       key={cls.id}
                       type="button"
                       onClick={() => setSelectedClass(cls.id)}
+                      data-class-id={cls.id}
+                      aria-pressed={isSelected}
                       className={`p-3 rounded-xl border text-left transition ${
                         isSelected
                           ? 'border-amber-400 bg-amber-500/20 text-amber-200 ring-1 ring-amber-400/50'
@@ -492,7 +500,7 @@ export const CharacterCreation: React.FC<CharacterCreationProps> = ({
                             const target = e.currentTarget;
                             target.style.display = 'none';
                             const fallback = target.nextElementSibling;
-                            if (fallback) fallback.style.display = 'inline-block';
+                            if (fallback instanceof HTMLElement) fallback.style.display = 'inline-block';
                           }}
                         />
                         <span className="text-lg hidden">{cls.icon}</span>

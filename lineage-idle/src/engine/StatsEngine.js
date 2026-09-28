@@ -22,6 +22,9 @@ import { CLASS_SAVE_MIGRATION_MAP } from '../services/ClassSaveMigrationMap.js';
 import { WeaponResonanceService } from '../services/WeaponResonanceService.js';
 import { isSkillInProgressionPath } from '../services/SkillEligibility.js';
 import { getArmorType, getWeaponType } from '../data/items/item_class_rules.js';
+import { getEquippedAugmentationSkills } from '../services/AugmentationService.js';
+import { CANONICAL_SKILL_REGISTRY_V2 } from '../data/skills/CanonicalSkillRegistryV2.js';
+import { resolveDwarvenRecoveryMasteryBonuses, resolveSkillCooldownReduction, resolveSkillMovementSpeedPercent, resolveSkillSpeedCooldownReduction } from '../services/SkillEffectService.js';
 
 export const STR_MODIFIERS = {
   10: 0.42, 11: 0.43, 12: 0.45, 13: 0.46, 14: 0.48, 15: 0.50,
@@ -239,8 +242,12 @@ export function getEquipBonus(state, slot) {
     out = { ...out, ...scaled };
   }
 
-  ['atk','def','matk','mdef','hp','mp','eva','crit','speed','lifesteal'].forEach(k => {
-    if (out[k]) out[k] = Math.floor(Number(out[k]) * rarityMult * enchantMult * foundationMult);
+  ['atk','def','matk','mdef','hp','mp','eva','crit','critDmg','speed','atkSpeed','castSpeed','mpRegen','stunChance','blockRate','lifesteal'].forEach(k => {
+    if (out[k]) {
+      const scaled = Number(out[k]) * rarityMult * enchantMult * foundationMult;
+      // Critical damage is stored as a fractional multiplier (for example 0.30 = +30%).
+      out[k] = k === 'critDmg' ? Math.round(scaled * 1e6) / 1e6 : Math.floor(scaled);
+    }
   });
 
   if (Array.isArray(inv.affixes)) {
@@ -261,7 +268,7 @@ export function getEquipBonus(state, slot) {
  * @returns {Object}
  */
 export function getTotalEquipBonuses(state) {
-  const totals = { atk: 0, def: 0, matk: 0, mdef: 0, hp: 0, mp: 0, eva: 0, crit: 0, speed: 0, lifesteal: 0, xpBoost: 0, goldBoost: 0, adenaBoost: 0, str: 0, dex: 0, con: 0, int: 0, wit: 0, men: 0 };
+  const totals = { atk: 0, def: 0, matk: 0, mdef: 0, hp: 0, mp: 0, eva: 0, crit: 0, critDmg: 0, speed: 0, atkSpeed: 0, castSpeed: 0, mpRegen: 0, stunChance: 0, blockRate: 0, lifesteal: 0, xpBoost: 0, goldBoost: 0, adenaBoost: 0, str: 0, dex: 0, con: 0, int: 0, wit: 0, men: 0 };
   if (!state.equipment) return totals;
   const seenUids = new Set();
   for (const slot of Object.keys(state.equipment)) {
@@ -582,11 +589,11 @@ export function hasEquippedSigil(state) {
  * Retorna categoria e características da arma equipada.
  */
 export function getEquippedWeaponInfo(state) {
-  if (!state?.equipment) return { category: null, isTwoHanded: false };
+  if (!state?.equipment) return { category: null, isTwoHanded: false, weaponId: null, weaponName: null };
   const uid = state.equipment.weapon || state.equipment.rightHand;
-  if (!uid) return { category: null, isTwoHanded: false };
+  if (!uid) return { category: null, isTwoHanded: false, weaponId: null, weaponName: null };
   const item = state.inventory?.find(i => i.uid === uid) || (typeof uid === 'object' ? uid : null);
-  if (!item) return { category: null, isTwoHanded: false };
+  if (!item) return { category: null, isTwoHanded: false, weaponId: null, weaponName: null };
   const gData = D();
   const def = gData?.ALL_ITEMS?.[item.itemId || item.id] || (typeof window !== 'undefined' && window.ALL_ITEMS?.[item.itemId || item.id]) || item;
 
@@ -619,7 +626,7 @@ export function getEquippedWeaponInfo(state) {
     /two_hand|twohanded|two-handed|great_sword|greatsword|big_hammer|two_hand_sword|two_hand_blunt/.test(`${def.id || ''} ${def.name || ''} ${typeProp}`)
   );
 
-  return { category, isTwoHanded };
+  return { category, isTwoHanded, weaponId: def.id || item.itemId || item.id || null, weaponName: def.name || item.name || null };
 }
 
 /**
@@ -667,7 +674,25 @@ export function getStats(state) {
   const isHeavyEquipped = armorType === 'heavy';
   const isLightEquipped = armorType === 'light';
   const isRobeEquipped  = armorType === 'robe';
+  const elementWeaverArmorMasteryActive = sk('element_weaver_s_armor_mastery') > 0 && isRobeEquipped;
+  const elementalAcumenActive = sk('elemental_acumen') > 0 && isLightEquipped;
+  const combatArmorMasteryActive = sk('combat_armor_mastery') > 0 && (isHeavyEquipped || isLightEquipped);
+  const expertArmorMasteryActive = sk('expert_armor_mastery') > 0 && isLightEquipped;
+  const wizardArmorMasteryActive = sk('wizard_s_armor_mastery') > 0;
+  const summonerArmorMasteryActive = sk('summoner_s_armor_mastery') > 0;
+  const wizardArmorMasteryGearActive = wizardArmorMasteryActive && isRobeEquipped;
+  const summonerArmorMasteryGearActive = summonerArmorMasteryActive && (isRobeEquipped || isLightEquipped);
+  const khavatariArmorMasteryActive = sk('khavatari_s_armor_mastery') > 0 && isLightEquipped;
   const isShieldEquipped = hasEquippedShield(state);
+  const templarArmorMasteryActive = sk('templar_s_armor_mastery') > 0 && isHeavyEquipped;
+  const armorCareRank = Math.min(2, Math.floor(sk('armor_care')));
+  const pSkillCritRate = armorCareRank >= 2 ? 3 : armorCareRank === 1 ? 1 : 0;
+  const pSkillCritDamagePercent = armorCareRank >= 2 ? 0.08 : armorCareRank === 1 ? 0.03 : 0;
+  const receivedCritDamageReductionPercent = armorCareRank >= 2 ? 0.04 : armorCareRank === 1 ? 0.02 : 0;
+  const armorCareShieldBlockBonus = isShieldEquipped ? (armorCareRank >= 2 ? 8 : armorCareRank === 1 ? 3 : 0) : 0;
+  const shieldSlot = state.equipment?.shield ? 'shield' : 'offhand';
+  const equippedShieldStats = isShieldEquipped ? getEquipBonus(state, shieldSlot) : null;
+  const equippedShieldDef = Number(equippedShieldStats?.def) || 0;
   const isSigilEquipped  = hasEquippedSigil(state);
 
   const wpnInfo = getEquippedWeaponInfo(state);
@@ -709,22 +734,84 @@ export function getStats(state) {
 
   // Death Knight Unique Passives
   if (isSwordBluntEquipped) baseAtk += sk('death_sword_mastery') * 5;
-  if (isHeavyEquipped || isLightEquipped) baseDef += sk('death_armor_mastery') * 10;
+  if (sk('death_armor_mastery') > 0 && (isHeavyEquipped || isLightEquipped)) baseDef += 15;
   baseAtk += sk('death_points') * 5;
   baseAtk += sk('appetite_for_destruction') * 10;
 
   // Canonical Race & Archetype Specific Passives (Dwarf, Kamael, Sylph, High Elf, Orc, Assassin, Elves)
-  baseAtk += sk('dwarven_weapon_mastery') * 5;
-  baseDef += sk('dwarven_armor_mastery') * 10;
-  baseAtk += sk('sacral_weapon_mastery') * 5;
-  baseDef += sk('sacral_armor_mastery') * 10;
+  if (sk('dwarven_weapon_mastery') > 0) {
+    // L2Wiki Dwarven Weapon Mastery source ranks 8–15: P. Atk. +420 at Lv. 76,
+    // then +30 per rank through rank 14, and +50 for rank 15 at Lv. 90.
+    const dwarvenWeaponMasteryAtk = lvl >= 90 ? 650 : lvl >= 89 ? 600 : lvl >= 88 ? 570 :
+      lvl >= 86 ? 540 : lvl >= 84 ? 510 : lvl >= 82 ? 480 : lvl >= 79 ? 450 : 420;
+    baseAtk += dwarvenWeaponMasteryAtk;
+  }
+  // Multi-target spear swings have no equivalent in the solo card loop;
+  // adapt the clause to +10% basic-attack damage with a spear only.
+  const basicAttackDamagePercent = sk('dwarven_weapon_mastery') > 0 && isPolearmEquipped ? 0.10 : 0;
+  let receivedCritRateReductionPercent = 0;
+  let generalReceivedCritDamageReductionPercent = receivedCritDamageReductionPercent;
+  let receivedBasicCritDamageReductionPercent = 0;
+  let bowResistancePercent = 0;
+  let firearmsResistancePercent = 0;
+  const dwarvenRecoveryBonuses = resolveDwarvenRecoveryMasteryBonuses(lvl, sk('dwarven_recovery_mastery'));
+  // L2Wiki Dwarven Armor Mastery: at levels 76+ while wearing heavy/light,
+  // grants +160 P. Def., +10 P. Evasion, and -5% received critical rate.
+  if (sk('dwarven_armor_mastery') > 0 && (isHeavyEquipped || isLightEquipped)) {
+    baseDef += 160;
+    baseEva += 10;
+    receivedCritRateReductionPercent += 0.05;
+  }
+  // L2Wiki Sacred Templar levels: a one-handed sword + shield grants
+  // +60/+120/+200/+300 P. Atk at character levels 20/40/63/70.
+  if (sk('sacral_weapon_mastery') > 0 && wCat === 'sword' && isShieldEquipped && !isTwoHandedWpn) {
+    baseAtk += lvl >= 70 ? 300 : lvl >= 63 ? 200 : lvl >= 40 ? 120 : lvl >= 20 ? 60 : 0;
+  }
+  // Sacral Armor Mastery requires heavy armor and grants equal P./M. Def.
+  if (sk('sacral_armor_mastery') > 0 && isHeavyEquipped) {
+    const sacralArmorDefense = lvl >= 70 ? 200 : lvl >= 63 ? 150 : lvl >= 40 ? 100 : lvl >= 20 ? 50 : 0;
+    baseDef += sacralArmorDefense;
+    baseMdef += sacralArmorDefense;
+  }
   baseAtk += sk('ancient_sword_mastery') * 5;
   baseAtk += sk('wild_weapon_mastery') * 5;
   baseDef += sk('wild_armor_mastery') * 10;
   baseAtk += sk('firearm_mastery') * 5;
   baseMatk += sk('elemental_sphere_mastery') * 5;
-  baseDef += sk('element_weaver_s_armor_mastery') * 8;
-  baseMdef += sk('element_weaver_s_armor_mastery') * 8;
+  if (elementWeaverArmorMasteryActive) {
+    baseDef += 20;
+    baseMdef += 30;
+  }
+  if (sk('rogue_s_armor_mastery') > 0 && isLightEquipped) {
+    baseDef += 150;
+    baseEva += 9;
+    receivedCritRateReductionPercent += 0.10;
+  }
+  if (combatArmorMasteryActive) {
+    baseDef += 135;
+    baseMdef += 60;
+    baseEva += 10;
+  }
+  if (expertArmorMasteryActive) {
+    baseDef += 100;
+    baseMdef += 100;
+    baseEva += 5;
+  }
+  if (wizardArmorMasteryActive || summonerArmorMasteryActive) baseMdef += 30;
+  if (wizardArmorMasteryGearActive || summonerArmorMasteryGearActive) baseDef += 30;
+  if (khavatariArmorMasteryActive) {
+    baseDef += 119;
+    baseMdef += 60;
+    baseEva += 12;
+    receivedCritRateReductionPercent += 0.35;
+  }
+  if (templarArmorMasteryActive) {
+    baseDef += 320;
+    baseMdef += 160;
+    receivedBasicCritDamageReductionPercent = 0.35;
+    bowResistancePercent = 0.05;
+    firearmsResistancePercent = 0.05;
+  }
   baseMdef += sk('magic_immunity') * 15;
   baseAtk += sk('titan_spirit') * 10;
   baseAtk += sk('khavatari_spirit') * 5;
@@ -748,8 +835,17 @@ export function getStats(state) {
   baseEva += (sk('boost_evasion') * 3) + (sk('elven_senses') * 3);
   baseMdef += sk('anti_magic') * 18;
   mpRegenBonus += (sk('higher_mana') + sk('boost_mp') + sk('mana_recovery') + sk('focus_mind') + sk('higher_mana_gain') + sk('death_points') + sk('children_of_the_mother_tree') + sk('elemental_recovery')) * 2;
+  if (elementWeaverArmorMasteryActive) mpRegenBonus += 3;
+  if (combatArmorMasteryActive) mpRegenBonus += 0.10;
+  if (khavatariArmorMasteryActive) mpRegenBonus += 0.10;
+  if (templarArmorMasteryActive) mpRegenBonus += 0.10;
+  mpRegenBonus += dwarvenRecoveryBonuses.mpRecovery;
+  // The canonical recovery passive restores MP about every 10s; map it to a
+  // small +0.5 MP per 5s tick consumed by the production combat loop.
+  mpRegenBonus += sk('mp_recovery') * 0.5;
 
   const eb = getTotalEquipBonuses(state);
+  mpRegenBonus += Number(eb.mpRegen) || 0;
   const setRes = getActiveSetBonuses(state);
   const setB = setRes.statTotals;
 
@@ -769,15 +865,127 @@ export function getStats(state) {
 
   const now = Date.now();
   let buffAtk = 0, buffDef = 0, buffMatk = 0, buffMdef = 0, buffAtkMult = 0;
+  if (wCat === 'blunt') buffAtkMult += sk('shineMakerBase_crystal_weapon_mastery') * 0.15;
+  // Aden Arena adaptation of Warg's WP/form passives: the card-combat loop has
+  // no form bar, so Unleashed Potential retains a modest always-on core.
+  buffAtkMult += Math.min(0.24, sk('unleashed_potential') * 0.08);
+  // L2Wiki Warg skill 88454 requires wolf-form/claw combat, which Aden Arena
+  // does not model. Preserve its offensive/defensive role with bounded bonuses.
+  if (sk('growing_potential') > 0) {
+    buffAtkMult += 0.05;
+    buffDef += Math.floor(baseDef * 0.05);
+    buffMdef += Math.floor(baseMdef * 0.05);
+  }
+  let skillBuffCon = 0, skillBuffMen = 0;
+  // Bow range has no tactical effect in one-target idle combat; convert Long
+  // Shot to a small bow/crossbow attack bonus so its passive remains useful.
+  if (isBowEquipped) buffAtkMult += sk('long_shot') * 0.05;
   let buffCrit = (sk('focus') * 5) + (sk('critical_chance') * 5) + (sk('eye_of_slayer') * 2) + (sk('assassin_critical_dagger') * 5) + (sk('shadow_sense') * 5);
-  let buffCritDmg = (sk('critical_power') * 0.05) + (sk('assassin_critical_dagger') * 0.05);
-  let buffSpd = (sk('quick_step') * 5) + (sk('boost_attack_speed') * 5) + (sk('fast_spell_casting') * 4) + (sk('appetite_for_destruction') * 10) + (sk('death_points') * 3) + (sk('wind_shooting') * 5) + (sk('khavatari_spirit') * 5);
+  let buffCritDmg = (sk('critical_power') * 0.05) + (sk('assassin_critical_dagger') * 0.05) + (sk('death_whisper') * 0.25);
+  buffCritDmg += Number(eb.critDmg) || 0;
+  let augmentationMpCostReduction = 0;
+  let skillBuffMpCostReduction = 0;
+  let skillBuffCdr = sk('unleashed_potential') * 0.05;
+  let skillBuffMovementSpeedPercent = 0;
+  let skillBuffPSkillCdr = 0;
+  let skillBuffMSkillCdr = 0;
+  let skillBuffEva = 0;
+  let skillBuffPAccuracy = 0, skillBuffMAccuracy = 0;
+  let skillBuffBlockRate = 0;
+  let skillBuffShieldDefPercent = 0;
+  let skillBuffPveDamagePercent = 0;
+  if (armorCareRank >= 2) skillBuffPveDamagePercent += 0.10;
+  let skillBuffDamageTakenReductionPercent = 0;
+  let skillBuffHealingReceivedPercent = 0;
+  let skillBuffPSkillPowerPercent = 0, skillBuffMSkillPowerPercent = 0;
+  if (sk('rogue_s_armor_mastery') > 0 && isLightEquipped) {
+    skillBuffPSkillPowerPercent += 0.01;
+    skillBuffMSkillPowerPercent += 0.01;
+  }
+  let skillBuffLifeDrain = 0;
+  let pSkillMpCostReduction = (sk('clarity') > 0 ? 0.10 : 0) + (sk('dwarven_weapon_mastery') > 0 ? 0.60 : 0);
+  let mSkillMpCostReduction = sk('clarity') > 0 ? 0.04 : 0;
+  const hpPotionEffectPercent = sk('potion_mastery') > 0 ? 0.10 : 0;
+  let pSkillEvasionPercent = 0, mSkillEvasionPercent = 0, buffCancelResistancePercent = 0, debuffResistancePercent = 0;
+  debuffResistancePercent += sk('unleashed_potential') * 0.05;
+  // There is no maximum-buff-slot limit in card combat. Divine Inspiration
+  // instead extends player self-buff duration by 10% per learned rank.
+  const buffDurationPercent = Math.min(0.50, sk('divine_inspiration') * 0.10);
+  // Local Warg skill data defines Tough Skin as a passive +20% debuff resistance.
+  if (sk('tough_skin') > 0) debuffResistancePercent += 0.20;
+  let skillBuffMaxHpFlat = 0, skillBuffMaxHpPercent = 0;
+  let skillBuffMaxMpFlat = 0, skillBuffMaxMpPercent = 0;
+  let skillBuffMaxCpFlat = 0, skillBuffMaxCpPercent = 0;
+  let buffSpd = 0;
+  buffSpd += Number(eb.atkSpeed) || 0;
 
   let xpBoost = 0, goldBoost = 0, luckBoost = 0, autoPotion = false;
   state.buffs = state.buffs || {};
   for (const k of Object.keys(state.buffs)) {
     if (state.buffs[k].until < now) continue;
     const b = state.buffs[k];
+    if (b.skillBuffStats) {
+      const activeStats = b.skillBuffStats;
+      skillBuffCon += Number(activeStats.con) || 0;
+      skillBuffMen += Number(activeStats.men) || 0;
+      skillBuffMovementSpeedPercent += Number(activeStats.movementSpeedPercent) || 0;
+      buffAtk += Number(activeStats.atk) || 0;
+      buffAtkMult += Number(activeStats.pAtkPercent) || 0;
+      buffMatk += (Number(activeStats.matk) || 0) + Math.floor(baseMatk * (Number(activeStats.mAtkPercent) || 0));
+      buffDef += (Number(activeStats.def) || 0) + Math.floor(baseDef * (Number(activeStats.pDefPercent) || 0));
+      buffMdef += (Number(activeStats.mdef) || 0) + Math.floor(baseMdef * (Number(activeStats.mDefPercent) || 0));
+      buffCrit += Number(activeStats.crit) || 0;
+      skillBuffCdr += Number(activeStats.cdr) || 0;
+      // Legacy skill definitions may store attack/casting speed directly in
+      // buff stats. In this game those bonuses shorten skill reuse instead of
+      // increasing the auto-attack stat. Percent fields are ratios; flat speed
+      // fields use the existing 100-points-to-100%-CDR scale.
+      for (const key of ['atkSpdPercent', 'castSpdPercent']) {
+        const percent = Number(activeStats[key]) || 0;
+        if (percent > 0) skillBuffCdr += percent;
+      }
+      for (const key of ['atkSpd', 'castSpd']) {
+        const speed = Number(activeStats[key]) || 0;
+        if (speed > 0) skillBuffCdr += speed > 1 ? speed / 100 : speed;
+      }
+      skillBuffPSkillCdr += Number(activeStats.pSkillCdr) || 0;
+      skillBuffMSkillCdr += Number(activeStats.mSkillCdr) || 0;
+      skillBuffMpCostReduction += Number(activeStats.mpCostReduction) || 0;
+      pSkillMpCostReduction += Number(activeStats.pSkillMpCostReduction) || 0;
+      mSkillMpCostReduction += Number(activeStats.mSkillMpCostReduction) || 0;
+      skillBuffEva += Number(activeStats.eva) || 0;
+      skillBuffPAccuracy += Number(activeStats.pAccuracy) || 0;
+      skillBuffMAccuracy += Number(activeStats.mAccuracy) || 0;
+      if (hasEquippedShield(state)) skillBuffBlockRate += Number(activeStats.blockRate) || 0;
+      if (hasEquippedShield(state)) skillBuffShieldDefPercent += Number(activeStats.shieldDefPercent) || 0;
+      skillBuffPveDamagePercent += Number(activeStats.pveDamagePercent) || 0;
+      skillBuffDamageTakenReductionPercent += Number(activeStats.damageTakenReductionPercent) || 0;
+      skillBuffHealingReceivedPercent += Number(activeStats.healingReceivedPercent) || 0;
+      buffCritDmg += Number(activeStats.critDmgPercent) || 0;
+      skillBuffPSkillPowerPercent += Number(activeStats.pSkillPowerPercent) || 0;
+      skillBuffMSkillPowerPercent += Number(activeStats.mSkillPowerPercent) || 0;
+      skillBuffLifeDrain += Number(activeStats.lifeDrain) || 0;
+      pSkillEvasionPercent += Number(activeStats.pSkillEvasionPercent) || 0;
+      mSkillEvasionPercent += Number(activeStats.mSkillEvasionPercent) || 0;
+      buffCancelResistancePercent += Number(activeStats.buffCancelResistancePercent) || 0;
+      debuffResistancePercent += Number(activeStats.debuffResistancePercent) || 0;
+      skillBuffMaxHpFlat += Number(activeStats.maxHpFlat) || 0;
+      skillBuffMaxHpPercent += Number(activeStats.maxHpPercent) || 0;
+      skillBuffMaxMpFlat += Number(activeStats.maxMpFlat) || 0;
+      skillBuffMaxMpPercent += Number(activeStats.maxMpPercent) || 0;
+      mpRegenBonus += Number(activeStats.mpRegen) || 0;
+      skillBuffMaxCpFlat += Number(activeStats.maxCpFlat) || 0;
+      skillBuffMaxCpPercent += Number(activeStats.maxCpPercent) || 0;
+    }
+    if (b.augmentationStats) {
+      const activeStats = b.augmentationStats;
+      buffAtkMult += Number(activeStats.pAtkPercent) || 0;
+      buffMatk += Math.floor(baseMatk * (Number(activeStats.mAtkPercent) || 0));
+      buffDef += Math.floor(baseDef * (Number(activeStats.pDefPercent) || 0));
+      buffMdef += Math.floor(baseMdef * (Number(activeStats.mDefPercent) || 0));
+      buffCrit += Number(activeStats.critBonus) || 0;
+      buffCritDmg += Number(activeStats.critDmgPercent) || 0;
+    }
     if (k === 'atk') buffAtk += Number(b.amount) || 0;
     else if (k === 'def') buffDef += Number(b.amount) || 0;
     else if (k === 'speed') buffSpd += Number(b.amount) || 0;
@@ -802,6 +1010,7 @@ export function getStats(state) {
 
   // Process Active Elixirs from Alchemy System
   let elixirHpMult = 0;
+  let masterworkHpBonusFlat = 0;
   const elixirSources = { ...(state.activeElixirs || {}) };
   if (state.buffs && typeof state.buffs === 'object') {
     for (const [k, b] of Object.entries(state.buffs)) {
@@ -894,6 +1103,8 @@ export function getStats(state) {
 
   // Process Weapon Augmentation Stats (Weapon 1 and Weapon 2)
   let augCrit = 0;
+  let augmentationFlatHp = 0;
+  let augmentationFlatCp = 0;
   for (const wpnKey of ['weapon', 'weapon2']) {
     const wpnUid = state.equipment?.[wpnKey];
     const equippedWeaponItem = wpnUid ? (state.inventory?.find(i => i.uid === wpnUid) || wpnUid) : null;
@@ -905,15 +1116,32 @@ export function getStats(state) {
       const aMdef = weaponAug.mdefBonus || weaponAug.stats?.mdef || 0;
       const aCrit = weaponAug.critBonus || weaponAug.stats?.crit || 0;
       const aEva = weaponAug.evaBonus || weaponAug.stats?.eva || 0;
-      const aHp = weaponAug.hpBonus || weaponAug.stats?.hp || 0;
+      const aHpLegacy = Number(weaponAug.hpBonus) || 0;
+      const aHpRoll = Number(weaponAug.stats?.hp) || 0;
+      const aCpRoll = Number(weaponAug.cpBonus || weaponAug.stats?.cp) || 0;
       if (aAtk) buffAtk += aAtk;
       if (aMatk) buffMatk += aMatk;
       if (aDef) buffDef += aDef;
       if (aMdef) buffMdef += aMdef;
       if (aCrit) augCrit += aCrit;
       if (aEva) baseEva += aEva;
-      if (aHp) elixirHpMult += (aHp / 2000);
+      if (aHpLegacy) elixirHpMult += (aHpLegacy / 2000);
+      augmentationFlatHp += aHpRoll;
+      augmentationFlatCp += aCpRoll;
     }
+  }
+
+  // Item Skills passivas de augmentação só contam enquanto a arma estiver equipada.
+  for (const itemSkill of getEquippedAugmentationSkills(state)) {
+    if (itemSkill.type !== 'passive') continue;
+    const skillStats = itemSkill.stats || {};
+    augCrit += Number(skillStats.critBonus) || 0;
+    buffCritDmg += Number(skillStats.critDmgPercent) || 0;
+    buffAtkMult += Number(skillStats.pAtkPercent) || 0;
+    buffMatk += Math.floor(baseMatk * (Number(skillStats.mAtkPercent) || 0));
+    buffDef += Math.floor(baseDef * (Number(skillStats.pDefPercent) || 0));
+    buffMdef += Math.floor(baseMdef * (Number(skillStats.mDefPercent) || 0));
+    augmentationMpCostReduction += Number(skillStats.mpReductionPercent) || 0;
   }
 
   // Process Fortress & Talisman Bonuses
@@ -987,6 +1215,34 @@ export function getStats(state) {
     console.warn('WeaponResonanceService error:', e);
   }
 
+  let passiveCooldownReduction = 0;
+  let passiveMovementSpeedPercent = 0;
+  let passivePSkillCooldownReduction = 0;
+  let passiveMSkillCooldownReduction = 0;
+  for (const [skillId, level] of Object.entries(skills)) {
+    if (!(Number(level) > 0) || sk(skillId) <= 0) continue;
+    const canonicalId = LEGACY_PASSIVE_MAP[skillId] || skillId;
+    const def = CANONICAL_SKILL_REGISTRY_V2[canonicalId];
+    if (!def || !['passive', 'stat'].includes(def.type)) continue;
+    const cooldownContext = {
+      armorType,
+      weaponCategory: wCat,
+      isTwoHanded: isTwoHandedWpn,
+      weaponId: wpnInfo.weaponId,
+      weaponName: wpnInfo.weaponName
+    };
+    passiveCooldownReduction += resolveSkillSpeedCooldownReduction(def, cooldownContext);
+    passiveMovementSpeedPercent += resolveSkillMovementSpeedPercent(def, cooldownContext);
+    const explicitCooldownReduction = resolveSkillCooldownReduction(def, cooldownContext);
+    passiveCooldownReduction += explicitCooldownReduction.cdr;
+    passivePSkillCooldownReduction += explicitCooldownReduction.pSkillCdr;
+    passiveMSkillCooldownReduction += explicitCooldownReduction.mSkillCdr;
+  }
+  let cdr = sk('quickRecycle') * 0.10 + skillBuffCdr + passiveCooldownReduction;
+  cdr += (Number(eb.castSpeed) || 0) / 100;
+  let pSkillCdr = skillBuffPSkillCdr + passivePSkillCooldownReduction;
+  let mSkillCdr = skillBuffMSkillCdr + passiveMSkillCooldownReduction;
+
   // Process Masterwork & Belt Bonuses on Equipped Items
   if (state.equipment && typeof state.equipment === 'object') {
     const processedEquipUids = new Set();
@@ -1000,7 +1256,8 @@ export function getStats(state) {
 
       if (item.isMasterwork && item.masterworkBonus) {
         buffSpd += (item.masterworkBonus.atkSpdPct || 0) * 100;
-        if (item.masterworkBonus.hpBonus) elixirHpMult += ((item.masterworkBonus.hpBonus || 0) / 2000);
+        cdr += Number(item.masterworkBonus.castSpdPct) || 0;
+        masterworkHpBonusFlat += Number(item.masterworkBonus.hpBonus) || 0;
         mpRegenBonus += (item.masterworkBonus.mpRegenPct || 0);
       }
 
@@ -1029,8 +1286,15 @@ export function getStats(state) {
 
   let atkMult = 1 + buffAtkMult;
   const defMult = 1 + sk('heavyArmor') * 0.05;
-  const cdr = sk('quickRecycle') * 0.10;
-
+  const combatDebuffNow = Date.now();
+  const activeMonsterDebuffPercent = id => {
+    const entry = state.buffs?.[id];
+    return entry && Number(entry.until) > combatDebuffNow
+      ? Math.max(0, Math.min(1, (Number(entry.amount) || 0) / 100))
+      : 0;
+  };
+  const monsterPDefMult = 1 - activeMonsterDebuffPercent('monster_hex');
+  const monsterMdefMult = 1 - activeMonsterDebuffPercent('monster_gloom');
   const codexB = getCodexBonuses(state);
   // Process Soul Crystal (SA) Bonus on Both Equipped Weapons (Dual Arsenal)
   let saCrit = 0, saPatkMult = 0, saMatkMult = 0, saSpeed = 0, saHpMult = 0;
@@ -1038,11 +1302,11 @@ export function getStats(state) {
     const wpnUid = state.equipment?.[wpnKey];
     const socket = (wpnUid && state.weaponSockets) ? state.weaponSockets[wpnUid] : null;
     if (socket) {
-      const stage = Math.min(13, Math.max(1, socket.stage || 1));
+      const stage = Math.min(15, Math.max(1, socket.stage || 1));
       const mult = 1 + (stage - 1) * 0.15;
       if (socket.effect === 'focus') saCrit += Math.floor(15 * mult);
       else if (socket.effect === 'haste') buffSpd += Math.floor(12 * mult);
-      else if (socket.effect === 'acumen') buffMatk += Math.floor(baseMatk * 0.15 * mult);
+      else if (socket.effect === 'acumen') cdr += 0.15 * mult;
       else if (socket.effect === 'health') elixirHpMult += (0.15 * mult);
       else if (socket.effect === 'might') buffAtkMult += (0.10 * mult);
       else if (socket.effect === 'empower') buffMatk += Math.floor(baseMatk * 0.12 * mult);
@@ -1053,7 +1317,10 @@ export function getStats(state) {
     if (itemSa) {
       if (itemSa.stat === 'crit' || itemSa.key === 'focus') saCrit += (itemSa.val || 0);
       else if (itemSa.stat === 'patk' || itemSa.key === 'might') buffAtkMult += (typeof itemSa.val === 'number' && itemSa.val < 1 ? itemSa.val : (itemSa.val || 0) / 100);
-      else if (itemSa.stat === 'castSpd' || itemSa.key === 'acumen') buffSpd += Math.floor((itemSa.val || 0) * 50);
+      else if (itemSa.stat === 'castSpd' || itemSa.key === 'acumen') {
+        const castSpeed = Number(itemSa.val) || 0;
+        cdr += castSpeed > 1 ? castSpeed / 100 : castSpeed;
+      }
       else if (itemSa.stat === 'hp' || itemSa.key === 'health') elixirHpMult += (typeof itemSa.val === 'number' && itemSa.val < 1 ? itemSa.val : (itemSa.val || 0) / 100);
       else if (itemSa.stat === 'matk' || itemSa.key === 'empower') buffMatk += Math.floor(baseMatk * (typeof itemSa.val === 'number' && itemSa.val < 1 ? itemSa.val : (itemSa.val || 0) / 100));
       else if (itemSa.stat === 'accuracy' || itemSa.key === 'guidance') baseEva += (itemSa.val || 0);
@@ -1074,10 +1341,10 @@ export function getStats(state) {
   const primaryStats = {
     str: (baseAttrs.str || 0) + (setRes.primaryStats?.str || 0) + (Number(eb.str) || 0) + tatStr,
     dex: (baseAttrs.dex || 0) + (setRes.primaryStats?.dex || 0) + (Number(eb.dex) || 0) + tatDex,
-    con: (baseAttrs.con || 0) + (setRes.primaryStats?.con || 0) + (Number(eb.con) || 0) + tatCon,
+    con: (baseAttrs.con || 0) + (setRes.primaryStats?.con || 0) + (Number(eb.con) || 0) + tatCon + skillBuffCon,
     int: (baseAttrs.int || 0) + (setRes.primaryStats?.int || 0) + (Number(eb.int) || 0) + tatInt,
-    wit: (baseAttrs.wit || 0) + (setRes.primaryStats?.wit || 0) + (Number(eb.wit) || 0) + tatWit,
-    men: (baseAttrs.men || 0) + (setRes.primaryStats?.men || 0) + (Number(eb.men) || 0) + tatMen
+    wit: (baseAttrs.wit || 0) + (setRes.primaryStats?.wit || 0) + (Number(eb.wit) || 0) + tatWit + (elementalAcumenActive ? 1 : 0),
+    men: (baseAttrs.men || 0) + (setRes.primaryStats?.men || 0) + (Number(eb.men) || 0) + tatMen + skillBuffMen
   };
   state.primaryStats = primaryStats;
 
@@ -1115,6 +1382,7 @@ export function getStats(state) {
 
   const dollsB = getDollsBonuses(state);
   const certB  = getCertificationsBonuses(state);
+  cdr += (Number(certB.castSpd) || 0) / 100;
   const towerMult = 1 + ((state.tower?.highestFloor || 0) * 0.01);
 
   const certAtkMult  = 1 + (certB.pAtkPercent || 0);
@@ -1131,22 +1399,27 @@ export function getStats(state) {
 
   atkMult = 1 + buffAtkMult;
   const finalAtk  = Math.floor((baseAtk + (Number(eb.atk) || 0) + (Number(setB.atk) || 0) + buffAtk + codexB.atk + dollsB.atk + certB.atk) * atkMult * towerMult * certAtkMult * resAtkMult);
-  const finalDef  = Math.floor((baseDef + (Number(eb.def) || 0) + (Number(setB.def) || 0) + buffDef + codexB.def + dollsB.def + certB.def) * defMult * towerMult * certDefMult * resDefMult);
-  const finalEva  = Math.floor(baseEva + (Number(eb.eva) || 0) + (Number(setB.eva) || 0) + codexB.eva + dollsB.eva + (certB.evaAdd || 0));
+  const shieldDefBuff = isShieldEquipped ? Math.floor(equippedShieldDef * skillBuffShieldDefPercent) : 0;
+  const finalDef  = Math.floor((baseDef + (Number(eb.def) || 0) + (Number(setB.def) || 0) + buffDef + shieldDefBuff + codexB.def + dollsB.def + certB.def) * defMult * towerMult * certDefMult * resDefMult * monsterPDefMult);
+  const finalEva  = Math.floor(baseEva + (Number(eb.eva) || 0) + (Number(setB.eva) || 0) + codexB.eva + dollsB.eva + (certB.evaAdd || 0) + skillBuffEva);
   const finalMatk = Math.floor((baseMatk + (Number(eb.matk) || 0) + (Number(setB.matk) || 0) + buffMatk + codexB.matk + dollsB.matk + certB.matk) * towerMult * certMatkMult * resMatkMult);
-  const finalMdef = Math.floor((baseMdef + (Number(eb.mdef) || 0) + (Number(setB.mdef) || 0) + buffMdef + codexB.mdef + dollsB.mdef + certB.mdef) * towerMult * certMdefMult * resMdefMult);
+  const finalMdef = Math.floor((baseMdef + (Number(eb.mdef) || 0) + (Number(setB.mdef) || 0) + buffMdef + codexB.mdef + dollsB.mdef + certB.mdef) * towerMult * certMdefMult * resMdefMult * monsterMdefMult);
   const finalCrit = (Number(eb.crit) || 0) + (Number(setB.crit) || 0) + codexB.crit + dollsB.crit + certB.crit + astralB.crit + saCrit + augCrit + legacyCrit + buffCrit + resonanceCrit;
 
   const lootBonus  = (Number(race?.stats?.lootBonus) || 0) + (Number(cls?.base?.lootBonus) || 0) + itemLootBonus + luckBoost;
   const rawAtkSpd  = ((buffSpd + (dollsB.speed || 0)) / 100) + (certB.atkSpdPercent || 0);
-  const lifeDrain  = ((Number(eb.lifesteal) || 0) + (dollsB.lifesteal || 0) + ((setB.lifesteal || 0) / 100)) + resonanceLifeDrain;
+  const lifeDrain  = ((Number(eb.lifesteal) || 0) + (dollsB.lifesteal || 0) + ((setB.lifesteal || 0) / 100)) + resonanceLifeDrain + skillBuffLifeDrain;
   const craftBonus = itemCraftBonus;
 
   const baseCritDmg = 1 + sk('executioner') * 0.15 + astralB.critDmg + buffCritDmg;
-  const regenHp   = sk('holylight') * 0.01;
+  // Both passives feed the 10-second HP recovery tick in attackMonster.
+  const regenHp   = (sk('holylight') + sk('hp_recovery')) * 0.01;
   const meteorLvl = sk('meteor');
   const execute   = sk('assassinate') * 0.02;
-  const rawBlock  = sk('divineshield') * 0.05 + (setB.block || 0);
+  const setBlock = Number(setB.block) || 0;
+  const setBlockPercent = Math.abs(setBlock) <= 1 ? setBlock * 100 : setBlock;
+  const templarShieldDefense = templarArmorMasteryActive && isShieldEquipped ? 5 : 0;
+  const rawBlock = (sk('divineshield') * 5) + (Number(eb.blockRate) || 0) + setBlockPercent + skillBuffBlockRate + templarShieldDefense + armorCareShieldBlockBonus;
 
   // ═══════════════════════════════════════════════════════════════════════
   // COMBAT SOFT-CAPS & DIMINISHING RETURNS
@@ -1166,19 +1439,50 @@ export function getStats(state) {
   // 3. Velocidade de Ataque: Retornos decrescentes suaves acima de 2.0x
   const atkSpd = rawAtkSpd > 2.0 ? (2.0 + Math.log10(1 + (rawAtkSpd - 2.0) * 0.5)) : rawAtkSpd;
 
-  const maxHp = Math.floor((100 + state.level * 10 + (sk('boostHp') + sk('boost_hp') + sk('vital_force')) * 60 + (Number(eb.hp) || 0) + (Number(setB.hp) || 0) + codexB.hp + dollsB.hp + setEnchantHp) * (1 + elixirHpMult) * certHpMult);
-  const maxMp = Math.floor((50 + state.level * 5 + (sk('boostMana') + sk('boost_mp') + sk('higher_mana')) * 30 + (Number(eb.mp) || 0) + (Number(setB.mp) || 0) + codexB.mp + dollsB.mp) * certMpMult);
+  const maxHp = Math.floor((100 + state.level * 10 + (sk('boostHp') + sk('boost_hp') + sk('vital_force')) * 60 + (elementWeaverArmorMasteryActive ? 100 : 0) + (elementalAcumenActive ? 700 : 0) + (expertArmorMasteryActive ? 200 : 0) + (wizardArmorMasteryGearActive || summonerArmorMasteryGearActive ? 60 : 0) + (Number(eb.hp) || 0) + (Number(setB.hp) || 0) + codexB.hp + dollsB.hp + setEnchantHp) * (1 + elixirHpMult + skillBuffMaxHpPercent) * certHpMult);
+  const maxMp = Math.floor((50 + state.level * 5 + (sk('boostMana') + sk('boost_mp') + sk('higher_mana')) * 30 + (elementalAcumenActive ? 700 : 0) + (Number(eb.mp) || 0) + (Number(setB.mp) || 0) + codexB.mp + dollsB.mp) * (1 + skillBuffMaxMpPercent) * certMpMult);
+  const maxCpMultiplier = 1 + (Number(certB.maxCpPercent) || 0) + skillBuffMaxCpPercent;
+  const maxCp = Math.floor(maxHp * 0.60 * maxCpMultiplier + skillBuffMaxCpFlat);
 
   const rawStats = {
     atk: finalAtk || 1, def: finalDef || 0, eva: effectiveEvasion || 0, matk: finalMatk || 1, mdef: finalMdef || 0,
-    crit: effectiveCritRate, rawCrit, critOverflowDmgBonus, critDmg, loot: 1 + lootBonus, speed: 1 + (buffSpd + (setB.speed || 0)) / 100 + (certB.speedPercent || 0), cdr,
+    crit: effectiveCritRate, rawCrit, critOverflowDmgBonus, critDmg, loot: 1 + lootBonus, speed: 1 + (buffSpd + (setB.speed || 0)) / 100 + (certB.speedPercent || 0), movementSpeedPercent: Math.max(-0.90, Math.min(2, skillBuffMovementSpeedPercent + passiveMovementSpeedPercent)), cdr, pSkillCdr, mSkillCdr,
+    pAccuracy: skillBuffPAccuracy, mAccuracy: skillBuffMAccuracy,
+    buffDurationPercent,
     atkSpd, lifeDrain, craftBonus, mpRegen: mpRegenBonus,
-    xpBoost, goldBoost, luckBoost, autoPotion, maxHp, maxMp,
+    basicAttackDamagePercent,
+    hpRegenFlat: dwarvenRecoveryBonuses.hpRecoveryFlat,
+    mpCostReduction: Math.max(-1, Math.min(0.50, augmentationMpCostReduction + skillBuffMpCostReduction)),
+    pSkillMpCostReduction,
+    mSkillMpCostReduction: Math.max(0, Math.min(0.50, mSkillMpCostReduction)),
+    pSkillMpCostReduction: Math.max(0, Math.min(0.75, pSkillMpCostReduction)),
+    hpPotionEffectPercent,
+    pveDamagePercent: skillBuffPveDamagePercent,
+    damageTakenReductionPercent: Math.min(0.90, skillBuffDamageTakenReductionPercent),
+    magicDamageTakenReductionPercent: Math.min(0.90, (wizardArmorMasteryActive ? 0.15 : 0) + (summonerArmorMasteryActive ? 0.15 : 0)),
+    healingReceivedPercent: Math.min(1, skillBuffHealingReceivedPercent),
+    pSkillPowerPercent: skillBuffPSkillPowerPercent,
+    mSkillPowerPercent: skillBuffMSkillPowerPercent,
+    pSkillEvasionPercent: Math.min(1, pSkillEvasionPercent),
+    mSkillEvasionPercent: Math.min(1, mSkillEvasionPercent),
+    buffCancelResistancePercent: Math.min(1, buffCancelResistancePercent),
+    debuffResistancePercent: Math.min(1, debuffResistancePercent),
+    receivedCritRateReductionPercent: Math.min(1, receivedCritRateReductionPercent),
+    pSkillCritRate,
+    pSkillCritDamagePercent,
+    receivedCritDamageReductionPercent: Math.min(0.90, generalReceivedCritDamageReductionPercent),
+    receivedBasicCritDamageReductionPercent: Math.min(0.90, receivedBasicCritDamageReductionPercent),
+    bowResistancePercent,
+    firearmsResistancePercent,
+    xpBoost, goldBoost, luckBoost, autoPotion, maxHp, maxMp, maxCp,
     regenHp, meteorLvl, execute, block,
     celestial: certB.celestial, hasteProc: certB.hasteProc, defenceProc: certB.defenceProc, spiritProc: certB.spiritProc, critProc: certB.critProc
   };
 
   const finalStats = applyPrimaryStats(rawStats, primaryStats);
+  finalStats.maxHp += masterworkHpBonusFlat + augmentationFlatHp + skillBuffMaxHpFlat;
+  finalStats.maxMp += skillBuffMaxMpFlat;
+  finalStats.maxCp = Math.floor(finalStats.maxHp * 0.60 * maxCpMultiplier + augmentationFlatCp + skillBuffMaxCpFlat);
   finalStats.combatPower = CombatPowerService.calculateCombatPower({ ...state, stats: finalStats });
   return finalStats;
 }

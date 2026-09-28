@@ -6,6 +6,8 @@
 import { D, ALL_EQUIP_SLOTS, TIER_NAMES } from '../core/GameConfig.js';
 import { getSellValue } from '../data/economy/economyBalance.js';
 import { ALL_ITEMS } from '../data/items/index.js';
+import { getItemGradeCode } from '../data/items/item_grade.js';
+export { getItemGradeCode } from '../data/items/item_grade.js';
 import { getState } from '../core/StateManager.js';
 import { el, qsa, mkEl, mkNS, updateBar } from '../core/DomHelpers.js';
 import {
@@ -48,7 +50,7 @@ import { ClanService, CLAN_HALL_BUFFS } from '../services/ClanService.js';
 import { ENCHANT_ROUTES, getEnchantLevelData, ENCHANT_ITEMS } from '../data/skill_enchant.js';
 import { SkillEnchantService } from '../services/SkillEnchantService.js';
 import { LIFE_STONES, ITEM_SKILLS } from '../data/augmentation.js';
-import { AugmentationService } from '../services/AugmentationService.js';
+import { AugmentationService, getAugmentationRequirements } from '../services/AugmentationService.js';
 import { FACTIONS, SEAL_STONES, SEVEN_SIGNS_BOSSES, MAMMON_BLACKSMITH_SERVICES, MAMMON_MERCHANT_CATALOG } from '../data/seven_signs.js';
 import { SevenSignsService } from '../services/SevenSignsService.js';
 import { FORTRESSES } from '../data/fortresses.js';
@@ -113,40 +115,6 @@ export function getItemDef(itemId) {
   }
   const normalized = raw.toLowerCase().replace(/\s+/g, '');
   return Object.values(data.ALL_ITEMS).find(i => i.name?.toLowerCase().replace(/\s+/g, '') === normalized) || null;
-}
-
-export function getItemGradeCode(itemDef) {
-  if (!itemDef) return 'ng';
-  const explicit = String(itemDef.grade || itemDef.tierGrade || '').toLowerCase();
-  if (['none', 'no grade', 'nograde', 'ng'].includes(explicit)) return 'ng';
-  if (['d', 'c', 'b', 'a', 's'].includes(explicit)) return explicit;
-  if (['boss', 'special'].includes(explicit)) return 'boss';
-  if (['frostlord', 'frost'].includes(explicit)) return 'frostlord';
-
-  const desc = String(itemDef.desc || itemDef.info || itemDef.name || '').toLowerCase();
-  const icon = String(itemDef.icon || '').toLowerCase();
-
-  if (desc.includes('no grade') || desc.includes('(no grade)') || icon.includes('nograde/')) return 'ng';
-  if (desc.includes('frost lord') || icon.includes('frost_lord')) return 'frostlord';
-  if (desc.includes('(special') || desc.includes('(boss') || icon.includes('gradespecial/')) return 'boss';
-  if (desc.includes('(s grade)') || icon.includes('grades/')) return 's';
-  if (desc.includes('(a grade)') || icon.includes('gradea/')) return 'a';
-  if (desc.includes('(b grade)') || icon.includes('gradeb/')) return 'b';
-  if (desc.includes('(c grade)') || icon.includes('gradec/')) return 'c';
-  if (desc.includes('(d grade)') || icon.includes('graded/')) return 'd';
-
-  const tier = Number(itemDef.tier) || 0;
-  const reqLvl = Number(itemDef.req?.level || itemDef.reqLvl || 0);
-
-  if (tier === 1 || reqLvl < 20) return 'ng';
-  if (tier === 2 || (reqLvl >= 20 && reqLvl < 40)) return 'd';
-  if (tier === 3 || (reqLvl >= 40 && reqLvl < 52)) return 'c';
-  if (tier === 4 || (reqLvl >= 52 && reqLvl < 61)) return 'b';
-  if (tier === 5 || (reqLvl >= 61 && reqLvl < 76)) return 'a';
-  if (tier === 6 || (reqLvl >= 76 && reqLvl < 80)) return 's';
-  if (tier >= 7 || reqLvl >= 80) return 'frostlord';
-
-  return 'ng';
 }
 
 export function getItemGrade(itemDef) {
@@ -413,6 +381,7 @@ export function showItemTooltip(arg1, arg2, state, callbacks = {}) {
 
   const tooltip = findElement('item-tooltip');
   if (!tooltip || !item) return;
+  tooltip.classList?.remove('skill-hover-tooltip');
 
   if (typeof item === 'string') {
     item = { itemId: item, rarity: 'common' };
@@ -909,7 +878,41 @@ export function showItemTooltip(arg1, arg2, state, callbacks = {}) {
 
 export function hideItemTooltip() {
   const tooltip = findElement('item-tooltip');
-  if (tooltip) tooltip.style.display = 'none';
+  if (tooltip) {
+    tooltip.style.display = 'none';
+    tooltip.classList?.remove('skill-hover-tooltip');
+  }
+}
+
+export function positionSkillTooltip(tooltip, event, viewport = globalThis.window) {
+  if (!tooltip || !event) return null;
+
+  const clientX = Number(event.clientX ?? event.pageX);
+  const clientY = Number(event.clientY ?? event.pageY);
+  const viewportWidth = Number(viewport?.innerWidth) || 0;
+  const viewportHeight = Number(viewport?.innerHeight) || 0;
+  const rect = tooltip.getBoundingClientRect();
+  const tipW = rect.width || 270;
+  const tipH = rect.height || 280;
+
+  let posX = (Number.isFinite(clientX) ? clientX : 100) + 16;
+  let posY = (Number.isFinite(clientY) ? clientY : 100) + 12;
+
+  if (viewportWidth && posX + tipW > viewportWidth - 12) {
+    posX = Math.max(10, (Number.isFinite(clientX) ? clientX : 100) - tipW - 14);
+  }
+  if (viewportHeight && posY + tipH > viewportHeight - 12) {
+    posY = Math.max(10, viewportHeight - tipH - 12);
+  }
+
+  tooltip.style.position = 'fixed';
+  tooltip.style.top = '0px';
+  tooltip.style.left = '0px';
+  tooltip.style.zIndex = '999999';
+  tooltip.style.transform = `translate3d(${Math.round(posX)}px, ${Math.round(posY)}px, 0)`;
+  tooltip.classList?.add('skill-hover-tooltip');
+
+  return { x: Math.round(posX), y: Math.round(posY) };
 }
 
 // Inicializa o auto-hide do tooltip ao mover mouse para fora dele
@@ -3683,7 +3686,7 @@ export function renderZoneMap(state, callbacks = {}) {
 const SKILL_LOADOUT_SLOT_ICONS = { basic: '⚔️', core1: '🔥', core2: '🔥', special1: '💠', special2: '💠', signature: '✨', ultimate: '🌟' };
 const SKILL_LOADOUT_SLOT_LABELS = { basic: 'Basic', core1: 'Core 1', core2: 'Core 2', special1: 'Spec 1', special2: 'Spec 2', signature: 'Signat.', ultimate: 'Ultim.' };
 
-export const NEUTRAL_SKILL_PLACEHOLDER = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='8' fill='%231e293b' stroke='%23334155' stroke-width='2'/%3E%3Ctext x='24' y='30' font-size='20' text-anchor='middle' fill='%2394a3b8'%3E⚔%EF%B8%8E%3C/text%3E%3C/svg%3E";
+export const NEUTRAL_SKILL_PLACEHOLDER = 'data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2248%22%20height%3D%2248%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%228%22%20fill%3D%22%231e293b%22%20stroke%3D%22%23334155%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2224%22%20y%3D%2230%22%20font-size%3D%2220%22%20text-anchor%3D%22middle%22%20fill%3D%22%2394a3b8%22%3E%E2%9A%94%EF%B8%8E%3C%2Ftext%3E%3C%2Fsvg%3E';
 
 function renderLoadoutBar(state) {
   const loadout = getLoadout(state);
@@ -7545,9 +7548,10 @@ export function renderForgeSoulCrystals(container, state) {
   const selectedWpn = candidateWeapons.find(w => w.uid === window._selectedSAWeaponUid) || candidateWeapons[0];
   const wpnDef = selectedWpn ? (getItemDef(selectedWpn.itemId) || selectedWpn) : null;
   const grade = selectedWpn ? getElementalItemGrade(selectedWpn) : 'none';
-  const gating = SOUL_CRYSTAL_GRADE_GATING[grade] || SOUL_CRYSTAL_GRADE_GATING.d;
+  const gating = SOUL_CRYSTAL_GRADE_GATING[grade] || null;
   const playerLvl = Number(state.level || 1);
-  const isLvlReady = playerLvl >= gating.minLevel;
+  const isLvlReady = Boolean(gating && playerLvl >= gating.minLevel);
+  const gatingLabel = gating?.label || 'Sem grau elegível';
 
   // Busca cristal no inventário
   const crystal = inv.find(i => (i.itemId?.startsWith('soul_crystal_') || i.isSoulCrystal) && !i.equipped);
@@ -7603,15 +7607,18 @@ export function renderForgeSoulCrystals(container, state) {
 
         ${crystalStage === 14 ? `
           <div style="margin-top:12px; background:rgba(239,68,68,0.12); border:1px solid rgba(239,68,68,0.4); padding:10px 14px; border-radius:6px; font-size:11px; color:#fca5a5;">
-            ⚔️ <strong>DESAFIO ÉPICO (ESTÁGIO 14 ➔ 15):</strong> Derrote um <strong>Epic Boss</strong> (Valakas, Antharas, Baium) com o cristal na mochila para a ressonância final (50% de chance canônica)!
+            ⚔️ <strong>DESAFIO ÉPICO (ESTÁGIO 14 ➔ 15):</strong> Derrote um Epic Boss (Queen Ant, Core, Orfen, Zaken, Baium, Frintezza, Antharas ou Valakas) com o cristal na mochila. Esta extensão do Aden Arena tem 50% de chance de evolução.
           </div>
         ` : ''}
 
         ${!crystal ? `
           <div style="margin-top:12px;">
-            <button onclick="window.buyInitialSoulCrystal()" class="l2-forge-action-btn is-ready" style="max-width:320px;">
-              🛒 Adquirir Soul Crystal Inicial (50.000 Adena)
-            </button>
+            <div style="font-size:11px; color:#94a3b8; margin-bottom:7px;">Escolha a cor do seu cristal inicial:</div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <button onclick="window.buyInitialSoulCrystal('red')" class="l2-forge-action-btn is-ready" style="max-width:220px;">🔴 Vermelho (50.000 Adena)</button>
+              <button onclick="window.buyInitialSoulCrystal('green')" class="l2-forge-action-btn is-ready" style="max-width:220px;">🟢 Verde (50.000 Adena)</button>
+              <button onclick="window.buyInitialSoulCrystal('blue')" class="l2-forge-action-btn is-ready" style="max-width:220px;">🔵 Azul (50.000 Adena)</button>
+            </div>
           </div>
         ` : ''}
       </div>
@@ -7637,7 +7644,7 @@ export function renderForgeSoulCrystals(container, state) {
           <div style="flex:1; min-width:200px;">
             <div style="display:flex; align-items:center; gap:8px;">
               <span style="font-size:13px; font-weight:700; color:#ffd877; font-family:'Cinzel',serif;">${wpnDef ? (selectedWpn.name || wpnDef.name) : 'Nenhuma Arma Selecionada'}</span>
-              <span class="l2-stat-pill" style="font-size:10px; color:#fde047;">${gating.label}</span>
+              <span class="l2-stat-pill" style="font-size:10px; color:${gating ? '#fde047' : '#fca5a5'};">${gatingLabel}</span>
               <span style="font-size:10px; color:#94a3b8;">${selectedWpn?.equipSlotLabel || ''}</span>
             </div>
             <div style="font-size:11px; color:#94a3b8; margin-top:3px;">
@@ -7646,7 +7653,9 @@ export function renderForgeSoulCrystals(container, state) {
                 : 'Nenhuma Habilidade Especial engastada nesta arma.'}
             </div>
             <div style="font-size:10px; color:#cbd5e1; margin-top:4px;">
-              Requisito de Nível: <strong style="color:${isLvlReady ? '#34d399' : '#f87171'};">Lv. ${gating.minLevel}+</strong> | Taxa de Engaste: <strong style="color:#fde047;">${gating.adenaCost.toLocaleString()} Adena</strong>
+              ${gating
+                ? `Requisito de Nível: <strong style="color:${isLvlReady ? '#34d399' : '#f87171'};">Lv. ${gating.minLevel}+</strong> | Taxa de Engaste: <strong style="color:#fde047;">${gating.adenaCost.toLocaleString()} Adena</strong>`
+                : '<strong style="color:#fca5a5;">Armas sem grau elegível não podem receber Soul Crystal.</strong>'}
             </div>
           </div>
           ${selectedWpn?.soulCrystal ? `
@@ -7656,9 +7665,9 @@ export function renderForgeSoulCrystals(container, state) {
           ` : ''}
         </div>
 
-        ${!isLvlReady ? `
+        ${gating && !isLvlReady ? `
           <div style="background:rgba(239,68,68,0.12); border:1px solid rgba(239,68,68,0.4); border-radius:6px; padding:8px 12px; margin-bottom:12px; font-size:11px; color:#fca5a5;">
-            🔒 Nível Insuficiente: Seu personagem é Nível ${playerLvl}. Itens de ${gating.label} requerem Nível ${gating.minLevel} para receber Special Ability (SA).
+            🔒 Nível Insuficiente: Seu personagem é Nível ${playerLvl}. Itens de ${gatingLabel} requerem Nível ${gating.minLevel} para receber Special Ability (SA).
           </div>
         ` : ''}
 
@@ -10895,7 +10904,7 @@ export function openAugmentModal(state) {
           <div style="margin-top:6px; background:#083344; border:1px solid #06b6d4; border-radius:6px; padding:8px; font-size:11.5px; color:#a5f3fc;">
             <div>✨ Augmentação Ativa: <strong>${currentAug.lifeStoneName}</strong></div>
             <div style="margin-top:2px;">Atributos: <strong>${Object.entries(currentAug.stats || {}).map(([k,v]) => `+${v} ${k.toUpperCase()}`).join(', ')}</strong></div>
-            ${currentAug.itemSkill ? `<div style="color:#fde047; font-weight:bold; margin-top:2px;">Habilidade: ${currentAug.itemSkill.name}</div>` : ''}
+            ${currentAug.itemSkill ? `<div style="color:#fde047; font-weight:bold; margin-top:2px;">Habilidade: ${currentAug.itemSkill.name}</div><div style="font-size:10px; color:#cbd5e1;">Potência da rolagem: x${Number(currentAug.itemSkill.powerMultiplier || 1).toFixed(2)}</div>` : ''}
           </div>
         ` : `
           <div style="font-size:11.5px; color:#94a3b8; margin-top:4px;">Nenhuma Pedra da Vida infundida nesta arma ainda.</div>
@@ -10906,15 +10915,18 @@ export function openAugmentModal(state) {
       <div style="margin-bottom:14px;">
         <label style="font-size:11.5px; color:#94a3b8; display:block; margin-bottom:6px;">Escolha a Life Stone para Infundir:</label>
         <div style="display:flex; flex-direction:column; gap:6px;">
-          ${Object.values(LIFE_STONES).map(s => `
+          ${Object.values(LIFE_STONES).map(s => {
+            const requirements = getAugmentationRequirements(s);
+            return `
             <button
               onclick="window._selectedLifeStoneId = '${s.id}'; openAugmentModal(window.getGameState ? window.getGameState() : {})"
               style="padding:10px; font-size:11px; text-align:left; background:${activeStoneId === s.id ? '#164e63' : '#27272a'}; border:1px solid ${activeStoneId === s.id ? '#22d3ee' : '#3f3f46'}; color:#fff; border-radius:6px; cursor:pointer;"
             >
               <div style="font-weight:bold; color:#67e8f9;">${s.name}</div>
-              <div style="font-size:10px; color:#cbd5e1;">${s.desc} | Preço: ${s.priceAdena.toLocaleString()} Adena</div>
+              <div style="font-size:10px; color:#cbd5e1;">${s.desc} | Gemstone ${requirements.gemstoneGrade} ×${requirements.gemstonesNeeded} | Chance de habilidade: ${Math.round(s.skillChance * 100)}% | Potência: ×${s.statMultiplier.toFixed(2)} | ${requirements.adena.toLocaleString()} Adena</div>
             </button>
-          `).join('')}
+          `;
+          }).join('')}
         </div>
       </div>
 

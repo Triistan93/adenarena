@@ -2444,7 +2444,7 @@ skills: [
 
   // ShineMaker (stages 1-3)
   shineMakerS1: {
-    name: 'ShineMaker', parent: 'highElfBase', race: 'highelf', archetype: 'support', stage: 1,
+    name: 'ShineMaker', parent: 'shineMakerBase', race: 'dwarf', archetype: 'support', stage: 1,
     base: { atk: 8, def: 10, hp: 110, mp: 110, matk: 24, mdef: 18, eva: 6, crit: 4 },
     skills: [
       { name: "Light Burst",        type: "Ativo",     rarity: "1★", effect: "Dano sagrado 190%", cooldown: "10s", duration: null, note: "Skill permanece após trocar de classe" },
@@ -2455,7 +2455,7 @@ skills: [
   },
 
   shineMakerS2: {
-    name: 'ShineMaker', parent: 'shineMakerS1', race: 'highelf', archetype: 'support', stage: 2,
+    name: 'ShineMaker', parent: 'shineMakerS1', race: 'dwarf', archetype: 'support', stage: 2,
     base: { atk: 14, def: 22, hp: 210, mp: 220, matk: 52, mdef: 42, eva: 10, crit: 6 },
     skills: [
       { name: "Prismatic Ray",       type: "Ativo",     rarity: "2★", effect: "Dano sagrado 280% + slow 30% 4s", cooldown: "16s", duration: "4s", note: "Skill permanece após trocar de classe" },
@@ -2468,7 +2468,7 @@ skills: [
   },
 
   shineMakerS3: {
-    name: 'ShineMaker', parent: 'shineMakerS2', race: 'highelf', archetype: 'support', stage: 3,
+    name: 'ShineMaker', parent: 'shineMakerS2', race: 'dwarf', archetype: 'support', stage: 3,
     desc: 'Criadora de luz — suporte sagrado com dano ofensivo.',
     base: { atk: 22, def: 38, hp: 350, mp: 400, matk: 98, mdef: 78, eva: 14, crit: 8 },
     skills: [
@@ -2693,8 +2693,8 @@ skills: [
     ]
   },
   ertheiaWarrior: {
-    name: 'Eviscerator', parent: 'marauder', race: 'ertheia', archetype: 'fighter', stage: 2,
-    desc: 'Evisceradora — guerreira marcial letal que corta o ar e destrói defesas.',
+    name: 'Ripper', parent: 'marauder', race: 'ertheia', archetype: 'fighter', stage: 2,
+    desc: 'Ripper — combatente Ertheia de curta distância, especialista em golpes físicos rápidos.',
     base: { atk: 70, def: 32, hp: 440, mp: 95, eva: 28, crit: 24, mdef: 28 },
     skills: [
       { name: "Gravity Shockwave",            type: "Ativo",     rarity: "3★", effect: "Onda de choque gravitacional: dano AoE 360% + knockback", cooldown: "16s" },
@@ -2715,10 +2715,10 @@ skills: [
     ]
   },
 
-  // ─── SAYHA SEEKER & SEER (Ertheia Wind Mage) ───
+  // ─── ERTHEIA WIZARD → CLOUD BREAKER → STRATOMANCER → SAYHA'S SEER ───
   sayhaMageBase: {
-    name: 'Sayha Mage', parent: null, race: 'ertheia', archetype: 'mage', stage: 0,
-    desc: 'Mística Ertheia — invocadora elemental dos vendavais de Sayha.',
+    name: 'Ertheia Wizard', parent: null, race: 'ertheia', archetype: 'mage', stage: 0,
+    desc: 'Maga Ertheia — conjuradora que canaliza as forças elementais de Sayha.',
     base: { atk: 10, def: 10, hp: 100, mp: 130, matk: 26, mdef: 18, eva: 10, crit: 6 },
     skills: [
       { name: "Sayha's Wind",                 type: "Ativo",     rarity: "1★", effect: "Rajada de vento cortante: dano mágico 160%", cooldown: "6s" },
@@ -2728,8 +2728,8 @@ skills: [
     ]
   },
   sayhaSeer: {
-    name: 'Sayha Seeker', parent: 'sayhaMageBase', race: 'ertheia', archetype: 'mage', stage: 1,
-    desc: 'Buscadora de Sayha — canalizadora de correntes de ar e tempestades.',
+    name: 'Cloud Breaker', parent: 'sayhaMageBase', race: 'ertheia', archetype: 'mage', stage: 1,
+    desc: 'Cloud Breaker — maga Ertheia que domina as forças elementais de Sayha.',
     base: { atk: 14, def: 16, hp: 170, mp: 210, matk: 55, mdef: 32, eva: 16, crit: 8 },
     skills: [
       { name: "Sayha's Wind Strike",          type: "Ativo",     rarity: "1★", effect: "Dano de vento concentrado 210%", cooldown: "7s" },
@@ -2738,8 +2738,8 @@ skills: [
     ]
   },
   windRiderErth: {
-    name: 'Sayha Seeker', parent: 'sayhaSeer', race: 'ertheia', archetype: 'mage', stage: 2,
-    desc: 'Condutora dos Ventos — maga que comanda tufões devastadores.',
+    name: 'Stratomancer', parent: 'sayhaSeer', race: 'ertheia', archetype: 'mage', stage: 2,
+    desc: 'Stratomancer — maga Ertheia que manipula as camadas e correntes do ar.',
     base: { atk: 22, def: 28, hp: 320, mp: 360, matk: 98, mdef: 60, eva: 24, crit: 12 },
     skills: [
       { name: "Typhoon Strike",               type: "Ativo",     rarity: "3★", effect: "Tufão cortante: dano AoE de vento 360%", cooldown: "16s" },
@@ -2748,14 +2748,14 @@ skills: [
     ]
   },
   sayhaSeeker: {
-    name: 'Sayha Seeker', parent: 'windRiderErth', race: 'ertheia', archetype: 'mage', stage: 3,
-    desc: 'Mestra Suprema de Sayha — soberana dos vendavais e tempestades de Aden.',
+    name: "Sayha's Seer", parent: 'windRiderErth', race: 'ertheia', archetype: 'mage', stage: 3,
+    desc: "Sayha's Seer — classe mágica Ertheia que canaliza o poder de Sayha.",
     base: { atk: 38, def: 48, hp: 580, mp: 580, matk: 175, mdef: 100, eva: 34, crit: 18 },
     skills: [
       { name: "Sayha Ultimate Tempest",       type: "Ativo",     rarity: "4★", effect: "Tempestade Suprema de Sayha: dano AoE 820% + dispersão e retardo em massa", cooldown: "60s" },
       { name: "Spacetime Vortex",             type: "Ativo",     rarity: "4★", effect: "Vórtice dimensional de vento: dano 860% com alta penetração mágica", cooldown: "120s" },
       { name: "Wind Spirit Transcendence",    type: "Passivo",   rarity: "4★", effect: "+25% M.ATK, +20% Dano Crítico Mágico, +20% Esquiva Permanente", cooldown: null },
-      { name: "Sayha Seeker Ultimate Harmony", type: "Self-Buff", rarity: "4★", effect: "+65% M.ATK, +45% Dano de Vento, +35% Velocidade de Cast por 30 min", cooldown: "90 min" }
+      { name: "Sayha's Seer Ultimate Harmony", type: "Self-Buff", rarity: "4★", effect: "+65% M.ATK, +45% Dano de Vento, +35% Velocidade de Cast por 30 min", cooldown: "90 min" }
     ]
   }
 };

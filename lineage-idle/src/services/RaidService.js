@@ -125,6 +125,8 @@ export function startRaidBoss(state, raidId, callbacks = {}) {
 
   state.activeMonster = {
     ...bossTemplate,
+    id: raidId,
+    key: raidId,
     _maxHp: bossTemplate.hp,
     hp: bossTemplate.hp,
     _stunnedUntil: 0,

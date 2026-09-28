@@ -176,6 +176,9 @@ const V2_STARTER_MAP = {
   'spirit_2': 'elementWeaverS2',
   'spirit_3': 'elementWeaver',
 
+  'werewolf_0': 'wargS0',
+  'werewolf_1': 'wargS1',
+  'werewolf_2': 'wargS2',
   'werewolf_3': 'warg',
 
   'artisan': 'artisanDwarf',
@@ -230,51 +233,24 @@ const V2_STARTER_MAP = {
   'arbalester': 'soulRanger'
 };
 
+const DEATH_KNIGHT_CALL_SKILL_BY_RACE = Object.freeze({
+  human: 'call_of_flame',
+  elf: 'call_of_frost',
+  darkelf: 'call_of_lightning'
+});
+
+const DEATH_KNIGHT_CALL_SKILL_IDS = new Set(Object.values(DEATH_KNIGHT_CALL_SKILL_BY_RACE));
+
+function resolveDeathKnightCallSkill(classId, race, v2ClassId) {
+  if (v2ClassId !== 'deathMessenger' && v2ClassId !== 'deathKnight') return null;
+
+  const classRace = String(classId || '').toLowerCase().match(/^(human|elf|delf)_deathknight_[23]$/)?.[1];
+  const normalizedRace = String(race || classRace || '').toLowerCase().trim().replace(/[-_\s]+/g, '');
+  const canonicalRace = normalizedRace === 'delf' || normalizedRace === 'darkelf' ? 'darkelf' : normalizedRace;
+  return DEATH_KNIGHT_CALL_SKILL_BY_RACE[canonicalRace] || null;
+}
+
 export const V2_CONTENT_GAP_CLASSES = {
-  'werewolf_0': {
-    gapType: 'V2_NODE_ABSENT',
-    reason: 'Nó V2 ausente: dataset L2Wiki contém apenas 1 habilidade de Estágio 0 (88401 Direct Strike); árvore de 5 habilidades ausente no catálogo V2',
-    authorizedSkillIds: ['direct_strike']
-  },
-  'werewolf_1': {
-    gapType: 'V2_NODE_ABSENT',
-    reason: 'Nó V2 ausente: Warg de Estágio 1 (Lycanthrope) ausente no catálogo V2; autorizado conjunto canônico de Estágio 1',
-    authorizedSkillIds: [
-      'direct_strike',
-      'quick_dash',
-      'wind_walk',
-      'death_whisper',
-      'clarity'
-    ]
-  },
-  'werewolf_2': {
-    gapType: 'V2_NODE_ABSENT',
-    reason: 'Nó V2 ausente: Warg de Estágio 2 (Berserk Wolf) ausente no catálogo V2; autorizado conjunto canônico de Estágio 2',
-    authorizedSkillIds: [
-      'direct_strike',
-      'quick_dash',
-      'wind_walk',
-      'death_whisper',
-      'clarity',
-      'upward_strike',
-      'howling',
-      'haste',
-      'acumen',
-      'berserker_spirit',
-      'wild_magic',
-      'magic_barrier',
-      'hp_recovery',
-      'mp_recovery',
-      'potion_mastery',
-      'unleashed_potential',
-      'divine_inspiration'
-    ]
-  },
-  'shineMakerBase': {
-    gapType: 'V2_NODE_ABSENT',
-    reason: 'Nó V2 ausente: ShineMaker Anão de Estágio 0 não presente no dataset L2Wiki nem no catálogo V2',
-    authorizedSkillIds: []
-  },
   'spirit_0': {
     gapType: 'V2_NODE_ABSENT',
     reason: 'Nó V2 ausente: dataset L2Wiki contém apenas 2 habilidades de Estágio 0 (87701 Fire Sphere, 87702 Ice Sphere); árvore de 5 habilidades ausente no catálogo V2',
@@ -365,7 +341,15 @@ export function resolveV2ClassContext(classId, race = null) {
   }
 
   if (v2Def && v2Id) {
+    const requiredRace = String(v2Def.race || '').toLowerCase().replace(/[-_\s]+/g, '');
+    if (requiredRace && normRace && requiredRace !== normRace) {
+      return {
+        status: 'UNRESOLVED', originalClassId, race, v2ClassId: null, v2ClassDef: null,
+        authorizedSkillIds: [], contentGapReason: `Class ${v2Id} is restricted to race ${v2Def.race}`
+      };
+    }
     const authorized = new Set(v2Def.skillIds || []);
+    const classSkills = new Set(v2Def.skillIds || []);
     let curr = v2Def;
     const visited = new Set([curr.id]);
     while (curr.parentClass && CANONICAL_CLASS_REGISTRY_V2[curr.parentClass] && !visited.has(curr.parentClass)) {
@@ -375,13 +359,22 @@ export function resolveV2ClassContext(classId, race = null) {
         for (const sid of curr.skillIds) authorized.add(sid);
       }
     }
+    const raceSpecificCallSkillId = resolveDeathKnightCallSkill(originalClassId, race, v2Id);
+    if (raceSpecificCallSkillId) {
+      for (const callSkillId of DEATH_KNIGHT_CALL_SKILL_IDS) authorized.delete(callSkillId);
+      for (const callSkillId of DEATH_KNIGHT_CALL_SKILL_IDS) classSkills.delete(callSkillId);
+      authorized.add(raceSpecificCallSkillId);
+      if (classSkills.size !== (v2Def.skillIds || []).length) classSkills.add(raceSpecificCallSkillId);
+    }
     return {
       status: 'RESOLVED',
       originalClassId,
       race,
       v2ClassId: v2Id,
       v2ClassDef: v2Def,
-      authorizedSkillIds: Array.from(authorized)
+      classSkillIds: Array.from(classSkills),
+      authorizedSkillIds: Array.from(authorized),
+      raceSpecificCallSkillId
     };
   }
 
@@ -819,6 +812,9 @@ export function isSkillInV2Lineage(classId, skillId, race = null) {
 
   const v2Ctx = resolveV2ClassContext(charClass, charRace);
   if (v2Ctx.status === 'RESOLVED') {
+    if (DEATH_KNIGHT_CALL_SKILL_IDS.has(skillId) && v2Ctx.raceSpecificCallSkillId && skillId !== v2Ctx.raceSpecificCallSkillId) {
+      return false;
+    }
     if (v2Ctx.authorizedSkillIds.includes(skillId)) return true;
     if (v2Ctx.v2ClassDef) {
       const queue = [v2Ctx.v2ClassDef.id];

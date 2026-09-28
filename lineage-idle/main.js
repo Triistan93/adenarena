@@ -58,6 +58,9 @@ import {
   getClass,
   getZoneDropTier,
   getEquippedSetCount,
+  getEquippedArmorType,
+  hasEquippedShield,
+  getEquippedWeaponInfo,
   ASTRAL_NODES
 } from './src/engine/StatsEngine.js';
 
@@ -205,10 +208,12 @@ import { StaggerEngine } from './src/engine/StaggerEngine.js';
 import {
   COMBAT_CONFIG,
   calculateDefenseMitigation,
+  calculatePlayerMissChance,
   calculatePhysicalDamage,
   calculateMagicDamage,
   calculateHealAmount,
   calculateVampiricHeal,
+  resolvePlayerBlock,
   canCastSkill,
   consumeSkillMp,
   getSkillMpCost,
@@ -318,14 +323,16 @@ import {
   openBatchSalvageModal,
   openBatchCrystallizeModal,
   closeInventoryPreviewModal,
-  renderItemDetailAndComparison
+  renderItemDetailAndComparison,
+  positionSkillTooltip as uiPositionSkillTooltip
 } from './src/ui/GameUI.js';
 import { CashShopService } from './src/services/CashShopService.js';
 import { NoblesseService } from './src/services/NoblesseService.js';
 import { OlympiadService } from './src/services/OlympiadService.js';
 import { ClanService } from './src/services/ClanService.js';
 import { SkillEnchantService } from './src/services/SkillEnchantService.js';
-import { AugmentationService } from './src/services/AugmentationService.js';
+import { AugmentationService, getEquippedAugmentationSkills, getAugmentationStunChancePercent, processAugmentationCombatTick } from './src/services/AugmentationService.js';
+import { applyPlayerBasicAttackDamageBonus, applyPlayerBasicCriticalDamageReduction, applyPlayerWeaponDamageReduction, applyPlayerBuffHitControlProc, applyPlayerBuffHitHealProc, applyPlayerBuffLifeDrainProc, applyPlayerDamageTakenReduction, applyPlayerHealingReceivedBonus, applyPlayerPveDamageBonus, applyPlayerSkillPowerBonus, applySkillBuffDurationBonus, applySkillDamageOverTime, applySkillTargetDebuff, applyTargetDamageTakenBonus, clearPlayerCombatDebuffs, getActivePlayerCombatDebuffIds, getPlayerBuffShockChanceBonus, getDebuffedMonsterAttack, getDebuffedMonsterAttackSpeed, getDebuffedMonsterDefense, getHpPotionHealAmount, isMonsterActionDisabled, isHpRecoveryPotion, isMonsterMagicSkillSilenced, processSkillDamageOverTime, resolveDebuffedMonsterSkillCooldownMs, resolveDwarvenWeaponMasteryStunChancePercent, resolveMechanicalMasterpieceHit, resolvePlayerBasicAttackIntervalMs, resolvePlayerDamageReflection, resolvePhysicalSkillCriticalDamage, resolveSkillBuffDurationMs, resolveSkillBuffStats, resolveSkillDamageOverTime, resolveSkillFixedHeal, resolveSkillHealPower, resolveSkillHpSacrificeCost, resolveSkillMpRecoveryAmount, resolveSkillSelfHealPercent, resolveSkillTargetDebuffStats, shouldEvadeMonsterSkill } from './src/services/SkillEffectService.js';
 import { SevenSignsService } from './src/services/SevenSignsService.js';
 import { SEAL_STONES, NECROPOLIS_ZONES } from './src/data/seven_signs.js';
 import { FortressService } from './src/services/FortressService.js';
@@ -1401,7 +1408,7 @@ function crystallizeSelectedItems() {
 }
 window.crystallizeSelectedItems = crystallizeSelectedItems;
 
-function useItem(uid) {
+export function useItem(uid) {
   if (typeof hideItemTooltip === 'function') hideItemTooltip();
   const idx = state.inventory.findIndex(i => i.uid === uid);
   if (idx < 0) return;
@@ -1442,13 +1449,14 @@ function useItem(uid) {
   const fmtDur = (s) => s >= 3600 ? `${(s/3600).toFixed(s%3600?1:0)}h` : s >= 60 ? `${Math.round(s/60)}m` : `${s}s`;
   
   // ── HP Potions ─────────────────────────────────────────────────────────────
-  if (def.type === 'heal' || item.itemId.startsWith('hp_potion')) {
+  if (def.type === 'heal' || isHpRecoveryPotion(item.itemId, def)) {
     const potNow = Date.now();
     if (state._lastHpPotTime && (potNow - state._lastHpPotTime) < 1500) {
       return false; // Respeita GCD de 1.5s
     }
     state._lastHpPotTime = potNow;
-    const healAmt = def.amount || def.healAmt || 100;
+    const baseHealAmt = def.amount || def.healAmt || 100;
+    const healAmt = isHpRecoveryPotion(item.itemId, def) ? getHpPotionHealAmount(baseHealAmt, getStats()) : baseHealAmt;
     state.hp = Math.min(state.maxHp, state.hp + healAmt);
     log(`✨ Usou ${def.name}: +${healAmt} HP`, 'heal');
     if (typeof floatText === 'function') floatText(`+${healAmt} HP`, 'sf-heal');
@@ -2469,8 +2477,9 @@ function showSkillTooltip(skillId, e) {
 
   tt.style.display = 'block';
   tt.style.zIndex = '999999';
-  tt.onmouseenter = cancelHideTooltip;
-  tt.onmouseleave = scheduleHideTooltip;
+  tt.onmouseenter = null;
+  tt.onmouseleave = null;
+  uiPositionSkillTooltip(tt, e);
 }
 
 function updateShopUI() {
@@ -5187,6 +5196,14 @@ function getEquippedProcBonuses() {
     });
   }
 
+  procs.stun_chance += Number(engineGetTotalEquipBonuses(state).stunChance) || 0;
+  procs.stun_chance += getAugmentationStunChancePercent(state);
+  procs.stun_chance += getPlayerBuffShockChanceBonus(state.buffs);
+  procs.stun_chance += resolveDwarvenWeaponMasteryStunChancePercent(
+    state.skills?.dwarven_weapon_mastery,
+    getEquippedWeaponInfo(state).category
+  );
+
   return procs;
 }
 
@@ -5194,7 +5211,14 @@ function dealDamage(target, amount, type = 'physical') {
   const rawAmount = Number(amount) || 0;
   const isMagic = type === 'magic';
   const def = isMagic ? (Number(target.mdef) || 0) : (Number(target.def) || 0); 
-  return calculateDefenseMitigation(rawAmount, def, isMagic);
+  return applyTargetDamageTakenBonus(calculateDefenseMitigation(rawAmount, def, isMagic), target);
+}
+
+function getSkillDebuffDefenseTarget(monster, now = Date.now()) {
+  return {
+    ...monster,
+    ...getDebuffedMonsterDefense(monster, now)
+  };
 }
 
 const goldEvents = []; 
@@ -5545,6 +5569,15 @@ export function isMagicSkillDef(def, skillId) {
   return isMagicSkill(def?.name || skillId, def, null, state?.class);
 }
 
+function applyActiveBuffLifeDrain(damage, stats, now = Date.now()) {
+  const healed = applyPlayerBuffLifeDrainProc(damage, state, stats?.maxHp || state.maxHp, now);
+  if (healed > 0) {
+    log(`🦇 Buff vampírico absorveu ${healed} HP.`, 'heal');
+    if (typeof stageFloat === 'function') stageFloat(`+${healed} HP`, 'sf-heal', 'left');
+  }
+  return healed;
+}
+
 export function attackMonster() {
   if (typeof window !== 'undefined') window.attackMonster = attackMonster;
   if (state.isCombatActive === false) return;
@@ -5565,6 +5598,15 @@ export function attackMonster() {
   }
 
   checkBuffsExpire();
+  const augmentationActivations = processAugmentationCombatTick(state, Date.now());
+  for (const activation of augmentationActivations) {
+    const itemSkill = getEquippedAugmentationSkills(state).find(skill => skill.id === activation.id);
+    if (activation.healed) {
+      log(`💚 ${itemSkill?.name || 'Habilidade da augmentação'} recuperou ${activation.healed} HP.`, 'heal');
+    } else if (itemSkill) {
+      log(`✨ ${itemSkill.name} ativada.`, 'rarity-rare');
+    }
+  }
   const stats = getStats(), monster = state.activeMonster || MONSTERS[state.target]; if (!monster) return;
   if (monster.isRaid) {
     serviceProcessRaidBossMechanics(state, {
@@ -5582,6 +5624,33 @@ export function attackMonster() {
   }
   combatTick++;
 
+  // Timed skill damage is advanced through the same production combat tick as bleed.
+  for (const tick of processSkillDamageOverTime(monster, Date.now())) {
+    const hpBeforeDotTick = monster.hp;
+    monster.hp -= tick.damage;
+    log(`❄️ ${tick.skillId}: ${monster.name} sofreu ${tick.damage} de dano contínuo!`, 'combat');
+    if (typeof stageFloat === 'function') stageFloat(`-${tick.damage} FROST`, 'sf-crit', 'right');
+    combatEvents.emit(CombatEventType.SKILL_DAMAGE, {
+      skillId: tick.skillId,
+      target: 'monster',
+      targetPos: getCombatTargetPoint(),
+      damage: tick.damage,
+      isCrit: false,
+      source: 'damage_over_time',
+      hpBefore: hpBeforeDotTick,
+      hpAfter: monster.hp
+    });
+    if (monster.hp <= 0) {
+      const killingSkill = SKILL_DEFS[tick.skillId] ? { id: tick.skillId, def: SKILL_DEFS[tick.skillId] } : null;
+      monster._killingSkill = killingSkill;
+      monster._overkillDmg = Math.abs(monster.hp);
+      combatEvents.emit(CombatEventType.SKILL_KILL, { target: 'monster', targetPos: getCombatTargetPoint(), overkill: monster._overkillDmg });
+      processMonsterDefeat(monster, killingSkill);
+      updateStatsUI();
+      return;
+    }
+  }
+
   // Processamento de Sangramento Contínuo (Bleed - Caçador das Sombras)
   if (monster._bleedTicks && monster._bleedTicks > 0) {
     monster._bleedTicks--;
@@ -5591,13 +5660,13 @@ export function attackMonster() {
     if (typeof stageFloat === 'function') stageFloat(`-${bDmg} BLEED`, 'sf-crit', 'right');
   }
 
-  if (stats.regenHp > 0) {
+  if (stats.regenHp > 0 || stats.hpRegenFlat > 0) {
     state._regenAcc = (state._regenAcc || 0) + 0.2; 
-    if (state._regenAcc >= 10) { state._regenAcc = 0; const heal = Math.max(1, Math.floor(state.maxHp * stats.regenHp)); if (state.hp < state.maxHp) { state.hp = Math.min(state.maxHp, state.hp + heal); log(`Holy Light: +${heal} HP`, 'heal'); } }
+    if (state._regenAcc >= 10 - 1e-9) { state._regenAcc = 0; const heal = Math.max(1, Math.floor(state.maxHp * stats.regenHp) + (Number(stats.hpRegenFlat) || 0)); if (state.hp < state.maxHp) { state.hp = Math.min(state.maxHp, state.hp + heal); log(`${stats.hpRegenFlat > 0 ? 'HP Recovery' : 'Holy Light'}: +${heal} HP`, 'heal'); } }
   }
   if (stats.mpRegen > 0) {
     state._mpRegenAcc = (state._mpRegenAcc || 0) + 0.2;
-    if (state._mpRegenAcc >= 5) { state._mpRegenAcc = 0; if (state.mp < state.maxMp) { state.mp = Math.min(state.maxMp, state.mp + stats.mpRegen); } }
+    if (state._mpRegenAcc >= 5 - 1e-9) { state._mpRegenAcc = 0; if (state.mp < state.maxMp) { state.mp = Math.min(state.maxMp, state.mp + stats.mpRegen); } }
   }
   const apSettings = state.autoPotionSettings = state.autoPotionSettings || {
     hpThreshold: 0.6,
@@ -5610,7 +5679,7 @@ export function attackMonster() {
     const potNow = Date.now();
     if (apSettings.autoHp !== false && state.hp < state.maxHp * (apSettings.hpThreshold || 0.6)) {
       if (!state._lastHpPotTime || (potNow - state._lastHpPotTime) >= 1500) {
-        const potIds = ['hp_potion_xl','hp_potion_l','hp_potion_m','hp_potion_s'];
+        const potIds = ['greater_healing_potion','hp_potion_xl','hp_potion_l','hp_potion_m','hp_potion_s'];
         for (const pid of potIds) {
           const it = state.inventory.find(i => i.itemId === pid && ((i.count ?? i.qty ?? 1) > 0));
           if (it) { useItem(it.uid); break; }
@@ -5630,7 +5699,7 @@ export function attackMonster() {
 
   // 3. Ação Autônoma Periódica do Monstro (Cadência própria de ataque desacoplada do jogador)
   if (monster && monster.hp > 0 && !monster.isRaid) {
-    const enemyAtkInterval = Math.max(400, Math.round(1500 / (monster.atkSpd || 1.0)));
+    const enemyAtkInterval = Math.max(400, Math.round(1500 / getDebuffedMonsterAttackSpeed(monster)));
     const enemyAtkTicks = Math.max(1, Math.round(enemyAtkInterval / 200));
     if (combatTick % enemyAtkTicks === 0) {
       monsterAttack(monster);
@@ -5704,17 +5773,51 @@ export function attackMonster() {
       continue;
     }
 
-    const isBuff = skill.def.type === 'buff' || skill.def.type === 'harmony' || skill.def.type === 'toggle' || skill.def.effect === 'warcry';
-    const isHeal = skill.def.effect === 'heal' || skill.def.type === 'heal' || skill.id.includes('heal') || skill.id.includes('curation');
+    const fixedHealAmount = resolveSkillFixedHeal(skill.def);
+    const skillHealPower = resolveSkillHealPower(skill.def);
+    const isMpConversion = skill.id === 'body_to_mind';
+    const isHybridHealBuff = skill.id === 'reflecting_illusion';
+    const isHeal = skill.def.effect === 'heal' || skill.def.type === 'heal' || skill.id.includes('heal') || skill.id.includes('curation') || fixedHealAmount !== null || skillHealPower !== null || isHybridHealBuff;
+    const skillHpCost = resolveSkillHpSacrificeCost(skill.def, stats.maxHp, state.hp);
+    if (isMpConversion && (state.mp >= stats.maxMp || skillHpCost <= 0)) continue;
+    if (['sacrifice', 'touch_of_death'].includes(skill.id) && skillHpCost <= 0) continue;
+    const activePlayerDebuffs = getActivePlayerCombatDebuffIds(state, realNow);
+    if (isHeal && state.hp >= stats.maxHp && activePlayerDebuffs.length === 0) continue;
+    const targetDebuffStats = !isHeal ? resolveSkillTargetDebuffStats(skill.def) : null;
+    const isDirectDamageSkill = skill.def.effect === 'dmg' || Number(skill.def.damage) > 0 || Number(skill.def.gameplay?.damageMultiplier) > 0 || Boolean(resolveSkillDamageOverTime(skill.def));
+    const isTargetDebuff = Boolean(targetDebuffStats) && !isDirectDamageSkill;
+    // A few legacy heal definitions carry type="buff"; route them to healing
+    // before requiring a self-buff stat contract.
+    const isBuff = (!isHeal || isHybridHealBuff) && !isMpConversion && !isTargetDebuff && !isDirectDamageSkill && (skill.def.type === 'buff' || skill.def.type === 'harmony' || skill.def.type === 'toggle' || skill.def.effect === 'warcry');
 
     // 1. Se a habilidade é um Buff/Warcry, verifica se o efeito ainda está ativo!
     if (isBuff) {
-      const activeBuff = state.buffs && (state.buffs[skill.id] || state.buffs['warcry']);
+      const activeBuff = state.buffs && (state.buffs[skill.id] || (skill.id === 'war_cry' ? state.buffs['warcry'] : null));
       if (activeBuff && activeBuff.until > realNow) {
         // Buff ainda ativo no personagem, não re-convoque nem solte novamente!
         continue;
       }
     }
+
+    if (isTargetDebuff) {
+      monster._skillDebuffs = monster._skillDebuffs || {};
+      const activeDebuff = monster._skillDebuffs[skill.id];
+      if (activeDebuff && activeDebuff.until > realNow) continue;
+    }
+
+    let skillBuffStats = null;
+    if (isBuff) {
+      const equippedWeapon = getEquippedWeaponInfo(state);
+      skillBuffStats = resolveSkillBuffStats(skill.def, skill.lvl, {
+        armorType: getEquippedArmorType(state),
+        weaponCategory: equippedWeapon.category,
+        isTwoHanded: equippedWeapon.isTwoHanded,
+        weaponId: equippedWeapon.weaponId,
+        weaponName: equippedWeapon.weaponName,
+        hasShield: hasEquippedShield(state)
+      });
+    }
+    if (isBuff && !skillBuffStats) continue;
 
     state.stats = stats;
     const canCast = canCastSkill(state, skill.def, realNow, state._cds);
@@ -5727,13 +5830,45 @@ export function attackMonster() {
       continue;
     }
       
-    if (isBuff) {
+    if (isMpConversion) {
+        const mpRecovered = resolveSkillMpRecoveryAmount(skill.def, stats.maxMp, state.mp);
+        if (mpRecovered <= 0) continue;
+        state.hp = Math.max(1, state.hp - skillHpCost);
+        state.mp = Math.min(stats.maxMp, state.mp + mpRecovered);
+        log(`🌀 ${skill.def.name}: sacrificou ${skillHpCost} HP e recuperou ${mpRecovered} MP.`, 'heal');
+        floatText(`-${skillHpCost} HP / +${mpRecovered} MP`, 'sf-heal');
+        const source = getHeroBasePoint();
+        combatEvents.emit(CombatEventType.SKILL_CAST, {
+          skillId: skill.id,
+          skillName: skill.def.name,
+          caster: 'hero',
+          target: 'hero',
+          sourcePos: source,
+          targetPos: source,
+          def: skill.def
+        });
+      } else if (isTargetDebuff) {
+        if (skillHpCost > 0) state.hp = Math.max(1, state.hp - skillHpCost);
+        const targetDebuffApplication = applySkillTargetDebuff(monster, skill.def, realNow, Math.random(), getEquippedProcBonuses().stun_chance);
+        if (targetDebuffApplication.stats) {
+          const durationMs = targetDebuffApplication.effect.until - realNow;
+          const durationSeconds = durationMs / 1000;
+          log(`🌀 ${skill.def.name}: efeito aplicado em ${monster.name} por ${durationSeconds}s.`, 'rarity-rare');
+          floatText(skill.def.name, 'sf-block');
+        } else {
+          log(`🌀 ${skill.def.name}: o efeito de controle não foi ativado.`, 'rarity-common');
+        }
+        castedSkillThisTick = true;
+      } else if (isBuff) {
         state.buffs = state.buffs || {};
-        const buffDuration = 60000; // 60 segundos de efeito
-        const buffAmt = window.SkillScaling ? window.SkillScaling.getSkillBuffAtLevel(skill.lvl) : (0.20 + (skill.lvl * 0.05));
-        const buffObj = { amount: buffAmt, until: realNow + buffDuration, effect: 'warcry' };
+        const buffDuration = applySkillBuffDurationBonus(resolveSkillBuffDurationMs(skill.def) ?? 60000, stats);
+        const buffObj = { skillBuffStats, until: realNow + buffDuration, source: 'class_skill' };
         state.buffs[skill.id] = buffObj;
-        state.buffs['warcry'] = buffObj;
+        if (isHybridHealBuff) {
+          const healAmt = Math.min(Math.max(0, stats.maxHp - state.hp), Math.floor(stats.maxHp * 0.50));
+          state.hp = Math.min(stats.maxHp, state.hp + healAmt);
+          log(`✨ ${skill.def.name} restaurou ${healAmt} HP e ativou sua proteção.`, 'heal');
+        }
         log(`🗣 ${skill.def.name}! ${skill.def.info || 'Buff Ativo por 60s'}`, 'rarity-rare');
         floatText(skill.def.name, 'float-epic');
 
@@ -5770,10 +5905,19 @@ export function attackMonster() {
           def: skillDefForVfx
         });
       } else if (isHeal) {
-        const healAmt = window.SkillScaling ? window.SkillScaling.getSkillHealAtLevel(stats.maxHp, skill.lvl, stats.matk) : Math.floor(stats.maxHp * (0.25 + skill.lvl * 0.05));
-        state.hp = Math.min(stats.maxHp, state.hp + healAmt);
-        log(`✨ ${skill.def.name}! Curou ${healAmt} HP`, 'heal');
-        floatText(`+${healAmt} HP`, 'sf-heal');
+        if (skillHpCost > 0) state.hp = Math.max(1, state.hp - skillHpCost);
+        const healAmt = fixedHealAmount ?? (skillHealPower !== null
+          ? calculateHealAmount({ maxHp: stats.maxHp, matk: stats.matk, skillLvl: skill.lvl, pwr: skillHealPower })
+          : (window.SkillScaling ? window.SkillScaling.getSkillHealAtLevel(stats.maxHp, skill.lvl, stats.matk) : Math.floor(stats.maxHp * (0.25 + skill.lvl * 0.05))));
+        const receivedHeal = applyPlayerHealingReceivedBonus(healAmt, stats);
+        state.hp = Math.min(stats.maxHp, state.hp + receivedHeal);
+        log(`✨ ${skill.def.name}! ${skillHpCost > 0 ? `Sacrificou ${skillHpCost} HP e ` : ''}curou ${receivedHeal} HP`, 'heal');
+        floatText(`${skillHpCost > 0 ? `-${skillHpCost} / ` : ''}+${receivedHeal} HP`, 'sf-heal');
+        const healEffectText = [skill.def.canonicalEffect, skill.def.desc, skill.def.effectText, skill.def.info].filter(Boolean).join(' ');
+        if (skill.id === 'shineMakerS1_purifying_light' || /removes? debuffs? from the target/i.test(healEffectText)) {
+          const removedDebuffs = clearPlayerCombatDebuffs(state, realNow);
+          if (removedDebuffs.length > 0) log(`🧹 ${skill.def.name} removeu ${removedDebuffs.length} efeito(s) negativo(s).`, 'heal');
+        }
 
         // Dispara VFX Premium de Cura Sagrada (ancorado aos pés do herói)
         const source = getHeroBasePoint();
@@ -5799,12 +5943,26 @@ export function attackMonster() {
           targetPos: source,
           def: skillDefForVfx
         });
+        castedSkillThisTick = true;
       } else {
         const useMagicSkill = isMagicSkillDef(skill.def, skill.id);
         const type = useMagicSkill ? 'magic' : 'physical';
         const baseSkillDmg = useMagicSkill ? stats.matk : stats.atk;
         const skillPwr = window.SkillScaling ? window.SkillScaling.getSkillPwrAtLevel(skill.def, skill.lvl) : (Number(skill.def.pwr) || 30);
-        let rawSDmg = dealDamage(monster, baseSkillDmg * (skillPwr / 10), type);
+        const multiHitCount = skill.id === 'powerful_fists' ? 2 : 1;
+        const defenseIgnorePercent = skill.id === 'powerful_fists' && !useMagicSkill ? 0.25 : 0;
+        const skillDamageTarget = getSkillDebuffDefenseTarget(monster);
+        const targetDefenseBefore = useMagicSkill ? skillDamageTarget.mdef : skillDamageTarget.def;
+        if (defenseIgnorePercent > 0) skillDamageTarget.def = Math.floor(skillDamageTarget.def * (1 - defenseIgnorePercent));
+        const effectiveDefense = useMagicSkill ? skillDamageTarget.mdef : skillDamageTarget.def;
+        let rawSDmg = dealDamage(skillDamageTarget, applyPlayerSkillPowerBonus(baseSkillDmg * (skillPwr / 10), stats, useMagicSkill ? 'magical' : 'physical'), type);
+        let skillWasCrit = false;
+        if (!useMagicSkill) {
+          const physicalSkillCritical = resolvePhysicalSkillCriticalDamage(rawSDmg, stats);
+          rawSDmg = physicalSkillCritical.damage;
+          skillWasCrit = physicalSkillCritical.isCrit;
+        }
+        if (multiHitCount > 1) rawSDmg *= multiHitCount;
         
         // Trigger de Ressonância de Habilidades
         WeaponResonanceService.onSkillCast(state, skill.def, monster, { log, floatText });
@@ -5812,7 +5970,7 @@ export function attackMonster() {
         const skillWeaponType = skill.def.weaponType || skill.def.requiredWeapon || (useMagicSkill ? 'staff' : 'sword');
 
         // Aplica Dano de Postura e obtém Multiplicador de Break (2.0x se vulnerável)
-        const staggerResult = StaggerEngine.applyStaggerDamage(monster, rawSDmg, skillWeaponType, true, false, { log, floatText });
+        const staggerResult = StaggerEngine.applyStaggerDamage(monster, rawSDmg, skillWeaponType, true, skillWasCrit, { log, floatText });
         if (staggerResult.mult > 1.0) {
           rawSDmg = Math.floor(rawSDmg * staggerResult.mult);
         }
@@ -5828,7 +5986,7 @@ export function attackMonster() {
         const resonanceResult = WeaponResonanceService.processAttackImpact(state, monster, skillWeaponType, rawSDmg, { log, floatText });
         let sDmg = (resonanceResult && typeof resonanceResult.finalDamage === 'number') ? resonanceResult.finalDamage : rawSDmg;
         const elemSkillRes = ElementalService.calculatePlayerElementalDamage(state, monster, sDmg);
-        sDmg = elemSkillRes.finalDamage;
+        sDmg = applyPlayerPveDamageBonus(elemSkillRes.finalDamage, stats);
 
         // IA do Monstro: Reações defensivas (Bloqueio, Esquiva Ladina, Barreira, Enrage)
         const aiSkillReaction = MonsterAIEngine.processIncomingDamage(monster, sDmg, !useMagicSkill, state);
@@ -5855,7 +6013,36 @@ export function attackMonster() {
           sDmg = Math.max(1, Math.floor(sDmg * cpRatio));
         }
         
-        monster.hp -= sDmg;
+          monster.hp -= sDmg;
+        const selfHealPercent = resolveSkillSelfHealPercent(skill.def);
+        if (selfHealPercent > 0 && state.hp < stats.maxHp) {
+          const selfHeal = applyPlayerHealingReceivedBonus(Math.floor(stats.maxHp * selfHealPercent), stats);
+          const actualSelfHeal = Math.min(selfHeal, stats.maxHp - state.hp);
+          state.hp += actualSelfHeal;
+          if (actualSelfHeal > 0) {
+            log(`✨ ${skill.def.name}: recuperou ${actualSelfHeal} HP.`, 'heal');
+            floatText(`+${actualSelfHeal} HP`, 'sf-heal');
+          }
+        }
+          const golemProc = resolveMechanicalMasterpieceHit(state, monster, sDmg, realNow);
+          if (golemProc.extraDamage > 0) {
+            const procHpBefore = monster.hp;
+            monster.hp = Math.max(0, monster.hp - golemProc.extraDamage);
+            const actualProcDamage = procHpBefore - monster.hp;
+            combatEvents.emit(CombatEventType.SKILL_DAMAGE, { skillId: 'mechanical_masterpiece', target: 'monster', targetPos: getCombatTargetPoint(), damage: actualProcDamage, isCrit: false, source: 'mechanical_golem', hpBefore: procHpBefore, hpAfter: monster.hp });
+          }
+        applyActiveBuffLifeDrain(sDmg, stats, realNow);
+        if (resolveSkillDamageOverTime(skill.def) && monster.hp > 0) {
+          // Damage-over-time skills add half of their resolved hit as a timed burn.
+          applySkillDamageOverTime(monster, skill.def, sDmg * 0.5, realNow);
+        }
+        if (targetDebuffStats) {
+          // Direct-damage debuffs bypass the target-only branch above. Preserve
+          // the same sacrifice payment here so Touch of Death cannot avoid its
+          // HP cost merely because the skill also deals damage.
+          if (skillHpCost > 0) state.hp = Math.max(1, state.hp - skillHpCost);
+          applySkillTargetDebuff(monster, skill.def, realNow, Math.random(), getEquippedProcBonuses().stun_chance);
+        }
         const killedBySkill = monster.hp <= 0;
         if (killedBySkill) {
           monster._killingSkill = skill;
@@ -5872,7 +6059,7 @@ export function attackMonster() {
         }
         const skinReaction = state.activeSkin === 'skin_weapon_frost_lord' ? 'is-frozen' : (state.activeSkin === 'skin_weapon_infernal_dragon' ? 'is-ignited' : (state.activeSkin === 'skin_weapon_celestial_holy' ? 'is-consecrated' : null));
         stageHeroAttack();
-        stageMonsterHurt(sDmg, false, skinReaction, 400);
+        stageMonsterHurt(sDmg, skillWasCrit, skinReaction, 400);
         
         const sourcePt = getStagePositionRelative('hero');
         const isGroundFeet = MONSTER_FEET_EFFECTS.has(skill.id) || (vfxData && MONSTER_FEET_EFFECTS.has(vfxData.id));
@@ -5890,22 +6077,32 @@ export function attackMonster() {
           def: skillDefForVfx
         });
 
-        combatEvents.emit(CombatEventType.SKILL_HIT, {
-          skillId: skill.id,
-          target: 'monster',
-          targetPos: targetPt,
-          isCrit: false,
-          damage: sDmg
-        });
+        for (let hitIndex = 1; hitIndex <= multiHitCount; hitIndex++) {
+          const hitDamage = hitIndex === multiHitCount
+            ? sDmg - Math.floor(sDmg / multiHitCount) * (multiHitCount - 1)
+            : Math.floor(sDmg / multiHitCount);
+          combatEvents.emit(CombatEventType.SKILL_HIT, {
+            skillId: skill.id,
+            target: 'monster',
+            targetPos: targetPt,
+            isCrit: skillWasCrit,
+            damage: hitDamage
+          });
 
-        combatEvents.emit(CombatEventType.SKILL_DAMAGE, {
-          skillId: skill.id,
-          target: 'monster',
-          targetPos: targetPt,
-          damage: sDmg,
-          isCrit: false,
-          element: elemSkillRes?.element || null
-        });
+          combatEvents.emit(CombatEventType.SKILL_DAMAGE, {
+            skillId: skill.id,
+            target: 'monster',
+            targetPos: targetPt,
+            damage: hitDamage,
+            isCrit: skillWasCrit,
+            element: elemSkillRes?.element || null,
+            hitIndex,
+            hitCount: multiHitCount,
+            targetDefenseBefore,
+            effectiveDefense,
+            defenseIgnorePercent
+          });
+        }
 
         if (staggerResult && staggerResult.isBreak) {
           combatEvents.emit(CombatEventType.SKILL_STAGGER, {
@@ -5942,7 +6139,7 @@ export function attackMonster() {
           }
         }
 
-        log(`💥 ${skill.def.name}! ${sDmg} ${type} damage`, 'rarity-epic');
+        log(`${skillWasCrit ? '💥 CRITICAL! ' : '💥 '}${skill.def.name}! ${sDmg} ${type} damage`, 'rarity-epic');
         if (skill.def.effect === 'stun' && !killedBySkill) {
            monster._stunnedUntil = realNow + 3500;
            log(`💫 ${monster.name} foi Atordoado!`, 'rarity-rare');
@@ -5967,15 +6164,17 @@ export function attackMonster() {
 
   if (castedSkillThisTick) return;
 
-  const atkInterval = Math.max(200, 1000 - stats.atkSpd * 600);
+  const atkInterval = resolvePlayerBasicAttackIntervalMs(stats);
   if (combatTick % Math.max(1, Math.round(atkInterval / 200)) !== 0) return;
 
+  const useMagic = stats.matk > stats.atk;
   // Level Gap Miss Penalty: se o monstro é muito superior (+3 níveis), aumenta a chance de Miss do jogador
   const monLvl = monster.lvl || 1;
   const pLvl = state.level || 1;
   const gap = monLvl - pLvl;
   if (gap >= 3) {
-    const missChance = gap >= 10 ? 0.70 : (gap >= 5 ? 0.35 : 0.15);
+    const accuracy = useMagic ? stats.mAccuracy : stats.pAccuracy;
+    const missChance = calculatePlayerMissChance(gap, accuracy);
     if (Math.random() < missChance) {
       log(`❌ MISS! ${monster.name} esquivou do seu ataque (Diferença de Nível +${gap})!`, 'warning');
       if (typeof stageFloat === 'function') stageFloat('MISS', 'sf-miss', 'right');
@@ -5985,16 +6184,15 @@ export function attackMonster() {
 
   stageHeroAttack();
 
-  const useMagic = stats.matk > stats.atk;
   const atkVal = useMagic ? stats.matk : stats.atk;
   const atkType = useMagic ? 'magic' : 'physical';
   
-  let damage = dealDamage(monster, atkVal, atkType);
+  let damage = dealDamage(getSkillDebuffDefenseTarget(monster), atkVal, atkType);
   let wasCrit = false;
 
   // Bônus de Atributo Elemental das Armas Equipadas (Primária + Arsenal Secundário via ElementalService)
   const elemAtkRes = ElementalService.calculatePlayerElementalDamage(state, monster, damage);
-  damage = elemAtkRes.finalDamage;
+  damage = applyPlayerBasicAttackDamageBonus(applyPlayerPveDamageBonus(elemAtkRes.finalDamage, stats), stats);
   if (elemAtkRes.bonusText && typeof stageFloat === 'function') {
     stageFloat(elemAtkRes.bonusText, 'sf-crit', 'right');
   }
@@ -6109,14 +6307,14 @@ export function attackMonster() {
   const resonanceResult = WeaponResonanceService.processAttackImpact(state, monster, primaryWeaponType, damage, { log, floatText });
   damage = resonanceResult.finalDamage;
 
-  if (procBonuses.stun_chance > 0 && Math.random() * 100 < procBonuses.stun_chance) {
+  const realNowAttack = Date.now();
+  if (procBonuses.stun_chance > 0 && Math.random() * 100 < Math.min(100, procBonuses.stun_chance)) {
     monster._stunnedUntil = realNowAttack + 1500;
     log(`💫 Stun Proc! ${monster.name} foi Atordoado por 1.5s`, 'rarity-rare');
     floatText('STUN!', 'float-epic');
   }
 
   // Procs de Certificação de Subclasse ao Atacar (Warrior: Counter Haste, Rogue: Chance Critical)
-  const realNowAttack = Date.now();
   if (stats.hasteProc && Math.random() < 0.06) {
     state.buffs = state.buffs || {};
     state.buffs['counter_haste'] = { amount: 32, until: realNowAttack + 10000 };
@@ -6158,11 +6356,19 @@ export function attackMonster() {
   }
 
   monster.hp -= damage;
+  const golemProc = resolveMechanicalMasterpieceHit(state, monster, damage);
+  if (golemProc.extraDamage > 0) {
+    const procHpBefore = monster.hp;
+    monster.hp = Math.max(0, monster.hp - golemProc.extraDamage);
+    const actualProcDamage = procHpBefore - monster.hp;
+    combatEvents.emit(CombatEventType.SKILL_DAMAGE, { skillId: 'mechanical_masterpiece', target: 'monster', targetPos: getCombatTargetPoint(), damage: actualProcDamage, isCrit: false, source: 'mechanical_golem', hpBefore: procHpBefore, hpAfter: monster.hp });
+  }
+  applyActiveBuffLifeDrain(damage, stats);
 
   // Ataque Conjunto do Mascote de Batalha (Pet)
   const activePetBonus = PetService.getActivePetBonus(state);
   if (activePetBonus && activePetBonus.atk > 0 && combatTick % 2 === 0 && monster.hp > 0) {
-    const petDmg = Math.max(1, Math.floor(dealDamage(monster, activePetBonus.atk, 'physical') * 1.2));
+    const petDmg = Math.max(1, Math.floor(dealDamage(getSkillDebuffDefenseTarget(monster), activePetBonus.atk, 'physical') * 1.2));
     monster.hp -= petDmg;
     log(`🐾 [${activePetBonus.name}] Ataque de Mascote! ${petDmg} physical damage`, 'damage');
   }
@@ -6240,10 +6446,11 @@ export function attackMonster() {
   updateStatsUI();
 }
 
-function monsterAttack(monster) {
+export function monsterAttack(monster) {
   if (state.isCombatActive === false || !state.target || state.hp <= 0) return;
   const now = combatTick * 200;
   const realNow = Date.now();
+  if (isMonsterActionDisabled(monster, realNow)) return;
   if (monster._stunnedUntil && monster._stunnedUntil > realNow) return; 
   if (monster.breakUntil && monster.breakUntil > realNow) return; // Chefe paralisado durante o BREAK!
   
@@ -6293,49 +6500,61 @@ function monsterAttack(monster) {
   let atkVal = type === 'magical' ? (monster.matk || monster.atk) : monster.atk;
   let isSkillCast = false;
   let skillName = null;
+  let monsterSkillEffect = null;
+  const monsterSkillType = String(monster.skill?.type || '').toLowerCase();
+  const monsterSkillIsMagic = monsterSkillType === 'magic' || monsterSkillType === 'magical';
+  const silencesMonsterSkill = monsterSkillIsMagic && isMonsterMagicSkillSilenced(monster, realNow);
 
   // Monster Skill AI: executa habilidade se disponível e fora de recarga
-  if (monster.skill && (!monster._skillCooldownUntil || monster._skillCooldownUntil <= now)) {
+  if (monster.skill && !silencesMonsterSkill && (!monster._skillCooldownUntil || monster._skillCooldownUntil <= now)) {
     if (Math.random() < 0.40 || monster.boss || monster.elite) {
       isSkillCast = true;
       const sk = monster.skill;
       skillName = sk.name;
+      monsterSkillEffect = sk.effect || null;
       type = sk.type || type;
       atkVal = Math.floor(atkVal * (sk.mult || 1.35));
-      monster._skillCooldownUntil = now + ((sk.cd || 4) * 1000);
-
-      // Efeitos secundários de skills de monstros
-      if (sk.effect === 'stun') {
-        stageFloat('💫 STUNNED', 'sf-crit', 'left');
-        log(`💫 **${monster.name}** usou [${skillName}] e te atordoou!`, 'warning');
-      } else if (sk.effect === 'root') {
-        stageFloat('🌿 PRESO', 'sf-block', 'left');
-        log(`🌿 **${monster.name}** usou [${skillName}] e enraizou seus pés!`, 'warning');
-      } else if (sk.effect === 'bleed') {
-        stageFloat('🩸 SANGRANDO', 'sf-hurt', 'left');
-        log(`🩸 **${monster.name}** usou [${skillName}] causando sangramento!`, 'warning');
-      } else if (sk.effect === 'poison') {
-        stageFloat('🧪 ENVENENADO', 'sf-hurt', 'left');
-        log(`🧪 **${monster.name}** usou [${skillName}] causando envenenamento!`, 'warning');
-      }
+      monster._skillCooldownUntil = now + resolveDebuffedMonsterSkillCooldownMs(monster, (sk.cd || 4) * 1000, realNow);
     }
   }
 
-  let damage = dealDamage({ def: stats.def, mdef: stats.mdef }, atkVal, type);
-
   // IA do Monstro: Modificadores de Ataque por Archetype e Traços de Campeão (NÍVEL 15.1 e 15.2)
   const aiAttack = MonsterAIEngine.processMonsterAttack(monster, stats, state);
-  if (aiAttack.spellName && !isSkillCast) {
+  if (aiAttack.spellName && !isSkillCast && !isMonsterMagicSkillSilenced(monster, realNow)) {
     isSkillCast = true;
     skillName = aiAttack.spellName;
     type = aiAttack.atkType;
     atkVal = aiAttack.baseAtk;
-    damage = dealDamage({ def: stats.def, mdef: stats.mdef }, atkVal, type);
   }
+  if (isSkillCast && shouldEvadeMonsterSkill(stats, type)) {
+    log(`${monster.name} usou [${skillName || monster.skill?.name || 'habilidade'}], mas você esquivou da habilidade!`, 'combat');
+    stageFloat('SKILL EVADED', 'sf-miss', 'left');
+    updateStatsUI();
+    return;
+  }
+  if (isSkillCast && monsterSkillEffect) {
+    if (monsterSkillEffect === 'stun') {
+      stageFloat('💫 STUNNED', 'sf-crit', 'left');
+      log(`💫 **${monster.name}** usou [${skillName}] e te atordoou!`, 'warning');
+    } else if (monsterSkillEffect === 'root') {
+      stageFloat('🌿 PRESO', 'sf-block', 'left');
+      log(`🌿 **${monster.name}** usou [${skillName}] e enraizou seus pés!`, 'warning');
+    } else if (monsterSkillEffect === 'bleed') {
+      stageFloat('🩸 SANGRANDO', 'sf-hurt', 'left');
+      log(`🩸 **${monster.name}** usou [${skillName}] causando sangramento!`, 'warning');
+    } else if (monsterSkillEffect === 'poison') {
+      stageFloat('🧪 ENVENENADO', 'sf-hurt', 'left');
+      log(`🧪 **${monster.name}** usou [${skillName}] causando envenenamento!`, 'warning');
+    }
+  }
+  atkVal = getDebuffedMonsterAttack(monster, atkVal, type, realNow);
+  let damage = dealDamage({ def: stats.def, mdef: stats.mdef }, atkVal, type);
   if (aiAttack.isCrit) {
     damage = Math.floor(damage * aiAttack.critMultiplier);
+    damage = applyPlayerBasicCriticalDamageReduction(damage, stats, !isSkillCast);
     stageFloat('💥 CRITICAL!', 'sf-crit', 'left');
   }
+  damage = applyPlayerWeaponDamageReduction(damage, stats, aiAttack.weaponType);
   if (aiAttack.manaBurnAmt > 0 && state.mp > 0) {
     state.mp = Math.max(0, state.mp - aiAttack.manaBurnAmt);
     log(`🔥 [Mana Burn] **${monster.name}** drenou ${aiAttack.manaBurnAmt} MP seu!`, 'warning');
@@ -6367,6 +6586,8 @@ function monsterAttack(monster) {
     if (typeof stageFloat === 'function') stageFloat('CRUSHING!', 'sf-crit', 'left');
   }
 
+  damage = applyPlayerDamageTakenReduction(damage, stats, type);
+
   if (state.godMode) {
     log(`🛡️ [GOD MODE ATIVADO] ${monster.name} causaria ${damage} de dano (anulado por Invencibilidade de Admin)! Digite //god para desativar.`, 'warning');
     damage = 0;
@@ -6378,6 +6599,13 @@ function monsterAttack(monster) {
     if (typeof stageFloat === 'function') stageFloat('🌟 INVULNERÁVEL', 'sf-block', 'left');
     else if (typeof floatText === 'function') floatText('🌟 INVULNERÁVEL', 'float-jackpot');
     log('🌟 [Celestial Shield] Escudo Divino absorveu todo o impacto!', 'rarity-legendary');
+  }
+
+  const blockResult = resolvePlayerBlock(damage, stats.block, type);
+  if (blockResult.blocked) {
+    damage = blockResult.damage;
+    log(`🛡️ Você bloqueou metade do dano físico de ${monster.name}.`, 'combat');
+    stageFloat('🛡️ BLOCK (-50%)', 'sf-block', 'left');
   }
 
   if (damage > 0) {
@@ -6405,6 +6633,24 @@ function monsterAttack(monster) {
     }
 
     state.hp -= damage;
+    const winterSkinProc = applyPlayerBuffHitControlProc(monster, state.buffs, realNow, Math.random());
+    if (winterSkinProc.procSucceeded) {
+      log(`❄️ Winter Skin paralisou ${monster.name} por 3s.`, 'rarity-rare');
+      stageFloat('PARALYZED!', 'sf-block', 'left');
+    }
+    const tenacityHeal = applyPlayerBuffHitHealProc(state, stats.maxHp, realNow);
+    if (tenacityHeal > 0) {
+      log(`🛡️ Tenacity recuperou ${tenacityHeal} HP após o golpe.`, 'heal');
+      stageFloat(`+${tenacityHeal} HP`, 'sf-heal', 'left');
+    }
+    const reflectedDamage = resolvePlayerDamageReflection(state.buffs, damage, realNow);
+    if (reflectedDamage > 0 && Number(monster.hp) > 0) {
+      const dealtReflection = Math.min(Number(monster.hp), reflectedDamage);
+      monster.hp = Math.max(0, Number(monster.hp) - dealtReflection);
+      log(`🔥 Blazing Skin refletiu ${dealtReflection} de dano contra ${monster.name}.`, 'combat');
+      stageMonsterHurt(dealtReflection, false);
+      if (monster.hp <= 0) processMonsterDefeat(monster);
+    }
     if (isSkillCast && skillName) {
       log(`⚡ **${monster.name}** acertou [${skillName}] em você causando **${damage}** de dano!`, 'combat');
     } else if (!isCrushingHit) {
@@ -9193,8 +9439,12 @@ function claimExpeditionReward(expId) {
 
 // --------------------------- FORGE EXPANSION: SOUL CRYSTALS, MASTERWORK & TATTOOS ---------------------------
 function buySoulCrystal(color = 'red', stage = 1) {
-  const prices = { 1: 15000, 2: 35000, 3: 80000, 4: 180000, 5: 450000 };
-  const cost = prices[stage] || 15000;
+  const normalizedColor = String(color).toLowerCase();
+  if (stage !== 1 || !['red', 'green', 'blue'].includes(normalizedColor)) {
+    log('Apenas Soul Crystals iniciais podem ser adquiridos; a evolução ocorre derrotando monstros.', 'system');
+    return false;
+  }
+  const cost = 50000;
 
   if ((state.gold || 0) < cost) {
     log(`⚠️ Ouro insuficiente! Requer ${cost.toLocaleString()}g.`, 'warning');
@@ -9202,33 +9452,25 @@ function buySoulCrystal(color = 'red', stage = 1) {
   }
 
   state.gold -= cost;
-  if (!state.soulCrystals) state.soulCrystals = {};
-  const key = `${color}_stage${stage}`;
-  state.soulCrystals[key] = (state.soulCrystals[key] || 0) + 1;
+  serviceAddToInventory(state, `soul_crystal_${normalizedColor}_stage1`, 1, 'rare', false, { log, updateAllUI, save }, true);
+  const crystal = (state.inventory || []).find(i => i.itemId === `soul_crystal_${normalizedColor}_stage1`);
+  if (crystal) {
+    crystal.isSoulCrystal = true;
+    crystal.color = normalizedColor;
+    crystal.stage = 1;
+    crystal.crystalLevel = 1;
+    crystal.absorbedSouls = Number(crystal.absorbedSouls) || 0;
+  }
 
-  log(`🔮 Comprou Soul Crystal ${color.toUpperCase()} (Stage ${stage})!`, 'rarity-legendary');
+  log(`🔮 Comprou Soul Crystal ${normalizedColor.toUpperCase()} (Stage 1)!`, 'rarity-legendary');
   updateAllUI();
   save();
   return true;
 }
 
 function fuseSoulCrystals(color = 'red', stage = 1) {
-  if (stage >= 13) return false;
-  const key = `${color}_stage${stage}`;
-  const owned = state.soulCrystals ? (state.soulCrystals[key] || 0) : 0;
-  if (owned < 2) {
-    log(`⚠️ Você precisa de pelo menos 2x Soul Crystals do mesmo estágio para fundir!`, 'warning');
-    return false;
-  }
-
-  state.soulCrystals[key] -= 2;
-  const nextKey = `${color}_stage${stage + 1}`;
-  state.soulCrystals[nextKey] = (state.soulCrystals[nextKey] || 0) + 1;
-
-  log(`✨ SÍNTESE BEM SUCEDIDA! Soul Crystal subiu para Stage ${stage + 1}!`, 'rarity-legendary');
-  updateAllUI();
-  save();
-  return true;
+  log('Soul Crystals evoluem ao absorver almas em combate; a síntese por fusão não está disponível.', 'system');
+  return false;
 }
 
 function socketSoulCrystalToWeapon(effect = 'focus', stage = 1) {
@@ -9238,18 +9480,15 @@ function socketSoulCrystalToWeapon(effect = 'focus', stage = 1) {
     return false;
   }
 
-  if (!state.weaponSockets) state.weaponSockets = {};
-  state.weaponSockets[wpnUid] = {
-    effect,
-    stage: Math.min(13, Math.max(1, stage))
+  const saColors = {
+    focus: 'red', might: 'red', acumen: 'green', health: 'green', empower: 'blue', guidance: 'blue'
   };
-
-  log(`🔮 ENGASTOU SOUL CRYSTAL SA [${effect.toUpperCase()} Stage ${stage}] NA ARMA EQUIPADA!`, 'rarity-legendary');
-  floatText(`SA ${effect.toUpperCase()} ATIVADO`, 'float-gold');
-
-  updateAllUI();
-  save();
-  return true;
+  const color = saColors[String(effect).toLowerCase()];
+  if (!color) {
+    log('Efeito de Soul Crystal inválido.', 'system');
+    return false;
+  }
+  return ElementalService.applySoulCrystalToWeapon(state, wpnUid, color, String(effect).toLowerCase(), { log, updateAllUI, save, floatText });
 }
 
 function upgradeItemToMasterwork(itemUid) {
@@ -11696,24 +11935,31 @@ export function init() {
 
     // ---- Global Handlers para os 7 Subsistemas da Forja Imperial ----
     if (typeof window !== 'undefined') {
-      window.buyInitialSoulCrystal = () => {
+      window.buyInitialSoulCrystal = (color = 'red') => {
+        const normalizedColor = String(color).toLowerCase();
+        if (!['red', 'green', 'blue'].includes(normalizedColor)) {
+          log('Cor de Soul Crystal inválida.', 'system');
+          return false;
+        }
         const cost = 50000;
         if ((state.gold || 0) < cost) {
           log('Adena insuficiente para adquirir o Soul Crystal Inicial (50.000 Adena necessária).', 'system');
-          return;
+          return false;
         }
         state.gold -= cost;
-        serviceAddToInventory(state, 'soul_crystal_red_stage1', 1, 'rare', false, { log, updateAllUI, save }, true);
-        const crystal = (state.inventory || []).find(i => i.itemId === 'soul_crystal_red_stage1');
+        serviceAddToInventory(state, `soul_crystal_${normalizedColor}_stage1`, 1, 'rare', false, { log, updateAllUI, save }, true);
+        const crystal = (state.inventory || []).find(i => i.itemId === `soul_crystal_${normalizedColor}_stage1`);
         if (crystal) {
           crystal.isSoulCrystal = true;
+          crystal.color = normalizedColor;
           crystal.stage = 1;
           crystal.crystalLevel = 1;
           crystal.absorbedSouls = 0;
         }
-        log('🔮 Soul Crystal Adquirido! Mantenha na mochila para absorver almas.', 'rarity-epic');
+        log(`🔮 Soul Crystal ${normalizedColor.toUpperCase()} adquirido! Mantenha na mochila para absorver almas.`, 'rarity-epic');
         updateAllUI();
         save();
+        return true;
       };
 
       window.applySAAction = (color, saKey, targetUid) => {

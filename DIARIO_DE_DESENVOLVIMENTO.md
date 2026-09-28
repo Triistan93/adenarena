@@ -8,6 +8,8 @@
 ---
 
 #### 📑 Índice Rápido de Páginas
+- [Página 27 — 26 de Setembro de 2026 às 16:40](#página-27--26-de-setembro-de-2026-às-1640) — *Correção do Vínculo Indevido de Assassin Servitor com a Classe Assassin*
+- [Página 26 — 26 de Setembro de 2026 às 16:22](#página-26--26-de-setembro-de-2026-às-1622) — *Correção dos Falsos Positivos do Executor de Auditoria Funcional; Revalidação com Aprovação Integral Bloqueada*
 - [Página 25 — 25 de Setembro de 2026 às 02:35](#página-25--25-de-setembro-de-2026-às-0235) — *Etapa 2 (Drops Canônicos de Tomos/Spellbooks 1★ a 4★ nas 32 Zonas & Consumo no SkillEngine) e Etapa 3 (Sistema e Modal de Class Transfer DAG para 9 Raças e 49 Linhagens nos Níveis 20, 40 e 76) — 739/739 Testes Aprovados*
 - [Página 24 — 24 de Setembro de 2026 às 22:30](#página-24--24-de-setembro-de-2026-às-2230) — *Exibição e Aprendizado de Passivas Autênticas na Skill Tree (Aba PASSIVAS): 4 Estágios Canônicos, Progressão por Nível e Upgrade Direto via SP*
 - [Página 23 — 24 de Setembro de 2026 às 21:50](#página-23--24-de-setembro-de-2026-às-2150) — *Conclusão Canônica Integral do Sistema de Skills (1.176 Habilidades, 9 Raças, Equidade Racial Completa), Mecânicas Autênticas do Death Knight (Born to Die, Death Points), Ingestão de 444 Passivas, 272 Ícones e 720/720 Testes Aprovados*
@@ -1705,5 +1707,1032 @@ O usuário solicitou a execução unificada de duas etapas essenciais para o cic
 
 
 
+
+
+
+## Página 26 — 26 de Setembro de 2026 às 16:22
+### Auditoria Funcional: correção do executor, reprodução pelo caminho de combate e bloqueios explicitados
+
+> **Data & Hora**: 26/09/2026 às 16:22 (BRT)
+> **Branch**: `main`
+> **HEAD observado**: `c02262ef3e171884495e27be287fcae0db246fcc` (sem commit nesta sessão)
+> **Status de aprovação integral**: **BLOQUEADO (`APPROVAL_BLOCKED`)**
+
+#### Correções e evidências desta sessão
+- O executor não tenta inferir o efeito de uma habilidade quando o aprendizado ou a equipagem falham. Nesses casos registra `NOT_EXECUTED` e não usa ataques automáticos não relacionados como evidência.
+- A continuidade Hellfire agora respeita as promoções e o requisito de nível 76: nos estágios anteriores verifica bloqueio sem gasto; testa aprendizado e combate somente no estágio 3. As falhas anteriores eram falsos positivos do executor, não defeitos reproduzidos do Hellfire.
+- O relatório deriva cobertura de efeitos, view models e transições dos resultados coletados. Inventário estático de habilidades não é contado como prova independente de proveniência; a serialização isolada não é apresentada como reload do jogo.
+- A auditoria exercitou 159 classes e 2.114 relações classe/habilidade, sem assertions falhas, mas deixou 118 assertions sem validação. O resultado continua bloqueado.
+- Transições reais do serviço `switchSubclass` foram exercitadas para 134 destinos, com 134/134 resultados aprovados no harness isolado. Isso não cobre elegibilidade racial nem renderização visual.
+- Cobertura de efeitos: 439 IDs únicos; 417 contratos configurados, sendo 416 classificados como implementados e `long_shot` como não implementado no modelo de combate; 22 IDs seguem sem contrato. Nas 2.114 relações auditadas, 1.996 efeitos passaram, 11 ficaram explicitamente não implementados, 25 foram bloqueados por lacuna de conteúdo, 22 sem validação e 60 por proveniência não comprovada.
+- Proveniência independente não foi exercitada por classe: 13 classes bloqueadas por lacunas de conteúdo (7) ou proveniência não comprovada (6); as demais 146 permanecem sem validação independente.
+- UI de criação/promoção e reload com bootstrap completo continuam sem teste. A auditoria usa um harness modular em navegador, sem executar a aplicação completa.
+- Foi observado no caminho genérico que buffs canônicos sem implementação específica podem ser roteados como `warcry`, gerando alias/valor de ataque genérico. Isso é uma reprodução do mapeamento genérico, não validação semântica dos efeitos catalogados; os contratos sem comportamento comprovado permanecem pendentes.
+
+#### Verificação
+- `node --test test/functional-audit-evidence.test.js test/canonical-progression-3.0.test.js`: **14/14 aprovados**.
+- `npm test`: **753 testes aprovados, 92 suítes, 0 falhas**.
+- `node --check` dos módulos do executor: aprovado.
+- `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` permaneceram sem alterações nesta sessão.
+- Relatório atualizado: `scripts/functional_chain_test_report.json`; snapshot indica a mesma branch e HEAD antes/depois da auditoria. O diff local preexistente foi preservado.
+
+#### Próximas pendências concretas
+1. Implementar ou especificar, com evidência verificável, os 22 efeitos sem contrato; investigar especialmente o mapeamento canônico genérico de buffs antes de alterar comportamentos.
+2. Resolver lacunas de conteúdo/proveniência e testar cada classe individualmente sem extrapolar amostras.
+3. Acrescentar execução da UI real de criação e transferência, elegibilidade racial de subclass e save/reload com o bootstrap completo.
+
+## Página 27 — 26 de Setembro de 2026 às 16:40
+### Correção do vínculo indevido de Assassin Servitor com a classe Assassin
+
+> **Data & Hora**: 26/09/2026 às 16:40 (BRT)
+> **Branch**: `main`
+> **HEAD observado**: `c02262ef3e171884495e27be287fcae0db246fcc` (sem commit nesta sessão)
+> **Status da auditoria funcional**: **BLOQUEADO (`APPROVAL_BLOCKED`)**
+
+- Corrigido o catálogo canônico para retirar `assassin_servitor` da classe secreta `assassinS2` e manter a habilidade no `spectralMaster`. As notas de atualização de Essence também relacionam Assassin Servitor ao Spectral Master: https://eu.4game.com/patchnotes/lineage2essence/387/.
+- Para manter cinco habilidades próprias na etapa Assassin, adicionada `assassin_s_secret_notes_2nd_page`, habilidade que já pertence a `assassinS2` no catálogo e tem requisito de nível 60.
+- Teste de regressão demonstra que Assassin Servitor é elegível ao Spectral Master e não à classe Assassin. O teste foi executado em RED antes da mudança e passou depois.
+- Testes direcionados: **18/18 aprovados**. Suíte completa: **754 testes, 92 suítes, 0 falhas**.
+- Auditoria funcional atualizada: 159 classes, 2.114 relações, 0 assertions falhas, 122 sem validação. Resultado continua bloqueado. Os contratos sem mapeamento aumentaram de 22 para 23 por causa da habilidade adicional; nenhum efeito foi inventado.
+- O executor encerrou com status não zero porque a aprovação permanece bloqueada. Isso não representa falha em assertions; o relatório registra `APPROVAL_BLOCKED`.
+
+## Página 28 — 26 de Setembro de 2026 às 21:48
+### Auditoria inicial de efeitos de equipamento e correções na augmentação
+
+> **Data & Hora**: 26/09/2026 às 21:48 (BRT)
+> **Branch**: `main`
+> **HEAD observado**: `c02262ef3e171884495e27be287fcae0db246fcc` (sem commit nesta sessão)
+> **Status de aprovação integral**: **BLOQUEADO** — os testes existentes não demonstram cobertura integral do jogo.
+
+- Inspecionados os caminhos reais de combate e atributos para Soulshots, Weapon Resonance, SA embutida na arma, cristais encaixados, Foundation e armadura. As conclusões abaixo se limitam aos cenários testados.
+- Reproduzido em RED e corrigido: saves que continham `gold` e um campo legado `adena` pagavam a taxa de augmentação duas vezes. A cobrança agora debita somente a carteira canônica `gold`, usando `adena` apenas quando `gold` não existe.
+- Reproduzido em RED e corrigido: a augmentação recusava a operação quando os cristais necessários estavam divididos entre pilhas `crystal_d` e `gemstone_d`; agora agrega e consome as pilhas suficientes.
+- Reproduzido em RED e corrigido: ID inexistente de Life Stone era substituído silenciosamente pela pedra padrão. A entrada inválida agora falha sem consumir pedra, cristais ou Adena.
+- Novas verificações pelo `StatsEngine.getStats` confirmam, nos fixtures usados, que Foundation aumenta P.Def e M.Def, SA Might aumenta ataque e os seis efeitos de cristal encaixado (Focus, Haste, Acumen, Health, Might e Empower) alteram o atributo correspondente.
+- Os testes direcionados de classe, linhagem, promoção, transferência, subclass e skills passaram: 90/90. Testes direcionados de combate, ressonância, equipamentos, cristais, encantamento e novos efeitos passaram: 47/47 antes do caso de ID inválido; todos também passaram na suíte completa posterior.
+- `npm test`: **760 testes, 93 suítes, 0 falhas**. `git diff --check`: sem erros de whitespace (Git apenas avisou sobre a conversão configurada de LF/CRLF em arquivos modificados).
+- Este resultado não certifica todas as classes, efeitos, receitas, graus de cristal, peças de armadura, saves reais ou UI. A auditoria funcional continua bloqueada pelas lacunas já listadas na Página 26: efeitos sem contrato/implementação, lacunas de conteúdo/proveniência e ausência de execução do bootstrap e UI completos.
+- Gap adicional confirmado por inspeção do fluxo: `polishMasterwork` anuncia e grava `castSpdPct`, mas `StatsEngine` não o aplica nem expõe um atributo de conjuração; o `castSpd` de certificações também não é consumido no ciclo de combate. A regra esperada (reduzir recarga ou acelerar o ciclo de combate mágico) não está definida no código e fica pendente de decisão de design.
+- `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` continuam sem alterações; saves reais não foram carregados ou modificados.
+
+## Página 29 — 26 de Setembro de 2026 às 22:35
+### Habilidades de augmentação por arquétipo e execução no combate
+
+> **Data & Hora**: 26/09/2026 às 22:35 (BRT)
+> **Branch**: `main`
+> **HEAD observado**: `c02262ef3e171884495e27be287fcae0db246fcc` (sem commit nesta sessão)
+> **Status de aprovação integral**: **BLOQUEADO** — os cenários cobertos não comprovam todas as classes nem todos os efeitos do jogo.
+
+- A lista de Item Skills de augmentação agora filtra as habilidades por arquétipo canônico: guerreiros recebem opções físicas e defensivas; magos recebem opções mágicas. As classes canônicas carregam os grupos `fighter` ou `mage`; os testes verificaram Gladiator e Spellsinger, sem extrapolar isso como prova de cada classe individual.
+- Passivas de armas equipadas agora entram em `StatsEngine`: Focus aumenta crítico; Fortitude aumenta defesa; Arcane Insight aumenta ataque mágico; Clarity reduz o custo de MP no validador e consumidor de skills; Combat Mastery aumenta dano crítico.
+- Habilidades ativas equipadas são ativadas pelo tick normal de combate com recarga. Os efeitos de Might, Shield e Wild Magic ficam em buffs temporários consumidos pelo cálculo de atributos; Greater Heal só ativa quando o HP está abaixo de 70% e respeita recarga.
+- O proc de stun da augmentação agora converte o valor catalogado `0.15` em chance de 15%. Também foi corrigida a referência a `realNowAttack` antes da declaração. A chamada de combate que consome o proc foi integrada; a cobertura automatizada testa o cálculo da chance e a aplicação do buff/cura pelo serviço, mas não simula uma partida inteira pelo navegador.
+- Testes direcionados de augmentação, equipamentos, cristais SA e regras de progressão passaram; `node --check lineage-idle/main.js` passou. `npm test`: **776 testes, 95 grupos, 0 falhas**.
+- O build não foi executado para evitar reescrever `dist`. Saves reais não foram carregados nem alterados. Nenhuma alteração foi feita em `LevelEngine.js`, `MarketService.js` ou `ExpeditionService.js`; não houve push, merge ou deploy.
+- Pendências: executar teste visual do combate completo e validar individualmente cada classe, cada transferência/subclasse e todos os efeitos de skills/equipamentos. A aprovação integral permanece bloqueada.
+
+## Página 30 — 26 de Setembro de 2026 às 23:05
+### SA: identidade dos encontros reais, orientação da forja e lacuna de alvos por estágio
+
+> **Data & Hora**: 26/09/2026 às 23:05 (BRT)
+> **Branch**: `main`
+> **HEAD observado**: `c02262ef3e171884495e27be287fcae0db246fcc` (sem commit nesta sessão)
+> **Status de aprovação integral**: **BLOQUEADO**.
+
+- Reprodução no caminho de produção: `CombatEngine.pickRandomMonster` criava o chefe da zona sem `id`/`key`; `RaidService.startRaidBoss` também copiava o chefe sem identidade explícita. Como `processSoulDrainOnKill` identifica Epic Boss por esses campos, o Valakas real de raid não promovia estágio 14 para 15, embora o teste anterior com `{ id: 'valakas' }` passasse. Os encontros de zona e de raid agora preservam `id` e `key`; o teste parte de `startRaidBoss('valakas')`, usa o monstro criado pelo serviço e confirma promoção para estágio 15.
+- A comparação com a tabela High Five do L2DB confirma que, naquele conjunto de regras, os níveis de Soul Crystal são vinculados a NPCs e chances específicos, não a qualquer monstro. O catálogo deste projeto contém monstros próprios; o serviço atual ainda progride os estágios abaixo de 10 por qualquer abate e usa contagem genérica de elite/raid para estágios 10–14. Isso não satisfaz “monstros específicos” e permanece como lacuna funcional; não foi substituído por uma tabela inventada. Referência consultada: https://l2db.info/high-five/saleveling.
+- A forja agora deixa escolher cristal inicial vermelho, verde ou azul. O tutorial não recomenda mais fundir dois cristais, pois essa ação está desativada; ele explica progressão por abates, elites/chefes e Epic Boss no estágio 15. A descrição do estágio 14 lista os oito Epic Boss IDs reconhecidos pela regra e identifica os 50% como extensão do Aden Arena, não regra canônica.
+- Verificações de sintaxe nos módulos alterados passaram. `npm test`: **777 testes, 95 suítes, 0 falhas**. O build não foi executado para preservar `dist`.
+- A aprovação continua bloqueada: ainda falta mapear os alvos específicos de cada estágio 1–13 para o bestiário do jogo e testar cada transição, as raças/classes, as skills e os efeitos em fluxos completos de produção. Nenhum save real foi carregado ou alterado. `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` seguem intactos; sem push, merge ou deploy.
+
+## Página 31 — 26 de Setembro de 2026 às 23:16
+### Correção de contratos de buffs, curas e debuffs na auditoria de produção
+
+> **Data & Hora**: 26/09/2026 às 23:16 (BRT)
+> **Branch**: `main`
+> **HEAD observado**: `c02262ef3e171884495e27be287fcae0db246fcc` (sem commit nesta sessão)
+> **Status da aprovação integral**: **BLOQUEADO** — ainda há falhas reais de execução e áreas sem validação.
+
+- Corrigida uma fonte de falsos positivos no executor: todos os buffs eram tratados como aumento de ataque, mesmo quando a descrição canônica indicava defesa, HP, esquiva ou outro atributo. O contrato agora verifica apenas deltas explícitos; efeitos sem regra independente continuam `NOT_VALIDATED`, não são marcados como aprovados.
+- Reproduzido no caminho de combate que algumas curas têm `type="buff"` legado e eram descartadas antes da cura. O ramo de cura agora tem precedência. O relatório de auditoria reduziu as assertions falhas de 710 para 556 durante esta rodada; a queda também inclui dois efeitos de alvo corrigidos.
+- Implementados efeitos de buffs explícitos usados nos testes: Majesty aplica P.Def, HP máximo e esquiva; Arcane Power aplica M.Atk e o aumento documentado de consumo de MP. O custo de MP agora aceita penalidade negativa de redução, limitada para não exceder o dobro do custo base.
+- Weakness e Hex agora aplicam reduções de ataque/defesa ao monstro-alvo pelo caminho de combate; o cálculo usa essas reduções e deixa de aplicá-las após expirar. A descrição de ataques híbridos continua causando dano e também aplica o debuff. A auditoria verificou Weakness e Hex em alvos com valores suficientes para evitar falsos negativos por arredondamento.
+- Auditoria atual: 159 classes e 2.114 relações executadas; 278 cenários ainda não conjuram e falham também na verificação de débito de MP (556 checks no total). Há 24 habilidades sem contrato entre 440 únicas; 85 efeitos permanecem `NOT_VALIDATED`. O resultado segue `FAIL`, sem aprovação integral.
+- `npm test`: **795 testes, 96 suítes, 0 falhas** na última execução completa. Uma execução anterior falhou uma vez no limite probabilístico do teste de Valakas (92,5% contra 95%); o arquivo isolado e a suíte completa passaram nas execuções seguintes, então a instabilidade do teste fica registrada, sem ser atribuída a esta alteração.
+- `git diff --check` não encontrou erros de whitespace; o Git avisou apenas sobre a conversão LF/CRLF configurada nos arquivos já modificados. Não houve build para evitar reescrever `dist`.
+- O auditor continua usando navegador isolado, sem bootstrap completo; `realApplicationSaveReload` não foi validado com o jogo real. Nenhum save real foi carregado ou alterado. `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` permanecem intactos. Sem push, merge ou deploy.
+
+#### Próximas pendências concretas
+1. Investigar e corrigir, uma família por vez, os 278 casos em que o combate não conjurou; os maiores grupos atuais incluem Ultimate Evasion, Concentration, Lionheart, Roar of Death, Wind Shackles e várias skills ofensivas/controle sem contrato de runtime.
+2. Validar efeitos ainda sem regra explícita sem inventar comportamento, incluindo bloqueios, resistências, summons, controles e efeitos de grupo.
+3. Fechar os 24 contratos ausentes, lacunas de conteúdo/proveniência e a execução com bootstrap e save/reload de teste isolado.
+
+## Página 32 — 26 de Setembro de 2026 às 23:29
+### Life Rescue: cura fixa executada pelo combate e evidência do auditor
+
+> **Data & Hora**: 26/09/2026 às 23:29 (BRT)
+> **Branch**: `main`
+> **HEAD observado**: `c02262ef3e171884495e27be287fcae0db246fcc` (sem commit nesta sessão)
+> **Status da aprovação integral**: **BLOQUEADO** — esta correção cobre Life Rescue nos vínculos listados, não o catálogo inteiro.
+
+- Causa reproduzida: `Life Rescue` está registrado como `type="buff"`, apesar da descrição canônica declarar “Recovers 127 of the target's HP.” O roteador de combate tratava buffs sem atributo próprio como não executáveis, por isso a habilidade não debitava MP nem curava.
+- `resolveSkillFixedHeal` agora reconhece apenas descrições canônicas explícitas no formato de cura fixa. O dispatcher identifica `Life Rescue` como cura, recupera exatamente 127 HP (respeitando o limite de HP máximo) e evita usar habilidade de cura quando o jogador já está com HP cheio.
+- O contrato independente da auditoria agora valida o delta de HP esperado, em vez de aceitar qualquer aumento de HP. A matriz executou o fluxo real `main.attackMonster` para `orc_shaman`, `overlord`, `dominator`, `warcryer` e `doomcryer`: nos cinco casos, conjuração e débito de 32 MP passaram, e o HP aumentou exatamente 127. Prova adicional: com HP cheio, Life Rescue não conjura nem gasta MP.
+- `npm test`: **797 testes, 96 suítes, 0 falhas**. Testes direcionados: **18/18**; verificações de sintaxe e `git diff --check` passaram. Os avisos do Git se limitam à conversão LF/CRLF configurada.
+- Auditor funcional: **FAIL**, 2.114 casos; 536 assertions falhas e 428 não validadas, ante 546 e 433 no relatório anterior. A diferença corresponde a cinco vínculos de Life Rescue que agora conjuram/consomem MP e têm contrato de cura mensurável. Dez provas de mutação passaram, incluindo a regressão de HP cheio.
+- O relatório continua usando harness de navegador isolado e não executa o bootstrap completo ou reload real da aplicação. A aprovação integral fica bloqueada por falhas de outras habilidades, efeitos ainda sem contrato, conteúdo/proveniência pendentes e UI/save-reload não validados.
+- Investigação da próxima família: `Concentration` declara `Casting Interruption Rate -36`, mas o combate do jogador não tem canalização nem uma checagem de interrupção. Existe somente a interrupção de golpe fatal canalizado do monstro em `StaggerEngine`; o evento `SKILL_INTERRUPT` está apenas declarado, sem consumidor. Não converti isso em recarga, pois é uma mecânica distinta da decisão já tomada para Casting Speed.
+- `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` não aparecem no diff e permaneceram intactos. Nenhum save real foi carregado/alterado; sem push, merge ou deploy.
+
+## Página 34 — 26 de Setembro de 2026 às 23:47
+### Lionheart: bônus de dano PvE ligado ao combate de produção
+
+> **Data & Hora**: 26/09/2026 às 23:47 (BRT)
+> **Branch**: `main`
+> **HEAD observado**: `c02262ef3e171884495e27be287fcae0db246fcc` (sem commit nesta sessão)
+> **Status da aprovação integral**: **BLOQUEADO** — a prova cobre o bônus PvE de Lionheart, não seus demais efeitos nem todas as skills.
+
+- Reproduzido pelo fluxo real: Lionheart conjurava, mas seu efeito documentado de +3% de dano PvE não aparecia em `StatsEngine` nem era aplicado aos golpes. O resolver agora expõe `pveDamagePercent`; os caminhos de skill ativa e ataque básico aplicam esse bônus ao dano final contra monstros.
+- A auditoria no navegador comparou o mesmo personagem/alvo e uma sequência determinística pelo `main.attackMonster`: controle causou 227; Lionheart foi conjurada e causou 233, igual a `floor(227 × 1,03)`. O atributo ativo foi 0,03 e o efeito expira junto com o buff.
+- Resistências a paralysis, hold, sleep, shock e cancelamento de buff permanecem não validadas: não há mecânicas correspondentes de status hostil no combate do jogador. O contrato da skill registra esse limite, em vez de declarar aprovação integral.
+- A matriz executou 2.114 casos nas 159 classes. O relatório continua **FAIL**, agora com 468 assertions falhas e 428 não validadas; a prova nova confirma somente o efeito PvE de Lionheart, sem extrapolar o resultado aos outros efeitos da skill ou às outras classes.
+- `npm test`: **801 testes, 96 suítes, 0 falhas**. Auditor funcional no navegador isolado: prova Lionheart passou; as provas de mutação registradas passaram; `git diff --check` e verificações de sintaxe passaram. Avisos de LF/CRLF seguem sendo configuração do Git.
+- O auditor não carrega saves reais e ainda não executa o bootstrap completo/save-reload real. `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` seguem intactos; saves reais preservados; sem push, merge ou deploy.
+
+## Página 35 — 26 de Setembro de 2026 às 23:52
+### Death Whisper: dano crítico básico e cobertura do contrato
+
+> **Data & Hora**: 26/09/2026 às 23:52 (BRT)
+> **Branch**: `main`
+> **HEAD observado**: `c02262ef3e171884495e27be287fcae0db246fcc` (sem commit nesta sessão)
+> **Status da aprovação integral**: **BLOQUEADO** — esta evidência não cobre todas as classes que citam a skill nem a lista restante de efeitos sem contrato.
+
+- O passivo canônico Death Whisper declara `Basic Critical Damage +25%`, mas antes não contribuía para `critDmg`. `StatsEngine` agora acrescenta 0,25 quando a skill está aprendida e autorizada pela progressão da classe; a matriz recebeu um contrato específico para esse atributo.
+- A prova isolada pelo caminho de produção `main.attackMonster` usou o mesmo personagem, alvo e crítico: o controle causou 510 com multiplicador 1,50; Death Whisper causou 595 com multiplicador 1,75. A diferença corresponde ao +25% relativo declarado.
+- A matriz encontrou somente três vínculos de Death Whisper: um passou e dois foram bloqueados por lacunas de conteúdo. A prova direta foi feita com Gladiator; não extrapolei o resultado para todas as 89 classes enumeradas no dado legado.
+- Auditor funcional após a alteração: **FAIL**, 159 classes, 2.114 casos, 468 assertions falhas e 427 não validadas. A cobertura independente de efeitos passou de 416/440 para 417/440; permanecem 23 skills sem contrato, além de falhas de conjuração e efeitos incompletos.
+- `npm test`: **802 testes, 96 suítes, 0 falhas**. As provas do navegador para Lionheart e Death Whisper passaram, assim como as provas de mutação. As verificações de sintaxe passaram; `git diff --check` não encontrou erros, apenas avisos de conversão LF/CRLF.
+- O relatório de auditoria usa navegador descartável e ainda não executa o bootstrap completo nem save/reload real. Nenhum save real foi carregado ou alterado; `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` permanecem intactos. Sem push, merge ou deploy.
+
+## Página 36 — 26 de Setembro de 2026 às 23:58
+### Clarity: descontos de MP físico e mágico no custo real das skills
+
+> **Data & Hora**: 26/09/2026 às 23:58 (BRT)
+> **Branch**: `main`
+> **HEAD observado**: `c02262ef3e171884495e27be287fcae0db246fcc` (sem commit nesta sessão)
+> **Status da aprovação integral**: **BLOQUEADO** — a prova cobre o consumo de duas skills em fixtures de Gladiator e Sorcerer; não certifica a obtenção da passiva por todas as classes.
+
+- A descrição canônica de Clarity informa redução de 10% no consumo de MP de skills físicas e 4% nas mágicas. `StatsEngine` agora expõe esses percentuais separadamente quando o passivo está ativo; `canCastSkill` aplica o desconto conforme `damageType`/`isMagic` da skill e combina com modificadores gerais respeitando o limite existente.
+- Prova pelo fluxo real do navegador (`main.attackMonster` + validador/consumidor de MP): Power Strike no Gladiator debitou 10 MP sem Clarity e 9 com; Prominence no Sorcerer debitou 32 sem e 31 com. Ambas conjuraram; os valores correspondem ao arredondamento para cima após os descontos.
+- O contrato de auditoria agora exige ambos os deltas numéricos, em vez de aceitar apenas um atributo. Na matriz, Clarity passou em um vínculo encontrado e dois seguem bloqueados pelas lacunas de conteúdo; essa amostra não prova disponibilidade universal.
+- Auditor funcional: **FAIL**, 159 classes, 2.114 casos, 468 assertions falhas e 426 não validadas. O número de skills com contrato aumentou para 418/440; permanecem 22 sem contrato e outros efeitos/casts pendentes.
+- `npm test`: **804 testes, 96 suítes, 0 falhas**. A prova Clarity no navegador passou; verificações de sintaxe passaram; `git diff --check` não acusou erro de whitespace (o Git emite avisos configurados de LF/CRLF).
+- O navegador de auditoria permanece isolado, sem bootstrap completo ou save/reload real. Nenhum save real foi aberto/alterado. `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` seguem intactos; sem push, merge ou deploy.
+
+## Página 37 — 27 de Setembro de 2026 às 00:05
+### Potion Mastery: bônus aplicado às poções HP manuais e automáticas
+
+> **Data & Hora**: 27/09/2026 às 00:05 (BRT)
+> **Branch**: `main`
+> **HEAD observado**: `c02262ef3e171884495e27be287fcae0db246fcc` (sem commit nesta sessão)
+> **Status da aprovação integral**: **BLOQUEADO** — a matriz encontrou Potion Mastery em um vínculo aprovado e outro bloqueado por lacuna de conteúdo.
+
+- O passivo declara `HP Recovery Potions' Effect +10%`, mas não alimentava `StatsEngine` nem a cura de itens. Agora expõe `hpPotionEffectPercent`, e a aplicação de poções HP multiplica a cura por 1,10, respeitando o limite de HP máximo.
+- Corrigido também `greater_healing_potion`: o uso manual passava pelo ramo genérico, consumia o item e não curava porque não era classificado como `heal` nem tinha prefixo `hp_potion`. O item agora é reconhecido como poção HP; o auto-use também o considera antes das poções menores.
+- O `CombatSimulator` headless aplica o mesmo bônus no auto-potion e inclui o valor ampliado no orçamento de sobrevivência. Testes determinísticos confirmam HP Potion M de 150→165 e Greater Healing Potion de 850→935, com e sem Potion Mastery.
+- Prova no navegador isolado pelo `main.useItem`: os dois itens foram consumidos e curaram 150/165 e 850/935 respectivamente; a passiva ficou em 0 sem skill e 0,10 com ela. A matriz encontrou dois vínculos: um `PASS` e um `BLOCKED_CONTENT_GAP`; isso não prova obtenção em todas as classes.
+- Auditor funcional: **FAIL**, 159 classes, 2.114 casos, 468 assertions falhas e 425 não validadas; 419/440 skills têm contrato, restando 21 sem contrato. O snapshot do relatório permaneceu inalterado durante a execução.
+- `npm test`: **806 testes, 96 suítes, 0 falhas**. A prova de produção passou; verificações de sintaxe passaram; `git diff --check` não acusou erro de whitespace (avisos LF/CRLF são configuração do Git).
+- Não foi executado build para preservar `dist`. Nenhum save real foi carregado ou alterado. `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` continuam intactos; sem push, merge ou deploy.
+
+## Página 38 — 27 de Setembro de 2026 às 00:08
+### Acumen: contrato auditável para redução de recarga
+
+> **Data & Hora**: 27/09/2026 às 00:08 (BRT)
+> **Branch**: `main`
+> **HEAD observado**: `c02262ef3e171884495e27be287fcae0db246fcc` (sem commit nesta sessão)
+> **Status da aprovação integral**: **BLOQUEADO** — a matriz aprovou o vínculo executável encontrado e mantém outro bloqueado por lacuna de conteúdo.
+
+- O runtime local já resolvia Acumen como +15% em `cdr`, mas a skill ainda aparecia entre as sem contrato. Adicionado contrato que exige aumento mensurável de `cdr`, aplicação do buff e retorno ao valor-base após expirar.
+- A matriz de navegador encontrou dois vínculos: `werewolf_3` aprendeu e equipou Acumen, debitou 15 MP, conjurou e teve o delta de recarga aplicado/expirado; `werewolf_2` continua `BLOCKED_CONTENT_GAP`. A evidência não se estende a classes não percorridas pela matriz.
+- Teste de contrato adicional rejeita ausência do delta ou não expiração. O teste existente do `StatsEngine`/`canCastSkill` confirma que o `cdr` ativo pode alterar a decisão de recarga; a regra local de Casting Speed → redução de recarga continua sendo a decisão de design adotada.
+- Auditor funcional: **FAIL**, 159 classes, 2.114 casos, 468 assertions falhas e 424 não validadas. Contratos independentes: 420/440; restam 20 skills sem contrato.
+- `npm test`: **807 testes, 96 suítes, 0 falhas**. Auditor do navegador isolado confirmou o vínculo disponível; sintaxe e `git diff --check` passaram, com avisos configurados de LF/CRLF.
+- Nenhum save real foi aberto/alterado; `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` permanecem intactos. Sem push, merge ou deploy.
+
+## Página 33 — 26 de Setembro de 2026 às 23:40
+### Ultimate Evasion: habilidade ativa e evasão de skills inimigas
+
+> **Data & Hora**: 26/09/2026 às 23:40 (BRT)
+> **Branch**: `main`
+> **HEAD observado**: `c02262ef3e171884495e27be287fcae0db246fcc` (sem commit nesta sessão)
+> **Status da aprovação integral**: **BLOQUEADO**.
+
+- A causa de não conjuração era o mesmo bloqueio fail-closed de buffs sem implementação. A versão catalogada como nível 2 foi ligada a seus efeitos documentados: Evasion +25, Physical Skill Evasion +40%, resistência a cancelamento de buff +80%, duração de 30 segundos, custo e recarga preservados do catálogo local. A descrição nível 2 e seus parâmetros conferem com a entrada de skill ID 111 do [L2DB High Five](https://l2db.info/high-five/skills/111/2); isso identifica a referência numérica usada, sem afirmar que High Five e Essence são regras idênticas. As notas oficiais da [NC sobre Ultimate Evasion nível 3](https://www.lineage2.com/en-us/news/vanguard-update-notes) descrevem uma evolução posterior, que não foi aplicada à variante nível 2.
+- O atributo de Evasion entra em `StatsEngine`; Physical Skill Evasion agora é aplicado no fluxo real `monsterAttack`, depois que o monstro decide usar uma habilidade física. A verificação não evita ataques básicos nem skills mágicas. A resistência a cancelamento fica como dado ativo, porém **não validado funcionalmente**: o combate local não implementa remoção hostil de buffs.
+- Prova real no navegador isolado: com o mesmo fixture e sequência controlada, o ataque físico do monstro reduziu HP de 715 para 646 sem o buff; com Ultimate Evasion ativa, o ataque foi evitado e HP ficou em 715. O teste também observou 40% de evasão física de skill. A prova compara controle e efeito ativo pelo `monsterAttack` de produção.
+- As 24 ocorrências da habilidade conjuraram e debitaram MP; os efeitos da skill continuam `NOT_VALIDATED` enquanto a resistência a cancelamento não tiver caminho executável. Isso não é PASS integral.
+- Auditor funcional: **FAIL**, 159 classes, 2.114 casos, 488 assertions falhas e 428 não validadas. Redução de 48 falhas de asserção em relação à Página 32 corresponde às 24 ocorrências de Ultimate Evasion que antes falhavam tanto em cast quanto em débito de MP. Próximos grupos de cast falho: Concentration (17 ocorrências), Lionheart (10), Roar of Death (9), Call of Flame e Dreaming Spirit (6 cada). A matriz atualiza-se sem alegar cobertura além desses casos executados.
+- `npm test`: **800 testes, 96 suítes, 0 falhas**. Os testes direcionados (21), verificações de sintaxe, mutações de evidência (10/10) e `git diff --check` passaram; os avisos continuam sendo só de conversão LF/CRLF configurada.
+- A auditoria ainda não executa bootstrap completo nem save/reload real; 13 raízes/classes seguem bloqueadas por conteúdo/proveniência e há skills/efeitos sem contrato. Não foram carregados saves reais. `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` continuam intactos; nenhuma publicação foi feita.
+
+## Página 39 — 27 de Setembro de 2026 às 00:13
+### Haste segue a regra de recarga do Aden Arena
+
+> **Data & Hora**: 27/09/2026 às 00:13 (BRT)
+> **Branch**: `main`
+> **HEAD observado**: `c02262ef3e171884495e27be287fcae0db246fcc` (sem commit nesta sessão)
+> **Status da aprovação integral**: **BLOQUEADO** — permanece ampla cobertura faltante em habilidades, proveniência e bootstrap.
+
+- Decisão de design confirmada pelo usuário: Haste no Aden Arena deve reduzir o tempo de recarga de habilidades; não aumenta velocidade de ataque. Implementado +15% em `cdr` para o ID canônico `haste`; Haste não altera `atkSpd`. A regra de velocidade de conjuração → recarga continua valendo.
+- A regressão de produção confirma `getStats` com `cdr +0,15`, sem delta em `atkSpd`; `canCastSkill` bloqueia o uso aos 9s sem buff e permite com Haste ativa para uma habilidade de recarga-base de 10s; ao expirar, `cdr` retorna ao valor anterior.
+- Auditor de navegador: ocorrência `werewolf_3` aprendeu/equipou/conjurou Haste pelo caminho `main.attackMonster`, debitou 15 MP, observou `cdr` de 0 → 0,15 → 0 após expiração (**PASS**). `werewolf_2` segue **BLOCKED_CONTENT_GAP**; nenhuma conclusão é extrapolada para outras classes.
+- Auditor funcional geral: **FAIL**, 159 classes, 2.114 casos, 466 assertions falhas, 423 não validadas; 421/440 skills têm contrato, 19 permanecem sem mapeamento. Linhagens independentes ainda não validadas e bootstrap/save reais não exercitados.
+- `npm test`: **808 testes, 96 suítes, 0 falhas**. `git diff --check` passou com avisos configurados de LF/CRLF.
+- `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` continuam sem diff. Nenhum save real foi carregado ou alterado; sem push, merge ou deploy.
+
+## Página 40 — 27 de Setembro de 2026 às 00:35
+### Bônus de Atk. Spd. e Cast. Spd. passam a reduzir recargas
+
+> **Data & Hora**: 27/09/2026 às 00:35 (BRT)
+> **Branch**: `main`
+> **HEAD observado**: `c02262ef3e171884495e27be287fcae0db246fcc` (sem commit nesta sessão)
+> **Status da aprovação integral**: **BLOQUEADO** — matriz geral continua incompleta.
+
+- Regra de design confirmada pelo usuário: bônus de Attack Speed e Casting Speed de habilidades do Aden Arena devem reduzir recargas. O resolvedor agora reconhece os rótulos numéricos `Atk. Spd.`, `Attack Speed`, `Cast. Spd.`, `Casting Spd.` e equivalentes completos; percentuais mantêm a proporção escrita e pontos planos usam a conversão local já usada para cast speed (100 pontos = 100% CDR). Condições explícitas de armadura e arma são consideradas para passivas numéricas.
+- Corrigido o `StatsEngine`: `Boost Attack Speed` (+10%) e `Fast Spell Casting` (+15%) deixaram de adicionar velocidade de ataque e agora alimentam CDR. A resolução cobre passivas aprendidas com condição de equipamento e buffs que declaram ambos os tipos de velocidade. Buffs de alvo continuam no fluxo de debuff; velocidade de movimento não foi convertida.
+- Testes provam no cálculo real de atributos: Haste aumenta CDR em 0,15 e habilita uso aos 9s de uma skill de 10s; Thrill Fight aplica +0,05; Prophecy of Fire soma os +0,10 de Atk. Spd. e +0,10 de Casting Spd.; Boost Attack Speed +0,10; Fast Spell Casting +0,15; Fast Spellcasting +0,30; Light Armor Mastery +0,05 apenas com armadura leve; Robe Mastery +0,10 apenas com robe. Os bônus de passivas e buffs não elevam `atkSpd`.
+- Matriz de navegador atualizada: Fast Spell Casting teve 36 vínculos `PASS` e 3 bloqueados por proveniência não comprovada; Boost Attack Speed teve 7 `PASS` e 3 bloqueados pela mesma razão. Haste segue com um vínculo `PASS` em `werewolf_3` e um `BLOCKED_CONTENT_GAP` em `werewolf_2`. Os resultados se limitam às ocorrências executadas.
+- Corrigido falso positivo no catálogo da auditoria: contratos duplicados de `fast_spell_casting` e `boost_attack_speed` faziam o objeto JavaScript usar a regra antiga de `speed` no lugar da regra nova de `cdr`. Adicionado teste que exige IDs de contrato únicos.
+- Auditoria funcional geral: **FAIL**, 159 classes, 2.114 casos, 466 assertions falhas, 423 não validadas; 421/440 skills têm contrato e 19 seguem sem mapeamento. 13 linhagens/classes permanecem bloqueadas por lacunas de conteúdo/proveniência; o bootstrap integral e save real não foram exercitados.
+- `npm test`: **813 testes, 96 suítes, 0 falhas**. A auditoria confirma snapshot inalterado e nenhum erro de navegador. `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` continuam sem diff; nenhum save real foi carregado ou alterado. Sem push, merge ou deploy.
+
+## Página 41 — 27 de Setembro de 2026 às 00:43
+### Buffs condicionais de velocidade também reduzem a recarga
+
+> **Data & Hora**: 27/09/2026 às 00:43 (BRT)
+> **Branch**: `main`
+> **HEAD observado**: `c02262ef3e171884495e27be287fcae0db246fcc` (sem commit nesta sessão)
+> **Status da aprovação integral**: **BLOQUEADO** — esta rodada cobre somente efeitos numéricos de velocidade, não todas as habilidades e sistemas.
+
+- A varredura do catálogo canônico encontrou 61 habilidades com valores numéricos positivos de Atk. Spd. ou Cast. Spd. O teste de regressão percorre todas e exige conversão em CDR sob ao menos uma combinação compatível de arma/armadura; efeitos negativos direcionados ao inimigo não são convertidos como bônus do jogador.
+- Foi reproduzido um caso que os testes anteriores não cobriam: `Angelic Archon` concede +10% Atk. Spd. com espada ou blunt, mas a condição combinada não era reconhecida e o `canonicalEffect` abreviado contém “Debuff Resistance”, que fazia o parser descartar o buff. Agora o requisito de arma é aplicado e a menção a resistência a debuff não é confundida com um debuff contra o alvo.
+- O fluxo de conjuração em `main.js` agora passa arma e armadura equipadas para resolver buffs condicionais. A prova usa o detector real de arma equipada, confirma +0,10 CDR com espada/blunt, nenhum efeito com adaga, ausência de aumento em `atkSpd` e liberação de uma habilidade de 10s aos 9s.
+- Quatro descrições restantes mencionam aumento de velocidade sem valor numérico (`Magician's Curiosity`, `Knight's Armor Mastery`/Power Stance, `Serenade of Mana` e `Vivace`). Não inventei magnitudes; esses efeitos continuam sem valor executável comprovado.
+- `npm test`: **815 testes, 96 suítes, 0 falhas**. Build Vite passou usando diretório temporário fora de `dist`; permanece o aviso conhecido de chunk JavaScript maior que 1.500 kB. `git diff --check` não encontrou erro de whitespace; avisos LF/CRLF são configuração do Git.
+- Esta rodada não executou a matriz de navegador geral; a aprovação ampla segue bloqueada pelos resultados e lacunas registrados nas páginas anteriores. Nenhum save real foi carregado ou alterado. `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` continuam sem diff. Sem push, merge ou deploy.
+
+## Página 42 — 27 de Setembro de 2026 às 00:51
+### Reduções explícitas de cooldown com escopo físico e mágico
+
+> **Data & Hora**: 27/09/2026 às 00:51 (BRT)
+> **Branch**: `main`
+> **HEAD observado**: `c02262ef3e171884495e27be287fcae0db246fcc` (sem commit nesta sessão)
+> **Status da aprovação integral**: **BLOQUEADO** — validado um contrato de efeitos; o restante das classes e sistemas segue pendente.
+
+- O catálogo contém reduções numéricas de cooldown explícitas além de velocidade. O resolvedor agora lê 15 cláusulas incondicionais numericamente definidas; valores P. Skill são acumulados em `pSkillCdr`, M. Skill em `mSkillCdr`, e cláusulas sem prefixo usam `cdr` geral. Cooldown positivo não é interpretado como redução. Bônus convertidos de Atk./Cast. Spd. continuam gerais, conforme decisão de design do usuário.
+- O consumidor real `canCastSkill` escolhe a redução tipada usando `damageType`/`isMagic`. Quick Recovery foi verificada em todas as 13 classes do catálogo: reduz M. Skill em 10%, não altera CDR global nem recarga física. A 10s de recarga-base, o teste mágico libera aos 9s e o físico segue bloqueado aos 9,999s.
+- Alacrity combina +10% Atk. Spd. convertido em CDR geral com P. Skill Cooldown -5%. O teste valida +10% para recarga mágica e +15% para física, sem alteração de `atkSpd`.
+- Duas descrições condicionam a redução a efeitos de HP atual (`Life Force Harmony: Grand Khavatari` e `Life Force Harmony: Titan`). Permanecem sem aplicação porque ainda não existe regra executável de limiares; também há uma cláusula de cooldown aumentado que não foi tratada como bônus.
+- `npm test`: **818 testes, 96 suítes, 0 falhas**. Build Vite passou em diretório temporário fora de `dist`, com o aviso conhecido de chunk acima de 1.500 kB. Teste direcionado de efeitos: **27/27**. `git diff --check` sem erro de whitespace; avisos LF/CRLF são configuração local do Git.
+- A matriz geral de navegador não foi executada nesta rodada, portanto não alego validação de todas as classes, nem de saves reais. `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` seguem sem diff. Sem push, merge ou deploy.
+
+## Página 43 — 27 de Setembro de 2026 às 00:52
+### Masterwork: HP fixo no cálculo de atributos
+
+> **Data & Hora**: 27/09/2026 às 00:52 (BRT)
+> **Branch**: `main`
+> **HEAD observado**: `c02262ef3e171884495e27be287fcae0db246fcc` (sem commit nesta sessão)
+> **Status da aprovação integral**: **BLOQUEADO** — correção validada isoladamente; permanecem falhas e lacunas na matriz completa.
+
+- Reproduzido o desvio do Masterwork: o serviço `polishMasterwork` grava e anuncia +250 HP, mas `StatsEngine` tratava o campo como +12,5% de HP. Corrigido para adicionar os 250 pontos fixos depois dos multiplicadores percentuais e de atributos primários. Regressão exercita o serviço de polimento, debita exatamente 100.000 de ouro e compara HP efetivo antes/depois.
+- `test/equipment-effect-runtime-validation.test.js` e `test/skill-buff-production-effects.test.js`: **33/33 passaram**.
+- Auditor de navegador isolado atualizado após a mudança de cooldown: **FAIL**, 159 classes, 2.114 casos de skills, 458 assertions falhas e 423 não validadas; 421/440 contratos de efeito configurados. Os testes de promoções e ativações de subclasse executados passaram. Não houve erro de navegador; o snapshot foi preservado durante a execução. Os 229 casos de cast/debito de MP que falham pertencem a outras skills; nenhuma das skills de velocidade/cooldown alteradas aparece entre os IDs com falha. `Concentration` lidera com 17 ocorrências: a descrição promete resistência a interrupção, mas o jogo não tem conjuração interrompível no combate real.
+- O relatório declara explicitamente que o bootstrap completo e save/reload da aplicação não foram exercitados. Proveniência independente não foi validada em 146 classes, 13 estão bloqueadas por conteúdo/proveniência e 19 skills seguem sem contrato. Portanto esta matriz não autoriza aprovação de todas as classes ou efeitos.
+- A regressão Foundation/Masterwork passou depois da correção. Após ela, `npm test`: **819 testes, 96 suítes, 0 falhas**; build Vite passou em diretório temporário fora de `dist`, mantendo o aviso de chunk acima de 1.500 kB.
+- Nenhum save real foi carregado ou alterado. `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` continuam sem diff. Sem push, merge ou deploy.
+
+## Página 45 — 27 de Setembro de 2026 às 01:07
+### Soul Crystal: armas sem grau elegível
+
+> **Data & Hora**: 27/09/2026 às 01:07 (BRT)
+> **Branch**: `main`
+> **HEAD observado**: `c02262ef3e171884495e27be287fcae0db246fcc` (sem commit nesta sessão)
+> **Status da aprovação integral**: **BLOQUEADO** — corrigido um caso do serviço de SA; os demais efeitos e fluxos ainda exigem auditoria.
+
+- Reproduzido em `applySoulCrystalToWeapon`: uma arma com slot válido, mas sem grau explícito e sem nível de requisito reconhecido, herdava silenciosamente o custo e nível do grau D. O engaste aceitava o item, consumia um Soul Crystal e cobrava Adena.
+- Corrigido o serviço para rejeitar graus não suportados antes de qualquer débito ou consumo. A bancada também deixou de rotular armas sem grau como D; mostra que o item não é elegível e mantém os botões de engaste desabilitados.
+- Regressão usa o serviço de SA de produção e confirma rejeição sem gasto nem mutação. `test/soul-crystal-lifecycle-validation.test.js`: **9/9**.
+- `npm test`: **822 testes, 97 suítes, 0 falhas**. Build Vite passou em diretório temporário fora de `dist`; permanece o aviso conhecido de chunk acima de 1.500 kB. Nenhum save real foi aberto ou alterado.
+- A última auditoria geral continua **FAIL**; esta correção pontual não foi incluída nela. Não há evidência para declarar a SA ou a cobertura ampla completas. `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` permanecem intactos; sem push, merge ou deploy.
+
+## Página 46 — 27 de Setembro de 2026 às 01:16
+### Atributos de armas e joias consumidos por `getStats`
+
+> **Data & Hora**: 27/09/2026 às 01:16 (BRT)
+> **Branch**: `main`
+> **HEAD observado**: `c02262ef3e171884495e27be287fcae0db246fcc` (sem commit nesta sessão)
+> **Status da aprovação integral**: **BLOQUEADO** — correção limitada a atributos de equipamento com consumidores de combate identificáveis.
+
+- Comparação do catálogo com `getEquipBonus`/`getTotalEquipBonuses` encontrou atributos declarados, mas não agregados: `castSpeed`, `atkSpeed`, `mpRegen`, `critDmg` e `stunChance`.
+- Regressões com definições reais do catálogo confirmaram que Infinity Rod e Ring of Baium agora fornecem Cast Speed convertido em CDR, Infinity Duals e Ring of Baium alteram a cadência de ataque, MP Regen da Infinity Rod entra nos atributos, e a fração de dano crítico da Infinity Cleaver chega a `calculatePhysicalDamage` sem ser truncada para zero.
+- A Infinity Axe declara 25% de stun. O atributo agora entra na agregação de proc de equipamento usada pelos ataques e skills do combate; o teste confirma os 25 pontos no agregado. A resolução temporal do stun continua sendo o consumidor existente de 1,5s.
+- `npm test`: **823 testes, 97 suítes, 0 falhas**; build Vite passou em diretório temporário fora de `dist`, mantendo aviso de chunk acima de 1.500 kB. Uma execução completa falhou uma vez com 90% WR em Valakas no teste Monte Carlo de 40 execuções; o teste isolado passou quatro vezes e a execução completa seguinte passou. Não é uma regressão determinística desta mudança, mas a pequena amostra torna esse gate suscetível a variação aleatória.
+- A varredura ainda encontrou propriedades cujo contrato precisa ser rastreado antes de afirmar cobertura, incluindo `aoeDmg` em arma de lança e `hit`/`blockRate` em heranças. A matriz geral de classes/skills continua FAIL e não foi refeita nesta rodada.
+- Nenhum save real foi aberto ou alterado. `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` permanecem sem diff. Sem push, merge ou deploy.
+
+## Página 44 — 27 de Setembro de 2026 às 01:02
+### Troca de armas: validação de grau no serviço
+
+> **Data & Hora**: 27/09/2026 às 01:02 (BRT)
+> **Branch**: `main`
+> **HEAD observado**: `c02262ef3e171884495e27be287fcae0db246fcc` (sem commit nesta sessão)
+> **Status da aprovação integral**: **BLOQUEADO** — esta regressão cobre somente o fluxo de troca de armas.
+
+- Reproduzido no serviço `swapWeaponSameGrade`: uma arma D podia ser trocada diretamente por uma arma S, apesar do filtro da interface, e a operação debitava 150.000 Adena e alterava o item. A causa era a regra de grau existir só na interface e não no serviço que executa a cobrança.
+- Adicionado cálculo compartilhado de grau em `item_grade.js`, usado pela interface e pelo serviço. O serviço agora rejeita origem/destino que não sejam armas e destinos de grau diferente antes de cobrar ou modificar inventário.
+- Regressões pelo serviço de produção: D→S é recusada sem custo nem mutação; D→D válida passa e cobra uma vez. `test/blacksmith-same-grade-exchange.test.js`: **2/2**.
+- `npm test`: **821 testes, 97 suítes, 0 falhas**. Build Vite passou em diretório temporário fora de `dist`; permanece o aviso conhecido de chunk acima de 1.500 kB. `git diff --check` não encontrou erros de whitespace; somente avisos configurados de LF/CRLF.
+- A última auditoria geral disponível segue **FAIL** e antecede esta alteração: 159 classes, 2.114 casos, 458 falhas de asserção e 423 não validados. A matriz não cobre a interface completa do ferreiro/Pushkin; portanto a troca foi validada pelo serviço, não por uma sessão visual de navegador.
+- Nenhum save real foi carregado ou alterado. `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` continuam sem diff. Sem push, merge ou deploy.
+
+## Página 47 — 27 de Setembro de 2026 às 01:22
+### Bloqueio físico do jogador consome `blockRate`
+
+> **Data & Hora**: 27/09/2026 às 01:22 (BRT)
+> **Branch**: `main`
+> **HEAD observado**: `c02262ef3e171884495e27be287fcae0db246fcc` (sem commit nesta sessão)
+> **Status da aprovação integral**: **BLOQUEADO** — validada uma propriedade de equipamento e sua aplicação ao dano recebido; os demais efeitos e fluxos continuam pendentes.
+
+- Reproduzido com o escudo real `shield_heirloom_aegis`: o item declara `blockRate: 25`, mas `getStats` retornava `block: 0`, e ataques do jogador não consultavam esse atributo.
+- `StatsEngine` agora agrega `blockRate` do equipamento e contribuições defensivas existentes, normalizando razões de sets para pontos percentuais. O combate do jogador agora consulta `stats.block`: ataque físico bloqueado causa 50% do dano; chance limitada a 80%. Ataques mágicos não bloqueiam. A rolagem aleatória só é consumida quando há chance aplicável.
+- Teste direcionado: **8/8**; suíte completa: **824 testes, 97 suítes, 0 falhas**. Build Vite concluído em diretório temporário fora de `dist`; persiste o aviso conhecido de chunk JavaScript acima de 1.500 kB. `git diff --check` não encontrou erros de whitespace; apenas avisos de LF/CRLF.
+- Permanecem sem consumidor confirmado outras propriedades do catálogo, incluindo `aoeDmg`, `aoeTargets` e `hit`; não inventei regras para elas. A auditoria geral de classes e habilidades não foi refeita nesta rodada e permanece FAIL, com lacunas de efeitos, proveniência e fluxos reais conforme relatório anterior.
+- Nenhum save real foi carregado ou alterado. `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` continuam sem diff. Sem push, merge ou deploy.
+
+## Página 48 — 27 de Setembro de 2026 às 01:31
+### Blazing Skin reflete dano pelo combate de produção
+
+> **Data & Hora**: 27/09/2026 às 01:31 (BRT)
+> **Branch**: `main`
+> **HEAD observado**: `c02262ef3e171884495e27be287fcae0db246fcc` (sem commit nesta sessão)
+> **Status da aprovação integral**: **BLOQUEADO** — validado um efeito de habilidade em duas classes; a matriz geral permanece incompleta.
+
+- A auditoria reproduziu que `Blazing Skin` não era lançado porque `resolveSkillBuffStats` não reconhecia “Reflects 3% of received damage”; a defesa do combate descartava buffs sem efeito resolvido. O catálogo canônico declara precisamente 3%.
+- O resolvedor agora traduz essa declaração para `reflectDamagePercent`; após o dano recebido e suas mitigações, `monsterAttack` aplica a reflexão ao HP do monstro, atualiza o feedback de combate e processa derrota se o retorno o eliminar.
+- O auditor de navegador exercitou o caminho real `attackMonster` + `monsterAttack`: Sorcerer refletiu 2 de 69 de dano recebido, Archmage refletiu 1 de 57; ambos lançaram a habilidade e consumiram o MP correto. Os resultados são duas ocorrências comprovadas, não uma generalização a todas as classes.
+- A auditoria geral caiu de 458 para **446 falhas** e de 423 para **421 não validadas**. Continua **FAIL**: 19 habilidades não têm contrato; 13 linhagens/classes estão bloqueadas por conteúdo ou proveniência; bootstrap integral e save real não foram exercitados. O perfil de navegador foi isolado e o snapshot permaneceu inalterado durante a execução.
+- Testes direcionados: **41/41**. `npm test`: **826 testes, 97 suítes, 0 falhas**. Build Vite concluído fora de `dist`; permanece o aviso conhecido de chunk acima de 1.500 kB. `git diff --check` sem erros de whitespace; somente avisos LF/CRLF.
+- Nenhum save real foi aberto ou alterado. `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` seguem sem diff. Sem push, merge ou deploy.
+
+## Página 49 — 27 de Setembro de 2026 às 01:37
+### Cripple aplica lentidão de combate ao alvo
+
+> **Data & Hora**: 27/09/2026 às 01:37 (BRT)
+> **Branch**: `main`
+> **HEAD observado**: `c02262ef3e171884495e27be287fcae0db246fcc` (sem commit nesta sessão)
+> **Status da aprovação integral**: **BLOQUEADO** — corrigido e validado um debuff em três classes; conteúdo e efeitos restantes seguem incompletos.
+
+- A auditoria reproduziu `Cripple` sem execução em `orc_monk`, `tyrant` e `grand_khavatari`. O resolvedor rejeitava o efeito completo porque a descrição incluía velocidade de movimento não modelada, e não reconhecia a palavra “enemy” como alvo.
+- O resolvedor de debuffs agora reconhece alvos descritos como inimigos, conserva os efeitos numéricos de combate suportados e ignora a cláusula isolada de velocidade de movimento. O contrato canônico registra apenas os efeitos validados: velocidade de ataque do alvo ×0,85 e multiplicador da recarga das skills ×1,15.
+- Navegador de auditoria no caminho de produção: as três classes lançaram Cripple, pagaram o MP previsto, aplicaram os dois efeitos e retornaram aos valores de base após expiração. A evidência permanece limitada a essas três ocorrências; movimento não tem consumidor neste combate.
+- A auditoria geral segue **FAIL**, mas passou de 446 para **440 falhas** e de 421 para **418 não validadas**. Os 19 contratos sem mapeamento permanecem; 13 classes/linhagens continuam bloqueadas por lacunas de conteúdo/proveniência. O bootstrap integral e save real continuam sem execução.
+- Testes direcionados: **41/41**. `npm test`: **826 testes, 97 suítes, 0 falhas**. Build Vite passou fora de `dist`, com o aviso conhecido de chunk maior que 1.500 kB. `git diff --check` sem erros; apenas avisos LF/CRLF.
+- Nenhum save real foi aberto ou alterado. `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` seguem sem diff. Sem push, merge ou deploy.
+
+## Página 50 — 27 de Setembro de 2026 às 01:39
+### Power Break aplica a redução explícita de P. Atk.
+
+> **Data & Hora**: 27/09/2026 às 01:39 (BRT)
+> **Branch**: `main`
+> **HEAD observado**: `c02262ef3e171884495e27be287fcae0db246fcc` (sem commit nesta sessão)
+> **Status da aprovação integral**: **BLOQUEADO** — efeito validado em duas classes; a auditoria de todas as classes e habilidades segue incompleta.
+
+- A auditoria funcional e o catálogo canônico mostraram `Power Break` com o efeito textual `Target's P. Atk. --23%`. A repetição do sinal fazia o parser rejeitar o efeito, impedindo a habilidade de ser lançada.
+- O parser de debuff agora normaliza sinais repetidos de forma conservadora para conservar o sentido negativo explícito. O contrato independente prova uma redução de 23% no ataque físico do alvo, com retorno ao valor original na expiração.
+- No navegador e pelo fluxo de combate real, Abyss Walker e Ghost Hunter lançaram a habilidade; o ataque do alvo caiu de 100 para 77 e retornou a 100 ao expirar. A evidência cobre essas duas classes observadas, não qualquer outra herança.
+- A auditoria geral permanece **FAIL**: **436 falhas** e **416 casos não validados**, ante 440/418 antes desta correção. Os 19 contratos sem mapeamento e as lacunas de conteúdo/proveniência permanecem. O perfil foi isolado; nenhum save real foi carregado e o bootstrap completo segue sem validação.
+- `npm test`: **826 testes, 97 suítes, 0 falhas**. Build Vite passou em diretório temporário fora de `dist`; continua o aviso de chunk maior que 1.500 kB. `git diff --check` sem erros de whitespace; somente avisos LF/CRLF.
+- `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` seguem sem diff. Sem push, merge ou deploy.
+
+## Página 51 — 27 de Setembro de 2026 às 01:47
+### Ponto de retomada: análise das 436 falhas e 416 pendências
+
+> **Branch**: `main`
+> **HEAD observado**: `c02262ef3e171884495e27be287fcae0db246fcc` (sem commit)
+> **Aprovação integral**: **BLOQUEADA**.
+
+- Foi criado [`docs/AUDIT_CONTINUATION_CHECKPOINT_2026-09-27.md`](docs/AUDIT_CONTINUATION_CHECKPOINT_2026-09-27.md) como save point de trabalho, com estado do workspace, leitura detalhada do relatório funcional e próximos passos.
+- Leitura de `scripts/functional_chain_test_report.json`: 159 classes, 2.114 relações; 436 asserções falhas e 416 sem validação. As falhas se agrupam em 218 conjurações não reproduzidas e 218 débitos de MP associados às mesmas tentativas; são 95 IDs de habilidade em 96 classes, não 436 defeitos independentes.
+- Dos 416 casos pendentes, 211 ficaram sem executar; 120 não têm contrato de efeito suficiente (72 buffs, 32 contratos ausentes, 16 efeitos de alvo); 25 estão bloqueados por lacuna de conteúdo e 60 por proveniência não comprovada. As pendências de UI, bootstrap e save real são critérios adicionais detalhados no save point.
+- Mudança de cooldown: um teste TDD reproduziu que campos legados de `atkSpd`/`castSpd` dentro de buffs ativos não eram convertidos para CDR. `StatsEngine` foi ajustado; teste focal passou **29/29** e `npm test` passou **827 testes, 97 suítes, 0 falhas**. A reprodução visual da Haste no navegador ainda está pendente.
+- Nenhum save real foi tocado; `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` seguem intactos. Sem push, merge ou deploy.
+
+## Página 52 — 27 de Setembro de 2026 às 01:58
+### Haste/Acumen e nova medição da auditoria
+
+> **Branch**: `main`
+> **HEAD observado**: `c02262ef3e171884495e27be287fcae0db246fcc` (sem commit)
+> **Aprovação integral**: **BLOQUEADA**.
+
+- O catálogo de efeitos reconhece agora as variantes Haste e Acumen e traduz bônus de velocidade para CDR, sem aumentar `atkSpd`. O contrato exige aumento de CDR, `atkSpd` inalterado e expiração correta.
+- `scripts/audit_functional_chain_test.mjs` foi executado novamente: **422 asserções falhas** e **409 não validadas**, ante 436/416. Sete casos adicionais executaram com sucesso. Foram 1.705 efeitos aprovados, 204 não executados, 120 não validados, 25 bloqueados por lacuna de conteúdo e 60 por proveniência não comprovada.
+- No harness do navegador, Haste/Acumen passou em `werewolf_3`; Soul Haste em `soul_finder`, `soul_breaker` e `soul_hound`; Elemental Haste em `sylphid`, `sylph_gunner`, `wind_hunter` e `storm_blaster`. Cada caso conferiu conjuração, débito de MP e contrato do efeito. Isso cobre somente os casos observados.
+- Testes focais: **44/44**; `npm test`: **829 testes, 97 suítes, 0 falhas**. A matriz ampla continua FAIL; persistem 19 IDs sem contrato e 13 classes/linhagens bloqueadas por conteúdo/proveniência. O harness não executou o bootstrap completo nem recarregou save real.
+- Um teste recém-escrito calculava incorretamente o instante de disponibilidade do cooldown; a fórmula do teste foi corrigida. Nenhum save real foi tocado. `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` permanecem intactos; sem push, merge ou deploy.
+
+## Página 53 — 27 de Setembro de 2026 às 02:10
+### Blessed Shield funciona pela chance real de bloqueio
+
+> **Branch**: `main`
+> **HEAD observado**: `c02262ef3e171884495e27be287fcae0db246fcc` (sem commit)
+> **Aprovação integral**: **BLOQUEADA**.
+
+- Reprodução inicial: `Blessed Shield` estava na árvore, mas `resolveSkillBuffStats` retornava `null`; o combate pulava a habilidade sem conjurar nem consumir MP.
+- Corrigido o efeito para acrescentar cinco pontos percentuais a `stats.block` somente quando há escudo equipado. Sem escudo, a habilidade não é despachada como um buff sem efeito. `monsterAttack` já consome `stats.block` por `resolvePlayerBlock`.
+- Harness de produção: Prophet e Hierophant aprenderam/equiparam e conjuraram a habilidade, pagaram 35 MP, viram `block` subir de 0 a 5 e retornar a 0 após expirar.
+- Auditoria ampla caiu de 422/409 para **418 falhas e 407 não validadas**; as 4 asserções corrigidas representam duas ocorrências classe/habilidade (conjuração e MP em cada uma). Restam 209 conjurações não executadas e 209 débitos de MP dependentes delas.
+- Teste focal inclui o consumidor de bloqueio: em rolagem física 0,03, chance 5% bloqueia e reduz 100 para 50; ataque mágico não é bloqueado; sem escudo, o bônus não existe. `npm test`: **831 testes, 97 suítes, 0 falhas**. `git diff --check` passou; somente avisos LF/CRLF.
+- Permanecem 19 habilidades sem contrato e 13 classes/linhagens bloqueadas. O harness não executa o bootstrap integral nem recarrega save real. Nenhum save real foi tocado; `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` intactos. Sem push, merge ou deploy.
+
+## Página 54 — 27 de Setembro de 2026 às 02:18
+### Falso positivo de Advanced Block removido do auditor
+
+> **Branch**: `main`
+> **HEAD observado**: `c02262ef3e171884495e27be287fcae0db246fcc` (sem commit)
+> **Aprovação integral**: **BLOQUEADA**.
+
+- O relatório de 02:14 UTC marcava Advanced Block no Hierophant como efeito FAIL: a skill conjurava e debitava 44 MP, mas `getStats().def` permanecia 202→202. Os testes de combate direcionados já usavam escudo com `def: 20`; ao comparar com o executor, ficou provado que sua fixture `audit_shield` tinha `def: 0` implícito. O buff de 10% não podia produzir uma variação mensurável.
+- Corrigida somente a fixture em `scripts/lib/functional-browser.mjs`, incluindo defesa 20 no escudo de auditoria; código de produção não foi alterado nesta correção.
+- Matriz repetida pelo fluxo de navegador/combate: Advanced Block no Hierophant agora conjura, debita 44/44 MP e comprova DEF 202→204→202 após expirar. A contagem caiu de **417 para 416 falhas de asserção**; pendências não validadas permanecem **406**.
+- `npm test`: **833/833**, 97 suítes. `git diff --check` sem erros; apenas avisos configurados de LF/CRLF. `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` seguem intactos. Nenhum save real alterado; sem push, merge ou deploy.
+- A matriz ainda cobre 159 classes e 2.114 casos, continua FAIL, sem bootstrap integral, 19 contratos de efeito sem mapeamento e 13 classes/linhagens sem aprovação independente de conteúdo/proveniência. O restante das falhas e pendências não foi resolvido por esta correção de executor.
+
+## Página 55 — 27 de Setembro de 2026 às 02:22
+### Investigação de Concentration e interrupção de conjuração
+
+> **Branch**: `main`
+> **HEAD observado**: `c02262ef3e171884495e27be287fcae0db246fcc` (sem commit)
+> **Aprovação integral**: **BLOQUEADA**.
+
+- Rastreado o efeito canônico `Casting Interruption Rate -36`, responsável pelo maior agrupamento atual de conjurações falhas (17 classes). `CombatEventType.SKILL_INTERRUPT` existe somente como declaração do evento; não há emissor/consumidor para interromper skills do jogador. `attackMonster` seleciona a skill e consome MP/cooldown no mesmo tick, sem estado de canalização do jogador.
+- Os canais reais encontrados são do golpe fatal de monstros/raids; `StaggerEngine` interrompe esse canal quando o jogador quebra a postura do chefe. Isso é direção oposta ao efeito de Concentration e não serve como substituto. Não converti resistência à interrupção em CDR ou outro bônus inventado.
+- Impedimento identificado: para Concentration ter efeito verificável, o jogo precisa ter uma mecânica real de skill do jogador em canalização que possa ser interrompida. Até existir essa mecânica e contrato de design, o resolver rejeita corretamente o buff sem efeito observável e a skill não conjura.
+- Próximo trabalho autorizado: continuar triagem de skills pelo conjunto de comportamentos explícitos e consumidores existentes; priorizar efeitos que possam ser implementados fielmente pelo combate atual, sem atribuir semântica a strings placeholder como “X effect”.
+
+## Página 56 — 27 de Setembro de 2026 às 02:33
+### Vitalize cura e limpa Hex/Gloom pelo combate real
+
+> **Branch**: `main`
+> **HEAD observado**: `c02262ef3e171884495e27be287fcae0db246fcc` (sem commit)
+> **Aprovação integral**: **BLOQUEADA**.
+
+- Causa identificada: `Vitalize` declara cura com Power 460 e remoção de debuffs, mas era classificada como buff sem efeito resolvido e, por isso, o combate não a conjurava nem debitava MP. Em paralelo, a IA de monstros criava `monster_hex` e `monster_gloom` na bolsa de buffs, mas `getStats` não aplicava suas reduções de P.Def/M.Def.
+- O resolver agora identifica o Power de cura explícito. O caminho real de combate calcula a cura com o balanço existente, debita o MP canônico e remove apenas Hex/Gloom ativos, preservando buffs do jogador. `getStats` consome as penalidades de 20% por 10 s e volta aos valores de base após expiração.
+- Teste de produção simulou os dois debuffs pelo produtor `MonsterAIEngine.processMonsterAttack`, mediu DEF/MDEF reduzidos e aumento de dano recebido; expirados os debuffs, os atributos restauram. Auditor de navegador executou Vitalize em quatro relações: Elder, Eva's Saint, Shillien Elder e Shillien Saint; em todas conjurou, debitou 84 MP, curou e removeu Hex+Gloom. Isto prova essas quatro ocorrências, não todas as classes.
+- Matriz ampla caiu de 416/406 para **408 falhas e 402 não validadas**. Efeitos: 1.712 PASS, 197 NOT_EXECUTED, 120 NOT_VALIDATED, 25 bloqueados por lacuna de conteúdo e 60 por proveniência. Mantêm-se 19 IDs sem contrato e 13 classes/linhagens bloqueadas.
+- `test/skill-buff-production-effects.test.js` e `test/functional-audit-evidence.test.js`: **51/51**; `npm test`: **836/836**, 97 suítes. `git diff --check` passou; somente avisos LF/CRLF. Serviços protegidos sem diff, sem save real, sem push/merge/deploy.
+- O relatório ainda não executa bootstrap completo nem reload real de save. Status geral continua **FAIL**.
+
+## Página 57 — 27 de setembro de 2026 às 02:55 BRT
+### Adaptações funcionais: Concentration e Detect Weakness
+
+> **Branch**: `main`
+> **HEAD**: `c02262ef3e171884495e27be287fcae0db246fcc` (sem commit)
+> **Aprovação integral**: **BLOQUEADA**.
+
+- Nova orientação do usuário: quando uma habilidade tiver efeito que não se encaixa no combate atual, podemos criar uma adaptação criativa e semelhante, desde que balanceada. Isso substitui a antiga conclusão da Página 55 que deixava Concentration sem efeito até existir canalização; ela deve permanecer como histórico da investigação, não como decisão vigente.
+- `Concentration` declara `Casting Interruption Rate -36`, mas o jogo não interrompe conjurações do jogador. Adaptação: +36% de resistência aos debuffs de combate aplicados pelos monstros. A resistência entra em `getStats` e reduz a chance base de 25% de Hex/Gloom de monstros Support para 16%; não altera CDR nem Atk Spd. Teste determinístico pelo produtor real `MonsterAIEngine.processMonsterAttack` confirmou que a mesma rolagem aplica Hex sem o buff e é resistida com Concentration.
+- O harness de navegador percorreu 17 casos de `Concentration` em Wizard, Sorcerer, Archmage, Necromancer, Soultaker, Warlock, Arcana Lord, Elven Wizard, Spellsinger, Mystic Muse, Elemental Summoner, Elemental Master, Dark Wizard, Spellhowler, Storm Screamer, Phantom Summoner e Spectral Master. Em todos: cast real, custo de MP, resistência 0→0,36→0 após expiração, sem alteração indevida de CDR/Atk Spd. Três outros registros em linhagens Sayha seguem bloqueados por proveniência não comprovada.
+- `Detect Weakness` tinha apenas o placeholder “Detect Weakness effect” e nunca conjurava. Adaptação: marca o alvo atual, que recebe +8% de dano por 8 s; cooldown continua 10 s e o custo canônico é mantido. Cinco casos da linha Warrior (Warrior, Gladiator, Duelist, Warlord e Dreadnought) passaram pelo `attackMonster`, com MP debitado e marca temporária comprovada. Um ataque real do navegador produziu 77 de dano com a marca e 72 sem a marca; o teste de serviço também confirmou 100→108 antes do arredondamento final e retorno ao valor original após expirar.
+- A cobertura do auditor agora mede `damageTakenPercent` no alvo e há uma prova específica de amplificação de dano no caminho real de ataque. O contrato de auditoria e o gerador foram alinhados para preservar os contratos revisados durante regenerações futuras.
+- Relatório atualizado em `2026-09-27T05:54:07.928Z`: 159 registros de classe, 2.114 relações skill/classe, 1.734 PASS, 175 NOT_EXECUTED, 120 NOT_VALIDATED, 25 BLOCKED_CONTENT_GAP, 60 BLOCKED_UNPROVEN_PROVENANCE; 364 asserções falharam e 380 não foram validadas. Continua FAIL; os contadores de asserção podem se sobrepor por caso.
+- Testes focados: 55/55; suíte completa: 840/840 em 97 suítes. Auditor navegador isolado: prova Detect Weakness PASS; nenhum save real alterado. `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` sem diff. `git diff --check` sem erros, apenas avisos LF/CRLF.
+- Próximo foco: manter a matriz em classes/skills, triando outros grupos recorrentes de casts que não executam. Não tratar os 364/380 como bugs únicos: primeiro separar bloqueio de contrato, conteúdo, proveniência, pré-condição e comportamento de produção. Permanecem 19 IDs sem contrato de efeito independente e 13 classes/linhagens com conteúdo/proveniência bloqueados.
+
+## Página 58 — 27 de setembro de 2026, 03:00 BRT
+### Adaptações de Concentration, Detect Weakness e Roar of Death
+
+> **Branch**: `main`
+> **HEAD**: `c02262ef3e171884495e27be287fcae0db246fcc` (sem commit)
+> **Aprovação integral**: **BLOQUEADA**.
+
+- A orientação vigente do usuário permite criar efeitos semelhantes, criativos e balanceados para skills cujo efeito canônico não faz sentido no combate atual.
+- `Concentration`: adaptada de resistência à interrupção de conjuração (mecânica inexistente para o jogador) para +36% de resistência a debuffs de combate aplicados por monstros. Hex/Gloom de monstros Support cai de 25% para 16%. 17 classes passaram em cast, MP, efeito e expiração; CDR e Atk Spd ficam inalterados. Três ocorrências Sayha seguem bloqueadas por proveniência.
+- `Detect Weakness`: substituído o placeholder sem comportamento por uma marca de +8% de dano recebido no alvo por 8 s; cooldown e custo existentes preservados. Cinco classes Warrior passaram pelo cast real; ataque de produção mediu 77 contra 72 de dano na configuração auditada e restaura ao expirar.
+- `Roar of Death`: placeholder adaptado a uma intimidação que reduz P. Atk e M. Atk do monstro em 15% por 10 s. Nove variantes de Death Knight passaram pelo cast real. Pelo fluxo de combate, um ataque recebido caiu de 73 para 62 (redução arredondada de aproximadamente 15%), com expiração validada.
+- O gerador de evidências agora preserva os contratos revisados independentemente, ao regenerar o catálogo, e o avaliador cobre efeitos combinados e atributos que devem permanecer inalterados.
+- Relatório `2026-09-27T05:59:00.986Z`: 159 registros de classe, 2.114 relações skill/classe; 1.743 PASS, 166 NOT_EXECUTED, 120 NOT_VALIDATED, 25 BLOCKED_CONTENT_GAP e 60 BLOCKED_UNPROVEN_PROVENANCE. Há 346 assertions failed e 371 unvalidated; status geral permanece FAIL. Contadores de asserções podem refletir conjuntamente cast e débito de MP e não equivalem a bugs únicos.
+- `npm test`: 842/842, 97 suítes. `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` intactos; nenhum save real alterado; sem push, merge ou deploy.
+- Próximos bloqueios: 19 IDs ainda sem contrato independente, 13 ocorrências/classes bloqueadas por conteúdo ou proveniência, 166 casos sem execução e 120 sem validação; bootstrap completo e reload de save descartável continuam sem evidência. Continuar triagem em classes e skills sem extrapolar estes resultados.
+
+## Página 59 — 27 de setembro de 2026, 03:04 BRT
+### Lionheart: adaptação das resistências e validação por ocorrência
+
+> **Branch**: `main`
+> **HEAD**: `c02262ef3e171884495e27be287fcae0db246fcc` (sem commit)
+> **Aprovação integral**: **BLOQUEADA**.
+
+- `Lionheart` já aplicava o bônus de dano PvE de +3%; as resistências a paralisia, hold, sono, choque e cancelamento de buff não tinham correspondentes no combate atual. Adaptação autorizada: manter +3% dano PvE e converter o conjunto defensivo em +25% de resistência a debuffs de combate aplicados por monstros. A descrição da skill explicita a adaptação.
+- Teste determinístico pelo produtor real `MonsterAIEngine.processMonsterAttack`: a mesma rolagem de debuff afeta o estado sem Lionheart e é resistida com Lionheart; os testes também confirmam o +3% de dano e os atributos retornam ao normal fora do buff.
+- Matriz de navegador/harness provou 10 ocorrências: Duelist, Orc Monk, Tyrant, Grand Khavatari, Artisan, Warsmith, Maestro, Shine Maker S1, Shine Maker S2 e Shinemaker. Cast, débito de MP, contrato de efeito e expiração passaram nesses casos. Prova agregada: dano PvE de 227→233, com stats do buff mostrando +3% PvE e 0,25 de resistência. Limitar conclusão a essas dez ocorrências.
+- Relatório regenerado em `2026-09-27T06:03:43.252Z`: 159 classes, 2.114 relações skill/classe; 346 assertions failed e 361 unvalidated (antes 371); status geral continua FAIL. A avaliação independente de proveniência continua incompleta; são 19 IDs sem contrato independente e demais execuções/validações ainda pendentes.
+- `npm test`: 842/842, 97 suítes. `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` intactos; nenhum save real tocado; sem push, merge ou deploy. `git diff --check` sem erros funcionais, apenas avisos de conversão LF/CRLF.
+- Próxima triagem: outras skills não validadas ou sem execução, separando efeitos que já têm consumidor no combate daqueles cuja regra depende de conteúdo ou proveniência ainda não confirmado. O harness não executa bootstrap integral nem recarrega save real.
+
+## Página 60 — 27 de setembro de 2026, 03:06 BRT
+### Damage Reflection ligado ao contrato real de contra-ataque
+
+> **Branch**: `main`
+> **HEAD**: `c02262ef3e171884495e27be287fcae0db246fcc` (sem commit)
+> **Aprovação integral**: **BLOQUEADA**.
+
+- `Damage Reflection` já tinha implementação no combate e o teste de serviço reconhecia o reflexo de 3%; o contrato independente, porém, classificava a habilidade como buff sem atributo parseável, fazendo a auditoria rejeitar o efeito comprovado.
+- Atualizei o contrato para `damage_reflection`, que exercita `monsterAttack` em combate real e confere o dano recebido versus o refletido. Dark Avenger passou com 69 de dano recebido e 2 refletidos; Hell Knight, 57 recebidos e 1 refletido (arredondamento inteiro, 3%). As duas variantes passaram cast/MP/efeito. Não foi necessário mudar a regra de produção.
+- Auditoria repetida às `2026-09-27T06:05:19.747Z`: 159 classes/2.114 skill-cases, 346 asserções falhas e 359 não validadas; o estado global continua FAIL. A classificação de efeitos agora reconhece Damage Reflection como validado nas ocorrências testadas.
+- `npm test`: 842/842, 97 suítes. Nenhum save real alterado; serviços protegidos intactos; sem push, merge ou deploy. Bootstrap completo e reload de save continuam sem evidência.
+
+## Página 61 — 27 de setembro de 2026, 03:11 BRT
+### Provoke e Dreaming Spirit adaptados ao combate de alvo único
+
+> **Branch**: `main`
+> **HEAD**: `c02262ef3e171884495e27be287fcae0db246fcc` (sem commit)
+> **Aprovação integral**: **BLOQUEADA**.
+
+- `Provoke` não tinha utilidade de taunt no combate solo, e a redução de resistência a lanças não tinha sistema de resistências por arma. Adaptação: o alvo recebe 5% de dano adicional por 10 s. Warlord e Dreadnought passaram conjuração de produção, gasto de 54 MP, aplicação/expiração e medição real de dano: 130 marcado contra 124 sem marca (diferença ~4,8%, arredondamento de combate).
+- `Dreaming Spirit` aplica sono, mas o combate não tem estado de sono/inabilitação. Adaptação: enfraquece o alvo por 8 s, reduzindo P. Atk e M. Atk em 12%. Teste comprova redução física 100→88 e mágica 120→105; com a expiração, o ataque retorna a 100. As seis ocorrências — Orc Mage, Orc Shaman, Overlord, Dominator, Warcryer e Doomcryer — passaram cast, débito de MP e deltas do alvo pelo harness de produção.
+- Atualização da matriz: 159 classes, 2.114 relações; 1.763 PASS, 158 NOT_EXECUTED, 108 NOT_VALIDATED, 25 bloqueios de conteúdo e 60 de proveniência. Assertions failed: **330**; unvalidated: **351**. Os números são asserções e não bugs únicos; o estado continua FAIL.
+- Provas relacionadas da rodada: Lionheart validado em 10 variantes (bônus PvE +3% e resistência unificada a debuffs de monstros); Damage Reflection em Dark Avenger e Hell Knight pelo dano refletido no `monsterAttack`; Provoke e Dreaming Spirit como acima.
+- `npm test`: **844/844**, 97 suítes. Relatório gerado `2026-09-27T06:11:10.900Z`. Sem alteração de saves reais; `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` intactos; sem push/merge/deploy. Bootstrap completo e reload de save continuam sem evidência.
+- Próximo: continuar auditoria classe/skill, sobretudo as 158 execuções não realizadas, os 19 IDs sem contrato independente e os 13 bloqueios por conteúdo/proveniência; não assumir que os grupos acima representam o catálogo inteiro.
+
+## Página 62 — 27 de setembro de 2026, 03:13 BRT
+### Hamstring desacelera o ciclo real de ataque do monstro
+
+> **Branch**: `main`
+> **HEAD**: `c02262ef3e171884495e27be287fcae0db246fcc` (sem commit)
+> **Aprovação integral**: **BLOQUEADA**.
+
+- O efeito canônico `Speed -30%` não era resolvido porque estava cadastrado como buff do jogador. Adaptação: reduzir em 30% o `atkSpd` do monstro por 30 s, o que aumenta o intervalo autônomo de ataque na fórmula de produção `1500 / atkSpd` (com piso de 400 ms).
+- Dark Avenger e Hell Knight passaram cast real, MP e delta do alvo: `attackSpeed` 2→1,4 durante o efeito e retorno a 2 ao expirar. O teste focal valida o valor durante/depois do buff; não mede wall-clock de uma sequência de ticks.
+- Auditoria `2026-09-27T06:13:18.983Z`: 159 classes/2.114 relações; 1.765 PASS, 156 NOT_EXECUTED, 108 NOT_VALIDATED, 25 bloqueios de conteúdo e 60 de proveniência; 326 assertions failed e 349 unvalidated. Estado continua FAIL.
+- Nesta rodada `Provoke` passou em Warlord/Dreadnought, `Dreaming Spirit` em seis classes Orc, Hamstring em duas classes, Damage Reflection em duas classes e Lionheart em dez variantes. Cada resultado aplica-se somente às variantes observadas.
+- `npm test`: 845/845, 97 suítes. Saves reais intocados; serviços protegidos intactos; sem push/merge/deploy. O auditor ainda não carrega bootstrap completo nem faz reload de save real.
+
+## Página 64 — 27 de setembro de 2026, 03:25 BRT
+### Ultimate Evasion e Mana Effect Boost com consumidores executáveis
+
+> **Branch**: `main`
+> **HEAD**: `c02262ef3e171884495e27be287fcae0db246fcc` (sem commit)
+> **Aprovação integral**: **BLOQUEADA**.
+
+- `Ultimate Evasion` já somava EVA +25 e 40% de evasão a ataques físicos de skill; cancelamento de buff inimigo não existe no combate. A parcela de 80% foi adaptada para resistência a debuffs de monstros por 30 s. Prova de navegador: sem buff o ataque físico reduz HP de 715→646 e Gloom é aplicado; com buff o HP fica em 715, `pSkillEvasionPercent=0,4` e o mesmo Gloom é resistido com `debuffResistancePercent=0,8`. Todas as 24 ocorrências de classe na matriz passaram cast, MP e contrato; não extrapolar para outras skills/classes.
+- `Mana Effect Boost` declarava Max MP +20% e recuperação de MP +5,1, mas o parser e agregador só consumiam o primeiro valor. Adicionei `MP Recovery Rate` ao parser e conectei o bônus de buff ao `StatsEngine` existente; teste prova crescimento dos dois stats, e a matriz passou em Oracle, Elder e Eva's Saint.
+- Auditoria `2026-09-27T06:25:49.044Z`: 159 classes/2.114 relações; 1.800 PASS, 148 NOT_EXECUTED, 81 NOT_VALIDATED, 25 bloqueios por conteúdo, 60 por proveniência; 310 assertions failed e 314 unvalidated. Status continua FAIL.
+- `npm test`: **848/848**, 97 suítes. `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` intactos; saves reais intocados; sem push/merge/deploy. Bootstrap integral e reload de save real continuam sem evidência.
+- Próximo: continuar as skills sem execução e contratos sem validação e, depois, retomar cobertura requisito-a-requisito de classes, promoções, SA/cristais, Foundation, equipamentos e atributos.
+
+## Página 65 — 27 de setembro de 2026, 03:31 BRT
+### Long Shot adaptada e exercitada pelo dano de arco
+
+> **Branch**: `main`
+> **HEAD**: `c02262ef3e171884495e27be287fcae0db246fcc` (sem commit)
+> **Aprovação integral**: **BLOQUEADA**.
+
+- `Long Shot` concedia +200 de alcance de arco, sem efeito tático no combate de um alvo. Adaptei para +5% P. Atk passivo ao usar arco/besta. O bônus é gated pela arma ativa; teste garante que espada não recebe o efeito.
+- Harness mediu 11 ocorrências: Hawkeye, Sagittarius, Silver Ranger, Moonlight Sentinel, Phantom Ranger, Ghost Sentinel, Arbalester, Trickster, Sylph Gunner, Wind Hunter e Storm Blaster. Todas aumentaram `atk` com a arma de auditoria bow. Prova pelo caminho real `attackMonster`: 124 dano sem passiva e 130 com Long Shot.
+- Auditoria `2026-09-27T06:31:42.530Z`: 159 classes/2.114 relações; 1.811 PASS, 148 NOT_EXECUTED, 70 NOT_VALIDATED, 25 bloqueios de conteúdo e 60 de proveniência; 310 assertions failed, 303 unvalidated. Status geral continua FAIL.
+- `npm test`: 849/849 em 97 suítes. Serviços protegidos intactos; saves reais intocados; sem push/merge/deploy. Bootstrap integral e reload de save real continuam sem evidência.
+- Próximo: seguir pelos efeitos ainda sem contrato/execução e depois revisar os demais domínios do escopo, incluindo promoções/trocas, SA/cristais, Foundation, armadura e atributos. Não generalizar as onze variantes.
+
+## Atualização — 27 de setembro de 2026, 03:41 BRT
+
+- Reproduzi por que `Frost Flame` estava nas cinco ocorrências `NOT_EXECUTED`: a habilidade dizia que causava dano contínuo por 15 segundos, mas estava classificada como `buff`, e o fluxo a bloqueava sem contrato de buff.
+- Corrigi a classificação para ativa e conectei um efeito periódico ao tick real de `attackMonster`: dano adicional equivalente a 50% do acerto resolvido, distribuído em 15 pulsos de um segundo; recastar atualiza a duração sem empurrar o próximo pulso. O contrato confirma cast, cada redução real de HP, os 15 eventos e a expiração.
+- As cinco heranças (`orc_shaman`, `overlord`, `dominator`, `warcryer`, `doomcryer`) passaram na matriz. Não generalizar a prova para outras skills ou classes.
+- Relatório `2026-09-27T06:41:10.010Z`: 1.816 PASS, 143 NOT_EXECUTED, 70 NOT_VALIDATED, 25 bloqueios de conteúdo, 60 por proveniência; 300 assertions failed e 298 unvalidated; 159 classes/2.114 relações. Status geral continua **FAIL**.
+- Testes focados: 65/65; `npm test`: 850/850 em 97 suítes. O executor modular não roda o bootstrap completo nem recarrega save real. Serviços protegidos intactos; saves reais não tocados; sem push/merge/deploy.
+- Próximo: continuar corrigindo semânticas executáveis e resolver contratos/efeitos pendentes; cobertura geral de classes, promoções, SA/cristais, Foundation, armaduras e atributos segue aberta.
+
+## Atualização — 27 de setembro de 2026, 03:46 BRT
+
+- `Shining Prison`: o Hold original não tem consumidor direto no combate solo. Adaptei para redução de 25% da cadência de ataques do monstro por 6 s. Teste de serviço mediu o intervalo real subir de 1.500 para 2.000 ms e voltar a 1.500 ms após expirar.
+- A matriz confirmou conjuração, gasto de MP, ataqueSpeed 2→1,5 e expiração nas cinco variantes: Orc Shaman, Overlord, Dominator, Warcryer e Doomcryer. As cinco variantes de Frost Flame também repetiram PASS com 15 ticks reais.
+- A segunda execução encontrou que a atualização de combate podia chegar alguns ms depois do último pulso e encerrar o DOT cedo. Corrigi a fronteira para processar pulsos vencidos dentro da duração e acrescentei regressão com último tick atrasado; o relatório final voltou a confirmar 15 ticks.
+- Relatório `2026-09-27T06:46:10.000Z`: 159 classes/2.114 relações; 1.821 PASS, 138 NOT_EXECUTED, 70 NOT_VALIDATED, 25 bloqueios de conteúdo e 60 por proveniência; 290 assertions failed e 293 unvalidated. Sem efeito marcado como FAIL; a aprovação geral continua **FAIL/BLOQUEADA** pelas pendências.
+- `npm test`: 851/851 em 97 suítes. Saves reais intocados; serviços protegidos intactos; sem push/merge/deploy. Bootstrap integral e reload de save real continuam não validados.
+- Próximo: seguir pelas skills ainda não executadas e sem contrato; o resultado destas skills não prova as outras classes/skills nem fecha as áreas restantes do escopo.
+
+## Atualização — 27 de setembro de 2026, 03:51 BRT
+
+- `Anchor` paralisava o alvo, sem semântica direta no combate atual. Adaptei para reduzir a cadência de ataque do monstro em 35% por 3 s. Serviço e harness mediram ataqueSpeed 2→1,3 e retorno para 2 em Necromancer e Soultaker.
+- `Shackle` e `Dryad Root` compartilham Hold, então receberam adaptação de -25% na cadência por 4 s. A matriz só encontrou e provou Shackle em Paladin e Phoenix Knight e Dryad Root em Prophet e Hierophant; não extrapolar para as demais classes do registro.
+- Junto com `Shining Prison` (5 casos) e `Frost Flame` (5 casos, 15 ticks por ocorrência), as cinco famílias somam 16 relações classe/skill que passaram na matriz desta rodada. As adaptações foram declaradas no texto visível das habilidades.
+- Relatório `2026-09-27T06:51:07.332Z`: 159 classes/2.114 relações; 1.827 PASS, 132 NOT_EXECUTED, 70 NOT_VALIDATED, 25 bloqueios por conteúdo e 60 por proveniência; 278 assertions failed, 287 unvalidated. Sem efeito `FAIL`; status geral continua **FAIL/BLOQUEADO** por cobertura pendente.
+- `npm test`: 853/853 em 97 suítes. Saves reais intocados, serviços protegidos intactos, sem push/merge/deploy. Bootstrap completo e reload de save real não validados.
+- Próximo: continuar no catálogo ainda não executado/não validado e voltar às áreas de promoções/trocas, SA/cristais, Foundation, armaduras e atributos sem considerar esta amostra suficiente.
+
+## Atualização — 27 de setembro de 2026, 03:57 BRT
+
+- `Silence` agora tem consumidor real em `monsterAttack`: impede apenas a habilidade especial mágica do monstro durante 6 s, mantendo o ataque básico mágico; o cooldown da skill não é gasto enquanto silenciado.
+- Prova comparativa pelo fluxo real: Spellhowler recebeu 97 de dano de Audit Arcane Bolt no controle e 69 sob Silence; Storm Screamer, 81 no controle e 58 sob Silence. Em ambas as variantes o controle iniciou cooldown e Silence manteve o cooldown em zero; `magicSkillsSilenced` foi 0→1→0. Não generalizar para outras classes ou efeitos.
+- Relatório `2026-09-27T06:56:47.516Z`: 159 classes/2.114 relações; 1.829 PASS, 130 NOT_EXECUTED, 70 NOT_VALIDATED, 25 bloqueios de conteúdo, 60 de proveniência; 274 assertions failed e 285 unvalidated. Status geral continua **FAIL/BLOQUEADO**; ausência de efeito `FAIL` não substitui cobertura completa.
+- `npm test`: 854/854 em 97 suítes. Saves reais intactos, serviços protegidos sem alteração, sem push/merge/deploy. Bootstrap integral e reload de save real seguem não validados.
+- Próximo: continuar a matriz de skills não executadas/não validadas e completar as áreas restantes do escopo; esta prova cobre só Spellhowler e Storm Screamer.
+
+## Atualização — 27 de setembro de 2026, 03:59 BRT
+
+- `Curse Fear` não tinha comportamento numérico implementado; adaptei o medo para -15% P. Atk e M. Atk do monstro por 5 s. O cálculo real de ataque consome os dois atributos e os restaura ao expirar.
+- A matriz passou em Necromancer e Soultaker: atk/matk 100→85→100, cast e custo de MP corretos. Esta prova cobre somente essas duas relações.
+- Relatório `2026-09-27T06:59:15.405Z`: 159 classes/2.114 relações; 1.831 PASS, 128 NOT_EXECUTED, 70 NOT_VALIDATED, 25 bloqueios de conteúdo, 60 por proveniência; 270 assertions failed e 283 unvalidated. Status geral **FAIL/BLOQUEADO**.
+- `npm test`: 855/855 em 97 suítes. Saves reais intactos, serviços protegidos intactos, sem push/merge/deploy. Bootstrap integral e reload de save real permanecem sem validação.
+- Próximo: continuar as skills sem execução/contrato e depois fechar os sistemas fora desta família de combate. Não generalizar Curse Fear para outras skills/classes.
+
+## Atualização — 27 de setembro de 2026, 04:04 BRT
+
+- `Sleep`: adaptada para impedir ações do monstro por 2 s. `monsterAttack` retorna antes de dano ou cooldown enquanto o estado estiver ativo; a skill inimiga volta a atacar normalmente quando o tempo expira.
+- Prova pelo caminho real em Spellsinger e Mystic Muse: controle 97/81 de dano, durante Sleep 0/0 sem gastar cooldown, após expiração 97/81 com cooldown novamente ativo; `actionsDisabled` 0→1→0. Somente estas duas ocorrências foram auditadas.
+- Relatório `2026-09-27T07:04:14.759Z`: 159 classes/2.114 relações; 1.833 PASS, 126 NOT_EXECUTED, 70 NOT_VALIDATED, 25 bloqueios de conteúdo, 60 de proveniência; 266 assertions failed e 281 unvalidated. Global **FAIL/BLOQUEADO**.
+- `npm test`: 856/856 em 97 suítes. Saves reais intactos; `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` intactos; sem push/merge/deploy. Bootstrap integral/reload de save real seguem sem validação.
+- Próximo: continuar a cobertura do catálogo e depois os sistemas restantes do escopo; as provas de Sleep não são validação das demais classes/skills.
+
+## Atualização — 27 de setembro de 2026, 04:08 BRT
+
+- `Erosion` não tinha efeito de combate definido apesar de ser apresentada como buff. Adaptei-a para reduzir P. Def e M. Def do alvo em 10% por 5 s; o cooldown original de 1 s permanece, e o combat runtime evita reaplicar o debuff enquanto ele estiver ativo.
+- A regressão do serviço confirmou as duas defesas efetivas em 200/160 → 180/144 e o retorno após 5 s; a mitigação física e mágica melhora com a defesa reduzida.
+- A matriz pelo caminho `main.attackMonster` executou as únicas duas relações de Erosion no catálogo: `secret_assassin_male_3` e `secret_assassin_female_3`. Em ambas: aprendizado/equipamento/cast passaram, 50 MP debitados, `def`/`mdef` 100→90→100 e aplicação expira em 5.000 ms. Isso não valida outras skills nem outras classes.
+- Relatório `2026-09-27T07:08:37.468Z`, HEAD `c02262ef3e171884495e27be287fcae0db246fcc`: 159 classes/2.114 relações; 1.835 PASS, 124 NOT_EXECUTED, 70 NOT_VALIDATED, 25 content gap, 60 provenance gap; 262 assertions failed e 279 unvalidated. Global **FAIL/BLOQUEADO**; bootstrap completo e reload de save real não exercitados.
+- `npm test`: 857/857 em 97 suítes. `LevelEngine.js`, `MarketService.js`, `ExpeditionService.js` seguem intactos; saves reais não foram usados/alterados; sem push, merge ou deploy.
+- Próximo: seguir pelo catálogo de skills com efeitos ausentes/incoerentes e validar cada adaptação pelo produtor/consumidor real; manter as 18 skills sem contrato, 70 relações não validadas e as barreiras de proveniência/conteúdo explícitas.
+
+## Atualização — 27 de setembro de 2026, 04:12 BRT
+
+- `Wind Walk` foi a próxima adaptação: `Speed +20` era velocidade de movimento sem consumidor no combate ocioso. Agora concede +5% de redução de recarga por 10 s e não aumenta `atkSpd`.
+- A matriz encontrou três relações: `werewolf_1` e `werewolf_2` permanecem bloqueadas por lacuna de conteúdo; somente `werewolf_3` foi executada e passou (cast, custo/efeito/duração conforme evidência do auditor). Portanto, não generalizar o resultado à lista de classes do registro.
+- Novo relatório `2026-09-27T07:12:33.902Z`: 159 classes/2.114 relações; 1.836 PASS, 124 NOT_EXECUTED, 70 NOT_VALIDATED, 25 content gap e 60 provenance gap; 260 assertions failed e 278 unvalidated. Contratos: 423/440, 17 skills ainda sem contrato. Global **FAIL/BLOQUEADO**; 13 classes/linhagens e reload/bootstrap reais seguem como bloqueios.
+- `npm test`: 858/858 em 97 suítes. As adaptações de Erosion e Wind Walk estão registradas acima; Erosion passou em duas relações, Wind Walk em uma relação executável. Serviços protegidos e saves reais preservados, sem push/merge/deploy.
+- Próximo: revisar as outras 17 skills sem contrato e demais relações não executadas/não validadas, mantendo proveniência da regra, balanceamento explícito e limites de cada amostra.
+
+## Atualização — 27 de setembro de 2026, 04:14 BRT
+
+- `Magic Barrier` não tinha efeito consumido pelo combate. Adaptei para +10% M. Def por 10 s, ligado ao atributo efetivo usado contra dano mágico.
+- Das duas relações da matriz: `werewolf_2` segue bloqueada por lacuna de conteúdo; `werewolf_3` passou no cast e no custo de MP, com M. Def 185→203 e expiração em 10 s. A regressão adicional confirmou que `getStats` inclui o bônus. Esta é uma prova de uma classe executável, não das duas nem de outras classes.
+- Relatório `2026-09-27T07:14:29.656Z`: 159 classes/2.114 relações; 1.837 PASS, 124 NOT_EXECUTED, 68 NOT_VALIDATED, 25 content gap e 60 provenance gap; 258 assertions failed, 277 unvalidated; 424/440 contratos, 16 skills sem contrato. Global **FAIL/BLOQUEADO**, 13 classes/linhagens sem validação de conteúdo/proveniência; bootstrap e reload real pendentes.
+- Escopo recente com prova: Erosion 2/2 relações passaram; Wind Walk 1 passou e 2 ficaram bloqueadas por conteúdo; Magic Barrier 1 passou e 1 ficou bloqueada. Não extrapolar amostras.
+- `npm test`: 859/859 em 97 suítes. Serviços protegidos intactos; saves reais não alterados; sem push/merge/deploy. Seguir pelos 16 contratos ausentes e efeitos ainda não validados, preservando os bloqueios registrados.
+
+## Atualização — 27 de setembro de 2026, 04:21 BRT
+
+- Corrigi `HP Recovery` e `MP Recovery`: antes, as passivas não alimentavam os stats de regeneração que `attackMonster` consome. HP Recovery agora acrescenta +1% do HP máximo por nível ao tick de 10 s; MP Recovery acrescenta +0,5 MP por nível ao tick de 5 s.
+- O teste de produção revelou e reproduziu um erro numérico no tick de HP: após 50 incrementos de 0,2 s, ponto flutuante deixava o acumulador abaixo de 10, impedindo a cura. A condição agora aceita tolerância de 1e-9 nos acumuladores de HP e MP.
+- Auditoria real pelo `main.attackMonster`, 50 ticks, Warg: HP Recovery restaurou 12 HP (1129→1141) e MP Recovery restaurou 1 MP (446→447). `werewolf_2` segue bloqueada por lacuna de conteúdo; somente `werewolf_3` executou as duas habilidades. Não inferir para classes fora dessas relações.
+- Relatório `2026-09-27T07:21:20.817Z`, HEAD `c02262ef3e171884495e27be287fcae0db246fcc`: 159 classes/2.114 relações; 1.839 PASS, 124 NOT_EXECUTED, 66 NOT_VALIDATED, 25 content gap, 60 provenance gap; 258 assertions failed, 275 unvalidated; 426/440 contratos e 14 skills sem contrato. Global continua **FAIL/BLOQUEADO**; 13 classes/linhagens bloqueadas e bootstrap/reload real pendentes.
+- `npm test`: 861/861 em 97 suítes. Serviços protegidos intactos, saves reais não usados/alterados, sem push/merge/deploy. Próximo: continuar as skills sem contrato e as restantes famílias de sistemas do objetivo.
+
+## Atualização — 27 de setembro de 2026, 04:26 BRT
+
+- `Berserker Spirit` tinha placeholder sem efeito. Com base no trade-off ofensivo/defensivo do efeito clássico documentado pela NCSoft, adaptei para 8 s: +5% P. Atk, +10% M. Atk, +10% CDR (os +5% atk speed e +5% cast speed foram convertidos em recarga), em troca de -5% P. Def, -10% M. Def e -2 Evasion. Referência: https://www.lineage2.com/en-us/news/Death-Knight-Reborn-Patch-Notes . Os valores e duração são balanceamento Aden Arena, não uma cópia do efeito oficial.
+- Matriz de produção: `werewolf_3` aprendeu/equipou/conjurou a skill, debitou 15 MP, mediu ATK 303→318, MATK 279→306, CDR 0→0,10, DEF 182→173, M.DEF 185→166 e EVA 11→9; após 8 s todos retornaram aos valores anteriores. `werewolf_2` permanece bloqueada por lacuna de conteúdo. Esta adaptação só foi executada em uma variante.
+- Relatório `2026-09-27T07:26:16.476Z`: 159 classes/2.114 relações; 1.840 PASS, 124 NOT_EXECUTED, 65 NOT_VALIDATED, 25 content gap e 60 provenance gap; 256 assertions failed e 274 unvalidated. 427/440 habilidades observadas têm contrato; 13 continuam sem contrato. Status geral **FAIL/BLOQUEADO**; 13 classes/linhagens e bootstrap/reload de save real não validados.
+- `npm test`: 862/862 em 97 suítes. Serviços protegidos intactos, saves reais não alterados; sem push/merge/deploy. Próximo: revisar as 13 skills sem contrato e continuar os domínios de SA/cristais, Foundation, armaduras, atributos e trocas com provas próprias.
+
+## Atualização — 27 de setembro de 2026, 04:29 BRT
+
+- `Wild Magic` e `Improved Speed` eram placeholders sem execução definida. Wild Magic agora concede +5 pontos percentuais na chance crítica compartilhada por 8 s; o jogo não separa crítico mágico. Improved Speed converte mobilidade sem consumidor em +10% CDR por 12 s, mantendo `atkSpd` inalterado.
+- A referência oficial NCSoft lista Wild Magic como aumento de chance de crítico mágico e documenta berserker como troca entre ataque e defesa: https://www.lineage2.com/en-us/news/lineage-ii-classic-generous-cats-event-july-2024 ; https://www.lineage2.com/en-us/news/Death-Knight-Reborn-Patch-Notes . Os valores/tempos acima são balanceamento local do Aden Arena.
+- A matriz comprova as variantes executáveis de Wild Magic e Improved Speed em `werewolf_3`; `werewolf_2` permanece bloqueada por lacuna de conteúdo. Berserker Spirit também passou em `werewolf_3`, com deltas e expiração anteriores. Não generalizar para variantes bloqueadas ou outras classes.
+- Relatório `2026-09-27T07:29:16.555Z`: 159 classes/2.114 relações; 1.842 PASS, 124 NOT_EXECUTED, 63 NOT_VALIDATED, 25 content gap e 60 provenance gap; 252 assertions failed e 272 unvalidated. 429/440 contratos; 11 skills ainda sem contrato. Status global **FAIL/BLOQUEADO**; classes/linhagens, bootstrap/reload real pendentes.
+- `npm test`: 864/864 em 97 suítes. Serviços protegidos intactos, saves reais não alterados, sem push/merge/deploy. Prosseguir pelas 11 skills sem contrato e domínios restantes.
+
+## Atualização — 27 de setembro de 2026, 04:32 BRT
+
+- `Powerful Fists` estava causando dano genérico em um único evento, apesar do contrato local descrever dois golpes e ignorar 25% da defesa do alvo. Corrigi `main.attackMonster`: o dano físico é calculado contra 75% da P. Def efetiva e distribuído em dois eventos de golpe, mantendo o total debitado do HP igual à soma das duas parcelas.
+- Auditoria na única relação executável, `werewolf_3`: aprendizado/equipamento/cast e 84 MP passaram; dois eventos de 11.653 dano cada; P. Def 100→75 para cada golpe; HP do alvo 1.000.000.000→999.976.694. Essa amostra não cobre outras classes.
+- Limite concreto: o modelo de monstros não tem atributo separado de `Shield Defense`; a cláusula “ignores Shield Defense” não possui efeito independente no combate atual e permanece sem validação própria. Não afirmar que toda a descrição está coberta.
+- Relatório `2026-09-27T07:32:26.939Z`: 159 classes/2.114 relações; 1.843 PASS, 124 NOT_EXECUTED, 62 NOT_VALIDATED, 25 content gap, 60 provenance gap; 252 assertions failed e 271 unvalidated. 430/440 contratos observados; 10 habilidades sem contrato. Global **FAIL/BLOQUEADO**.
+- `npm test`: 865/865 em 97 suítes. Serviços protegidos intactos, saves reais não alterados; sem push/merge/deploy. Continuar contratos ausentes e sistemas restantes; bootstrap/reload real e conteúdo/proveniência seguem bloqueados.
+
+## Atualização — 27 de setembro de 2026, 04:40 BRT
+
+- `Glorious Warrior: Enhanced Abilities` não tinha contrato executável. Seu texto nomeava CON +1 e MEN +1, e o caminho de produção já escala esses atributos para HP, MP e M. Def.; implementei o buff por 10 s, sem criar um bônus de ataque arbitrário. O cálculo do auditor agora inclui atributos primários para medir os dois efeitos.
+- Evidência do cast real: apenas a relação `werewolf_3` foi executável. Passou aprendizado, livro, equipamento, cast e custo de 15 MP. Durante o buff, CON 43→44, MEN 25→26, Max HP 1430→1440, Max MP 541→542 e M. Def. 217→218; após 10 s, os valores voltaram. As outras variantes/classes não foram provadas por esta amostra.
+- Auditoria `2026-09-27T07:40:03.191Z`: 159 classes/2.114 relações, 252 assertions failed e 270 unvalidated; 431/440 contratos configurados, 9 skills sem contrato (`assassin_s_secret_notes_2nd_page`, `quick_dash`, `unleashed_potential`, `divine_inspiration`, `artful_disarm`, `imminent_piercing`, `moon_influence`, `confused_mind`, `tough_skin`). Status geral **FAIL/BLOQUEADO**. Proveniência independente: 146/159 não validadas e 13 bloqueadas por conteúdo/proveniência; bootstrap/reload de save real não executado.
+- `npm test`: 866/866 em 97 suítes. `git diff --check` sem erros de whitespace; `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` permanecem intactos. Nenhum save real foi usado; sem push/merge/deploy.
+- Próximo: revisar as 9 habilidades sem contrato e procurar outros efeitos sem consumidor no combate atual. Adaptar apenas quando houver base semântica razoável, com teste de regressão e prova no fluxo real; manter cada variante não executada como pendente.
+
+## Atualização — 27 de setembro de 2026, 04:46 BRT
+
+- Corrigi `Tough Skin`: a ficha local `classes_echo_defs.js` registra a passiva Warg como +20% Debuff Resist, mas o registro canônico a classificava como buff e o atributo de combate não consumia a skill. Agora a skill é passiva e acrescenta +20% resistência a debuffs de combate, que o MonsterAIEngine usa ao decidir Hex/Gloom. Mantive a adaptação restrita a essa regra documentada.
+- Regressão de produção passou: a mesma rolagem 0,22 aplica Hex/Gloom sem a passiva e é resistida com Tough Skin. A matriz exercitou apenas a relação `werewolf_3` e mediu a resistência de 0→0,20 pelo `StatsEngine.getStats`; não infiro cobertura para outras classes.
+- Auditoria `2026-09-27T07:44:40.890Z`: 159 classes/2.114 relações; 250 assertions failed, 269 unvalidated; 432/440 contratos, 8 skills ainda sem contrato. Global **FAIL/BLOQUEADO**; proveniência independente segue incompleta e reload/bootstrap de save real não executado.
+- `npm test`: 867/867 em 97 suítes. `git diff --check` sem erros; `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` intactos. Nenhum save real alterado; sem push/merge/deploy.
+- Próximo: investigar as 8 skills sem contrato, começando pela relação entre placeholders do Warg e os efeitos detalhados do catálogo local. Separar sempre conteúdo de uma classe de evidência que atravessa o combate; só adaptar onde houver base semântica verificável.
+
+- Ressalva de proveniência: o registro canônico original ainda conserva `rawType: "Buff"` e cooldown de 10 min, enquanto `classes_echo_defs.js` define Tough Skin como passiva 2★ +20% Debuff Resist. A implementação segue a ficha local Warg como adaptação executável, mas essa divergência entre fontes não está resolvida por fonte independente; a passagem funcional não prova que as duas representem a mesma variante oficial.
+
+## Atualização — 27 de setembro de 2026, 04:51 BRT
+
+- Corrigi o cast de `Confused Mind`: antes o executor não tinha efeito e recusava a skill. A ficha Warg local descreve uma transformação instantânea; como o combate por cartas não troca formas/skill bars, adaptei para uma postura feral defensiva de 8 s: +10% P. Def., +10% M. Def. e +5% redução de recarga (sem aumentar `atkSpd`). O cooldown canônico registrado permanece 60 s.
+- Prova pelo executor do navegador em `main.attackMonster`, apenas para `werewolf_3`: aprendizado, consumo do livro, equip, cast e 15 MP passaram. `def` 182→198, `mdef` 185→203 e `cdr` 0→0,05; `atkSpd` ficou 0, e os valores retornaram ao expirar. Não inferir resultado para `werewolf_2`, que continua bloqueada por lacuna de conteúdo.
+- Ressalva de fonte: `classes_echo_defs.js` descreve Confused Mind com transformação instantânea/cooldown de 30 s; o registro canônico diz Buff/cooldown de 1 min. O efeito de 8 s é balanceamento local inspirado nos efeitos da transformação Warg descritos pelo próprio registro de `unleashed_potential`; não é afirmação de equivalência oficial.
+- O primeiro `npm test` falhou somente no teste estocástico de Valakas (amostra de 40, WR 90%); isolado passou. Fixei a reprodutibilidade do teste com PRNG seed 1 e amostra de 100, que reproduz WR 96%, SM 1,58x e TTK 167,6 s; limiares continuam estritos. Suíte completa agora passou: 868/868 em 97 suítes.
+- Auditoria `2026-09-27T07:49:22.057Z`: 159 classes/2.114 relações; 248 assertions failed, 268 unvalidated; 433/440 contratos, 7 skills sem contrato (`assassin_s_secret_notes_2nd_page`, `quick_dash`, `unleashed_potential`, `divine_inspiration`, `artful_disarm`, `imminent_piercing`, `moon_influence`). Status geral **FAIL/BLOQUEADO**; proveniência independente, conteúdo e reload/bootstrap de save real seguem incompletos.
+- `git diff --check` sem erros; serviços protegidos intactos; saves reais intocados; sem push/merge/deploy.
+- Próximo: continuar as sete skills sem contrato e registrar divergências entre o cadastro canônico e as fichas de arquétipo antes de tratar qualquer efeito local como verdade universal.
+
+## Atualização — 27 de setembro de 2026, 05:18 BRT
+
+- Corrigi a classificação de Assassin's Secret Notes 1st/2nd/3rd Page: são buffs, não dano. As notas publicadas pela 4game descrevem HP/MP, ataque, defesa, velocidade de ataque, precisão, crítico mágico e velocidade; o patch oficial traz as três faixas e requisitos de nível. A velocidade de ataque passa a reduzir recarga conforme a regra do Aden Arena. Precisão recebeu consumidores P./M. próprios e reduz a penalidade de erro por diferença de nível em 5 pontos percentuais por ponto; `atkSpd` fica inalterado.
+- Auditor de produção provou as páginas 1 e 2 em `secret_assassin_male_2/3` e `secret_assassin_female_2/3`. Página 3 não foi executada porque não aparece nos cinco `skillIds` do estágio Assassin S2, embora a entrada da skill a declare elegível a `assassinS2`; é uma inconsistência de roster ainda sem decisão de qual habilidade substituir para preservar o limite de cinco.
+- Adaptações com contrato: Quick Dash vira +5% CDR por 2s; Artful Disarm reduz P. Atk. do monstro em 20% por 5s; Imminent Piercing reduz P. Def. em 15% por 5s; Moon Influence vira postura de 12s (+15% P. Atk., +10% P./M. Def., +10% CDR e +10% resistência a debuff), mantendo cooldown de 10 min. São números locais de balanceamento, não alegações de equivalência oficial. O ciclo de produção executou Quick Dash, Artful Disarm, Imminent Piercing e Moon Influence apenas em `werewolf_3`; `werewolf_1/2` continuam bloqueadas por lacuna de conteúdo.
+- Auditoria `2026-09-27T08:18:36.100Z`: 159 classes/2.114 relações, 248 assertions failed e 260 unvalidated. Há 438/440 contratos para as 440 habilidades observadas; permanecem sem contrato `unleashed_potential` e `divine_inspiration`. 124 relações ainda falham em cast/custo de MP no executor; causas ainda não isoladas. Há 13 classes com lacuna de conteúdo e a proveniência independente não foi exercitada. Bootstrap completo e reload de save real seguem não validados.
+- `npm test`: 871/871 em 97 suítes. `git diff --check` limpo (avisos somente de normalização LF/CRLF). `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` intactos; saves reais preservados; sem push/merge/deploy.
+- Próximo: resolver as duas habilidades sem contrato e isolar as 124 falhas de cast sem atribuir efeito por suposição; tratar a falta de vínculo da 3rd Page respeitando cinco habilidades por evolução.
+
+## Atualização — 27 de setembro de 2026, 05:36 BRT
+
+- Adaptei mais duas habilidades de controle que não tinham efeito equivalente no combate por cartas: `Word of Fear` reduz P./M. Atk. do monstro em 12% por 5 s; `Shadow Step` converte a redução de movimento do alvo em −20% da cadência de ataque por 5 s. São escolhas de balanceamento Aden Arena, não valores oficiais. Ambas foram aprendidas, equipadas e conjuradas por `main.attackMonster`; custos de MP foram debitados, os efeitos chegaram ao alvo e expiraram corretamente. Relações executadas: Hierophant 1/1 para Word of Fear; Adventurer e Ghost Hunter 2/2 para Shadow Step.
+- Corrigi `Freezing Flame`: o registro descrevia dano contínuo por 10 s, mas o combate tratava a skill como buff sem efeito e o consumidor de dano contínuo só aceitava Frost Flame. Agora skills com cláusula explícita de dano contínuo entram como ataque e aplicam dez ticks de queimadura de 1 s, somando metade do dano inicial ao longo do efeito. Auditor de produção: Warcryer e Doomcryer 2/2 conjuraram, pagaram MP, aplicaram e completaram exatamente os 10 ticks; ambos PASS.
+- O auditor ainda está globalmente **FAIL/BLOQUEADO**: geração `2026-09-27T08:35:35.518Z`, 159 classes, 2.114 relações, 238 assertions failed e 253 unvalidated. Efeitos: 1.861 PASS, 119 NOT_EXECUTED, 49 NOT_VALIDATED, 25 bloqueados por lacuna de conteúdo e 60 bloqueados por proveniência. 440/440 IDs observados têm contrato; isso não equivale à validação de todas as relações.
+- Lacunas concretas inalteradas: 13 classes/linhagens com conteúdo ausente, 146 proveniências sem comprovação independente, cinco raízes de criação bloqueadas e nenhuma renderização da UI de promoção, bootstrap/reload real ou save real exercitado. A matriz isolada segue em `main.attackMonster`; não afirma validação visual integral.
+- `npm test`: 876/876 em 97 suítes. `npm run build` concluiu (aviso de chunk JS acima de 1,5 MB). `git diff --check` sem erros de whitespace, somente avisos CRLF. Serviços protegidos intactos; nenhum save real acessado; sem push/merge/deploy.
+- Continuar pela leitura dos 238 asserts que falham e pelas relações NOT_EXECUTED/NOT_VALIDATED. Não extrapolar as amostras destas três habilidades para classes além das listadas.
+
+## Atualização — 27 de setembro de 2026, 05:45 BRT
+
+- Adaptei três efeitos explicitamente incompatíveis com o combate por cartas. `Disarm` é PvP-only; no PvE reduz o ataque físico do monstro em 20% por 2 s. `Shillien's Stigma` transforma resistência a armas sem canal por tipo em +10% de dano recebido e −10% M. Def. por 8 s. `Elemental Wind Walk` converte movimento sem consumidor em +5% CDR por 10 s, sem elevar atkSpd.
+- Provas por `main.attackMonster`: Disarm passou em Doombringer (1 relação); Eviscerator está bloqueada por proveniência e não conta como PASS. Shillien's Stigma passou em Shillien Elder/Saint (2/2). Elemental Wind Walk passou em Sylph Gunner, Wind Hunter e Storm Blaster (3/3). Cada relação aprovada aprendeu/equipou/conjurou, pagou MP e teve efeito/duração verificados.
+- Auditoria `2026-09-27T08:44:28.506Z`: 159 classes, 2.114 relações; 226 assertions failed, 247 unvalidated. Distribuição dos efeitos: 1.867 PASS, 113 NOT_EXECUTED, 49 NOT_VALIDATED, 25 BLOCKED_CONTENT_GAP e 60 BLOCKED_UNPROVEN_PROVENANCE. Status geral permanece **FAIL/BLOQUEADO**.
+- `npm test`: 880/880 em 97 suítes. Build passou, com aviso de chunk JS >1,5 MB. `git diff --check` sem erros, apenas avisos de normalização CRLF. Serviços protegidos intactos; saves reais não acessados; sem push/merge/deploy.
+- Prosseguir nos 113 não executados, nos 49 efeitos sem validação, nas 13 classes/linhagens com conteúdo insuficiente e nos domínios de skills/classes, trocas, SA/cristais, Foundation, armaduras e atributos. A proveniência das classes, renderização real da UI de promoção e bootstrap/reload real continuam sem prova. Resultados das três habilidades acima não se estendem a relações bloqueadas ou não listadas.
+
+## Atualização — 27 de setembro de 2026, 05:29 BRT
+
+- Fechei contratos para `Unleashed Potential` e `Divine Inspiration`. Como Aden Arena não tem barra de WP/formas, `Unleashed Potential` fica com +8% P. Atk., +5% CDR e +5% resistência a debuffs por rank; como buffs não têm limite de slots, `Divine Inspiration` estende a duração de buffs próprios em 10% por rank. A segunda adaptação é consumida ao aplicar buff no `main.attackMonster`; ambas passaram na relação `werewolf_3`. Não extrapolar a `werewolf_2`, bloqueada por lacuna de conteúdo.
+- Relatório final `2026-09-27T08:24:03.400Z`: 159 classes/2.114 relações. 1.856 efeitos PASS, 124 NOT_EXECUTED, 49 NOT_VALIDATED, 25 BLOCKED_CONTENT_GAP e 60 BLOCKED_UNPROVEN_PROVENANCE. 440/440 habilidades observadas têm contrato implementado; isso não fecha validação de execução. Global **FAIL/BLOQUEADO**, com 248 assertions failed e 258 unvalidated.
+- O auditor continua encontrando 124 relações sem cast/custo de MP no executor; causa ainda não isolada. 13 classes estão bloqueadas por lacuna local, 146/159 proveniências não foram verificadas de modo independente e o bootstrap/reload real de save não foi exercitado.
+- `Assassin's Secret Notes` Page 1 e Page 2 passaram em `secret_assassin_male_2/3` e `secret_assassin_female_2/3`. Page 3 não consta nos cinco `skillIds` do estágio `assassinS2`, embora seu registro de skill a declare elegível; preservar cinco skills por evolução deixa em aberto qual skill substituir.
+- `Quick Dash`, `Artful Disarm`, `Imminent Piercing`, `Moon Influence`, `Unleashed Potential` e `Divine Inspiration` passaram no caminho medido em `werewolf_3`; `werewolf_1/2` seguem bloqueadas, portanto sem conclusão para essas variantes. Durações/valores são balanceamento Aden Arena explicitamente local.
+- `npm test`: 872/872 em 97 suítes. `git diff --check` limpo, com avisos somente sobre normalização LF/CRLF. `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` seguem intactos; nenhum save real foi lido/alterado; sem push/merge/deploy.
+- Próximo: rastrear as 124 falhas de conjuração no executor e revisar as 49 relações NOT_VALIDATED. Não reduzir os números usando só cobertura de contrato; resolver roster da Page 3 sem violar as cinco habilidades por evolução.
+
+## Continuidade — habilidades raciais e efeitos de combate (11:35 BRT)
+
+- Corrigi o executor funcional: ele usava `v2ClassDef.skillIds` do nó genérico compartilhado e chamava `isSkillInProgressionPath` sem classe+raça. O contexto agora expõe `classSkillIds` da evolução já ajustada por raça; o executor percorre habilidades por estágio e passa `{ class, race }` ao verificador. Uma regressão cobre estágio 2/3, habilidade racial correta, rejeição das outras variantes e contagem de slots.
+- Resultado: as variantes de Call passam no `main.attackMonster`: Human `Call of Flame` 2/2 (−15% P./M. Def. do monstro por 5 s); Elf `Call of Frost` 2/2 (+5% P. Atk. e +2% dano PvE por 10 s); Dark Elf `Call of Lightning` 2/2 (bloqueia ação do monstro por 1 s). São adaptações locais, não alegação de equivalência integral à versão oficial.
+- Outras adaptações medidas: Entangle (−20% cadência do alvo/4 s) 2/2; Silent Move (+10% evasão de skills físicas/mágicas do monstro/8 s) 2/2; Fake Death (+15% P./M. Def. e +10% resistência a debuffs/4 s) 4/4; Ultimate Defense (+60% P./M. Def./10 s) 1/1; Guts (+400 P. Def., +35% P. Def. e +25% resistência a debuffs/10 s) 2/2. Cada registro passou pelo auditor do caminho de combate; testes unitários verificam consumidor e expiração.
+- Auditor regenerado `2026-09-27T14:32:19.888Z`: 159 classes, 2.114 relações; 1.884 efeitos PASS, 98 NOT_EXECUTED, 47 NOT_VALIDATED, 25 bloqueados por lacuna de conteúdo e 60 por proveniência. 196 assertions failed correspondem a 98 relações com cast não executado + verificação de débito MP dependente do cast. Global permanece **FAIL/BLOQUEADO**; as 145 relações NOT_EXECUTED/NOT_VALIDATED não são aprovação.
+- `npm test`: 888/888 em 97 suítes. `npm run build`: sucesso; mantém aviso de chunk JS acima de 1,5 MB. `git diff --check`: sem erro de whitespace, apenas avisos de conversão LF/CRLF. `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` seguem intactos; nenhum save real foi carregado/editado; sem push, merge ou deploy.
+- Próximo trabalho: isolar as 98 relações que não chegam ao cast e validar os 47 efeitos restantes sem contrato comportamental suficiente; continuar a prova de classes, promoções, trocas, SA/cristais, Foundation, armaduras e atributos. Não extrapolar a amostra das classes listadas.
+
+## Continuidade — adaptação do servitor Panther (11:37 BRT)
+
+- `Dark Panther's Help` descreve o servitor atacando o mesmo alvo com dano baseado no P. Atk. Como o combate por cartas não simula um ator de servitor separado, adaptei o ataque adicional para +5% dano PvE do dono durante 6 s. Teste reproduz o aumento de dano 100→105 no bônus ativo e expiração de volta ao baseline.
+- Auditor de produção executou `main.attackMonster` em Dark Avenger e Hell Knight: cast, débito MP, buff e expiração passaram em 2/2 relações.
+- Novo auditor `2026-09-27T14:36:23.196Z`: 159 classes, 2.114 relações; 1.886 PASS, 96 NOT_EXECUTED, 47 NOT_VALIDATED, 25 content-gap e 60 provenance-gap. 192 assertions failed são 96 casts não executados + respectivas verificações MP. Global segue FAIL/BLOQUEADO.
+- `npm test`: 889/889 em 97 suítes; `npm run build`: sucesso com aviso existente de chunk >1,5 MB. Serviços protegidos intactos; saves reais preservados; sem push/merge/deploy.
+- Próximo: investigar os 96 casts restantes sem enfraquecer o pré-requisito de execução; depois trabalhar os 47 efeitos não validados e retomar cobertura própria de promoções/trocas, SA/cristais, Foundation, armaduras/status e atributos.
+
+## Continuidade — correções de Sacrifice e Shelter Master (11:49 BRT)
+
+- Corrigi `Sacrifice`: o texto canônico “Consumes your HP to recover HP of the target. Power 350” agora é reconhecido como cura. No combate solo a adaptação custa 10% do HP máximo, mantém pelo menos 1 HP e só pode ser lançada se o jogador puder pagar o custo; a cura Power 350 vai para o próprio personagem. O ramo de cura agora também sinaliza corretamente que uma skill foi conjurada no tick.
+- A auditoria mede as transições de HP efetivamente observadas durante `main.attackMonster`, em vez de inferir o custo a partir de uma cura esperada que pode bater no limite de Max HP. Paladin e Phoenix Knight: cast e débito de 15 MP passaram, com custo medido de 10% Max HP (85/858 e 122/1229); o resultado líquido de HP chegou ao teto sem excedê-lo.
+- Adaptei `Shelter: Master`, cujo texto descreve invulnerabilidade e cura de grupo inexistentes no combate solo, para uma postura temporária de +60% P./M. Def. e +25% resistência a debuffs por 10 s. Mantém o cooldown canônico de 3 minutos. Teste confirma maior mitigação real e que o bônus de resistência altera a chance de debuff do monstro; a matriz funcional mediu a relação de `evaSaint`. Ainda não há relação funcional executada para `shillienSaint`, embora a skill liste essa classe no registro canônico.
+- Auditor funcional `2026-09-27T14:53:36.654Z`: 159 classes e 2.114 relações; 1.889 PASS, 93 NOT_EXECUTED, 47 NOT_VALIDATED, 25 BLOCKED_CONTENT_GAP e 60 BLOCKED_UNPROVEN_PROVENANCE. Global **FAIL/BLOQUEADO**. Contratos cobrem 442 habilidades únicas observadas, mas isso não substitui execução. Permanecem 186 assertions dependentes de cast/MP e 225 sem validação completa.
+- `npm test`: 892/892 em 97 suítes. Build passou, com aviso de chunk JS >1,5 MB. `git diff --check` sem erro de whitespace (avisos LF/CRLF). `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` permanecem sem diff; nenhum save real acessado; sem push, merge ou deploy.
+- Retomar os 93 casts ainda não executados e as 47 relações não validadas; manter explícitos os 13 gaps de conteúdo/proveniência e as validações ainda não feitas do bootstrap/save real, UI de promoções, SA/cristais, Foundation, armaduras/status e trocas. Nenhum resultado das classes testadas pode ser extrapolado às bloqueadas ou não listadas.
+
+## Continuidade — auditoria de Freezing Wound (12:22 BRT)
+
+- A auditoria `2026-09-27T15:22Z` mostrou que Freezing Wound estava tipada como buff apesar de descrever ataque de Power 120% e redução de velocidade por 3 s. `resolveSkillBuffStats` não encontrava efeito suportado, então `main.attackMonster` pulava a habilidade antes do custo de MP. O relatório antigo de pré-reparo chegou a registrar a habilidade como buff aplicado; isso era um falso positivo, não evidência de execução correta.
+- Corrigi o registro e o adaptador: Freezing Wound agora é ataque (pwr 12 no fator de escala 10 do combate, equivalente aos 120% declarados), com redução balanceada de 20% da cadência de ataque e aumento de 20% no cooldown das habilidades do monstro durante 3 s. O efeito e o teste combinado exigem dano real, débito de MP, aplicação no alvo e retorno ao baseline após expirar.
+- Caminho real `main.attackMonster`: `wind_hunter` e `storm_blaster` passaram; ambos conjuraram e pagaram MP. Em ambos, attack speed do alvo foi de 2 para 1,6, multiplicador de cooldown de 1 para 1,2 e duração observada de 3.000 ms. O dano foi medido em cada classe separadamente; não extrapolei valores entre classes.
+- Nova matriz: 159 classes/2.114 relações; 1.892 PASS, 90 NOT_EXECUTED, 47 NOT_VALIDATED, 25 bloqueadas por lacuna de conteúdo e 60 por proveniência. As 90 relações não executadas cobrem 50 skills únicas em 51 classes. As 180 assertions falhas são os pares cast/MP dessas 90 relações. Global permanece **FAIL/BLOQUEADO**; bootstrap completo e reload de save real não foram executados.
+- `npm test`: 896/896 em 97 suítes. `npm run build`: sucesso, com o aviso existente de chunks acima de 1,5 MB. O gerador de contratos foi executado e preservou a avaliação independente; os testes direcionados passaram 109/109. `git diff --check` sem erro de whitespace (avisos de normalização LF/CRLF). `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` seguem intactos; saves reais preservados; sem push/merge/deploy.
+- Próximo: adaptar com evidência o grupo restante de buffs que não executam e os dois casos de Chant of Vampire. A fonte oficial NC mais recente encontrada descreve Chant of Vampire Lv. 1 com +10% resistência e 80% de chance de absorver 7% do dano causado como HP; `Speed +2` não tem consumidor de movimento no combate por cartas. Ainda falta implementar e medir esses efeitos, inclusive a chance de proc. Continuam abertas proveniência independente, 13 gaps de classe, bootstrap/save real e cobertura de trocas, SA/cristais, Foundation, armadura e atributos.
+
+## Continuidade — Chant of Vampire e proc de absorção (12:35 BRT)
+
+- A descrição local de Chant of Vampire estava truncada e a auditoria a classificava como debuff de alvo. Atualizei o efeito de nível 1 a partir da tabela oficial da NC: Speed +2, resistência a debuff/mez +10% e 80% de chance para absorver 7% do dano causado como HP. Como movimento não tem consumidor no combate de cartas, Speed +2 vira +2% CDR; resistência e proc mantêm os valores da fonte. A fonte não informa duração nesta tabela; o runtime usa o padrão existente de 60 s, sem afirmar que essa seja a duração oficial: https://lounge.plaync.com/feed/75079?country=US&locale=en-US
+- Implementei o proc probabilístico em um consumidor reutilizado pelos ataques básicos e pelas skills no `main.attackMonster`. Ele cura com base no dano efetivamente causado, respeita HP máximo e buff expirado e não converte a chance em valor médio garantido.
+- Prova de combate real passou em Warcryer e Doomcryer: conjuração, débito de MP, +2% CDR, +10% resistência e retorno ao baseline após expiração. Com rolagem 0,79, os danos medidos de 119 e 206 curaram 8 e 14 HP; na rolagem de controle 0,80, ambos curaram 0. São resultados dessas duas relações, sem extrapolação.
+- Auditoria `2026-09-27T15:35:10Z`: 159 classes/2.114 relações; 1.894 PASS, 88 NOT_EXECUTED, 47 NOT_VALIDATED, 25 bloqueadas por lacuna de conteúdo e 60 por proveniência. As 88 relações não executadas geram 176 verificações de cast/MP falhas. Status geral continua **FAIL/BLOQUEADO**; 13 registros de classe têm gaps e proveniência independente, bootstrap completo e reload de save real seguem sem prova.
+- `npm test`: 899/899 em 97 suítes. Build concluído; permanece o aviso de chunks acima de 1,5 MB. `git diff --check` não acusou erros de whitespace, somente avisos de normalização LF/CRLF. `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` sem alteração; saves reais preservados; sem push, merge ou deploy.
+- Próximo: investigar as 88 relações sem cast, começando pelos 88 efeitos buff ainda sem execução, e depois validar as 47 relações cujo efeito segue sem prova suficiente. As outras áreas do objetivo — trocas, SA/cristais, Foundation, armaduras/atributos, bootstrap e saves — continuam abertas.
+
+## Continuidade — Rage, Soul Roar e Soul Guard (12:48 BRT)
+
+- Reabri as 88 relações `NOT_EXECUTED` do snapshot das 12:35. O motivo foi reproduzido no fluxo real: as definições do catálogo continham somente `"<nome> effect"`, `resolveSkillBuffStats` devolvia `null` e `main.attackMonster` pulava o cast antes do débito de MP. Portanto, não eram apenas falsos positivos do auditor: faltavam efeitos executáveis no jogo.
+- Como os registros locais não fornecem valores canônicos para esses três efeitos, apliquei a autorização do usuário para adaptações criativas e balanceadas e deixei isso visível na descrição: `Rage` concede +10% P. Atk. e +5% redução de recarga por 8 s; `Soul Roar`, +8% P. Atk. e +10% resistência a debuffs de combate por 8 s; `Soul Guard`, +15% P. Def., +10% M. Def. e +10% resistência a debuffs por 8 s. Rage não altera `atkSpd`.
+- Regressões TDD primeiro falharam porque o resolver retornava `null` e faltavam os contratos de auditoria. Depois da implementação, testes focados passaram (114/114). Reexecutei individualmente as nove relações elegíveis pelo executor de navegador e `main.attackMonster`: Orc Raider, Destroyer, Titan; Trooper, Berserker e Doombringer para Soul Roar e Soul Guard. Todas passaram em cast, débito exato de MP, aplicação/atributos, expiração e ausência de erro de navegador. A evidência completa está em `scripts/audit-evidence/warrior-buffs-production-batch-20260927.json`.
+- A suíte integral passou 901/901 em 97 suítes; `npm run build` passou com o aviso existente de chunks acima de 1,5 MB. `git diff --check` não mostrou erro de whitespace; só avisou normalização LF/CRLF. Os três serviços protegidos seguem sem alteração e nenhum save real foi acessado.
+- O relatório amplo de 12:35 foi mantido como registro histórico e ainda exibe 88 casos não executados; não foi regenerado depois deste lote. Há evidência nova para nove relações dessas 88, mas os 79 casos restantes ainda precisam ser auditados individualmente ou em lotes. O projeto continua **FAIL/BLOQUEADO**; as demais habilidades, as classes com lacunas de conteúdo/proveniência e os sistemas de promoção/troca, SA/cristais, Foundation, armadura/status, bootstrap e saves ainda não têm cobertura integral demonstrada. Sem push, merge ou deploy.
+
+## Continuidade — posturas elementais Samurai (12:56 BRT)
+
+- O relatório listava as skills `Fire`, `Wind`, `Mountain` e `Forest` como buffs sem efeito numérico. Adaptações visíveis no catálogo: Fire +10% P. Atk.; Wind +8% CDR; Mountain +15% P. Def. e +10% M. Def.; Forest +15 Evasion e +10% resistência a debuffs de combate. Todas duram 8 s. Wind não altera `atkSpd`. Os números são balanceamento Aden Arena, pois os registros locais destas skills são placeholders.
+- Testes TDD foram vistos falhar primeiro com `resolveSkillBuffStats(...) === null` e sem contrato independente. Após implementar os mapas, durações, descrições e contratos, os testes direcionados passaram; a auditoria via navegador executou as 10 relações pendentes existentes em `crow_1`, `crow_2` e `crow_3`. As 10 passaram por `main.attackMonster`, incluindo cast, débito MP, efeito de atributo, expiração e ausência de erro JS. Evidência integral: `scripts/audit-evidence/samurai-stances-production-batch-20260927.json`.
+- O relatório original dizia 88 relações não executadas. Somando os lotes específicos de Guerreiro (9) e Samurai (10), há evidência nova para 19; 69 das relações originais ainda não foram reexecutadas, correspondendo a 42 IDs de skill distintos. A contagem combinada com o snapshot é 1.913/2.114 relações aprovadas, mas o relatório amplo não foi regenerado e continua sendo histórico. Permanecem as 47 relações sem validação e os 85 bloqueios de conteúdo/procedência descritos no relatório.
+- `npm test`: 903/903 em 97 suítes. `npm run build`: sucesso, com aviso de chunks acima de 1,5 MB. Os três serviços protegidos seguem sem alteração, saves reais não foram acessados e nada foi enviado, mesclado ou publicado.
+
+## Atualização — buffs Sylph/Kamael e auditoria funcional (13:14 BRT)
+
+- Tentei abrir `https://l2wiki.com/essence/skills/` no navegador integrado; ele falhou com `ERR_ADDRESS_UNREACHABLE`. A navegação desta sessão não alcançou o host. Para informação verificável, usei as notas da distribuidora oficial 4game: a atualização Sylph lista Elemental Magic Barrier como skill de classe, Elemental Wind como bônus de velocidade com imunidade a supressão/hold e Soul Wind Walk Lv. 3 como Speed +35; `Dwelling of Spirits` documenta Magic Barrier de nível 76 como +380 M. Def. por 20 min. Fontes: https://eu.4game.com/patchnotes/lineage2essence/281/ e https://eu.4game.com/patchnotes/lineage2essence/261/.
+- Não transferi os números oficiais de uma variante diferente para as skills ativas simplificadas do cadastro Aden Arena. Criei adaptações locais explícitas: Elemental Magic Barrier (+15% M. Def. e +10% resistência a debuffs/8 s), Elemental Insight (+10% M. Atk. e +5% CDR mágico/8 s), Soul Wind Walk (+6% CDR/10 s) e Blessing of Winds (+8% CDR e +10% resistência a debuffs/10 s). O cadastro oficial consultado mostra Elemental Insight como passiva de armadura em outra variante; a habilidade ativa local continua tratada como adaptação, sem confundir os dois contratos.
+- Os 11 pares classe/skill existentes passaram pelo executor de navegador isolado via `main.attackMonster`: 3 Soul Wind Walk (Warder, Arbalester, Trickster), 3 Elemental Magic Barrier e 3 Elemental Insight (Sylph Gunner, Wind Hunter, Storm Blaster), e 2 Blessing of Winds (Wind Hunter, Storm Blaster). Cast, custo de MP e efeito/expiração passaram nas 11 relações. Isso não prova outras classes, versões ou o bootstrap de saves.
+- Auditor completo gerado em `2026-09-27T16:14:17.702Z`: 159 classes/2.114 relações; 1.924 PASS, 58 NOT_EXECUTED (116 asserts: 58 casts e 58 débitos de MP dependentes), 47 NOT_VALIDATED, 25 BLOCKED_CONTENT_GAP e 60 BLOCKED_UNPROVEN_PROVENANCE. Global segue **FAIL/BLOQUEADO**. As 58 relações sem cast concentram-se em 39 IDs de buffs com descrições/efeitos canônicos-placeholder; aprovação de contrato para 448 IDs não equivale à execução do efeito.
+- `npm test`: 905/905 em 97 suítes. `git diff --check`: sem erros; apenas avisos de normalização LF/CRLF. `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` seguem intactos. Nenhum save real acessado/editado; sem push, merge ou deploy.
+- Próxima etapa: agrupar os 39 buffs sem cast por famílias e verificar efeito/função de cada um em fonte independente ou criar adaptação Aden Arena documentada; retestar no caminho de produção em pares específicos. Continuam pendentes as 47 relações não validadas, 85 bloqueadas, proveniência de classes, bootstrap/reload real e auditorias próprias de promoções, SA/cristais, Foundation, armaduras e atributos.
+
+## Atualização — Sharp Blade e nova matriz (13:20 BRT)
+
+- A matriz identificou que os 4 vínculos de `Sharp Blade` não chegavam ao cast porque o registro tinha efeito placeholder. As notas oficiais da 4game detalham os níveis 1-3: P. Atk. +5/7/10%; níveis 2-3 também dão Skill Critical Rate +2/+5 e PvE Damage +3/+5%. Fonte: https://eu.4game.com/patchnotes/lineage2essence/456/ (linhas 332-340).
+- Implementei os valores por nível no serviço de efeitos e adaptei a taxa crítica para o stat crítico compartilhado do Aden Arena. Duração de 8 s é regra local balanceada, não valor atribuído à fonte oficial. Teste verificou os três níveis em `getStats`, sem alterar `atkSpd`; executor isolado confirmou cast, MP e efeito em `secret_assassin_male_2/3` e `secret_assassin_female_2/3`. Evidência: `scripts/audit-evidence/sharp-blade-production-batch-20260927.json`.
+- O relatório completo, regenerado `2026-09-27T16:20:54Z`, mostra 1.928/2.114 relações PASS, 54 NOT_EXECUTED, 47 NOT_VALIDATED, 25 BLOCKED_CONTENT_GAP e 60 BLOCKED_UNPROVEN_PROVENANCE. As 108 assertions falhas são 54 casts rejeitados e seus asserts de MP. Os casos sem cast estão em 37 IDs distintos, abaixo dos 39 registrados no lote anterior. Os 15 pares Sylph/Kamael e Sharp Blade passam individualmente; isso não resolve os demais 2.099 vínculos.
+- `npm test`: 907/907 em 97 suítes. Build e diff-check ainda serão repetidos após este lote. Serviços protegidos intactos, sem saves reais, push, merge ou deploy.
+- Próximo: investigar os 54 casts não executados e 47 efeitos sem validação, priorizando famílias com fontes primárias e executando cada relação em separado. Aprovação global permanece bloqueada; promoções/trocas, SA/cristais, Foundation, armaduras/atributos, proveniência independente e bootstrap/reload real ainda carecem de cobertura.
+
+## Continuidade — fechamento dos últimos efeitos de classe bloqueada (27/09/2026, 14:40 BRT)
+
+- Corrigi os dois efeitos únicos que só apareciam nas classes bloqueadas e por isso nunca recebiam prova funcional: `Increase Power` concede +20% P./M. Atk. e +20 pontos percentuais de chance de stun no ataque, conforme a variante Lv. 1 consultada; `Body to Mind` não cobra MP, sacrifica 10% do HP máximo e recupera até 90 MP usando o Power 90 do cadastro canônico local. A página L2Wiki consultada para Body to Mind Lv. 1 confirma HP→MP, mas mostra Power 60 nessa variante. Fontes: [Increase Power](https://l2wiki.com/essence/skills/trooper/1432_1_0.html), [Body to Mind](https://l2wiki.com/essence/skills/dark_wizard/1157_1_0.html).
+- O auditor agora executa em matriz separada as 3 habilidades que não aparecem em classes liberadas (`increase_power`, `body_to_mind`, `mystic_spiral`). As três passaram pelo executor de produção; a matriz mantém as atribuições das classes bloqueadas como não validadas.
+- Ajustei falsos negativos do executor: a reflexão de 10% era arredondada para zero quando o alvo causava só 6 de dano; a cura instantânea de Reflecting Illusion era medida depois do dano recebido; e os efeitos refletidos adicionais no mesmo combate podiam inflar a comparação exata. O contrato agora exige ao menos o dano mínimo da reflexão declarada e mede a cura antes do golpe.
+- Auditor atualizado: 2.029 relações de skill passaram, nenhuma falhou, 85 continuam sem validação por lacunas documentadas de conteúdo/proveniência em 13 classes. Os 442 IDs únicos têm contratos configurados; isso não valida atribuição de classe nem torna a auditoria integral aprovada. As renderizações de UI e o bootstrap/save real seguem sem execução.
+- Testes direcionados: 105/105 em `skill-buff-production-effects.test.js`; 35/35 em `functional-audit-evidence.test.js`. A suíte e o build integrais serão repetidos após este lote. Nenhum save real foi acessado. Sem commit, push, merge ou deploy.
+
+Verificação final após o ajuste de fonte: `npm test` passou 930/930 (97 suítes); `npm run build` passou, mantendo o aviso de chunk acima de 1,5 MB; `git diff --check` passou sem erro de whitespace (somente avisos LF/CRLF). `npm run typecheck` continua falhando por erros TypeScript em arquivos `.ts/.tsx` fora deste lote, incluindo `src/App.tsx`, `src/ArenaApp.tsx`, `src/game/Game.ts` e `src/firebase.ts`; nenhum desses arquivos foi alterado nesta correção. Auditor funcional mais recente: 0 falhas, 85 relações bloqueadas, aprovação integral ainda bloqueada.
+
+## Retomada — Growing Potential/Warg e auditoria regenerada (27/09/2026)
+
+- Pesquisa verificável na árvore L2Wiki Essence confirmou `Growing Potential`, ID 88454, como skill de Warg. O ID 88453 atribuído localmente a `Unleashed Potential` não tem página nessa árvore. Corrigi o roster canônico de Warg para `growing_potential`, removi a atribuição sem fonte do legado e retirei a autorização indevida de `unleashed_potential` na progressão `werewolf_2`. Fonte: https://l2wiki.com/essence/skills/werewolf_3/88454_1_0.html .
+- Como a forma de lobo, WP e morphs de skills não existem no combate por cartas, `Growing Potential` recebe adaptação Aden Arena declarada no catálogo: +5% P. Atk., P. Def. e M. Def. O efeito chega ao `StatsEngine` real e um teste confirma os três atributos. Uma regressão de save sintético comprova que o legado não atribuído é removido e seus 30 SP são devolvidos; nenhum save real foi lido ou alterado.
+- O teste focado passou 3/3; `npm test` passou 934/934 em 97 suítes. `npm run build` passou (aviso de chunk acima de 1,5 MB). `git diff --check` não encontrou erros de whitespace; houve apenas avisos LF/CRLF.
+- Auditor regenerado em `2026-09-27T19:14:29.867Z`, branch `main`, HEAD `c02262ef3e171884495e27be287fcae0db246fcc`: 159 classes, 2.113 relações, zero assertions falhas e zero assertions não validadas nessa matriz; 84 vínculos continuam bloqueados por atribuição/conteúdo/proveniência em 13 IDs. São 146/159 classes com proveniência local ainda sem validação independente (7 gaps de conteúdo e 6 sem proveniência). Os 442 contratos configurados cobrem apenas os IDs observados e não equivalem à comprovação de todas as habilidades/classes.
+- Aprovação global segue `APPROVAL_BLOCKED`: árvore de criação indica 5 raízes com lacuna de conteúdo; UI realmente renderizada, bootstrap completo e reload de save real não foram exercitados. A matriz de efeitos aprovada não elimina esses bloqueios nem substitui auditorias próprias de classe, promoção, SA, Foundation, armaduras/atributos e trocas.
+- Alterações locais anteriores preservadas. `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` intactos; sem saves reais, commit, push, merge ou deploy.
+
+## Correção de raça e elo de promoção de ShineMaker (27/09/2026)
+
+- A pesquisa em fonte primária da NCSoft confirmou que Shine Maker é classe exclusiva dos anões e documenta a cadeia Dwarven Maker → Earth Maker → Wind Maker → Soul Maker → Shine Maker, além das habilidades próprias (por exemplo, Shining Touch, Fantasia Circle, Funky Star e Maker Force). Fonte: https://www.lineage2.com/news/shinemaker-patch-notes-november-2023 .
+- Reproduzi inconsistência nas definições consumidas pelo jogo: ShineMaker S1, S2 e S3 estavam em `highelf`; S1 apontava para `highElfBase`, embora o projeto já tivesse `shineMakerBase` anão. Ajustei a raça das três promoções para `dwarf` e liguei S1 à base anã. Teste verifica raça, cadeia e disponibilidade da promoção real no `ClassProgressionEngine`.
+- Limite importante: a fonte oficial apresenta cinco classes, enquanto o fluxo Aden Arena mantém quatro estágios 0–3. Corrigi o vínculo local sem mudar o esquema de promoções nem presumir um estágio extra; o catálogo de habilidades customizadas ainda precisa ser reconciliado/adaptado habilidade por habilidade. A matriz ampla mantém bloqueios de procedência/conteúdo para ShineMaker.
+- Validação: `npm test` passou 935/935 em 97 suítes; build passou com aviso de chunks acima de 1,5 MB; auditoria gerada `2026-09-27T19:20:36.905Z` continua `APPROVAL_BLOCKED`, com 159 classes, 2.113 relações, 0 assertions falhas, 0 não validadas e 84 vínculos ainda bloqueados por atribuição/proveniência. `git diff --check` sem erros; apenas avisos LF/CRLF.
+- Nenhum save real acessado. `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` continuam intactos; sem commit, push, merge ou deploy.
+
+## Continuidade — habilidades ShineMaker executadas (27/09/2026, 16:48 BRT)
+
+- A fonte NCSoft comprova ShineMaker como classe mágica híbrida de Dwarf, mas não confirma os nomes/números criados no Aden Arena. Mantive explícita a distinção: 18 IDs (4 base + 4 S1 + 6 S2 + 4 S3) têm `source: adenarena-local-adaptation`; os contadores continuam separando 1.176 habilidades e 142 classes sourced. Fonte de referência: https://www.lineage2.com/news/shinemaker-patch-notes-november-2023 .
+- Corrigi os registros V2 ausentes, a classificação de dano mágico, os buffs sem resolver, Purifying Light sem cleanse, Divine Crystal Aegis classificado como ataque, controles que eram só descrição e as curas de grupo sem consumidor solo. A raiz anã agora resolve skills e promoção; outras raças são recusadas. A passiva Crystal Weapon Mastery aplica seu bônus condicional com maça/hammer. Curas de grupo foram adaptadas para autocura onde aplicável.
+- Testes pelo caminho real `main.attackMonster`/`StatsEngine.getStats`: 458 IDs únicos, 2.127 casos classe-skill, 0 assertions falhas/não validadas; 44 ocorrências ShineMaker contando skills herdadas passaram. `npm test`: 939/939 em 97 suítes. Build passou com aviso de chunks >1,5 MB.
+- A auditoria continua `APPROVAL_BLOCKED`: 84 vínculos classe-skill bloqueados em 12 classes com lacunas de conteúdo/proveniência. O executor ainda não carrega bootstrap integral nem valida reload de save real. A diferença da cadeia oficial (cinco classes) para o jogo (estágios 0–3) permanece sem quinta promoção implementada; não inventei suas habilidades.
+- Branch `main`, HEAD `c02262ef3e171884495e27be287fcae0db246fcc`; serviços protegidos intactos, saves reais não acessados, sem commit/push/merge/deploy.
+
+## Continuidade — Warg e skills lunares (27/09/2026, 17:09 BRT)
+
+- Consultei as páginas de classe do L2Wiki Essence no navegador. Warg S0 lista apenas Direct Strike; S1 lista as habilidades da primeira evolução; S2 lista Upward Strike, Howling e as Moon's Graces. Fontes: https://l2wiki.com/essence/skills/werewolf_0/ , https://l2wiki.com/essence/skills/werewolf_1/ e https://l2wiki.com/essence/skills/werewolf_2/ .
+- Registrei os nós V2 Warg S0/S1/S2 e a ligação da classe final. Corrigi o vazamento na árvore: Armor/Weapon Mastery apareciam no estágio 0 embora estivessem associados às classes Warg de estágio 1+. Agora as masteries só aparecem em S1; as recuperações HP/MP permanecem no nível 20.
+- As três Moon's Graces aplicam os atributos adaptados no StatsEngine: velocidade de ataque reduz cooldown e velocidade de movimento encurta o intervalo de ataque básico. Contratos com 20 minutos de duração, atributos e consumidores medidos.
+- Auditoria final `2026-09-27T20:12:11.816Z` (snapshot inalterado): 159 classes, 2.140 relações classe-skill; 461/461 skills únicas observadas passaram em contratos de efeito, sem falhas ou efeitos sem contrato. Restam 62 vínculos bloqueados por conteúdo/proveniência; status global `APPROVAL_BLOCKED`.
+- O índice Essence do L2Wiki não lista Ertheia; notas da NCSoft para Eviscerator/Sayha's Seer encontradas são da edição Live, por isso não servem para liberar as seis atribuições Essence sem comprovação. `spirit_0` permanece parcial: a fonte lista duas skills. Fonte Live consultada: https://www.lineage2.com/en-us/news/wild-horizons-patch-notes .
+- `npm test` 941/941 em 97 suítes; build passou com aviso de chunks >1,5 MB. Renderização das interfaces, bootstrap completo e recarga de save real continuam sem prova; nenhum save real foi acessado. Serviços protegidos intactos, sem commit/push/merge/deploy.
+
+## Continuidade — procs de controle e Winter Skin (27/09/2026, 18:31 BRT)
+
+- Corrigido o roteamento de controles probabilísticos. Antes, Shocking Burst e outras skills com “with a certain chance” aplicavam o controle sempre que o golpe era executado. Agora o resolver compartilhado sorteia o proc e `main.attackMonster` só grava no estado de combate os efeitos que realmente ocorreram. Em Shocking Burst, o stun pode falhar sem descartar as reduções de P./M. Def. que a descrição declara separadamente.
+- A amostra consultada no L2Wiki confirma Shocking Burst como stun de 3 s “with a certain chance”, mas a página não dá percentual. Logo, 30% para “certain chance” e 70% para “high chance” são parâmetros de balanceamento local do Aden Arena, não números oficiais. Bônus Shock aumentam somente procs de stun; não alteram Sleep ou Hold. Fonte consultada: https://l2wiki.com/essence/skills/dreadnought/361_1_0.html .
+- Cobertos pelos registros locais e pelo resolver: Shocking Burst, Improved Sleep, Shield Bash, Iron Fist, Body Crush, Rush Impact, Blacksmith's Attack, Vine Embrace, Light Discharge, Indestructible Seal e Indestructible Blade. Em Indestructible Seal, o aprisionamento probabilístico dura 5 s e a redução de P. Def. inicia após o aprisionamento e dura outros 5 s. Winter Skin também foi conectado ao caminho real `main.monsterAttack`: ao receber um golpe, pode paralisar o monstro atacante por 3 s; o proc não ocorre quando o buff expirou.
+- Testes direcionados: 115/115; suíte completa após estes ajustes: 952/952 em 98 suítes. Build passou com o aviso existente de chunks acima de 1,5 MB. Auditoria em navegador descartável `2026-09-27T21:31:20.558Z`: 159 classes, 2.140 relações, 461 contratos de efeito; 477/477 renderizações de abas de skills; zero assertions falhas/não validadas. O status segue `APPROVAL_BLOCKED` por 62 atribuições classe-skill em 9 classes bloqueadas (3 lacunas de conteúdo, 6 de proveniência); contratos configurados não provam, por si só, a fidelidade semântica de cada habilidade.
+- `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` permanecem sem alterações; perfil de navegador/save foi descartável e isolado. Sem commit, push, merge ou deploy.
+
+## Continuidade — passivas raciais do anão no combate (27/09/2026, 18:46 BRT)
+
+- Fonte Essence consultada no navegador para Dwarven Weapon Mastery e Dwarven Armor Mastery: https://l2wiki.com/essence/skills/maestro/47235_8_0.html , https://l2wiki.com/essence/skills/maestro/47235_15_0.html e https://l2wiki.com/essence/skills/maestro/47236_8_0.html . O ataque passa a respeitar os valores observados por nível (420 no nível 76 a 650 no nível 90); o desconto de 60% em MP físico chega ao gate real de conjuração. A fonte diz “certain chance”, sem percentual: 30 pontos percentuais para o proc de stun é adaptação local de balanceamento, restrita a espada/blunt; não é dado oficial.
+- Dwarven Armor Mastery agora entrega +160 P. Def., +10 Evasão e −5% de taxa de crítico recebido somente com armadura pesada/leve. A taxa reduz a chance base antes da rolagem real de crítico da IA de monstros. Fonte: https://l2wiki.com/essence/skills/maestro/47236_8_0.html .
+- O trecho de Dwarven Weapon Mastery que aumenta alvos de ataques de lança não cabe no combate atual de um alvo; adaptei-o a +10% de dano apenas em ataques básicos com lança. Essa magnitude é uma decisão de balanceamento local, não valor oficial. A aplicação é separada do caminho de skills ativas.
+- Encontrei e corrigi uma terceira lacuna na mesma família: Dwarven Recovery Mastery existia no catálogo, mas seus bônus não eram consumidos. Os patamares conferidos (níveis 77, 82, 84, 86, 88 e 90) agora alimentam cura plana no tick de HP de 10 s e recuperação de MP no tick de 5 s. Amostras de nível 77, 82, 84, 86, 88 e 90: https://l2wiki.com/essence/skills/maestro/47237_5_0.html , https://l2wiki.com/essence/skills/maestro/47237_6_0.html , https://l2wiki.com/essence/skills/maestro/47237_7_0.html , https://l2wiki.com/essence/skills/maestro/47237_8_0.html , https://l2wiki.com/essence/skills/maestro/47237_9_0.html e https://l2wiki.com/essence/skills/maestro/47237_10_0.html .
+- Regressões focadas: 122/122 em `test/skill-buff-production-effects.test.js`. `npm test`: 959/959 em 101 suítes. `npm run build` passou; permanece o aviso existente de chunks maiores que 1,5 MB. `git diff --check` sem erro de whitespace (avisos LF/CRLF já existentes).
+- Auditor navegador gerado `2026-09-27T21:51:52.974Z`, snapshot inalterado: 159 classes, 2.140 relações classe-skill, 0 assertions falhas/não validadas, 461/461 contratos de efeito, 477/477 abas de skill renderizadas, 134/134 transições de promoção no serviço/ViewModel e 134/134 ativações de subclasse. O harness inicializa `GameBootstrap` e `main.init` e salva/recarrega somente estado semeado em perfil descartável. Aprovação integral segue `APPROVAL_BLOCKED`: 62 atribuições classe-skill bloqueadas em 9 classes (3 por lacuna de conteúdo, 6 por procedência), 22 raízes de criação e 134 telas de promoção continuam sem renderização real.
+- Contratos e amostras auditadas não provam equivalência semântica de todas as skills; não generalizar estes três casos Dwarf para todas as classes. Nenhum save real acessado; `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` preservados; sem commit/push/merge/deploy.
+
+## Continuidade — passivas Sacral do Divine Templar (27/09/2026, 18:57 BRT)
+
+- Corrigi Sacral Weapon Mastery, que concedia P. Atk por rank sem condição: a fonte exige espada de uma mão + escudo e especifica P. Atk +60/+120/+200/+300 nos níveis 20/40/63/70. O StatsEngine agora aplica a faixa correta pela progressão real e verifica arma e escudo. Fontes: https://l2wiki.com/essence/skills/sacred_templar_1/87881_1_0.html , https://l2wiki.com/essence/skills/sacred_templar_2/87881_2_0.html , https://l2wiki.com/essence/skills/sacred_templar_2/87881_3_0.html e https://l2wiki.com/essence/skills/sacred_templar_2/87881_4_0.html .
+- Corrigi Sacral Armor Mastery, que concedia somente P. Def por rank mesmo sem armadura pesada: agora aplica P. Def e M. Def +50/+100/+150/+200 nos níveis 20/40/63/70 e exige heavy armor. Fontes: https://l2wiki.com/essence/skills/sacred_templar_1/87882_1_0.html , https://l2wiki.com/essence/skills/sacred_templar_2/87882_2_0.html , https://l2wiki.com/essence/skills/sacred_templar_2/87882_3_0.html e https://l2wiki.com/essence/skills/sacred_templar_2/87882_4_0.html .
+- Atualizei a regressão antiga, que verificava apenas incrementos pequenos sem equipamento. Novos casos checam patamares, sword+shield, rejeição de blunt/duas mãos/sem escudo, armadura pesada e rejeição de robe.
+- Validação: 130 testes combinados nas duas suites direcionadas; `npm test` 962/962 em 102 suítes; build passou com o aviso existente de chunks >1,5 MB. Auditor `2026-09-27T21:57:16.725Z`, snapshot inalterado: 159 classes, 2.140 relações, 0 assertions falhas/não validadas, 461 contratos, 477 abas de skills renderizadas; status `APPROVAL_BLOCKED` permanece por 62 vínculos classe-skill em 9 classes (3 lacunas de conteúdo, 6 sem proveniência independente). 22 telas-raiz de criação e 134 telas de promoção seguem sem renderização.
+- Resultado local destas duas passivas não libera a proveniência das demais classes nem prova semântica global. Nenhum save real acessado; `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` intactos; sem commit/push/merge/deploy.
+
+## Continuidade — Element Weaver Armor Mastery (27/09/2026, 19:03 BRT)
+
+A fonte canônica local do skill 87782 descreve robe obrigatório e P. Def. +20, M. Def. +30, Max HP +100, MP Recovery Rate +3 e M. Skill Cooldown −15%. O caminho real tinha dois defeitos: concedia +8 P./M. Def. mesmo sem robe e não aplicava HP/MP; o resolver genérico interpretava “Equipped robe effect” como incondicional e liberava os 15% de cooldown sem robe.
+
+Corrigi `StatsEngine.getStats` para aplicar os bônus só com robe e usei o ganho de HP antes do multiplicador de CON já existente. Ajustei o parser de condição de robe no resolvedor de cooldown. Regressão percorre stats de produção com/sem robe, verifica todos os cinco efeitos e passa habilidades mágica/física pelo gate real de cooldown. O teste falhou antes da correção e passou depois.
+
+Validação: teste focado 126/126; `npm test` 963/963 em 103 suítes; `npm run build` passou (aviso existente de chunks >1,5 MB). Auditor funcional `2026-09-27T22:02:47.261Z`: 159 classes, 2.140 relações, 62 atribuições bloqueadas, 0 assertions falhas e 0 não validadas; 461 contratos de efeito configurados e 477 abas renderizadas passaram. Estado global segue `APPROVAL_BLOCKED`: há 3 lacunas de conteúdo e 6 atribuições sem proveniência em 9 classes bloqueadas; testes de view-model não substituem renderização integral das telas de criação/promoção.
+
+A correção prova somente esta passiva e os dois consumidores testados; não comprova todas as skills/classes. Branch `main`, HEAD `c02262ef3e171884495e27be287fcae0db246fcc`; serviços protegidos sem diff, nenhum save real aberto; sem commit/push/merge/deploy.
+
+## Continuidade — Elemental Acumen (27/09/2026, 19:07 BRT)
+
+A auditoria de condições por equipamento encontrou `elemental_acumen` (ID 88250) sem os atributos explícitos da descrição local: com armadura leve, concede Casting Spd. +200, M. Skill Cooldown −3%, Max HP +700, Max MP +700 e WIT +1. O cálculo já convertia velocidade/recarga sob a condição leve, mas ignorava HP, MP e WIT.
+
+O teste de regressão primeiro confirmou a ausência de HP no `StatsEngine.getStats`. A correção aplica +700 de HP/MP e +1 WIT somente quando a passiva está aprendida e armadura leve equipada; WIT passa pelo multiplicador de MP existente. O teste também confirma que, sem armadura leve, estes bônus e recargas não são concedidos, e que `canCastSkill` consome a redução de cooldown com armadura compatível.
+
+Após ambas as correções desta rodada: `npm test` 964/964 em 104 suítes; build passou (alerta conhecido de chunks >1,5 MB). Auditor `2026-09-27T22:07:15.728Z`: 159 classes, 2.140 casos, 62 atribuições bloqueadas, 0 assertions falhas e 0 não validadas; 461 contratos e 477 abas de habilidades passaram. Global continua `APPROVAL_BLOCKED`: 3 lacunas de conteúdo e 6 de proveniência em 9 classes.
+
+Os dados citados aqui são os registros canônicos locais; não são apresentados como confirmação independente atual do L2Wiki. As provas de produção cobrem apenas Element Weaver's Armor Mastery e Elemental Acumen. Saves reais e serviços protegidos permanecem intocados; sem commit/push/merge/deploy.
+
+## Continuidade — Rogue's Armor Mastery (27/09/2026, 19:10 BRT)
+
+O registro canônico local do skill 47332 lista seis classes Rogue e condiciona à armadura leve: P. Def. +150, P. Evasion +9, −10% de chance de crítico recebido e Skill Power +1%. A reprodução em `getStats` mostrou zero efeito nas seis classes.
+
+Implementei os quatro bônus com a condição de armadura leve. Skill Power +1% é entregue aos cálculos físico e mágico de `applyPlayerSkillPowerBonus`; a mitigação crítica chega à rotina real `MonsterAIEngine.processMonsterAttack`. A regressão percorre as seis classes, confirma cada bônus e confirma que robe/ausência de armadura não ativa a passiva.
+
+Validação conjunta das três passivas desta retomada: teste focal 128/128; suíte completa `npm test` 965/965 em 105 suítes; build passou com aviso conhecido de chunks >1,5 MB. Auditor `2026-09-27T22:10:39.530Z`: 159 classes, 2.140 relações, 62 atribuições bloqueadas, 0 assertions falhas/não validadas; 461 contratos e 477 abas passaram. Global continua `APPROVAL_BLOCKED`, com 3 lacunas de conteúdo e 6 de proveniência em 9 classes.
+
+Estas evidências cobrem apenas as três passivas e condições testadas. Branch `main`, HEAD `c02262ef3e171884495e27be287fcae0db246fcc`; serviços protegidos intactos, saves reais não acessados; sem commit/push/merge/deploy.
+
+## Continuidade — masteries de armadura Combat, Death e Expert (27/09/2026, 19:15 BRT)
+
+Fechei mais três lacunas comparando os registros canônicos locais com `StatsEngine.getStats`:
+- `combat_armor_mastery` (4 classes): P. Def. +135, M. Def. +60, P. Evasion +10 e MP Recovery Rate +10%, somente heavy/light. O percentual segue a unidade de recuperação por tick já usada pelo runtime: +0,10 MP/tick, consumido pelo loop real de `main.js`.
+- `death_armor_mastery` (10 classes): corrigido de +10 para o valor descrito de P. Def. +15, heavy/light; robe não recebe o bônus.
+- `expert_armor_mastery` (3 classes): Max HP +200, P./M. Def. +100 e P. Evasion +5, somente light.
+
+Regressões exercitam todos os IDs de classe listados e os equipamentos compatíveis/incompatíveis pelo cálculo de produção. Os registros locais sustentam os números; não atribuir essas verificações a fonte externa independente.
+
+Validação da rodada: teste focal 131/131; `npm test` 968/968 em 108 suítes; build passou com alerta conhecido de chunks acima de 1,5 MB. Auditor funcional `2026-09-27T22:14:57.640Z`: 159 classes, 2.140 relações, 62 atribuições bloqueadas, 0 assertions falhas/não validadas; 461 contratos e 477 abas passaram. `APPROVAL_BLOCKED` permanece por 3 lacunas de conteúdo e 6 de procedência em 9 classes.
+
+Somando as correções desta retomada, foram testadas Element Weaver, Elemental Acumen, Rogue, Combat, Death e Expert Armor Mastery. Isso não demonstra completude para as demais skills, promoções ou sistemas. Branch `main`, HEAD `c02262ef3e171884495e27be287fcae0db246fcc`; serviços protegidos sem diff, saves reais preservados; sem commit/push/merge/deploy.
+
+## Continuidade — Wizard/Summoner Armor Mastery (27/09/2026, 19:19 BRT)
+
+Registros canônicos locais identificam dois efeitos não conectados: Wizard's Armor Mastery (7 classes) e Summoner's Armor Mastery (5 classes) declaram M. Def. +30 e M. Damage Resistance +15%; a primeira adiciona P. Def. +30 e HP +60 com robe, a segunda com robe ou armadura leve. Corrigi esses efeitos nas 12 classes cadastradas.
+
+A resistência mágica agora é um atributo separado e o tipo do ataque segue até `applyPlayerDamageTakenReduction` no fluxo de `main.js`: golpes mágicos recebem 15% de redução adicional, enquanto os físicos não recebem esse bônus. O teste percorre as 12 classes, equipamento compatível/incompatível, `MonsterAIEngine` para ataque de caster, mitigação por M. Def. e o redutor real com o tipo reportado pelo ataque.
+
+Validação: teste focal 132/132; `npm test` 969/969 em 109 suítes; build passou com alerta existente de chunks >1,5 MB. Auditor `2026-09-27T22:18:44.697Z`: 159 classes, 2.140 relações, 62 atribuições bloqueadas, 0 assertions falhas/não validadas, 461 contratos e 477 abas. `APPROVAL_BLOCKED` permanece por 3 lacunas de conteúdo e 6 de procedência em 9 classes.
+
+Os números vieram dos registros canônicos locais; não alegar confirmação independente no L2Wiki nesta rodada. A mudança cobre somente essas duas passivas e o caminho do dano mágico. Saves reais preservados; `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` sem diff; branch `main`, HEAD `c02262ef3e171884495e27be287fcae0db246fcc`; sem commit/push/merge/deploy.
+
+## Continuidade 19:26 BRT — Templar's Armor Mastery (27/09/2026)
+
+A skill canônica local 88050 atribui Templar's Armor Mastery a Evas Templar e Shillien Templar, sob armadura pesada: +320 P. Def., +160 M. Def., +5% Shield Defense, −35% dano crítico básico recebido, +10% MP Recovery Rate, +5% Bow Resistance e +5% Firearms Resistance. Corrigi os efeitos atualmente representáveis: os bônus defensivos e recuperação só ativam com armadura pesada; Shield Defense soma 5 pontos percentuais ao bloqueio apenas com escudo equipado; a redução de crítico básico é aplicada no caminho de dano recebido e não reduz críticos de skills; MP Recovery Rate foi mapeado ao mesmo +0,10 MP/tick usado nas outras masteries locais.
+
+O executor de combate não diferencia ataques de arco e armas de fogo: `MonsterAIEngine` só classifica ataque físico/mágico e os dados de monstros não declaram `weaponType`. Não inventei uma resistência que não possa ser acionada; Bow/Firearms Resistance continuam pendentes até o modelo de ataque carregar essa procedência. A descrição local não foi conferida independentemente em fonte externa nesta retomada.
+
+Regressão primeiro reproduzida em vermelho (P. Def. ausente), depois verde por StatsEngine, MonsterAIEngine, `resolvePlayerBlock` e função de redução conectada ao ataque real em `main.js`. `npm test`: 971/971 em 111 suítes. `npm run build` passou em 17,16 s; permanece o aviso conhecido de chunks JS acima de 1,5 MB. Auditor funcional gerado em `2026-09-27T22:26:02.644Z`: 159 classes, 2.140 casos classe-skill, 62 atribuições bloqueadas em 9 classes (3 gaps de conteúdo e 6 de proveniência), zero assertions falhas/não validadas; 461/461 contratos de efeito e 477/477 abas de skill renderizadas. O status permanece `APPROVAL_BLOCKED`; a renderização real de telas de criação/promoção e a prova de procedência de 9 classes continuam pendentes. O reload de save foi feito apenas com dados semeados em perfil descartável, sem abrir saves reais.
+
+Branch `main`, HEAD `c02262ef3e171884495e27be287fcae0db246fcc`; `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` sem alterações. Nenhum commit, push, merge ou deploy.
+
+## Continuidade 19:31 BRT — resistência a ataques de arco no bestiário (27/09/2026)
+
+Complemento à nota anterior de Templar's Armor Mastery: o bestiário local identifica cinco inimigos por nomes de arqueiro/atirador/besteiro (`kashaOrcArcher`, `outpostMarksman`, `skeletonArcher`, `gludioRoyalArcher`, `adenCrossbowman`). Marquei os quatro arqueiros/atiradores com `weaponType: bow` e o besteiro com `weaponType: crossbow`; `CombatEngine.pickRandomMonster` copia os campos da definição ao encontro ativo, e `MonsterAIEngine.processMonsterAttack` preserva a família no ataque. O consumidor agora aplica os 5% da passiva às famílias bow/crossbow no dano recebido. Os nomes são conteúdo autoral do bestiário local, não identificação de arma confirmada por fonte oficial externa.
+
+Nenhum monstro local declara arma de fogo. `firearmsResistancePercent` está disponível na ficha calculada e o redutor aceita arma `firearm`/`gun`, mas não há encontro real para provar esse ramo ponta a ponta; mantê-lo explicitamente não validado até existir conteúdo de arma de fogo. A busca externa por páginas de monstros locais não encontrou fontes, então não usei procedência externa para classificar esses nomes.
+
+Regressões Templar cobrem Evas e Shillien Templar, cinco definições, passagem pelo `MonsterAIEngine`, redução para bow/crossbow/firearm sintético e ausência de redução contra espada; 2/2 focais passaram. `npm test`: 972/972, 111 suítes. `npm run build` passou em 17,21 s, mantendo aviso de chunks acima de 1,5 MB. Auditor funcional reexecutado depois da mudança: `APPROVAL_BLOCKED`, 159 classes, 2.140 relações classe-skill, 62 atribuições bloqueadas em 9 classes (3 gaps de conteúdo e 6 sem procedência comprovada), zero assertions falhas/não validadas, 461/461 contratos e 477/477 abas renderizadas. Não confundir renderização da janela de skills com validação visual de todas as telas de criação e promoção.
+
+Nenhum save real aberto; serviços protegidos sem alterações; branch `main`, HEAD `c02262ef3e171884495e27be287fcae0db246fcc`; sem commit/push/merge/deploy.
+
+## Continuidade — Armor Care, progressão e crítico de habilidade (27/09/2026, 19:54 BRT)
+
+Armor Care estava fora das árvores das duas classes que a recebem. Corrigi Eva's Templar e Shillien Templar, registrei os IDs de fonte por classe (88053 e 88055), limite de dois ranks e níveis 76/84. O SP também passa a refletir o custo consultado nas páginas do L2Wiki: 5.800 para Eva rank 1, 4.900 para Shillien rank 1 e 240.000 no rank 2 para ambas. O teste usa o `spendSP` real e prova bloqueio do rank 2 no nível 83 sem perder SP.
+
+Os efeitos exercitados são crítico físico de skill, dano crítico, redução de crítico recebido, bônus PvE do rank 2 e bloqueio adicional com escudo. “Shield Defense Ignore Removal”, que não tinha ataque de penetração no modelo local, foi adaptado para +3/+8 pontos de bloqueio sob escudo. Um navegador isolado forçou rolagens no `main.attackMonster` com Templar's Rush e confirmou a chance de crítico nos ranks 1/2 e o aumento do dano crítico.
+
+Fontes: [Eva rank 1](https://l2wiki.com/essence/skills/evas_templar/88053_1_0.html), [Eva rank 2](https://l2wiki.com/essence/skills/evas_templar/88053_2_0.html), [Shillien rank 1](https://l2wiki.com/essence/skills/shillien_templar/88055_1_0.html), [Shillien rank 2](https://l2wiki.com/essence/skills/shillien_templar/88055_2_0.html).
+
+`npm test`: 974/974 em 112 suítes. Build passou com o aviso conhecido de chunks grandes. Auditor funcional de `2026-09-27T22:54:13.243Z`: 159 classes, 2.142 relações classe-skill, 62 vínculos bloqueados em 9 classes, sem assertions falhas/não validadas e 462/462 contratos de efeito. O gate geral segue `APPROVAL_BLOCKED` por 3 lacunas de conteúdo, 6 de procedência e validação visual incompleta de criação/promoção.
+
+Saves reais preservados; serviços protegidos intactos; branch `main` e HEAD `c02262ef3e171884495e27be287fcae0db246fcc`; nenhum commit, push, merge ou deploy.
+
+## Continuidade 23:06 BRT — nomes da progressão Ertheia e nova auditoria (27/09/2026)
+
+A pesquisa confirmou uma divergência real nos nomes das classes Ertheia. O L2Wiki Essence não lista Ertheia; o patch oficial europeu cita Marauder e Cloud Breaker, e a árvore documentada pela wiki comunitária Ertheia é Marauder → Ripper → Eviscerator e Ertheia Wizard → Cloud Breaker → Stratomancer → Sayha's Seer. Notas oficiais da NCSoft confirmam Eviscerator e Sayha's Seer. Usei essa evidência para nomes, não como prova das skills atribuídas no Aden Arena.
+
+Atualizei nomes e descrições nas registries V2/legada, nas definições Echo e no manifesto independente. Os IDs, levels e parent IDs foram mantidos; aliases para os nomes atuais e antigos preservam resolução aos IDs existentes. A regressão falhou inicialmente para Ripper/Eviscerator e passou após a alteração. `npm test`: 977/977 em 112 suítes; build aprovado com aviso de chunks grandes.
+
+Auditor atualizado `2026-09-27T23:06:03.992Z`: 159 classes, 2.142 relações classe-skill, 62 atribuições bloqueadas, sem assertions falhas/não validadas; 462/462 contratos e 477/477 renderizações da janela de skills passaram. Passaram 134/134 promoções nos ViewModels e 134/134 ativações de subclass; bootstrap e reload comprovados em save semeado num perfil descartável.
+
+Continuam bloqueadas 3 raízes por falta de conteúdo e 6 classes Ertheia por falta de procedência das skills. Não foram renderizadas 22 telas de criação nem 134 modais de promoção; o gate global permanece `APPROVAL_BLOCKED`. Saves reais e serviços protegidos intactos; sem commit/push/merge/deploy.
+
+## 27/09/2026 — skills Kamael atribuídas a outras classes
+
+Retirei `Kamael's Dignity` e `Pride of Kamael` da elegibilidade de Ertheia Fighter. Restrinjo `Overwhelming Power` a Doombringer, conforme as notas oficiais de Essence, e retirei a skill das árvores Titan e Eviscerator. Titan mantém cinco habilidades após trocar esse slot por `Frenzy`. Eviscerator fica com quatro vínculos locais; mantive o bloqueio da classe e registrei a skill que falta sem inventar uma substituta.
+
+As regressões falharam antes da mudança e passaram depois, incluindo a validação do serviço de elegibilidade em produção. `npm test`: 979/979; build aprovada. Auditor de `2026-09-28T01:01:13.692Z`: `APPROVAL_BLOCKED`, 159 classes, 2.140 casos classe-skill, 61 vínculos bloqueados, zero assertions falhas/não validadas; 462/462 contratos e 477/477 renderizações da janela de skills. Continuam 3 lacunas de conteúdo, 6 classes sem procedência suficiente, 22 telas de criação e 134 modais de promoção sem renderização visual.
+
+Fonte: [notas oficiais de Lineage II Essence](https://eu.4game.com/patchnotes/lineage2essence/196/). Nenhum save real foi aberto; serviços protegidos intactos; sem commit, push, merge ou deploy.
+
+## Continuidade — auditoria real das telas de criação (28/09/2026)
+
+Substituí a lacuna do auditor que só montava ViewModels por uma execução do componente React real `CharacterCreation.tsx` em navegador descartável. A tela oferece 25 raízes iniciais em 9 raças: 22 com conteúdo ativo e 3 ainda bloqueadas por conteúdo (`spirit_0`, `marauderBase`, `sayhaMageBase`). Não tratei esses três bloqueios como classes aprovadas. As 25 escolhas foram comparadas ao registro canônico de raça/classe; troca de raça e seleção mantiveram estado coerente, 25/25 inicializações passaram pelo `applyStarterKit` real, e o envio devolveu raça/classe/gênero corretos. Nos viewports 768×1024 e 390×844 não houve overflow horizontal e a navegação por Tab permaneceu no modal.
+
+A auditoria reproduziu retratos masculinos ausentes de Elfo Negro Mago/Blood Rose e Kamael Soulbreaker; corrigi os caminhos para os arquivos que já existem no projeto. Restaram quatro retratos femininos sem arte correspondente: Dark Fighter, Dark Death Knight e Dark Elf Assassin apontam para `darkelfskF.png`, e Kamael Samurai aponta para `kamaelDF.png`; os quatro arquivos não existem e o componente os substitui silenciosamente por `humanpalaM.png`. Mantive isso como falha real em vez de usar uma imagem de classe/sexo incorretos. O relatório está em `scripts/functional_chain_test_report.json` (gerado em `2026-09-28T01:26:57.829Z`): a auditoria visual tem uma assertion reprovada por esses quatro retratos; não é aprovação integral.
+
+`npm run build` passou em 33 s; permanece o aviso conhecido de chunks acima de 1,5 MB. `npm run typecheck` continua falhando em diagnósticos preexistentes de tipos/uso não utilizado em `App.tsx`, `ArenaApp.tsx`, `LoginScreen.tsx`, `firebase.ts`, `Game.ts`, `Aden2DGame.tsx`, `FirebaseGameService.ts` e `SocialIntegrityService.ts`; corrigi o tipo de `nextElementSibling` neste componente. O relatório funcional completo mantém 159 classes, 2.140 casos classe-skill, 61 atribuições bloqueadas em 9 classes e 462/462 contratos de efeito; o gate está `FAIL` por este novo problema visual, sem resolver bloqueios de conteúdo/procedência.
+
+O teste usa armazenamento local vazio e bloqueia rede fora do servidor local; nenhum save real foi lido ou escrito. `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` continuam intactos. Sem commit, push, merge ou deploy.
 
 

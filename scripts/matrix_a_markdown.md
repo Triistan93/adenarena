@@ -6,14 +6,14 @@
 | human_deathknight_0 | 0 | — | human_deathknight_1 | deathPilgrim | 5 (hellfire, change_armor, sword_blunt_mastery...) | 5 | PASS |
 | mage | 0 | — | wizard, cleric | mage | 5 (fireball, wind_strike, self_heal...) | 5 | PASS |
 | secret_assassin_male_0 | 0 | — | secret_assassin_male_1 | assassinS0 | 5 (blow, bandage, dagger_mastery...) | 5 | PASS |
-| werewolf_0 | 0 | — | werewolf_1 | — | 1 (direct_strike) | 1 | CONTENT_GAP |
+| werewolf_0 | 0 | — | werewolf_1 | wargS0 | 1 (direct_strike) | 1 | PASS |
 | cleric | 1 | mage | bishop, prophet | cleric | 5 (battle_heal, divine_strike, might...) | 10 | PASS |
 | human_deathknight_1 | 1 | human_deathknight_0 | human_deathknight_2 | deathBlade | 5 (punishment, roar_of_death, fist_of_fury...) | 10 | PASS |
 | knight | 1 | fighter | paladin, dark_avenger | knight | 5 (shield_strike, shield_stun, majesty...) | 10 | PASS |
 | rogue | 1 | fighter | treasure_hunter, hawkeye | rogue | 5 (ultimate_evasion, open, quick_step...) | 10 | PASS |
 | secret_assassin_male_1 | 1 | secret_assassin_male_0 | secret_assassin_male_2 | assassinS1 | 5 (shadow_attack, ultimate_evasion, quick_step...) | 10 | PASS |
 | warrior | 1 | fighter | gladiator, warlord | warrior | 5 (wild_sweep, detect_weakness, war_cry...) | 10 | PASS |
-| werewolf_1 | 1 | werewolf_0 | werewolf_2 | — | 1 (direct_strike) | 1 | CONTENT_GAP |
+| werewolf_1 | 1 | werewolf_0 | werewolf_2 | wargS1 | 11 (quick_dash, wind_walk, acumen...) | 12 | PASS |
 | wizard | 1 | mage | sorcerer, necromancer, warlock | wizard | 5 (ice_bolt, concentration, weakness...) | 10 | PASS |
 | bishop | 2 | cleric | cardinal | bishop | 5 (greater_heal, purify, resurrection...) | 15 | PASS |
 | dark_avenger | 2 | knight | hell_knight | darkAvenger | 5 (dark_strike, dark_panther_s_help, damage_reflection...) | 15 | PASS |
@@ -28,7 +28,7 @@
 | treasure_hunter | 2 | rogue | adventurer | treasureHunter | 5 (deadly_blow, backstab, fake_death...) | 15 | PASS |
 | warlock | 2 | wizard | arcana_lord | warlock | 5 (blaze, summon_kat_the_cat, servitor_share...) | 15 | PASS |
 | warlord | 2 | warrior | dreadnought | warlord | 5 (vortex, thunder_storm, quick_spear...) | 15 | PASS |
-| werewolf_2 | 2 | werewolf_1 | werewolf_3 | — | 1 (direct_strike) | 1 | CONTENT_GAP |
+| werewolf_2 | 2 | werewolf_1 | werewolf_3 | wargS2 | 5 (upward_strike, howling, young_moon_s_grace...) | 17 | PASS |
 | adventurer | 3 | treasure_hunter | TERMINAL | adventurer | 5 (shadow_step, lethal_blow, critical_assault...) | 20 | PASS |
 | arcana_lord | 3 | warlock | TERMINAL | arcanaLord | 5 (ethereal_strike, ray_of_light, summon_feline_king...) | 20 | PASS |
 | archmage | 3 | sorcerer | TERMINAL | archmage | 5 (meteor, fire_vortex, mystic_meteor_master...) | 20 | PASS |

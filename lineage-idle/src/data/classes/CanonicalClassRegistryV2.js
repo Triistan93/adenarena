@@ -634,16 +634,67 @@ export const CANONICAL_CLASS_REGISTRY_V2 = Object.freeze({
             "master_of_combat"
         ]
     },
+    "wargS0": {
+        "id": "wargS0",
+        "name": "Warg",
+        "race": "human",
+        "lineageId": "warg",
+        "lineageName": "Warg",
+        "source": "l2wiki-essence",
+        "sourceUrl": "https://l2wiki.com/essence/skills/werewolf_0/",
+        "stage": 0,
+        "stageName": "BASE",
+        "minLevel": 1,
+        "maxLevel": 19,
+        "parentClass": null,
+        "desc": "Warg — combatente humano de curta e média distância que luta com armas de punho.",
+        "skillIds": ["direct_strike"]
+    },
+    "wargS1": {
+        "id": "wargS1",
+        "name": "Warg",
+        "race": "human",
+        "lineageId": "warg",
+        "lineageName": "Warg",
+        "source": "l2wiki-essence",
+        "sourceUrl": "https://l2wiki.com/essence/skills/werewolf_1/",
+        "stage": 1,
+        "stageName": "FIRST_CLASS",
+        "minLevel": 20,
+        "maxLevel": 39,
+        "parentClass": "wargS0",
+        "desc": "Warg — combatente de punhos que usa o poder especial do lobo.",
+        "skillIds": ["quick_dash", "wind_walk", "acumen", "haste", "hp_recovery", "mp_recovery", "wild_magic", "magic_barrier", "berserker_spirit", "armor_mastery", "weapon_mastery"]
+    },
+    "wargS2": {
+        "id": "wargS2",
+        "name": "Warg",
+        "race": "human",
+        "lineageId": "warg",
+        "lineageName": "Warg",
+        "source": "l2wiki-essence",
+        "sourceUrl": "https://l2wiki.com/essence/skills/werewolf_2/",
+        "stage": 2,
+        "stageName": "SECOND_CLASS",
+        "minLevel": 40,
+        "maxLevel": 75,
+        "parentClass": "wargS1",
+        "desc": "Warg — forma avançada, com ataques físicos e bênçãos lunares.",
+        "skillIds": ["upward_strike", "howling", "young_moon_s_grace", "moon_s_grace", "full_moon_s_grace"]
+    },
     "warg": {
         "id": "warg",
         "name": "Warg",
+        "race": "human",
         "lineageId": "warg",
         "lineageName": "Warg",
+        "source": "l2wiki-essence",
+        "sourceUrl": "https://l2wiki.com/essence/skills/werewolf_3/",
         "stage": 3,
         "stageName": "THIRD_CLASS",
         "minLevel": 76,
         "maxLevel": 120,
-        "parentClass": null,
+        "parentClass": "wargS2",
         "desc": "Warg — guerreiro feral com transformação em lobo ancestral e vampirismo feral.",
         "skillIds": [
             "direct_strike",
@@ -661,7 +712,7 @@ export const CANONICAL_CLASS_REGISTRY_V2 = Object.freeze({
             "hp_recovery",
             "mp_recovery",
             "potion_mastery",
-            "unleashed_potential",
+            "growing_potential",
             "divine_inspiration",
             "enormous_wolf",
             "devastating_assault",
@@ -728,8 +779,8 @@ export const CANONICAL_CLASS_REGISTRY_V2 = Object.freeze({
         "skillIds": [
             "forward_move",
             "sharp_blade",
-            "assassin_servitor",
             "assassin_s_secret_notes_1st_page",
+            "assassin_s_secret_notes_2nd_page",
             "critical_chance"
         ]
     },
@@ -825,7 +876,8 @@ export const CANONICAL_CLASS_REGISTRY_V2 = Object.freeze({
             "templar_s_rush",
             "templar_s_assault",
             "water_shield_throwing",
-            "master_of_combat"
+            "master_of_combat",
+            "armor_care"
         ]
     },
     "swordSinger": {
@@ -1205,7 +1257,8 @@ export const CANONICAL_CLASS_REGISTRY_V2 = Object.freeze({
             "shillien_s_curse",
             "mass_lightning_strike",
             "lightning_wave_break",
-            "master_of_combat"
+            "master_of_combat",
+            "armor_care"
         ]
     },
     "bladeDancer": {
@@ -1658,7 +1711,7 @@ export const CANONICAL_CLASS_REGISTRY_V2 = Object.freeze({
         "desc": "Titã — devastação absoluta com fúria imparável.",
         "skillIds": [
             "titan_champion",
-            "overwhelming_power",
+            "frenzy",
             "excruciating_strike",
             "zealot",
             "master_of_combat"
@@ -2044,11 +2097,31 @@ export const CANONICAL_CLASS_REGISTRY_V2 = Object.freeze({
             "mechanical_masterpiece"
         ]
     },
+    "shineMakerBase": {
+        "id": "shineMakerBase",
+        "name": "ShineMaker",
+        "source": "adenarena-local-adaptation",
+        "race": "dwarf",
+        "lineageId": "shinemaker",
+        "lineageName": "ShineMaker",
+        "stage": 0,
+        "stageName": "BASE",
+        "minLevel": 1,
+        "maxLevel": 19,
+        "parentClass": null,
+        "desc": "Base anã de suporte mágico e combate luminoso.",
+        "skillIds": [
+            "shineMakerBase_light_spark",
+            "shineMakerBase_luminary_glow",
+            "shineMakerBase_crystal_weapon_mastery",
+            "shineMakerBase_shinemakers_harmony"
+        ]
+    },
     "highElfBase": {
         "id": "highElfBase",
         "name": "High Elf",
-        "lineageId": "shinemaker",
-        "lineageName": "ShineMaker",
+        "lineageId": "elementWeaver",
+        "lineageName": "Element Weaver",
         "stage": 0,
         "stageName": "BASE",
         "minLevel": 1,
@@ -2066,25 +2139,26 @@ export const CANONICAL_CLASS_REGISTRY_V2 = Object.freeze({
     "shineMakerS1": {
         "id": "shineMakerS1",
         "name": "ShineMaker",
+        "race": "dwarf",
         "lineageId": "shinemaker",
         "lineageName": "ShineMaker",
         "stage": 1,
         "stageName": "FIRST_CLASS",
         "minLevel": 20,
         "maxLevel": 39,
-        "parentClass": null,
-        "desc": "",
+        "parentClass": "shineMakerBase",
+        "desc": "Primeira promoção ShineMaker anã.",
         "skillIds": [
-            "power_strike",
-            "wild_sweep",
-            "lionheart",
-            "sword_blunt_mastery",
-            "light_armor_mastery"
+            "shineMakerS1_light_burst",
+            "shineMakerS1_radiant_strike",
+            "shineMakerS1_purifying_light",
+            "shineMakerS1_shining_barrier"
         ]
     },
     "shineMakerS2": {
         "id": "shineMakerS2",
         "name": "ShineMaker",
+        "race": "dwarf",
         "lineageId": "shinemaker",
         "lineageName": "ShineMaker",
         "stage": 2,
@@ -2094,16 +2168,18 @@ export const CANONICAL_CLASS_REGISTRY_V2 = Object.freeze({
         "parentClass": "shineMakerS1",
         "desc": "",
         "skillIds": [
-            "vortex",
-            "fatal_strike",
-            "power_crash",
-            "rush",
-            "critical_power"
+            "shineMakerS2_prismatic_ray",
+            "shineMakerS2_shining_nova",
+            "shineMakerS2_crystal_arrow",
+            "shineMakerS2_light_of_creation",
+            "shineMakerS2_brilliant_aura",
+            "shineMakerS2_shinemaker_harmony_s2"
         ]
     },
     "shinemaker": {
         "id": "shinemaker",
         "name": "ShineMaker",
+        "race": "dwarf",
         "lineageId": "shinemaker",
         "lineageName": "ShineMaker",
         "stage": 3,
@@ -2113,11 +2189,10 @@ export const CANONICAL_CLASS_REGISTRY_V2 = Object.freeze({
         "parentClass": "shineMakerS2",
         "desc": "Criadora de luz — suporte sagrado anão com poder celestial e dano luminoso.",
         "skillIds": [
-            "earthquake",
-            "earth_tremor",
-            "hammer_rumble",
-            "final_secret",
-            "master_of_combat"
+            "shinemaker_star_fall",
+            "shinemaker_transcendent_star_fall",
+            "shinemaker_divine_crystal_aegis",
+            "shinemaker_shinemakers_ultimate_harmony"
         ]
     },
     "kamaelSoldier": {
@@ -2589,7 +2664,6 @@ export const CANONICAL_CLASS_REGISTRY_V2 = Object.freeze({
         "desc": "Lutadora Ertheia — mestre veloz de combate corporal com ventos de Sayha.",
         "skillIds": [
             "iron_punch",
-            "kamael_s_dignity",
             "death_mark",
             "fist_mastery",
             "light_armor_mastery"
@@ -2616,7 +2690,7 @@ export const CANONICAL_CLASS_REGISTRY_V2 = Object.freeze({
     },
     "ertheiaWarrior": {
         "id": "ertheiaWarrior",
-        "name": "Eviscerator",
+        "name": "Ripper",
         "lineageId": "eviscerator",
         "lineageName": "Eviscerator",
         "stage": 2,
@@ -2624,7 +2698,7 @@ export const CANONICAL_CLASS_REGISTRY_V2 = Object.freeze({
         "minLevel": 40,
         "maxLevel": 75,
         "parentClass": "marauder",
-        "desc": "Evisceradora — guerreira marcial letal que corta o ar e destrói defesas.",
+        "desc": "Ripper — combatente Ertheia de curta distância, especialista em golpes físicos rápidos.",
         "skillIds": [
             "soul_impulse",
             "enuma_elish",
@@ -2645,7 +2719,6 @@ export const CANONICAL_CLASS_REGISTRY_V2 = Object.freeze({
         "parentClass": "ertheiaWarrior",
         "desc": "Evisceradora Imperial — mestre suprema de combate corporal com poder dimensional de Sayha.",
         "skillIds": [
-            "overwhelming_power",
             "powerful_rush",
             "soul_weapon",
             "disarm",
@@ -2654,9 +2727,9 @@ export const CANONICAL_CLASS_REGISTRY_V2 = Object.freeze({
     },
     "sayhaMageBase": {
         "id": "sayhaMageBase",
-        "name": "Sayha Mage",
+        "name": "Ertheia Wizard",
         "lineageId": "sayhaSeeker",
-        "lineageName": "Sayha Seeker",
+        "lineageName": "Sayha's Seer",
         "stage": 0,
         "stageName": "BASE",
         "minLevel": 1,
@@ -2673,15 +2746,15 @@ export const CANONICAL_CLASS_REGISTRY_V2 = Object.freeze({
     },
     "sayhaSeer": {
         "id": "sayhaSeer",
-        "name": "Sayha Seeker",
+        "name": "Cloud Breaker",
         "lineageId": "sayhaSeeker",
-        "lineageName": "Sayha Seeker",
+        "lineageName": "Sayha's Seer",
         "stage": 1,
         "stageName": "FIRST_CLASS",
         "minLevel": 20,
         "maxLevel": 39,
         "parentClass": "sayhaMageBase",
-        "desc": "Buscadora de Sayha — canalizadora de correntes de ar e tempestades.",
+        "desc": "Cloud Breaker — maga Ertheia que domina as forças elementais de Sayha.",
         "skillIds": [
             "aqua_swirl",
             "concentration",
@@ -2692,15 +2765,15 @@ export const CANONICAL_CLASS_REGISTRY_V2 = Object.freeze({
     },
     "windRiderErth": {
         "id": "windRiderErth",
-        "name": "Sayha Seeker",
+        "name": "Stratomancer",
         "lineageId": "sayhaSeeker",
-        "lineageName": "Sayha Seeker",
+        "lineageName": "Sayha's Seer",
         "stage": 2,
         "stageName": "SECOND_CLASS",
         "minLevel": 40,
         "maxLevel": 75,
         "parentClass": "sayhaSeer",
-        "desc": "Condutora dos Ventos — maga que comanda tufões devastadores.",
+        "desc": "Stratomancer — maga Ertheia que manipula as camadas e correntes do ar.",
         "skillIds": [
             "hydro_blast",
             "aqua_splash",
@@ -2711,9 +2784,9 @@ export const CANONICAL_CLASS_REGISTRY_V2 = Object.freeze({
     },
     "sayhaSeeker": {
         "id": "sayhaSeeker",
-        "name": "Sayha Seeker",
+        "name": "Sayha's Seer",
         "lineageId": "sayhaSeeker",
-        "lineageName": "Sayha Seeker",
+        "lineageName": "Sayha's Seer",
         "stage": 3,
         "stageName": "THIRD_CLASS",
         "minLevel": 76,

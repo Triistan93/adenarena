@@ -22,19 +22,39 @@ export const EFFECT_CONTRACTS = Object.freeze({
     "stat": "def",
     "source": "Armor Mastery: increase def"
   },
+  "armor_care": {
+    "kind": "passive",
+    "expectedDeltas": [
+      { "stat": "pSkillCritRate", "direction": "increase" },
+      { "stat": "pSkillCritDamagePercent", "direction": "increase" },
+      { "stat": "receivedCritDamageReductionPercent", "direction": "increase" },
+      { "stat": "block", "direction": "increase" }
+    ],
+    "source": "L2Wiki Armor Care ranks 1-2: skill critical, received critical damage reduction, and shield-ignore removal adapted to actual shield block chance; rank-2 values and real physical-skill critical path are also tested separately"
+  },
   "wild_sweep": {
     "kind": "damage",
     "source": "Wild Sweep: deal combat damage with MP and cooldown"
   },
   "detect_weakness": {
-    "kind": "buff",
-    "stat": "atk",
-    "source": "Detect Weakness: attack buff with duration and expiration"
+    "kind": "target_debuff",
+    "expectedDeltas": [
+      {
+        "stat": "damageTakenPercent",
+        "direction": "increase"
+      }
+    ],
+    "source": "Aden Arena adaptation: marks the current target for 8% increased damage taken over 8 seconds"
   },
   "war_cry": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "War Cry: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "atk",
+        "direction": "increase"
+      }
+    ],
+    "source": "War Cry: known attack buff with duration and expiration"
   },
   "sword_blunt_mastery": {
     "kind": "passive",
@@ -60,8 +80,13 @@ export const EFFECT_CONTRACTS = Object.freeze({
   },
   "battle_roar": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Battle Roar: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "maxHp",
+        "direction": "increase"
+      }
+    ],
+    "source": "Battle Roar: canonical described effects with duration and expiration"
   },
   "dual_weapon_mastery": {
     "kind": "passive",
@@ -82,8 +107,17 @@ export const EFFECT_CONTRACTS = Object.freeze({
   },
   "lionheart": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Lionheart: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "pveDamagePercent",
+        "direction": "increase"
+      },
+      {
+        "stat": "debuffResistancePercent",
+        "direction": "increase"
+      }
+    ],
+    "source": "Lionheart: canonical described effects with duration and expiration"
   },
   "master_of_combat": {
     "kind": "passive",
@@ -103,9 +137,14 @@ export const EFFECT_CONTRACTS = Object.freeze({
     "source": "Quick Spear: deal combat damage with MP and cooldown"
   },
   "provoke": {
-    "kind": "buff",
-    "stat": "atk",
-    "source": "Provoke: attack buff with duration and expiration"
+    "kind": "target_debuff",
+    "expectedDeltas": [
+      {
+        "stat": "damageTakenPercent",
+        "direction": "increase"
+      }
+    ],
+    "source": "Provoke: adapted 5% target vulnerability for 10 seconds"
   },
   "polearm_mastery": {
     "kind": "passive",
@@ -114,8 +153,24 @@ export const EFFECT_CONTRACTS = Object.freeze({
   },
   "unleashed_power": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Unleashed Power: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "damageTakenReductionPercent",
+        "direction": "increase"
+      },
+      {
+        "stat": "debuffResistancePercent",
+        "direction": "increase"
+      },
+      {
+        "stat": "pSkillPowerPercent",
+        "direction": "increase"
+      }
+    ],
+    "consumer": "incoming_damage_reduction",
+    "incomingDamageReductionPercent": 0.03,
+    "physicalSkillPowerPercent": 0.01,
+    "source": "Aden Arena adaptation: 3% less received damage, 5% combat-debuff resistance, and 1% physical skill power"
   },
   "shocking_burst": {
     "kind": "damage",
@@ -139,8 +194,21 @@ export const EFFECT_CONTRACTS = Object.freeze({
   },
   "majesty": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Majesty: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "def",
+        "direction": "increase"
+      },
+      {
+        "stat": "maxHp",
+        "direction": "increase"
+      },
+      {
+        "stat": "eva",
+        "direction": "decrease"
+      }
+    ],
+    "source": "Majesty: canonical described effects with duration and expiration"
   },
   "holy_strike": {
     "kind": "damage",
@@ -148,18 +216,31 @@ export const EFFECT_CONTRACTS = Object.freeze({
   },
   "knight_s_protection": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Knight's Protection: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "maxHp",
+        "direction": "increase"
+      }
+    ],
+    "source": "L2Wiki Lineage II Essence knight s protection; unsupported multi-target and hit-counter mechanics are represented by the available solo-combat stats"
   },
   "shackle": {
-    "kind": "buff",
-    "stat": "atk",
-    "source": "Shackle: attack buff with duration and expiration"
+    "kind": "target_debuff",
+    "expectedDeltas": [
+      {
+        "stat": "actionsDisabled",
+        "direction": "increase"
+      }
+    ],
+    "expectedDurationMs": 4000,
+    "consumer": "monster_action_lock",
+    "source": "Shackle: target action lock prevents monster basic attacks and skills for 4 seconds"
   },
   "sacrifice": {
-    "kind": "buff",
-    "stat": "atk",
-    "source": "Sacrifice: attack buff with duration and expiration"
+    "kind": "sacrifice_heal",
+    "power": 350,
+    "hpCostPercent": 0.1,
+    "source": "Aden Arena solo adaptation: pay 10% Max HP to self-heal with canonical Power 350"
   },
   "shield_mastery": {
     "kind": "passive",
@@ -180,8 +261,17 @@ export const EFFECT_CONTRACTS = Object.freeze({
   },
   "ultimate_defense": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Ultimate Defense: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "def",
+        "direction": "increase"
+      },
+      {
+        "stat": "mdef",
+        "direction": "increase"
+      }
+    ],
+    "source": "Aden Arena adaptation: high-cooldown Ultimate Defense grants +60% P./M. Def for 10 seconds"
   },
   "dark_strike": {
     "kind": "damage",
@@ -189,18 +279,30 @@ export const EFFECT_CONTRACTS = Object.freeze({
   },
   "dark_panther_s_help": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Dark Panther's Help: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "pveDamagePercent",
+        "direction": "increase"
+      }
+    ],
+    "source": "Aden Arena adaptation: Dark Panther's additional hit becomes +5% owner PvE damage for 6 seconds"
   },
   "damage_reflection": {
-    "kind": "buff",
-    "stat": "atk",
-    "source": "Damage Reflection: attack buff with duration and expiration"
+    "kind": "damage_reflection",
+    "reflectPercent": 0.03,
+    "source": "Damage Reflection: reflect 3% of incoming damage through production monsterAttack"
   },
   "hamstring": {
-    "kind": "buff",
-    "stat": "atk",
-    "source": "Hamstring: attack buff with duration and expiration"
+    "kind": "target_debuff",
+    "expectedDeltas": [
+      {
+        "stat": "movementSpeedPercent",
+        "direction": "decrease"
+      }
+    ],
+    "expectedDurationMs": 30000,
+    "consumer": "monster_movement_slow",
+    "source": "Aden Arena maps Hamstring movement-speed reduction to a slower monster basic-attack interval"
   },
   "condemnation": {
     "kind": "damage",
@@ -215,14 +317,34 @@ export const EFFECT_CONTRACTS = Object.freeze({
     "source": "Dark Knight's Break: deal combat damage with MP and cooldown"
   },
   "touch_of_death": {
-    "kind": "buff",
-    "stat": "atk",
-    "source": "Touch of Death: attack buff with duration and expiration"
+    "kind": "target_debuff",
+    "expectedDeltas": [
+      {
+        "stat": "damageTakenPercent",
+        "direction": "increase"
+      }
+    ],
+    "expectedDurationMs": 20000,
+    "hpCostPercent": 0.1,
+    "source": "L2Wiki Lineage II Essence Touch of Death: self-sacrifice and timed enemy vulnerability adapted to 10% Max HP and +10% damage taken for 20 seconds"
   },
   "ultimate_evasion": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Ultimate Evasion: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "eva",
+        "direction": "increase"
+      },
+      {
+        "stat": "pSkillEvasionPercent",
+        "direction": "increase"
+      },
+      {
+        "stat": "debuffResistancePercent",
+        "direction": "increase"
+      }
+    ],
+    "source": "Ultimate Evasion: Evasion +25, 40% physical skill evasion and adapted 80% monster-debuff resistance; 30s duration"
   },
   "open": {
     "kind": "damage",
@@ -230,8 +352,14 @@ export const EFFECT_CONTRACTS = Object.freeze({
   },
   "quick_step": {
     "kind": "passive",
-    "stat": "speed",
-    "source": "Quick Step: increase speed"
+    "expectedDeltas": [
+      {
+        "stat": "movementSpeedPercent",
+        "direction": "increase"
+      }
+    ],
+    "consumer": "basic_attack_interval",
+    "source": "Canonical effect Speed +15: movement speed shortens the production basic-attack interval"
   },
   "dagger_mastery": {
     "kind": "passive",
@@ -253,13 +381,35 @@ export const EFFECT_CONTRACTS = Object.freeze({
   },
   "fake_death": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Fake Death: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "def",
+        "direction": "increase"
+      },
+      {
+        "stat": "mdef",
+        "direction": "increase"
+      },
+      {
+        "stat": "debuffResistancePercent",
+        "direction": "increase"
+      }
+    ],
+    "source": "Aden Arena adaptation: feigning death grants +15% P./M. Def and +10% debuff resistance for 4 seconds"
   },
   "silent_move": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Silent Move: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "pSkillEvasionPercent",
+        "direction": "increase"
+      },
+      {
+        "stat": "mSkillEvasionPercent",
+        "direction": "increase"
+      }
+    ],
+    "source": "Aden Arena adaptation: stealth grants 10% evasion against physical and magical monster skills for 8 seconds"
   },
   "critical_power": {
     "kind": "passive",
@@ -267,9 +417,16 @@ export const EFFECT_CONTRACTS = Object.freeze({
     "source": "Critical Power: increase critDmg"
   },
   "shadow_step": {
-    "kind": "buff",
-    "stat": "atk",
-    "source": "Shadow Step: attack buff with duration and expiration"
+    "kind": "target_debuff",
+    "expectedDeltas": [
+      {
+        "stat": "movementSpeedPercent",
+        "direction": "decrease"
+      }
+    ],
+    "expectedDurationMs": 5000,
+    "consumer": "monster_movement_slow",
+    "source": "L2 skill text: target Speed -30%; Aden Arena maps movement suppression to basic-attack cadence"
   },
   "lethal_blow": {
     "kind": "damage",
@@ -281,8 +438,38 @@ export const EFFECT_CONTRACTS = Object.freeze({
   },
   "exciting_adventure": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Exciting Adventure: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "atk",
+        "direction": "increase"
+      },
+      {
+        "stat": "movementSpeedPercent",
+        "direction": "increase"
+      },
+      {
+        "stat": "eva",
+        "direction": "increase"
+      },
+      {
+        "stat": "crit",
+        "direction": "increase"
+      },
+      {
+        "stat": "pSkillEvasionPercent",
+        "direction": "increase"
+      },
+      {
+        "stat": "buffCancelResistancePercent",
+        "direction": "increase"
+      },
+      {
+        "stat": "debuffResistancePercent",
+        "direction": "increase"
+      }
+    ],
+    "consumer": "basic_attack_interval",
+    "source": "L2Wiki Lineage II Essence exciting adventure; unsupported multi-target and hit-counter mechanics are represented by the available solo-combat stats"
   },
   "critical_chance": {
     "kind": "passive",
@@ -299,8 +486,21 @@ export const EFFECT_CONTRACTS = Object.freeze({
   },
   "snipe": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Snipe: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "pAccuracy",
+        "direction": "increase"
+      },
+      {
+        "stat": "atk",
+        "direction": "increase"
+      },
+      {
+        "stat": "crit",
+        "direction": "increase"
+      }
+    ],
+    "source": "L2Wiki Lineage II Essence snipe; unsupported multi-target and hit-counter mechanics are represented by the available solo-combat stats"
   },
   "bow_mastery": {
     "kind": "passive",
@@ -309,8 +509,29 @@ export const EFFECT_CONTRACTS = Object.freeze({
   },
   "legendary_archer": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Legendary Archer: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "maxHp",
+        "direction": "increase"
+      },
+      {
+        "stat": "atk",
+        "direction": "increase"
+      },
+      {
+        "stat": "crit",
+        "direction": "increase"
+      },
+      {
+        "stat": "pSkillPowerPercent",
+        "direction": "increase"
+      },
+      {
+        "stat": "pveDamagePercent",
+        "direction": "increase"
+      }
+    ],
+    "source": "L2Wiki Lineage II Essence legendary archer; unsupported multi-target and hit-counter mechanics are represented by the available solo-combat stats"
   },
   "flame_arrow_rain": {
     "kind": "damage",
@@ -352,23 +573,49 @@ export const EFFECT_CONTRACTS = Object.freeze({
     "source": "Robe Mastery: increase matk"
   },
   "ice_bolt": {
-    "kind": "damage",
-    "source": "Dardo de Gelo: deal combat damage with MP and cooldown"
+    "kind": "damage_and_target_debuff",
+    "expectedDeltas": [
+      {
+        "stat": "movementSpeedPercent",
+        "direction": "decrease"
+      }
+    ],
+    "expectedDurationMs": 30000,
+    "consumer": "monster_movement_slow",
+    "source": "Ice Bolt: damage plus target Speed -20%; movement slow lengthens basic-attack cadence"
   },
   "concentration": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Concentration: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "debuffResistancePercent",
+        "direction": "increase"
+      }
+    ],
+    "unchangedStats": [
+      "cdr",
+      "atkSpd"
+    ],
+    "source": "Aden Arena adaptation: 36-point casting-interruption reduction grants 36% resistance to combat debuffs"
   },
   "weakness": {
-    "kind": "buff",
-    "stat": "atk",
-    "source": "Weakness: attack buff with duration and expiration"
+    "kind": "target_debuff",
+    "expectedDeltas": [
+      {
+        "stat": "atk",
+        "direction": "decrease"
+      },
+      {
+        "stat": "matk",
+        "direction": "decrease"
+      }
+    ],
+    "source": "Weakness: canonical target debuff with timed stat effects"
   },
   "fast_spell_casting": {
     "kind": "passive",
-    "stat": "speed",
-    "source": "Fast Spell Casting: increase speed"
+    "stat": "cdr",
+    "source": "Aden Arena runtime rule: Fast Spell Casting +15% maps to cooldown reduction"
   },
   "anti_magic": {
     "kind": "passive",
@@ -384,14 +631,15 @@ export const EFFECT_CONTRACTS = Object.freeze({
     "source": "Rain of Fire: deal combat damage with MP and cooldown"
   },
   "blazing_skin": {
-    "kind": "buff",
-    "stat": "atk",
-    "source": "Blazing Skin: attack buff with duration and expiration"
+    "kind": "damage_reflection",
+    "reflectPercent": 0.03,
+    "source": "Blazing Skin: reflect 3% of damage received, measured in production combat"
   },
   "inferno": {
-    "kind": "buff",
-    "stat": "atk",
-    "source": "Inferno: attack buff with duration and expiration"
+    "kind": "damage_over_time",
+    "expectedTicks": 10,
+    "expectedDurationMs": 10000,
+    "source": "L2Wiki Lineage II Essence Inferno: Fire damage, Power 150, then 10 seconds of damage over time; browser harness measures all production ticks"
   },
   "spellcraft": {
     "kind": "passive",
@@ -412,8 +660,17 @@ export const EFFECT_CONTRACTS = Object.freeze({
   },
   "arcane_power": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Arcane Power: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "matk",
+        "direction": "increase"
+      },
+      {
+        "stat": "mpCostReduction",
+        "direction": "decrease"
+      }
+    ],
+    "source": "Arcane Power: canonical described effects with duration and expiration"
   },
   "focus_mind": {
     "kind": "passive",
@@ -429,14 +686,30 @@ export const EFFECT_CONTRACTS = Object.freeze({
     "source": "Dark Burst: deal combat damage with MP and cooldown"
   },
   "curse_fear": {
-    "kind": "buff",
-    "stat": "atk",
-    "source": "Curse Fear: attack buff with duration and expiration"
+    "kind": "target_debuff",
+    "expectedDeltas": [
+      {
+        "stat": "atk",
+        "direction": "decrease"
+      },
+      {
+        "stat": "matk",
+        "direction": "decrease"
+      }
+    ],
+    "source": "Aden Arena adaptation: fear reduces target physical and magic attack by 15% for 5 seconds"
   },
   "anchor": {
-    "kind": "buff",
-    "stat": "atk",
-    "source": "Anchor: attack buff with duration and expiration"
+    "kind": "target_debuff",
+    "expectedDeltas": [
+      {
+        "stat": "actionsDisabled",
+        "direction": "increase"
+      }
+    ],
+    "expectedDurationMs": 3000,
+    "consumer": "monster_action_lock",
+    "source": "Anchor: target action lock prevents monster basic attacks and skills for 3 seconds"
   },
   "dark_vortex": {
     "kind": "damage",
@@ -492,9 +765,8 @@ export const EFFECT_CONTRACTS = Object.freeze({
     "source": "Powerful Servitor Share: deal combat damage with MP and cooldown"
   },
   "battle_heal": {
-    "kind": "buff",
-    "stat": "atk",
-    "source": "Battle Heal: attack buff with duration and expiration"
+    "kind": "heal",
+    "source": "Battle Heal: restore HP without exceeding maxHp"
   },
   "divine_strike": {
     "kind": "damage",
@@ -505,9 +777,8 @@ export const EFFECT_CONTRACTS = Object.freeze({
     "source": "Might: deal combat damage with MP and cooldown"
   },
   "greater_heal": {
-    "kind": "buff",
-    "stat": "atk",
-    "source": "Greater Heal: attack buff with duration and expiration"
+    "kind": "heal",
+    "source": "Greater Heal: restore HP without exceeding maxHp"
   },
   "purify": {
     "kind": "damage",
@@ -518,9 +789,8 @@ export const EFFECT_CONTRACTS = Object.freeze({
     "source": "Resurrection: deal combat damage with MP and cooldown"
   },
   "group_heal": {
-    "kind": "buff",
-    "stat": "atk",
-    "source": "Group Heal: attack buff with duration and expiration"
+    "kind": "heal",
+    "source": "Group Heal: restore HP without exceeding maxHp"
   },
   "higher_mana_gain": {
     "kind": "passive",
@@ -553,13 +823,25 @@ export const EFFECT_CONTRACTS = Object.freeze({
   },
   "blessed_shield": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Blessed Shield: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "block",
+        "direction": "increase"
+      }
+    ],
+    "source": "Blessed Shield: +5 percentage points of shield block rate while a shield is equipped"
   },
   "dryad_root": {
-    "kind": "buff",
-    "stat": "atk",
-    "source": "Dryad Root: attack buff with duration and expiration"
+    "kind": "target_debuff",
+    "expectedDeltas": [
+      {
+        "stat": "actionsDisabled",
+        "direction": "increase"
+      }
+    ],
+    "expectedDurationMs": 4000,
+    "consumer": "monster_action_lock",
+    "source": "Dryad Root: target action lock prevents monster basic attacks and skills for 4 seconds"
   },
   "sephiroth": {
     "kind": "damage",
@@ -571,13 +853,27 @@ export const EFFECT_CONTRACTS = Object.freeze({
   },
   "advanced_block": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Advanced Block: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "def",
+        "direction": "increase"
+      }
+    ],
+    "source": "Advanced Block: increases the equipped shield's physical defense by 10%"
   },
   "word_of_fear": {
-    "kind": "buff",
-    "stat": "atk",
-    "source": "Word of Fear: attack buff with duration and expiration"
+    "kind": "target_debuff",
+    "expectedDeltas": [
+      {
+        "stat": "atk",
+        "direction": "decrease"
+      },
+      {
+        "stat": "matk",
+        "direction": "decrease"
+      }
+    ],
+    "source": "Aden Arena adaptation: converts fear into a brief reduction to monster physical and magical attacks"
   },
   "hellfire": {
     "kind": "damage",
@@ -597,9 +893,18 @@ export const EFFECT_CONTRACTS = Object.freeze({
     "source": "Punishment: deal combat damage with MP and cooldown"
   },
   "roar_of_death": {
-    "kind": "buff",
-    "stat": "atk",
-    "source": "Roar of Death: attack buff with duration and expiration"
+    "kind": "target_debuff",
+    "expectedDeltas": [
+      {
+        "stat": "atk",
+        "direction": "decrease"
+      },
+      {
+        "stat": "matk",
+        "direction": "decrease"
+      }
+    ],
+    "source": "Aden Arena adaptation: reduces the marked target physical and magic attack by 15% for 10 seconds"
   },
   "fist_of_fury": {
     "kind": "damage",
@@ -623,9 +928,18 @@ export const EFFECT_CONTRACTS = Object.freeze({
     "source": "Stigma of Death: deal combat damage with MP and cooldown"
   },
   "call_of_flame": {
-    "kind": "buff",
-    "stat": "atk",
-    "source": "Call of Flame: attack buff with duration and expiration"
+    "kind": "target_debuff",
+    "expectedDeltas": [
+      {
+        "stat": "def",
+        "direction": "decrease"
+      },
+      {
+        "stat": "mdef",
+        "direction": "decrease"
+      }
+    ],
+    "source": "Aden Arena adaptation: Human Call of Flame lowers target P./M. Def by 15% for 5 seconds"
   },
   "two_handed_weapon_mastery": {
     "kind": "passive",
@@ -645,9 +959,16 @@ export const EFFECT_CONTRACTS = Object.freeze({
     "source": "Stigma of Evil: deal combat damage with MP and cooldown"
   },
   "flame_grip": {
-    "kind": "buff",
-    "stat": "atk",
-    "source": "Flame Grip: attack buff with duration and expiration"
+    "kind": "target_debuff",
+    "expectedDeltas": [
+      {
+        "stat": "actionsDisabled",
+        "direction": "increase"
+      }
+    ],
+    "expectedDurationMs": 5000,
+    "consumer": "monster_action_lock",
+    "source": "Flame Grip: target action lock prevents monster basic attacks and skills for 5 seconds"
   },
   "blow": {
     "kind": "damage",
@@ -672,26 +993,98 @@ export const EFFECT_CONTRACTS = Object.freeze({
   },
   "sharp_blade": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Sharp Blade: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "atk",
+        "direction": "increase"
+      }
+    ],
+    "unchangedStats": [
+      "atkSpd"
+    ],
+    "source": "Lineage II Essence Assassin notes: Sharp Blade Lv. 1 gives 5% P. Atk.; Aden Arena adapts it to an 8-second buff"
   },
   "assassin_servitor": {
     "kind": "damage",
     "source": "Assassin Servitor: deal combat damage with MP and cooldown"
   },
   "assassin_s_secret_notes_1st_page": {
-    "kind": "damage",
-    "source": "Assassin's Secret Notes - 1st Page: deal combat damage with MP and cooldown"
+    "kind": "buff",
+    "expectedDeltas": [
+      {
+        "stat": "maxHp",
+        "direction": "increase"
+      },
+      {
+        "stat": "maxMp",
+        "direction": "increase"
+      },
+      {
+        "stat": "atk",
+        "direction": "increase"
+      },
+      {
+        "stat": "matk",
+        "direction": "increase"
+      },
+      {
+        "stat": "def",
+        "direction": "increase"
+      },
+      {
+        "stat": "mdef",
+        "direction": "increase"
+      },
+      {
+        "stat": "crit",
+        "direction": "increase"
+      },
+      {
+        "stat": "cdr",
+        "direction": "increase"
+      },
+      {
+        "stat": "pAccuracy",
+        "direction": "increase"
+      },
+      {
+        "stat": "mAccuracy",
+        "direction": "increase"
+      }
+    ],
+    "unchangedStats": [
+      "atkSpd"
+    ],
+    "source": "Publisher patch notes: self-buff. Aden Arena maps Attack Speed to cooldown reduction, leaves Movement Speed unused, and maps accuracy to reduced level-gap miss chance; duration 15s is local balance."
   },
   "erosion": {
-    "kind": "buff",
-    "stat": "atk",
-    "source": "Erosion: attack buff with duration and expiration"
+    "kind": "target_debuff",
+    "expectedDeltas": [
+      {
+        "stat": "def",
+        "direction": "decrease"
+      },
+      {
+        "stat": "mdef",
+        "direction": "decrease"
+      }
+    ],
+    "source": "Aden Arena adaptation: reduces target P. Def and M. Def by 10% for 5 seconds"
   },
   "murder_attempt": {
-    "kind": "buff",
-    "stat": "atk",
-    "source": "Murder Attempt: attack buff with duration and expiration"
+    "kind": "target_debuff",
+    "expectedDeltas": [
+      {
+        "stat": "def",
+        "direction": "decrease"
+      },
+      {
+        "stat": "mdef",
+        "direction": "decrease"
+      }
+    ],
+    "expectedDurationMs": 10000,
+    "source": "L2Wiki Lineage II Essence Murder Attempt curse stacks to -10% P./M. Def.; Aden Arena applies its cap as a timed single-target curse"
   },
   "shadow_blast": {
     "kind": "damage",
@@ -719,8 +1112,13 @@ export const EFFECT_CONTRACTS = Object.freeze({
   },
   "howling": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Howling: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "atk",
+        "direction": "increase"
+      }
+    ],
+    "source": "L2Wiki Lineage II Essence Howling: P. Atk. +20%; Aden Arena adapts the 15 MP on-kill proc separately"
   },
   "aqua_strike": {
     "kind": "damage",
@@ -732,13 +1130,39 @@ export const EFFECT_CONTRACTS = Object.freeze({
   },
   "battle_training": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Battle Training: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "atk",
+        "direction": "increase"
+      },
+      {
+        "stat": "cdr",
+        "direction": "increase"
+      }
+    ],
+    "source": "L2Wiki Lineage II Essence battle training; unsupported multi-target and hit-counter mechanics are represented by the available solo-combat stats"
   },
   "life_magic_harmony_defense": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Life Magic Harmony - Defense: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "def",
+        "direction": "increase"
+      },
+      {
+        "stat": "mdef",
+        "direction": "increase"
+      },
+      {
+        "stat": "maxHp",
+        "direction": "increase"
+      },
+      {
+        "stat": "mpRegen",
+        "direction": "increase"
+      }
+    ],
+    "source": "L2Wiki Lineage II Essence life magic harmony defense; unsupported multi-target and hit-counter mechanics are represented by the available solo-combat stats"
   },
   "supernova": {
     "kind": "damage",
@@ -770,8 +1194,34 @@ export const EFFECT_CONTRACTS = Object.freeze({
   },
   "song_of_earth": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Song of Earth: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "atk",
+        "direction": "increase"
+      },
+      {
+        "stat": "def",
+        "direction": "increase"
+      },
+      {
+        "stat": "mdef",
+        "direction": "increase"
+      },
+      {
+        "stat": "crit",
+        "direction": "increase"
+      },
+      {
+        "stat": "movementSpeedPercent",
+        "direction": "increase"
+      },
+      {
+        "stat": "pSkillPowerPercent",
+        "direction": "increase"
+      }
+    ],
+    "consumer": "basic_attack_interval",
+    "source": "L2Wiki Lineage II Essence song of earth; unsupported multi-target and hit-counter mechanics are represented by the available solo-combat stats"
   },
   "symphony": {
     "kind": "damage",
@@ -779,23 +1229,65 @@ export const EFFECT_CONTRACTS = Object.freeze({
   },
   "sword_symphony": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Sword Symphony: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "atk",
+        "direction": "increase"
+      },
+      {
+        "stat": "pveDamagePercent",
+        "direction": "increase"
+      },
+      {
+        "stat": "damageTakenReductionPercent",
+        "direction": "increase"
+      }
+    ],
+    "source": "L2Wiki Lineage II Essence Sword Symphony: +10% P. Atk., +10% PvE skill damage, and -10% received skill damage; sword-specific proc effects remain outside the simulator"
   },
   "song_of_cosmos": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Song of Cosmos: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "atk",
+        "direction": "increase"
+      },
+      {
+        "stat": "crit",
+        "direction": "increase"
+      },
+      {
+        "stat": "pSkillPowerPercent",
+        "direction": "increase"
+      },
+      {
+        "stat": "pveDamagePercent",
+        "direction": "increase"
+      }
+    ],
+    "source": "L2Wiki Lineage II Essence song of cosmos; unsupported multi-target and hit-counter mechanics are represented by the available solo-combat stats"
   },
   "eliminate_obstruction": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Eliminate Obstruction: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "debuffResistancePercent",
+        "direction": "increase"
+      }
+    ],
+    "source": "L2Wiki Lineage II Essence Eliminate Obstruction: +10% Debuff/Anomaly Resistance; on-hit cleanse chance is adapted to this solo-combat resistance"
   },
   "entangle": {
-    "kind": "buff",
-    "stat": "atk",
-    "source": "Entangle: attack buff with duration and expiration"
+    "kind": "target_debuff",
+    "expectedDeltas": [
+      {
+        "stat": "movementSpeedPercent",
+        "direction": "decrease"
+      }
+    ],
+    "expectedDurationMs": 3000,
+    "consumer": "monster_movement_slow",
+    "source": "L2Wiki Lineage II Essence Entangle Lv. 1: target Speed -70% for 3 seconds; Aden Arena maps the slow to slower basic attacks and longer monster skill cooldowns"
   },
   "fury_blade": {
     "kind": "damage",
@@ -803,18 +1295,70 @@ export const EFFECT_CONTRACTS = Object.freeze({
   },
   "wind_riding": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Wind Riding: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "atk",
+        "direction": "increase"
+      },
+      {
+        "stat": "movementSpeedPercent",
+        "direction": "increase"
+      },
+      {
+        "stat": "eva",
+        "direction": "increase"
+      },
+      {
+        "stat": "crit",
+        "direction": "increase"
+      },
+      {
+        "stat": "pSkillEvasionPercent",
+        "direction": "increase"
+      },
+      {
+        "stat": "buffCancelResistancePercent",
+        "direction": "increase"
+      },
+      {
+        "stat": "debuffResistancePercent",
+        "direction": "increase"
+      }
+    ],
+    "consumer": "basic_attack_interval",
+    "source": "L2Wiki Lineage II Essence wind riding; unsupported multi-target and hit-counter mechanics are represented by the available solo-combat stats"
   },
   "synchro_freedom": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Synchro Freedom: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "pSkillPowerPercent",
+        "direction": "increase"
+      },
+      {
+        "stat": "maxHp",
+        "direction": "increase"
+      },
+      {
+        "stat": "debuffResistancePercent",
+        "direction": "increase"
+      }
+    ],
+    "source": "L2Wiki Lineage II Essence Synchro Freedom Lv. 1, adapted to the solo combat model"
   },
   "evasion": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Evasion: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "pSkillEvasionPercent",
+        "direction": "increase"
+      },
+      {
+        "stat": "mSkillEvasionPercent",
+        "direction": "increase"
+      }
+    ],
+    "source": "L2Wiki Lineage II Essence evasion; unsupported multi-target and hit-counter mechanics are represented by the available solo-combat stats"
   },
   "clear_movements": {
     "kind": "damage",
@@ -822,8 +1366,17 @@ export const EFFECT_CONTRACTS = Object.freeze({
   },
   "rapid_fire": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Rapid Fire: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "atk",
+        "direction": "increase"
+      },
+      {
+        "stat": "cdr",
+        "direction": "increase"
+      }
+    ],
+    "source": "L2Wiki Lineage II Essence rapid fire; unsupported multi-target and hit-counter mechanics are represented by the available solo-combat stats"
   },
   "water_arrow_rain": {
     "kind": "damage",
@@ -843,13 +1396,22 @@ export const EFFECT_CONTRACTS = Object.freeze({
   },
   "freezing_skin": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Freezing Skin: attack buff with duration and expiration"
+    "expectedDeltas": [],
+    "reflectPercent": 0.03,
+    "expectedDurationMs": 20000,
+    "source": "L2Wiki Lineage II Essence Freezing Skin reflects 3% of received damage; verified through the production reflection consumer"
   },
   "sleep": {
-    "kind": "buff",
-    "stat": "atk",
-    "source": "Sleep: attack buff with duration and expiration"
+    "kind": "target_debuff",
+    "expectedDeltas": [
+      {
+        "stat": "actionsDisabled",
+        "direction": "increase"
+      }
+    ],
+    "expectedDurationMs": 2000,
+    "consumer": "monster_action_lock",
+    "source": "Sleep: target action lock prevents monster basic attacks and skills for 2 seconds"
   },
   "aqua_splash": {
     "kind": "damage",
@@ -880,9 +1442,18 @@ export const EFFECT_CONTRACTS = Object.freeze({
     "source": "Summon Elemental Unicorn: deal combat damage with MP and cooldown"
   },
   "wind_shackles": {
-    "kind": "buff",
-    "stat": "atk",
-    "source": "Wind Shackles: attack buff with duration and expiration"
+    "kind": "target_debuff",
+    "expectedDeltas": [
+      {
+        "stat": "attackSpeed",
+        "direction": "decrease"
+      },
+      {
+        "stat": "skillCooldown",
+        "direction": "increase"
+      }
+    ],
+    "source": "Wind Shackles: canonical target debuff with timed stat effects"
   },
   "elemental_strike": {
     "kind": "damage",
@@ -898,23 +1469,44 @@ export const EFFECT_CONTRACTS = Object.freeze({
   },
   "elemental_mastership": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Elemental Mastership: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "matk",
+        "direction": "increase"
+      },
+      {
+        "stat": "mSkillPowerPercent",
+        "direction": "increase"
+      },
+      {
+        "stat": "maxMp",
+        "direction": "increase"
+      }
+    ],
+    "source": "L2Wiki Lineage II Essence Elemental Mastership Lv. 1, adapted to a 20-second solo-combat buff"
   },
   "heal": {
-    "kind": "buff",
-    "stat": "atk",
-    "source": "Heal: attack buff with duration and expiration"
+    "kind": "heal",
+    "source": "Heal: restore HP without exceeding maxHp"
   },
   "mana_effect_boost": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Mana Effect Boost: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "maxMp",
+        "direction": "increase"
+      },
+      {
+        "stat": "mpRegen",
+        "direction": "increase"
+      }
+    ],
+    "source": "Mana Effect Boost: +20% Max MP and +5.1 MP recovery rate"
   },
   "vitalize": {
-    "kind": "buff",
-    "stat": "atk",
-    "source": "Vitalize: attack buff with duration and expiration"
+    "kind": "heal_and_cleanse",
+    "power": 460,
+    "source": "Vitalize: recover HP using canonical power and remove active monster combat debuffs"
   },
   "eva_s_serenade": {
     "kind": "damage",
@@ -922,8 +1514,21 @@ export const EFFECT_CONTRACTS = Object.freeze({
   },
   "shelter_master": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Shelter: Master: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "def",
+        "direction": "increase"
+      },
+      {
+        "stat": "mdef",
+        "direction": "increase"
+      },
+      {
+        "stat": "debuffResistancePercent",
+        "direction": "increase"
+      }
+    ],
+    "source": "Aden Arena solo adaptation: timed physical/magic defense and combat-debuff resistance"
   },
   "divine_beam": {
     "kind": "damage",
@@ -931,22 +1536,75 @@ export const EFFECT_CONTRACTS = Object.freeze({
   },
   "prophecy_of_water": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Prophecy of Water: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "matk",
+        "direction": "increase"
+      },
+      {
+        "stat": "cdr",
+        "direction": "increase"
+      },
+      {
+        "stat": "def",
+        "direction": "increase"
+      },
+      {
+        "stat": "mdef",
+        "direction": "increase"
+      },
+      {
+        "stat": "maxMp",
+        "direction": "increase"
+      },
+      {
+        "stat": "mpRegen",
+        "direction": "increase"
+      }
+    ],
+    "source": "L2Wiki Lineage II Essence prophecy of water; unsupported multi-target and hit-counter mechanics are represented by the available solo-combat stats"
   },
   "enlightenment": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Enlightenment: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "matk",
+        "direction": "increase"
+      },
+      {
+        "stat": "cdr",
+        "direction": "increase"
+      },
+      {
+        "stat": "crit",
+        "direction": "increase"
+      },
+      {
+        "stat": "mSkillPowerPercent",
+        "direction": "increase"
+      },
+      {
+        "stat": "healingReceivedPercent",
+        "direction": "increase"
+      }
+    ],
+    "source": "L2Wiki Lineage II Essence enlightenment; unsupported multi-target and hit-counter mechanics are represented by the available solo-combat stats"
   },
   "drain_hp": {
     "kind": "damage",
     "source": "Drain HP: deal combat damage with MP and cooldown"
   },
   "confusion": {
-    "kind": "buff",
-    "stat": "atk",
-    "source": "Confusion: attack buff with duration and expiration"
+    "kind": "target_debuff",
+    "expectedDeltas": [
+      {
+        "stat": "actionsDisabled",
+        "direction": "increase"
+      }
+    ],
+    "expectedDurationMs": 5000,
+    "consumer": "monster_action_lock",
+    "source": "Confusion: target action lock prevents monster basic attacks and skills for 5 seconds"
   },
   "abyss_strike": {
     "kind": "damage",
@@ -961,9 +1619,14 @@ export const EFFECT_CONTRACTS = Object.freeze({
     "source": "Life Leech: deal combat damage with MP and cooldown"
   },
   "hex": {
-    "kind": "buff",
-    "stat": "atk",
-    "source": "Hex: attack buff with duration and expiration"
+    "kind": "target_debuff",
+    "expectedDeltas": [
+      {
+        "stat": "def",
+        "direction": "decrease"
+      }
+    ],
+    "source": "Hex: canonical target debuff with timed stat effects"
   },
   "shillien_s_curse": {
     "kind": "damage",
@@ -983,8 +1646,29 @@ export const EFFECT_CONTRACTS = Object.freeze({
   },
   "dance_of_warrior": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Dance of Warrior: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "atk",
+        "direction": "increase"
+      },
+      {
+        "stat": "def",
+        "direction": "increase"
+      },
+      {
+        "stat": "mdef",
+        "direction": "increase"
+      },
+      {
+        "stat": "pSkillPowerPercent",
+        "direction": "increase"
+      },
+      {
+        "stat": "cdr",
+        "direction": "increase"
+      }
+    ],
+    "source": "L2Wiki Lineage II Essence dance of warrior; unsupported multi-target and hit-counter mechanics are represented by the available solo-combat stats"
   },
   "dance_of_fury": {
     "kind": "damage",
@@ -992,8 +1676,33 @@ export const EFFECT_CONTRACTS = Object.freeze({
   },
   "flamenco": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Flamenco: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "maxHp",
+        "direction": "increase"
+      },
+      {
+        "stat": "atk",
+        "direction": "increase"
+      },
+      {
+        "stat": "def",
+        "direction": "increase"
+      },
+      {
+        "stat": "mdef",
+        "direction": "increase"
+      },
+      {
+        "stat": "pveDamagePercent",
+        "direction": "increase"
+      },
+      {
+        "stat": "cdr",
+        "direction": "increase"
+      }
+    ],
+    "source": "L2Wiki Lineage II Essence Flamenco Lv. 1 caster effects adapted to solo card combat"
   },
   "deadly_rhythm": {
     "kind": "damage",
@@ -1012,9 +1721,14 @@ export const EFFECT_CONTRACTS = Object.freeze({
     "source": "Poison Blade Dance: deal combat damage with MP and cooldown"
   },
   "power_break": {
-    "kind": "buff",
-    "stat": "atk",
-    "source": "Power Break: attack buff with duration and expiration"
+    "kind": "target_debuff",
+    "expectedDeltas": [
+      {
+        "stat": "atk",
+        "direction": "decrease"
+      }
+    ],
+    "source": "Power Break: reduces target P. Atk. by 23%; canonical text repeats the minus sign"
   },
   "dark_blow": {
     "kind": "damage",
@@ -1022,13 +1736,35 @@ export const EFFECT_CONTRACTS = Object.freeze({
   },
   "focus_power": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Focus Power: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "atk",
+        "direction": "increase"
+      }
+    ],
+    "source": "L2Wiki Lineage II Essence Focus Power: dagger damage +10%, adapted to physical attack while a dagger is equipped"
   },
   "dead_eye": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Dead Eye: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "pAccuracy",
+        "direction": "increase"
+      },
+      {
+        "stat": "atk",
+        "direction": "increase"
+      },
+      {
+        "stat": "critDmg",
+        "direction": "increase"
+      },
+      {
+        "stat": "cdr",
+        "direction": "decrease"
+      }
+    ],
+    "source": "L2Wiki Lineage II Essence dead eye; unsupported multi-target and hit-counter mechanics are represented by the available solo-combat stats"
   },
   "storm_arrow_rain": {
     "kind": "damage",
@@ -1051,9 +1787,15 @@ export const EFFECT_CONTRACTS = Object.freeze({
     "source": "Demon Wind: deal combat damage with MP and cooldown"
   },
   "silence": {
-    "kind": "buff",
-    "stat": "atk",
-    "source": "Silence: attack buff with duration and expiration"
+    "kind": "target_debuff",
+    "expectedDeltas": [
+      {
+        "stat": "magicSkillsSilenced",
+        "direction": "increase"
+      }
+    ],
+    "consumer": "monster_magic_skill",
+    "source": "Aden Arena adaptation: Silence blocks a monster's magical special skill for 6 seconds"
   },
   "wind_spiral": {
     "kind": "damage",
@@ -1089,13 +1831,27 @@ export const EFFECT_CONTRACTS = Object.freeze({
   },
   "vampiric_rage": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Vampiric Rage: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "lifeDrain",
+        "direction": "increase"
+      }
+    ],
+    "source": "Vampiric Rage: adapted +5% life drain for 10 seconds"
   },
   "shillien_s_stigma": {
-    "kind": "buff",
-    "stat": "atk",
-    "source": "Shillien's Stigma: attack buff with duration and expiration"
+    "kind": "target_debuff",
+    "expectedDeltas": [
+      {
+        "stat": "damageTakenPercent",
+        "direction": "increase"
+      },
+      {
+        "stat": "mdef",
+        "direction": "decrease"
+      }
+    ],
+    "source": "Aden Arena adaptation: translates weapon resistance marking into a short damage vulnerability and M. Def reduction"
   },
   "dark_disruption": {
     "kind": "damage",
@@ -1107,8 +1863,26 @@ export const EFFECT_CONTRACTS = Object.freeze({
   },
   "prophecy_of_wind": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Prophecy of Wind: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "crit",
+        "direction": "increase"
+      },
+      {
+        "stat": "mSkillPowerPercent",
+        "direction": "increase"
+      },
+      {
+        "stat": "movementSpeedPercent",
+        "direction": "increase"
+      },
+      {
+        "stat": "pveDamagePercent",
+        "direction": "increase"
+      }
+    ],
+    "consumer": "basic_attack_interval",
+    "source": "L2Wiki Lineage II Essence prophecy of wind; unsupported multi-target and hit-counter mechanics are represented by the available solo-combat stats"
   },
   "rose_attack": {
     "kind": "damage",
@@ -1140,23 +1914,97 @@ export const EFFECT_CONTRACTS = Object.freeze({
   },
   "bleeding_rose": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Bleeding Rose: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "matk",
+        "direction": "increase"
+      },
+      {
+        "stat": "crit",
+        "direction": "increase"
+      },
+      {
+        "stat": "mSkillPowerPercent",
+        "direction": "increase"
+      },
+      {
+        "stat": "pveDamagePercent",
+        "direction": "increase"
+      }
+    ],
+    "source": "L2Wiki Lineage II Essence Bleeding Rose: +5% M. Atk., M. Skill Critical Rate, M. Skill Power, and +10% PvE damage"
   },
   "kingdom_of_plants": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Kingdom of Plants: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "matk",
+        "direction": "increase"
+      },
+      {
+        "stat": "crit",
+        "direction": "increase"
+      },
+      {
+        "stat": "pveDamagePercent",
+        "direction": "increase"
+      },
+      {
+        "stat": "mpRegen",
+        "direction": "increase"
+      }
+    ],
+    "source": "L2Wiki Lineage II Essence Kingdom of Plants Lv. 1: +10% M. Atk., +5 shared critical chance, +10% PvE damage, and +10 MP recovery"
   },
   "reflecting_illusion": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Reflecting Illusion: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "def",
+        "direction": "increase"
+      },
+      {
+        "stat": "mdef",
+        "direction": "increase"
+      },
+      {
+        "stat": "debuffResistancePercent",
+        "direction": "increase"
+      },
+      {
+        "stat": "damageTakenReductionPercent",
+        "direction": "increase"
+      }
+    ],
+    "healPercent": 0.5,
+    "reflectPercent": 0.1,
+    "source": "L2Wiki Lineage II Essence Reflecting Illusion: restores 50% Max HP, adds P./M. Def. +3000, resistance +15%, reflects 10%; magic-counter reduction is adapted to general mitigation"
   },
   "crimson_rose": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Crimson Rose: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "matk",
+        "direction": "increase"
+      },
+      {
+        "stat": "crit",
+        "direction": "increase"
+      },
+      {
+        "stat": "mSkillPowerPercent",
+        "direction": "increase"
+      },
+      {
+        "stat": "pveDamagePercent",
+        "direction": "increase"
+      },
+      {
+        "stat": "mpRegen",
+        "direction": "increase"
+      }
+    ],
+    "source": "L2Wiki Lineage II Essence Crimson Rose Lv. 2: +10% M. Atk., +5% magic skill crit, +2% M. Skill Power, +5% PvE damage, +10 MP recovery"
   },
   "rose_thorns": {
     "kind": "damage",
@@ -1168,13 +2016,42 @@ export const EFFECT_CONTRACTS = Object.freeze({
   },
   "rage": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Rage: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "atk",
+        "direction": "increase"
+      },
+      {
+        "stat": "cdr",
+        "direction": "increase"
+      }
+    ],
+    "unchangedStats": [
+      "atkSpd"
+    ],
+    "source": "Aden Arena adaptation: 10% physical attack and 5% cooldown reduction for 8 seconds"
   },
   "frenzy": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Frenzy: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "atk",
+        "direction": "increase"
+      },
+      {
+        "stat": "cdr",
+        "direction": "increase"
+      },
+      {
+        "stat": "crit",
+        "direction": "increase"
+      },
+      {
+        "stat": "pSkillPowerPercent",
+        "direction": "increase"
+      }
+    ],
+    "source": "L2Wiki Lineage II Essence frenzy; unsupported multi-target and hit-counter mechanics are represented by the available solo-combat stats"
   },
   "power_crash": {
     "kind": "damage",
@@ -1182,8 +2059,17 @@ export const EFFECT_CONTRACTS = Object.freeze({
   },
   "guts": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Guts: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "def",
+        "direction": "increase"
+      },
+      {
+        "stat": "debuffResistancePercent",
+        "direction": "increase"
+      }
+    ],
+    "source": "Aden Arena adaptation: Guts preserves +400 P. Def, +35% P. Def and +25% debuff resistance for 10 seconds"
   },
   "titan_champion": {
     "kind": "damage",
@@ -1191,8 +2077,25 @@ export const EFFECT_CONTRACTS = Object.freeze({
   },
   "overwhelming_power": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Overwhelming Power: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "atk",
+        "direction": "increase"
+      },
+      {
+        "stat": "cdr",
+        "direction": "increase"
+      },
+      {
+        "stat": "crit",
+        "direction": "increase"
+      },
+      {
+        "stat": "pSkillPowerPercent",
+        "direction": "increase"
+      }
+    ],
+    "source": "L2Wiki Lineage II Essence overwhelming power; unsupported multi-target and hit-counter mechanics are represented by the available solo-combat stats"
   },
   "excruciating_strike": {
     "kind": "damage",
@@ -1200,17 +2103,43 @@ export const EFFECT_CONTRACTS = Object.freeze({
   },
   "zealot": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Zealot: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "cdr",
+        "direction": "increase"
+      },
+      {
+        "stat": "crit",
+        "direction": "increase"
+      },
+      {
+        "stat": "pSkillPowerPercent",
+        "direction": "increase"
+      }
+    ],
+    "source": "L2Wiki Lineage II Essence zealot; unsupported multi-target and hit-counter mechanics are represented by the available solo-combat stats"
   },
   "force_blaster": {
     "kind": "damage",
     "source": "Force Blaster: deal combat damage with MP and cooldown"
   },
   "cripple": {
-    "kind": "buff",
-    "stat": "atk",
-    "source": "Cripple: attack buff with duration and expiration"
+    "kind": "target_debuff",
+    "expectedDeltas": [
+      {
+        "stat": "attackSpeed",
+        "direction": "decrease"
+      },
+      {
+        "stat": "skillCooldown",
+        "direction": "increase"
+      },
+      {
+        "stat": "movementSpeedPercent",
+        "direction": "decrease"
+      }
+    ],
+    "source": "Cripple: attack/casting-speed penalties lengthen skill cooldown; movement-speed penalty slows basic attacks"
   },
   "fist_mastery": {
     "kind": "passive",
@@ -1227,18 +2156,51 @@ export const EFFECT_CONTRACTS = Object.freeze({
   },
   "bison_spirit_totem": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Bison Spirit Totem: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "atk",
+        "direction": "increase"
+      },
+      {
+        "stat": "cdr",
+        "direction": "increase"
+      },
+      {
+        "stat": "def",
+        "direction": "increase"
+      },
+      {
+        "stat": "crit",
+        "direction": "increase"
+      }
+    ],
+    "unchangedStats": [
+      "atkSpd"
+    ],
+    "source": "L2Wiki Lineage II Essence Bison Spirit Totem Lv. 1: P. Atk. +10%, Atk. Spd. +10%, P. Def. +5%, P. Skill Critical Rate +50; attack speed maps to cooldown reduction"
   },
   "ogre_s_essence": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Ogre's Essence: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "def",
+        "direction": "increase"
+      },
+      {
+        "stat": "mdef",
+        "direction": "increase"
+      },
+      {
+        "stat": "damageTakenReductionPercent",
+        "direction": "increase"
+      }
+    ],
+    "source": "L2Wiki Lineage II Essence Ogre's Essence: +300 P./M. Def. and 5% less received damage for 10 seconds"
   },
   "boost_attack_speed": {
     "kind": "passive",
-    "stat": "speed",
-    "source": "Boost Attack Speed: increase speed"
+    "stat": "cdr",
+    "source": "Aden Arena runtime rule: Boost Attack Speed +10% maps to cooldown reduction"
   },
   "raging_force": {
     "kind": "damage",
@@ -1250,8 +2212,21 @@ export const EFFECT_CONTRACTS = Object.freeze({
   },
   "wondrous_power": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Wondrous Power: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "def",
+        "direction": "increase"
+      },
+      {
+        "stat": "mdef",
+        "direction": "increase"
+      },
+      {
+        "stat": "debuffResistancePercent",
+        "direction": "increase"
+      }
+    ],
+    "source": "L2Wiki Lineage II Essence Wondrous Power: +2000 P./M. Def. and 30% combat-debuff resistance for 15 seconds"
   },
   "cacophony_of_war": {
     "kind": "damage",
@@ -1266,83 +2241,248 @@ export const EFFECT_CONTRACTS = Object.freeze({
     "source": "Vortex of Fire: deal combat damage with MP and cooldown"
   },
   "dreaming_spirit": {
-    "kind": "buff",
-    "stat": "atk",
-    "source": "Dreaming Spirit: attack buff with duration and expiration"
+    "kind": "target_debuff",
+    "expectedDeltas": [
+      {
+        "stat": "actionsDisabled",
+        "direction": "increase"
+      }
+    ],
+    "expectedDurationMs": 5000,
+    "consumer": "monster_action_lock",
+    "source": "Dreaming Spirit: target action lock prevents monster basic attacks and skills for 5 seconds"
   },
   "frost_flame": {
-    "kind": "buff",
-    "stat": "atk",
-    "source": "Frost Flame: attack buff with duration and expiration"
+    "kind": "damage_over_time",
+    "expectedTicks": 15,
+    "expectedDurationMs": 15000,
+    "source": "Frost Flame: production combat applies 15 one-second damage ticks over 15 seconds"
   },
   "shining_prison": {
-    "kind": "buff",
-    "stat": "atk",
-    "source": "Shining Prison: attack buff with duration and expiration"
+    "kind": "target_debuff",
+    "expectedDeltas": [
+      {
+        "stat": "actionsDisabled",
+        "direction": "increase"
+      }
+    ],
+    "expectedDurationMs": 5000,
+    "consumer": "monster_action_lock",
+    "source": "Shining Prison: target action lock prevents monster basic attacks and skills for 5 seconds"
   },
   "life_rescue": {
-    "kind": "buff",
-    "stat": "atk",
-    "source": "Life Rescue: attack buff with duration and expiration"
+    "kind": "heal",
+    "expectedAmount": 127,
+    "source": "Life Rescue: restore HP without exceeding maxHp"
   },
   "swap_attack": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Swap Attack: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "atk",
+        "direction": "increase"
+      },
+      {
+        "stat": "matk",
+        "direction": "decrease"
+      }
+    ],
+    "source": "Swap Attack: canonical described effects with duration and expiration"
   },
   "swap_defense": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Swap Defense: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "def",
+        "direction": "increase"
+      },
+      {
+        "stat": "mdef",
+        "direction": "decrease"
+      }
+    ],
+    "source": "Swap Defense: canonical described effects with duration and expiration"
   },
   "pa_agrio_s_glory": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Pa'agrio's Glory: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "matk",
+        "direction": "increase"
+      },
+      {
+        "stat": "def",
+        "direction": "increase"
+      },
+      {
+        "stat": "mdef",
+        "direction": "increase"
+      },
+      {
+        "stat": "mSkillCdr",
+        "direction": "increase"
+      }
+    ],
+    "source": "L2Wiki Lineage II Essence Pa'agrio's Glory Lv. 3: magic attack/defense, physical defense and 15% magic-skill cooldown reduction; Aden Arena adapts its duration to 20 seconds"
   },
   "pa_agrio_s_immunity": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Pa'agrio's Immunity: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "matk",
+        "direction": "increase"
+      },
+      {
+        "stat": "def",
+        "direction": "increase"
+      },
+      {
+        "stat": "crit",
+        "direction": "increase"
+      },
+      {
+        "stat": "damageTakenReductionPercent",
+        "direction": "increase"
+      },
+      {
+        "stat": "debuffResistancePercent",
+        "direction": "increase"
+      }
+    ],
+    "source": "L2Wiki Lineage II Essence pa agrio s immunity; unsupported multi-target and hit-counter mechanics are represented by the available solo-combat stats"
   },
   "pa_agrio_s_touch": {
     "kind": "damage",
     "source": "Pa'agrio's Touch: deal combat damage with MP and cooldown"
   },
   "pa_agrio_s_cure": {
-    "kind": "buff",
-    "stat": "atk",
-    "source": "Pa'agrio's Cure: attack buff with duration and expiration"
+    "kind": "heal",
+    "expectedAmount": 1800,
+    "source": "L2Wiki Lineage II Essence Pa'agrio's Cure Lv. 1: 600 HP plus an additional 1200 HP, adapted to one target; CP recovery is not modeled"
   },
   "seal_of_despair": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Seal of Despair: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "atk",
+        "direction": "decrease"
+      },
+      {
+        "stat": "cdr",
+        "direction": "decrease"
+      },
+      {
+        "stat": "crit",
+        "direction": "decrease"
+      },
+      {
+        "stat": "mdef",
+        "direction": "decrease"
+      }
+    ],
+    "source": "L2Wiki Lineage II Essence seal of despair; unsupported multi-target and hit-counter mechanics are represented by the available solo-combat stats"
   },
   "prophecy_of_pa_agrio": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Prophecy of Pa'agrio: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "maxCp",
+        "direction": "increase"
+      },
+      {
+        "stat": "movementSpeedPercent",
+        "direction": "increase"
+      },
+      {
+        "stat": "cdr",
+        "direction": "increase"
+      },
+      {
+        "stat": "crit",
+        "direction": "increase"
+      },
+      {
+        "stat": "mSkillPowerPercent",
+        "direction": "increase"
+      }
+    ],
+    "source": "L2Wiki Lineage II Essence prophecy of pa agrio; unsupported multi-target and hit-counter mechanics are represented by the available solo-combat stats"
   },
   "chant_of_vampire": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Chant of Vampire: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "movementSpeedPercent",
+        "direction": "increase"
+      },
+      {
+        "stat": "debuffResistancePercent",
+        "direction": "increase"
+      }
+    ],
+    "unchangedStats": [
+      "atkSpd",
+      "cdr"
+    ],
+    "consumer": "chant_vampire_lifedrain",
+    "requiresAttackInterval": true,
+    "lifeDrainProcChance": 0.8,
+    "lifeDrainProcPercent": 0.07,
+    "source": "NC Essence skill table: Speed +2, Debuff/Mez Resistance +10%, and 80% chance to absorb 7% of inflicted damage; movement Speed shortens basic-attack intervals in card combat"
   },
   "chant_of_glory": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Chant of Glory: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "matk",
+        "direction": "increase"
+      },
+      {
+        "stat": "def",
+        "direction": "increase"
+      },
+      {
+        "stat": "mdef",
+        "direction": "increase"
+      },
+      {
+        "stat": "mSkillCdr",
+        "direction": "increase"
+      },
+      {
+        "stat": "mSkillPowerPercent",
+        "direction": "increase"
+      },
+      {
+        "stat": "maxMp",
+        "direction": "increase"
+      },
+      {
+        "stat": "mSkillMpCostReduction",
+        "direction": "increase"
+      }
+    ],
+    "source": "L2Wiki Lineage II Essence Chant of Glory Lv. 3; source effects are adapted to a 20-second solo-combat buff"
   },
   "freezing_flame": {
-    "kind": "buff",
-    "stat": "atk",
-    "source": "Freezing Flame: attack buff with duration and expiration"
+    "kind": "damage_over_time",
+    "expectedTicks": 10,
+    "expectedDurationMs": 10000,
+    "source": "Aden Arena adaptation: converts Freezing Flame's ten-second damage effect into one-second burn ticks"
   },
   "convert": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Convert: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "maxHp",
+        "direction": "increase"
+      },
+      {
+        "stat": "maxMp",
+        "direction": "decrease"
+      }
+    ],
+    "source": "Convert: canonical described effects with duration and expiration"
   },
   "blood_bond": {
     "kind": "damage",
@@ -1354,13 +2494,47 @@ export const EFFECT_CONTRACTS = Object.freeze({
   },
   "chant_of_prophecy": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Chant of Prophecy: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "cdr",
+        "direction": "increase"
+      },
+      {
+        "stat": "movementSpeedPercent",
+        "direction": "increase"
+      },
+      {
+        "stat": "crit",
+        "direction": "increase"
+      },
+      {
+        "stat": "mSkillPowerPercent",
+        "direction": "increase"
+      }
+    ],
+    "source": "L2Wiki Lineage II Essence chant of prophecy; unsupported multi-target and hit-counter mechanics are represented by the available solo-combat stats"
   },
   "blazing_fury": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Blazing Fury: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "atk",
+        "direction": "increase"
+      },
+      {
+        "stat": "def",
+        "direction": "increase"
+      },
+      {
+        "stat": "maxHp",
+        "direction": "increase"
+      },
+      {
+        "stat": "pSkillPowerPercent",
+        "direction": "increase"
+      }
+    ],
+    "source": "L2Wiki Lineage II Essence Blazing Fury Lv. 1: P. Atk., P. Def., Max HP +10%, P. Skill Power +5%; Aden Arena adapts the 20-minute source duration to 20 seconds"
   },
   "wild_rush": {
     "kind": "damage",
@@ -1395,9 +2569,16 @@ export const EFFECT_CONTRACTS = Object.freeze({
     "source": "Wide Threatening Swing: deal combat damage with MP and cooldown"
   },
   "giant_s_stomp": {
-    "kind": "buff",
-    "stat": "atk",
-    "source": "Giant's Stomp: attack buff with duration and expiration"
+    "kind": "target_debuff",
+    "expectedDeltas": [
+      {
+        "stat": "actionsDisabled",
+        "direction": "increase"
+      }
+    ],
+    "expectedDurationMs": 3000,
+    "consumer": "monster_action_lock",
+    "source": "L2Wiki Lineage II Essence Giant's Stomp: three-second knockdown adapted to block target attacks and skills"
   },
   "spoil": {
     "kind": "damage",
@@ -1417,13 +2598,23 @@ export const EFFECT_CONTRACTS = Object.freeze({
   },
   "tenacity": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Tenacity: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "debuffResistancePercent",
+        "direction": "increase"
+      }
+    ],
+    "source": "L2Wiki Lineage II Essence Tenacity Lv. 4: +10% Shock Resistance; the five-second chance-based on-hit HP recovery is implemented in production and unit-tested"
   },
   "weapon_reinforcement": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Weapon Reinforcement: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "atk",
+        "direction": "increase"
+      }
+    ],
+    "source": "L2Wiki Lineage II Essence weapon reinforcement; unsupported multi-target and hit-counter mechanics are represented by the available solo-combat stats"
   },
   "golden_stone": {
     "kind": "damage",
@@ -1467,13 +2658,40 @@ export const EFFECT_CONTRACTS = Object.freeze({
   },
   "prime_master": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Prime Master: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "maxHp",
+        "direction": "increase"
+      },
+      {
+        "stat": "atk",
+        "direction": "increase"
+      },
+      {
+        "stat": "crit",
+        "direction": "increase"
+      },
+      {
+        "stat": "pSkillPowerPercent",
+        "direction": "increase"
+      },
+      {
+        "stat": "debuffResistancePercent",
+        "direction": "increase"
+      }
+    ],
+    "source": "L2Wiki Lineage II Essence Prime Master adapted from siege-scale bonuses to a short solo PvE stance"
   },
   "mechanical_masterpiece": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Mechanical Masterpiece: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "pveDamagePercent",
+        "direction": "increase"
+      }
+    ],
+    "consumer": "mechanical_masterpiece_proc",
+    "source": "L2Wiki Lineage II Essence Mechanical Masterpiece: chance-based additional attack and Mechanical Golem stun for 1 sec.; Aden Arena adapts the proc to +20% damage on a 15% attack roll and a 1-second action lock"
   },
   "earth_tremor": {
     "kind": "damage",
@@ -1481,8 +2699,17 @@ export const EFFECT_CONTRACTS = Object.freeze({
   },
   "final_secret": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Final Secret: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "pSkillPowerPercent",
+        "direction": "increase"
+      },
+      {
+        "stat": "damageTakenReductionPercent",
+        "direction": "increase"
+      }
+    ],
+    "source": "L2Wiki Lineage II Essence Final Secret: +10% physical skill power; unsupported bow/magic resistance becomes 10% incoming damage reduction for 30 seconds"
   },
   "pride_of_kamael": {
     "kind": "damage",
@@ -1502,13 +2729,35 @@ export const EFFECT_CONTRACTS = Object.freeze({
   },
   "soul_roar": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Soul Roar: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "atk",
+        "direction": "increase"
+      },
+      {
+        "stat": "debuffResistancePercent",
+        "direction": "increase"
+      }
+    ],
+    "source": "Aden Arena adaptation: 8% physical attack and 10% combat-debuff resistance for 8 seconds"
   },
   "soul_guard": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Soul Guard: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "def",
+        "direction": "increase"
+      },
+      {
+        "stat": "mdef",
+        "direction": "increase"
+      },
+      {
+        "stat": "debuffResistancePercent",
+        "direction": "increase"
+      }
+    ],
+    "source": "Aden Arena adaptation: 15% physical defense, 10% magic defense, and 10% combat-debuff resistance for 8 seconds"
   },
   "soul_impulse": {
     "kind": "damage",
@@ -1524,18 +2773,49 @@ export const EFFECT_CONTRACTS = Object.freeze({
   },
   "powerful_rush": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Powerful Rush: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "atk",
+        "direction": "increase"
+      },
+      {
+        "stat": "pveDamagePercent",
+        "direction": "increase"
+      },
+      {
+        "stat": "movementSpeedPercent",
+        "direction": "increase"
+      }
+    ],
+    "source": "L2Wiki Lineage II Essence Powerful Rush: P. Atk. +40%, PvE damage +17%, Speed +10; speed maps to basic-attack cadence"
   },
   "soul_weapon": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Soul Weapon: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "atk",
+        "direction": "increase"
+      },
+      {
+        "stat": "crit",
+        "direction": "increase"
+      },
+      {
+        "stat": "pveDamagePercent",
+        "direction": "increase"
+      }
+    ],
+    "source": "L2Wiki Lineage II Essence Soul Weapon Lv. 1, adapted to the solo combat model"
   },
   "disarm": {
-    "kind": "buff",
-    "stat": "atk",
-    "source": "Disarm: attack buff with duration and expiration"
+    "kind": "target_debuff",
+    "expectedDeltas": [
+      {
+        "stat": "atk",
+        "direction": "decrease"
+      }
+    ],
+    "source": "Aden Arena adaptation: PvP-only disarm briefly suppresses the PvE monster's physical attack"
   },
   "through_strike": {
     "kind": "damage",
@@ -1543,8 +2823,16 @@ export const EFFECT_CONTRACTS = Object.freeze({
   },
   "soul_haste": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Soul Haste: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "cdr",
+        "direction": "increase"
+      }
+    ],
+    "unchangedStats": [
+      "atkSpd"
+    ],
+    "source": "Essence level-76 Haste grants +35% attack speed, mapped to +35% cooldown reduction"
   },
   "flash_dash": {
     "kind": "damage",
@@ -1552,13 +2840,31 @@ export const EFFECT_CONTRACTS = Object.freeze({
   },
   "soul_reinforcement": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Soul Reinforcement: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "maxHp",
+        "direction": "increase"
+      },
+      {
+        "stat": "atk",
+        "direction": "increase"
+      },
+      {
+        "stat": "pveDamagePercent",
+        "direction": "increase"
+      }
+    ],
+    "source": "L2Wiki Lineage II Essence soul reinforcement; unsupported multi-target and hit-counter mechanics are represented by the available solo-combat stats"
   },
   "collect_shadow_souls": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Collect Shadow Souls: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "pSkillPowerPercent",
+        "direction": "increase"
+      }
+    ],
+    "source": "L2Wiki Lineage II Essence Collect Shadow Souls grants 100 Shadow Souls momentarily; Aden Arena maps the missing soul-transformation resource to a 10-second physical-skill burst"
   },
   "time_distortion_master": {
     "kind": "damage",
@@ -1570,13 +2876,33 @@ export const EFFECT_CONTRACTS = Object.freeze({
   },
   "fragarach": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Fragarach: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "debuffResistancePercent",
+        "direction": "increase"
+      }
+    ],
+    "reflectPercent": 0.1,
+    "expectedDurationMs": 30000,
+    "source": "L2Wiki Lineage II Essence fragarach: timed reflection adapted to modeled combat damage; https://l2wiki.com/essence/skills/soul_hound/47981_1_0.html"
   },
   "soul_blade": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Soul Blade: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "atk",
+        "direction": "increase"
+      },
+      {
+        "stat": "crit",
+        "direction": "increase"
+      },
+      {
+        "stat": "pSkillPowerPercent",
+        "direction": "increase"
+      }
+    ],
+    "source": "L2Wiki Lineage II Essence Soul Blade Lv. 1: P. Atk. +30%, skill critical rate +15%, skill critical damage +10%, skill power +10%"
   },
   "cunning_shot": {
     "kind": "damage",
@@ -1588,8 +2914,18 @@ export const EFFECT_CONTRACTS = Object.freeze({
   },
   "soul_wind_walk": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Soul Wind Walk: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "movementSpeedPercent",
+        "direction": "increase"
+      }
+    ],
+    "unchangedStats": [
+      "atkSpd",
+      "cdr"
+    ],
+    "consumer": "basic_attack_interval",
+    "source": "L2Wiki Lineage II Essence Soul Wind Walk Lv. 3: Speed +35; Aden Arena adapts movement to 6% faster basic-attack cadence for 10 seconds"
   },
   "cunning_arrow": {
     "kind": "damage",
@@ -1601,8 +2937,17 @@ export const EFFECT_CONTRACTS = Object.freeze({
   },
   "collect_light_souls": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Collect Light Souls: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "mSkillPowerPercent",
+        "direction": "increase"
+      },
+      {
+        "stat": "mSkillCdr",
+        "direction": "increase"
+      }
+    ],
+    "source": "L2Wiki Lineage II Essence Collect Light Souls grants 100 Light Souls momentarily; Aden Arena maps the missing soul-transformation resource to a 10-second magical-skill burst"
   },
   "cunning_arrest": {
     "kind": "damage",
@@ -1610,8 +2955,25 @@ export const EFFECT_CONTRACTS = Object.freeze({
   },
   "force_unleashed": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Force Unleashed: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "maxHp",
+        "direction": "increase"
+      },
+      {
+        "stat": "def",
+        "direction": "increase"
+      },
+      {
+        "stat": "mdef",
+        "direction": "increase"
+      },
+      {
+        "stat": "debuffResistancePercent",
+        "direction": "increase"
+      }
+    ],
+    "source": "L2Wiki Lineage II Essence force unleashed; unsupported multi-target and hit-counter mechanics are represented by the available solo-combat stats"
   },
   "legendary_cloak": {
     "kind": "damage",
@@ -1631,13 +2993,30 @@ export const EFFECT_CONTRACTS = Object.freeze({
   },
   "wind": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Wind: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "cdr",
+        "direction": "increase"
+      }
+    ],
+    "unchangedStats": [
+      "atkSpd"
+    ],
+    "source": "Aden Arena adaptation: 8% cooldown reduction for 8 seconds"
   },
   "forest": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Forest: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "eva",
+        "direction": "increase"
+      },
+      {
+        "stat": "debuffResistancePercent",
+        "direction": "increase"
+      }
+    ],
+    "source": "Aden Arena adaptation: 15 evasion and 10% combat-debuff resistance for 8 seconds"
   },
   "strike": {
     "kind": "damage",
@@ -1645,18 +3024,53 @@ export const EFFECT_CONTRACTS = Object.freeze({
   },
   "fire": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Fire: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "atk",
+        "direction": "increase"
+      }
+    ],
+    "source": "Aden Arena adaptation: 10% physical attack for 8 seconds"
   },
   "mountain": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Mountain: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "def",
+        "direction": "increase"
+      },
+      {
+        "stat": "mdef",
+        "direction": "increase"
+      }
+    ],
+    "source": "Aden Arena adaptation: 15% physical defense and 10% magic defense for 8 seconds"
   },
   "atsumori": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Atsumori: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "maxHp",
+        "direction": "increase"
+      },
+      {
+        "stat": "mpRegen",
+        "direction": "increase"
+      },
+      {
+        "stat": "atk",
+        "direction": "increase"
+      },
+      {
+        "stat": "pSkillMpCostReduction",
+        "direction": "increase"
+      },
+      {
+        "stat": "pSkillCdr",
+        "direction": "increase"
+      }
+    ],
+    "source": "L2Wiki Lineage II Essence Atsumori Lv. 2: Max HP +15%, MP recovery +5, P. Atk. +8%/+300, P. Skill MP consumption -15%, P. Skill cooldown -1%"
   },
   "battojutsu": {
     "kind": "damage",
@@ -1668,13 +3082,39 @@ export const EFFECT_CONTRACTS = Object.freeze({
   },
   "adamant_will": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Adamant Will: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "atk",
+        "direction": "increase"
+      },
+      {
+        "stat": "pSkillPowerPercent",
+        "direction": "increase"
+      }
+    ],
+    "source": "L2Wiki Lineage II Essence adamant will; unsupported multi-target and hit-counter mechanics are represented by the available solo-combat stats"
   },
   "determination": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Determination: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "atk",
+        "direction": "increase"
+      },
+      {
+        "stat": "crit",
+        "direction": "increase"
+      },
+      {
+        "stat": "def",
+        "direction": "increase"
+      },
+      {
+        "stat": "debuffResistancePercent",
+        "direction": "increase"
+      }
+    ],
+    "source": "L2Wiki Lineage II Essence determination; unsupported multi-target and hit-counter mechanics are represented by the available solo-combat stats"
   },
   "take_life": {
     "kind": "damage",
@@ -1690,37 +3130,99 @@ export const EFFECT_CONTRACTS = Object.freeze({
   },
   "elemental_haste": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Elemental Haste: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "cdr",
+        "direction": "increase"
+      }
+    ],
+    "unchangedStats": [
+      "atkSpd"
+    ],
+    "source": "Aden Arena runtime rule: Elemental Haste maps its base attack-speed bonus to +15% cooldown reduction"
   },
   "elemental_wind_walk": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Elemental Wind Walk: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "movementSpeedPercent",
+        "direction": "increase"
+      }
+    ],
+    "unchangedStats": [
+      "atkSpd",
+      "cdr"
+    ],
+    "consumer": "basic_attack_interval",
+    "source": "Aden Arena adaptation: movement speed shortens the interval between basic attacks without changing attack speed or skill cooldown"
   },
   "elemental_insight": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Elemental Insight: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "matk",
+        "direction": "increase"
+      },
+      {
+        "stat": "mSkillCdr",
+        "direction": "increase"
+      }
+    ],
+    "unchangedStats": [
+      "atkSpd"
+    ],
+    "source": "Aden Arena adaptation: 10% magic attack and 5% magic-skill cooldown reduction for 8 seconds"
   },
   "elemental_magic_barrier": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Elemental Magic Barrier: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "mdef",
+        "direction": "increase"
+      },
+      {
+        "stat": "debuffResistancePercent",
+        "direction": "increase"
+      }
+    ],
+    "source": "Aden Arena adaptation: 15% magic defense and 10% debuff resistance for 8 seconds"
   },
   "fire_explosion": {
     "kind": "damage",
     "source": "Fire Explosion: deal combat damage with MP and cooldown"
   },
   "freezing_wound": {
-    "kind": "buff",
-    "stat": "atk",
-    "source": "Freezing Wound: attack buff with duration and expiration"
+    "kind": "damage_and_target_debuff",
+    "expectedDeltas": [
+      {
+        "stat": "attackSpeed",
+        "direction": "decrease"
+      },
+      {
+        "stat": "skillCooldown",
+        "direction": "increase"
+      }
+    ],
+    "source": "Freezing Wound: 120% single-target damage plus a 3-second balanced attack-cadence and skill-cooldown slow"
   },
   "blessing_of_winds": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Blessing of Winds: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "movementSpeedPercent",
+        "direction": "increase"
+      },
+      {
+        "stat": "debuffResistancePercent",
+        "direction": "increase"
+      }
+    ],
+    "unchangedStats": [
+      "atkSpd",
+      "cdr"
+    ],
+    "consumer": "basic_attack_interval",
+    "source": "Aden Arena adaptation: 8% movement speed shortens basic-attack interval and 10% debuff resistance for 10 seconds"
   },
   "greater_wind_shot": {
     "kind": "damage",
@@ -1739,9 +3241,16 @@ export const EFFECT_CONTRACTS = Object.freeze({
     "source": "Dragon Strike: deal combat damage with MP and cooldown"
   },
   "wild_dance": {
-    "kind": "buff",
-    "stat": "atk",
-    "source": "Wild Dance: attack buff with duration and expiration"
+    "kind": "target_debuff",
+    "expectedDeltas": [
+      {
+        "stat": "actionsDisabled",
+        "direction": "increase"
+      }
+    ],
+    "expectedDurationMs": 1000,
+    "consumer": "monster_action_lock",
+    "source": "L2Wiki Lineage II Essence Wild Dance: knocks nearby targets back for 1 second; adapted to block target actions in the solo combat loop"
   },
   "destiny": {
     "kind": "damage",
@@ -1765,8 +3274,22 @@ export const EFFECT_CONTRACTS = Object.freeze({
   },
   "sacral_power": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Sacral Power: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "atk",
+        "direction": "increase"
+      },
+      {
+        "stat": "crit",
+        "direction": "increase"
+      },
+      {
+        "stat": "movementSpeedPercent",
+        "direction": "increase"
+      }
+    ],
+    "consumer": "basic_attack_interval",
+    "source": "L2Wiki Lineage II Essence Sacral Power Lv. 2: P. Atk. +20%, P. Skill Critical Rate +5%, Speed +20 adapted to basic-attack cadence"
   },
   "protection_of_light": {
     "kind": "damage",
@@ -1786,8 +3309,10 @@ export const EFFECT_CONTRACTS = Object.freeze({
   },
   "light_counter": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Light Counter: attack buff with duration and expiration"
+    "expectedDeltas": [],
+    "reflectPercent": 0.15,
+    "expectedDurationMs": 20000,
+    "source": "L2Wiki Lineage II Essence light_counter: timed reflection adapted to modeled combat damage; https://l2wiki.com/essence/skills/sacred_templar_3/87841_1_0.html"
   },
   "divine_guardian": {
     "kind": "damage",
@@ -1823,64 +3348,1002 @@ export const EFFECT_CONTRACTS = Object.freeze({
   },
   "increase_power": {
     "kind": "buff",
-    "stat": "atk",
-    "source": "Increase Power: attack buff with duration and expiration"
+    "expectedDeltas": [
+      {
+        "stat": "atk",
+        "direction": "increase"
+      },
+      {
+        "stat": "matk",
+        "direction": "increase"
+      }
+    ],
+    "consumer": "stun_attack_proc",
+    "source": "L2Wiki Lineage II Essence Trooper Increase Power Lv. 1: increases M. Atk., P. Atk. and Shock Atk. Rate by 20%; the shock bonus uses the modeled stun proc; https://l2wiki.com/essence/skills/trooper/1432_1_0.html"
   },
   "body_to_mind": {
-    "kind": "buff",
-    "stat": "atk",
-    "source": "Body to Mind: attack buff with duration and expiration"
+    "kind": "resource_trade",
+    "hpCostPercent": 0.1,
+    "mpRecoveryPower": 90,
+    "source": "L2Wiki Lineage II Essence Body to Mind Lv. 1 confirms HP sacrifice for MP recovery; Aden Arena uses its local canonical Power 90, capped at 90 MP, with a 10% Max HP cost; https://l2wiki.com/essence/skills/dark_wizard/1157_1_0.html"
   },
   "mystic_spiral": {
     "kind": "damage",
     "source": "Mystic Spiral: deal combat damage with MP and cooldown"
   },
+  "growing_potential": {
+    "kind": "passive",
+    "expectedDeltas": [
+      {
+        "stat": "atk",
+        "direction": "increase"
+      },
+      {
+        "stat": "def",
+        "direction": "increase"
+      },
+      {
+        "stat": "mdef",
+        "direction": "increase"
+      }
+    ],
+    "source": "L2Wiki Essence Warg Growing Potential (88454), adapted to +5% P. Atk., P. Def., and M. Def. in card combat"
+  },
+  "shineMakerBase_light_spark": {
+    "kind": "damage",
+    "source": "Local ShineMaker base skill: holy magical damage with MP and cooldown"
+  },
+  "shineMakerBase_luminary_glow": {
+    "kind": "buff",
+    "expectedDeltas": [
+      {
+        "stat": "matk",
+        "direction": "increase"
+      },
+      {
+        "stat": "def",
+        "direction": "increase"
+      }
+    ],
+    "expectedDurationMs": 8000,
+    "source": "Local solo-combat adaptation: +15% M. Atk. and +10% P. Def. for eight seconds"
+  },
+  "shineMakerBase_crystal_weapon_mastery": {
+    "kind": "passive",
+    "expectedDeltas": [
+      {
+        "stat": "atk",
+        "direction": "increase"
+      }
+    ],
+    "source": "Local passive: +15% physical attack while a blunt weapon is equipped"
+  },
+  "shineMakerBase_shinemakers_harmony": {
+    "kind": "buff",
+    "expectedDeltas": [
+      {
+        "stat": "matk",
+        "direction": "increase"
+      },
+      {
+        "stat": "def",
+        "direction": "increase"
+      }
+    ],
+    "expectedDurationMs": 1800000,
+    "source": "Local authored ShineMaker harmony: +20% M. Atk. and +20% P. Def. for 30 minutes"
+  },
+  "shineMakerS1_light_burst": {
+    "kind": "damage",
+    "source": "Local Aden Arena ShineMaker skill: magical damage with MP cost and cooldown"
+  },
+  "shineMakerS1_radiant_strike": {
+    "kind": "damage_and_target_debuff",
+    "expectedDeltas": [
+      {
+        "stat": "atk",
+        "direction": "decrease"
+      },
+      {
+        "stat": "matk",
+        "direction": "decrease"
+      }
+    ],
+    "expectedDurationMs": 2000,
+    "source": "Local Aden Arena adaptation: holy damage plus a two-second attack-pressure reduction in place of blind"
+  },
+  "shineMakerS1_purifying_light": {
+    "kind": "cleanse",
+    "source": "Local Aden Arena single-hero adaptation: heal the caster and remove one active monster debuff"
+  },
+  "shineMakerS1_shining_barrier": {
+    "kind": "buff",
+    "expectedDeltas": [
+      {
+        "stat": "def",
+        "direction": "increase"
+      },
+      {
+        "stat": "mdef",
+        "direction": "increase"
+      }
+    ],
+    "expectedDurationMs": 120000,
+    "source": "Local authored ShineMaker skill: +15% physical and magical defense for 120 seconds"
+  },
+  "shineMakerS2_prismatic_ray": {
+    "kind": "damage_and_target_debuff",
+    "expectedDeltas": [
+      {
+        "stat": "attackSpeed",
+        "direction": "decrease"
+      },
+      {
+        "stat": "skillCooldown",
+        "direction": "increase"
+      }
+    ],
+    "expectedDurationMs": 4000,
+    "consumer": "monster_speed_slow",
+    "source": "Local Aden Arena adaptation: holy damage plus a four-second slow that delays monster attacks and skill reuse"
+  },
+  "shineMakerS2_shining_nova": {
+    "kind": "damage_and_self_heal",
+    "healPercent": 0.1,
+    "source": "Local solo adaptation: area damage focuses the encounter target and redirects the ten-percent group heal to the caster"
+  },
+  "shineMakerS2_crystal_arrow": {
+    "kind": "damage",
+    "source": "Local ShineMaker magical projectile: damage with MP cost and cooldown"
+  },
+  "shineMakerS2_light_of_creation": {
+    "kind": "buff",
+    "expectedDeltas": [
+      {
+        "stat": "matk",
+        "direction": "increase"
+      }
+    ],
+    "expectedDurationMs": 120000,
+    "source": "Local solo adaptation: +25% M. Atk. and +10% magic-skill power for 120 seconds; unsupported healing-power is mapped to magic-skill power"
+  },
+  "shineMakerS2_brilliant_aura": {
+    "kind": "buff",
+    "expectedDeltas": [
+      {
+        "stat": "atk",
+        "direction": "increase"
+      },
+      {
+        "stat": "matk",
+        "direction": "increase"
+      },
+      {
+        "stat": "def",
+        "direction": "increase"
+      },
+      {
+        "stat": "mdef",
+        "direction": "increase"
+      }
+    ],
+    "expectedDurationMs": 300000,
+    "source": "Local solo adaptation: party aura applies ten-percent offense and defense bonuses to its owner"
+  },
+  "shineMakerS2_shinemaker_harmony_s2": {
+    "kind": "buff",
+    "expectedDeltas": [
+      {
+        "stat": "matk",
+        "direction": "increase"
+      },
+      {
+        "stat": "mdef",
+        "direction": "increase"
+      }
+    ],
+    "expectedDurationMs": 1500000,
+    "source": "Local solo adaptation: +35% M. Atk., +20% M. Def. and +10% magic-skill power for 25 minutes"
+  },
+  "shinemaker_star_fall": {
+    "kind": "damage_and_target_debuff",
+    "expectedDeltas": [
+      {
+        "stat": "actionsDisabled",
+        "direction": "increase"
+      }
+    ],
+    "expectedDurationMs": 3000,
+    "consumer": "monster_action_lock",
+    "source": "Local authored skill: holy damage plus a three-second stun that prevents monster basic and skill actions"
+  },
+  "shinemaker_transcendent_star_fall": {
+    "kind": "damage_and_target_debuff",
+    "expectedDeltas": [
+      {
+        "stat": "atk",
+        "direction": "decrease"
+      },
+      {
+        "stat": "matk",
+        "direction": "decrease"
+      }
+    ],
+    "expectedDurationMs": 5000,
+    "healPercent": 0.3,
+    "source": "Local solo adaptation: holy damage, a five-second attack reduction in place of blind, and the group heal redirected to its caster"
+  },
+  "shinemaker_divine_crystal_aegis": {
+    "kind": "buff",
+    "expectedDeltas": [
+      {
+        "stat": "damageTakenReductionPercent",
+        "direction": "increase"
+      }
+    ],
+    "expectedDurationMs": 8000,
+    "incomingDamageReductionPercent": 0.35,
+    "physicalSkillPowerPercent": 0,
+    "consumer": "incoming_damage_reduction",
+    "source": "Local solo adaptation: the shield reduces incoming damage by 35% for eight seconds"
+  },
+  "shinemaker_shinemakers_ultimate_harmony": {
+    "kind": "buff",
+    "expectedDeltas": [
+      {
+        "stat": "matk",
+        "direction": "increase"
+      },
+      {
+        "stat": "def",
+        "direction": "increase"
+      },
+      {
+        "stat": "cdr",
+        "direction": "increase"
+      }
+    ],
+    "expectedDurationMs": 1800000,
+    "source": "Local solo adaptation: +30% M. Atk., +20% P. Def. and +10% cooldown reduction for 30 minutes"
+  },
+  "powerful_fists": {
+    "kind": "multi_hit_damage",
+    "expectedHits": 2,
+    "defenseIgnorePercent": 0.25,
+    "source": "Powerful Fists: two physical hits; each hit resolves against 25% lower target P. Def"
+  },
+  "glorious_warrior_enhanced_abilities": {
+    "kind": "buff",
+    "expectedDeltas": [
+      {
+        "stat": "con",
+        "direction": "increase"
+      },
+      {
+        "stat": "men",
+        "direction": "increase"
+      },
+      {
+        "stat": "maxHp",
+        "direction": "increase"
+      },
+      {
+        "stat": "maxMp",
+        "direction": "increase"
+      },
+      {
+        "stat": "mdef",
+        "direction": "increase"
+      }
+    ],
+    "source": "Aden Arena adaptation: CON +1 and MEN +1 feed their existing primary-stat scaling for 10 seconds"
+  },
+  "tough_skin": {
+    "kind": "passive",
+    "expectedDeltas": [
+      {
+        "stat": "debuffResistancePercent",
+        "direction": "increase"
+      }
+    ],
+    "source": "Local Warg skill catalog: +20% debuff resistance, consumed by monster Hex/Gloom application"
+  },
+  "confused_mind": {
+    "kind": "buff",
+    "expectedDeltas": [
+      {
+        "stat": "def",
+        "direction": "increase"
+      },
+      {
+        "stat": "mdef",
+        "direction": "increase"
+      },
+      {
+        "stat": "cdr",
+        "direction": "increase"
+      }
+    ],
+    "unchangedStats": [
+      "atkSpd"
+    ],
+    "source": "Aden Arena adaptation: instant wolf transformation becomes an 8-second defensive stance; movement speed maps to cooldown reduction"
+  },
+  "wind_walk": {
+    "kind": "buff",
+    "expectedDeltas": [
+      {
+        "stat": "movementSpeedPercent",
+        "direction": "increase"
+      }
+    ],
+    "unchangedStats": [
+      "atkSpd",
+      "cdr"
+    ],
+    "consumer": "basic_attack_interval",
+    "source": "Aden Arena adaptation: movement speed shortens the interval between basic attacks without changing attack speed or skill cooldown"
+  },
+  "magic_barrier": {
+    "kind": "buff",
+    "expectedDeltas": [
+      {
+        "stat": "mdef",
+        "direction": "increase"
+      }
+    ],
+    "source": "Aden Arena adaptation: Magic Barrier grants +10% M. Def for 10 seconds"
+  },
+  "berserker_spirit": {
+    "kind": "buff",
+    "expectedDeltas": [
+      {
+        "stat": "atk",
+        "direction": "increase"
+      },
+      {
+        "stat": "matk",
+        "direction": "increase"
+      },
+      {
+        "stat": "cdr",
+        "direction": "increase"
+      },
+      {
+        "stat": "def",
+        "direction": "decrease"
+      },
+      {
+        "stat": "mdef",
+        "direction": "decrease"
+      },
+      {
+        "stat": "eva",
+        "direction": "decrease"
+      }
+    ],
+    "unchangedStats": [
+      "atkSpd"
+    ],
+    "source": "Aden Arena adaptation of Berserker Spirit's offense/defense tradeoff; attack/cast speed bonuses become +10% cooldown reduction for 8 seconds"
+  },
+  "wild_magic": {
+    "kind": "buff",
+    "expectedDeltas": [
+      {
+        "stat": "crit",
+        "direction": "increase"
+      }
+    ],
+    "source": "Aden Arena adaptation: maps Wild Magic's magic critical chance to +5 shared critical chance for 8 seconds"
+  },
+  "improved_speed": {
+    "kind": "buff",
+    "expectedDeltas": [
+      {
+        "stat": "cdr",
+        "direction": "increase"
+      }
+    ],
+    "unchangedStats": [
+      "atkSpd"
+    ],
+    "source": "Aden Arena adaptation: unused movement speed becomes +10% cooldown reduction for 12 seconds"
+  },
+  "hp_recovery": {
+    "kind": "periodic_regen",
+    "stat": "regenHp",
+    "resource": "hp",
+    "ticks": 50,
+    "source": "HP Recovery adds +1% max HP to the production 10-second recovery tick per learned level"
+  },
+  "mp_recovery": {
+    "kind": "periodic_regen",
+    "stat": "mpRegen",
+    "resource": "mp",
+    "ticks": 50,
+    "source": "MP Recovery adds +0.5 MP to each production 5-second recovery tick per learned level"
+  },
+  "call_of_frost": {
+    "kind": "buff",
+    "expectedDeltas": [
+      {
+        "stat": "atk",
+        "direction": "increase"
+      },
+      {
+        "stat": "pveDamagePercent",
+        "direction": "increase"
+      }
+    ],
+    "source": "Aden Arena adaptation: Elf Call of Frost grants +5% P. Atk and +2% PvE damage for 10 seconds"
+  },
+  "call_of_lightning": {
+    "kind": "target_debuff",
+    "expectedDeltas": [
+      {
+        "stat": "actionsDisabled",
+        "direction": "increase"
+      }
+    ],
+    "source": "Aden Arena adaptation: Dark Elf Call of Lightning interrupts the target for 1 second"
+  },
+  "assassin_s_secret_notes_2nd_page": {
+    "kind": "buff",
+    "expectedDeltas": [
+      {
+        "stat": "maxHp",
+        "direction": "increase"
+      },
+      {
+        "stat": "maxMp",
+        "direction": "increase"
+      },
+      {
+        "stat": "atk",
+        "direction": "increase"
+      },
+      {
+        "stat": "matk",
+        "direction": "increase"
+      },
+      {
+        "stat": "def",
+        "direction": "increase"
+      },
+      {
+        "stat": "mdef",
+        "direction": "increase"
+      },
+      {
+        "stat": "crit",
+        "direction": "increase"
+      },
+      {
+        "stat": "cdr",
+        "direction": "increase"
+      },
+      {
+        "stat": "pAccuracy",
+        "direction": "increase"
+      },
+      {
+        "stat": "mAccuracy",
+        "direction": "increase"
+      }
+    ],
+    "unchangedStats": [
+      "atkSpd"
+    ],
+    "source": "Publisher patch notes: self-buff. Aden Arena maps Attack Speed to cooldown reduction, leaves Movement Speed unused, and maps accuracy to reduced level-gap miss chance; duration 15s is local balance."
+  },
+  "assassin_s_secret_notes_3rd_page": {
+    "kind": "buff",
+    "expectedDeltas": [
+      {
+        "stat": "maxHp",
+        "direction": "increase"
+      },
+      {
+        "stat": "maxMp",
+        "direction": "increase"
+      },
+      {
+        "stat": "atk",
+        "direction": "increase"
+      },
+      {
+        "stat": "matk",
+        "direction": "increase"
+      },
+      {
+        "stat": "def",
+        "direction": "increase"
+      },
+      {
+        "stat": "mdef",
+        "direction": "increase"
+      },
+      {
+        "stat": "crit",
+        "direction": "increase"
+      },
+      {
+        "stat": "cdr",
+        "direction": "increase"
+      },
+      {
+        "stat": "pAccuracy",
+        "direction": "increase"
+      },
+      {
+        "stat": "mAccuracy",
+        "direction": "increase"
+      }
+    ],
+    "unchangedStats": [
+      "atkSpd"
+    ],
+    "source": "Publisher patch notes: self-buff. Aden Arena maps Attack Speed to cooldown reduction, leaves Movement Speed unused, and maps accuracy to reduced level-gap miss chance; duration 15s is local balance."
+  },
+  "quick_dash": {
+    "kind": "buff",
+    "expectedDeltas": [
+      {
+        "stat": "cdr",
+        "direction": "increase"
+      }
+    ],
+    "unchangedStats": [
+      "atkSpd"
+    ],
+    "source": "Aden Arena adaptation: movement becomes +5% skill cooldown reduction for 2 seconds"
+  },
+  "moon_influence": {
+    "kind": "buff",
+    "expectedDeltas": [
+      {
+        "stat": "atk",
+        "direction": "increase"
+      },
+      {
+        "stat": "def",
+        "direction": "increase"
+      },
+      {
+        "stat": "mdef",
+        "direction": "increase"
+      },
+      {
+        "stat": "cdr",
+        "direction": "increase"
+      },
+      {
+        "stat": "debuffResistancePercent",
+        "direction": "increase"
+      }
+    ],
+    "unchangedStats": [
+      "atkSpd"
+    ],
+    "source": "Aden Arena adaptation: Moon Influence replaces an unavailable WP transformation with a 12-second stance"
+  },
+  "artful_disarm": {
+    "kind": "target_debuff",
+    "expectedDeltas": [
+      {
+        "stat": "atk",
+        "direction": "decrease"
+      }
+    ],
+    "source": "Aden Arena adaptation: reduces target P. Atk. by 20% for 5 seconds"
+  },
+  "imminent_piercing": {
+    "kind": "target_debuff",
+    "expectedDeltas": [
+      {
+        "stat": "def",
+        "direction": "decrease"
+      }
+    ],
+    "source": "Aden Arena adaptation: reduces target P. Def. by 15% for 5 seconds"
+  },
+  "unleashed_potential": {
+    "kind": "passive",
+    "expectedDeltas": [
+      {
+        "stat": "atk",
+        "direction": "increase"
+      },
+      {
+        "stat": "cdr",
+        "direction": "increase"
+      },
+      {
+        "stat": "debuffResistancePercent",
+        "direction": "increase"
+      }
+    ],
+    "source": "Aden Arena adaptation: the unsupported WP/form cycle becomes a modest passive combat core"
+  },
+  "divine_inspiration": {
+    "kind": "passive",
+    "expectedDeltas": [
+      {
+        "stat": "buffDurationPercent",
+        "direction": "increase"
+      }
+    ],
+    "source": "Aden Arena adaptation: +1 buff slot becomes +10% player self-buff duration because combat has no slot cap"
+  },
   "long_shot": {
-    "kind": "defined_not_implemented",
-    "status": "DEFINED_BUT_NOT_IMPLEMENTED",
-    "source": "Long Shot: Bow Range +200 is defined in canonical catalog but functionally not implemented in idle combat model/StatsEngine"
+    "kind": "passive",
+    "stat": "atk",
+    "source": "Long Shot: adapted bow/crossbow range bonus to +5% physical attack"
+  },
+  "death_whisper": {
+    "kind": "passive",
+    "stat": "critDmg",
+    "source": "Death Whisper: canonical Basic Critical Damage +25%"
+  },
+  "clarity": {
+    "kind": "passive",
+    "expectedDeltas": [
+      {
+        "stat": "pSkillMpCostReduction",
+        "direction": "increase"
+      },
+      {
+        "stat": "mSkillMpCostReduction",
+        "direction": "increase"
+      }
+    ],
+    "source": "Clarity: P. Skill MP Consumption -10%; M. Skill MP Consumption -4%"
+  },
+  "haste": {
+    "kind": "buff",
+    "expectedDeltas": [
+      {
+        "stat": "cdr",
+        "direction": "increase"
+      }
+    ],
+    "unchangedStats": [
+      "atkSpd"
+    ],
+    "source": "Aden Arena runtime rule: Haste maps its +15% attack speed to +15% cooldown reduction"
+  },
+  "acumen": {
+    "kind": "buff",
+    "expectedDeltas": [
+      {
+        "stat": "cdr",
+        "direction": "increase"
+      }
+    ],
+    "unchangedStats": [
+      "atkSpd"
+    ],
+    "source": "Aden Arena runtime rule: Acumen grants +15% cooldown reduction"
+  },
+  "young_moon_s_grace": {
+    "kind": "buff",
+    "expectedDeltas": [
+      {
+        "stat": "maxHp",
+        "direction": "increase"
+      },
+      {
+        "stat": "maxMp",
+        "direction": "increase"
+      },
+      {
+        "stat": "atk",
+        "direction": "increase"
+      },
+      {
+        "stat": "cdr",
+        "direction": "increase"
+      }
+    ],
+    "unchangedStats": [
+      "atkSpd"
+    ],
+    "expectedDurationMs": 1200000,
+    "consumer": "basic_attack_interval",
+    "source": "L2Wiki Essence Warg skill 88477: +3% Max HP/MP, +2% P./M. Atk./Def., +2% Atk. Spd. and +3 Speed; speed maps to skill cooldown and basic-attack interval in Aden Arena"
+  },
+  "moon_s_grace": {
+    "kind": "buff",
+    "expectedDeltas": [
+      {
+        "stat": "maxHp",
+        "direction": "increase"
+      },
+      {
+        "stat": "maxMp",
+        "direction": "increase"
+      },
+      {
+        "stat": "atk",
+        "direction": "increase"
+      },
+      {
+        "stat": "cdr",
+        "direction": "increase"
+      }
+    ],
+    "unchangedStats": [
+      "atkSpd"
+    ],
+    "expectedDurationMs": 1200000,
+    "consumer": "basic_attack_interval",
+    "source": "L2Wiki Essence Warg skill 88478: +5% Max HP/MP, +2% P./M. Atk./Def., +3% Atk. Spd. and +4 Speed; speed maps to skill cooldown and basic-attack interval in Aden Arena"
+  },
+  "full_moon_s_grace": {
+    "kind": "buff",
+    "expectedDeltas": [
+      {
+        "stat": "maxHp",
+        "direction": "increase"
+      },
+      {
+        "stat": "maxMp",
+        "direction": "increase"
+      },
+      {
+        "stat": "atk",
+        "direction": "increase"
+      },
+      {
+        "stat": "cdr",
+        "direction": "increase"
+      }
+    ],
+    "unchangedStats": [
+      "atkSpd"
+    ],
+    "expectedDurationMs": 1200000,
+    "consumer": "basic_attack_interval",
+    "source": "L2Wiki Essence Warg skill 88479: +7% Max HP/MP, +3% P./M. Atk./Def., +5% Atk. Spd. and +5 Speed; speed maps to skill cooldown and basic-attack interval in Aden Arena"
+  },
+  "potion_mastery": {
+    "kind": "passive",
+    "stat": "hpPotionEffectPercent",
+    "source": "Potion Mastery: HP Recovery Potions' Effect +10%"
+  },
+  "chant_of_haste": {
+    "kind": "buff",
+    "expectedDeltas": [
+      {
+        "stat": "cdr",
+        "direction": "increase"
+      }
+    ],
+    "unchangedStats": [
+      "atkSpd"
+    ],
+    "source": "Aden Arena runtime rule: Chant of Haste attack-speed bonus maps to +15% cooldown reduction"
+  },
+  "maphr_s_haste": {
+    "kind": "buff",
+    "expectedDeltas": [
+      {
+        "stat": "cdr",
+        "direction": "increase"
+      }
+    ],
+    "unchangedStats": [
+      "atkSpd"
+    ],
+    "source": "Essence level-76 Maphr's Haste grants +35% attack speed, mapped to +35% cooldown reduction"
+  },
+  "chant_of_acumen": {
+    "kind": "buff",
+    "expectedDeltas": [
+      {
+        "stat": "cdr",
+        "direction": "increase"
+      }
+    ],
+    "unchangedStats": [
+      "atkSpd"
+    ],
+    "source": "Aden Arena runtime rule: Chant of Acumen casting-speed bonus maps to +15% cooldown reduction"
+  },
+  "maphr_s_acumen": {
+    "kind": "buff",
+    "expectedDeltas": [
+      {
+        "stat": "cdr",
+        "direction": "increase"
+      }
+    ],
+    "unchangedStats": [
+      "atkSpd"
+    ],
+    "source": "Essence level-76 Maphr's Acumen grants +33% casting speed, mapped to +33% cooldown reduction"
+  },
+  "soul_acumen": {
+    "kind": "buff",
+    "expectedDeltas": [
+      {
+        "stat": "cdr",
+        "direction": "increase"
+      }
+    ],
+    "unchangedStats": [
+      "atkSpd"
+    ],
+    "source": "Essence level-76 Soul Acumen grants +33% casting speed, mapped to +33% cooldown reduction"
   }
 });
 
 export function assessEffect(contract, evidence) {
-  if (!contract) {
-    return {
-      status: "NOT_VALIDATED",
-      pass: null,
-      reason: "Sem contrato comportamental configurado",
-      contract,
-      evidence
-    };
-  }
+  if (!contract) return { status: "NOT_VALIDATED", pass: null, reason: "Independent effect contract missing", evidence };
   if (contract.kind === "defined_not_implemented" || contract.status === "DEFINED_BUT_NOT_IMPLEMENTED") {
-    return {
-      status: "DEFINED_BUT_NOT_IMPLEMENTED",
-      pass: null,
-      reason: "Habilidade definida no catálogo canônico mas funcionalmente não implementada no motor (sem mecânica de alcance/range no combate idle)",
-      contract,
-      evidence
-    };
+    return { status: "NOT_VALIDATED", pass: null, reason: contract.reason || "Skill is explicitly defined but has no production effect", contract, evidence };
   }
+  if (evidence.preconditionsMet === false) return { status: "NOT_EXECUTED", pass: null, reason: "Effect was not evaluated because learning or execution preconditions failed", contract, evidence };
   let pass = false;
-  if (contract.kind === "passive") pass = Number.isFinite(evidence.after?.[contract.stat]) && evidence.after[contract.stat] > evidence.before?.[contract.stat];
-  if (contract.kind === "buff") pass = evidence.applied === true && evidence.expiresInMs > 0 && evidence.after?.[contract.stat] > evidence.before?.[contract.stat] && evidence.expired?.[contract.stat] === evidence.before?.[contract.stat];
+  const expectedDeltas = contract.expectedDeltas || (contract.stat ? [{ stat: contract.stat, direction: "increase" }] : []);
+  if (contract.kind === "buff" && (contract.unsupportedEffects?.length || (!expectedDeltas.length && !Number.isFinite(contract.reflectPercent)))) return { status: "NOT_VALIDATED", pass: null, reason: "Buff contains effects without a supported independent contract", contract, evidence };
+  if (contract.kind === "target_debuff" && (contract.unsupportedEffects?.length || !expectedDeltas.length)) return { status: "NOT_VALIDATED", pass: null, reason: "Target effect contains behavior without a supported independent contract", contract, evidence };
+  if (contract.kind === "damage_and_target_debuff" && (contract.unsupportedEffects?.length || !expectedDeltas.length)) return { status: "NOT_VALIDATED", pass: null, reason: "Combined damage and target effect lacks a complete independent contract", contract, evidence };
+  const deltasMatch = (before, after, expired, deltas) => deltas.every(({ stat, direction }) => { const start = before?.[stat], active = after?.[stat], end = expired?.[stat]; return Number.isFinite(start) && Number.isFinite(active) && (direction === "increase" ? active > start : active < start) && (expired == null || (Number.isFinite(end) && end === start)); });
+  const unchangedStatsMatch = (stats = []) => stats.every(stat => { const before = evidence.before?.[stat], after = evidence.after?.[stat], expired = evidence.expired?.[stat]; return Number.isFinite(before) && Number.isFinite(after) && Number.isFinite(expired) && before === after && before === expired; });
+  if (contract.kind === "passive") {
+    let consumerPassed = true;
+    if (contract.consumer === "basic_attack_interval") {
+      consumerPassed = evidence.consumerProof?.baselineIntervalMs > evidence.consumerProof?.reducedIntervalMs &&
+        evidence.consumerProof?.productionConsumer === "main.resolvePlayerBasicAttackIntervalMs";
+    }
+    pass = expectedDeltas.length > 0 && deltasMatch(evidence.before, evidence.after, null, expectedDeltas) && consumerPassed;
+  }
+  if (contract.kind === "periodic_regen") {
+    pass = Number(evidence.before?.[contract.stat]) >= 0 && Number(evidence.after?.[contract.stat]) > Number(evidence.before?.[contract.stat]) &&
+      evidence.ticks === contract.ticks && Number.isFinite(evidence.resourceBefore) && Number.isFinite(evidence.resourceAfter) &&
+      evidence.resourceAfter > evidence.resourceBefore && evidence.resourceGained === evidence.resourceAfter - evidence.resourceBefore;
+  }
+  if (contract.kind === "buff") {
+    let consumerPassed = true;
+    if (contract.consumer === "basic_attack_interval") {
+      consumerPassed = evidence.consumerProof?.baselineIntervalMs > evidence.consumerProof?.reducedIntervalMs &&
+        evidence.consumerProof?.productionConsumer === "main.resolvePlayerBasicAttackIntervalMs";
+    } else if (contract.consumer === "incoming_damage_reduction") {
+      consumerPassed = evidence.consumerProof?.baselineDamage > 0 && evidence.consumerProof?.reducedDamage === Math.floor(evidence.consumerProof.baselineDamage * (1 - contract.incomingDamageReductionPercent));
+      consumerPassed = consumerPassed && evidence.consumerProof?.physicalSkillDamageBefore > 0 && evidence.consumerProof?.physicalSkillDamageAfter === Math.floor(evidence.consumerProof.physicalSkillDamageBefore * (1 + contract.physicalSkillPowerPercent));
+    } else if (contract.consumer === "chant_vampire_lifedrain") {
+      consumerPassed = evidence.consumerProof?.procDamage > 0 &&
+        evidence.consumerProof?.procHealing === Math.floor(evidence.consumerProof.procDamage * contract.lifeDrainProcPercent) &&
+        evidence.consumerProof?.controlDamage > 0 && evidence.consumerProof?.controlHealing === 0 &&
+        (!contract.requiresAttackInterval || evidence.consumerProof?.baselineIntervalMs > evidence.consumerProof?.reducedIntervalMs);
+    } else if (Number.isFinite(contract.reflectPercent)) {
+      consumerPassed = evidence.consumerProof?.receivedDamage > 0 &&
+        evidence.consumerProof?.reflectedDamage >= Math.floor(evidence.consumerProof.receivedDamage * contract.reflectPercent) &&
+        evidence.consumerProof?.productionConsumer === "main.monsterAttack -> resolvePlayerDamageReflection";
+    } else if (contract.consumer === "mechanical_masterpiece_proc") {
+      consumerPassed = evidence.consumerProof?.bonusDamage > 0 && evidence.consumerProof?.targetLocked === true &&
+        evidence.consumerProof?.productionConsumer === "main.attackMonster -> resolveMechanicalMasterpieceHit";
+    } else if (contract.consumer === "stun_attack_proc") {
+      consumerPassed = evidence.consumerProof?.targetStunned === true &&
+        evidence.consumerProof?.productionConsumer === "main.attackMonster -> getEquippedProcBonuses";
+    }
+    const durationPassed = !Number.isFinite(contract.expectedDurationMs) || Math.abs(evidence.expiresInMs - contract.expectedDurationMs) <= 100;
+    const healPassed = !Number.isFinite(contract.healPercent) || evidence.healAmount === Math.min(evidence.maxHp - evidence.hpBefore, Math.floor(evidence.maxHp * contract.healPercent));
+    pass = evidence.applied === true && evidence.expiresInMs > 0 && durationPassed && healPassed && deltasMatch(evidence.before, evidence.after, evidence.expired, expectedDeltas) && unchangedStatsMatch(contract.unchangedStats) && consumerPassed;
+  }
+  if (contract.kind === "target_debuff") {
+    let consumerPassed = true;
+    if (contract.consumer === "monster_magic_skill") {
+      consumerPassed = evidence.consumerProof?.controlCooldown > 0 && evidence.consumerProof?.silencedCooldown === 0 && evidence.consumerProof?.controlDamage > evidence.consumerProof?.silencedDamage;
+    } else if (contract.consumer === "monster_action") {
+      consumerPassed = evidence.consumerProof?.controlCooldown > 0 && evidence.consumerProof?.sleepCooldown === 0 && evidence.consumerProof?.controlDamage > 0 && evidence.consumerProof?.sleepDamage === 0 && evidence.consumerProof?.wakeDamage > 0 && evidence.consumerProof?.wakeCooldown > 0;
+    } else if (contract.consumer === "monster_action_lock") {
+      const proof = evidence.consumerProof;
+      consumerPassed = proof?.basicDamageBefore > 0 && proof.basicDamageWhileDisabled === 0 && proof.basicDamageAfterExpiry > 0 &&
+        proof.skillDamageBefore > 0 && proof.skillDamageWhileDisabled === 0 && proof.skillDamageAfterExpiry > 0 && proof.skillCooldownWhileDisabled === 0;
+    } else if (contract.consumer === "monster_speed_slow") {
+      const proof = evidence.consumerProof;
+      consumerPassed = proof?.basicAttackSpeedBefore > proof?.basicAttackSpeedAfter &&
+        proof?.skillCooldownBefore > 0 && proof.skillCooldownAfter > proof.skillCooldownBefore &&
+        proof?.productionConsumer === "main.monsterAttack";
+    } else if (contract.consumer === "monster_movement_slow") {
+      const proof = evidence.consumerProof;
+      consumerPassed = proof?.basicAttackIntervalAfter > proof?.basicAttackIntervalBefore &&
+        proof?.skillCooldownBefore === proof?.skillCooldownAfter &&
+        proof?.productionConsumer === "main.attackMonster.enemyAttackInterval";
+    }
+    const hpCostPassed = !Number.isFinite(contract.hpCostPercent) || (evidence.hpBefore > Math.floor(evidence.maxHp * contract.hpCostPercent) && evidence.hpBefore - evidence.hpAfter === Math.floor(evidence.maxHp * contract.hpCostPercent));
+    pass = evidence.applied === true && evidence.expiresInMs > 0 && (!Number.isFinite(contract.expectedDurationMs) || Math.abs(evidence.expiresInMs - contract.expectedDurationMs) <= 100) && deltasMatch(evidence.before, evidence.after, evidence.expired, expectedDeltas) && consumerPassed && hpCostPassed;
+  }
+  if (contract.kind === "damage_and_target_debuff") {
+    const damage = (evidence.events || []).filter(event => event.skillId === evidence.skillId).reduce((sum, event) => sum + (Number(event.damage) || 0), 0);
+    const selfHeal = Number.isFinite(contract.healPercent)
+      ? evidence.playerHpAfterCast - evidence.playerHpBeforeCast === Math.min(evidence.maxHp - evidence.playerHpBeforeCast, Math.floor(evidence.maxHp * contract.healPercent))
+      : true;
+    const movementConsumerPassed = contract.consumer !== "monster_movement_slow" ||
+      (evidence.consumerProof?.basicAttackIntervalAfter > evidence.consumerProof?.basicAttackIntervalBefore &&
+       evidence.consumerProof?.skillCooldownBefore === evidence.consumerProof?.skillCooldownAfter &&
+       evidence.consumerProof?.productionConsumer === "main.attackMonster.enemyAttackInterval");
+    pass = evidence.cast === true && evidence.applied === true && evidence.expiresInMs > 0 && selfHeal && movementConsumerPassed &&
+      deltasMatch(evidence.before, evidence.after, evidence.expired, expectedDeltas) &&
+      damage > 0 && evidence.hpBefore - evidence.hpAfter === damage;
+  }
+  if (contract.kind === "damage_and_self_heal") {
+    const damage = (evidence.events || []).filter(event => event.skillId === evidence.skillId).reduce((sum, event) => sum + (Number(event.damage) || 0), 0);
+    const expectedHeal = Math.min(evidence.maxHp - evidence.playerHpBeforeCast, Math.floor(evidence.maxHp * contract.healPercent));
+    pass = evidence.cast === true && damage > 0 && evidence.hpBefore - evidence.hpAfter === damage &&
+      evidence.selfHealPercent === contract.healPercent && evidence.playerHpAfterCast - evidence.playerHpBeforeCast === expectedHeal && expectedHeal > 0;
+  }
   if (contract.kind === "damage") {
     const damage = (evidence.events || []).filter(e => e.skillId === evidence.skillId).reduce((n, e) => n + (e.damage || 0), 0);
     pass = damage > 0 && evidence.hpBefore - evidence.hpAfter === damage;
   }
-  if (contract.kind === "heal") pass = evidence.cast === true && evidence.hpAfter > evidence.hpBefore && evidence.hpAfter <= evidence.maxHp;
+  if (contract.kind === "multi_hit_damage") {
+    const hits = (evidence.events || []).filter(event => event.skillId === evidence.skillId);
+    const damage = hits.reduce((sum, event) => sum + (Number(event.damage) || 0), 0);
+    const hitIndexes = new Set(hits.map(event => event.hitIndex));
+    pass = evidence.cast === true && hits.length === contract.expectedHits && hitIndexes.size === contract.expectedHits &&
+      hits.every(event => event.hitCount === contract.expectedHits && event.defenseIgnorePercent === contract.defenseIgnorePercent &&
+        Number.isFinite(event.targetDefenseBefore) && Number.isFinite(event.effectiveDefense) &&
+        event.effectiveDefense === Math.floor(event.targetDefenseBefore * (1 - contract.defenseIgnorePercent))) &&
+      damage > 0 && evidence.hpBefore - evidence.hpAfter === damage;
+  }
+  if (contract.kind === "damage_over_time") {
+    const ticks = (evidence.events || []).filter(e => e.skillId === evidence.skillId && e.source === "damage_over_time");
+    const totalTickDamage = ticks.reduce((sum, event) => sum + (event.damage || 0), 0);
+    pass = evidence.cast === true && evidence.applied === true && evidence.expired === true && ticks.length === contract.expectedTicks && evidence.expiresInMs === contract.expectedDurationMs && totalTickDamage > 0 && ticks.every(tick => tick.hpBefore - tick.hpAfter === tick.damage);
+  }
+  if (contract.kind === "damage_reflection") pass = evidence.applied === true && evidence.expiresInMs > 0 && Number.isFinite(evidence.receivedDamage) && evidence.receivedDamage > 0 && evidence.reflectedDamage === Math.floor(evidence.receivedDamage * contract.reflectPercent);
+  if (contract.kind === "heal") {
+    const healed = evidence.hpAfter - evidence.hpBefore;
+    const expected = Number.isFinite(contract.expectedAmount) ? Math.min(contract.expectedAmount, Math.max(0, evidence.maxHp - evidence.hpBefore)) : null;
+    pass = evidence.cast === true && healed > 0 && evidence.hpAfter <= evidence.maxHp && (expected === null || healed === expected);
+  }
+  if (contract.kind === "heal_and_cleanse") {
+    const healed = evidence.hpAfter - evidence.hpBefore;
+    pass = evidence.cast === true && evidence.healPower === contract.power && healed > 0 && healed === evidence.expectedHeal && evidence.hpAfter <= evidence.maxHp && Array.isArray(evidence.cleansedDebuffs) && evidence.cleansedDebuffs.length > 0;
+  }
+  if (contract.kind === "cleanse") {
+    pass = evidence.cast === true && Array.isArray(evidence.debuffsBefore) && evidence.debuffsBefore.length > 0 &&
+      Array.isArray(evidence.cleansedDebuffs) && evidence.cleansedDebuffs.length === evidence.debuffsBefore.length;
+  }
+  if (contract.kind === "sacrifice_heal") {
+    const hpCost = Math.floor(evidence.maxHp * contract.hpCostPercent);
+    const expectedAfter = Math.min(evidence.maxHp, evidence.hpBefore - hpCost + evidence.expectedHeal);
+    pass = evidence.cast === true && evidence.healPower === contract.power && evidence.hpCost === hpCost && evidence.hpBefore > hpCost && evidence.hpAfter === expectedAfter && evidence.hpAfter > evidence.hpBefore && evidence.hpAfter <= evidence.maxHp;
+  }
+  if (contract.kind === "resource_trade") {
+    const expectedHpCost = Math.floor(evidence.maxHp * contract.hpCostPercent);
+    const expectedMpRecovery = Math.min(evidence.maxMp - evidence.mpBefore, contract.mpRecoveryPower);
+    pass = evidence.cast === true && evidence.hpCost === expectedHpCost && evidence.hpBefore > expectedHpCost &&
+      evidence.hpAfter === evidence.hpBefore - expectedHpCost && evidence.mpRecovered === expectedMpRecovery && expectedMpRecovery > 0;
+  }
   return { status: pass ? "PASS" : "FAIL", pass, contract, evidence };
+}
+
+export function assessEffectCoverage(observedSkillIds, contracts) {
+  const unique = [...new Set(observedSkillIds)];
+  const unmappedSkills = unique.filter(id => !contracts[id]);
+  const unimplementedSkills = unique.filter(id => contracts[id]?.kind === "defined_not_implemented" || contracts[id]?.kind === "unimplemented");
+  const implementedContracts = unique.filter(id => contracts[id] && !unmappedSkills.includes(id) && !unimplementedSkills.includes(id)).length;
+  const contractsConfigured = unique.length - unmappedSkills.length;
+  return { totalUniqueSkills: unique.length, contractsConfigured, implementedContracts, unmappedSkills, unimplementedSkills, pass: unique.length > 0 && !unmappedSkills.length && !unimplementedSkills.length };
 }
 
 export function summarizeAudit(classes, proofs, requiredCoverage = []) {
   const checks = [...classes.flatMap(c => [...(c.checks || []), ...(c.skills || []).flatMap(s => [...(s.checks || []), s.effect].filter(Boolean))]), ...proofs];
   const failed = checks.filter(c => c.pass === false);
-  const missing = checks.filter(c => c.pass === null || c.status === "NOT_VALIDATED" || c.status === "DEFINED_BUT_NOT_IMPLEMENTED" || c.status?.startsWith("BLOCKED"));
+  const missing = checks.filter(c => c.pass === null || c.status === "NOT_VALIDATED");
   const blocked = classes.filter(c => c.contentStatus?.startsWith("BLOCKED"));
-  const completeCoverage = requiredCoverage.length > 0 && requiredCoverage.every(c => c.complete === true);
+  const completeCoverage = requiredCoverage.length > 0 && requiredCoverage.every(c => c.executed === true && c.pass === true);
   return {
     overallStatus: failed.length ? "FAIL" : (blocked.length || missing.length || !completeCoverage ? "APPROVAL_BLOCKED" : "PASS"),
     classCount: classes.length, skillCaseCount: classes.reduce((n, c) => n + (c.skills?.length || 0), 0),
+    blockedSkillAssignments: classes.reduce((n, c) => n + (c.skills || []).filter(skill =>
+      skill.classAssignment?.validated === false || (!skill.classAssignment && c.contentStatus?.startsWith("BLOCKED"))
+    ).length, 0),
     failedAssertions: failed.length, unvalidatedAssertions: missing.length,
     contentBlockedClassIds: blocked.map(c => c.classId), requiredCoverage,
   };

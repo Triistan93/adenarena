@@ -18,18 +18,22 @@ export class SkillSystemV2Validator {
     const errors = [];
     const warnings = [];
 
-    const totalSkills = Object.keys(CANONICAL_SKILL_REGISTRY_V2).length;
-    const totalClasses = Object.keys(CANONICAL_CLASS_REGISTRY_V2).length;
+    const totalSkills = Object.values(CANONICAL_SKILL_REGISTRY_V2).filter(skill => skill.source !== 'adenarena-local-adaptation').length;
+    const localAdaptationSkills = Object.values(CANONICAL_SKILL_REGISTRY_V2).filter(skill => skill.source === 'adenarena-local-adaptation').length;
+    const totalClasses = Object.values(CANONICAL_CLASS_REGISTRY_V2).filter(cls => cls.source !== 'adenarena-local-adaptation').length;
+    const localAdaptationClasses = Object.values(CANONICAL_CLASS_REGISTRY_V2).filter(cls => cls.source === 'adenarena-local-adaptation').length;
 
     // 1. Lineage and Stage Distribution
     const lineages = new Set();
+    const localAdaptationLineages = new Set();
     const stageCounts = { BASE: 0, FIRST_CLASS: 0, SECOND_CLASS: 0, THIRD_CLASS: 0 };
 
     for (const [cId, cls] of Object.entries(CANONICAL_CLASS_REGISTRY_V2)) {
-      if (cls.lineageId) lineages.add(cls.lineageId);
-      if (cls.stageName && stageCounts[cls.stageName] !== undefined) {
+      if (cls.lineageId && cls.source !== 'adenarena-local-adaptation') lineages.add(cls.lineageId);
+      if (cls.lineageId && cls.source === 'adenarena-local-adaptation') localAdaptationLineages.add(cls.lineageId);
+      if (cls.stageName && stageCounts[cls.stageName] !== undefined && cls.source !== 'adenarena-local-adaptation') {
         stageCounts[cls.stageName]++;
-      } else {
+      } else if (!stageCounts[cls.stageName] && cls.source !== 'adenarena-local-adaptation') {
         errors.push(`Class ${cId} has invalid stageName: ${cls.stageName}`);
       }
 
@@ -51,7 +55,7 @@ export class SkillSystemV2Validator {
     }
 
     if (lineages.size < 46) {
-      errors.push(`Expected 46 lineages, found ${lineages.size}`);
+      errors.push(`Expected at least 46 source-backed lineages, found ${lineages.size}`);
     }
 
     // 2. Audit Skills: 0 Silent Gaps
@@ -106,8 +110,11 @@ export class SkillSystemV2Validator {
       timestamp: Date.now(),
       metrics: {
         totalSkills,
+        localAdaptationSkills,
         totalClasses,
+        localAdaptationClasses,
         totalLineages: lineages.size,
+        localAdaptationLineages: localAdaptationLineages.size,
         stageCounts,
         typeDistribution,
         auditedGaps: {

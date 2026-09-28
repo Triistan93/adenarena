@@ -30,10 +30,14 @@ export function getStarterSkillForClass(classId) {
  * @param {number} currentLvl — Nível atual da skill (0-based)
  * @returns {number} Custo em SP
  */
-export function getSkillCost(skillId, currentLvl) {
+export function getSkillCost(skillId, currentLvl, state = null) {
   const echoDefs = (typeof window !== 'undefined' && window.EchoData) ? window.EchoData.SKILL_DEFS_ECHO : {};
   const def = echoDefs[skillId] || D()?.SKILL_DEFS?.[skillId];
   if (!def) return 0;
+  const classCostTable = def.spCostsByClass?.[state?.class];
+  if (Array.isArray(classCostTable) && Number.isFinite(classCostTable[currentLvl || 0])) {
+    return classCostTable[currentLvl || 0];
+  }
   const baseCost = def.cost || 5;
   return Math.floor(baseCost * Math.pow(1.4, currentLvl || 0));
 }
@@ -117,14 +121,17 @@ export function spendSP(state, skillId, callbacks = {}) {
     return false;
   }
 
-  const cost = getSkillCost(skillId, lvl);
+  const cost = getSkillCost(skillId, lvl, state);
   if (state.sp < cost) {
     if (callbacks.log) callbacks.log(`SP insuficiente (${cost} SP necessário).`, 'system');
     return false;
   }
 
-  if (state.level < (def.reqLvl || 1)) {
-    if (callbacks.log) callbacks.log(`Nível ${def.reqLvl || 1} necessário para esta habilidade.`, 'system');
+  const rankRequiredLevel = Array.isArray(def.levelRequirements)
+    ? (def.levelRequirements[lvl] ?? def.reqLvl ?? 1)
+    : (def.reqLvl || 1);
+  if (state.level < rankRequiredLevel) {
+    if (callbacks.log) callbacks.log(`Nível ${rankRequiredLevel} necessário para esta habilidade.`, 'system');
     return false;
   }
 

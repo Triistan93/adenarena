@@ -14,7 +14,7 @@ const PROD_URL = 'https://adenarena.vercel.app/';
 const EXPECTED_COMMIT = '6e910b5878bc66588347899c2d805aa716fe9ca5';
 
 const manifest = JSON.parse(fs.readFileSync(path.join(ROOT_DIR, 'docs/INDEPENDENT_CLASS_EXPECTATIONS_MANIFEST.json'), 'utf8'));
-const CONTENT_GAP_ROOTS = new Set(['werewolf_0', 'shineMakerBase', 'spirit_0', 'marauderBase', 'sayhaMageBase']);
+const CONTENT_GAP_ROOTS = new Set(['spirit_0', 'marauderBase', 'sayhaMageBase']);
 
 const ROOTS = Object.entries(manifest.races).flatMap(([raceId, r]) =>
   r.baseClassIds.map(baseId => ({

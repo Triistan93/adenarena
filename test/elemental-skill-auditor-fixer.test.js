@@ -363,8 +363,8 @@ test('Elemental Skill Auditor & Safe Fixer — Comprehensive 30-Test Suite', asy
   });
 
   // ─── Test 23: Alias Does Not Create Duplicate Entity ────────────────────────
-  await t.test('Test 23: Alias dictionary contains 274 entries without duplicating canonical count 98', () => {
-    assert.equal(Object.keys(CLASS_ALIASES).length, 274);
+  await t.test('Test 23: Alias dictionary contains 288 entries without duplicating canonical count 98', () => {
+    assert.equal(Object.keys(CLASS_ALIASES).length, 288);
     assert.equal(ACTIVE_CLASSES.length + HISTORICAL_CLASSES.length, 98);
   });
 

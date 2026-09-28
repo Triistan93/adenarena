@@ -364,6 +364,13 @@ const HERO_IMG = {
   ertheia_mage: "/img/elfmageF.png"
 };
 
+// Every JPG portrait currently registered above has a byte-identical copy in
+// heroes_cropped. Use the registered source directly for those portraits;
+// the remaining cropped variants contain distinct artwork and stay enabled.
+const HERO_IDENTICAL_CROPS = new Set(
+  Object.values(HERO_IMG).filter((path) => path.toLowerCase().endsWith('.jpg'))
+);
+
 // Fallback by race only
 const RACE_FALLBACK = {
   human: "/img/m_humanfighter.jpg",
@@ -778,7 +785,8 @@ export function heroSVG(raceOrState, clsParam, genderParam, aura, mode) {
     // For portrait frames, prefer the cropped artwork that eliminates side dead space
     const originalPath = heroImgPath(race, cls, gender);
     const croppedPath = originalPath.replace(/^\/img\//, '/img/heroes_cropped/');
-    const portraitSrc = getAssetUrl(croppedPath);
+    const portraitPath = HERO_IDENTICAL_CROPS.has(originalPath) ? originalPath : croppedPath;
+    const portraitSrc = getAssetUrl(portraitPath);
 
     return `<div class="hero-svg hero-portrait" style="position:relative;width:100%;height:100%;overflow:hidden;display:flex;align-items:flex-end;justify-content:center;">
       <img src="${portraitSrc}" alt="${race} ${cls}" draggable="false" onerror="this.onerror=null; this.src='${src}';"

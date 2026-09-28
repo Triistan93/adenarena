@@ -123,6 +123,24 @@ describe('Lineage II Canonical Adaptations Suite (Season 1)', () => {
       assert.equal(res.reason, 'missing_life_stone');
     });
 
+    it('rejects an unknown Life Stone id instead of silently using the default stone', () => {
+      const state = DEFAULT_STATE();
+      state.gold = 100000;
+      state.inventory = [
+        { id: 'w1', itemId: 'weapon_crimson_sword', name: 'Crimson Sword', type: 'weapon', grade: 'D' },
+        { id: 'ls1', itemId: 'life_stone_28', count: 1 },
+        { id: 'cr1', itemId: 'crystal_d', count: 10 }
+      ];
+
+      const result = AugmentationService.augmentWeapon(state, 'w1', 'life_stone_unknown', {});
+
+      assert.equal(result.success, false);
+      assert.equal(result.reason, 'invalid_life_stone');
+      assert.equal(state.inventory.find(item => item.id === 'ls1').count, 1);
+      assert.equal(state.inventory.find(item => item.id === 'cr1').count, 10);
+      assert.equal(state.gold, 100000);
+    });
+
     it('successfully augments weapon with Life Stone and Gemstone/Crystal fee', () => {
       const state = DEFAULT_STATE();
       state.gold = 100000;
@@ -137,6 +155,39 @@ describe('Lineage II Canonical Adaptations Suite (Season 1)', () => {
       assert.ok(res.item.augmentation);
       assert.ok(res.item.augmentation.stats);
       assert.equal(state.inventory.find(i => i.itemId === 'life_stone_28'), undefined);
+    });
+
+    it('charges the canonical gold balance only when a legacy adena field is also present', () => {
+      const state = DEFAULT_STATE();
+      state.gold = 100000;
+      state.adena = 100000;
+      state.inventory = [
+        { id: 'w1', itemId: 'weapon_crimson_sword', name: 'Crimson Sword', type: 'weapon', grade: 'D' },
+        { id: 'ls1', itemId: 'life_stone_28', count: 1 },
+        { id: 'cr1', itemId: 'crystal_d', count: 10 }
+      ];
+
+      const res = AugmentationService.augmentWeapon(state, 'w1', 'life_stone_28', {});
+
+      assert.equal(res.success, true);
+      assert.equal(state.gold, 75000, 'Canonical balance should pay the fee exactly once');
+      assert.equal(state.adena, 100000, 'Legacy alias should not be debited a second time');
+    });
+
+    it('aggregates and consumes the required gemstones across separate inventory stacks', () => {
+      const state = DEFAULT_STATE();
+      state.gold = 100000;
+      state.inventory = [
+        { id: 'w1', itemId: 'weapon_crimson_sword', name: 'Crimson Sword', type: 'weapon', grade: 'D' },
+        { id: 'ls1', itemId: 'life_stone_28', count: 1 },
+        { id: 'cr1', itemId: 'crystal_d', count: 3 },
+        { id: 'cr2', itemId: 'gemstone_d', count: 2 }
+      ];
+
+      const res = AugmentationService.augmentWeapon(state, 'w1', 'life_stone_28', {});
+
+      assert.equal(res.success, true);
+      assert.equal(state.inventory.some(item => ['crystal_d', 'gemstone_d'].includes(item.itemId)), false);
     });
   });
 

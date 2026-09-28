@@ -295,7 +295,11 @@ export function applySoulCrystalToWeapon(state, weaponUid, color = 'red', saKey 
   }
 
   const grade = getItemGrade(item);
-  const gating = SOUL_CRYSTAL_GRADE_GATING[grade] || SOUL_CRYSTAL_GRADE_GATING.d;
+  const gating = SOUL_CRYSTAL_GRADE_GATING[grade];
+  if (!gating) {
+    if (callbacks.log) callbacks.log('Esta arma não possui um grau elegível para receber Soul Crystal (SA).', 'system');
+    return false;
+  }
   const playerLvl = Number(state.level || 1);
 
   if (playerLvl < gating.minLevel) {
@@ -310,18 +314,41 @@ export function applySoulCrystalToWeapon(state, weaponUid, color = 'red', saKey 
   }
 
   const saGroup = SA_RUNES[color];
-  const saBonus = saGroup?.[saKey] || Object.values(saGroup || {})[0];
-  if (!saBonus) return false;
+  const saBonus = saGroup?.[saKey];
+  if (!saBonus) {
+    if (callbacks.log) callbacks.log('Cor ou efeito de SA inválido.', 'system');
+    return false;
+  }
+
+  if (item.soulCrystal) {
+    if (callbacks.log) callbacks.log('Esta arma já possui uma SA. Extraia a atual antes de aplicar outra.', 'system');
+    return false;
+  }
 
   // Busca cristal no inventário
-  const crystalIdx = inv.findIndex(i => (i.itemId?.startsWith('soul_crystal_') || i.isSoulCrystal) && !i.equipped);
-  const crystalLevel = crystalIdx !== -1 ? (inv[crystalIdx].stage || inv[crystalIdx].crystalLevel || 1) : 1;
+  const crystalIdx = inv.findIndex(i => {
+    if (!i || i.equipped || !(i.itemId?.startsWith('soul_crystal_') || i.isSoulCrystal)) return false;
+    const idColor = String(i.itemId || '').match(/^soul_crystal_(red|green|blue)_stage\d+$/)?.[1];
+    const crystalColor = i.color || idColor || (i.itemId === 'soul_crystal_initial' || i.itemId === 'soul_crystal_stage_1' ? 'red' : null);
+    return crystalColor === color;
+  });
+  if (crystalIdx === -1) {
+    if (callbacks.log) callbacks.log(`É necessário um Soul Crystal ${color} na mochila para aplicar esta SA.`, 'system');
+    return false;
+  }
 
-  if (crystalIdx !== -1) {
-    inv.splice(crystalIdx, 1); // Consome o cristal utilizado
+  const crystal = inv[crystalIdx];
+  const stageFromId = Number(String(crystal.itemId || '').match(/_stage(\d+)$/)?.[1]);
+  const crystalLevel = Number(crystal.stage || crystal.crystalLevel || stageFromId || 1);
+  if (!Number.isInteger(crystalLevel) || crystalLevel < 1 || crystalLevel > 15) {
+    if (callbacks.log) callbacks.log('Estágio de Soul Crystal inválido.', 'system');
+    return false;
   }
 
   state.gold -= adenaCost;
+
+  if ((Number(crystal.count) || 1) > 1) crystal.count -= 1;
+  else inv.splice(crystalIdx, 1);
 
   // Escala de poder por nível do cristal (Nível 1 = 50%, Nível 10 = 85%, Nível 15 = 120%)
   const powerScale = 0.50 + (crystalLevel * 0.05);

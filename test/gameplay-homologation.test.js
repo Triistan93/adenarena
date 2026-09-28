@@ -164,9 +164,9 @@ const CREATION_CASES = [
   { race: 'elf', classId: 'elven_mage', label: 'Elven Mage (original diagnóstico)' },
   // Sylph
   { race: 'sylph', classId: 'sylphid', label: 'Sylph Gunner (raça com 4 nós)' },
-  // CONTENT_GAP cases
-  { race: 'human', classId: 'werewolf_0', label: 'Werewolf (CONTENT_GAP: V2 absent)' },
-  { race: 'dwarf', classId: 'shineMakerBase', label: 'Shine Maker (CONTENT_GAP: V2 absent)' },
+  // Source-backed special roots and currently quarantined Ertheia roots
+  { race: 'human', classId: 'werewolf_0', label: 'Warg (source-backed V2 stage 0)' },
+  { race: 'dwarf', classId: 'shineMakerBase', label: 'Shine Maker (local source-backed root)' },
   { race: 'highelf', classId: 'spirit_0', label: 'Spirit (CONTENT_GAP: partial skills)' },
   { race: 'ertheia', classId: 'marauderBase', label: 'Marauder Base (CONTENT_GAP: Ertheia S0)' },
   { race: 'ertheia', classId: 'sayhaMageBase', label: 'Sayha Mage Base (CONTENT_GAP: Ertheia S0)' },
@@ -662,18 +662,18 @@ test('HOM-10: Season 1 bloqueia subclasses (maxLevel=40), Season 3 libera (maxLe
   console.log(`  ✓ Season gating: Season 1 (maxLv 40) blocks subclasses, Season 3 (maxLv 85) allows`);
 });
 
-// ─────────────── HOM-11: CONTENT_GAP — ATAQUE BÁSICO, XP E CONTINUIDADE ────────────────
+// ─────────────── HOM-11: RAÍZES ESPECIAIS — ATAQUE BÁSICO, XP E CONTINUIDADE ────────────────
 
-const CONTENT_GAP_CASES = [
-  { race: 'human', classId: 'werewolf_0', label: 'Werewolf (nó V2 ausente)' },
-  { race: 'dwarf', classId: 'shineMakerBase', label: 'Shine Maker (nó V2 ausente)' },
+const SPECIAL_ROOT_CASES = [
+  { race: 'human', classId: 'werewolf_0', label: 'Warg (estágio 0 com skill de fonte)' },
+  { race: 'dwarf', classId: 'shineMakerBase', label: 'Shine Maker (raiz local fonte-verificada)' },
   { race: 'highelf', classId: 'spirit_0', label: 'Spirit (nó V2 ausente — 2 skills parciais)' },
   { race: 'ertheia', classId: 'marauderBase', label: 'Marauder Base (Ertheia S0 sem proveniência)' },
   { race: 'ertheia', classId: 'sayhaMageBase', label: 'Sayha Mage Base (Ertheia S0 sem proveniência)' },
 ];
 
-for (const tc of CONTENT_GAP_CASES) {
-  test(`HOM-11: CONTENT_GAP — ${tc.label}: ataque básico, XP e continuidade`, () => {
+for (const tc of SPECIAL_ROOT_CASES) {
+  test(`HOM-11: raiz especial — ${tc.label}: ataque básico, XP e continuidade`, () => {
     const s = makeState(tc.race, tc.classId);
 
     // Should be created successfully
@@ -749,7 +749,8 @@ test('HOM-12: Diferenciação de CONTENT_GAP — V2 ausente vs habilidades sem p
     }
   }
 
-  assert.equal(gapEntries.length, 7, 'should have exactly 7 CONTENT_GAP entries');
+  assert.equal(gapEntries.length, 3, 'Warg source stages and ShineMaker are resolved; only the three documented roots remain blocked');
+  assert.equal(gapEntries.some(entry => entry.id === 'shineMakerBase'), false, 'source-backed ShineMaker must no longer be a CONTENT_GAP');
 
   // Categorize
   const typeA = gapEntries.filter(e => e.gapType === 'V2_NODE_ABSENT');
@@ -765,10 +766,10 @@ test('HOM-12: Diferenciação de CONTENT_GAP — V2 ausente vs habilidades sem p
     console.log(`    - ${e.id} (${e.race} S${e.stage}): ${e.reason}`);
   }
 
-  assert.equal(typeA.length, 5, 'should have 5 V2_NODE_ABSENT entries (werewolf_0-2, shineMakerBase, spirit_0)');
+  assert.equal(typeA.length, 1, 'should have 1 V2_NODE_ABSENT entry (spirit_0)');
   assert.equal(typeB.length, 2, 'should have 2 UNPROVEN_PROVENANCE entries (marauderBase, sayhaMageBase)');
 
-  console.log(`  ✓ Differentiated 7 CONTENT_GAP entries into 5 V2_NODE_ABSENT + 2 UNPROVEN_PROVENANCE`);
+  console.log(`  ✓ Differentiated 3 CONTENT_GAP entries into 1 V2_NODE_ABSENT + 2 UNPROVEN_PROVENANCE`);
 });
 
 // ─────────────── HOM-13: ERTHEIA IDENTITY_RESOLVED — Proveniência pendente ────────────────
@@ -784,7 +785,11 @@ test('HOM-13: Ertheia promovidas classificadas como IDENTITY_RESOLVED (proveniê
     const v2 = resolveV2ClassContext(id, 'ertheia');
     assert.equal(v2.status, 'RESOLVED', `${id} should resolve to V2 (identity resolved)`);
     assert.ok(v2.v2ClassDef, `${id} should have V2 class definition`);
-    assert.ok(v2.v2ClassDef.skillIds.length >= 5, `${id} should have 5+ skills`);
+    const minimumSkillCount = id === 'eviscerator' ? 4 : 5;
+    assert.ok(
+      v2.v2ClassDef.skillIds.length >= minimumSkillCount,
+      `${id} should have at least ${minimumSkillCount} sourced/retained skills`
+    );
 
     // Check skill sharing with non-Ertheia classes
     let sharedCount = 0;
@@ -798,7 +803,7 @@ test('HOM-13: Ertheia promovidas classificadas como IDENTITY_RESOLVED (proveniê
       }
     }
 
-    console.log(`    ${id}: V2=${v2.v2ClassId}, skills=${v2.v2ClassDef.skillIds.length}, shared_with_others=${sharedCount}/5 — PROVENIÊNCIA PENDENTE`);
+    console.log(`    ${id}: V2=${v2.v2ClassId}, skills=${v2.v2ClassDef.skillIds.length}, shared_with_others=${sharedCount}/${v2.v2ClassDef.skillIds.length} — PROVENIÊNCIA PENDENTE`);
   }
 
   console.log(`  ✓ 6 Ertheia promoted classes: identity resolved, content provenance pending`);

@@ -33,8 +33,10 @@ import { getStats } from '../lineage-idle/src/engine/StatsEngine.js';
 import { playerDeath } from '../lineage-idle/src/engine/CombatEngine.js';
 
 test('1. Canonical Catalog Completion: 1,176 skills with 100% scraped passives present', () => {
-  const totalSkills = Object.keys(CANONICAL_SKILL_REGISTRY_V2).length;
-  assert.equal(totalSkills, 1176, 'CANONICAL_SKILL_REGISTRY_V2 must contain exactly 1,176 skills');
+  const totalSkills = Object.values(CANONICAL_SKILL_REGISTRY_V2).filter(skill => skill.source !== 'adenarena-local-adaptation').length;
+  const localAdaptationSkills = Object.values(CANONICAL_SKILL_REGISTRY_V2).filter(skill => skill.source === 'adenarena-local-adaptation').length;
+  assert.equal(totalSkills, 1176, 'The sourced Lineage II skill roster must remain 1,176 entries');
+  assert.equal(localAdaptationSkills, 18, 'Aden Arena-authored ShineMaker abilities must stay separately identified from sourced skills');
 
   // Verify that all 444 scraped passives exist
   const scrapedPassives = JSON.parse(fs.readFileSync('scraped_data_wiki/passives_detailed.json', 'utf8'));
@@ -181,15 +183,22 @@ test('4. Race Equity & Passives Across All Non-Human Races in StatsEngine', () =
     level: 76,
     base: { atk: 100, def: 100, matk: 50, mdef: 50, eva: 20 },
     skills: {
-      sacral_weapon_mastery: 3, // +15 P.Atk
-      sacral_armor_mastery: 2   // +20 P.Def
+      sacral_weapon_mastery: 1,
+      sacral_armor_mastery: 1
     },
-    equipment: {},
+    equipment: { weapon: 'sacral_sword', shield: 'sacral_shield', armor: 'sacral_heavy' },
+    inventory: [
+      { uid: 'sacral_sword', itemId: 'audit_sacral_sword', weaponType: 'sword', type: 'sword' },
+      { uid: 'sacral_shield', itemId: 'audit_sacral_shield', type: 'shield', def: 10 },
+      { uid: 'sacral_heavy', itemId: 'audit_sacral_heavy', type: 'heavy', armorType: 'heavy', def: 10, mdef: 10 }
+    ],
     buffs: {}
   };
   const highElfStats = getStats(highElfState);
-  assert.ok(highElfStats.atk > 100 + 15, 'High Elf P.Atk must reflect Sacral Weapon Mastery');
-  assert.ok(highElfStats.def > 100 + 20, 'High Elf P.Def must reflect Sacral Armor Mastery');
+  const highElfBaseline = getStats({ ...highElfState, skills: {} });
+  assert.ok(highElfStats.atk - highElfBaseline.atk >= 300, 'Divine Templar sword-and-shield P.Atk follows its level 70 source entry');
+  assert.ok(highElfStats.def - highElfBaseline.def >= 200, 'Sacral Armor Mastery heavy-armor P.Def follows its level 70 source entry');
+  assert.ok(highElfStats.mdef - highElfBaseline.mdef >= 200, 'Sacral Armor Mastery also grants matching M.Def');
 
   // 5. Orc: Titan Spirit & Wild Weapon Mastery
   const orcState = {

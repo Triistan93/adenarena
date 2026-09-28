@@ -205,6 +205,8 @@ export function pickRandomMonster(state, callbacks = {}) {
     const finalHp = Math.floor(template.hp * hpMult);
     state.activeMonster = {
       ...template,
+      id: targetId,
+      key: targetId,
       _maxHp: finalHp,
       hp: finalHp,
       atk: Math.floor(template.atk * atkMult),

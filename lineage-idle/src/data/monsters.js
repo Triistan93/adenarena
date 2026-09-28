@@ -53,7 +53,7 @@ export const MONSTERS = {
   orc: { name: 'Orc Warrior', lvl: 7, hp: 480, atk: 22, def: 16, eva: 5, matk: 0, mdef: 8, xp: 58, sp: 0, gold: [22, 48], traits: ['enrage'] },
   kashaWolf: { name: 'Kasha Wolf', lvl: 9, hp: 560, atk: 27, def: 18, eva: 10, matk: 0, mdef: 10, xp: 75, sp: 0, gold: [30, 62], traits: ['bleed'] },
   kashaBear: { name: 'Kasha Bear', lvl: 11, hp: 750, atk: 34, def: 24, eva: 5, matk: 0, mdef: 12, xp: 105, sp: 0, gold: [38, 82], skill: { name: 'Pata Esmagadora', type: 'physical', effect: 'stun', mult: 1.4, cd: 5 } },
-  kashaOrcArcher: { name: 'Kasha Orc Archer', lvl: 13, hp: 620, atk: 42, def: 20, eva: 10, matk: 0, mdef: 14, xp: 125, sp: 0, gold: [45, 95], skill: { name: 'Tiro Duplo Kasha', type: 'physical', mult: 1.5, cd: 4, vfx: 'arrow' } },
+  kashaOrcArcher: { name: 'Kasha Orc Archer', lvl: 13, hp: 620, atk: 42, def: 20, eva: 10, matk: 0, mdef: 14, xp: 125, sp: 0, gold: [45, 95], weaponType: 'bow', skill: { name: 'Tiro Duplo Kasha', type: 'physical', mult: 1.5, cd: 4, vfx: 'arrow' } },
   kashaOrcBerserker: { name: 'Kasha Orc Berserker', lvl: 14, hp: 1550, atk: 55, def: 34, eva: 8, matk: 0, mdef: 18, xp: 280, sp: 12, gold: [100, 210], traits: ['enrage'], elite: true, skill: { name: 'Golpe Furioso Berserk', type: 'physical', mult: 1.65, cd: 5 } },
   kashaOrcOverlord: { name: 'Kasha Tribe Overlord', lvl: 15, hp: 3100, atk: 65, def: 45, eva: 8, matk: 20, mdef: 28, xp: 520, sp: 60, gold: [180, 380], boss: true, skill: { name: 'Rugido Tribal do Overlord', type: 'physical', effect: 'stun', mult: 1.85, cd: 6 } },
 
@@ -82,7 +82,7 @@ export const MONSTERS = {
   // ──────────────────────────────────────────────────────────────────────────
   ruinedGoblinThief: { name: 'Outpost Thief', lvl: 15, hp: 320, atk: 42, def: 16, eva: 12, xp: 130, sp: 3, gold: [50, 110] },
   ruinedOrc: { name: 'Outpost Orc', lvl: 16, hp: 420, atk: 50, def: 20, eva: 5, xp: 160, sp: 3, gold: [60, 130] },
-  outpostMarksman: { name: 'Outpost Marksman', lvl: 17, hp: 380, atk: 58, def: 18, eva: 10, xp: 185, sp: 4, gold: [70, 150] },
+  outpostMarksman: { name: 'Outpost Marksman', lvl: 17, hp: 380, atk: 58, def: 18, eva: 10, xp: 185, sp: 4, gold: [70, 150], weaponType: 'bow' },
   ruinedDeserter: { name: 'Ruined Deserter Knight', lvl: 19, hp: 560, atk: 68, def: 26, eva: 6, xp: 250, sp: 5, gold: [95, 200] },
   shadowMercenary: { name: 'Shadow Mercenary', lvl: 20, hp: 950, atk: 82, def: 32, eva: 12, xp: 420, sp: 9, gold: [160, 340], elite: true },
   outpostFallenCaptain: { name: 'Fallen Outpost Captain', lvl: 20, hp: 1600, atk: 105, def: 42, eva: 8, xp: 750, sp: 16, gold: [320, 680], boss: true },
@@ -101,7 +101,7 @@ export const MONSTERS = {
   // 9. GIRAN OUTSKIRTS (Level 25-29)
   // ──────────────────────────────────────────────────────────────────────────
   skeleton: { name: 'Skeletal Trooper', lvl: 25, hp: 1200, atk: 120, def: 48, eva: 5, matk: 0, mdef: 18, xp: 700, sp: 6, gold: [240, 500] },
-  skeletonArcher: { name: 'Skeletal Marksman', lvl: 26, hp: 1100, atk: 135, def: 44, eva: 8, matk: 0, mdef: 20, xp: 780, sp: 6, gold: [260, 550] },
+  skeletonArcher: { name: 'Skeletal Marksman', lvl: 26, hp: 1100, atk: 135, def: 44, eva: 8, matk: 0, mdef: 20, xp: 780, sp: 6, gold: [260, 550], weaponType: 'bow' },
   deathRider: { name: 'Death Rider', lvl: 27, hp: 1600, atk: 145, def: 56, eva: 10, xp: 920, sp: 7, gold: [300, 650] },
   giranGargoyle: { name: 'Giran Stone Gargoyle', lvl: 28, hp: 1900, atk: 160, def: 68, eva: 6, matk: 0, mdef: 26, xp: 1050, sp: 8, gold: [340, 720], element: 'earth' },
   giranGladiator: { name: 'Cursed Giran Gladiator', lvl: 29, hp: 2700, atk: 185, def: 74, eva: 8, xp: 1500, sp: 10, gold: [550, 1150], elite: true },
@@ -142,7 +142,7 @@ export const MONSTERS = {
   // ──────────────────────────────────────────────────────────────────────────
   knight: { name: 'Gludio Guard Knight', lvl: 45, hp: 5500, atk: 340, def: 140, eva: 6, xp: 3800, sp: 16, gold: [1200, 2600] },
   cursedKnight: { name: 'Cursed Gludio Knight', lvl: 46, hp: 6800, atk: 400, def: 165, eva: 6, xp: 4800, sp: 18, gold: [1500, 3200] },
-  gludioRoyalArcher: { name: 'Gludio Royal Archer', lvl: 47, hp: 5800, atk: 420, def: 135, eva: 14, xp: 4900, sp: 18, gold: [1600, 3400] },
+  gludioRoyalArcher: { name: 'Gludio Royal Archer', lvl: 47, hp: 5800, atk: 420, def: 135, eva: 14, xp: 4900, sp: 18, gold: [1600, 3400], weaponType: 'bow' },
   gludioSorcerer: { name: 'Gludio Fallen Sorcerer', lvl: 47, hp: 5400, atk: 220, def: 130, eva: 8, matk: 460, mdef: 185, xp: 5100, sp: 19, gold: [1700, 3600], magic: true },
   gludioShieldMaster: { name: 'Gludio Shield Master', lvl: 48, hp: 11500, atk: 460, def: 210, eva: 6, xp: 7500, sp: 24, gold: [2600, 5600], elite: true },
   gludioCommander: { name: 'Gludio Fallen Commander', lvl: 48, hp: 18000, atk: 580, def: 230, eva: 8, xp: 12500, sp: 32, gold: [5000, 11000], boss: true },
@@ -212,7 +212,7 @@ export const MONSTERS = {
   // ──────────────────────────────────────────────────────────────────────────
   royalKnight: { name: 'Aden Royal Guard', lvl: 76, hp: 22000, atk: 980, def: 380, eva: 8, xp: 24000, sp: 240, gold: [7500, 15000] },
   highMage: { name: 'Aden High Spellweaver', lvl: 77, hp: 19000, atk: 450, def: 320, eva: 10, matk: 1150, mdef: 450, xp: 28000, sp: 270, gold: [8800, 18000], magic: true },
-  adenCrossbowman: { name: 'Aden Elite Crossbowman', lvl: 78, hp: 24000, atk: 1150, def: 360, eva: 18, xp: 31000, sp: 290, gold: [9600, 19500] },
+  adenCrossbowman: { name: 'Aden Elite Crossbowman', lvl: 78, hp: 24000, atk: 1150, def: 360, eva: 18, xp: 31000, sp: 290, gold: [9600, 19500], weaponType: 'crossbow' },
   adenPaladin: { name: 'Aden Vanguard Paladin', lvl: 78, hp: 32000, atk: 1100, def: 480, eva: 8, xp: 33500, sp: 310, gold: [10500, 21500] },
   adenHighJusticiar: { name: 'Aden Grand Justiciar', lvl: 79, hp: 48000, atk: 1380, def: 540, eva: 10, xp: 42000, sp: 410, gold: [16000, 33000], elite: true },
   adenCommander: { name: 'Aden High Commander', lvl: 79, hp: 68000, atk: 1550, def: 600, eva: 10, xp: 52000, sp: 520, gold: [22000, 45000], boss: true },

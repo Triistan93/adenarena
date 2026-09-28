@@ -3546,6 +3546,9 @@ select:focus-visible {
   box-shadow: 0 10px 30px rgba(0,0,0,0.9), 0 0 15px rgba(212,167,68,0.25), inset 0 0 10px rgba(212,167,68,0.15) !important;
   will-change: transform;
 }
+#item-tooltip.skill-hover-tooltip {
+  pointer-events: none !important;
+}
 .item-tooltip::before {
   content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
   background: linear-gradient(90deg, transparent, #f0d080, transparent);
@@ -7979,14 +7982,13 @@ select:focus-visible {
   border: 1px solid rgba(148, 163, 184, 0.2);
   border-radius: 6px;
   cursor: pointer;
-  transition: all 0.18s ease;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
   user-select: none;
   position: relative;
   overflow: hidden;
 }
 
 .skill-node-card:hover {
-  transform: translateY(-1px);
   border-color: rgba(212, 167, 68, 0.5);
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
 }

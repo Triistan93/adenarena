@@ -84,9 +84,11 @@ test('2. Sylph Identity Contract & Dedicated V2 Context Resolution', (t) => {
   assert.deepEqual(skillsSylph, expectedSylphSkills.slice().sort());
 });
 
-test('3. Spurious Parentage & Autonomous Lineages Isolation', (t) => {
-  // 3.1 warg.parentClass must be strictly null
-  assert.equal(CANONICAL_CLASS_REGISTRY_V2['warg'].parentClass, null, 'warg.parentClass must be null');
+test('3. Warg source progression and autonomous lineage isolation', (t) => {
+  assert.equal(CANONICAL_CLASS_REGISTRY_V2['wargS0'].parentClass, null);
+  assert.equal(CANONICAL_CLASS_REGISTRY_V2['wargS1'].parentClass, 'wargS0');
+  assert.equal(CANONICAL_CLASS_REGISTRY_V2['wargS2'].parentClass, 'wargS1');
+  assert.equal(CANONICAL_CLASS_REGISTRY_V2['warg'].parentClass, 'wargS2');
 
   // 3.2 shineMakerS1.parentClass must NOT be highElfBase
   assert.notEqual(CANONICAL_CLASS_REGISTRY_V2['shineMakerS1']?.parentClass, 'highElfBase', 'shineMakerS1 must not inherit highElfBase');
@@ -108,10 +110,10 @@ test('3. Spurious Parentage & Autonomous Lineages Isolation', (t) => {
 });
 
 test('4. CONTENT_GAP Handling — No Fallbacks, v2ClassId null on Stage 0 Gaps, Playable & Equipable', (t) => {
-  // 4.1 werewolf_0: Stage 0 CONTENT_GAP -> v2ClassId MUST BE NULL (warg is Stage 3 Lv 76+)
+  // 4.1 Warg stage 0 is source-backed and has its own V2 node.
   const ctxWarg = resolveV2ClassContext('werewolf_0', 'human');
-  assert.equal(ctxWarg.status, 'CONTENT_GAP');
-  assert.equal(ctxWarg.v2ClassId, null, 'werewolf_0 has no Stage 0 node in V2, v2ClassId must be null');
+  assert.equal(ctxWarg.status, 'RESOLVED');
+  assert.equal(ctxWarg.v2ClassId, 'wargS0');
   assert.deepEqual(ctxWarg.authorizedSkillIds, ['direct_strike'], 'werewolf_0 must authorize direct_strike');
 
   // ViewModel at Lv 1 only shows direct_strike, ZERO generic fighter skills
@@ -135,11 +137,12 @@ test('4. CONTENT_GAP Handling — No Fallbacks, v2ClassId null on Stage 0 Gaps, 
   assert.equal(ctxSpirit.v2ClassId, null, 'spirit_0 has no Stage 0 node in V2, v2ClassId must be null');
   assert.deepEqual(ctxSpirit.authorizedSkillIds.slice().sort(), ['fire_sphere', 'ice_sphere'].sort());
 
-  // 4.3 shineMakerBase: Stage 0 CONTENT_GAP -> v2ClassId MUST BE NULL, authorizedSkillIds empty
+  // 4.3 shineMakerBase: source-backed Dwarf class with its local four-skill starter kit
   const ctxShine = resolveV2ClassContext('shineMakerBase', 'dwarf');
-  assert.equal(ctxShine.status, 'CONTENT_GAP');
-  assert.equal(ctxShine.v2ClassId, null);
-  assert.deepEqual(ctxShine.authorizedSkillIds, []);
+  assert.equal(ctxShine.status, 'RESOLVED');
+  assert.equal(ctxShine.v2ClassId, 'shineMakerBase');
+  assert.equal(ctxShine.authorizedSkillIds.length, 4);
+  assert.ok(ctxShine.authorizedSkillIds.includes('shineMakerBase_light_spark'));
 
   // 4.4 Ertheia (marauderBase, sayhaMageBase) -> Stage 0 CONTENT_GAP without arbitrary Kamael / Mage skills
   const ctxMarauder = resolveV2ClassContext('marauderBase', 'ertheia');
@@ -195,9 +198,9 @@ test('5. Uniform Resolution Object Schema for All 25 Creator Starter Classes', (
     if (ctx.status === 'RESOLVED') {
       // [CANONICAL 3.0] Death Pilgrim (human_deathknight_0, elf_deathknight_0, delf_deathknight_0)
       // canonically has 4 Stage 0 skills (Change Armor + 3 fighter passives; Hellfire is strictly Stage 3 Lv 76+).
-      // Other standard starter classes have 5 Stage 0 skills.
+      // Warg Stage 0 has one source-confirmed skill (Direct Strike); standard starters have 5.
       const isDeathKnightStage0 = starter.id.includes('deathknight_0');
-      const expectedSkillsCount = isDeathKnightStage0 ? 4 : 5;
+      const expectedSkillsCount = starter.id === 'werewolf_0' ? 1 : (isDeathKnightStage0 ? 4 : (starter.id === 'shineMakerBase' ? 4 : 5));
       assert.equal(ctx.authorizedSkillIds.length, expectedSkillsCount, `RESOLVED class ${starter.id} must have exactly ${expectedSkillsCount} Stage 0 skills`);
       assert.ok(ctx.v2ClassId, `RESOLVED class ${starter.id} must have v2ClassId`);
       assert.ok(ctx.v2ClassDef, `RESOLVED class ${starter.id} must have v2ClassDef`);

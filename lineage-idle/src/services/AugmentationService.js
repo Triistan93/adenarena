@@ -3,6 +3,106 @@
  */
 
 import { LIFE_STONES, ITEM_SKILLS, STAT_ROLL_POOL } from '../data/augmentation.js';
+import { CanonicalClassGraph } from '../data/classes/CanonicalClassGraph.js';
+import { resolveCanonicalClassId } from '../data/classes/class_aliases.js';
+
+export function getAugmentationGemstoneGrade(level) {
+  const stoneLevel = Number(level);
+  if (!Number.isFinite(stoneLevel) || stoneLevel < 1) return null;
+  if (stoneLevel <= 39) return 'D';
+  if (stoneLevel <= 51) return 'C';
+  if (stoneLevel <= 61) return 'B';
+  if (stoneLevel <= 75) return 'A';
+  return 'S';
+}
+
+export function getAugmentationRequirements(lifeStoneId) {
+  const stone = typeof lifeStoneId === 'string' ? LIFE_STONES[lifeStoneId] : lifeStoneId;
+  const gemstoneGrade = getAugmentationGemstoneGrade(stone?.level);
+  if (!stone || !gemstoneGrade) return null;
+  return {
+    gemstoneGrade,
+    gemstonesNeeded: Number(stone.gemstonesNeeded) || 5,
+    adena: Number(stone.priceAdena) || 25000
+  };
+}
+
+export function getAugmentationSkillPool(classId) {
+  const canonicalId = resolveCanonicalClassId(String(classId || '')) || classId;
+  const classNode = CanonicalClassGraph.getClassNode(canonicalId);
+  const archetype = classNode?.archetypeGroup;
+  if (!archetype) return [];
+  return ITEM_SKILLS.filter(skill => skill.allowedArchetypes?.includes(archetype));
+}
+
+function scaleRolledSkill(skill, multiplier) {
+  if (!skill) return null;
+  const scale = Number(multiplier);
+  if (!Number.isFinite(scale) || scale <= 0 || scale === 1) return structuredClone(skill);
+  const scaled = structuredClone(skill);
+  scaled.powerMultiplier = scale;
+  scaled.stats = Object.fromEntries(Object.entries(skill.stats || {}).map(([key, rawValue]) => {
+    const value = Number(rawValue);
+    if (!Number.isFinite(value)) return [key, rawValue];
+    const scaledValue = value * scale;
+    const isRatio = /percent|chance/i.test(key);
+    return [key, isRatio ? Math.round(scaledValue * 10000) / 10000 : Math.round(scaledValue)];
+  }));
+  return scaled;
+}
+
+export function getEquippedAugmentationSkills(state) {
+  const skills = [];
+  for (const slot of ['weapon', 'weapon2']) {
+    const equipped = state?.equipment?.[slot];
+    const item = typeof equipped === 'object'
+      ? equipped
+      : state?.inventory?.find(entry => entry?.uid === equipped);
+    const skill = item?.augmentation?.itemSkill;
+    if (skill && !skills.some(existing => existing.id === skill.id)) skills.push(skill);
+  }
+  return skills;
+}
+
+export function getAugmentationStunChancePercent(state) {
+  return getEquippedAugmentationSkills(state).reduce((total, skill) => {
+    const chance = Number(skill.stats?.stunChance) || 0;
+    return total + (chance > 0 && chance <= 1 ? chance * 100 : chance);
+  }, 0);
+}
+
+export function processAugmentationCombatTick(state, now = Date.now()) {
+  if (!state || !state.isCombatActive) return [];
+  state.buffs ||= {};
+  state._augmentationSkillCooldowns ||= {};
+  const activated = [];
+  for (const skill of getEquippedAugmentationSkills(state)) {
+    if (skill.type !== 'active') continue;
+    const cooldownUntil = Number(state._augmentationSkillCooldowns[skill.id]) || 0;
+    if (now < cooldownUntil) continue;
+    const skillStats = skill.stats || {};
+    if (skillStats.instantHeal) {
+      const maxHp = Number(state.maxHp) || Number(state.stats?.maxHp) || 0;
+      if (!maxHp || state.hp >= maxHp * 0.70) continue;
+      const healed = Math.min(maxHp - (Number(state.hp) || 0), Number(skillStats.instantHeal));
+      state.hp = (Number(state.hp) || 0) + healed;
+      state._augmentationSkillCooldowns[skill.id] = now + (skill.cooldownMs || 60000);
+      activated.push({ id: skill.id, healed });
+      continue;
+    }
+    const existingBuff = state.buffs[skill.id];
+    if (existingBuff?.until > now) continue;
+    const durationMs = Number(skill.durationMs) || 15000;
+    state.buffs[skill.id] = {
+      until: now + durationMs,
+      augmentationStats: skillStats,
+      source: 'weapon_augmentation'
+    };
+    state._augmentationSkillCooldowns[skill.id] = now + (Number(skill.cooldownMs) || 60000);
+    activated.push({ id: skill.id, until: now + durationMs });
+  }
+  return activated;
+}
 
 export class AugmentationService {
   /**
@@ -10,7 +110,11 @@ export class AugmentationService {
    */
   static augmentWeapon(state, weaponItem, lifeStoneId = 'life_stone_28', callbacks = {}) {
     const { log = console.log, onUpdate = () => {} } = callbacks;
-    const stone = LIFE_STONES[lifeStoneId] || LIFE_STONES.life_stone_28;
+    const stone = LIFE_STONES[lifeStoneId];
+    if (!stone) {
+      log('Pedra da Vida inválida para augmentação.', 'error');
+      return { success: false, reason: 'invalid_life_stone' };
+    }
 
     let weapon = weaponItem;
     if (typeof weapon === 'string') {
@@ -45,14 +149,19 @@ export class AugmentationService {
     }
 
     // 2. Verificar Gemstones / Cristais necessários conforme o grau da pedra
-    const reqCrystals = stone.gemstonesNeeded || 5;
-    const crystalId = stone.gemstoneGrade === 'C' ? 'crystal_c' : 'crystal_d';
-    const crystalIdx = (state.inventory || []).findIndex(i => {
+    const requirements = getAugmentationRequirements(stone);
+    if (!requirements) return { success: false, reason: 'invalid_life_stone_level' };
+    const { gemstonesNeeded: reqCrystals, gemstoneGrade } = requirements;
+    const gradeKey = gemstoneGrade.toLowerCase();
+    const crystalId = `crystal_${gradeKey}`;
+    const gemstoneId = `gemstone_${gradeKey}`;
+    const crystalItems = (state.inventory || []).filter(i => {
       const itId = typeof i === 'object' ? (i.itemId || i.id) : i;
-      return (itId === crystalId || itId === `gemstone_${stone.gemstoneGrade?.toLowerCase()}`) && !i.equipped;
+      return typeof i === 'object'
+        && (itId === crystalId || itId === gemstoneId)
+        && !i.equipped;
     });
-    const crystalItem = crystalIdx !== -1 ? state.inventory[crystalIdx] : null;
-    const crystalCount = crystalItem ? (crystalItem.count || 1) : 0;
+    const crystalCount = crystalItems.reduce((total, item) => total + (Number(item.count) || 1), 0);
 
     if (crystalCount < reqCrystals) {
       log(`⚠️ Gemstones insuficientes! O Ferreiro exige ${reqCrystals}x Cristais/Gemstones Grau ${stone.gemstoneGrade || 'D'} para canalizar a pedra.`, 'error');
@@ -60,7 +169,7 @@ export class AugmentationService {
     }
 
     // 3. Verificar taxa de Adena do Ferreiro
-    const feeAdena = stone.priceAdena || 25000;
+    const feeAdena = requirements.adena;
     const currentGold = (state.gold !== undefined ? state.gold : (state.adena || 0));
     if (currentGold < feeAdena) {
       log(`⚠️ Adena insuficiente para a mão de obra do Ferreiro (${feeAdena.toLocaleString()} Adena necessária).`, 'error');
@@ -76,19 +185,23 @@ export class AugmentationService {
     }
 
     // Consumir Cristais
-    if (crystalItem.count && crystalItem.count > reqCrystals) {
-      crystalItem.count -= reqCrystals;
-    } else if (crystalItem.count === reqCrystals) {
-      const curIdx = state.inventory.indexOf(crystalItem);
-      if (curIdx !== -1) state.inventory.splice(curIdx, 1);
-    } else {
-      const curIdx = state.inventory.indexOf(crystalItem);
-      if (curIdx !== -1) state.inventory.splice(curIdx, 1);
+    let crystalsToConsume = reqCrystals;
+    for (const crystalItem of crystalItems) {
+      if (crystalsToConsume <= 0) break;
+      const available = Number(crystalItem.count) || 1;
+      const consumed = Math.min(available, crystalsToConsume);
+      if (available > consumed) {
+        crystalItem.count = available - consumed;
+      } else {
+        const curIdx = state.inventory.indexOf(crystalItem);
+        if (curIdx !== -1) state.inventory.splice(curIdx, 1);
+      }
+      crystalsToConsume -= consumed;
     }
 
     // Consumir taxa de Adena
     if (state.gold !== undefined) state.gold -= feeAdena;
-    if (state.adena !== undefined) state.adena -= feeAdena;
+    else if (state.adena !== undefined) state.adena -= feeAdena;
 
     // 1. Rolar 2 atributos aleatórios
     const rolledStats = {};
@@ -111,8 +224,9 @@ export class AugmentationService {
     // 3. Rolar Item Skill
     let acquiredSkill = null;
     if (Math.random() <= stone.skillChance) {
-      const shuffledSkills = [...ITEM_SKILLS].sort(() => Math.random() - 0.5);
-      acquiredSkill = shuffledSkills[0];
+      const eligibleSkills = getAugmentationSkillPool(state.class);
+      const shuffledSkills = eligibleSkills.sort(() => Math.random() - 0.5);
+      acquiredSkill = scaleRolledSkill(shuffledSkills[0], stone.statMultiplier);
     }
 
     // Gravar a augmentação no objeto da arma
