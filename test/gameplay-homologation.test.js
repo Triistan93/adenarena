@@ -749,7 +749,7 @@ test('HOM-12: Diferenciação de CONTENT_GAP — V2 ausente vs habilidades sem p
     }
   }
 
-  assert.equal(gapEntries.length, 2, 'Warg stages, ShineMaker, and the source-listed High Elf root are resolved');
+  assert.equal(gapEntries.length, 0, 'Warg stages, ShineMaker, High Elf root, and sourced Ertheia roots resolve');
   assert.equal(gapEntries.some(entry => entry.id === 'shineMakerBase'), false, 'source-backed ShineMaker must no longer be a CONTENT_GAP');
 
   // Categorize
@@ -767,9 +767,9 @@ test('HOM-12: Diferenciação de CONTENT_GAP — V2 ausente vs habilidades sem p
   }
 
   assert.equal(typeA.length, 0, 'High Elf spirit_0 now has a V2 node; no V2_NODE_ABSENT gap should remain');
-  assert.equal(typeB.length, 2, 'should have 2 UNPROVEN_PROVENANCE entries (marauderBase, sayhaMageBase)');
+  assert.equal(typeB.length, 0, 'no V2 resolver content/provenance blockers remain in this registry pass');
 
-  console.log(`  ✓ Remaining CONTENT_GAP entries are limited to 2 UNPROVEN_PROVENANCE roots`);
+  console.log(`  ✓ No V2 CONTENT_GAP entries remain in this resolver pass`);
 });
 
 // ─────────────── HOM-13: ERTHEIA IDENTITY_RESOLVED — Proveniência pendente ────────────────

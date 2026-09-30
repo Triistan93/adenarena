@@ -5,6 +5,7 @@ import { isMagicSkill } from "./data/echo-adapter.js";
 import "./src/data/items/index.js";
 import { RARITY, ALL_ITEMS, rollDrop, rollRarity } from './src/data/items/index.js';
 import { getArmorType, getWeaponType, canEquipByType, ARMOR_TYPE_LABEL, WEAPON_TYPE_LABEL } from './src/data/items/item_class_rules.js';
+import { getShotGradeCode } from './src/data/items/item_grade.js';
 import { AFFIX_MAP as AFFIX_MAP_IMPORT } from './data/affixes.js';
 import { getSkillIcon, getSkillSemanticData } from './src/services/SkillIconRegistry.js';
 
@@ -207,12 +208,13 @@ import { WeaponResonanceService } from './src/services/WeaponResonanceService.js
 import { StaggerEngine } from './src/engine/StaggerEngine.js';
 import {
   COMBAT_CONFIG,
-  calculateDefenseMitigation,
+  calculateIncomingDamageMitigation,
   calculatePlayerMissChance,
   calculatePhysicalDamage,
   calculateMagicDamage,
   calculateHealAmount,
   calculateVampiricHeal,
+  calculateShotBonusMultiplier,
   resolvePlayerBlock,
   canCastSkill,
   consumeSkillMp,
@@ -327,6 +329,7 @@ import {
   positionSkillTooltip as uiPositionSkillTooltip
 } from './src/ui/GameUI.js';
 import { CashShopService } from './src/services/CashShopService.js';
+import { applyConsumableStatBuff, getConsumableRestoreAmount } from './src/services/ConsumableService.js';
 import { NoblesseService } from './src/services/NoblesseService.js';
 import { OlympiadService } from './src/services/OlympiadService.js';
 import { ClanService } from './src/services/ClanService.js';
@@ -1455,7 +1458,7 @@ export function useItem(uid) {
       return false; // Respeita GCD de 1.5s
     }
     state._lastHpPotTime = potNow;
-    const baseHealAmt = def.amount || def.healAmt || 100;
+    const baseHealAmt = getConsumableRestoreAmount(item.itemId, 'hp') || def.amount || def.healAmt || 100;
     const healAmt = isHpRecoveryPotion(item.itemId, def) ? getHpPotionHealAmount(baseHealAmt, getStats()) : baseHealAmt;
     state.hp = Math.min(state.maxHp, state.hp + healAmt);
     log(`✨ Usou ${def.name}: +${healAmt} HP`, 'heal');
@@ -1468,7 +1471,7 @@ export function useItem(uid) {
       return false; // Respeita GCD de 1.5s
     }
     state._lastMpPotTime = potNow;
-    const manaAmt = def.amount || def.healAmt || 80;
+    const manaAmt = getConsumableRestoreAmount(item.itemId, 'mp') || def.amount || def.healAmt || 80;
     state.mp = Math.min(state.maxMp, state.mp + manaAmt);
     log(`💧 Usou ${def.name}: +${manaAmt} MP`, 'heal');
     if (typeof floatText === 'function') floatText(`+${manaAmt} MP`, 'sf-heal');
@@ -1478,6 +1481,15 @@ export function useItem(uid) {
     applyBuff(def.stat, def.amount, def.duration || 1800);
     log(`⚡ Usou ${def.name}: +${def.amount} ${def.stat.toUpperCase()} por ${fmtDur(def.duration || 1800)}`, 'heal');
     if (typeof floatText === 'function') floatText(`⚡ +${def.amount} ${def.stat.toUpperCase()}`, 'sf-heal');
+  }
+  else if (def.buffStats && typeof def.buffStats === 'object') {
+    if (!applyConsumableStatBuff(state, def)) {
+      log(`Não foi possível aplicar os efeitos de ${def.name}.`, 'system');
+      return false;
+    }
+    const duration = def.buffDuration || def.duration || 1800;
+    log(`🍲 Usou ${def.name}: bônus de combate por ${fmtDur(duration)}.`, 'heal');
+    if (typeof floatText === 'function') floatText(`🍲 ${def.name}`, 'sf-heal');
   }
   else if (item.itemId === 'attack_potion') {
     applyBuff('atk', 0.20, 1800); log(`⚡ Usou ${def.name}: +20% ATK por 30min`, 'heal');
@@ -5124,7 +5136,7 @@ function getWeaponAttackVfx(isCrit = false, useMagic = false, weaponType = 'mele
   // Fallback para atributo elemental da arma equipada
   const equippedWpnUid = state.equipment?.weapon;
   const equippedWpn = equippedWpnUid ? state.inventory?.find(i => i.uid === equippedWpnUid) : null;
-  const elem = equippedWpn?.elementalAttribute?.element;
+  const elem = ElementalService.getItemElementalAttribute(equippedWpn).element;
   if (elem === 'water') {
     return { id: 'frost_slash', color: '#7dd3fc', duration: 650, reaction: 'is-frozen', reactionDuration: 350 };
   }
@@ -5209,9 +5221,7 @@ function getEquippedProcBonuses() {
 
 function dealDamage(target, amount, type = 'physical') { 
   const rawAmount = Number(amount) || 0;
-  const isMagic = type === 'magic';
-  const def = isMagic ? (Number(target.mdef) || 0) : (Number(target.def) || 0); 
-  return applyTargetDamageTakenBonus(calculateDefenseMitigation(rawAmount, def, isMagic), target);
+  return applyTargetDamageTakenBonus(calculateIncomingDamageMitigation(rawAmount, target, type), target);
 }
 
 function getSkillDebuffDefenseTarget(monster, now = Date.now()) {
@@ -5777,7 +5787,7 @@ export function attackMonster() {
     const skillHealPower = resolveSkillHealPower(skill.def);
     const isMpConversion = skill.id === 'body_to_mind';
     const isHybridHealBuff = skill.id === 'reflecting_illusion';
-    const isHeal = skill.def.effect === 'heal' || skill.def.type === 'heal' || skill.id.includes('heal') || skill.id.includes('curation') || fixedHealAmount !== null || skillHealPower !== null || isHybridHealBuff;
+    const isHeal = skill.def.effect === 'heal' || skill.def.type === 'heal' || skill.def.cleanseDebuffs === true || skill.id.includes('heal') || skill.id.includes('curation') || fixedHealAmount !== null || skillHealPower !== null || isHybridHealBuff;
     const skillHpCost = resolveSkillHpSacrificeCost(skill.def, stats.maxHp, state.hp);
     if (isMpConversion && (state.mp >= stats.maxMp || skillHpCost <= 0)) continue;
     if (['sacrifice', 'touch_of_death'].includes(skill.id) && skillHpCost <= 0) continue;
@@ -5864,6 +5874,21 @@ export function attackMonster() {
         const buffDuration = applySkillBuffDurationBonus(resolveSkillBuffDurationMs(skill.def) ?? 60000, stats);
         const buffObj = { skillBuffStats, until: realNow + buffDuration, source: 'class_skill' };
         state.buffs[skill.id] = buffObj;
+        const configuredHealPercent = resolveSkillSelfHealPercent(skill.def);
+        if (configuredHealPercent > 0 && state.hp < stats.maxHp) {
+          const healAmt = Math.min(stats.maxHp - state.hp, Math.floor(stats.maxHp * configuredHealPercent));
+          state.hp += healAmt;
+          if (healAmt > 0) {
+            log(`✨ ${skill.def.name} restaurou ${healAmt} HP e ativou seu efeito.`, 'heal');
+            floatText(`+${healAmt} HP`, 'sf-heal');
+          }
+        }
+        const mpRecovery = resolveSkillMpRecoveryAmount(skill.def, stats.maxMp, state.mp);
+        if (mpRecovery > 0) {
+          state.mp = Math.min(stats.maxMp, state.mp + mpRecovery);
+          log(`💧 ${skill.def.name} restaurou ${mpRecovery} MP.`, 'heal');
+          floatText(`+${mpRecovery} MP`, 'sf-heal');
+        }
         if (isHybridHealBuff) {
           const healAmt = Math.min(Math.max(0, stats.maxHp - state.hp), Math.floor(stats.maxHp * 0.50));
           state.hp = Math.min(stats.maxHp, state.hp + healAmt);
@@ -6024,6 +6049,8 @@ export function attackMonster() {
             floatText(`+${actualSelfHeal} HP`, 'sf-heal');
           }
         }
+        const mpRecovery = resolveSkillMpRecoveryAmount(skill.def, stats.maxMp, state.mp);
+        if (mpRecovery > 0) state.mp = Math.min(stats.maxMp, state.mp + mpRecovery);
           const golemProc = resolveMechanicalMasterpieceHit(state, monster, sDmg, realNow);
           if (golemProc.extraDamage > 0) {
             const procHpBefore = monster.hp;
@@ -6049,7 +6076,8 @@ export function attackMonster() {
           monster._overkillDmg = Math.abs(monster.hp);
         }
         const vfxData = getSkillVfxData(skill.id, skill.def);
-        if (skill.def.effect === 'vampiric' || skill.def.effect === 'drain' || skill.id.includes('vampir') || skill.id.includes('drain') || (vfxData && vfxData.id === 'magic_vampiric_drain')) {
+        const legacyVampiricNameFallback = !skill.def.localAdaptation && (skill.id.includes('vampir') || skill.id.includes('drain') || (vfxData && vfxData.id === 'magic_vampiric_drain'));
+        if (skill.def.effect === 'vampiric' || skill.def.effect === 'drain' || legacyVampiricNameFallback) {
           const vHeal = calculateVampiricHeal(sDmg, stats.maxHp || state.maxHp, COMBAT_CONFIG.lifestealRatioDefault);
           if (vHeal > 0) {
             state.hp = Math.min(stats.maxHp || state.maxHp, state.hp + vHeal);
@@ -6206,11 +6234,7 @@ export function attackMonster() {
     if (state.equipment?.weapon) {
       const wpnItem = state.inventory?.find(i => i.uid === state.equipment.weapon);
       wpnDef = wpnItem ? D().ALL_ITEMS[wpnItem.itemId] : null;
-      if (wpnDef?.grade) weaponGrade = String(wpnDef.grade).toUpperCase();
-      else if (wpnDef?.tier) {
-        const TIER_GRADE = { 1: 'NG', 2: 'D', 3: 'C', 4: 'B', 5: 'A', 6: 'S' };
-        weaponGrade = TIER_GRADE[wpnDef.tier] || 'NG';
-      }
+      if (wpnDef) weaponGrade = getShotGradeCode(wpnDef).toUpperCase();
     }
 
     const gradeSuffix = weaponGrade.toLowerCase();
@@ -6248,7 +6272,8 @@ export function attackMonster() {
       // O tiro dedicado da grade correta dá +100% de dano (2.0x).
       // O tiro universal curinga dá +30% de dano (1.30x).
       const shotMult = isUniversal ? 1.30 : 2.0;
-      damage = Math.floor(damage * shotMult);
+      const shotBonusPercent = isMageClass ? stats.spsBonusPct : stats.ssBonusPct;
+      damage = Math.floor(damage * calculateShotBonusMultiplier(shotMult, shotBonusPercent));
 
       if (isMageClass) {
         if (shotItem.itemId === 'blessed_spiritshot_universal') soulshotCritBonus = 5;
@@ -9578,29 +9603,7 @@ function addKamaelSoul() {
 }
 
 function insertAttributeStone(itemUid, elemType = 'fire') {
-  const item = state.inventory?.find(i => i.uid === itemUid);
-  if (!item) {
-    log('⚠️ Item não encontrado no inventário!', 'warning');
-    return false;
-  }
-  const cost = 250000;
-  if ((state.gold || 0) < cost) {
-    log(`⚠️ Adena insuficiente para engaste elemental! Requer ${cost.toLocaleString()}g.`, 'warning');
-    return false;
-  }
-
-  state.gold -= cost;
-  if (!item.elemental) item.elemental = { type: elemType, val: 0 };
-  
-  const isFirst = item.elemental.val === 0;
-  const inc = isFirst ? 20 : 5;
-  item.elemental.type = elemType;
-  item.elemental.val = Math.min(300, item.elemental.val + inc);
-
-  log(`🔥 ENGASTE ELEMENTAL BEM SUCEDIDO! **${item.name || 'Item'}** recebeu +${inc} Atributo ${elemType.toUpperCase()} (Total: ${item.elemental.val})!`, 'rarity-legendary');
-  floatText(`ATRIBUTO ${elemType.toUpperCase()} +${inc}!`, 'float-gold');
-  updateAllUI(); save();
-  return true;
+  return ElementalService.applyElementalInfusion(state, itemUid, elemType, { log, updateAllUI, save, floatText });
 }
 
 function compoundBelts() {

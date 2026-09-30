@@ -223,7 +223,7 @@ export class SynthesisService {
         primaryItem.beltBonuses = {
           hpBonusPct: 0.04 + (targetRank * 0.02),
           pDefBonus: 20 + (targetRank * 10),
-          weightBonus: 1000 + (targetRank * 1000),
+          invSlots: 1 + targetRank,
           pvpDmgPct: 0.02 + (targetRank * 0.015)
         };
       }

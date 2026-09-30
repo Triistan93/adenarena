@@ -20,7 +20,7 @@ import {
 } from './recipes_drops.js';
 import { ELEMENT_OPPOSITES, ELEMENTAL_STONES, LIFE_STONE_ITEMS, BELT_ITEMS, getAttributeDamageBonus } from './attributes_belts.js';
 import { SOUL_CRYSTAL_ITEMS } from './soul_crystals.js';
-import { SPELLBOOK_ITEMS, CRYSTAL_ITEMS } from '../spellbooks.js';
+import { SPELLBOOK_ITEMS, CRYSTAL_ITEMS, GEMSTONE_ITEMS } from '../spellbooks.js';
 import { RAID_BOSSES } from '../raids.js';
 import { CANONICAL_RESOURCES } from '../../services/lifeActivities/ResourceDictionary.js';
 import { FISH_CATALOG } from '../fishing.js';
@@ -95,6 +95,7 @@ export const ALL_ITEMS = {
   ...SOUL_CRYSTAL_ITEMS,
   ...SPELLBOOK_ITEMS,
   ...CRYSTAL_ITEMS,
+  ...GEMSTONE_ITEMS,
   ...ELEMENTAL_STONES,
   ...LIFE_STONE_ITEMS,
   ...BELT_ITEMS,

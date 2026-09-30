@@ -712,6 +712,9 @@ export function applyStarterKit(state, race, classId, charName = null, gender = 
     starterShotId = 'soulshot_ng';
   }
 
+  // European Ertheia Fighter abilities require fist weapons from the first stage.
+  if (canonicalClass === 'marauderBase') starterWpnId = 'weapon_ertheia_no_grade_fist';
+
   // Gera UIDs únicos para os itens equipados
   const wpnUid = 'starter_wpn_' + Date.now();
   const armorUid = 'starter_arm_' + (Date.now() + 1);

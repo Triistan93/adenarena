@@ -3,12 +3,20 @@ import assert from 'node:assert/strict';
 
 import { DEFAULT_STATE } from '../lineage-idle/src/core/StateManager.js';
 import { getStats, getTotalEquipBonuses } from '../lineage-idle/src/engine/StatsEngine.js';
+import { MONSTER_ARCHETYPES, MonsterAIEngine } from '../lineage-idle/src/engine/MonsterAIEngine.js';
+import { getMaxInventorySlots } from '../lineage-idle/src/services/InventoryService.js';
 import { canCastSkill } from '../lineage-idle/src/data/balance/skillBalance.js';
-import { calculatePhysicalDamage, resolvePlayerBlock } from '../lineage-idle/src/data/balance/combatBalance.js';
+import { calculateDefenseMitigation, calculateIncomingDamageMitigation, calculatePhysicalDamage, calculatePlayerMissChance, calculateShotBonusMultiplier, resolvePlayerBlock } from '../lineage-idle/src/data/balance/combatBalance.js';
 import { polishMasterwork } from '../lineage-idle/src/services/CraftService.js';
+import { compoundBeltsWithDuplicates } from '../lineage-idle/src/services/CraftService.js';
+import { SynthesisService } from '../lineage-idle/src/services/SynthesisService.js';
+import { applyConsumableStatBuff } from '../lineage-idle/src/services/ConsumableService.js';
 import { WEAPONS } from '../lineage-idle/src/data/items/weapons.js';
-import { RINGS } from '../lineage-idle/src/data/items/jewels.js';
+import { NECKLACES, RINGS } from '../lineage-idle/src/data/items/jewels.js';
 import { HEIRLOOM_ITEMS } from '../lineage-idle/src/data/items/heirloom_items.js';
+import { BROOCH_JEWELS } from '../lineage-idle/src/data/items/broochJewels.js';
+import { ALL_ITEMS } from '../lineage-idle/src/data/items/index.js';
+import { CANONICAL_SKILL_REGISTRY_V2 } from '../lineage-idle/src/data/skills/CanonicalSkillRegistryV2.js';
 
 function withEquippedItem(slot, item) {
   const state = DEFAULT_STATE();
@@ -21,6 +29,103 @@ function withEquippedItem(slot, item) {
 }
 
 describe('Equipment effects through the production StatsEngine path', () => {
+  it('uses M.Def for both magic and magical monster attacks, and P.Def for physical attacks', () => {
+    const defenses = { def: 100, mdef: 500 };
+    const physical = calculateIncomingDamageMitigation(1000, defenses, 'physical');
+    const magic = calculateIncomingDamageMitigation(1000, defenses, 'magic');
+    const magical = calculateIncomingDamageMitigation(1000, defenses, 'magical');
+
+    assert.equal(physical, calculateDefenseMitigation(1000, defenses.def, false));
+    assert.equal(magic, calculateDefenseMitigation(1000, defenses.mdef, true));
+    assert.equal(magical, magic);
+  });
+
+  it('removes unsupported carry-weight and area-target stats from the item catalog', () => {
+    const retiredStats = new Set(['weightBonus', 'aoeTargets', 'aoeDmg']);
+    const visit = value => {
+      if (!value || typeof value !== 'object') return [];
+      return Object.entries(value).flatMap(([key, child]) => [
+        ...(retiredStats.has(key) ? [key] : []),
+        ...visit(child)
+      ]);
+    };
+    assert.deepEqual([...new Set([...visit(ALL_ITEMS), ...visit(CANONICAL_SKILL_REGISTRY_V2)])], []);
+  });
+
+  it('applies the fish stew physical and magical attack buffs through combat stats', () => {
+    const state = DEFAULT_STATE();
+    state.race = 'human';
+    state.class = 'wizard';
+    state.level = 40;
+    const baseline = getStats(state);
+    const applied = applyConsumableStatBuff(state, ALL_ITEMS.stew_fish);
+
+    assert.equal(applied, true);
+    const buffed = getStats(state);
+    assert.ok(buffed.atk > baseline.atk, 'fish stew increases P.Atk');
+    assert.ok(buffed.matk > baseline.matk, 'fish stew increases M.Atk');
+    assert.ok(state.buffs.stew_fish.until > Date.now());
+  });
+
+  it('replaces spear area targets/damage with effective physical attack in production stats', () => {
+    const heirloomSpear = withEquippedItem('weapon', {
+      ...HEIRLOOM_ITEMS.weapon_heirloom_spear, uid: 'test_item', itemId: 'weapon_heirloom_spear'
+    });
+    heirloomSpear.level = 1;
+    const heroSpear = withEquippedItem('weapon', {
+      ...WEAPONS.weapon_infinity_spear, uid: 'test_item', itemId: 'weapon_infinity_spear'
+    });
+    heroSpear.level = 80;
+
+    assert.equal(getTotalEquipBonuses(heirloomSpear).atk, 43);
+    assert.equal(getTotalEquipBonuses(heroSpear).atk, 384);
+  });
+
+  it('applies synthesized belt slot bonuses to the actual backpack capacity', () => {
+    const state = DEFAULT_STATE();
+    state.race = 'human';
+    state.level = 40;
+    state.gold = 100_000;
+    state.inventory = [
+      { uid: 'belt-primary', itemId: 'belt_heirloom_champion' },
+      { uid: 'belt-secondary', itemId: 'belt_heirloom_champion' }
+    ];
+    state.equipment = { ...state.equipment, belt: 'belt-primary' };
+    const before = getMaxInventorySlots(state);
+    const originalRandom = Math.random;
+    Math.random = () => 0;
+    try {
+      assert.equal(compoundBeltsWithDuplicates(state, 'belt-primary', 'belt-secondary', { log: () => {} }), true);
+    } finally {
+      Math.random = originalRandom;
+    }
+    assert.equal(state.inventory[0].beltBonuses.invSlots, 1);
+    assert.equal(getMaxInventorySlots(state), before + 1);
+  });
+
+  it('applies synthesis belt slot bonuses to the actual backpack capacity', () => {
+    const state = DEFAULT_STATE();
+    state.race = 'human';
+    state.level = 40;
+    state.gold = 500_000;
+    state.inventory = [
+      { uid: 'synthesis-belt-primary', itemId: 'belt_heirloom_champion' },
+      { uid: 'synthesis-belt-secondary', itemId: 'belt_heirloom_champion' }
+    ];
+    state.equipment = { ...state.equipment, belt: 'synthesis-belt-primary' };
+    const before = getMaxInventorySlots(state);
+    const originalRandom = Math.random;
+    Math.random = () => 0;
+    try {
+      const result = SynthesisService.executeSynthesis(state, 'synthesis-belt-primary', 'synthesis-belt-secondary', { log: () => {} });
+      assert.equal(result.success, true);
+    } finally {
+      Math.random = originalRandom;
+    }
+    assert.equal(state.inventory[0].beltBonuses.invSlots, 2);
+    assert.equal(getMaxInventorySlots(state), before + 2);
+  });
+
   it('Foundation improves the equipped armor defense returned by getStats', () => {
     const plain = withEquippedItem('armor', {
       itemId: 'runtime_test_armor', slot: 'armor', def: 100, mdef: 50
@@ -54,6 +159,75 @@ describe('Equipment effects through the production StatsEngine path', () => {
     } finally {
       Math.random = originalRandom;
     }
+  });
+
+  it('feeds heirloom hit and regeneration into the player combat stats', () => {
+    const baseline = withEquippedItem('weapon', {
+      itemId: 'runtime_test_weapon', slot: 'weapon', atk: 100
+    });
+    const heirloom = withEquippedItem('weapon', {
+      ...HEIRLOOM_ITEMS.weapon_heirloom_sword, uid: 'test_item', itemId: 'weapon_heirloom_sword'
+    });
+    const regen = withEquippedItem('earring1', {
+      ...HEIRLOOM_ITEMS.jewelry_heirloom_earring_2, uid: 'test_item', itemId: 'jewelry_heirloom_earring_2'
+    });
+
+    assert.ok(getStats(heirloom).pAccuracy > getStats(baseline).pAccuracy);
+    assert.ok(getStats(regen).hpRegenFlat > getStats(baseline).hpRegenFlat);
+  });
+
+  it('adapts heirloom stun resistance to the monster debuff-resistance stat used in combat', () => {
+    const baseline = DEFAULT_STATE();
+    const earring = withEquippedItem('earring1', {
+      ...HEIRLOOM_ITEMS.jewelry_heirloom_earring_1,
+      uid: 'test_item', itemId: 'jewelry_heirloom_earring_1'
+    });
+    const baselineStats = getStats(baseline);
+    const earringStats = getStats(earring);
+    const monster = { atk: 100, matk: 100, hp: 1000, _maxHp: 1000, _aiState: { archetype: MONSTER_ARCHETYPES.SUPPORT } };
+    const originalRandom = Math.random;
+    let exposedResult;
+    let protectedResult;
+    try {
+      Math.random = () => 0.24;
+      exposedResult = MonsterAIEngine.processMonsterAttack(structuredClone(monster), baselineStats, baseline);
+      protectedResult = MonsterAIEngine.processMonsterAttack(structuredClone(monster), earringStats, earring);
+    } finally {
+      Math.random = originalRandom;
+    }
+
+    assert.equal(earringStats.debuffResistancePercent, 0.10);
+    assert.ok(exposedResult.appliedDebuff);
+    assert.equal(protectedResult.appliedDebuff, null);
+  });
+
+  it('adds equipped heirloom inventory slots to the real backpack capacity', () => {
+    const baseline = DEFAULT_STATE();
+    baseline.race = 'human';
+    baseline.level = 40;
+    const expanded = { ...baseline, inventory: [{
+      ...HEIRLOOM_ITEMS.belt_heirloom_champion, uid: 'heirloom-belt', itemId: 'belt_heirloom_champion'
+    }] };
+    expanded.equipment = { ...expanded.equipment, belt: 'heirloom-belt' };
+
+    assert.equal(getMaxInventorySlots(baseline), 150);
+    assert.equal(getMaxInventorySlots(expanded), 170);
+  });
+
+  it('converts heirloom armor carrying capacity to small, real backpack slot bonuses', () => {
+    const armor = {
+      uid: 'heirloom-chest', itemId: 'armor_heirloom_chest_heavy',
+      ...HEIRLOOM_ITEMS.armor_heirloom_chest_heavy
+    };
+    const state = DEFAULT_STATE();
+    state.race = 'human';
+    state.level = 1;
+    state.inventory = [armor];
+    state.equipment = { ...state.equipment, armor: armor.uid };
+    assert.equal(getMaxInventorySlots(state), 151);
+
+    state.level = 25;
+    assert.equal(getMaxInventorySlots(state), 152);
   });
 
   it('applies cataloged equipment cast speed, attack speed, MP regeneration, and critical damage', () => {
@@ -101,6 +275,23 @@ describe('Equipment effects through the production StatsEngine path', () => {
     assert.equal(baiumStats.critDmg - baselineStats.critDmg, 0, 'Baium ring should not invent a critical-damage bonus');
   });
 
+  it('applies Frintezza necklace CDR to the cooldown checked by the skill runtime', () => {
+    const baseline = withEquippedItem('weapon', {
+      itemId: 'runtime_test_weapon', slot: 'weapon', atk: 100
+    });
+    const necklace = withEquippedItem('necklace', {
+      ...NECKLACES.jewel_necklace_of_frintezza,
+      uid: 'test_item', itemId: 'jewel_necklace_of_frintezza'
+    });
+    const baselineStats = getStats(baseline);
+    const necklaceStats = getStats(necklace);
+    const skill = { id: 'frintezza_cdr_test', type: 'active', baseCd: 10_000 };
+
+    assert.equal(necklaceStats.cdr, baselineStats.cdr + 0.15);
+    assert.equal(canCastSkill({ mp: 100, stats: baselineStats }, skill, 8_500, { frintezza_cdr_test: 0 }).canCast, false);
+    assert.equal(canCastSkill({ mp: 100, stats: necklaceStats }, skill, 8_500, { frintezza_cdr_test: 0 }).canCast, true);
+  });
+
   it('an equipped weapon soul crystal changes the actual combat stats', () => {
     const plain = withEquippedItem('weapon', {
       itemId: 'runtime_test_weapon', slot: 'weapon', atk: 100
@@ -138,6 +329,41 @@ describe('Equipment effects through the production StatsEngine path', () => {
       const stats = getStats(state);
       assert.ok(stats[stat] > baseStats[stat], `${effect} should increase ${stat}`);
     }
+  });
+
+  it('Guidance SA improves hit accuracy instead of incorrectly increasing evasion', () => {
+    const baseline = withEquippedItem('weapon', {
+      itemId: 'runtime_test_weapon', slot: 'weapon', atk: 100
+    });
+    const guided = withEquippedItem('weapon', {
+      itemId: 'runtime_test_weapon', slot: 'weapon', atk: 100,
+      soulCrystal: { key: 'guidance', stat: 'accuracy', val: 4 }
+    });
+    const baselineStats = getStats(baseline);
+    const guidedStats = getStats(guided);
+
+    assert.equal(guidedStats.eva, baselineStats.eva);
+    assert.equal(guidedStats.pAccuracy, baselineStats.pAccuracy + 4);
+    assert.equal(guidedStats.mAccuracy, baselineStats.mAccuracy + 4);
+    assert.ok(calculatePlayerMissChance(3, guidedStats.pAccuracy) < calculatePlayerMissChance(3, baselineStats.pAccuracy));
+  });
+
+  it('Ruby and Sapphire brooch jewels strengthen only their matching shot bonus', () => {
+    const ruby = withEquippedItem('jewel1', {
+      ...BROOCH_JEWELS.jewel_ruby_5, uid: 'test_item', itemId: 'jewel_ruby_5'
+    });
+    const sapphire = withEquippedItem('jewel1', {
+      ...BROOCH_JEWELS.jewel_sapphire_5, uid: 'test_item', itemId: 'jewel_sapphire_5'
+    });
+    const rubyStats = getStats(ruby);
+    const sapphireStats = getStats(sapphire);
+
+    assert.equal(rubyStats.ssBonusPct, 22);
+    assert.equal(rubyStats.spsBonusPct, 0);
+    assert.equal(sapphireStats.spsBonusPct, 22);
+    assert.equal(sapphireStats.ssBonusPct, 0);
+    assert.equal(calculateShotBonusMultiplier(2, rubyStats.ssBonusPct), 2.22);
+    assert.equal(calculateShotBonusMultiplier(1.3, sapphireStats.spsBonusPct), 1.366);
   });
 
   it('Masterwork cast speed reduces skill cooldown without changing attack speed', () => {

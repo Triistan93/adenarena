@@ -378,14 +378,14 @@ test('Elemental Skill Auditor & Safe Fixer — Comprehensive 30-Test Suite', asy
     }
   });
 
-  // ─── Test 25: 942 Unique Skill Definitions Derived Dynamically ──────────────
-  await t.test('Test 25: 942 unique definitions is recalculable from sources, not hardcoded', () => {
+  // ─── Test 25: 967 Unique Skill Definitions Derived Dynamically ──────────────
+  await t.test('Test 25: 967 unique definitions is recalculable from sources, not hardcoded', () => {
     const stats = getSkillStats();
     assert.equal(stats.activeSkillsCount, 100);
-    assert.equal(stats.historicalInstancesCount, 1315);
+    assert.equal(stats.historicalInstancesCount, 1342);
     assert.equal(stats.sharedCount, 5);
-    // Dynamic recalculation formula: active (100) + unique historical (847) - shared (5) = 942
-    assert.equal(stats.uniqueDefinitionsCount, 942);
+    // Dynamic recalculation formula: active (100) + unique historical (872) - shared (5) = 967
+    assert.equal(stats.uniqueDefinitionsCount, 967);
   });
 
   // ─── Test 26: 100 Active Skills Possess VFX Registration ────────────────────

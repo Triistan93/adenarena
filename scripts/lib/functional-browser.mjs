@@ -17,7 +17,8 @@ import { calculateHealAmount } from '/lineage-idle/src/data/balance/combatBalanc
 import { promoteClass, isSkillAllowedForClass } from '/lineage-idle/src/services/CharacterService.js';
 import { getSkillTreeViewModel } from '/lineage-idle/src/services/SkillTreeViewModel.js';
 import { SubclassCertificationService, SUBCLASS_ARCHETYPES } from '/lineage-idle/src/services/SubclassCertificationService.js';
-import { EFFECT_CONTRACTS, assessEffect, assessEffectCoverage } from './functional-evidence.mjs';
+import { EUROPEAN_ERTHEIA_ROSTER } from '/lineage-idle/src/data/skills/ertheia/european-roster.js';
+import { EFFECT_CONTRACTS, assessEffect, assessEffectCoverage, summarizeIndependentProvenanceEvidence } from './functional-evidence.mjs';
 
 setRoot(document);
 const defs = window.EchoData.SKILL_DEFS_ECHO;
@@ -36,14 +37,12 @@ const numericTargetStats = (target, now = Date.now()) => ({
 });
 const bookCount = state => state.inventory.filter(i => /book/.test(i.itemId)).reduce((n, i) => n + (i.count ?? 1), 0);
 
-const CONTENT_GAP_CLASSES = new Set([
-  'marauderBase', 'sayhaMageBase'
-]);
-
-const UNPROVEN_PROVENANCE_CLASSES = new Set([
-  'marauder', 'ertheiaWarrior', 'eviscerator',
-  'sayhaSeer', 'windRiderErth', 'sayhaSeeker'
-]);
+// The local RAG evidence index now maps all eight Ertheia stages and their
+// 57 source-listed skills to the European notes. The former Ertheia blockers
+// were stale executor labels, not current content gaps.
+const CONTENT_GAP_CLASSES = new Set();
+const SOURCE_BACKED_CLASS_IDS = new Set(Object.keys(EUROPEAN_ERTHEIA_ROSTER));
+const UNPROVEN_PROVENANCE_CLASSES = new Set(Object.keys(classes).filter(classId => !SOURCE_BACKED_CLASS_IDS.has(classId)));
 
 export function prepare(classId, level, def, skillId) {
   const state = getState();
@@ -61,6 +60,7 @@ export function prepare(classId, level, def, skillId) {
   else if (/fist_mastery|fist/.test(sid)) weapon = 'fist';
   else if (/two_handed_weapon_mastery/.test(sid)) weapon = 'two_hand_sword';
   else if (/sword_blunt_mastery/.test(sid)) weapon = 'sword';
+  else if (/crystal_weapon_mastery/.test(sid)) weapon = 'blunt';
 
   const isTwoHanded = weapon === 'two_hand_sword';
   state.inventory.push({ uid: 'audit-weapon', itemId: `audit_${weapon}`, type: weapon, weaponType: weapon, isTwoHanded, slot: 'weapon', atk: 10, matk: 10, count: 1 });
@@ -71,8 +71,14 @@ export function prepare(classId, level, def, skillId) {
   if (/light_armor_mastery/.test(sid)) armorType = 'light';
   else if (/robe_mastery/.test(sid)) armorType = 'robe';
   else if (/heavy_armor_mastery/.test(sid)) armorType = 'heavy';
-  state.inventory.push({ uid: 'audit-armor', itemId: `audit_${armorType}_armor`, type: armorType, armorType, slot: 'armor', def: 20, count: 1 });
+  state.inventory.push({ uid: 'audit-armor', itemId: `audit_${armorType}_armor`, type: armorType, armorType, slot: 'armor', def: 200, mdef: 200, count: 1 });
   state.equipment.armor = 'audit-armor';
+  if (/armor_mastery/.test(sid)) {
+    // Percentage passives are calculated from character base M.Def. A small
+    // level-one base rounds +5% to zero, even though equipment M.Def is high;
+    // raise only this isolated audit fixture so the declared ratio is visible.
+    state.base = { ...(state.base || {}), mdef: Math.max(200, Number(state.base?.mdef) || 0) };
+  }
 
   if (def?.requiredShield || /shield_mastery/.test(sid) || ['blessed_shield', 'advanced_block', 'armor_care'].includes(sid)) {
     state.inventory.push({ uid: 'audit-shield', itemId: 'audit_shield', slot: 'shield', type: 'shield', def: 20, count: 1 });
@@ -209,6 +215,7 @@ export function exercise(classId, skillId, inheritedFrom = null, mutation = null
   const stats = getStats(state);
   state.maxHp = stats.maxHp; state.hp = Math.floor(stats.maxHp / 2);
   state.maxMp = stats.maxMp; state.mp = Math.max(stats.maxMp, 10000);
+  if (Number.isFinite(contract?.mpRecoveryPercent)) state.mp = Math.floor(stats.maxMp / 2);
   if (skillId === 'body_to_mind') state.mp = Math.floor(stats.maxMp / 2);
   if (mutation === 'fullHealth') state.hp = state.maxHp;
   state._lastAttackTime = Date.now();
@@ -247,9 +254,13 @@ export function exercise(classId, skillId, inheritedFrom = null, mutation = null
     const playerHpAfterCast = state.hp;
     const hpAfter = state.activeMonster.hp;
     row.checks.push({ name: 'productionCast', pass: cast });
+    const recoveryPercent = Number(contract?.mpRecoveryPercent) || 0;
+    const expectedMpRecovery = recoveryPercent > 0
+      ? Math.min(Math.max(0, stats.maxMp - (mpBefore - expectedMp)), Math.floor(stats.maxMp * recoveryPercent))
+      : 0;
     const expectedMpDelta = contract?.kind === 'resource_trade'
       ? -Math.min(Math.max(0, stats.maxMp - mpBefore), contract.mpRecoveryPower)
-      : expectedMp;
+      : expectedMp - expectedMpRecovery;
     row.checks.push({ name: 'productionMpDebit', expected: expectedMpDelta, observed: mpBefore - state.mp, pass: cast && mpBefore - state.mp === expectedMpDelta });
     let evidence = { skillId, events, hpBefore, hpAfter, cast };
     if (contract?.kind === 'heal') evidence = { cast, hpBefore: playerHpBefore, hpAfter: state.hp, maxHp: stats.maxHp };
@@ -452,7 +463,10 @@ export function exercise(classId, skillId, inheritedFrom = null, mutation = null
           productionConsumer: 'main.monsterAttack -> resolvePlayerDamageReflection'
         };
       }
-      evidence = { before: buffsBefore, after, expired, applied: !!buff, expiresInMs: buff ? buff.until - now() : null, ...(Number.isFinite(contract.healPercent) ? { hpBefore: playerHpBefore, maxHp: stats.maxHp, healAmount: playerHpAfterCast - playerHpBefore } : {}), ...(consumerProof ? { consumerProof } : {}) };
+      evidence = { before: buffsBefore, after, expired, applied: !!buff, expiresInMs: buff ? buff.until - now() : null,
+        ...(Number.isFinite(contract.healPercent) ? { hpBefore: playerHpBefore, maxHp: stats.maxHp, healAmount: playerHpAfterCast - playerHpBefore } : {}),
+        ...(Number.isFinite(contract.mpRecoveryPercent) ? { mpBefore, mpAfter: state.mp, maxMp: stats.maxMp, expectedMpCost: expectedMp } : {}),
+        ...(consumerProof ? { consumerProof } : {}) };
     }
     if (contract?.kind === 'damage_reflection') {
       const buff = state.buffs[skillId];
@@ -487,6 +501,7 @@ export function exercise(classId, skillId, inheritedFrom = null, mutation = null
         playerHpAfterCast,
         maxHp: numericStats(state).maxHp,
         ...(Number.isFinite(contract.hpCostPercent) ? { hpBefore: playerHpBefore, hpAfter: state.hp, maxHp: numericStats(state).maxHp } : {}),
+        ...(Number.isFinite(contract.mpRecoveryPercent) ? { mpBefore, mpAfter: state.mp, maxMp: stats.maxMp, expectedMpCost: expectedMp } : {}),
         ...(contract.kind === 'damage_and_target_debuff' ? { cast, skillId, events, hpBefore, hpAfter } : {})
       };
       if (contract.consumer === 'monster_speed_slow' || contract.consumer === 'monster_movement_slow') {
@@ -1224,10 +1239,10 @@ export function auditIndependentProvenance() {
   const allCls = Object.values(classes);
   const gaps = allCls.filter(c => CONTENT_GAP_CLASSES.has(c.id));
   const unproven = allCls.filter(c => UNPROVEN_PROVENANCE_CLASSES.has(c.id));
-  const validated = allCls.filter(c => !CONTENT_GAP_CLASSES.has(c.id) && !UNPROVEN_PROVENANCE_CLASSES.has(c.id));
+  const eligible = allCls.filter(c => !CONTENT_GAP_CLASSES.has(c.id) && !UNPROVEN_PROVENANCE_CLASSES.has(c.id));
 
   let ancestryIntegrity = true;
-  for (const c of validated) {
+  for (const c of eligible) {
     if (c.parentClass && !classes[c.parentClass]) {
       ancestryIntegrity = false;
       break;
@@ -1236,14 +1251,15 @@ export function auditIndependentProvenance() {
 
   return {
     name: 'independentProvenance',
-    pass: ancestryIntegrity ? null : false,
-    status: ancestryIntegrity ? 'NOT_VALIDATED' : 'FAIL',
-    totalClasses: allCls.length,
-    validatedCount: validated.length,
-    contentGapCount: gaps.length,
-    unprovenProvenanceCount: unproven.length,
-    ancestryIntegrity,
-    evidenceSource: 'Local status lists and registry ancestry only; no independent per-class provenance evidence was exercised'
+    ...summarizeIndependentProvenanceEvidence({
+      totalClasses: allCls.length,
+      eligibleClassCount: eligible.length,
+      validatedClassCount: eligible.filter(c => SOURCE_BACKED_CLASS_IDS.has(c.id)).length,
+      contentGapCount: gaps.length,
+      unprovenProvenanceCount: unproven.length,
+      ancestryIntegrity
+    }),
+    evidenceSource: 'European Inn.games Ertheia skill notes indexed per Ertheia class stage; all other class lineages still lack independent class-specific source evidence'
   };
 }
 
@@ -1343,6 +1359,51 @@ export function auditAllPromotionsUI() {
     promotionsCount: promotions.length,
     resultsCount: results.length,
     uiRendered: false
+  };
+}
+
+/** Renders each promotion option through the production Class Transfer modal. */
+export function auditActualPromotionModalUI() {
+  const promotions = Object.values(classes).filter(cls => cls.parentClass && classes[cls.parentClass]);
+  let modal = document.getElementById('class-transfer-modal');
+  if (!modal) {
+    modal = document.createElement('section');
+    modal.id = 'class-transfer-modal';
+    modal.innerHTML = '<h2 id="class-modal-heading"></h2><button id="close-class-modal-btn">Close</button><div id="class-options-container"></div>';
+    document.body.append(modal);
+  }
+  const state = getState();
+  const results = [];
+  for (const target of promotions) {
+    const source = classes[target.parentClass];
+    for (const key of Object.keys(state)) delete state[key];
+    Object.assign(state, DEFAULT_STATE(), {
+      class: source.id,
+      race: source.race || target.race || 'human',
+      level: Math.max(Number(source.minLevel) || 1, Number(target.minLevel) || 1),
+      season: 3,
+      skills: {},
+      skillLoadout: {}
+    });
+    try {
+      if (typeof window.openClassTransferModal !== 'function') throw new Error('Production class transfer modal is not exposed');
+      window.openClassTransferModal({ id: source.id });
+      const buttons = [...modal.querySelectorAll('.class-option-card .promote-btn[data-class-id]')];
+      const renderedIds = buttons.map(button => button.dataset.classId);
+      const pass = modal.classList.contains('active') && renderedIds.includes(target.id);
+      results.push({ sourceId: source.id, targetId: target.id, renderedCount: buttons.length, renderedTarget: renderedIds.includes(target.id), pass });
+    } catch (error) {
+      results.push({ sourceId: source.id, targetId: target.id, pass: false, error: String(error?.stack || error) });
+    }
+  }
+  modal.remove();
+  return {
+    name: 'productionPromotionModalRendering',
+    promotionsCount: promotions.length,
+    renderedCount: results.filter(result => result.renderedTarget).length,
+    failedCount: results.filter(result => !result.pass).length,
+    pass: results.length === promotions.length && results.every(result => result.pass),
+    results
   };
 }
 

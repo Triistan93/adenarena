@@ -4,6 +4,8 @@
 // Regra: Skills aprendidas nas classes anteriores PERMANECEM
 // ============================================================
 
+import { EUROPEAN_ERTHEIA_ROSTER, EUROPEAN_ERTHEIA_SKILLS } from '../skills/ertheia/european-roster.js';
+
 const RACES_ECHO = {
   human:    { name: 'Human',     desc: 'Versáteis, equilibrados em combate e magia.',       stats: { atk: 0,  def: 0,  eva: 0,  matk: 0,  mdef: 0  }, startZone: 'talkingIsland' },
   elf:      { name: 'Elf',       desc: 'Graciosos, alta esquiva e velocidade de ataque.',    stats: { atk: 0,  def:-2,  eva: 8,  matk: 0,  mdef: 0  }, startZone: 'talkingIsland' },
@@ -2759,6 +2761,22 @@ skills: [
     ]
   }
 };
+
+for (const [classId, skillIds] of Object.entries(EUROPEAN_ERTHEIA_ROSTER)) {
+  if (!CLASSES_ECHO[classId]) continue;
+  CLASSES_ECHO[classId].skills = skillIds.map(skillId => {
+    const skill = EUROPEAN_ERTHEIA_SKILLS[skillId];
+    return {
+      id: skillId,
+      name: skill.name,
+      type: skill.type === 'passive' ? 'Passivo' : skill.type === 'buff' ? 'Self-Buff' : 'Ativo',
+      rarity: skill.rarity,
+      effect: skill.desc,
+      cooldown: skill.canonicalCooldown,
+      requiredLevel: skill.minLevel
+    };
+  });
+}
 
 if (typeof window !== 'undefined') {
   window.EchoData = { RACES_ECHO, CLASSES_ECHO };

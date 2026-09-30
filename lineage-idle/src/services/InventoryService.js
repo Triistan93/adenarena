@@ -16,7 +16,27 @@ import { getSellValue } from '../data/economy/economyBalance.js';
 export function getMaxInventorySlots(state) {
   const s = state || (typeof window !== 'undefined' ? window.state : null) || {};
   const base = (s.race === 'dwarf') ? 250 : 150;
-  return base + (Number(s.bonusInventorySlots) || 0);
+  const gData = D();
+  const inventory = Array.isArray(s.inventory) ? s.inventory : [];
+  const seenUids = new Set();
+  let equippedSlots = 0;
+  for (const uid of Object.values(s.equipment || {})) {
+    if (!uid || seenUids.has(uid)) continue;
+    seenUids.add(uid);
+    const item = inventory.find(entry => entry?.uid === uid);
+    if (!item) continue;
+    const def = gData?.ALL_ITEMS?.[item.itemId || item.id] || item;
+    const heirloom = def.isHeirloom || item.isHeirloom;
+    if (heirloom && def.heirloomScaling) {
+      const level = Number(s.level) || 1;
+      const phase = level <= 19 ? def.heirloomScaling.phase1 : level <= 39 ? def.heirloomScaling.phase2 : def.heirloomScaling.phase3;
+      equippedSlots += Number(phase?.stats?.invSlots ?? def.base?.invSlots ?? def.invSlots) || 0;
+    } else {
+      equippedSlots += Number(def.invSlots) || 0;
+    }
+    equippedSlots += Number(item.beltBonuses?.invSlots) || 0;
+  }
+  return base + (Number(s.bonusInventorySlots) || 0) + equippedSlots;
 }
 
 /**

@@ -1,3 +1,5 @@
+import { EUROPEAN_ERTHEIA_SKILLS } from './ertheia/european-roster.js';
+
 /**
  * CanonicalSkillRegistryV2.js — Single Source of Truth for Skills (Lineage II Essence - Celestial Destiny 3629)
  * 
@@ -31,7 +33,7 @@ const localSkill = (id, name, type, starRank, canonicalEffect, cooldownMs, pwr, 
     balance: { mpCost, pwr, pveMultiplier: 1, pvpMultiplier: 0.85 }
 });
 
-export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
+const CANONICAL_SKILL_REGISTRY_RAW = {
     "majesty": {
         "id": "majesty",
         "name": "Majesty",
@@ -40073,11 +40075,11 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
     },
     "shineMakerBase_light_spark": localSkill("shineMakerBase_light_spark", "Light Spark", "active", 1, "Dano mágico sagrado 160%", 8000, 16, 20, 1, "shineMakerBase"),
     "shineMakerBase_luminary_glow": localSkill("shineMakerBase_luminary_glow", "Luminary Glow", "buff", 1, "+15% M. Atk. e +10% P. Def.", 60000, 0, 15, 1, "shineMakerBase"),
-    "shineMakerBase_crystal_weapon_mastery": localSkill("shineMakerBase_crystal_weapon_mastery", "Crystal Weapon Mastery", "passive", 1, "+15% ATK com martelos e maças", 0, 0, 0, 1, "shineMakerBase"),
+    "shineMakerBase_crystal_weapon_mastery": { ...localSkill("shineMakerBase_crystal_weapon_mastery", "Crystal Weapon Mastery", "passive", 1, "+15% ATK com martelos e maças", 0, 0, 0, 1, "shineMakerBase"), requiredWeapon: "blunt" },
     "shineMakerBase_shinemakers_harmony": localSkill("shineMakerBase_shinemakers_harmony", "ShineMaker's Harmony", "buff", 1, "+20% M. Atk. e +20% P. Def. por 30 min", 1800000, 0, 20, 1, "shineMakerBase"),
     "shineMakerS1_light_burst": localSkill("shineMakerS1_light_burst", "Light Burst", "active", 1, "Dano mágico sagrado 190%", 10000, 19, 20, 20, "shineMakerS1"),
     "shineMakerS1_radiant_strike": localSkill("shineMakerS1_radiant_strike", "Radiant Strike", "active", 1, "Dano mágico sagrado 170% + redução de ataque por 2s", 12000, 17, 20, 20, "shineMakerS1"),
-    "shineMakerS1_purifying_light": localSkill("shineMakerS1_purifying_light", "Purifying Light", "active", 1, "Cura o personagem e remove um debuff de combate", 12000, 0, 20, 20, "shineMakerS1"),
+    "shineMakerS1_purifying_light": { ...localSkill("shineMakerS1_purifying_light", "Purifying Light", "active", 1, "Cura o personagem e remove um debuff de combate", 12000, 0, 20, 20, "shineMakerS1"), cleanseDebuffs: true },
     "shineMakerS1_shining_barrier": localSkill("shineMakerS1_shining_barrier", "Shining Barrier", "buff", 2, "+15% P. Def. e M. Def. por 120s", 60000, 0, 30, 20, "shineMakerS1"),
     "shineMakerS2_prismatic_ray": localSkill("shineMakerS2_prismatic_ray", "Prismatic Ray", "active", 2, "Dano mágico sagrado 280% + lentidão por 4s", 16000, 28, 30, 40, "shineMakerS2"),
     "shineMakerS2_shining_nova": localSkill("shineMakerS2_shining_nova", "Shining Nova", "active", 3, "Dano mágico sagrado 320% + cura própria de 10%", 22000, 32, 40, 40, "shineMakerS2"),
@@ -40088,5 +40090,17 @@ export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze({
     "shinemaker_star_fall": localSkill("shinemaker_star_fall", "Star Fall", "active", 4, "Dano mágico sagrado 580% + atordoamento por 3s", 45000, 58, 60, 76, "shinemaker"),
     "shinemaker_transcendent_star_fall": localSkill("shinemaker_transcendent_star_fall", "Transcendent Star Fall", "active", 4, "Dano mágico sagrado 750% + redução de ataque por 5s e cura própria de 30%", 120000, 75, 100, 80, "shinemaker"),
     "shinemaker_divine_crystal_aegis": localSkill("shinemaker_divine_crystal_aegis", "Divine Crystal Aegis", "buff", 4, "Reduz dano recebido em 35% por 8s", 60000, 0, 100, 76, "shinemaker"),
-    "shinemaker_shinemakers_ultimate_harmony": localSkill("shinemaker_shinemakers_ultimate_harmony", "ShineMaker's Ultimate Harmony", "buff", 4, "+30% M. Atk., +20% P. Def. e +10% redução de recarga por 30 min", 5400000, 0, 100, 76, "shinemaker")
-});
+    "shinemaker_shinemakers_ultimate_harmony": localSkill("shinemaker_shinemakers_ultimate_harmony", "ShineMaker's Ultimate Harmony", "buff", 4, "+30% M. Atk., +20% P. Def. e +10% redução de recarga por 30 min", 5400000, 0, 100, 76, "shinemaker"),
+    ...EUROPEAN_ERTHEIA_SKILLS
+};
+
+const ERTHEIA_CLASS_IDS = new Set(['marauderBase', 'marauder', 'ertheiaWarrior', 'eviscerator', 'sayhaMageBase', 'sayhaSeer', 'windRiderErth', 'sayhaSeeker']);
+const ERTHEIA_SKILL_IDS = new Set(Object.values(EUROPEAN_ERTHEIA_SKILLS).map(skill => skill.id));
+
+export const CANONICAL_SKILL_REGISTRY_V2 = Object.freeze(Object.fromEntries(
+    Object.entries(CANONICAL_SKILL_REGISTRY_RAW).map(([id, skill]) => {
+        if (!Array.isArray(skill.classes) || !skill.classes.some(classId => ERTHEIA_CLASS_IDS.has(classId))) return [id, skill];
+        const classes = skill.classes.filter(classId => !ERTHEIA_CLASS_IDS.has(classId) || ERTHEIA_SKILL_IDS.has(id));
+        return [id, classes.length === skill.classes.length ? skill : { ...skill, classes }];
+    })
+));

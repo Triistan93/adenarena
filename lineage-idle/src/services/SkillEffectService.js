@@ -392,6 +392,8 @@ const KNOWN_TARGET_DEBUFF_STAT_DELAYS_MS = Object.freeze({
 
 /** Converts local party-healing attacks into bounded self-healing for solo encounters. */
 export function resolveSkillSelfHealPercent(def) {
+  const configured = Number(def?.effectStats?.healPercent ?? def?.selfHealPercent);
+  if (Number.isFinite(configured) && configured > 0) return Math.min(0.50, configured);
   const id = String(def?.id || '').toLowerCase();
   if (id === 'shinemakers2_shining_nova') return 0.10;
   if (id === 'shinemaker_transcendent_star_fall') return 0.30;
@@ -621,6 +623,7 @@ export function resolveSkillFixedHeal(def) {
 /** Resolves a canonical buff duration or a researched skill-specific duration. */
 export function resolveSkillBuffDurationMs(def) {
   if (!def) return null;
+  if (Number.isFinite(Number(def.effectDurationMs)) && Number(def.effectDurationMs) > 0) return Number(def.effectDurationMs);
   const source = String(def.canonicalEffect || def.effectText || def.info || def.desc || '');
   const match = source.match(/(?:for\s+|duration\s*:?\s*)(\d+)\s*(?:sec(?:ond)?s?\b|s\b)/i);
   if (match) {
@@ -654,6 +657,7 @@ export function shouldEvadeMonsterSkill(stats, attackType, roll = Math.random())
 /** Resolves only explicit, numeric effects described as targeting an enemy. */
 export function resolveSkillTargetDebuffStats(def) {
   if (!def || !['buff', 'debuff', 'active'].includes(def.type) && def.effect !== 'debuff') return null;
+  if (def.targetStats && typeof def.targetStats === 'object') return { ...def.targetStats };
   const known = KNOWN_TARGET_DEBUFF_EFFECTS[String(def.id || '').toLowerCase()];
   if (known) return { ...known };
   const source = getSkillEffectSource(def);
@@ -704,6 +708,7 @@ export function resolveSkillTargetDebuffApplication(def, roll = Math.random(), b
 /** Resolves explicit or skill-specific target debuff duration. */
 export function resolveSkillTargetDebuffDurationMs(def) {
   if (!def) return null;
+  if (Number.isFinite(Number(def.targetDurationMs)) && Number(def.targetDurationMs) > 0) return Number(def.targetDurationMs);
   const sources = [def.canonicalEffect, def.effectText, def.info, def.desc].filter(Boolean).map(String);
   const source = sources.sort((a, b) => b.length - a.length)[0] || '';
   const match = source.match(/(?:for\s+|duration\s*:?\s*)(\d+)\s*(?:sec(?:ond)?s?\b|s\b)/i);
@@ -919,6 +924,12 @@ export function resolveSkillHpSacrificeCost(def, maxHp, currentHp = Number.MAX_S
 
 /** Converts a deliberate HP sacrifice into capped MP recovery for Body to Mind. */
 export function resolveSkillMpRecoveryAmount(def, maxMp, currentMp = 0) {
+  const configuredPercent = Number(def?.effectStats?.mpRecoveryPercent);
+  if (Number.isFinite(configuredPercent) && configuredPercent > 0) {
+    const limit = Math.max(0, Number(maxMp) || 0);
+    const current = Math.max(0, Number(currentMp) || 0);
+    return Math.min(Math.max(0, limit - current), Math.floor(limit * Math.min(0.50, configuredPercent)));
+  }
   if (String(def?.id || '').toLowerCase() !== 'body_to_mind') return 0;
   const limit = Math.max(0, Number(maxMp) || 0);
   const current = Math.max(0, Number(currentMp) || 0);
@@ -1035,9 +1046,14 @@ export function resolveMechanicalMasterpieceHit(state, target, damage, now = Dat
 
 /** Returns only buff effects with a supported, explicit combat meaning. */
 export function resolveSkillBuffStats(def, level = 1, context = {}) {
-  if (!def || !['buff', 'harmony', 'toggle'].includes(def.type) && def.effect !== 'buff') return null;
+  if (!def || !['buff', 'harmony', 'toggle', 'passive', 'stat'].includes(def.type) && def.effect !== 'buff') return null;
   const id = String(def.id || '').toLowerCase();
+  if (def.requiredWeapon === 'fist' && context.weaponCategory !== 'fist') return null;
+  if (def.requiredWeapon === 'blunt' && !['blunt', 'staff'].includes(context.weaponCategory)) return null;
+  if (def.requiredWeapon === 'light' && context.armorType !== 'light') return null;
+  if (def.requiredWeapon === 'robe' && context.armorType !== 'robe') return null;
   if (['blessed_shield', 'advanced_block'].includes(id) && context.hasShield !== true) return null;
+  if (def.effectStats && typeof def.effectStats === 'object') return { ...def.effectStats };
   if (KNOWN_BUFF_EFFECTS[id]) {
     const known = KNOWN_BUFF_EFFECTS[id];
     const stats = typeof known === 'function' ? known(level, context) : { ...known };

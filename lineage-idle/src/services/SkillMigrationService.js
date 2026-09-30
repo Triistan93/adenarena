@@ -107,6 +107,67 @@ export const OLD_TO_NEW_SKILL_MAP = Object.freeze({
   'tempest_edge': 'lightning_leap'
 });
 
+// Previous Aden Arena Ertheia trees contained synthetic IDs that are not
+// equivalents of the European class roster. Only exact Hydro Attack remains
+// in the new roster; removed investments are refunded rather than guessed.
+const LEGACY_ERTHEIA_SKILL_IDS = new Set([
+  'iron_punch', 'fist_mastery', 'light_armor_mastery', 'hydro_attack',
+  'soul_smash', 'increase_power', 'soul_guard', 'boost_attack_speed', 'bandage',
+  'soul_impulse', 'enuma_elish', 'rush', 'rush_impact', 'critical_power',
+  'powerful_rush', 'soul_weapon', 'disarm', 'master_of_combat',
+  'aqua_swirl', 'concentration', 'body_to_mind', 'fast_spell_casting', 'anti_magic',
+  'hydro_blast', 'aqua_splash', 'freezing_skin', 'blizzard', 'spellcraft',
+  'ice_vortex', 'mystic_explosion', 'mystic_spiral', 'meteor', 'mystic_freeze'
+]);
+
+function migrateLegacyErtheiaRoster(state) {
+  if (state.ertheiaRosterMigrationVersion >= 1) return;
+  const race = String(state.race || '').toLowerCase();
+  if (race !== 'ertheia') return;
+
+  const classId = state.class;
+  const classDef = CANONICAL_CLASS_REGISTRY_V2[classId];
+  const allowed = new Set();
+  let cursor = classDef;
+  while (cursor) {
+    for (const skillId of cursor.skillIds || []) allowed.add(skillId);
+    cursor = cursor.parentClass ? CANONICAL_CLASS_REGISTRY_V2[cursor.parentClass] : null;
+  }
+
+  const removed = [];
+  for (const skillId of LEGACY_ERTHEIA_SKILL_IDS) {
+    if (allowed.has(skillId) || !(Number(state.skills?.[skillId]) > 0)) continue;
+    const rank = Number(state.skills[skillId]) || 0;
+    const refundedSp = calculateHistoricalSpSpent(5, rank);
+    delete state.skills[skillId];
+    state.sp = (Number(state.sp) || 0) + refundedSp;
+    removed.push({ skillId, rank, refundedSp });
+    if (state.skillLoadout && typeof state.skillLoadout === 'object') {
+      for (const [slot, equippedId] of Object.entries(state.skillLoadout)) {
+        if (equippedId === skillId) state.skillLoadout[slot] = null;
+      }
+    }
+    if (Array.isArray(state.hotbar)) {
+      state.hotbar = state.hotbar.map(slot => slot === skillId ? null : slot);
+    }
+    if (state.skillAutoCast && typeof state.skillAutoCast === 'object') {
+      delete state.skillAutoCast[skillId];
+    }
+    if (state.selectedSkill === skillId) state.selectedSkill = null;
+  }
+
+  state.ertheiaRosterMigrationVersion = 1;
+  if (removed.length) {
+    state.migrationLedger = state.migrationLedger || {};
+    state.migrationLedger.ertheiaRoster = {
+      version: 1,
+      classId: classId || 'unknown',
+      removed,
+      totalSpRefunded: removed.reduce((total, entry) => total + entry.refundedSp, 0)
+    };
+  }
+}
+
 /**
  * Migrates a character state object to Skill System V2.
  * Deterministic and safe to run on any save (local or Firestore).
@@ -116,6 +177,8 @@ export const OLD_TO_NEW_SKILL_MAP = Object.freeze({
  */
 export function migrateCharacterSave(state) {
   if (!state || typeof state !== 'object') return null;
+
+  migrateLegacyErtheiaRoster(state);
 
   // Always scrub any purged skills even on current version saves
   if (state.skills) {

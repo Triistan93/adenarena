@@ -23,9 +23,10 @@ test('Ertheia Fighter starter kit grants only its configured class skills and re
 
   assert.equal(character.class, 'marauderBase');
   assert.ok(Object.keys(character.skills).length > 0, 'starter kit must not leave the class without skills');
-  assert.deepEqual(Object.keys(character.skills).sort(), CANONICAL_CLASS_REGISTRY_V2.marauderBase.skillIds.slice().sort());
+  assert.deepEqual(Object.keys(character.skills), ['eminent_light_armor_mastery']);
   assert.deepEqual(visible.visibleList.map(({ skillId }) => skillId).sort(), Object.keys(character.skills).sort());
-  assert.equal(tree.tabs.active.skills.some(({ skillId }) => character.skills[skillId] > 0), true);
+  assert.equal(tree.tabs.active.skills.some(({ skillId }) => character.skills[skillId] > 0), false);
+  assert.deepEqual(tree.tabs.passive.skills.map(({ skillId }) => skillId), CANONICAL_CLASS_REGISTRY_V2.marauderBase.skillIds.slice(0, 3));
 });
 
 test('Ertheia class display names resolve to the same guarded skill context as canonical IDs', () => {
@@ -39,7 +40,8 @@ test('Ertheia class display names resolve to the same guarded skill context as c
 
     assert.equal(context.status, canonicalContext.status, `${displayName} must not bypass its content guard`);
     assert.deepEqual(context.authorizedSkillIds.slice().sort(), canonicalContext.authorizedSkillIds.slice().sort());
-    assert.deepEqual(Object.keys(character.skills).sort(), canonicalContext.authorizedSkillIds.slice().sort());
+    const expectedStarter = canonicalId === 'marauderBase' ? 'eminent_light_armor_mastery' : 'hydro_attack';
+    assert.deepEqual(Object.keys(character.skills), [expectedStarter]);
   }
 });
 
@@ -52,7 +54,7 @@ test('Ertheia Wizard starts with an Ertheia-specific offensive spell visible in 
 
   assert.ok(starterIds.length > 0, 'Ertheia Wizard starter kit must not be empty');
   assert.ok(starterIds.includes('hydro_attack'), 'Ertheia Wizard must receive its researched Hydro Attack starter');
-  assert.deepEqual(starterIds.slice().sort(), context.authorizedSkillIds.slice().sort());
+  assert.deepEqual(starterIds, ['hydro_attack']);
   assert.ok(visible.visibleList.some(({ skillId }) => skillId === 'hydro_attack'));
   assert.ok(tree.tabs.active.skills.some(({ skillId }) => skillId === 'hydro_attack'));
 

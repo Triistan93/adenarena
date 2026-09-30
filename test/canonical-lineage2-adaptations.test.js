@@ -129,7 +129,7 @@ describe('Lineage II Canonical Adaptations Suite (Season 1)', () => {
       state.inventory = [
         { id: 'w1', itemId: 'weapon_crimson_sword', name: 'Crimson Sword', type: 'weapon', grade: 'D' },
         { id: 'ls1', itemId: 'life_stone_28', count: 1 },
-        { id: 'cr1', itemId: 'crystal_d', count: 10 }
+        { id: 'cr1', itemId: 'gemstone_d', count: 10 }
       ];
 
       const result = AugmentationService.augmentWeapon(state, 'w1', 'life_stone_unknown', {});
@@ -141,13 +141,13 @@ describe('Lineage II Canonical Adaptations Suite (Season 1)', () => {
       assert.equal(state.gold, 100000);
     });
 
-    it('successfully augments weapon with Life Stone and Gemstone/Crystal fee', () => {
+    it('successfully augments weapon with Life Stone and matching Gemstone fee', () => {
       const state = DEFAULT_STATE();
       state.gold = 100000;
       state.inventory = [
         { id: 'w1', itemId: 'weapon_crimson_sword', name: 'Crimson Sword', type: 'weapon', grade: 'D' },
         { id: 'ls1', itemId: 'life_stone_28', count: 1 },
-        { id: 'cr1', itemId: 'crystal_d', count: 10 }
+        { id: 'cr1', itemId: 'gemstone_d', count: 10 }
       ];
 
       const res = AugmentationService.augmentWeapon(state, 'w1', 'life_stone_28', {});
@@ -164,7 +164,7 @@ describe('Lineage II Canonical Adaptations Suite (Season 1)', () => {
       state.inventory = [
         { id: 'w1', itemId: 'weapon_crimson_sword', name: 'Crimson Sword', type: 'weapon', grade: 'D' },
         { id: 'ls1', itemId: 'life_stone_28', count: 1 },
-        { id: 'cr1', itemId: 'crystal_d', count: 10 }
+        { id: 'cr1', itemId: 'gemstone_d', count: 10 }
       ];
 
       const res = AugmentationService.augmentWeapon(state, 'w1', 'life_stone_28', {});
@@ -180,14 +180,14 @@ describe('Lineage II Canonical Adaptations Suite (Season 1)', () => {
       state.inventory = [
         { id: 'w1', itemId: 'weapon_crimson_sword', name: 'Crimson Sword', type: 'weapon', grade: 'D' },
         { id: 'ls1', itemId: 'life_stone_28', count: 1 },
-        { id: 'cr1', itemId: 'crystal_d', count: 3 },
+        { id: 'cr1', itemId: 'gemstone_d', count: 3 },
         { id: 'cr2', itemId: 'gemstone_d', count: 2 }
       ];
 
       const res = AugmentationService.augmentWeapon(state, 'w1', 'life_stone_28', {});
 
       assert.equal(res.success, true);
-      assert.equal(state.inventory.some(item => ['crystal_d', 'gemstone_d'].includes(item.itemId)), false);
+      assert.equal(state.inventory.some(item => item.itemId === 'gemstone_d'), false);
     });
   });
 

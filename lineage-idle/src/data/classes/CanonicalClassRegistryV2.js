@@ -2683,9 +2683,12 @@ export const CANONICAL_CLASS_REGISTRY_V2 = Object.freeze({
         "parentClass": null,
         "desc": "Lutadora Ertheia — mestre veloz de combate corporal com ventos de Sayha.",
         "skillIds": [
-            "iron_punch",
-            "fist_mastery",
-            "light_armor_mastery"
+            "eminent_light_armor_mastery",
+            "eminent_fist_weapon_mastery",
+            "eminent_stability",
+            "lateral_hit",
+            "right_sidestep",
+            "backspin_blow"
         ]
     },
     "marauder": {
@@ -2700,11 +2703,12 @@ export const CANONICAL_CLASS_REGISTRY_V2 = Object.freeze({
         "parentClass": "marauderBase",
         "desc": "Saqueadora — especialista em combos rápidos de vento e golpes aéreos.",
         "skillIds": [
-            "soul_smash",
-            "increase_power",
-            "soul_guard",
-            "boost_attack_speed",
-            "bandage"
+            "eminent_ability_marauder",
+            "eminent_attack_movement",
+            "air_light",
+            "fluid_weave",
+            "left_sidestep",
+            "chin_strike"
         ]
     },
     "ertheiaWarrior": {
@@ -2719,11 +2723,14 @@ export const CANONICAL_CLASS_REGISTRY_V2 = Object.freeze({
         "parentClass": "marauder",
         "desc": "Ripper — combatente Ertheia de curta distância, especialista em golpes físicos rápidos.",
         "skillIds": [
-            "soul_impulse",
-            "enuma_elish",
-            "rush",
-            "rush_impact",
-            "critical_power"
+            "eminent_trait_resistance_ripper",
+            "eminent_attribute_resistance_ripper",
+            "heavy_punch",
+            "crushing_air",
+            "back_step",
+            "distortion",
+            "gravity_hit",
+            "distant_kick"
         ]
     },
     "eviscerator": {
@@ -2738,10 +2745,15 @@ export const CANONICAL_CLASS_REGISTRY_V2 = Object.freeze({
         "parentClass": "ertheiaWarrior",
         "desc": "Evisceradora Imperial — mestre suprema de combate corporal com poder dimensional de Sayha.",
         "skillIds": [
-            "powerful_rush",
-            "soul_weapon",
-            "disarm",
-            "master_of_combat"
+            "reverse_weight",
+            "heavy_hand",
+            "steel_mind",
+            "pressure_punch",
+            "gravity_barrier",
+            "warped_space",
+            "spallation",
+            "spinning_kick",
+            "summon_eviscerator_fox"
         ]
     },
     "sayhaMageBase": {
@@ -2756,7 +2768,12 @@ export const CANONICAL_CLASS_REGISTRY_V2 = Object.freeze({
         "parentClass": null,
         "desc": "Mística Ertheia — invocadora elemental dos vendavais de Sayha.",
         "skillIds": [
-            "hydro_attack"
+            "hydro_attack",
+            "hydro_flare",
+            "wind_blend",
+            "eminent_blunt_weapon_mastery",
+            "eminent_robe_mastery",
+            "eminent_quick_recovery"
         ]
     },
     "sayhaSeer": {
@@ -2771,11 +2788,11 @@ export const CANONICAL_CLASS_REGISTRY_V2 = Object.freeze({
         "parentClass": "sayhaMageBase",
         "desc": "Cloud Breaker — maga Ertheia que domina as forças elementais de Sayha.",
         "skillIds": [
-            "aqua_swirl",
-            "concentration",
-            "body_to_mind",
-            "fast_spell_casting",
-            "anti_magic"
+            "hydro_strike",
+            "air_rush",
+            "eye_of_the_storm",
+            "squall",
+            "eminent_ability_cloud_breaker"
         ]
     },
     "windRiderErth": {
@@ -2790,11 +2807,12 @@ export const CANONICAL_CLASS_REGISTRY_V2 = Object.freeze({
         "parentClass": "sayhaSeer",
         "desc": "Stratomancer — maga Ertheia que manipula as camadas e correntes do ar.",
         "skillIds": [
-            "hydro_blast",
-            "aqua_splash",
-            "freezing_skin",
-            "blizzard",
-            "spellcraft"
+            "hydro_drain",
+            "mass_compelling_wind",
+            "threatening_wind",
+            "deceptive_blink",
+            "eminent_attribute_resistance_stratomancer",
+            "eminent_trait_resistance_stratomancer"
         ]
     },
     "sayhaSeeker": {
@@ -2809,11 +2827,17 @@ export const CANONICAL_CLASS_REGISTRY_V2 = Object.freeze({
         "parentClass": "windRiderErth",
         "desc": "Mestra Suprema de Sayha — soberana dos vendavais e tempestades de Aden.",
         "skillIds": [
-            "ice_vortex",
-            "mystic_explosion",
-            "mystic_spiral",
-            "meteor",
-            "mystic_freeze"
+            "sayhas_seer_aura",
+            "magic_potential",
+            "sayhas_word",
+            "divine_storm",
+            "sayhas_fury",
+            "sayhas_blessing",
+            "storm_rage",
+            "windy_refuge",
+            "switch_places",
+            "wind_illusion",
+            "summon_sayhas_seer_fox"
         ]
     }
 });

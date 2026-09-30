@@ -445,10 +445,18 @@ export function transformV2SkillToEcho(sId, s, existingDef = null) {
   else if (/twohand|greatsword/.test(sNameLower)) reqWeapon = 'twohand';
   else if (/fist|claw|punch/.test(sNameLower)) reqWeapon = 'fist';
   if (/shield|shield_stun|shield_bash/.test(sNameLower)) reqShield = true;
+  // Canonical equipment rules take precedence over name-based legacy guesses.
+  // Ertheia's adapted buffs and attacks depend on these same runtime gates.
+  reqWeapon = s.requiredWeapon || reqWeapon;
+  reqShield = s.requiredShield ?? reqShield;
 
   const adaptedDamageMultiplier = Number(s.gameplay?.damageMultiplier);
   const isDamageWithTargetDebuff = s.gameplay?.combatMode === 'damage_with_target_debuff';
-  const effect = isDamageWithTargetDebuff ? 'dmg' : (isBuff ? 'buff' : (isPassive ? 'stat' : (isToggle ? 'toggle' : (isHeal ? 'heal' : (isVampiric ? 'vampiric' : 'dmg')))));
+  const effect = s.cleanseDebuffs
+    ? 'heal'
+    : isDamageWithTargetDebuff || (s.source === 'adenarena-local-adaptation' && s.type === 'active')
+    ? 'dmg'
+    : (isBuff ? 'buff' : (isPassive ? 'stat' : (isToggle ? 'toggle' : (isHeal ? 'heal' : (isVampiric ? 'vampiric' : 'dmg')))));
   const pwr = Number.isFinite(adaptedDamageMultiplier) && adaptedDamageMultiplier > 0
     ? Math.round(adaptedDamageMultiplier * 10)
     : (s.balance?.pwr !== undefined ? s.balance.pwr : (isPassive || isBuff || isToggle ? 0 : null));
@@ -489,6 +497,12 @@ export function transformV2SkillToEcho(sId, s, existingDef = null) {
       reqLvl: s.minLevel !== undefined ? s.minLevel : 1,
       requiredWeapon: reqWeapon,
       requiredShield: reqShield,
+      effectStats: s.effectStats ? structuredClone(s.effectStats) : s.effectStats,
+      targetStats: s.targetStats ? structuredClone(s.targetStats) : s.targetStats,
+      cleanseDebuffs: s.cleanseDebuffs === true,
+      localAdaptation: s.source === 'adenarena-local-adaptation',
+      effectDurationMs: s.effectDurationMs ?? null,
+      targetDurationMs: s.targetDurationMs ?? null,
       gameplay: s.gameplay || null,
       requiredItemToUnlock: reqBook,
       isUltimate: isUlt,
@@ -502,6 +516,27 @@ export function transformV2SkillToEcho(sId, s, existingDef = null) {
   }
 
   return Object.assign(existingDef, {
+    // Locally authored V2 adaptations own the runtime behavior for these IDs.
+    // Enriching metadata alone left legacy Echo types in place (e.g. an old
+    // attack definition could override a new buff), preventing the production
+    // combat dispatcher from entering the correct branch.
+    ...(s.source === 'adenarena-local-adaptation' ? {
+      type: isDamageWithTargetDebuff ? 'active' : s.type,
+      effect,
+      pwr,
+      ...(mpCost !== null ? { mpCost } : {}),
+      ...(baseCd !== null ? { baseCd } : {}),
+      reqLvl: s.minLevel !== undefined ? s.minLevel : (existingDef.reqLvl ?? 1),
+      info: s.desc || s.canonicalEffect || s.name,
+      desc: s.desc || '',
+      effectText: s.canonicalEffect || '',
+      damageType: isMagic ? 'magic' : 'physical',
+      isMagic,
+      effectStats: s.effectStats ? structuredClone(s.effectStats) : s.effectStats,
+      targetStats: s.targetStats ? structuredClone(s.targetStats) : s.targetStats,
+      cleanseDebuffs: s.cleanseDebuffs === true,
+      localAdaptation: s.source === 'adenarena-local-adaptation'
+    } : {}),
     ...(isDamageWithTargetDebuff ? {
       type: 'active',
       effect,
@@ -534,6 +569,13 @@ export function transformV2SkillToEcho(sId, s, existingDef = null) {
     canonicalEffect: s.canonicalEffect,
     canonicalCooldown: s.canonicalCooldown,
     canonicalCooldownMs: s.canonicalCooldownMs,
+    requiredWeapon: reqWeapon,
+    requiredShield: reqShield,
+    effectStats: s.effectStats ? structuredClone(s.effectStats) : s.effectStats,
+    targetStats: s.targetStats ? structuredClone(s.targetStats) : s.targetStats,
+    effectDurationMs: s.effectDurationMs ?? null,
+    targetDurationMs: s.targetDurationMs ?? null,
+    gameplay: s.gameplay || existingDef.gameplay || null,
     classes: s.classes || existingDef.classes || []
   });
 }

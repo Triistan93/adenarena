@@ -45,6 +45,8 @@ test('ShineMaker runtime tree exposes its authored class skills instead of gener
   }
 
   assert.equal(SKILL_DEFS_ECHO.shineMakerS1_purifying_light.effect, 'heal', 'Purifying Light must enter the heal/cleanse production path');
+  assert.equal(SKILL_DEFS_ECHO.shineMakerS1_purifying_light.cleanseDebuffs, true, 'Purifying Light must carry an explicit cleanse contract');
+  assert.equal(SKILL_DEFS_ECHO.shineMakerBase_crystal_weapon_mastery.requiredWeapon, 'blunt', 'Crystal Weapon Mastery must require its declared blunt weapon condition');
   assert.equal(SKILL_DEFS_ECHO.shinemaker_divine_crystal_aegis.type, 'buff', 'Divine Crystal Aegis must enter the defensive buff path');
 
   const stageOneTree = getSkillTreeViewModel({ class: 'shineMakerS1', race: 'dwarf', level: 20, skills: {}, sp: 100 });

@@ -29,6 +29,7 @@ import {
   calculateCombatRates
 } from '../data/balance/phase4Model.js';
 import { getHpPotionHealAmount } from './SkillEffectService.js';
+import { getConsumableRestoreAmount } from './ConsumableService.js';
 
 /**
  * Clona profundamente um objeto de estado/entidade de forma segura.
@@ -119,11 +120,10 @@ export function simulateCombat({
     // 2. AUTO-POÇÃO (com cooldown de 1500ms e estoque estritamente finito)
     if (player.hp < player.maxHp * autoHpThreshold && (now - lastHpPotTime) >= potionCooldownMs) {
       const potIds = ['greater_healing_potion', 'hp_potion_xl', 'hp_potion_l', 'hp_potion_m', 'hp_potion_s'];
-      const potHeals = { greater_healing_potion: 850, hp_potion_xl: 500, hp_potion_l: 300, hp_potion_m: 150, hp_potion_s: 100 };
       for (const pid of potIds) {
         const invItem = player.inventory?.find(i => i.itemId === pid && (typeof i.count === 'number' ? i.count > 0 : (typeof i.qty === 'number' ? i.qty > 0 : true)));
         if (invItem) {
-          const heal = getHpPotionHealAmount(potHeals[pid] || 150, stats);
+          const heal = getHpPotionHealAmount(getConsumableRestoreAmount(pid, 'hp') || 150, stats);
           player.hp = Math.min(player.maxHp, player.hp + heal);
           totalHealingDone += heal;
           if (typeof invItem.count === 'number') invItem.count--;
@@ -137,11 +137,10 @@ export function simulateCombat({
 
     if (player.mp < player.maxMp * autoMpThreshold && (now - lastMpPotTime) >= potionCooldownMs) {
       const mpPotIds = ['mp_potion_xl', 'mp_potion_l', 'mp_potion_m', 'mp_potion_s'];
-      const potManas = { mp_potion_xl: 300, mp_potion_l: 180, mp_potion_m: 100, mp_potion_s: 50 };
       for (const pid of mpPotIds) {
         const invItem = player.inventory?.find(i => i.itemId === pid && (typeof i.count === 'number' ? i.count > 0 : (typeof i.qty === 'number' ? i.qty > 0 : true)));
         if (invItem) {
-          const mana = potManas[pid] || 100;
+          const mana = getConsumableRestoreAmount(pid, 'mp') || 100;
           player.mp = Math.min(player.maxMp, player.mp + mana);
           if (typeof invItem.count === 'number') invItem.count--;
           else if (typeof invItem.qty === 'number') invItem.qty--;
@@ -342,13 +341,13 @@ export function simulateCombat({
   const skillContributionPct = totalDamageDealt > 0 ? Math.round((skillDamageDealt / totalDamageDealt) * 1000) / 10 : 0;
 
   // Cálculo canônico de PST & SM (Seções 30, 31, 32)
-  const potHeals = { greater_healing_potion: 850, hp_potion_xl: 500, hp_potion_l: 300, hp_potion_m: 150, hp_potion_s: 100 };
   let totalPotionBudget = 0;
   if (Array.isArray(player.inventory)) {
     for (const item of player.inventory) {
-      if (item.itemId && potHeals[item.itemId]) {
+      const healAmount = getConsumableRestoreAmount(item.itemId, 'hp');
+      if (healAmount > 0) {
         const count = typeof item.count === 'number' ? item.count : (typeof item.qty === 'number' ? item.qty : 0);
-        totalPotionBudget += count * getHpPotionHealAmount(potHeals[item.itemId], player.stats || {});
+        totalPotionBudget += count * getHpPotionHealAmount(healAmount, player.stats || {});
       }
     }
   }
@@ -465,13 +464,13 @@ export function simulateMany({
   const rates = calculateCombatRates(playerWins, enemyWins, draws, timeouts, runs);
 
   // PST & Survival Margin Canônicos (Seções 30, 31, 32)
-  const potHeals = { greater_healing_potion: 850, hp_potion_xl: 500, hp_potion_l: 300, hp_potion_m: 150, hp_potion_s: 100 };
   let totalPotionBudget = 0;
   if (Array.isArray(player.inventory)) {
     for (const item of player.inventory) {
-      if (item.itemId && potHeals[item.itemId]) {
+      const healAmount = getConsumableRestoreAmount(item.itemId, 'hp');
+      if (healAmount > 0) {
         const count = typeof item.count === 'number' ? item.count : (typeof item.qty === 'number' ? item.qty : 0);
-        totalPotionBudget += count * getHpPotionHealAmount(potHeals[item.itemId], player.stats || {});
+        totalPotionBudget += count * getHpPotionHealAmount(healAmount, player.stats || {});
       }
     }
   }

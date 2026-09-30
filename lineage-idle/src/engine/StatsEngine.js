@@ -24,7 +24,7 @@ import { isSkillInProgressionPath } from '../services/SkillEligibility.js';
 import { getArmorType, getWeaponType } from '../data/items/item_class_rules.js';
 import { getEquippedAugmentationSkills } from '../services/AugmentationService.js';
 import { CANONICAL_SKILL_REGISTRY_V2 } from '../data/skills/CanonicalSkillRegistryV2.js';
-import { resolveDwarvenRecoveryMasteryBonuses, resolveSkillCooldownReduction, resolveSkillMovementSpeedPercent, resolveSkillSpeedCooldownReduction } from '../services/SkillEffectService.js';
+import { resolveDwarvenRecoveryMasteryBonuses, resolveSkillBuffStats, resolveSkillCooldownReduction, resolveSkillMovementSpeedPercent, resolveSkillSpeedCooldownReduction } from '../services/SkillEffectService.js';
 
 export const STR_MODIFIERS = {
   10: 0.42, 11: 0.43, 12: 0.45, 13: 0.46, 14: 0.48, 15: 0.50,
@@ -242,11 +242,12 @@ export function getEquipBonus(state, slot) {
     out = { ...out, ...scaled };
   }
 
-  ['atk','def','matk','mdef','hp','mp','eva','crit','critDmg','speed','atkSpeed','castSpeed','mpRegen','stunChance','blockRate','lifesteal'].forEach(k => {
+  ['atk','def','matk','mdef','hp','mp','eva','hit','crit','critDmg','cdr','speed','atkSpeed','castSpeed','mpRegen','hpRegen','stunChance','stunResist','blockRate','lifesteal','ssBonusPct','spsBonusPct','pveDamagePercent','damageTakenReductionPercent','pSkillPowerPercent','mSkillPowerPercent'].forEach(k => {
     if (out[k]) {
       const scaled = Number(out[k]) * rarityMult * enchantMult * foundationMult;
       // Critical damage is stored as a fractional multiplier (for example 0.30 = +30%).
-      out[k] = k === 'critDmg' ? Math.round(scaled * 1e6) / 1e6 : Math.floor(scaled);
+      const fractionalStat = ['critDmg','cdr','stunResist','pveDamagePercent','damageTakenReductionPercent','pSkillPowerPercent','mSkillPowerPercent'].includes(k);
+      out[k] = fractionalStat ? Math.round(scaled * 1e6) / 1e6 : Math.floor(scaled);
     }
   });
 
@@ -268,7 +269,7 @@ export function getEquipBonus(state, slot) {
  * @returns {Object}
  */
 export function getTotalEquipBonuses(state) {
-  const totals = { atk: 0, def: 0, matk: 0, mdef: 0, hp: 0, mp: 0, eva: 0, crit: 0, critDmg: 0, speed: 0, atkSpeed: 0, castSpeed: 0, mpRegen: 0, stunChance: 0, blockRate: 0, lifesteal: 0, xpBoost: 0, goldBoost: 0, adenaBoost: 0, str: 0, dex: 0, con: 0, int: 0, wit: 0, men: 0 };
+  const totals = { atk: 0, def: 0, matk: 0, mdef: 0, hp: 0, mp: 0, eva: 0, hit: 0, crit: 0, critDmg: 0, cdr: 0, speed: 0, atkSpeed: 0, castSpeed: 0, mpRegen: 0, hpRegen: 0, stunChance: 0, stunResist: 0, blockRate: 0, lifesteal: 0, ssBonusPct: 0, spsBonusPct: 0, pveDamagePercent: 0, damageTakenReductionPercent: 0, pSkillPowerPercent: 0, mSkillPowerPercent: 0, xpBoost: 0, goldBoost: 0, adenaBoost: 0, str: 0, dex: 0, con: 0, int: 0, wit: 0, men: 0 };
   if (!state.equipment) return totals;
   const seenUids = new Set();
   for (const slot of Object.keys(state.equipment)) {
@@ -895,9 +896,11 @@ export function getStats(state) {
   let skillBuffShieldDefPercent = 0;
   let skillBuffPveDamagePercent = 0;
   if (armorCareRank >= 2) skillBuffPveDamagePercent += 0.10;
-  let skillBuffDamageTakenReductionPercent = 0;
+  skillBuffPveDamagePercent += Number(eb.pveDamagePercent) || 0;
+  let skillBuffDamageTakenReductionPercent = Number(eb.damageTakenReductionPercent) || 0;
   let skillBuffHealingReceivedPercent = 0;
-  let skillBuffPSkillPowerPercent = 0, skillBuffMSkillPowerPercent = 0;
+  let skillBuffPSkillPowerPercent = Number(eb.pSkillPowerPercent) || 0;
+  let skillBuffMSkillPowerPercent = Number(eb.mSkillPowerPercent) || 0;
   if (sk('rogue_s_armor_mastery') > 0 && isLightEquipped) {
     skillBuffPSkillPowerPercent += 0.01;
     skillBuffMSkillPowerPercent += 0.01;
@@ -908,6 +911,9 @@ export function getStats(state) {
   const hpPotionEffectPercent = sk('potion_mastery') > 0 ? 0.10 : 0;
   let pSkillEvasionPercent = 0, mSkillEvasionPercent = 0, buffCancelResistancePercent = 0, debuffResistancePercent = 0;
   debuffResistancePercent += sk('unleashed_potential') * 0.05;
+  // The card combat runtime has monster debuffs but no interruptible player
+  // stun state, so heirloom stun resistance protects against its Hex/Gloom effects.
+  debuffResistancePercent += Number(eb.stunResist) || 0;
   // There is no maximum-buff-slot limit in card combat. Divine Inspiration
   // instead extends player self-buff duration by 10% per learned rank.
   const buffDurationPercent = Math.min(0.50, sk('divine_inspiration') * 0.10);
@@ -1237,8 +1243,54 @@ export function getStats(state) {
     passiveCooldownReduction += explicitCooldownReduction.cdr;
     passivePSkillCooldownReduction += explicitCooldownReduction.pSkillCdr;
     passiveMSkillCooldownReduction += explicitCooldownReduction.mSkillCdr;
+
+    const configured = def.officialSource === 'european-patch-notes' && def.source === 'adenarena-local-adaptation'
+      ? resolveSkillBuffStats(def, level, {
+      ...cooldownContext,
+      hasShield: isShieldEquipped
+      })
+      : null;
+    if (configured) {
+      buffAtk += Number(configured.atk) || 0;
+      buffAtkMult += Number(configured.pAtkPercent) || 0;
+      buffMatk += (Number(configured.matk) || 0) + Math.floor(baseMatk * (Number(configured.mAtkPercent) || 0));
+      buffDef += (Number(configured.def) || 0) + Math.floor(baseDef * (Number(configured.pDefPercent) || 0));
+      buffMdef += (Number(configured.mdef) || 0) + Math.floor(baseMdef * (Number(configured.mDefPercent) || 0));
+      buffCrit += Number(configured.crit) || 0;
+      buffCritDmg += Number(configured.critDmgPercent) || 0;
+      passiveCooldownReduction += Number(configured.cdr) || 0;
+      passivePSkillCooldownReduction += Number(configured.pSkillCdr) || 0;
+      passiveMSkillCooldownReduction += Number(configured.mSkillCdr) || 0;
+      for (const key of ['atkSpdPercent', 'castSpdPercent']) passiveCooldownReduction += Math.max(0, Number(configured[key]) || 0);
+      for (const key of ['atkSpd', 'castSpd']) {
+        const speed = Number(configured[key]) || 0;
+        if (speed > 0) passiveCooldownReduction += speed > 1 ? speed / 100 : speed;
+      }
+      passiveMovementSpeedPercent += Number(configured.movementSpeedPercent) || 0;
+      skillBuffEva += Number(configured.eva) || 0;
+      skillBuffPAccuracy += Number(configured.pAccuracy) || 0;
+      skillBuffMAccuracy += Number(configured.mAccuracy) || 0;
+      skillBuffPveDamagePercent += Number(configured.pveDamagePercent) || 0;
+      skillBuffDamageTakenReductionPercent += Number(configured.damageTakenReductionPercent) || 0;
+      skillBuffPSkillPowerPercent += Number(configured.pSkillPowerPercent) || 0;
+      skillBuffMSkillPowerPercent += Number(configured.mSkillPowerPercent) || 0;
+      skillBuffMpCostReduction += Number(configured.mpCostReduction) || 0;
+      pSkillMpCostReduction += Number(configured.pSkillMpCostReduction) || 0;
+      mSkillMpCostReduction += Number(configured.mSkillMpCostReduction) || 0;
+      debuffResistancePercent += Number(configured.debuffResistancePercent) || 0;
+      pSkillEvasionPercent += Number(configured.pSkillEvasionPercent) || 0;
+      mSkillEvasionPercent += Number(configured.mSkillEvasionPercent) || 0;
+      skillBuffMaxHpFlat += Number(configured.maxHpFlat) || 0;
+      skillBuffMaxHpPercent += Number(configured.maxHpPercent) || 0;
+      skillBuffMaxMpFlat += Number(configured.maxMpFlat) || 0;
+      skillBuffMaxMpPercent += Number(configured.maxMpPercent) || 0;
+      skillBuffMaxCpFlat += Number(configured.maxCpFlat) || 0;
+      skillBuffMaxCpPercent += Number(configured.maxCpPercent) || 0;
+      mpRegenBonus += Number(configured.mpRegen) || 0;
+    }
   }
   let cdr = sk('quickRecycle') * 0.10 + skillBuffCdr + passiveCooldownReduction;
+  cdr += Number(eb.cdr) || 0;
   cdr += (Number(eb.castSpeed) || 0) / 100;
   let pSkillCdr = skillBuffPSkillCdr + passivePSkillCooldownReduction;
   let mSkillCdr = skillBuffMSkillCdr + passiveMSkillCooldownReduction;
@@ -1297,7 +1349,7 @@ export function getStats(state) {
   const monsterMdefMult = 1 - activeMonsterDebuffPercent('monster_gloom');
   const codexB = getCodexBonuses(state);
   // Process Soul Crystal (SA) Bonus on Both Equipped Weapons (Dual Arsenal)
-  let saCrit = 0, saPatkMult = 0, saMatkMult = 0, saSpeed = 0, saHpMult = 0;
+  let saCrit = 0, saPatkMult = 0, saMatkMult = 0, saSpeed = 0, saHpMult = 0, saAccuracy = 0;
   for (const wpnKey of ['weapon', 'weapon2']) {
     const wpnUid = state.equipment?.[wpnKey];
     const socket = (wpnUid && state.weaponSockets) ? state.weaponSockets[wpnUid] : null;
@@ -1323,7 +1375,7 @@ export function getStats(state) {
       }
       else if (itemSa.stat === 'hp' || itemSa.key === 'health') elixirHpMult += (typeof itemSa.val === 'number' && itemSa.val < 1 ? itemSa.val : (itemSa.val || 0) / 100);
       else if (itemSa.stat === 'matk' || itemSa.key === 'empower') buffMatk += Math.floor(baseMatk * (typeof itemSa.val === 'number' && itemSa.val < 1 ? itemSa.val : (itemSa.val || 0) / 100));
-      else if (itemSa.stat === 'accuracy' || itemSa.key === 'guidance') baseEva += (itemSa.val || 0);
+      else if (itemSa.stat === 'accuracy' || itemSa.key === 'guidance') saAccuracy += Number(itemSa.val) || 0;
     }
   }
 
@@ -1447,11 +1499,12 @@ export function getStats(state) {
   const rawStats = {
     atk: finalAtk || 1, def: finalDef || 0, eva: effectiveEvasion || 0, matk: finalMatk || 1, mdef: finalMdef || 0,
     crit: effectiveCritRate, rawCrit, critOverflowDmgBonus, critDmg, loot: 1 + lootBonus, speed: 1 + (buffSpd + (setB.speed || 0)) / 100 + (certB.speedPercent || 0), movementSpeedPercent: Math.max(-0.90, Math.min(2, skillBuffMovementSpeedPercent + passiveMovementSpeedPercent)), cdr, pSkillCdr, mSkillCdr,
-    pAccuracy: skillBuffPAccuracy, mAccuracy: skillBuffMAccuracy,
+    pAccuracy: skillBuffPAccuracy + saAccuracy + (Number(eb.hit) || 0), mAccuracy: skillBuffMAccuracy + saAccuracy + (Number(eb.hit) || 0),
+    ssBonusPct: Number(eb.ssBonusPct) || 0, spsBonusPct: Number(eb.spsBonusPct) || 0,
     buffDurationPercent,
     atkSpd, lifeDrain, craftBonus, mpRegen: mpRegenBonus,
     basicAttackDamagePercent,
-    hpRegenFlat: dwarvenRecoveryBonuses.hpRecoveryFlat,
+    hpRegenFlat: dwarvenRecoveryBonuses.hpRecoveryFlat + (Number(eb.hpRegen) || 0),
     mpCostReduction: Math.max(-1, Math.min(0.50, augmentationMpCostReduction + skillBuffMpCostReduction)),
     pSkillMpCostReduction,
     mSkillMpCostReduction: Math.max(0, Math.min(0.50, mSkillMpCostReduction)),

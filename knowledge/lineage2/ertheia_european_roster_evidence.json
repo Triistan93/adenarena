@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-09-29",
+  "source": {
+    "id": "inn-eu-ertheia-patch-notes",
+    "title": "Ertheia announcement and patchnotes",
+    "url": "https://eu.4gameforum.com/threads/23847/",
+    "publisher": "Inn.games, European Lineage II publisher forum",
+    "version": "European Ertheia patch-notes page snapshot",
+    "lines": "594-622",
+    "confidence": 0.95,
+    "scope": "Ertheia class skill table and named abilities; table states effects at maximum learned level."
+  },
+  "rules": {
+    "officialFacts": [
+      "The named Ertheia skills below are listed under their source class in the European patch notes.",
+      "The source skill table presents effects at maximum learned level; it does not establish Aden Arena's local level-by-level unlock schedule.",
+      "Source combat values and party/retail mechanics are not copied directly into Aden Arena's single-target card combat."
+    ],
+    "localDecisions": [
+      "Aden Arena keeps promotion thresholds 20, 40 and 76.",
+      "Aden Arena distributes skills evenly through each class stage, preserving source row order; this is local balance, not official learning-level data.",
+      "Aden Arena caps five learned skills per stage for classes outside this Ertheia roster.",
+      "Numeric effects, durations, cooldowns, resource costs and unsupported solo-combat translations in european-roster.js are local adaptations and must not be attributed to Lineage II."
+    ]
+  },
+  "chunks": [
+    {"classId":"marauderBase","sourceClass":"Ertheia Fighter","sourceExcerpt":"The European Ertheia Fighter skill table lists Eminent Light Armor Mastery, Eminent Fist Weapon Mastery, Eminent Stability, Lateral Hit, Right Sidestep and Backspin Blow.","skillIds":["eminent_light_armor_mastery","eminent_fist_weapon_mastery","eminent_stability","lateral_hit","right_sidestep","backspin_blow"],"officialClaim":"Skill names and class membership only; source values are max-rank values.","localClaim":"Levels 1-19 evenly spaced; stats, control duration and cooldown are Aden Arena adaptations.","confidence":0.95},
+    {"classId":"marauder","sourceClass":"Marauder","sourceExcerpt":"The European class table lists Eminent Ability, Eminent Attack Movement, Air Light, Fluid Weave, Left Sidestep and Chin Strike.","skillIds":["eminent_ability_marauder","eminent_attack_movement","air_light","fluid_weave","left_sidestep","chin_strike"],"officialClaim":"Skill names and class membership only; source values are max-rank values.","localClaim":"Levels 20-39 evenly spaced; stats, control duration and cooldown are Aden Arena adaptations.","confidence":0.95},
+    {"classId":"ertheiaWarrior","sourceClass":"Ripper","sourceExcerpt":"The European Ertheia Fighter advancement table lists Eminent Trait Resistance, Eminent Attribute Resistance, Heavy Punch, Crushing Air, Back Step, Distortion, Gravity Hit and Distant Kick under Ripper.","skillIds":["eminent_trait_resistance_ripper","eminent_attribute_resistance_ripper","heavy_punch","crushing_air","back_step","distortion","gravity_hit","distant_kick"],"officialClaim":"Skill names and class membership only; source values are max-rank values.","localClaim":"Levels 40-75 evenly spaced; stats, control duration and cooldown are Aden Arena adaptations.","confidence":0.95},
+    {"classId":"eviscerator","sourceClass":"Eviscerator","sourceExcerpt":"The European Ertheia Fighter advancement table lists Reverse Weight, Heavy Hand, Steel Mind, Pressure Punch, Gravity Barrier, Warped Space, Spallation, Spinning Kick and Summon Eviscerator Fox under Eviscerator.","skillIds":["reverse_weight","heavy_hand","steel_mind","pressure_punch","gravity_barrier","warped_space","spallation","spinning_kick","summon_eviscerator_fox"],"officialClaim":"Skill names and class membership only; source values are max-rank values.","localClaim":"Levels 76-120 evenly spaced; stats, control duration and cooldown are Aden Arena adaptations.","confidence":0.95},
+    {"classId":"sayhaMageBase","sourceClass":"Ertheia Wizard","sourceExcerpt":"The European Ertheia Wizard skill table lists Hydro Attack, Hydro Flare, Wind Blend, Eminent Blunt Weapon Mastery, Eminent Robe Mastery and Eminent Quick Recovery.","skillIds":["hydro_attack","hydro_flare","wind_blend","eminent_blunt_weapon_mastery","eminent_robe_mastery","eminent_quick_recovery"],"officialClaim":"Skill names and class membership only; source values are max-rank values.","localClaim":"Levels 1-19 evenly spaced; numeric effects, duration and cooldown are Aden Arena adaptations.","confidence":0.95},
+    {"classId":"sayhaSeer","sourceClass":"Cloud Breaker","sourceExcerpt":"The European Ertheia Wizard advancement table lists Hydro Strike, Air Rush, Eye of the Storm, Squall and Eminent Ability under Cloud Breaker.","skillIds":["hydro_strike","air_rush","eye_of_the_storm","squall","eminent_ability_cloud_breaker"],"officialClaim":"Skill names and class membership only; source values are max-rank values.","localClaim":"Levels 20-39 evenly spaced; stats, control duration and cooldown are Aden Arena adaptations.","confidence":0.95},
+    {"classId":"windRiderErth","sourceClass":"Stratomancer","sourceExcerpt":"The European Ertheia Wizard advancement table lists Hydro Drain, Mass Compelling Wind, Threatening Wind, Deceptive Blink, Eminent Attribute Resistance and Eminent Trait Resistance under Stratomancer.","skillIds":["hydro_drain","mass_compelling_wind","threatening_wind","deceptive_blink","eminent_attribute_resistance_stratomancer","eminent_trait_resistance_stratomancer"],"officialClaim":"Skill names and class membership only; source values are max-rank values.","localClaim":"Levels 40-75 evenly spaced; stats, control duration and cooldown are Aden Arena adaptations.","confidence":0.95},
+    {"classId":"sayhaSeeker","sourceClass":"Sayha's Seer","sourceExcerpt":"The European Ertheia Wizard advancement table lists Sayha's Seer Aura, Magic Potential, Sayha's Word, Divine Storm, Sayha's Fury, Sayha's Blessing, Storm Rage, Windy Refuge, Switch Places, Wind Illusion and Summon Sayha's Seer Fox under Sayha's Seer.","skillIds":["sayhas_seer_aura","magic_potential","sayhas_word","divine_storm","sayhas_fury","sayhas_blessing","storm_rage","windy_refuge","switch_places","wind_illusion","summon_sayhas_seer_fox"],"officialClaim":"Skill names and class membership only; source values are max-rank values.","localClaim":"Levels 76-120 evenly spaced; stats, control duration and cooldown are Aden Arena adaptations.","confidence":0.95}
+  ]
+}

@@ -6,6 +6,14 @@ import { LIFE_STONES, ITEM_SKILLS, STAT_ROLL_POOL } from '../data/augmentation.j
 import { CanonicalClassGraph } from '../data/classes/CanonicalClassGraph.js';
 import { resolveCanonicalClassId } from '../data/classes/class_aliases.js';
 
+const LEGACY_LIFE_STONE_ALIASES = Object.freeze({
+  lifestone_common: 'life_stone_28',
+  life_stone_mid: 'life_stone_34',
+  lifestone_mid: 'life_stone_34',
+  lifestone_high: 'life_stone_40',
+  lifestone_top: 'life_stone_top_76'
+});
+
 export function getAugmentationGemstoneGrade(level) {
   const stoneLevel = Number(level);
   if (!Number.isFinite(stoneLevel) || stoneLevel < 1) return null;
@@ -140,7 +148,7 @@ export class AugmentationService {
     // 1. Verificar obrigatoriedade da Life Stone no inventário
     const stoneIdx = (state.inventory || []).findIndex(i => {
       const itId = typeof i === 'object' ? (i.itemId || i.id) : i;
-      return itId === stone.id && !i.equipped;
+      return (itId === stone.id || LEGACY_LIFE_STONE_ALIASES[itId] === stone.id) && !i.equipped;
     });
 
     if (stoneIdx === -1) {
@@ -153,18 +161,17 @@ export class AugmentationService {
     if (!requirements) return { success: false, reason: 'invalid_life_stone_level' };
     const { gemstonesNeeded: reqCrystals, gemstoneGrade } = requirements;
     const gradeKey = gemstoneGrade.toLowerCase();
-    const crystalId = `crystal_${gradeKey}`;
     const gemstoneId = `gemstone_${gradeKey}`;
     const crystalItems = (state.inventory || []).filter(i => {
       const itId = typeof i === 'object' ? (i.itemId || i.id) : i;
       return typeof i === 'object'
-        && (itId === crystalId || itId === gemstoneId)
+        && itId === gemstoneId
         && !i.equipped;
     });
     const crystalCount = crystalItems.reduce((total, item) => total + (Number(item.count) || 1), 0);
 
     if (crystalCount < reqCrystals) {
-      log(`⚠️ Gemstones insuficientes! O Ferreiro exige ${reqCrystals}x Cristais/Gemstones Grau ${stone.gemstoneGrade || 'D'} para canalizar a pedra.`, 'error');
+      log(`⚠️ Gemstones insuficientes! O Ferreiro exige ${reqCrystals}x Gemstone ${gemstoneGrade} para canalizar a pedra.`, 'error');
       return { success: false, reason: 'insufficient_gemstones' };
     }
 

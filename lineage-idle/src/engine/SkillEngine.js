@@ -296,13 +296,16 @@ export function detectItemWeaponType(itemDefOrInv) {
 export function canCastSkillWeapon(state, skillDef) {
   if (!skillDef) return { ok: true };
 
-  // 1. Requisito de Arma: A ÚNICA restrição é que habilidades de arco exigem Arco equipado
+  // 1. Requisitos de arma declarados pela habilidade; source skills can no longer
+  // silently execute with a mismatched weapon. Bow naming remains a legacy fallback.
   const rawReqWeapon = skillDef.weaponType || skillDef.requiredWeapon;
   const isBowSkill = rawReqWeapon === 'bow' || 
     /bow|arrow|tiro|flecha/i.test(skillDef.id || '') || 
     /arco|flecha|double shot|arrow rain|snipe|lethal shot/i.test(skillDef.name || '');
 
-  if (isBowSkill) {
+  const requiredWeapons = (Array.isArray(rawReqWeapon) ? rawReqWeapon : rawReqWeapon ? [rawReqWeapon] : (isBowSkill ? ['bow'] : []))
+    .filter(value => String(value).toLowerCase() !== 'any');
+  if (requiredWeapons.length > 0) {
     const equippedWeaponTypes = [];
     const gData = (typeof window !== 'undefined' && window.GameData) ? window.GameData : {};
     const eData = (typeof window !== 'undefined' && window.EchoData) ? window.EchoData : {};
@@ -318,9 +321,11 @@ export function canCastSkillWeapon(state, skillDef) {
       if (wType) equippedWeaponTypes.push(wType);
     }
 
-    const hasBow = equippedWeaponTypes.includes('bow');
-    if (!hasBow) {
-      return { ok: false, reason: 'Requer Arco equipado para esta habilidade' };
+    const accepted = requiredWeapons.map(value => String(value).toLowerCase());
+    const hasRequiredWeapon = equippedWeaponTypes.some(type => accepted.includes(type) || (accepted.includes('blunt') && type === 'staff'));
+    if (!hasRequiredWeapon) {
+      const label = accepted.includes('bow') ? 'Arco' : accepted.join(' ou ');
+      return { ok: false, reason: `Requer arma compatível (${label}) para esta habilidade` };
     }
   }
 

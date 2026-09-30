@@ -358,8 +358,8 @@ test('8. DOM Rendering Simulation: updateSkillUI mounts MMORPG SkillWindow and s
   // 5. Verify Lv. 80 lock pill is present since character is Lv. 40
   assert.ok(mockSkillTree.innerHTML.includes('tab-lock-pill'), 'Lv 40 must show lock pill on Ultimate tab');
 
-  // 6. Ertheia Marauder Base must render its real stage-0 skill cards through
-  // the production UI path instead of showing the empty-state panel.
+  // 6. Ertheia Marauder Base begins with its first source-roster passive.
+  // Its active skills are locally level-gated through the root stage.
   const ertheiaState = {
     class: 'Ertheia MarauderBase',
     race: 'ertheia',
@@ -369,14 +369,13 @@ test('8. DOM Rendering Simulation: updateSkillUI mounts MMORPG SkillWindow and s
     activeSkillTab: SKILL_TABS.ACTIVE
   };
   updateSkillUI(ertheiaState, callbacks);
-  assert.ok(mockSkillTree.innerHTML.includes('data-skill-id="iron_punch"'), 'Ertheia active starter skill must be rendered');
-  assert.ok(!mockSkillTree.innerHTML.includes('Nenhuma habilidade ativa disponível'), 'Ertheia must not render an empty active tab');
+  assert.ok(mockSkillTree.innerHTML.includes('Nenhuma habilidade ativa disponível'), 'Ertheia active skills remain gated until their configured unlock levels');
   assert.ok(!mockSkillTree.innerHTML.includes('data-skill-id="death_mark"'), 'Kamael Death Mark must not leak into Ertheia');
 
   ertheiaState.activeSkillTab = SKILL_TABS.PASSIVE;
   updateSkillUI(ertheiaState, callbacks);
-  assert.ok(mockSkillTree.innerHTML.includes('data-skill-id="fist_mastery"'), 'Ertheia fist mastery passive must be rendered');
-  assert.ok(mockSkillTree.innerHTML.includes('data-skill-id="light_armor_mastery"'), 'Ertheia armor mastery passive must be rendered');
+  assert.ok(mockSkillTree.innerHTML.includes('data-skill-id="eminent_light_armor_mastery"'), 'first Ertheia passive unlock must render');
+  assert.ok(!mockSkillTree.innerHTML.includes('data-skill-id="fist_mastery"'), 'obsolete synthetic fist mastery must not return');
 
   const ertheiaMageState = {
     class: 'Ertheia Mage',

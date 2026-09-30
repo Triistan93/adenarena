@@ -28,11 +28,11 @@ export const LIFE_STONE_ITEMS = {
 };
 
 export const BELT_ITEMS = {
-  belt_cloth: { id: 'belt_cloth', name: 'Cinto de Pano [No-Grade]', slot: 'belt', tier: 1, rarity: 'common', price: 5000, icon: 'nograde/armors/armor_adventurer_belt.png', desc: 'Cinto simples de tecido. +500 Limite de Peso.' },
-  belt_leather: { id: 'belt_leather', name: 'Cinto de Couro [D-Grade]', slot: 'belt', tier: 2, rarity: 'rare', price: 25000, icon: 'graded/armors/armor_brigandine_belt.png', desc: 'Cinto reforçado de couro. +1000 Limite de Peso, +10 P.Def.' },
-  belt_iron: { id: 'belt_iron', name: 'Cinto de Ferro [C-Grade]', slot: 'belt', tier: 3, rarity: 'epic', price: 75000, icon: 'gradec/armors/armor_full_plate_belt.png', desc: 'Cinto cravado em ferro. +1500 Limite de Peso, +20 P.Def.' },
-  belt_mithril: { id: 'belt_mithril', name: 'Cinto de Mithril [B-Grade]', slot: 'belt', tier: 4, rarity: 'epic', price: 200000, icon: 'gradeb/armors/armor_blue_wolf_belt.png', desc: 'Cinto encantado de Mithril. +2000 Limite de Peso, +35 P.Def.' },
-  belt_blessed_top: { id: 'belt_blessed_top', name: 'Blessed Top-Grade Magic Ornament Belt [S]', slot: 'belt', tier: 6, rarity: 'legendary', price: 1000000, icon: 'gradespecial/armors/armor_nobless_belt.png', desc: 'Cinto Sagrado Supremo: +7.2% Defesa Geral (PvE), +6% Dano Físico e Skills.' }
+  belt_cloth: { id: 'belt_cloth', name: 'Cinto de Pano [No-Grade]', slot: 'belt', tier: 1, rarity: 'common', def: 5, price: 5000, icon: 'nograde/armors/armor_adventurer_belt.png', desc: 'Cinto simples de tecido. +5 P.Def.' },
+  belt_leather: { id: 'belt_leather', name: 'Cinto de Couro [D-Grade]', slot: 'belt', tier: 2, rarity: 'rare', def: 10, price: 25000, icon: 'graded/armors/armor_brigandine_belt.png', desc: 'Cinto reforçado de couro. +10 P.Def.' },
+  belt_iron: { id: 'belt_iron', name: 'Cinto de Ferro [C-Grade]', slot: 'belt', tier: 3, rarity: 'epic', def: 20, price: 75000, icon: 'gradec/armors/armor_full_plate_belt.png', desc: 'Cinto cravado em ferro. +20 P.Def.' },
+  belt_mithril: { id: 'belt_mithril', name: 'Cinto de Mithril [B-Grade]', slot: 'belt', tier: 4, rarity: 'epic', def: 35, price: 200000, icon: 'gradeb/armors/armor_blue_wolf_belt.png', desc: 'Cinto encantado de Mithril. +35 P.Def.' },
+  belt_blessed_top: { id: 'belt_blessed_top', name: 'Blessed Top-Grade Magic Ornament Belt [S]', slot: 'belt', tier: 6, rarity: 'legendary', damageTakenReductionPercent: 0.072, pveDamagePercent: 0.06, pSkillPowerPercent: 0.06, price: 1000000, icon: 'gradespecial/armors/armor_nobless_belt.png', desc: 'Cinto Sagrado Supremo: +7.2% Defesa Geral (PvE), +6% Dano Físico e Skills.' }
 };
 
 export function getAttributeDamageBonus(attackerAttr = 0, targetAttrDef = 0) {

@@ -108,15 +108,14 @@ export const INFINITY_WEAPONS = {
     slot: 'weapon',
     tier: 6,
     rarity: 'legendary',
-    atk: 295,
+    atk: 384,
     matk: 190,
     crit: 12,
-    aoeDmg: 0.30,
     hp: 600,
     req: { level: 76, isHero: true },
     price: 1000000,
     icon: 'gradespecial/weapons/gorde_spear.png',
-    desc: 'Lança de Titã do Herói: +295 P.Atk, +30% Dano em Área (AoE), +12% Crit e +600 HP.'
+    desc: 'Lança de Titã do Herói: +384 P.Atk, +12% Crit e +600 HP.'
   },
   weapon_infinity_duals: {
     id: 'weapon_infinity_duals',

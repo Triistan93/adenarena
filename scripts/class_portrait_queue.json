@@ -1,0 +1,1487 @@
+{
+  "generatedFrom": "CanonicalClassRegistryV2",
+  "updatedAt": "2026-09-30T05:44:21.426Z",
+  "totalClasses": 87,
+  "completedClasses": 87,
+  "rows": [
+    {
+      "race": "orc",
+      "classId": "orcFighter",
+      "className": "Orc Fighter",
+      "stage": 0,
+      "lineageId": "titan",
+      "maleFile": "m_orc_orc_fighter.webp",
+      "femaleFile": "f_orc_orc_fighter.webp",
+      "status": "generated",
+      "classDescription": "Lutador orc — força bruta e HP elevado.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-3b2c3c88-8707-4954-95bd-4edb1b43f775.png",
+      "generatedAt": "2026-09-30T03:18:09.268Z",
+      "outputBytes": {
+        "male": 96582,
+        "female": 71538
+      }
+    },
+    {
+      "race": "orc",
+      "classId": "orcMage",
+      "className": "Orc Mage",
+      "stage": 0,
+      "lineageId": "dominator",
+      "maleFile": "m_orc_orc_mage.webp",
+      "femaleFile": "f_orc_orc_mage.webp",
+      "status": "generated",
+      "classDescription": "Mago orc — magia tribal e suporte.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-91479f14-6222-44c9-a2e1-83f2e5ab7f66.png",
+      "generatedAt": "2026-09-30T03:20:50.432Z",
+      "outputBytes": {
+        "male": 99060,
+        "female": 83642
+      }
+    },
+    {
+      "race": "orc",
+      "classId": "rider",
+      "className": "Rider",
+      "stage": 0,
+      "lineageId": "grandVanguard",
+      "maleFile": "m_orc_rider.webp",
+      "femaleFile": "f_orc_rider.webp",
+      "status": "generated",
+      "classDescription": "Cavaleiro orc inicial — combate montado com lança.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-432c0e9f-27e9-4ce9-a543-b6b7e28a0462.png",
+      "generatedAt": "2026-09-30T03:22:37.882Z",
+      "outputBytes": {
+        "male": 83378,
+        "female": 78034
+      }
+    },
+    {
+      "race": "orc",
+      "classId": "dragoon",
+      "className": "Dragoon",
+      "stage": 1,
+      "lineageId": "grandVanguard",
+      "maleFile": "m_orc_dragoon.webp",
+      "femaleFile": "f_orc_dragoon.webp",
+      "status": "generated",
+      "classDescription": "Dragão montado — ataques montados devastadores.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-fc6d5f09-f538-441d-a153-84a46df8b7d2.png",
+      "generatedAt": "2026-09-30T03:24:36.276Z",
+      "outputBytes": {
+        "male": 106266,
+        "female": 87888
+      }
+    },
+    {
+      "race": "orc",
+      "classId": "monk",
+      "className": "Monk",
+      "stage": 1,
+      "lineageId": "grandKhavatari",
+      "maleFile": "m_orc_monk.webp",
+      "femaleFile": "f_orc_monk.webp",
+      "status": "generated",
+      "classDescription": "Monge orc — mestre em combate desarmado.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-34ecc7fb-1061-448a-9004-24453b51047d.png",
+      "generatedAt": "2026-09-30T03:25:30.479Z",
+      "outputBytes": {
+        "male": 101760,
+        "female": 79566
+      }
+    },
+    {
+      "race": "orc",
+      "classId": "raider",
+      "className": "Raider",
+      "stage": 1,
+      "lineageId": "titan",
+      "maleFile": "m_orc_raider.webp",
+      "femaleFile": "f_orc_raider.webp",
+      "status": "generated",
+      "classDescription": "Saqueador orc — ataques devastadores com armas pesadas.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-5df484e0-11c3-4864-beff-70c4e5e590b0.png",
+      "generatedAt": "2026-09-30T03:27:01.957Z",
+      "outputBytes": {
+        "male": 112720,
+        "female": 88696
+      }
+    },
+    {
+      "race": "orc",
+      "classId": "shaman",
+      "className": "Shaman",
+      "stage": 1,
+      "lineageId": "dominator",
+      "maleFile": "m_orc_shaman.webp",
+      "femaleFile": "f_orc_shaman.webp",
+      "status": "generated",
+      "classDescription": "Xamã orc — cura e buffs tribais.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-da94ee48-0b99-4918-bd37-1208b5fc77c7.png",
+      "generatedAt": "2026-09-30T03:28:02.864Z",
+      "outputBytes": {
+        "male": 110784,
+        "female": 95888
+      }
+    },
+    {
+      "race": "orc",
+      "classId": "destroyer",
+      "className": "Destroyer",
+      "stage": 2,
+      "lineageId": "titan",
+      "maleFile": "m_orc_destroyer.webp",
+      "femaleFile": "f_orc_destroyer.webp",
+      "status": "generated",
+      "classDescription": "Destruidor — fúria descontrolada com dano massivo.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-3f487276-9f6b-4b5f-8784-421d744911cb.png",
+      "generatedAt": "2026-09-30T03:30:44.825Z",
+      "outputBytes": {
+        "male": 109968,
+        "female": 85912
+      }
+    },
+    {
+      "race": "orc",
+      "classId": "overlord",
+      "className": "Overlord",
+      "stage": 2,
+      "lineageId": "dominator",
+      "maleFile": "m_orc_overlord.webp",
+      "femaleFile": "f_orc_overlord.webp",
+      "status": "generated",
+      "classDescription": "Senhor da guerra — buffs de clã e debuffs massivos.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-8f2695f7-fb6d-4916-91e0-5981202c30d5.png",
+      "generatedAt": "2026-09-30T03:32:11.312Z",
+      "outputBytes": {
+        "male": 122508,
+        "female": 109940
+      }
+    },
+    {
+      "race": "orc",
+      "classId": "tyrant",
+      "className": "Tyrant",
+      "stage": 2,
+      "lineageId": "grandKhavatari",
+      "maleFile": "m_orc_tyrant.webp",
+      "femaleFile": "f_orc_tyrant.webp",
+      "status": "generated",
+      "classDescription": "Tirano — combate desarmado com fúria elemental.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-6f7c3c72-5253-44dd-bf6a-dc6782148ed8.png",
+      "generatedAt": "2026-09-30T03:37:36.331Z",
+      "outputBytes": {
+        "male": 105422,
+        "female": 95036
+      }
+    },
+    {
+      "race": "orc",
+      "classId": "vanguardRider",
+      "className": "Vanguard Rider",
+      "stage": 2,
+      "lineageId": "grandVanguard",
+      "maleFile": "m_orc_vanguard_rider.webp",
+      "femaleFile": "f_orc_vanguard_rider.webp",
+      "status": "generated",
+      "classDescription": "Cavaleiro de vanguarda — devastação montada com poder de dragão.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-e262bcb5-6c36-4bca-af90-ca239ed6001b.png",
+      "generatedAt": "2026-09-30T03:38:45.703Z",
+      "outputBytes": {
+        "male": 92190,
+        "female": 79480
+      }
+    },
+    {
+      "race": "orc",
+      "classId": "warcryer",
+      "className": "Warcryer",
+      "stage": 2,
+      "lineageId": "doomcryer",
+      "maleFile": "m_orc_warcryer.webp",
+      "femaleFile": "f_orc_warcryer.webp",
+      "status": "generated",
+      "classDescription": "Cantor de guerra — cânticos que empoderam aliados.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-eb2eae33-90f8-4d02-b56f-b2311c4b907b.png",
+      "generatedAt": "2026-09-30T03:43:30.455Z",
+      "outputBytes": {
+        "male": 106242,
+        "female": 90418
+      }
+    },
+    {
+      "race": "orc",
+      "classId": "dominator",
+      "className": "Dominator",
+      "stage": 3,
+      "lineageId": "dominator",
+      "maleFile": "m_orc_dominator.webp",
+      "femaleFile": "f_orc_dominator.webp",
+      "status": "generated",
+      "classDescription": "Dominador — líder absoluto com buffs supremos e dano ofensivo.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-9f62a331-4355-4da0-959e-2255d665221b.png",
+      "generatedAt": "2026-09-30T03:44:44.153Z",
+      "outputBytes": {
+        "male": 139662,
+        "female": 159652
+      }
+    },
+    {
+      "race": "orc",
+      "classId": "doomcryer",
+      "className": "Doomcryer",
+      "stage": 3,
+      "lineageId": "doomcryer",
+      "maleFile": "m_orc_doomcryer.webp",
+      "femaleFile": "f_orc_doomcryer.webp",
+      "status": "generated",
+      "classDescription": "Arauto da perdição — cânticos supremos e dano de guerra.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-43759d00-8d9b-4614-9fca-d256b0428320.png",
+      "generatedAt": "2026-09-30T03:47:10.707Z",
+      "outputBytes": {
+        "male": 109976,
+        "female": 100774
+      }
+    },
+    {
+      "race": "orc",
+      "classId": "grandKhavatari",
+      "className": "Grand Khavatari",
+      "stage": 3,
+      "lineageId": "grandKhavatari",
+      "maleFile": "m_orc_grand_khavatari.webp",
+      "femaleFile": "f_orc_grand_khavatari.webp",
+      "status": "generated",
+      "classDescription": "Grande Khavatari — mestre supremo do combate desarmado.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-3a5be76b-b482-4921-be16-e53a0562f04b.png",
+      "generatedAt": "2026-09-30T03:49:03.054Z",
+      "outputBytes": {
+        "male": 126274,
+        "female": 158570
+      }
+    },
+    {
+      "race": "orc",
+      "classId": "grandVanguard",
+      "className": "Grand Vanguard",
+      "stage": 3,
+      "lineageId": "grandVanguard",
+      "maleFile": "m_orc_grand_vanguard.webp",
+      "femaleFile": "f_orc_grand_vanguard.webp",
+      "status": "generated",
+      "classDescription": "Grande Vanguarda — lorde dragão montado supremo.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-6e9767b8-ab2d-4e3c-907e-90edd0067004.png",
+      "generatedAt": "2026-09-30T03:50:14.033Z",
+      "outputBytes": {
+        "male": 119702,
+        "female": 121990
+      }
+    },
+    {
+      "race": "orc",
+      "classId": "titan",
+      "className": "Titan",
+      "stage": 3,
+      "lineageId": "titan",
+      "maleFile": "m_orc_titan.webp",
+      "femaleFile": "f_orc_titan.webp",
+      "status": "generated",
+      "source": "C:/Users/duuha/.codex/generated_images/01a0b1f7-1896-7fe2-afbf-e56b251030f9/exec-14f8f0a3-44ad-4b8b-b34c-f35c13aed6ea.png",
+      "generatedAt": "2026-09-30T03:16:25.586Z",
+      "outputBytes": {
+        "male": 102328,
+        "female": 96770
+      },
+      "classDescription": "Titã — devastação absoluta com fúria imparável."
+    },
+    {
+      "race": "darkelf",
+      "classId": "bloodRoseBase",
+      "className": "Blood Rose",
+      "stage": 0,
+      "lineageId": "bloodRose",
+      "maleFile": "m_darkelf_blood_rose_base.webp",
+      "femaleFile": "f_darkelf_blood_rose_base.webp",
+      "status": "generated",
+      "classDescription": "Rosa de Sangue — mística dos Elfos Negros devota de Shillien, mestra de espinhos sombrios e roubo de vida.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-6d304ea5-86d4-4294-9aa1-66784dcf0254.png",
+      "generatedAt": "2026-09-30T03:52:29.418Z",
+      "outputBytes": {
+        "male": 106464,
+        "female": 91362
+      }
+    },
+    {
+      "race": "darkelf",
+      "classId": "darkElfFighter",
+      "className": "Dark Elf Fighter",
+      "stage": 0,
+      "lineageId": "shillienTemplar",
+      "maleFile": "m_darkelf_dark_elf_fighter.webp",
+      "femaleFile": "f_darkelf_dark_elf_fighter.webp",
+      "status": "generated",
+      "classDescription": "Lutador sombrio com afinidade natural para dano crítico.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-00cf5d70-c236-4dc3-850a-d74ef6accc07.png",
+      "generatedAt": "2026-09-30T03:53:39.866Z",
+      "outputBytes": {
+        "male": 102286,
+        "female": 86614
+      }
+    },
+    {
+      "race": "darkelf",
+      "classId": "darkElfMage",
+      "className": "Dark Elf Mage",
+      "stage": 0,
+      "lineageId": "stormScreamer",
+      "maleFile": "m_darkelf_dark_elf_mage.webp",
+      "femaleFile": "f_darkelf_dark_elf_mage.webp",
+      "status": "generated",
+      "classDescription": "Mago sombrio com magia negra poderosa.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-9b71a011-cc7b-4bd6-a915-80478322f8fe.png",
+      "generatedAt": "2026-09-30T03:55:40.072Z",
+      "outputBytes": {
+        "male": 75638,
+        "female": 71910
+      }
+    },
+    {
+      "race": "darkelf",
+      "classId": "deathKnightDE",
+      "className": "Death Knight",
+      "stage": 0,
+      "lineageId": "deathKnightDE",
+      "maleFile": "m_darkelf_death_knight.webp",
+      "femaleFile": "f_darkelf_death_knight.webp",
+      "status": "generated",
+      "classDescription": "Cavaleiro da Morte Dark Elf — cavaleiro sombrio com armadura gélida e energia profana.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-1e6cfdcc-1ed4-43a2-8532-a1a9dbc2c8e0.png",
+      "generatedAt": "2026-09-30T04:39:32.788Z",
+      "outputBytes": {
+        "male": 106048,
+        "female": 106426
+      }
+    },
+    {
+      "race": "darkelf",
+      "classId": "assassinDE",
+      "className": "Assassin",
+      "stage": 1,
+      "lineageId": "ghostHunter",
+      "maleFile": "m_darkelf_assassin_de.webp",
+      "femaleFile": "f_darkelf_assassin_de.webp",
+      "status": "generated",
+      "classDescription": "Assassino das sombras — mestre em emboscadas e venenos.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-9eb69349-9eae-455a-8301-988df85f7b67.png",
+      "generatedAt": "2026-09-30T03:56:55.149Z",
+      "outputBytes": {
+        "male": 85758,
+        "female": 88612
+      }
+    },
+    {
+      "race": "darkelf",
+      "classId": "bloodRoseS1",
+      "className": "Blood Rose",
+      "stage": 1,
+      "lineageId": "bloodRose",
+      "maleFile": "m_darkelf_blood_rose_s1.webp",
+      "femaleFile": "f_darkelf_blood_rose_s1.webp",
+      "status": "generated",
+      "classDescription": "Rosa de Sangue — sacerdotisa das trevas com controle de espinhos sangrentos.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-f94ba0bb-439f-4e7f-9fd5-182d86f56188.png",
+      "generatedAt": "2026-09-30T03:57:59.083Z",
+      "outputBytes": {
+        "male": 103224,
+        "female": 81166
+      }
+    },
+    {
+      "race": "darkelf",
+      "classId": "darkWizard",
+      "className": "Dark Wizard",
+      "stage": 1,
+      "lineageId": "stormScreamer",
+      "maleFile": "m_darkelf_dark_wizard.webp",
+      "femaleFile": "f_darkelf_dark_wizard.webp",
+      "status": "generated",
+      "classDescription": "Mago sombrio com magia elemental e dreno de vida.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-8b3f95c9-8850-43a9-8901-1a3879a735a9.png",
+      "generatedAt": "2026-09-30T04:00:13.430Z",
+      "outputBytes": {
+        "male": 62968,
+        "female": 55234
+      }
+    },
+    {
+      "race": "darkelf",
+      "classId": "palusKnight",
+      "className": "Palus Knight",
+      "stage": 1,
+      "lineageId": "shillienTemplar",
+      "maleFile": "m_darkelf_palus_knight.webp",
+      "femaleFile": "f_darkelf_palus_knight.webp",
+      "status": "generated",
+      "classDescription": "Cavaleiro sombrio com escudo e poder dark.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-fb3e179c-7882-48d9-9bb1-7e038a518d2b.png",
+      "generatedAt": "2026-09-30T04:02:51.390Z",
+      "outputBytes": {
+        "male": 82906,
+        "female": 74516
+      }
+    },
+    {
+      "race": "darkelf",
+      "classId": "shillienOracle",
+      "className": "Shillien Oracle",
+      "stage": 1,
+      "lineageId": "shillienSaint",
+      "maleFile": "m_darkelf_shillien_oracle.webp",
+      "femaleFile": "f_darkelf_shillien_oracle.webp",
+      "status": "generated",
+      "classDescription": "Oráculo de Shillien — cura e proteção sombria.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-24db2ce8-1b14-4b53-878c-5ac076f2173d.png",
+      "generatedAt": "2026-09-30T04:04:02.965Z",
+      "outputBytes": {
+        "male": 106710,
+        "female": 107982
+      }
+    },
+    {
+      "race": "darkelf",
+      "classId": "abyssWalker",
+      "className": "Abyss Walker",
+      "stage": 2,
+      "lineageId": "ghostHunter",
+      "maleFile": "m_darkelf_abyss_walker.webp",
+      "femaleFile": "f_darkelf_abyss_walker.webp",
+      "status": "generated",
+      "classDescription": "Caminhante do Abismo — golpes fatais nas sombras.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-8983cb60-0d25-40f3-a6ef-bfeb169ed047.png",
+      "generatedAt": "2026-09-30T04:05:20.756Z",
+      "outputBytes": {
+        "male": 94800,
+        "female": 106716
+      }
+    },
+    {
+      "race": "darkelf",
+      "classId": "bladeDancer",
+      "className": "Blade Dancer",
+      "stage": 2,
+      "lineageId": "spectralDancer",
+      "maleFile": "m_darkelf_blade_dancer.webp",
+      "femaleFile": "f_darkelf_blade_dancer.webp",
+      "status": "generated",
+      "classDescription": "Dançarino de lâminas — danças que fortalecem aliados.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-d3544552-8a45-4bbe-be73-edd54c1cc0a0.png",
+      "generatedAt": "2026-09-30T04:08:07.498Z",
+      "outputBytes": {
+        "male": 56612,
+        "female": 50416
+      }
+    },
+    {
+      "race": "darkelf",
+      "classId": "bloodRoseS2",
+      "className": "Blood Rose",
+      "stage": 2,
+      "lineageId": "bloodRose",
+      "maleFile": "m_darkelf_blood_rose_s2.webp",
+      "femaleFile": "f_darkelf_blood_rose_s2.webp",
+      "status": "generated",
+      "classDescription": "Rosa de Sangue — dominadora do jardim profano de Shillien.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-89906104-06c2-4982-883a-513fb26444f3.png",
+      "generatedAt": "2026-09-30T04:09:23.322Z",
+      "outputBytes": {
+        "male": 102230,
+        "female": 103584
+      }
+    },
+    {
+      "race": "darkelf",
+      "classId": "phantomRanger",
+      "className": "Phantom Ranger",
+      "stage": 2,
+      "lineageId": "ghostSentinel",
+      "maleFile": "m_darkelf_phantom_ranger.webp",
+      "femaleFile": "f_darkelf_phantom_ranger.webp",
+      "status": "generated",
+      "classDescription": "Atirador fantasma — flechas envenenadas e precisas.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-2d71d1f4-9d5d-41b8-baa6-acd7df46a27f.png",
+      "generatedAt": "2026-09-30T04:11:44.641Z",
+      "outputBytes": {
+        "male": 71260,
+        "female": 68010
+      }
+    },
+    {
+      "race": "darkelf",
+      "classId": "phantomSummoner",
+      "className": "Phantom Summoner",
+      "stage": 2,
+      "lineageId": "spectralMaster",
+      "maleFile": "m_darkelf_phantom_summoner.webp",
+      "femaleFile": "f_darkelf_phantom_summoner.webp",
+      "status": "generated",
+      "classDescription": "Invocador sombrio — invoca criaturas das trevas para lutar.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-34a323dc-b9ab-49b0-a934-bd9cea2d897f.png",
+      "generatedAt": "2026-09-30T04:13:32.648Z",
+      "outputBytes": {
+        "male": 154008,
+        "female": 147242
+      }
+    },
+    {
+      "race": "darkelf",
+      "classId": "shillienElder",
+      "className": "Shillien Elder",
+      "stage": 2,
+      "lineageId": "shillienSaint",
+      "maleFile": "m_darkelf_shillien_elder.webp",
+      "femaleFile": "f_darkelf_shillien_elder.webp",
+      "status": "generated",
+      "classDescription": "Anciã de Shillien — cura, buffs e magia dark ofensiva.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-760fb6e5-13f8-47f9-a2d1-dec3694d8e8b.png",
+      "generatedAt": "2026-09-30T04:15:37.911Z",
+      "outputBytes": {
+        "male": 82994,
+        "female": 94100
+      }
+    },
+    {
+      "race": "darkelf",
+      "classId": "shillienKnight",
+      "className": "Shillien Knight",
+      "stage": 2,
+      "lineageId": "shillienTemplar",
+      "maleFile": "m_darkelf_shillien_knight.webp",
+      "femaleFile": "f_darkelf_shillien_knight.webp",
+      "status": "generated",
+      "classDescription": "Cavaleiro de Shillien com dreno e terror.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-4d3c254c-47c2-4fb2-bbb0-9e22c8368d7a.png",
+      "generatedAt": "2026-09-30T04:17:18.234Z",
+      "outputBytes": {
+        "male": 99956,
+        "female": 84534
+      }
+    },
+    {
+      "race": "darkelf",
+      "classId": "spellhowler",
+      "className": "Spellhowler",
+      "stage": 2,
+      "lineageId": "stormScreamer",
+      "maleFile": "m_darkelf_spellhowler.webp",
+      "femaleFile": "f_darkelf_spellhowler.webp",
+      "status": "generated",
+      "classDescription": "Mago do vento sombrio — devastação elemental com foco em Wind.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-50a73e9b-8e03-4f7f-930e-24d0025db04a.png",
+      "generatedAt": "2026-09-30T04:20:07.357Z",
+      "outputBytes": {
+        "male": 119064,
+        "female": 90958
+      }
+    },
+    {
+      "race": "darkelf",
+      "classId": "bloodRose",
+      "className": "Blood Rose",
+      "stage": 3,
+      "lineageId": "bloodRose",
+      "maleFile": "m_darkelf_blood_rose.webp",
+      "femaleFile": "f_darkelf_blood_rose.webp",
+      "status": "generated",
+      "classDescription": "Rosa de Sangue — Rainha Suprema dos Espinhos de Shillien.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-42aff809-6951-4711-be77-c89ffee0cefb.png",
+      "generatedAt": "2026-09-30T04:21:56.606Z",
+      "outputBytes": {
+        "male": 108262,
+        "female": 117120
+      }
+    },
+    {
+      "race": "darkelf",
+      "classId": "ghostHunter",
+      "className": "Ghost Hunter",
+      "stage": 3,
+      "lineageId": "ghostHunter",
+      "maleFile": "m_darkelf_ghost_hunter.webp",
+      "femaleFile": "f_darkelf_ghost_hunter.webp",
+      "status": "generated",
+      "classDescription": "Caçador fantasma — o assassino definitivo das sombras.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-ee163d44-092f-4815-9a57-f9acb57aa541.png",
+      "generatedAt": "2026-09-30T04:25:09.541Z",
+      "outputBytes": {
+        "male": 97960,
+        "female": 101110
+      }
+    },
+    {
+      "race": "darkelf",
+      "classId": "ghostSentinel",
+      "className": "Ghost Sentinel",
+      "stage": 3,
+      "lineageId": "ghostSentinel",
+      "maleFile": "m_darkelf_ghost_sentinel.webp",
+      "femaleFile": "f_darkelf_ghost_sentinel.webp",
+      "status": "generated",
+      "classDescription": "Sentinela fantasma — atirador de elite com flechas elementais.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-29b62d5c-a16b-4274-99a1-6c08b36b5140.png",
+      "generatedAt": "2026-09-30T04:26:27.318Z",
+      "outputBytes": {
+        "male": 97454,
+        "female": 99526
+      }
+    },
+    {
+      "race": "darkelf",
+      "classId": "shillienSaint",
+      "className": "Shillien Saint",
+      "stage": 3,
+      "lineageId": "shillienSaint",
+      "maleFile": "m_darkelf_shillien_saint.webp",
+      "femaleFile": "f_darkelf_shillien_saint.webp",
+      "status": "generated",
+      "classDescription": "Santa de Shillien — cura suprema + modo ofensivo Dark Side.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-b94d8813-1d23-4b96-bf12-0d5c51854732.png",
+      "generatedAt": "2026-09-30T04:27:58.034Z",
+      "outputBytes": {
+        "male": 92756,
+        "female": 90276
+      }
+    },
+    {
+      "race": "darkelf",
+      "classId": "shillienTemplar",
+      "className": "Shillien Templar",
+      "stage": 3,
+      "lineageId": "shillienTemplar",
+      "maleFile": "m_darkelf_shillien_templar.webp",
+      "femaleFile": "f_darkelf_shillien_templar.webp",
+      "status": "generated",
+      "classDescription": "Templário de Shillien — tanque sombrio com AoE devastador.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-6f1f9a66-3db0-496b-b92b-0cd2d3a592f6.png",
+      "generatedAt": "2026-09-30T04:29:21.398Z",
+      "outputBytes": {
+        "male": 101194,
+        "female": 87824
+      }
+    },
+    {
+      "race": "darkelf",
+      "classId": "spectralDancer",
+      "className": "Spectral Dancer",
+      "stage": 3,
+      "lineageId": "spectralDancer",
+      "maleFile": "m_darkelf_spectral_dancer.webp",
+      "femaleFile": "f_darkelf_spectral_dancer.webp",
+      "status": "generated",
+      "classDescription": "Dançarina espectral — danças supremas e ataques devastadores.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-4bb950b4-6ae5-480b-9678-42356a3011d8.png",
+      "generatedAt": "2026-09-30T04:32:11.205Z",
+      "outputBytes": {
+        "male": 71232,
+        "female": 61504
+      }
+    },
+    {
+      "race": "darkelf",
+      "classId": "spectralMaster",
+      "className": "Spectral Master",
+      "stage": 3,
+      "lineageId": "spectralMaster",
+      "maleFile": "m_darkelf_spectral_master.webp",
+      "femaleFile": "f_darkelf_spectral_master.webp",
+      "status": "generated",
+      "classDescription": "Mestre espectral — summons supremos das trevas.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-4ee0f9b7-2d50-4ae1-bfa0-b546255c575e.png",
+      "generatedAt": "2026-09-30T04:34:05.252Z",
+      "outputBytes": {
+        "male": 140008,
+        "female": 126516
+      }
+    },
+    {
+      "race": "darkelf",
+      "classId": "stormScreamer",
+      "className": "Storm Screamer",
+      "stage": 3,
+      "lineageId": "stormScreamer",
+      "maleFile": "m_darkelf_storm_screamer.webp",
+      "femaleFile": "f_darkelf_storm_screamer.webp",
+      "status": "generated",
+      "classDescription": "Arauto da tempestade — mago devastador com foco em vento e trovão.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-428b8c6b-04d9-4447-8696-32611929c483.png",
+      "generatedAt": "2026-09-30T04:35:48.610Z",
+      "outputBytes": {
+        "male": 106920,
+        "female": 102624
+      }
+    },
+    {
+      "race": "dwarf",
+      "classId": "dwarfFighter",
+      "className": "Dwarf Fighter",
+      "stage": 0,
+      "lineageId": "fortuneSeeker",
+      "maleFile": "m_dwarf_dwarf_fighter.webp",
+      "femaleFile": "f_dwarf_dwarf_fighter.webp",
+      "status": "generated",
+      "classDescription": "Lutador anão — forte, resistente e com bônus de loot.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-64a7683b-3f24-4be9-ad2e-14d5cba33ee5.png",
+      "generatedAt": "2026-09-30T04:41:44.720Z",
+      "outputBytes": {
+        "male": 97734,
+        "female": 76886
+      }
+    },
+    {
+      "race": "dwarf",
+      "classId": "shineMakerBase",
+      "className": "ShineMaker",
+      "stage": 0,
+      "lineageId": "shinemaker",
+      "maleFile": "m_dwarf_shine_maker_base.webp",
+      "femaleFile": "f_dwarf_shine_maker_base.webp",
+      "status": "generated",
+      "classDescription": "Base anã de suporte mágico e combate luminoso.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-99f1ae30-c11d-4591-80e4-e58c1cfd022f.png",
+      "generatedAt": "2026-09-30T04:43:02.084Z",
+      "outputBytes": {
+        "male": 130392,
+        "female": 120190
+      }
+    },
+    {
+      "race": "dwarf",
+      "classId": "artisanDwarf",
+      "className": "Artisan",
+      "stage": 1,
+      "lineageId": "maestro",
+      "maleFile": "m_dwarf_artisan_dwarf.webp",
+      "femaleFile": "f_dwarf_artisan_dwarf.webp",
+      "status": "generated",
+      "classDescription": "Artesão anão — mestre em criar itens e golems.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-727d3fe6-962e-4a52-88e8-ffa79266e92c.png",
+      "generatedAt": "2026-09-30T04:44:58.838Z",
+      "outputBytes": {
+        "male": 113724,
+        "female": 102416
+      }
+    },
+    {
+      "race": "dwarf",
+      "classId": "scavenger",
+      "className": "Scavenger",
+      "stage": 1,
+      "lineageId": "fortuneSeeker",
+      "maleFile": "m_dwarf_scavenger.webp",
+      "femaleFile": "f_dwarf_scavenger.webp",
+      "status": "generated",
+      "classDescription": "Sucateiro — mestre em obter loot extra dos inimigos.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-f630b764-939f-4185-9d4f-d6baa9ecad23.png",
+      "generatedAt": "2026-09-30T04:46:34.983Z",
+      "outputBytes": {
+        "male": 112712,
+        "female": 117410
+      }
+    },
+    {
+      "race": "dwarf",
+      "classId": "shineMakerS1",
+      "className": "ShineMaker",
+      "stage": 1,
+      "lineageId": "shinemaker",
+      "maleFile": "m_dwarf_shine_maker_s1.webp",
+      "femaleFile": "f_dwarf_shine_maker_s1.webp",
+      "status": "generated",
+      "classDescription": "Primeira promoção ShineMaker anã.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-d5f22791-983f-4bd3-be47-af4e5fcf6e98.png",
+      "generatedAt": "2026-09-30T04:49:13.751Z",
+      "outputBytes": {
+        "male": 135652,
+        "female": 118796
+      }
+    },
+    {
+      "race": "dwarf",
+      "classId": "bountyHunter",
+      "className": "Bounty Hunter",
+      "stage": 2,
+      "lineageId": "fortuneSeeker",
+      "maleFile": "m_dwarf_bounty_hunter.webp",
+      "femaleFile": "f_dwarf_bounty_hunter.webp",
+      "status": "generated",
+      "classDescription": "Caçador de recompensas — combate e loot supremo.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-d4de8ffd-dd3b-4492-8687-876eee091da8.png",
+      "generatedAt": "2026-09-30T04:52:22.029Z",
+      "outputBytes": {
+        "male": 86048,
+        "female": 79062
+      }
+    },
+    {
+      "race": "dwarf",
+      "classId": "shineMakerS2",
+      "className": "ShineMaker",
+      "stage": 2,
+      "lineageId": "shinemaker",
+      "maleFile": "m_dwarf_shine_maker_s2.webp",
+      "femaleFile": "f_dwarf_shine_maker_s2.webp",
+      "status": "generated",
+      "classDescription": "",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-45a0a50a-d329-4121-ab96-3c68aad56575.png",
+      "generatedAt": "2026-09-30T04:53:58.681Z",
+      "outputBytes": {
+        "male": 108126,
+        "female": 92890
+      }
+    },
+    {
+      "race": "dwarf",
+      "classId": "warsmith",
+      "className": "Warsmith",
+      "stage": 2,
+      "lineageId": "maestro",
+      "maleFile": "m_dwarf_warsmith.webp",
+      "femaleFile": "f_dwarf_warsmith.webp",
+      "status": "generated",
+      "classDescription": "Ferreiro de guerra — golems poderosos e craft avançado.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-4f573469-a18f-4357-98d9-8ea99a1af4e4.png",
+      "generatedAt": "2026-09-30T04:57:11.916Z",
+      "outputBytes": {
+        "male": 90316,
+        "female": 97230
+      }
+    },
+    {
+      "race": "dwarf",
+      "classId": "fortuneSeeker",
+      "className": "Fortune Seeker",
+      "stage": 3,
+      "lineageId": "fortuneSeeker",
+      "maleFile": "m_dwarf_fortune_seeker.webp",
+      "femaleFile": "f_dwarf_fortune_seeker.webp",
+      "status": "generated",
+      "classDescription": "Buscador de fortuna — loot máximo e combate eficiente.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-04ea19c2-98fc-40b4-8895-5e69c1224963.png",
+      "generatedAt": "2026-09-30T04:59:22.245Z",
+      "outputBytes": {
+        "male": 117854,
+        "female": 98284
+      }
+    },
+    {
+      "race": "dwarf",
+      "classId": "maestro",
+      "className": "Maestro",
+      "stage": 3,
+      "lineageId": "maestro",
+      "maleFile": "m_dwarf_maestro.webp",
+      "femaleFile": "f_dwarf_maestro.webp",
+      "status": "generated",
+      "classDescription": "Maestro — mestre supremo da forja e dos golems.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-dfb44f8b-d7ca-423b-a837-47b0e616f570.png",
+      "generatedAt": "2026-09-30T05:01:19.396Z",
+      "outputBytes": {
+        "male": 129152,
+        "female": 120446
+      }
+    },
+    {
+      "race": "dwarf",
+      "classId": "shinemaker",
+      "className": "ShineMaker",
+      "stage": 3,
+      "lineageId": "shinemaker",
+      "maleFile": "m_dwarf_shinemaker.webp",
+      "femaleFile": "f_dwarf_shinemaker.webp",
+      "status": "generated",
+      "classDescription": "Criadora de luz — suporte sagrado anão com poder celestial e dano luminoso.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-3fe834a5-2d0a-4afe-b70f-91f144bf5a68.png",
+      "generatedAt": "2026-09-30T05:04:47.604Z",
+      "outputBytes": {
+        "male": 140436,
+        "female": 141224
+      }
+    },
+    {
+      "race": "kamael",
+      "classId": "kamaelSoldier",
+      "className": "Kamael Soldier",
+      "stage": 0,
+      "lineageId": "doombringer",
+      "maleFile": "m_kamael_kamael_soldier.webp",
+      "femaleFile": "f_kamael_kamael_soldier.webp",
+      "status": "generated",
+      "classDescription": "Soldado Kamael — guerreiro com poder da alma.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-9cf7e46c-3320-4f38-9899-8f79b4a7f6c0.png",
+      "generatedAt": "2026-09-30T05:07:31.689Z",
+      "outputBytes": {
+        "male": 95246,
+        "female": 99296
+      }
+    },
+    {
+      "race": "kamael",
+      "classId": "samuraiBase",
+      "className": "Bushi (Samurai)",
+      "stage": 0,
+      "lineageId": "samurai",
+      "maleFile": "m_kamael_samurai_base.webp",
+      "femaleFile": "f_kamael_samurai_base.webp",
+      "status": "generated",
+      "classDescription": "Bushi — aprendiz do caminho da lâmina e técnicas de Katana.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-b31f2849-08c8-4d1c-a8e5-003ccc7f35b1.png",
+      "generatedAt": "2026-09-30T05:08:53.622Z",
+      "outputBytes": {
+        "male": 97580,
+        "female": 92688
+      }
+    },
+    {
+      "race": "kamael",
+      "classId": "hatamoto",
+      "className": "Hatamoto",
+      "stage": 1,
+      "lineageId": "samurai",
+      "maleFile": "m_kamael_hatamoto.webp",
+      "femaleFile": "f_kamael_hatamoto.webp",
+      "status": "generated",
+      "classDescription": "Hatamoto — guerreiro de elite da lâmina com disciplina marcial.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-953ac0d3-feed-4996-9c23-2b52906c56ae.png",
+      "generatedAt": "2026-09-30T05:10:41.543Z",
+      "outputBytes": {
+        "male": 69634,
+        "female": 72330
+      }
+    },
+    {
+      "race": "kamael",
+      "classId": "soulFinder",
+      "className": "Soul Finder",
+      "stage": 1,
+      "lineageId": "soulHound",
+      "maleFile": "m_kamael_soul_finder.webp",
+      "femaleFile": "f_kamael_soul_finder.webp",
+      "status": "generated",
+      "classDescription": "Buscador de almas — combate misto físico/mágico.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-2485d000-ba04-43d5-a68a-2e375f0d2a54.png",
+      "generatedAt": "2026-09-30T05:11:47.481Z",
+      "outputBytes": {
+        "male": 99848,
+        "female": 106078
+      }
+    },
+    {
+      "race": "kamael",
+      "classId": "trooper",
+      "className": "Trooper",
+      "stage": 1,
+      "lineageId": "doombringer",
+      "maleFile": "m_kamael_trooper.webp",
+      "femaleFile": "f_kamael_trooper.webp",
+      "status": "generated",
+      "classDescription": "Combatente de linha — espada antiga e poder soul.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-8f5e365a-cd3a-40ea-b648-7c830f69697d.png",
+      "generatedAt": "2026-09-30T05:12:48.748Z",
+      "outputBytes": {
+        "male": 77968,
+        "female": 83742
+      }
+    },
+    {
+      "race": "kamael",
+      "classId": "warder",
+      "className": "Warder",
+      "stage": 1,
+      "lineageId": "trickster",
+      "maleFile": "m_kamael_warder.webp",
+      "femaleFile": "f_kamael_warder.webp",
+      "status": "generated",
+      "classDescription": "Guardiã Kamael — especialista em crossbow.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-f46f24cc-a2b7-4288-913f-cedc3106cf10.png",
+      "generatedAt": "2026-09-30T05:13:48.602Z",
+      "outputBytes": {
+        "male": 82322,
+        "female": 79250
+      }
+    },
+    {
+      "race": "kamael",
+      "classId": "berserker",
+      "className": "Berserker",
+      "stage": 2,
+      "lineageId": "doombringer",
+      "maleFile": "m_kamael_berserker.webp",
+      "femaleFile": "f_kamael_berserker.webp",
+      "status": "generated",
+      "classDescription": "Berserker Kamael — fúria soul com dano devastador.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-dbe6e6ea-5ffb-4cc1-9ba8-67432a2f3edb.png",
+      "generatedAt": "2026-09-30T05:16:03.413Z",
+      "outputBytes": {
+        "male": 97168,
+        "female": 92710
+      }
+    },
+    {
+      "race": "kamael",
+      "classId": "ronin",
+      "className": "Ronin",
+      "stage": 2,
+      "lineageId": "samurai",
+      "maleFile": "m_kamael_ronin.webp",
+      "femaleFile": "f_kamael_ronin.webp",
+      "status": "generated",
+      "classDescription": "Ronin — espadachim solitário com técnicas devastadoras de corte.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-754de12b-0c2d-4d94-b465-7be4365b478d.png",
+      "generatedAt": "2026-09-30T05:17:00.707Z",
+      "outputBytes": {
+        "male": 82910,
+        "female": 78886
+      }
+    },
+    {
+      "race": "kamael",
+      "classId": "soulBreakerKamael",
+      "className": "Soul Breaker",
+      "stage": 2,
+      "lineageId": "soulHound",
+      "maleFile": "m_kamael_soul_breaker_kamael.webp",
+      "femaleFile": "f_kamael_soul_breaker_kamael.webp",
+      "status": "generated",
+      "classDescription": "Quebrador de almas — misto combate/magia soul.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-9f080989-b8c6-467a-bbb2-5ff4206281cb.png",
+      "generatedAt": "2026-09-30T05:18:30.613Z",
+      "outputBytes": {
+        "male": 74546,
+        "female": 65390
+      }
+    },
+    {
+      "race": "kamael",
+      "classId": "soulRanger",
+      "className": "Soul Ranger",
+      "stage": 2,
+      "lineageId": "trickster",
+      "maleFile": "m_kamael_soul_ranger.webp",
+      "femaleFile": "f_kamael_soul_ranger.webp",
+      "status": "generated",
+      "classDescription": "Ranger soul — crossbow com poder da alma.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-3c444216-03df-4df5-b5e5-e7078c94430c.png",
+      "generatedAt": "2026-09-30T05:19:22.381Z",
+      "outputBytes": {
+        "male": 97370,
+        "female": 101984
+      }
+    },
+    {
+      "race": "kamael",
+      "classId": "doombringer",
+      "className": "Doombringer",
+      "stage": 3,
+      "lineageId": "doombringer",
+      "maleFile": "m_kamael_doombringer.webp",
+      "femaleFile": "f_kamael_doombringer.webp",
+      "status": "generated",
+      "classDescription": "Portador da ruína — devastação soul absoluta.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-c0aa391d-8f84-43fd-8a85-502b22b99df6.png",
+      "generatedAt": "2026-09-30T05:20:12.521Z",
+      "outputBytes": {
+        "male": 109936,
+        "female": 96204
+      }
+    },
+    {
+      "race": "kamael",
+      "classId": "samurai",
+      "className": "Samurai",
+      "stage": 3,
+      "lineageId": "samurai",
+      "maleFile": "m_kamael_samurai.webp",
+      "femaleFile": "f_kamael_samurai.webp",
+      "status": "generated",
+      "classDescription": "Samurai — mestre supremo da lâmina com técnicas lendárias de Kenjutsu.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-c8f5c9e0-b6dd-4bc1-bfd0-33cf98d9598a.png",
+      "generatedAt": "2026-09-30T05:21:13.074Z",
+      "outputBytes": {
+        "male": 101412,
+        "female": 104282
+      }
+    },
+    {
+      "race": "kamael",
+      "classId": "soulHound",
+      "className": "Soul Hound",
+      "stage": 3,
+      "lineageId": "soulHound",
+      "maleFile": "m_kamael_soul_hound.webp",
+      "femaleFile": "f_kamael_soul_hound.webp",
+      "status": "generated",
+      "classDescription": "Cão da alma — mestre do combate híbrido.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-77acf06c-e527-4847-816a-957b63f2463d.png",
+      "generatedAt": "2026-09-30T05:21:59.337Z",
+      "outputBytes": {
+        "male": 97634,
+        "female": 105514
+      }
+    },
+    {
+      "race": "kamael",
+      "classId": "trickster",
+      "className": "Trickster",
+      "stage": 3,
+      "lineageId": "trickster",
+      "maleFile": "m_kamael_trickster.webp",
+      "femaleFile": "f_kamael_trickster.webp",
+      "status": "generated",
+      "classDescription": "Trapaceiro — crossbow com armadilhas e truques.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-4633954f-f836-46a2-bd27-ae5309f6e409.png",
+      "generatedAt": "2026-09-30T05:22:45.815Z",
+      "outputBytes": {
+        "male": 88286,
+        "female": 99048
+      }
+    },
+    {
+      "race": "sylph",
+      "classId": "sylphGunner",
+      "className": "Sylph Gunner",
+      "stage": 0,
+      "lineageId": "stormBlaster",
+      "maleFile": "m_sylph_sylph_gunner.webp",
+      "femaleFile": "f_sylph_sylph_gunner.webp",
+      "status": "generated",
+      "classDescription": "Atirador elemental Sylph.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-fe853753-6636-4332-bd06-3244bf44fb9c.png",
+      "generatedAt": "2026-09-30T05:24:15.134Z",
+      "outputBytes": {
+        "male": 99866,
+        "female": 104120
+      }
+    },
+    {
+      "race": "sylph",
+      "classId": "sharpshooter",
+      "className": "Sharpshooter",
+      "stage": 1,
+      "lineageId": "stormBlaster",
+      "maleFile": "m_sylph_sharpshooter.webp",
+      "femaleFile": "f_sylph_sharpshooter.webp",
+      "status": "generated",
+      "classDescription": "",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-15d9045a-5dee-4650-b903-350418232f38.png",
+      "generatedAt": "2026-09-30T05:25:14.856Z",
+      "outputBytes": {
+        "male": 117480,
+        "female": 119388
+      }
+    },
+    {
+      "race": "sylph",
+      "classId": "windSniper",
+      "className": "Wind Sniper",
+      "stage": 2,
+      "lineageId": "stormBlaster",
+      "maleFile": "m_sylph_wind_sniper.webp",
+      "femaleFile": "f_sylph_wind_sniper.webp",
+      "status": "generated",
+      "classDescription": "",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-90ee2afe-12dd-49b3-9c0f-466c42721e8b.png",
+      "generatedAt": "2026-09-30T05:26:19.412Z",
+      "outputBytes": {
+        "male": 105260,
+        "female": 108164
+      }
+    },
+    {
+      "race": "sylph",
+      "classId": "stormBlaster",
+      "className": "Storm Blaster",
+      "stage": 3,
+      "lineageId": "stormBlaster",
+      "maleFile": "m_sylph_storm_blaster.webp",
+      "femaleFile": "f_sylph_storm_blaster.webp",
+      "status": "generated",
+      "classDescription": "Atirador da tempestade — devastação à distância com armas de fogo.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-872aa125-e31b-4fcc-ac98-d624a85a6015.png",
+      "generatedAt": "2026-09-30T05:27:18.044Z",
+      "outputBytes": {
+        "male": 99434,
+        "female": 115724
+      }
+    },
+    {
+      "race": "highelf",
+      "classId": "highElfBase",
+      "className": "High Elf",
+      "stage": 0,
+      "lineageId": "elementWeaver",
+      "maleFile": "m_highelf_high_elf_base.webp",
+      "femaleFile": "f_highelf_high_elf_base.webp",
+      "status": "generated",
+      "classDescription": "Alto Elfo — poder sagrado e elemental inicial.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-fa3beb16-441d-448e-9674-cc6a4ff0ffa4.png",
+      "generatedAt": "2026-09-30T05:28:38.852Z",
+      "outputBytes": {
+        "male": 93478,
+        "female": 89684
+      }
+    },
+    {
+      "race": "highelf",
+      "classId": "spirit_0",
+      "className": "Element Weaver Initiate",
+      "stage": 0,
+      "lineageId": "elementWeaver",
+      "maleFile": "m_highelf_spirit_0.webp",
+      "femaleFile": "f_highelf_spirit_0.webp",
+      "status": "generated",
+      "classDescription": "Iniciante Alto Elfo que desperta as esferas de fogo e gelo.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-91fee433-0257-4e56-aaa1-9fe3ead85fb7.png",
+      "generatedAt": "2026-09-30T05:29:36.739Z",
+      "outputBytes": {
+        "male": 85638,
+        "female": 85358
+      }
+    },
+    {
+      "race": "highelf",
+      "classId": "elementWeaverS1",
+      "className": "Element Weaver",
+      "stage": 1,
+      "lineageId": "elementWeaver",
+      "maleFile": "m_highelf_element_weaver_s1.webp",
+      "femaleFile": "f_highelf_element_weaver_s1.webp",
+      "status": "generated",
+      "classDescription": "",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-ae291db0-8764-4140-aeb3-68d9cc0fc33e.png",
+      "generatedAt": "2026-09-30T05:30:35.830Z",
+      "outputBytes": {
+        "male": 107038,
+        "female": 102578
+      }
+    },
+    {
+      "race": "highelf",
+      "classId": "lightTemplar",
+      "className": "Light Templar",
+      "stage": 1,
+      "lineageId": "divineTemplar",
+      "maleFile": "m_highelf_light_templar.webp",
+      "femaleFile": "f_highelf_light_templar.webp",
+      "status": "generated",
+      "classDescription": "",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-08578633-28c8-4602-bc26-ec6bf66a6110.png",
+      "generatedAt": "2026-09-30T05:31:16.525Z",
+      "outputBytes": {
+        "male": 88984,
+        "female": 85816
+      }
+    },
+    {
+      "race": "highelf",
+      "classId": "elementWeaverS2",
+      "className": "Element Weaver",
+      "stage": 2,
+      "lineageId": "elementWeaver",
+      "maleFile": "m_highelf_element_weaver_s2.webp",
+      "femaleFile": "f_highelf_element_weaver_s2.webp",
+      "status": "generated",
+      "classDescription": "",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-0399c0b7-288e-42fe-9b88-a758c8724c41.png",
+      "generatedAt": "2026-09-30T05:32:37.457Z",
+      "outputBytes": {
+        "male": 152162,
+        "female": 154224
+      }
+    },
+    {
+      "race": "highelf",
+      "classId": "holyTemplar",
+      "className": "Holy Templar",
+      "stage": 2,
+      "lineageId": "divineTemplar",
+      "maleFile": "m_highelf_holy_templar.webp",
+      "femaleFile": "f_highelf_holy_templar.webp",
+      "status": "generated",
+      "classDescription": "",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-edead438-39de-4bf5-80b6-6130508337f5.png",
+      "generatedAt": "2026-09-30T05:33:33.440Z",
+      "outputBytes": {
+        "male": 96206,
+        "female": 85310
+      }
+    },
+    {
+      "race": "highelf",
+      "classId": "divineTemplar",
+      "className": "Divine Templar",
+      "stage": 3,
+      "lineageId": "divineTemplar",
+      "maleFile": "m_highelf_divine_templar.webp",
+      "femaleFile": "f_highelf_divine_templar.webp",
+      "status": "generated",
+      "classDescription": "Templário Divino — tanque sagrado com poder ofensivo e defesa suprema.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-2ee82a5c-6c11-4896-ae49-4baef1fd9d25.png",
+      "generatedAt": "2026-09-30T05:34:17.280Z",
+      "outputBytes": {
+        "male": 108462,
+        "female": 113854
+      }
+    },
+    {
+      "race": "highelf",
+      "classId": "elementWeaver",
+      "className": "Element Weaver",
+      "stage": 3,
+      "lineageId": "elementWeaver",
+      "maleFile": "m_highelf_element_weaver.webp",
+      "femaleFile": "f_highelf_element_weaver.webp",
+      "status": "generated",
+      "classDescription": "Tecelão elemental — mestre supremo dos elementos.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-5b7d8f5c-0c55-4203-8150-08f5a23bea0a.png",
+      "generatedAt": "2026-09-30T05:35:15.194Z",
+      "outputBytes": {
+        "male": 158542,
+        "female": 169390
+      }
+    },
+    {
+      "race": "ertheia",
+      "classId": "marauderBase",
+      "className": "Ertheia Fighter",
+      "stage": 0,
+      "lineageId": "eviscerator",
+      "maleFile": "m_ertheia_marauder_base.webp",
+      "femaleFile": "f_ertheia_marauder_base.webp",
+      "status": "generated",
+      "classDescription": "Lutadora Ertheia — mestre veloz de combate corporal com ventos de Sayha.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-2c051960-203b-4511-be62-158332784758.png",
+      "generatedAt": "2026-09-30T05:36:18.186Z",
+      "outputBytes": {
+        "male": 128026,
+        "female": 129158
+      }
+    },
+    {
+      "race": "ertheia",
+      "classId": "sayhaMageBase",
+      "className": "Ertheia Wizard",
+      "stage": 0,
+      "lineageId": "sayhaSeeker",
+      "maleFile": "m_ertheia_sayha_mage_base.webp",
+      "femaleFile": "f_ertheia_sayha_mage_base.webp",
+      "status": "generated",
+      "classDescription": "Mística Ertheia — invocadora elemental dos vendavais de Sayha.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-2c636924-9982-4b43-96f4-3bb2882192b4.png",
+      "generatedAt": "2026-09-30T05:37:20.402Z",
+      "outputBytes": {
+        "male": 106528,
+        "female": 119044
+      }
+    },
+    {
+      "race": "ertheia",
+      "classId": "marauder",
+      "className": "Marauder",
+      "stage": 1,
+      "lineageId": "eviscerator",
+      "maleFile": "m_ertheia_marauder.webp",
+      "femaleFile": "f_ertheia_marauder.webp",
+      "status": "generated",
+      "classDescription": "Saqueadora — especialista em combos rápidos de vento e golpes aéreos.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-d6e8852e-ae09-49e6-a372-d449ae919a79.png",
+      "generatedAt": "2026-09-30T05:38:19.138Z",
+      "outputBytes": {
+        "male": 114990,
+        "female": 119814
+      }
+    },
+    {
+      "race": "ertheia",
+      "classId": "sayhaSeer",
+      "className": "Cloud Breaker",
+      "stage": 1,
+      "lineageId": "sayhaSeeker",
+      "maleFile": "m_ertheia_sayha_seer.webp",
+      "femaleFile": "f_ertheia_sayha_seer.webp",
+      "status": "generated",
+      "classDescription": "Cloud Breaker — maga Ertheia que domina as forças elementais de Sayha.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-5ce05a22-a5a9-4b5a-bcb4-4989881e4f5f.png",
+      "generatedAt": "2026-09-30T05:40:15.779Z",
+      "outputBytes": {
+        "male": 112174,
+        "female": 116024
+      }
+    },
+    {
+      "race": "ertheia",
+      "classId": "ertheiaWarrior",
+      "className": "Ripper",
+      "stage": 2,
+      "lineageId": "eviscerator",
+      "maleFile": "m_ertheia_ertheia_warrior.webp",
+      "femaleFile": "f_ertheia_ertheia_warrior.webp",
+      "status": "generated",
+      "classDescription": "Ripper — combatente Ertheia de curta distância, especialista em golpes físicos rápidos.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-498fd5b5-9828-4dc0-a03b-2b2c2970a78d.png",
+      "generatedAt": "2026-09-30T05:41:16.740Z",
+      "outputBytes": {
+        "male": 111238,
+        "female": 118260
+      }
+    },
+    {
+      "race": "ertheia",
+      "classId": "windRiderErth",
+      "className": "Stratomancer",
+      "stage": 2,
+      "lineageId": "sayhaSeeker",
+      "maleFile": "m_ertheia_wind_rider_erth.webp",
+      "femaleFile": "f_ertheia_wind_rider_erth.webp",
+      "status": "generated",
+      "classDescription": "Stratomancer — maga Ertheia que manipula as camadas e correntes do ar.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-b4d83e79-50e3-4976-aebd-ab524038487d.png",
+      "generatedAt": "2026-09-30T05:42:03.741Z",
+      "outputBytes": {
+        "male": 157208,
+        "female": 147478
+      }
+    },
+    {
+      "race": "ertheia",
+      "classId": "eviscerator",
+      "className": "Eviscerator",
+      "stage": 3,
+      "lineageId": "eviscerator",
+      "maleFile": "m_ertheia_eviscerator.webp",
+      "femaleFile": "f_ertheia_eviscerator.webp",
+      "status": "generated",
+      "classDescription": "Evisceradora Imperial — mestre suprema de combate corporal com poder dimensional de Sayha.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-8d12f9d9-ee8b-413d-a260-ff306f1c906e.png",
+      "generatedAt": "2026-09-30T05:43:23.449Z",
+      "outputBytes": {
+        "male": 114596,
+        "female": 87384
+      }
+    },
+    {
+      "race": "ertheia",
+      "classId": "sayhaSeeker",
+      "className": "Sayha's Seer",
+      "stage": 3,
+      "lineageId": "sayhaSeeker",
+      "maleFile": "m_ertheia_sayha_seeker.webp",
+      "femaleFile": "f_ertheia_sayha_seeker.webp",
+      "status": "generated",
+      "classDescription": "Mestra Suprema de Sayha — soberana dos vendavais e tempestades de Aden.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-ff952ced-4819-4091-a84d-077a9d0a662c.png",
+      "generatedAt": "2026-09-30T05:44:21.426Z",
+      "outputBytes": {
+        "male": 155628,
+        "female": 161410
+      }
+    }
+  ]
+}

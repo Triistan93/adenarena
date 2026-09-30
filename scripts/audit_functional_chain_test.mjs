@@ -70,6 +70,7 @@ try {
       creationRootsUI: audit.auditAllCreationRootsUI(),
       creationScreenUI: await (await import('/scripts/character_creation_ui.browser.mjs')).run(),
       promotionViewModels: audit.auditAllPromotionsUI(),
+      promotionModalUI: audit.auditActualPromotionModalUI(),
       subclassTransitions: audit.auditAllSubclassTransitions()
     };
   });
@@ -223,6 +224,7 @@ try {
     ...results.blockedClassSkillEffects,
     ...results.continuity,
     ...results.promotions,
+    { name: 'productionPromotionModalRendering', pass: results.promotionModalUI.pass, evidence: results.promotionModalUI },
     { name: 'actualCharacterCreationScreenAudit', pass: results.creationScreenUI.failures.length === 0, evidence: results.creationScreenUI },
     { name: 'productionSkillWindowRendering', pass: skillWindowRendering.pass, evidence: skillWindowRendering },
     { name: 'realGameBootstrapSaveReload', pass: realApplicationSaveReloadPass, evidence: { productionSaveSeed, productionSaveReload, productionConsumer: 'GameBootstrap.bootstrap -> StateManager.loadState -> main.init' } },
@@ -236,7 +238,7 @@ try {
       executedCount: results.provenance.totalClasses,
       passedCount: 0,
       blockedCount: results.provenance.contentGapCount + results.provenance.unprovenProvenanceCount,
-      notValidatedCount: results.provenance.status === 'NOT_VALIDATED' ? results.provenance.validatedCount : 0,
+      notValidatedCount: results.provenance.notValidatedCount,
       failedCount: results.provenance.status === 'FAIL' ? 1 : 0,
       executed: true,
       complete: false,
@@ -297,16 +299,16 @@ try {
     },
     {
       name: 'promotionUIRendering',
-      expectedCount: results.promotionViewModels.promotionsCount,
-      executedCount: 0,
-      passedCount: 0,
+      expectedCount: results.promotionModalUI.promotionsCount,
+      executedCount: results.promotionModalUI.results.length,
+      passedCount: results.promotionModalUI.renderedCount,
       blockedCount: 0,
-      notValidatedCount: results.promotionViewModels.promotionsCount,
-      failedCount: 0,
-      executed: false,
-      complete: false,
-      pass: null,
-      note: 'Promotion services and ViewModels were tested; the transfer modal/UI was not rendered'
+      notValidatedCount: Math.max(0, results.promotionModalUI.promotionsCount - results.promotionModalUI.results.length),
+      failedCount: results.promotionModalUI.failedCount,
+      executed: true,
+      complete: results.promotionModalUI.pass,
+      pass: results.promotionModalUI.pass,
+      details: results.promotionModalUI
     },
     {
       name: 'allSubclassActivationSwitches',

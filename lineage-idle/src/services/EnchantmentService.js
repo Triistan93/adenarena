@@ -13,6 +13,7 @@ import { ALL_ITEMS } from '../data/items/index.js';
 import { getStats } from '../engine/StatsEngine.js';
 import { CombatPowerService } from './CombatPowerService.js';
 import { CP_WEIGHTS } from '../data/balance/cpBalance.js';
+import { getEquipmentProgressionGradeCode } from '../data/items/item_grade.js';
 import {
   isEquippableItem,
   getEquipmentType,
@@ -81,6 +82,10 @@ export function getEnchantSuccessChance(grade, currentEnchant, safeLimit) {
   return Math.max(0.30, 1.0 - (currentEnchant - safeLimit) * 0.10);
 }
 
+function getEnchantGrade(targetDef) {
+  return getEquipmentProgressionGradeCode(targetDef).toUpperCase();
+}
+
 /**
  * Lista todos os equipamentos compatíveis com um determinado pergaminho.
  * @param {Object} state
@@ -133,7 +138,7 @@ export function getEnchantPreview(state, targetUid, scrollUid) {
 
   const currentEnchant = Number(targetItem.enchant || targetItem.enchantLevel) || 0;
   const targetEnchant = currentEnchant + 1;
-  const grade = String(targetDef.grade || (targetDef.tier ? ['NG','NG','D','C','B','A','S'][targetDef.tier] : 'NG')).toUpperCase();
+  const grade = getEnchantGrade(targetDef);
   const safeLimit = getSafeEnchantLimit(targetDef);
 
   const baseProb = getEnchantSuccessChance(grade, currentEnchant, safeLimit);
@@ -272,7 +277,7 @@ export function executeAtomicEnchant(state, targetUid, scrollUid, callbacks = {}
   }
 
   const currentEnchant = Number(targetItem.enchant || targetItem.enchantLevel) || 0;
-  const grade = String(targetDef.grade || (targetDef.tier ? ['NG','NG','D','C','B','A','S'][targetDef.tier] : 'NG')).toUpperCase();
+  const grade = getEnchantGrade(targetDef);
   const safeLimit = getSafeEnchantLimit(targetDef);
   const baseProb = getEnchantSuccessChance(grade, currentEnchant, safeLimit);
   const enchantRate = Math.max(0.1, Number(state.serverRates?.enchant) || 1);

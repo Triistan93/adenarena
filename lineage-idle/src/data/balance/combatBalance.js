@@ -49,6 +49,13 @@ export function calculatePlayerMissChance(levelGap, accuracy = 0) {
   return Math.max(0, Math.round((baseChance - effectiveAccuracy * 0.05) * 1e6) / 1e6);
 }
 
+/** Applies equipment bonuses to the additive damage provided by Soulshots/Spiritshots. */
+export function calculateShotBonusMultiplier(shotMultiplier, bonusPercent = 0) {
+  const baseMultiplier = Math.max(1, Number(shotMultiplier) || 1);
+  const bonus = Math.max(0, Number(bonusPercent) || 0) / 100;
+  return Math.round((1 + (baseMultiplier - 1) * (1 + bonus)) * 1e6) / 1e6;
+}
+
 /**
  * Calcula a redução de dano proporcionada pela defesa.
  * @param {number} rawDmg 
@@ -61,6 +68,14 @@ export function calculateDefenseMitigation(rawDmg, def, isMagic = false) {
   const safeDef = Math.max(0, Number(def) || 0);
   const factor = k / (safeDef + k);
   return Math.max(COMBAT_CONFIG.minimumDamage, Math.floor(rawDmg * factor));
+}
+
+/** Applies the matching player defense to an incoming monster attack. */
+export function calculateIncomingDamageMitigation(rawDmg, target = {}, attackType = 'physical') {
+  const normalizedType = String(attackType || '').trim().toLowerCase();
+  const isMagic = normalizedType === 'magic' || normalizedType === 'magical';
+  const defense = isMagic ? target.mdef : target.def;
+  return calculateDefenseMitigation(rawDmg, defense, isMagic);
 }
 
 /** Applies the game's shield-block rule to incoming physical damage only. */

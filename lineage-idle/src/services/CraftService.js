@@ -26,6 +26,7 @@ import {
   rollCanonicalRandomCraftSlots
 } from '../data/economy/randomCraftBalance.js';
 import { CRAFTING_RECIPES } from '../data/items/recipes_drops.js';
+import { applyElementalInfusion, applySoulCrystalToWeapon } from './ElementalService.js';
 
 /**
  * Retorna o nível de personagem necessário para cada nível de receita de craft.
@@ -386,52 +387,9 @@ export function processSoulDrainOnKill(state, monster = {}, callbacks = {}) {
  * Engasta o Soul Crystal na Arma com bônus proporcional ao nível do cristal (1 a 15).
  */
 export function applySoulCrystal(state, weaponUid, color = 'red', saKey = 'focus', callbacks = {}) {
-  const item = (state.inventory || []).find(i => i.uid === weaponUid || i.id === weaponUid);
-  if (!item) {
-    if (callbacks.log) callbacks.log('Arma não encontrada no inventário.', 'system');
-    return false;
-  }
-
-  const gData = D();
-  const def = gData?.ALL_ITEMS?.[item.itemId || item.id] || item;
-  if (!def || def.slot !== 'weapon') {
-    if (callbacks.log) callbacks.log('Soul Crystals só podem ser engastados em Armas!', 'system');
-    return false;
-  }
-
-  const saGroup = SA_DEFINITIONS[color];
-  const saBonus = saGroup?.[saKey] || Object.values(saGroup || {})[0];
-  if (!saBonus) return false;
-
-  // Busca cristal no inventário
-  const crystalIdx = (state.inventory || []).findIndex(i => (i.itemId?.startsWith('soul_crystal_') || i.isSoulCrystal) && !i.equipped);
-  const crystalLevel = crystalIdx !== -1 ? (state.inventory[crystalIdx].stage || state.inventory[crystalIdx].crystalLevel || 1) : 1;
-
-  if (crystalIdx !== -1) {
-    state.inventory.splice(crystalIdx, 1); // Consome o cristal utilizado
-  }
-
-  // Escala de poder por nível do cristal (Nível 1 = 50%, Nível 10 = 85%, Nível 15 = 120%)
-  const powerScale = 0.50 + (crystalLevel * 0.05);
-  const finalVal = typeof saBonus.baseVal === 'number' ? (saBonus.baseVal > 1 ? Math.round(saBonus.baseVal * powerScale) : parseFloat((saBonus.baseVal * powerScale).toFixed(3))) : saBonus.baseVal;
-
-  item.soulCrystal = {
-    color,
-    key: saKey,
-    name: saBonus.name,
-    level: crystalLevel,
-    desc: `${saBonus.desc} (+${typeof finalVal === 'number' && finalVal < 1 ? (finalVal * 100).toFixed(0) + '%' : finalVal})`,
-    stat: saBonus.stat,
-    val: finalVal
-  };
-
-  if (callbacks.log) {
-    callbacks.log(`🔮 SPECIAL ABILITY CONCEDIDA (Lv.${crystalLevel}): ${def.name} recebeu [SA: ${saBonus.name}]! (${item.soulCrystal.desc})`, 'rarity-legendary');
-  }
-
-  if (callbacks.updateAllUI) callbacks.updateAllUI();
-  if (callbacks.save) callbacks.save();
-  return true;
+  // Keep the historical CraftService API, but enforce the canonical grade,
+  // character-level, matching-crystal, cost, and effect validation rules.
+  return applySoulCrystalToWeapon(state, weaponUid, color, saKey, callbacks);
 }
 
 /**
@@ -680,38 +638,7 @@ export function getElementalDropSources() {
 }
 
 export function applyElementalStone(state, equipUid, element = 'fire', callbacks = {}) {
-  const item = (state.inventory || []).find(i => i.uid === equipUid || i.id === equipUid);
-  if (!item) return false;
-
-  const gData = D();
-  const def = gData?.ALL_ITEMS?.[item.itemId || item.id] || item;
-  const isWeapon = def?.slot === 'weapon';
-
-  const maxCap = isWeapon ? 300 : 120;
-  const currentVal = item.elementalAttribute?.val || 0;
-
-  if (currentVal >= maxCap) {
-    if (callbacks.log) callbacks.log(`Este equipamento já atingiu o limite máximo elemental de ${maxCap}!`, 'system');
-    return false;
-  }
-
-  const step = isWeapon ? 20 : 6;
-  const newVal = Math.min(maxCap, currentVal + step);
-
-  item.elementalAttribute = {
-    element,
-    val: newVal
-  };
-
-  const elemInfo = ELEMENT_DEFINITIONS[element] || { name: element };
-
-  if (callbacks.log) {
-    callbacks.log(`🔥 INFUSÃO ELEMENTAL: ${def.name} recebeu +${step} de ${elemInfo.name}! (Total: ${newVal}/${maxCap})`, 'rarity-epic');
-  }
-
-  if (callbacks.updateAllUI) callbacks.updateAllUI();
-  if (callbacks.save) callbacks.save();
-  return true;
+  return applyElementalInfusion(state, equipUid, element, callbacks);
 }
 
 /**
@@ -757,7 +684,7 @@ export function compoundBeltsWithDuplicates(state, primaryUid, secondaryUid, cal
     primaryItem.beltBonuses = {
       hpBonusPct: 0.03 + (primaryItem.enchant * 0.01),
       pDefBonus: 15 + (primaryItem.enchant * 5),
-      weightBonus: 1000 + (primaryItem.enchant * 500),
+      invSlots: 1 + Math.floor(primaryItem.enchant / 2),
       pvpDmgPct: 0.02 + (primaryItem.enchant * 0.01)
     };
 

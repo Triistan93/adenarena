@@ -38,11 +38,11 @@ export const HEIRLOOM_ITEMS = {
     maxHeirloomLevel: 40,
     desc: 'Lança lendária de montaria que se fortalece conforme o herói avança de nível (Lv. 1 ao 40).',
     icon: 'gradec/weapons/weapon_spiked_spear.png',
-    base: { atk: 138, crit: 6, hit: 10, aoeTargets: 4 },
+    base: { atk: 153, crit: 6, hit: 10 },
     heirloomScaling: {
-      phase1: { maxLvl: 19, baseMult: 1.5, stats: { atk: 38, crit: 4, hit: 4, aoeTargets: 2 }, label: 'No-Grade Superior (+50%)' },
-      phase2: { maxLvl: 39, baseMult: 1.5, stats: { atk: 85, crit: 5, hit: 7, aoeTargets: 3 }, label: 'D-Grade Superior (+50%)' },
-      phase3: { maxLvl: 40, baseMult: 1.0, stats: { atk: 138, crit: 6, hit: 10, aoeTargets: 4, enchantGlow: true }, label: 'C-Grade Pleno (+4 Glow)' }
+      phase1: { maxLvl: 19, baseMult: 1.5, stats: { atk: 43, crit: 4, hit: 4 }, label: 'No-Grade Superior (+50%)' },
+      phase2: { maxLvl: 39, baseMult: 1.5, stats: { atk: 95, crit: 5, hit: 7 }, label: 'D-Grade Superior (+50%)' },
+      phase3: { maxLvl: 40, baseMult: 1.0, stats: { atk: 153, crit: 6, hit: 10, enchantGlow: true }, label: 'C-Grade Pleno (+4 Glow)' }
     }
   },
   weapon_heirloom_dagger: {
@@ -151,11 +151,11 @@ export const HEIRLOOM_ITEMS = {
     maxHeirloomLevel: 40,
     desc: 'Peitoral de placas forjado para suportar o impacto de investidas e monstros colossais.',
     icon: 'gradec/armors/armor_full_plate_heavy_armor.png',
-    base: { def: 98, hp: 280, mdef: 36, weightBonus: 2000 },
+    base: { def: 98, hp: 280, mdef: 36, invSlots: 2 },
     heirloomScaling: {
-      phase1: { maxLvl: 19, stats: { def: 28, hp: 70, mdef: 10, weightBonus: 500 } },
-      phase2: { maxLvl: 39, stats: { def: 60, hp: 160, mdef: 22, weightBonus: 1200 } },
-      phase3: { maxLvl: 40, stats: { def: 98, hp: 280, mdef: 36, weightBonus: 2000 } }
+      phase1: { maxLvl: 19, stats: { def: 28, hp: 70, mdef: 10, invSlots: 1 } },
+      phase2: { maxLvl: 39, stats: { def: 60, hp: 160, mdef: 22, invSlots: 2 } },
+      phase3: { maxLvl: 40, stats: { def: 98, hp: 280, mdef: 36, invSlots: 2 } }
     }
   },
   armor_heirloom_legs_heavy: {
@@ -441,11 +441,11 @@ export const HEIRLOOM_ITEMS = {
     maxHeirloomLevel: 40,
     desc: 'Peitoral de placas forjado para suportar o impacto de investidas e monstros colossais.',
     icon: 'gradec/armors/armor_full_plate_heavy_armor.png',
-    base: { def: 98, hp: 280, mdef: 36, weightBonus: 2000 },
+    base: { def: 98, hp: 280, mdef: 36, invSlots: 2 },
     heirloomScaling: {
-      phase1: { maxLvl: 19, stats: { def: 28, hp: 70, mdef: 10, weightBonus: 500 } },
-      phase2: { maxLvl: 39, stats: { def: 60, hp: 160, mdef: 22, weightBonus: 1200 } },
-      phase3: { maxLvl: 40, stats: { def: 98, hp: 280, mdef: 36, weightBonus: 2000 } }
+      phase1: { maxLvl: 19, stats: { def: 28, hp: 70, mdef: 10, invSlots: 1 } },
+      phase2: { maxLvl: 39, stats: { def: 60, hp: 160, mdef: 22, invSlots: 2 } },
+      phase3: { maxLvl: 40, stats: { def: 98, hp: 280, mdef: 36, invSlots: 2 } }
     }
   },
   armor_heirloom_legs: {
@@ -653,11 +653,11 @@ export const HEIRLOOM_ITEMS = {
     maxHeirloomLevel: 40,
     desc: 'Cinto de couro de dragão que expande a capacidade de carga e inventário.',
     icon: 'gradec/armors/armor_full_plate_belt.png',
-    base: { def: 14, hp: 80, weightBonus: 3000, invSlots: 20 },
+    base: { def: 14, hp: 80, invSlots: 20 },
     heirloomScaling: {
-      phase1: { maxLvl: 19, stats: { def: 4, hp: 20, weightBonus: 1000, invSlots: 10 } },
-      phase2: { maxLvl: 39, stats: { def: 8, hp: 50, weightBonus: 2000, invSlots: 15 } },
-      phase3: { maxLvl: 40, stats: { def: 14, hp: 80, weightBonus: 3000, invSlots: 20 } }
+      phase1: { maxLvl: 19, stats: { def: 4, hp: 20, invSlots: 10 } },
+      phase2: { maxLvl: 39, stats: { def: 8, hp: 50, invSlots: 15 } },
+      phase3: { maxLvl: 40, stats: { def: 14, hp: 80, invSlots: 20 } }
     }
   },
   hair_heirloom_crown: {

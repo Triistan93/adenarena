@@ -1942,7 +1942,7 @@ export function rollDrop(zoneKey = 'zone1', rarityBonus = 0, isBoss = false, all
 
   // Resolve pool key (specific zoneKey e.g. 'talkingIsland', or tier e.g. 'zone1')
   let poolKey = zoneKey;
-  let numericLevel = 1;
+  let numericLevel = null;
   if (typeof zoneKey === 'number') {
     numericLevel = zoneKey;
     poolKey = getZoneDropTier(numericLevel);
@@ -1950,7 +1950,7 @@ export function rollDrop(zoneKey = 'zone1', rarityBonus = 0, isBoss = false, all
     poolKey = 'zone1';
   }
 
-  const isLowLevel = poolKey === 'zone1' || numericLevel < 20
+  const isLowLevel = poolKey === 'zone1' || (numericLevel !== null && numericLevel < 20)
     || ['talkingIsland', 'elvenForest', 'darkForest', 'orcVillage', 'dwarvenMine', 'kamaelLair', 'ruinedOutpost'].includes(poolKey);
 
   // 1. Consumable/Material Drop (30% chance for normal monsters, 60% for bosses)
@@ -1966,6 +1966,17 @@ export function rollDrop(zoneKey = 'zone1', rarityBonus = 0, isBoss = false, all
         drops.push({ id: matId, itemId: matId, rarity: 'common', isEquipment: false, amount: 1 });
       }
     }
+  }
+
+  // Life Stone grade determines the matching Gemstone grade. Elites and bosses
+  // are the more reliable source, while regular monsters can still drop them.
+  const gemstoneGradeByTier = {
+    zone1: 'd', zone2: 'd', zone3: 'c', zone4: 'b', zone5: 'a', zone6: 's', zone7: 's'
+  };
+  const gemstoneId = `gemstone_${gemstoneGradeByTier[poolKey]}`;
+  const gemstoneChance = isBoss ? 0.07 : 0.01;
+  if (gemstoneGradeByTier[poolKey] && allItems[gemstoneId] && Math.random() < gemstoneChance) {
+    drops.push({ id: gemstoneId, itemId: gemstoneId, rarity: 'common', isEquipment: false, amount: 1 });
   }
 
   // 2. Equipment Drop (Raro: 0.1%-0.3% para monstros normais, MÁXIMO 5% para chefes)

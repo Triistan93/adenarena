@@ -254,17 +254,18 @@ function resolveDeathKnightCallSkill(classId, race, v2ClassId) {
 }
 
 export const V2_CONTENT_GAP_CLASSES = {
-  'marauderBase': {
-    gapType: 'UNPROVEN_PROVENANCE',
-    reason: 'Nó V2 existente com proveniência parcial: somente habilidades explicitamente atribuídas ao estágio base e compatíveis com a linhagem Ertheia são liberadas; nomes de exibição não podem contornar essa quarentena',
-    authorizedSkillIds: ['iron_punch', 'fist_mastery', 'light_armor_mastery']
-  },
-  'sayhaMageBase': {
-    gapType: 'UNPROVEN_PROVENANCE',
-    reason: 'Nó V2 existente com proveniência parcial: libera somente Hydro Attack como habilidade ofensiva elemental inicial; placeholders genéricos de mago permanecem quarentenados',
-    authorizedSkillIds: ['hydro_attack']
-  }
+  // Kept for other classes whose content/provenance is still incomplete.
 };
+
+const ERTHEIA_CLASS_IDS = new Set([
+  'marauderBase', 'marauder', 'ertheiaWarrior', 'eviscerator',
+  'sayhaMageBase', 'sayhaSeer', 'windRiderErth', 'sayhaSeeker'
+]);
+
+function isErtheiaClassId(classId) {
+  const context = resolveV2ClassContext(classId, 'ertheia');
+  return ERTHEIA_CLASS_IDS.has(context.v2ClassId || context.v2ClassDef?.id);
+}
 
 /**
  * Resolves the authoritative V2 Skill Context for a given character class and race.
@@ -498,7 +499,9 @@ export function getSkillUnlockLevelForClass(classId, skillId) {
   // 1. Authoritative V2 Canonical Class DAG evaluation
   if (v2Class) {
     if (isExplicitStage0Skill(classId, skillId)) {
-      return 1;
+      return isErtheiaClassId(v2Ctx.v2ClassId)
+        ? Math.max(1, Number(CANONICAL_SKILL_REGISTRY_V2?.[skillId]?.minLevel) || 1)
+        : 1;
     }
 
     // Check canonical skill minLevel from authoritative registry
@@ -607,6 +610,9 @@ export function getStarterSkillsForClass(classId) {
   const v2Ctx = resolveV2ClassContext(classId);
   if (v2Ctx.status === 'RESOLVED') {
     if (v2Ctx.v2ClassDef && v2Ctx.v2ClassDef.stage === 0 && Array.isArray(v2Ctx.v2ClassDef.skillIds)) {
+      if (ERTHEIA_CLASS_IDS.has(v2Ctx.v2ClassId)) {
+        return v2Ctx.v2ClassDef.skillIds.filter(skillId => getSkillUnlockLevelForClass(v2Ctx.v2ClassId, skillId) <= 1);
+      }
       return [...v2Ctx.v2ClassDef.skillIds];
     }
     return [...v2Ctx.authorizedSkillIds];
@@ -1118,7 +1124,9 @@ export function getSkillDetailedVisibility(character, skill) {
   // 5. Level & Stage Gate -> HIDDEN_FUTURE (Zero vazamento para DOM)
   const classSpecificReq = getSkillUnlockLevelForClass(charClass, def.id);
   const isStage0Starter = isExplicitStage0Skill(charClass, def.id);
-  const baseReq = isStage0Starter ? 1 : (Number(def.requiredLevel || def.reqLvl || def.identity?.unlockLevel) || 1);
+  const baseReq = isStage0Starter
+    ? 1
+    : (Number(def.requiredLevel || def.reqLvl || def.identity?.unlockLevel) || 1);
   const reqLvl = Math.max(classSpecificReq, baseReq);
   const skillStage = isStage0Starter ? 'BASE' : (def.progressionStage || def.identity?.progressionStage);
   const stageReq = (skillStage && STAGE_LEVEL_THRESHOLDS[skillStage]) ? STAGE_LEVEL_THRESHOLDS[skillStage] : 1;

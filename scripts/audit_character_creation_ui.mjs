@@ -83,7 +83,7 @@ try {
     browserErrors: errors,
     viewportPass,
     pass: audit.failures.length === 0 && audit.raceCount === 9 && audit.classOptionCount === 25 &&
-      audit.productionInitializationCount === 25 && audit.activeClassCount === 22 && audit.blockedContentGapCount === 3 &&
+      audit.productionInitializationCount === 25 && audit.activeClassCount === 25 && audit.blockedContentGapCount === 0 &&
       audit.confirmation?.passedSelection === true && viewportPass && errors.length === 0
   };
   console.log(JSON.stringify(report, null, 2));

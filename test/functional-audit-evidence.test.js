@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { assessEffect, assessEffectCoverage, EFFECT_CONTRACTS, summarizeAudit } from '../scripts/lib/functional-evidence.mjs';
+import { assessEffect, assessEffectCoverage, EFFECT_CONTRACTS, summarizeAudit, summarizeIndependentProvenanceEvidence } from '../scripts/lib/functional-evidence.mjs';
 
 const actionLockConsumerProof = Object.freeze({
   basicDamageBefore: 100, basicDamageWhileDisabled: 0, basicDamageAfterExpiry: 100,
@@ -22,6 +22,42 @@ test('metadata and unrelated damage cannot prove an effect', () => {
   assert.equal(assessEffect({ kind: 'passive', stat: 'crit' }, { before: { crit: 5 }, after: { crit: 5 }, def: { effect: 'stat' } }).pass, false);
   assert.equal(assessEffect({ kind: 'damage' }, { skillId: 'power_strike', hpBefore: 100, hpAfter: 90, events: [] }).pass, false);
   assert.equal(assessEffect(null, { hpBefore: 100, hpAfter: 90 }).status, 'NOT_VALIDATED');
+});
+
+test('Hydro Attack local adaptation requires its own measured damage contract', () => {
+  const contract = EFFECT_CONTRACTS.hydro_attack;
+  assert.equal(contract.kind, 'damage_and_target_debuff');
+  assert.match(contract.source, /Aden Arena local adaptation/);
+  assert.equal(assessEffect(contract, {
+    skillId: 'hydro_attack',
+    hpBefore: 1_000,
+    hpAfter: 965,
+    cast: true,
+    events: [{ skillId: 'hydro_attack', damage: 35 }],
+    applied: true,
+    expiresInMs: 60_000,
+    before: { damageTakenPercent: 0 },
+    after: { damageTakenPercent: 0.05 },
+    expired: { damageTakenPercent: 0 },
+    playerHpBeforeCast: 100,
+    playerHpAfterCast: 100,
+    maxHp: 100
+  }).pass, true);
+  assert.equal(assessEffect(contract, {
+    skillId: 'hydro_attack',
+    hpBefore: 1_000,
+    hpAfter: 965,
+    cast: true,
+    events: [{ skillId: 'hydro_attack', damage: 35 }]
+  }).pass, false, 'damage from a different skill must not validate Hydro Attack');
+  assert.deepEqual(assessEffectCoverage(['hydro_attack'], EFFECT_CONTRACTS), {
+    totalUniqueSkills: 1,
+    contractsConfigured: 1,
+    implementedContracts: 1,
+    unmappedSkills: [],
+    unimplementedSkills: [],
+    pass: true
+  });
 });
 
 test('Quick Step passive proof requires both movement stats and a shorter production attack interval', () => {
@@ -746,6 +782,51 @@ test('technical failures in content-blocked classes and special proofs fail glob
   assert.equal(summarizeAudit([], [{ pass: false }]).overallStatus, 'FAIL');
   assert.equal(summarizeAudit([{ ...failed, checks: [] }], []).overallStatus, 'APPROVAL_BLOCKED');
   assert.equal(summarizeAudit([{ classId: 'normal', checks: [], skills: [{ effect: { status: 'NOT_VALIDATED' } }] }], []).overallStatus, 'APPROVAL_BLOCKED');
+});
+
+test('audit summary distinguishes content gaps from unproven provenance blockers', () => {
+  const report = summarizeAudit([
+    { classId: 'missing-content', contentStatus: 'BLOCKED_CONTENT_GAP', checks: [], skills: [] },
+    { classId: 'unproven', contentStatus: 'BLOCKED_UNPROVEN_PROVENANCE', checks: [], skills: [] },
+    { classId: 'verified', contentStatus: 'PROVENANCE_VALIDATED', checks: [], skills: [] }
+  ], []);
+
+  assert.deepEqual(report.approvalBlockedClassIds, ['missing-content', 'unproven']);
+  assert.deepEqual(report.contentGapClassIds, ['missing-content']);
+  assert.deepEqual(report.unprovenProvenanceClassIds, ['unproven']);
+  assert.equal(Object.hasOwn(report, 'contentBlockedClassIds'), false, 'do not label provenance blockers as content gaps');
+});
+
+test('ancestry checks do not count classes as independently provenance-validated', () => {
+  const evidence = summarizeIndependentProvenanceEvidence({
+    totalClasses: 159,
+    eligibleClassCount: 151,
+    contentGapCount: 2,
+    unprovenProvenanceCount: 6,
+    ancestryIntegrity: true
+  });
+
+  assert.equal(evidence.status, 'NOT_VALIDATED');
+  assert.equal(evidence.validatedCount, 0);
+  assert.equal(evidence.eligibleClassCount, 151);
+  assert.equal(evidence.notValidatedCount, 151);
+  assert.equal(evidence.pass, null);
+});
+
+test('independent Ertheia source coverage validates only its eight indexed class stages', () => {
+  const evidence = summarizeIndependentProvenanceEvidence({
+    totalClasses: 159,
+    eligibleClassCount: 8,
+    validatedClassCount: 8,
+    contentGapCount: 0,
+    unprovenProvenanceCount: 151,
+    ancestryIntegrity: true
+  });
+
+  assert.equal(evidence.validatedCount, 8);
+  assert.equal(evidence.notValidatedCount, 0);
+  assert.equal(evidence.unprovenProvenanceCount, 151);
+  assert.equal(evidence.pass, null, 'evidence for Ertheia must not certify other class lineages');
 });
 
 test('blocked class assignment stays separate from a measured skill effect', () => {

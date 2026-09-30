@@ -434,6 +434,11 @@ export function heroImgPath(race, cls, gender) {
   const g = String(gender || 'M').toLowerCase();
   const isFemale = g === 'f';
 
+  const generatedPortrait = typeof window !== 'undefined'
+    ? window.__CLASS_PORTRAITS?.[r]?.[c]?.[isFemale ? 'F' : 'M']
+    : null;
+  if (generatedPortrait) return generatedPortrait;
+
   const genderKey = `${r}_${c}_${isFemale ? 'f' : 'm'}`;
   if (HERO_IMG[genderKey]) return resolveImg(HERO_IMG[genderKey]);
 

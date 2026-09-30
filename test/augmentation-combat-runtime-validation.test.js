@@ -64,9 +64,9 @@ describe('Augmentation item skills on class and combat runtime paths', () => {
       state.inventory = [
         weapon,
         { uid: `stone-${stoneId}`, itemId: stoneId, count: 1 },
-        { uid: `crystal-${stoneId}`, itemId: 'crystal_d', count: 500 },
-        { uid: `crystal-a-${stoneId}`, itemId: 'crystal_a', count: 500 },
-        { uid: `crystal-s-${stoneId}`, itemId: 'crystal_s', count: 500 }
+        { uid: `gemstone-d-${stoneId}`, itemId: 'gemstone_d', count: 500 },
+        { uid: `gemstone-a-${stoneId}`, itemId: 'gemstone_a', count: 500 },
+        { uid: `gemstone-s-${stoneId}`, itemId: 'gemstone_s', count: 500 }
       ];
       Math.random = () => 0;
       try {
@@ -110,6 +110,23 @@ describe('Augmentation item skills on class and combat runtime paths', () => {
     assert.equal(state.inventory.includes(highGrade), false, 'the required S-grade gemstone stack is consumed');
     assert.equal(lowGrade.count, 500, 'a lower-grade crystal cannot pay the requirement');
     assert.equal(state.gold, 8_000_000, 'the Adena fee is charged once');
+  });
+
+  it('accepts the legacy top-grade Life Stone reward item for level 76 augmentation', () => {
+    const state = DEFAULT_STATE();
+    state.class = 'gladiator';
+    state.gold = 20_000_000;
+    const weapon = { uid: 'legacy-stone-weapon', itemId: 'weapon_test', slot: 'weapon' };
+    const stone = { uid: 'legacy-top-stone', itemId: 'lifestone_top', count: 1 };
+    const gemstones = { uid: 'legacy-top-gems', itemId: 'gemstone_s', count: 50 };
+    state.inventory = [weapon, stone, gemstones];
+
+    const result = AugmentationService.augmentWeapon(state, weapon, 'life_stone_top_76', { log: () => {} });
+
+    assert.equal(result.success, true);
+    assert.equal(state.inventory.includes(stone), false);
+    assert.equal(state.inventory.includes(gemstones), false);
+    assert.equal(state.gold, 8_000_000);
   });
 
   it('applies passive Focus from the equipped augmented weapon to effective crit', () => {

@@ -1,4 +1,74 @@
+import { EUROPEAN_ERTHEIA_SKILLS } from '../../lineage-idle/src/data/skills/ertheia/european-roster.js';
+
 // Explicit behavioral contracts. Never infer a successful effect from production metadata.
+// Ertheia contracts are generated from explicitly labeled local adaptations;
+// tests prove delivery through runtime consumers, not official retail balance.
+const ERTHEIA_STAT_OUTPUTS = Object.freeze({
+  pAtkPercent: 'atk', mAtkPercent: 'matk', pDefPercent: 'def', mDefPercent: 'mdef',
+  maxHpPercent: 'maxHp', maxMpPercent: 'maxMp', maxCpPercent: 'maxCp',
+  pSkillPowerPercent: 'pSkillPowerPercent', mSkillPowerPercent: 'mSkillPowerPercent',
+  pSkillCdr: 'pSkillCdr', mSkillCdr: 'mSkillCdr', cdr: 'cdr',
+  pSkillMpCostReduction: 'pSkillMpCostReduction', mSkillMpCostReduction: 'mSkillMpCostReduction',
+  mpCostReduction: 'mpCostReduction', crit: 'crit', critDmgPercent: 'critDmg',
+  eva: 'eva', movementSpeedPercent: 'movementSpeedPercent', mpRegen: 'mpRegen',
+  pAccuracy: 'pAccuracy', mAccuracy: 'mAccuracy', pSkillEvasionPercent: 'pSkillEvasionPercent',
+  mSkillEvasionPercent: 'mSkillEvasionPercent', debuffResistancePercent: 'debuffResistancePercent',
+  damageTakenReductionPercent: 'damageTakenReductionPercent', pveDamagePercent: 'pveDamagePercent'
+});
+const ERTHEIA_TARGET_OUTPUTS = Object.freeze({
+  actionsDisabled: 'actionsDisabled', damageTakenPercent: 'damageTakenPercent',
+  atkSpdPercent: 'attackSpeed', cooldownPercent: 'skillCooldown',
+  movementSpeedPercent: 'movementSpeedPercent', pAtkPercent: 'atk', mAtkPercent: 'matk',
+  pDefPercent: 'def', mDefPercent: 'mdef'
+});
+
+function erTheiaExpectedDeltas(stats = {}, outputs = ERTHEIA_STAT_OUTPUTS) {
+  return Object.entries(stats).flatMap(([key, value]) => {
+    const output = outputs[key];
+    return output && Number(value) !== 0 ? [{ stat: output, direction: Number(value) > 0 ? 'increase' : 'decrease' }] : [];
+  });
+}
+
+function buildErtheiaEffectContracts() {
+  return Object.fromEntries(Object.entries(EUROPEAN_ERTHEIA_SKILLS).map(([skillId, skill]) => {
+    const target = skill.targetStats || {};
+    const self = skill.effectStats || {};
+    const targetDeltas = erTheiaExpectedDeltas(target, ERTHEIA_TARGET_OUTPUTS);
+    const unsupportedTargetEffects = Object.keys(target).filter(key => !['actionsDisabled', 'damageTakenPercent', 'atkSpdPercent', 'cooldownPercent', 'movementSpeedPercent', 'pAtkPercent', 'mAtkPercent', 'pDefPercent', 'mDefPercent'].includes(key));
+    const unsupportedSelfEffects = Object.keys(self).filter(key => !ERTHEIA_STAT_OUTPUTS[key] && !['healPercent', 'mpRecoveryPercent'].includes(key));
+    const duration = skill.targetDurationMs || skill.effectDurationMs || undefined;
+    const consumer = target.actionsDisabled ? 'monster_action_lock'
+      : (target.atkSpdPercent || target.cooldownPercent ? 'monster_speed_slow'
+        : (target.movementSpeedPercent ? 'monster_movement_slow' : undefined));
+
+    if (skill.type === 'passive') {
+      return [skillId, { kind: 'passive', expectedDeltas: erTheiaExpectedDeltas(self), unsupportedEffects: unsupportedSelfEffects, source: `Aden Arena local adaptation: source-listed Ertheia skill ${skill.name}` }];
+    }
+    if (skill.type === 'buff') {
+      return [skillId, {
+        kind: 'buff', expectedDeltas: erTheiaExpectedDeltas(self), unsupportedEffects: unsupportedSelfEffects,
+        expectedDurationMs: duration, healPercent: Number.isFinite(self.healPercent) ? self.healPercent : undefined,
+        mpRecoveryPercent: Number.isFinite(self.mpRecoveryPercent) ? self.mpRecoveryPercent : undefined,
+        source: `Aden Arena local adaptation: source-listed Ertheia skill ${skill.name}`
+      }];
+    }
+    if (targetDeltas.length) {
+      return [skillId, {
+        kind: 'damage_and_target_debuff', expectedDeltas: targetDeltas,
+        unsupportedEffects: unsupportedTargetEffects, expectedDurationMs: duration, consumer,
+        healPercent: Number.isFinite(self.healPercent) ? self.healPercent : undefined,
+        mpRecoveryPercent: Number.isFinite(self.mpRecoveryPercent) ? self.mpRecoveryPercent : undefined,
+        source: `Aden Arena local adaptation: damage/control for source-listed Ertheia skill ${skill.name}`
+      }];
+    }
+    return [skillId, {
+      kind: Number.isFinite(self.healPercent) || Number.isFinite(self.mpRecoveryPercent) ? 'damage_and_self_heal' : 'damage',
+      healPercent: self.healPercent, mpRecoveryPercent: self.mpRecoveryPercent,
+      source: `Aden Arena local adaptation: damage for source-listed Ertheia skill ${skill.name}`
+    }];
+  }));
+}
+
 export const EFFECT_CONTRACTS = Object.freeze({
   "power_strike": {
     "kind": "damage",
@@ -3326,6 +3396,10 @@ export const EFFECT_CONTRACTS = Object.freeze({
     "kind": "damage",
     "source": "Ice Sphere: deal combat damage with MP and cooldown"
   },
+  "hydro_attack": {
+    "kind": "damage",
+    "source": "Aden Arena local adaptation: Sayha Mage Hydro Attack must deal single-target combat damage with MP and cooldown"
+  },
   "bright_dance": {
     "kind": "damage",
     "source": "Bright Dance: deal combat damage with MP and cooldown"
@@ -4176,7 +4250,8 @@ export const EFFECT_CONTRACTS = Object.freeze({
       "atkSpd"
     ],
     "source": "Essence level-76 Soul Acumen grants +33% casting speed, mapped to +33% cooldown reduction"
-  }
+  },
+  ...buildErtheiaEffectContracts()
 });
 
 export function assessEffect(contract, evidence) {
@@ -4187,7 +4262,7 @@ export function assessEffect(contract, evidence) {
   if (evidence.preconditionsMet === false) return { status: "NOT_EXECUTED", pass: null, reason: "Effect was not evaluated because learning or execution preconditions failed", contract, evidence };
   let pass = false;
   const expectedDeltas = contract.expectedDeltas || (contract.stat ? [{ stat: contract.stat, direction: "increase" }] : []);
-  if (contract.kind === "buff" && (contract.unsupportedEffects?.length || (!expectedDeltas.length && !Number.isFinite(contract.reflectPercent)))) return { status: "NOT_VALIDATED", pass: null, reason: "Buff contains effects without a supported independent contract", contract, evidence };
+  if (contract.kind === "buff" && (contract.unsupportedEffects?.length || (!expectedDeltas.length && !Number.isFinite(contract.reflectPercent) && !Number.isFinite(contract.healPercent) && !Number.isFinite(contract.mpRecoveryPercent)))) return { status: "NOT_VALIDATED", pass: null, reason: "Buff contains effects without a supported independent contract", contract, evidence };
   if (contract.kind === "target_debuff" && (contract.unsupportedEffects?.length || !expectedDeltas.length)) return { status: "NOT_VALIDATED", pass: null, reason: "Target effect contains behavior without a supported independent contract", contract, evidence };
   if (contract.kind === "damage_and_target_debuff" && (contract.unsupportedEffects?.length || !expectedDeltas.length)) return { status: "NOT_VALIDATED", pass: null, reason: "Combined damage and target effect lacks a complete independent contract", contract, evidence };
   const deltasMatch = (before, after, expired, deltas) => deltas.every(({ stat, direction }) => { const start = before?.[stat], active = after?.[stat], end = expired?.[stat]; return Number.isFinite(start) && Number.isFinite(active) && (direction === "increase" ? active > start : active < start) && (expired == null || (Number.isFinite(end) && end === start)); });
@@ -4231,7 +4306,11 @@ export function assessEffect(contract, evidence) {
     }
     const durationPassed = !Number.isFinite(contract.expectedDurationMs) || Math.abs(evidence.expiresInMs - contract.expectedDurationMs) <= 100;
     const healPassed = !Number.isFinite(contract.healPercent) || evidence.healAmount === Math.min(evidence.maxHp - evidence.hpBefore, Math.floor(evidence.maxHp * contract.healPercent));
-    pass = evidence.applied === true && evidence.expiresInMs > 0 && durationPassed && healPassed && deltasMatch(evidence.before, evidence.after, evidence.expired, expectedDeltas) && unchangedStatsMatch(contract.unchangedStats) && consumerPassed;
+    const expectedMpRecovery = Number.isFinite(contract.mpRecoveryPercent)
+      ? Math.min(evidence.maxMp - (evidence.mpBefore - evidence.expectedMpCost), Math.floor(evidence.maxMp * contract.mpRecoveryPercent))
+      : null;
+    const mpRecoveryPassed = expectedMpRecovery === null || evidence.mpAfter - (evidence.mpBefore - evidence.expectedMpCost) === expectedMpRecovery;
+    pass = evidence.applied === true && evidence.expiresInMs > 0 && durationPassed && healPassed && mpRecoveryPassed && deltasMatch(evidence.before, evidence.after, evidence.expired, expectedDeltas) && unchangedStatsMatch(contract.unchangedStats) && consumerPassed;
   }
   if (contract.kind === "target_debuff") {
     let consumerPassed = true;
@@ -4266,7 +4345,14 @@ export function assessEffect(contract, evidence) {
       (evidence.consumerProof?.basicAttackIntervalAfter > evidence.consumerProof?.basicAttackIntervalBefore &&
        evidence.consumerProof?.skillCooldownBefore === evidence.consumerProof?.skillCooldownAfter &&
        evidence.consumerProof?.productionConsumer === "main.attackMonster.enemyAttackInterval");
-    pass = evidence.cast === true && evidence.applied === true && evidence.expiresInMs > 0 && selfHeal && movementConsumerPassed &&
+    const expectedMpRecovery = Number.isFinite(contract.mpRecoveryPercent)
+      ? Math.min(evidence.maxMp - (evidence.mpBefore - evidence.expectedMpCost), Math.floor(evidence.maxMp * contract.mpRecoveryPercent))
+      : null;
+    const mpRecoveryPassed = expectedMpRecovery === null || evidence.mpAfter - (evidence.mpBefore - evidence.expectedMpCost) === expectedMpRecovery;
+    const durationPassed = !Number.isFinite(contract.expectedDurationMs) || Math.abs(evidence.expiresInMs - contract.expectedDurationMs) <= 100;
+    const targetConsumerPassed = contract.consumer !== "monster_action_lock" || (evidence.consumerProof?.basicDamageBefore > 0 && evidence.consumerProof.basicDamageWhileDisabled === 0 && evidence.consumerProof.basicDamageAfterExpiry > 0 && evidence.consumerProof.skillDamageBefore > 0 && evidence.consumerProof.skillDamageWhileDisabled === 0 && evidence.consumerProof.skillDamageAfterExpiry > 0 && evidence.consumerProof.skillCooldownWhileDisabled === 0);
+    const speedConsumerPassed = contract.consumer !== "monster_speed_slow" || (evidence.consumerProof?.basicAttackSpeedBefore > evidence.consumerProof.basicAttackSpeedAfter && evidence.consumerProof.skillCooldownAfter > evidence.consumerProof.skillCooldownBefore && evidence.consumerProof.productionConsumer === "main.monsterAttack");
+    pass = evidence.cast === true && evidence.applied === true && evidence.expiresInMs > 0 && durationPassed && selfHeal && mpRecoveryPassed && movementConsumerPassed && targetConsumerPassed && speedConsumerPassed &&
       deltasMatch(evidence.before, evidence.after, evidence.expired, expectedDeltas) &&
       damage > 0 && evidence.hpBefore - evidence.hpAfter === damage;
   }
@@ -4332,11 +4418,30 @@ export function assessEffectCoverage(observedSkillIds, contracts) {
   return { totalUniqueSkills: unique.length, contractsConfigured, implementedContracts, unmappedSkills, unimplementedSkills, pass: unique.length > 0 && !unmappedSkills.length && !unimplementedSkills.length };
 }
 
+export function summarizeIndependentProvenanceEvidence({ totalClasses, eligibleClassCount, validatedClassCount = 0, contentGapCount, unprovenProvenanceCount, ancestryIntegrity }) {
+  const validated = Math.max(0, Math.min(eligibleClassCount, Number(validatedClassCount) || 0));
+  const notValidated = Math.max(0, eligibleClassCount - validated);
+  const complete = ancestryIntegrity && notValidated === 0 && contentGapCount === 0 && unprovenProvenanceCount === 0;
+  return {
+    pass: complete ? true : (ancestryIntegrity ? null : false),
+    status: complete ? "PASS" : (ancestryIntegrity ? "NOT_VALIDATED" : "FAIL"),
+    totalClasses,
+    validatedCount: validated,
+    eligibleClassCount,
+    notValidatedCount: ancestryIntegrity ? notValidated : 0,
+    contentGapCount,
+    unprovenProvenanceCount,
+    ancestryIntegrity
+  };
+}
+
 export function summarizeAudit(classes, proofs, requiredCoverage = []) {
   const checks = [...classes.flatMap(c => [...(c.checks || []), ...(c.skills || []).flatMap(s => [...(s.checks || []), s.effect].filter(Boolean))]), ...proofs];
   const failed = checks.filter(c => c.pass === false);
   const missing = checks.filter(c => c.pass === null || c.status === "NOT_VALIDATED");
   const blocked = classes.filter(c => c.contentStatus?.startsWith("BLOCKED"));
+  const contentGaps = classes.filter(c => c.contentStatus === "BLOCKED_CONTENT_GAP");
+  const unprovenProvenance = classes.filter(c => c.contentStatus === "BLOCKED_UNPROVEN_PROVENANCE");
   const completeCoverage = requiredCoverage.length > 0 && requiredCoverage.every(c => c.executed === true && c.pass === true);
   return {
     overallStatus: failed.length ? "FAIL" : (blocked.length || missing.length || !completeCoverage ? "APPROVAL_BLOCKED" : "PASS"),
@@ -4345,6 +4450,9 @@ export function summarizeAudit(classes, proofs, requiredCoverage = []) {
       skill.classAssignment?.validated === false || (!skill.classAssignment && c.contentStatus?.startsWith("BLOCKED"))
     ).length, 0),
     failedAssertions: failed.length, unvalidatedAssertions: missing.length,
-    contentBlockedClassIds: blocked.map(c => c.classId), requiredCoverage,
+    approvalBlockedClassIds: blocked.map(c => c.classId),
+    contentGapClassIds: contentGaps.map(c => c.classId),
+    unprovenProvenanceClassIds: unprovenProvenance.map(c => c.classId),
+    requiredCoverage,
   };
 }

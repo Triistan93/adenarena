@@ -17,14 +17,12 @@ test('Ertheia Marauder Base shows its authorized starter skills at level 1', () 
   const visibility = getVisibleSkillsForCharacter(character);
   const tree = getSkillTreeViewModel(character);
 
-  assert.equal(context.status, 'CONTENT_GAP');
-  assert.deepEqual(context.authorizedSkillIds.slice().sort(), ['fist_mastery', 'iron_punch', 'light_armor_mastery']);
-  assert.deepEqual(visibility.visibleList.map(({ skillId }) => skillId).sort(), context.authorizedSkillIds.slice().sort());
-  assert.deepEqual(tree.tabs.active.skills.map(({ skillId }) => skillId), ['iron_punch']);
-  assert.deepEqual(tree.tabs.passive.skills.map(({ skillId }) => skillId).sort(), ['fist_mastery', 'light_armor_mastery']);
-  assert.equal(isSkillAvailableForCharacter(character, 'iron_punch'), true);
-  assert.equal(tree.tabs.active.count, 1);
-  assert.equal(tree.tabs.passive.count, 2);
+  assert.equal(context.status, 'RESOLVED');
+  assert.deepEqual(context.authorizedSkillIds, CANONICAL_CLASS_REGISTRY_V2.marauderBase.skillIds);
+  assert.deepEqual(visibility.visibleList.map(({ skillId }) => skillId), ['eminent_light_armor_mastery']);
+  assert.equal(tree.tabs.active.count, 0);
+  assert.equal(tree.tabs.passive.count, 3);
+  assert.equal(isSkillAvailableForCharacter(character, 'lateral_hit'), false);
 });
 
 test('Kamael Death Mark is not assigned to Ertheia Marauder Base', () => {

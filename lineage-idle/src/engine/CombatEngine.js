@@ -16,6 +16,7 @@ import { getMonsterSpawnMultipliers } from '../data/balance/monsterBalance.js';
 import { getZoneProgression } from '../data/balance/progressionBalance.js';
 import { combatEvents, CombatEventType, CombatEventFactory } from '../vfx/CombatEvent.js';
 import { ClassValidationService } from '../services/ClassValidationService.js';
+import { getShotGradeCode } from '../data/items/item_grade.js';
 
 export { combatEvents, CombatEventType, CombatEventFactory };
 
@@ -462,13 +463,7 @@ export function resolveSoulshotEffect(state, weaponDef = null, isMage = null) {
 
   const isMageClass = isMage !== null ? Boolean(isMage) : ClassValidationService.isMageClass(state.class);
 
-  let weaponGrade = 'NG';
-  if (weaponDef?.grade) {
-    weaponGrade = String(weaponDef.grade).toUpperCase();
-  } else if (weaponDef?.tier) {
-    const TIER_GRADE = { 1: 'NG', 2: 'D', 3: 'C', 4: 'B', 5: 'A', 6: 'S' };
-    weaponGrade = TIER_GRADE[weaponDef.tier] || 'NG';
-  }
+  const weaponGrade = getShotGradeCode(weaponDef).toUpperCase();
 
   const gradeSuffix = weaponGrade.toLowerCase();
   const dedicatedShotId = isMageClass 

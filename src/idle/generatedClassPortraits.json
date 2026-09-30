@@ -1,0 +1,416 @@
+{
+  "orc": {
+    "orcfighter": {
+      "M": "/img/m_orc_orc_fighter.webp",
+      "F": "/img/f_orc_orc_fighter.webp"
+    },
+    "orcmage": {
+      "M": "/img/m_orc_orc_mage.webp",
+      "F": "/img/f_orc_orc_mage.webp"
+    },
+    "rider": {
+      "M": "/img/m_orc_rider.webp",
+      "F": "/img/f_orc_rider.webp"
+    },
+    "dragoon": {
+      "M": "/img/m_orc_dragoon.webp",
+      "F": "/img/f_orc_dragoon.webp"
+    },
+    "monk": {
+      "M": "/img/m_orc_monk.webp",
+      "F": "/img/f_orc_monk.webp"
+    },
+    "raider": {
+      "M": "/img/m_orc_raider.webp",
+      "F": "/img/f_orc_raider.webp"
+    },
+    "shaman": {
+      "M": "/img/m_orc_shaman.webp",
+      "F": "/img/f_orc_shaman.webp"
+    },
+    "destroyer": {
+      "M": "/img/m_orc_destroyer.webp",
+      "F": "/img/f_orc_destroyer.webp"
+    },
+    "overlord": {
+      "M": "/img/m_orc_overlord.webp",
+      "F": "/img/f_orc_overlord.webp"
+    },
+    "tyrant": {
+      "M": "/img/m_orc_tyrant.webp",
+      "F": "/img/f_orc_tyrant.webp"
+    },
+    "vanguardrider": {
+      "M": "/img/m_orc_vanguard_rider.webp",
+      "F": "/img/f_orc_vanguard_rider.webp"
+    },
+    "warcryer": {
+      "M": "/img/m_orc_warcryer.webp",
+      "F": "/img/f_orc_warcryer.webp"
+    },
+    "dominator": {
+      "M": "/img/m_orc_dominator.webp",
+      "F": "/img/f_orc_dominator.webp"
+    },
+    "doomcryer": {
+      "M": "/img/m_orc_doomcryer.webp",
+      "F": "/img/f_orc_doomcryer.webp"
+    },
+    "grandkhavatari": {
+      "M": "/img/m_orc_grand_khavatari.webp",
+      "F": "/img/f_orc_grand_khavatari.webp"
+    },
+    "grandvanguard": {
+      "M": "/img/m_orc_grand_vanguard.webp",
+      "F": "/img/f_orc_grand_vanguard.webp"
+    },
+    "titan": {
+      "M": "/img/m_orc_titan.webp",
+      "F": "/img/f_orc_titan.webp"
+    },
+    "orc_fighter": {
+      "M": "/img/m_orc_orc_fighter.webp",
+      "F": "/img/f_orc_orc_fighter.webp"
+    },
+    "orc_mage": {
+      "M": "/img/m_orc_orc_mage.webp",
+      "F": "/img/f_orc_orc_mage.webp"
+    },
+    "orc_rider_0": {
+      "M": "/img/m_orc_rider.webp",
+      "F": "/img/f_orc_rider.webp"
+    }
+  },
+  "darkelf": {
+    "bloodrosebase": {
+      "M": "/img/m_darkelf_blood_rose_base.webp",
+      "F": "/img/f_darkelf_blood_rose_base.webp"
+    },
+    "darkelffighter": {
+      "M": "/img/m_darkelf_dark_elf_fighter.webp",
+      "F": "/img/f_darkelf_dark_elf_fighter.webp"
+    },
+    "darkelfmage": {
+      "M": "/img/m_darkelf_dark_elf_mage.webp",
+      "F": "/img/f_darkelf_dark_elf_mage.webp"
+    },
+    "deathknightde": {
+      "M": "/img/m_darkelf_death_knight.webp",
+      "F": "/img/f_darkelf_death_knight.webp"
+    },
+    "assassinde": {
+      "M": "/img/m_darkelf_assassin_de.webp",
+      "F": "/img/f_darkelf_assassin_de.webp"
+    },
+    "bloodroses1": {
+      "M": "/img/m_darkelf_blood_rose_s1.webp",
+      "F": "/img/f_darkelf_blood_rose_s1.webp"
+    },
+    "darkwizard": {
+      "M": "/img/m_darkelf_dark_wizard.webp",
+      "F": "/img/f_darkelf_dark_wizard.webp"
+    },
+    "palusknight": {
+      "M": "/img/m_darkelf_palus_knight.webp",
+      "F": "/img/f_darkelf_palus_knight.webp"
+    },
+    "shillienoracle": {
+      "M": "/img/m_darkelf_shillien_oracle.webp",
+      "F": "/img/f_darkelf_shillien_oracle.webp"
+    },
+    "abysswalker": {
+      "M": "/img/m_darkelf_abyss_walker.webp",
+      "F": "/img/f_darkelf_abyss_walker.webp"
+    },
+    "bladedancer": {
+      "M": "/img/m_darkelf_blade_dancer.webp",
+      "F": "/img/f_darkelf_blade_dancer.webp"
+    },
+    "bloodroses2": {
+      "M": "/img/m_darkelf_blood_rose_s2.webp",
+      "F": "/img/f_darkelf_blood_rose_s2.webp"
+    },
+    "phantomranger": {
+      "M": "/img/m_darkelf_phantom_ranger.webp",
+      "F": "/img/f_darkelf_phantom_ranger.webp"
+    },
+    "phantomsummoner": {
+      "M": "/img/m_darkelf_phantom_summoner.webp",
+      "F": "/img/f_darkelf_phantom_summoner.webp"
+    },
+    "shillienelder": {
+      "M": "/img/m_darkelf_shillien_elder.webp",
+      "F": "/img/f_darkelf_shillien_elder.webp"
+    },
+    "shillienknight": {
+      "M": "/img/m_darkelf_shillien_knight.webp",
+      "F": "/img/f_darkelf_shillien_knight.webp"
+    },
+    "spellhowler": {
+      "M": "/img/m_darkelf_spellhowler.webp",
+      "F": "/img/f_darkelf_spellhowler.webp"
+    },
+    "bloodrose": {
+      "M": "/img/m_darkelf_blood_rose.webp",
+      "F": "/img/f_darkelf_blood_rose.webp"
+    },
+    "ghosthunter": {
+      "M": "/img/m_darkelf_ghost_hunter.webp",
+      "F": "/img/f_darkelf_ghost_hunter.webp"
+    },
+    "ghostsentinel": {
+      "M": "/img/m_darkelf_ghost_sentinel.webp",
+      "F": "/img/f_darkelf_ghost_sentinel.webp"
+    },
+    "shilliensaint": {
+      "M": "/img/m_darkelf_shillien_saint.webp",
+      "F": "/img/f_darkelf_shillien_saint.webp"
+    },
+    "shillientemplar": {
+      "M": "/img/m_darkelf_shillien_templar.webp",
+      "F": "/img/f_darkelf_shillien_templar.webp"
+    },
+    "spectraldancer": {
+      "M": "/img/m_darkelf_spectral_dancer.webp",
+      "F": "/img/f_darkelf_spectral_dancer.webp"
+    },
+    "spectralmaster": {
+      "M": "/img/m_darkelf_spectral_master.webp",
+      "F": "/img/f_darkelf_spectral_master.webp"
+    },
+    "stormscreamer": {
+      "M": "/img/m_darkelf_storm_screamer.webp",
+      "F": "/img/f_darkelf_storm_screamer.webp"
+    },
+    "dark_fighter": {
+      "M": "/img/m_darkelf_dark_elf_fighter.webp",
+      "F": "/img/f_darkelf_dark_elf_fighter.webp"
+    },
+    "dark_mage": {
+      "M": "/img/m_darkelf_dark_elf_mage.webp",
+      "F": "/img/f_darkelf_dark_elf_mage.webp"
+    },
+    "delf_deathknight_0": {
+      "M": "/img/m_darkelf_death_knight.webp",
+      "F": "/img/f_darkelf_death_knight.webp"
+    },
+    "secret_assassin_female_0": {
+      "M": "/img/m_darkelf_assassin_de.webp",
+      "F": "/img/f_darkelf_assassin_de.webp"
+    },
+    "rose_vain_0": {
+      "M": "/img/m_darkelf_blood_rose_base.webp",
+      "F": "/img/f_darkelf_blood_rose_base.webp"
+    }
+  },
+  "dwarf": {
+    "dwarffighter": {
+      "M": "/img/m_dwarf_dwarf_fighter.webp",
+      "F": "/img/f_dwarf_dwarf_fighter.webp"
+    },
+    "shinemakerbase": {
+      "M": "/img/m_dwarf_shine_maker_base.webp",
+      "F": "/img/f_dwarf_shine_maker_base.webp"
+    },
+    "artisandwarf": {
+      "M": "/img/m_dwarf_artisan_dwarf.webp",
+      "F": "/img/f_dwarf_artisan_dwarf.webp"
+    },
+    "scavenger": {
+      "M": "/img/m_dwarf_scavenger.webp",
+      "F": "/img/f_dwarf_scavenger.webp"
+    },
+    "shinemakers1": {
+      "M": "/img/m_dwarf_shine_maker_s1.webp",
+      "F": "/img/f_dwarf_shine_maker_s1.webp"
+    },
+    "bountyhunter": {
+      "M": "/img/m_dwarf_bounty_hunter.webp",
+      "F": "/img/f_dwarf_bounty_hunter.webp"
+    },
+    "shinemakers2": {
+      "M": "/img/m_dwarf_shine_maker_s2.webp",
+      "F": "/img/f_dwarf_shine_maker_s2.webp"
+    },
+    "warsmith": {
+      "M": "/img/m_dwarf_warsmith.webp",
+      "F": "/img/f_dwarf_warsmith.webp"
+    },
+    "fortuneseeker": {
+      "M": "/img/m_dwarf_fortune_seeker.webp",
+      "F": "/img/f_dwarf_fortune_seeker.webp"
+    },
+    "maestro": {
+      "M": "/img/m_dwarf_maestro.webp",
+      "F": "/img/f_dwarf_maestro.webp"
+    },
+    "shinemaker": {
+      "M": "/img/m_dwarf_shinemaker.webp",
+      "F": "/img/f_dwarf_shinemaker.webp"
+    },
+    "dwarven_fighter": {
+      "M": "/img/m_dwarf_artisan_dwarf.webp",
+      "F": "/img/f_dwarf_artisan_dwarf.webp"
+    }
+  },
+  "kamael": {
+    "kamaelsoldier": {
+      "M": "/img/m_kamael_kamael_soldier.webp",
+      "F": "/img/f_kamael_kamael_soldier.webp"
+    },
+    "samuraibase": {
+      "M": "/img/m_kamael_samurai_base.webp",
+      "F": "/img/f_kamael_samurai_base.webp"
+    },
+    "hatamoto": {
+      "M": "/img/m_kamael_hatamoto.webp",
+      "F": "/img/f_kamael_hatamoto.webp"
+    },
+    "soulfinder": {
+      "M": "/img/m_kamael_soul_finder.webp",
+      "F": "/img/f_kamael_soul_finder.webp"
+    },
+    "trooper": {
+      "M": "/img/m_kamael_trooper.webp",
+      "F": "/img/f_kamael_trooper.webp"
+    },
+    "warder": {
+      "M": "/img/m_kamael_warder.webp",
+      "F": "/img/f_kamael_warder.webp"
+    },
+    "berserker": {
+      "M": "/img/m_kamael_berserker.webp",
+      "F": "/img/f_kamael_berserker.webp"
+    },
+    "ronin": {
+      "M": "/img/m_kamael_ronin.webp",
+      "F": "/img/f_kamael_ronin.webp"
+    },
+    "soulbreakerkamael": {
+      "M": "/img/m_kamael_soul_breaker_kamael.webp",
+      "F": "/img/f_kamael_soul_breaker_kamael.webp"
+    },
+    "soulranger": {
+      "M": "/img/m_kamael_soul_ranger.webp",
+      "F": "/img/f_kamael_soul_ranger.webp"
+    },
+    "doombringer": {
+      "M": "/img/m_kamael_doombringer.webp",
+      "F": "/img/f_kamael_doombringer.webp"
+    },
+    "samurai": {
+      "M": "/img/m_kamael_samurai.webp",
+      "F": "/img/f_kamael_samurai.webp"
+    },
+    "soulhound": {
+      "M": "/img/m_kamael_soul_hound.webp",
+      "F": "/img/f_kamael_soul_hound.webp"
+    },
+    "trickster": {
+      "M": "/img/m_kamael_trickster.webp",
+      "F": "/img/f_kamael_trickster.webp"
+    },
+    "jin_kamael_soldier": {
+      "M": "/img/m_kamael_kamael_soldier.webp",
+      "F": "/img/f_kamael_kamael_soldier.webp"
+    },
+    "crow_0": {
+      "M": "/img/m_kamael_samurai_base.webp",
+      "F": "/img/f_kamael_samurai_base.webp"
+    }
+  },
+  "sylph": {
+    "sylphgunner": {
+      "M": "/img/m_sylph_sylph_gunner.webp",
+      "F": "/img/f_sylph_sylph_gunner.webp"
+    },
+    "sharpshooter": {
+      "M": "/img/m_sylph_sharpshooter.webp",
+      "F": "/img/f_sylph_sharpshooter.webp"
+    },
+    "windsniper": {
+      "M": "/img/m_sylph_wind_sniper.webp",
+      "F": "/img/f_sylph_wind_sniper.webp"
+    },
+    "stormblaster": {
+      "M": "/img/m_sylph_storm_blaster.webp",
+      "F": "/img/f_sylph_storm_blaster.webp"
+    },
+    "sylphid": {
+      "M": "/img/m_sylph_sylph_gunner.webp",
+      "F": "/img/f_sylph_sylph_gunner.webp"
+    }
+  },
+  "highelf": {
+    "highelfbase": {
+      "M": "/img/m_highelf_high_elf_base.webp",
+      "F": "/img/f_highelf_high_elf_base.webp"
+    },
+    "spirit_0": {
+      "M": "/img/m_highelf_spirit_0.webp",
+      "F": "/img/f_highelf_spirit_0.webp"
+    },
+    "elementweavers1": {
+      "M": "/img/m_highelf_element_weaver_s1.webp",
+      "F": "/img/f_highelf_element_weaver_s1.webp"
+    },
+    "lighttemplar": {
+      "M": "/img/m_highelf_light_templar.webp",
+      "F": "/img/f_highelf_light_templar.webp"
+    },
+    "elementweavers2": {
+      "M": "/img/m_highelf_element_weaver_s2.webp",
+      "F": "/img/f_highelf_element_weaver_s2.webp"
+    },
+    "holytemplar": {
+      "M": "/img/m_highelf_holy_templar.webp",
+      "F": "/img/f_highelf_holy_templar.webp"
+    },
+    "divinetemplar": {
+      "M": "/img/m_highelf_divine_templar.webp",
+      "F": "/img/f_highelf_divine_templar.webp"
+    },
+    "elementweaver": {
+      "M": "/img/m_highelf_element_weaver.webp",
+      "F": "/img/f_highelf_element_weaver.webp"
+    },
+    "sacred_templar_0": {
+      "M": "/img/m_highelf_divine_templar.webp",
+      "F": "/img/f_highelf_divine_templar.webp"
+    }
+  },
+  "ertheia": {
+    "marauderbase": {
+      "M": "/img/m_ertheia_marauder_base.webp",
+      "F": "/img/f_ertheia_marauder_base.webp"
+    },
+    "sayhamagebase": {
+      "M": "/img/m_ertheia_sayha_mage_base.webp",
+      "F": "/img/f_ertheia_sayha_mage_base.webp"
+    },
+    "marauder": {
+      "M": "/img/m_ertheia_marauder.webp",
+      "F": "/img/f_ertheia_marauder.webp"
+    },
+    "sayhaseer": {
+      "M": "/img/m_ertheia_sayha_seer.webp",
+      "F": "/img/f_ertheia_sayha_seer.webp"
+    },
+    "ertheiawarrior": {
+      "M": "/img/m_ertheia_ertheia_warrior.webp",
+      "F": "/img/f_ertheia_ertheia_warrior.webp"
+    },
+    "windridererth": {
+      "M": "/img/m_ertheia_wind_rider_erth.webp",
+      "F": "/img/f_ertheia_wind_rider_erth.webp"
+    },
+    "eviscerator": {
+      "M": "/img/m_ertheia_eviscerator.webp",
+      "F": "/img/f_ertheia_eviscerator.webp"
+    },
+    "sayhaseeker": {
+      "M": "/img/m_ertheia_sayha_seeker.webp",
+      "F": "/img/f_ertheia_sayha_seeker.webp"
+    }
+  }
+}

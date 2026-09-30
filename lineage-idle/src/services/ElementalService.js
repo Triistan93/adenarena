@@ -11,6 +11,7 @@
  */
 
 import { D } from '../core/GameConfig.js';
+import { getItemGradeCode, getEquipmentProgressionGradeCode } from '../data/items/item_grade.js';
 
 export const ELEMENT_DEFINITIONS = {
   fire: {
@@ -75,6 +76,21 @@ export const ELEMENT_DEFINITIONS = {
   }
 };
 
+/** Reads canonical attributes and the legacy `elemental.type` save field without mutating saves. */
+export function getItemElementalAttribute(item) {
+  const raw = item?.elementalAttribute && typeof item.elementalAttribute === 'object'
+    ? item.elementalAttribute
+    : item?.elemental && typeof item.elemental === 'object'
+      ? { element: item.elemental.element || item.elemental.type, val: item.elemental.val }
+      : null;
+  const element = String(raw?.element || 'none').trim().toLowerCase();
+  const val = Number(raw?.val);
+  if (!Object.prototype.hasOwnProperty.call(ELEMENT_DEFINITIONS, element) || !Number.isFinite(val) || val <= 0) {
+    return { element: 'none', val: 0 };
+  }
+  return { element, val };
+}
+
 export const ELEMENTAL_GRADE_GATING = {
   s: { minLevel: 76, maxCapWeapon: 300, maxCapArmor: 120, stoneCost: 250000, label: 'Grau S' },
   a: { minLevel: 61, maxCapWeapon: 150, maxCapArmor: 60, stoneCost: 100000, label: 'Grau A' },
@@ -112,17 +128,10 @@ export function getItemGrade(item) {
   if (!item) return 'none';
   const gData = D();
   const def = gData?.ALL_ITEMS?.[item.itemId || item.id] || item;
-  const rawGrade = String(item.grade || def?.grade || '').toLowerCase();
-  if (['s', 'a', 'b', 'c', 'd'].includes(rawGrade)) return rawGrade;
-  
-  // Detecção por tier de nível do item
-  const lvlReq = Number(item.reqLvl || def?.reqLvl || def?.level || 1);
-  if (lvlReq >= 76) return 's';
-  if (lvlReq >= 61) return 'a';
-  if (lvlReq >= 52) return 'b';
-  if (lvlReq >= 40) return 'c';
-  if (lvlReq >= 20) return 'd';
-  return 'none';
+  // Use the shared item-grade contract so actual catalog weapons can resolve
+  // grade from tier, req.level, description, or icon as well as explicit data.
+  const grade = getItemGradeCode({ ...def, ...item });
+  return grade === 'ng' ? 'none' : grade;
 }
 
 /**
@@ -130,7 +139,10 @@ export function getItemGrade(item) {
  */
 export function getElementalGating(item) {
   const grade = getItemGrade(item);
-  const gating = ELEMENTAL_GRADE_GATING[grade];
+  const gData = D();
+  const def = gData?.ALL_ITEMS?.[item?.itemId || item?.id] || item;
+  const progressionGrade = getEquipmentProgressionGradeCode({ ...def, ...item });
+  const gating = ELEMENTAL_GRADE_GATING[progressionGrade];
   if (!gating) {
     return {
       eligible: false,
@@ -143,20 +155,20 @@ export function getElementalGating(item) {
     };
   }
 
-  const gData = D();
-  const def = gData?.ALL_ITEMS?.[item.itemId || item.id] || item;
   const slot = def?.slot || item.slot;
   const isWeapon = slot === 'weapon' || slot === 'weapon2';
+  const itemLevel = Number(def?.req?.level || item?.req?.level) || 0;
+  const label = grade === 'frostlord' ? 'Frost Lord Grade' : grade === 'boss' ? 'Especial/Boss' : gating.label;
 
   return {
     eligible: true,
     grade,
-    minLevel: gating.minLevel,
+    minLevel: Math.max(gating.minLevel, itemLevel),
     maxCap: isWeapon ? gating.maxCapWeapon : gating.maxCapArmor,
     maxCapWeapon: gating.maxCapWeapon,
     maxCapArmor: gating.maxCapArmor,
     stoneCost: gating.stoneCost,
-    label: gating.label,
+    label,
     isWeapon
   };
 }
@@ -167,6 +179,14 @@ export function getElementalGating(item) {
  * mas bloqueia novas adições até que o nível/grau correspondente seja atingido.
  */
 export function applyElementalInfusion(state, equipUid, elementKey = 'fire', callbacks = {}) {
+  const normalizedElementKey = typeof elementKey === 'string' ? elementKey.trim().toLowerCase() : '';
+  const elemDef = ELEMENT_DEFINITIONS[normalizedElementKey];
+  if (!state || typeof state !== 'object') return false;
+  if (!elemDef) {
+    if (callbacks.log) callbacks.log('Elemento inválido para infusão elemental.', 'system');
+    return false;
+  }
+
   const inv = state.inventory || [];
   const item = inv.find(i => i.uid === equipUid || i.id === equipUid);
   if (!item) {
@@ -195,8 +215,9 @@ export function applyElementalInfusion(state, equipUid, elementKey = 'fire', cal
     return false;
   }
 
-  const currentVal = Number(item.elementalAttribute?.val || 0);
-  const currentElem = item.elementalAttribute?.element || 'none';
+  const currentAttribute = getItemElementalAttribute(item);
+  const currentVal = currentAttribute.val;
+  const currentElem = currentAttribute.element;
 
   // Regra de Migração 17.4: Se já tem valor igual ou superior ao teto, não reduz mas trava novos ganhos
   if (currentVal >= gating.maxCap) {
@@ -205,8 +226,8 @@ export function applyElementalInfusion(state, equipUid, elementKey = 'fire', cal
   }
 
   // Se o item já tem outro elemento diferente, canonicamente no L2 precisa ser limpo ou sobreposto
-  if (currentElem !== 'none' && currentElem !== elementKey && currentVal > 0) {
-    if (callbacks.log) callbacks.log(`Este item já possui o elemento [${currentElem.toUpperCase()}]. Limpe o atributo anterior antes de imbuir ${elementKey.toUpperCase()}.`, 'system');
+  if (currentElem !== 'none' && currentElem !== normalizedElementKey && currentVal > 0) {
+    if (callbacks.log) callbacks.log(`Este item já possui o elemento [${currentElem.toUpperCase()}]. Limpe o atributo anterior antes de imbuir ${normalizedElementKey.toUpperCase()}.`, 'system');
     return false;
   }
 
@@ -218,7 +239,6 @@ export function applyElementalInfusion(state, equipUid, elementKey = 'fire', cal
   }
 
   // Consumo opcional de Pedra Elemental do inventário (se existir)
-  const elemDef = ELEMENT_DEFINITIONS[elementKey] || ELEMENT_DEFINITIONS.fire;
   const stoneIdx = inv.findIndex(i => (i.itemId === elemDef.stoneId || i.id === elemDef.stoneId) && !i.equipped && (i.count || 1) > 0);
   if (stoneIdx !== -1) {
     if ((inv[stoneIdx].count || 1) > 1) {
@@ -235,9 +255,10 @@ export function applyElementalInfusion(state, equipUid, elementKey = 'fire', cal
   const newVal = Math.min(gating.maxCap, currentVal + step);
 
   item.elementalAttribute = {
-    element: elementKey,
+    element: normalizedElementKey,
     val: newVal
   };
+  delete item.elemental;
 
   if (callbacks.log) {
     callbacks.log(`✨ ALQUIMIA ELEMENTAL: ${item.name || def.name} imbuído com +${step} de ${elemDef.name} ${elemDef.icon}! (${newVal}/${gating.maxCap})`, 'rarity-epic');
@@ -252,9 +273,11 @@ export function applyElementalInfusion(state, equipUid, elementKey = 'fire', cal
  * Remove atributo elemental de um item (Reset).
  */
 export function removeElementalInfusion(state, equipUid, callbacks = {}) {
+  if (!state || typeof state !== 'object') return false;
   const inv = state.inventory || [];
   const item = inv.find(i => i.uid === equipUid || i.id === equipUid);
-  if (!item || !item.elementalAttribute || item.elementalAttribute.val <= 0) return false;
+  const elementalAttribute = getItemElementalAttribute(item);
+  if (!item || elementalAttribute.val <= 0) return false;
 
   const resetCost = 25000;
   if ((state.gold || 0) < resetCost) {
@@ -263,8 +286,9 @@ export function removeElementalInfusion(state, equipUid, callbacks = {}) {
   }
 
   state.gold -= resetCost;
-  const oldElem = item.elementalAttribute.element;
+  const oldElem = elementalAttribute.element;
   item.elementalAttribute = { element: 'none', val: 0 };
+  delete item.elemental;
 
   if (callbacks.log) {
     callbacks.log(`🌊 PURIFICAÇÃO: O atributo [${oldElem.toUpperCase()}] foi removido com sucesso de ${item.name || item.itemId}.`, 'system');
@@ -295,15 +319,17 @@ export function applySoulCrystalToWeapon(state, weaponUid, color = 'red', saKey 
   }
 
   const grade = getItemGrade(item);
-  const gating = SOUL_CRYSTAL_GRADE_GATING[grade];
+  const progressionGrade = getEquipmentProgressionGradeCode({ ...def, ...item });
+  const gating = SOUL_CRYSTAL_GRADE_GATING[progressionGrade];
   if (!gating) {
     if (callbacks.log) callbacks.log('Esta arma não possui um grau elegível para receber Soul Crystal (SA).', 'system');
     return false;
   }
   const playerLvl = Number(state.level || 1);
 
-  if (playerLvl < gating.minLevel) {
-    if (callbacks.log) callbacks.log(`Nível insuficiente! Armas de ${gating.label} requerem Nível ${gating.minLevel}+ para engastar Soul Crystals.`, 'system');
+  const requiredLevel = Math.max(gating.minLevel, Number(def?.req?.level || item?.req?.level) || 0);
+  if (playerLvl < requiredLevel) {
+    if (callbacks.log) callbacks.log(`Nível insuficiente! Armas de ${gating.label} requerem Nível ${requiredLevel}+ para engastar Soul Crystals.`, 'system');
     return false;
   }
 
@@ -417,8 +443,8 @@ export function calculatePlayerElementalDamage(state, monster, rawDamage = 100) 
   const wpn1 = state.equipment?.weapon ? inv.find(i => i.uid === state.equipment.weapon) : null;
   const wpn2 = state.equipment?.weapon2 ? inv.find(i => i.uid === state.equipment.weapon2) : null;
 
-  const elem1 = wpn1?.elementalAttribute || { element: 'none', val: 0 };
-  const elem2 = wpn2?.elementalAttribute || { element: 'none', val: 0 };
+  const elem1 = getItemElementalAttribute(wpn1);
+  const elem2 = getItemElementalAttribute(wpn2);
 
   // Se nenhuma arma tiver elemento
   if ((elem1.val <= 0 || elem1.element === 'none') && (elem2.val <= 0 || elem2.element === 'none')) {
@@ -497,11 +523,12 @@ export function calculateArmorElementalMitigation(state, monster, incomingDamage
     const uid = state.equipment[slot];
     if (!uid) continue;
     const item = inv.find(i => i.uid === uid);
-    if (item?.elementalAttribute?.val > 0 && item.elementalAttribute.element !== 'none') {
-      const eKey = item.elementalAttribute.element;
+    const elementalAttribute = getItemElementalAttribute(item);
+    if (elementalAttribute.val > 0) {
+      const eKey = elementalAttribute.element;
       if (elemResist[eKey] !== undefined) {
-        elemResist[eKey] += item.elementalAttribute.val;
-        totalResist += item.elementalAttribute.val;
+        elemResist[eKey] += elementalAttribute.val;
+        totalResist += elementalAttribute.val;
       }
     }
   }
@@ -530,6 +557,7 @@ export const ElementalService = {
   SOUL_CRYSTAL_GRADE_GATING,
   SA_RUNES,
   getItemGrade,
+  getItemElementalAttribute,
   getElementalGating,
   applyElementalInfusion,
   removeElementalInfusion,

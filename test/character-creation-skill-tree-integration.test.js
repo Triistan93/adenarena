@@ -144,17 +144,19 @@ test('4. CONTENT_GAP Handling — No Fallbacks, v2ClassId null on Stage 0 Gaps, 
   assert.equal(ctxShine.authorizedSkillIds.length, 4);
   assert.ok(ctxShine.authorizedSkillIds.includes('shineMakerBase_light_spark'));
 
-  // 4.4 Ertheia (marauderBase, sayhaMageBase) -> Stage 0 CONTENT_GAP with only individually authorized skills
+  // 4.4 Both Ertheia roots resolve from the European skill roster.
   const ctxMarauder = resolveV2ClassContext('marauderBase', 'ertheia');
-  assert.equal(ctxMarauder.status, 'CONTENT_GAP');
-  assert.equal(ctxMarauder.v2ClassId, null);
+  assert.equal(ctxMarauder.status, 'RESOLVED');
+  assert.equal(ctxMarauder.v2ClassId, 'marauderBase');
+  assert.equal(ctxMarauder.authorizedSkillIds.length, 6);
   assert.equal(ctxMarauder.authorizedSkillIds.includes('kamael_s_dignity'), false, 'Kamael dignity must NOT be authorized for Ertheia');
   assert.equal(ctxMarauder.authorizedSkillIds.includes('death_mark'), false, 'Kamael death mark must NOT be authorized for Ertheia');
 
   const ctxSayha = resolveV2ClassContext('sayhaMageBase', 'ertheia');
-  assert.equal(ctxSayha.status, 'CONTENT_GAP');
-  assert.equal(ctxSayha.v2ClassId, null);
-  assert.deepEqual(ctxSayha.authorizedSkillIds, ['hydro_attack']);
+  assert.equal(ctxSayha.status, 'RESOLVED');
+  assert.equal(ctxSayha.v2ClassId, 'sayhaMageBase');
+  assert.equal(ctxSayha.authorizedSkillIds.length, 6);
+  assert.ok(ctxSayha.authorizedSkillIds.includes('hydro_attack'));
   for (const placeholderId of ['fireball', 'wind_strike', 'self_heal', 'magic_mastery', 'robe_mastery']) {
     assert.equal(ctxSayha.authorizedSkillIds.includes(placeholderId), false, `${placeholderId} must not be used as Ertheia starter content`);
   }
@@ -206,7 +208,8 @@ test('5. Uniform Resolution Object Schema for All 25 Creator Starter Classes', (
       const isDeathKnightStage0 = starter.id.includes('deathknight_0');
       const expectedSkillsCount = starter.id === 'werewolf_0' ? 1
         : (starter.id === 'spirit_0' ? 2
-          : (isDeathKnightStage0 ? 4 : (starter.id === 'shineMakerBase' ? 4 : 5)));
+          : (isDeathKnightStage0 ? 4 : (starter.id === 'shineMakerBase' ? 4
+            : (starter.id === 'marauderBase' || starter.id === 'sayhaMageBase' ? 6 : 5))));
       assert.equal(ctx.authorizedSkillIds.length, expectedSkillsCount, `RESOLVED class ${starter.id} must have exactly ${expectedSkillsCount} Stage 0 skills`);
       assert.ok(ctx.v2ClassId, `RESOLVED class ${starter.id} must have v2ClassId`);
       assert.ok(ctx.v2ClassDef, `RESOLVED class ${starter.id} must have v2ClassDef`);

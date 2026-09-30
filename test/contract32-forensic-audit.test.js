@@ -83,12 +83,12 @@ test('Game Data Contract 3.2.1 — Forensic Audit Integrity Suite', async (t) =>
     assert.equal(audit.isDAG, true, 'Lineage graph must be a strictly acyclic directed graph (DAG)');
   });
 
-  await t.test('7. Derived Skill Metrics: 1315 instances and 942 derived unique definitions', () => {
-    assert.equal(audit.rawSkillEntriesCount, 1315, 'Expected 1315 raw skills in CLASSES_ECHO');
+  await t.test('7. Derived Skill Metrics: 1342 instances and 967 derived unique definitions', () => {
+    assert.equal(audit.rawSkillEntriesCount, 1342, 'Expected 1342 raw skills in CLASSES_ECHO after Ertheia roster expansion');
     assert.equal(audit.activeSkillSlotsCount, 100, 'Expected 100 active skill slots');
-    assert.equal(audit.uniqueHistoricalSkillNamesCount, 847, 'Expected 847 unique historical skill names');
+    assert.equal(audit.uniqueHistoricalSkillNamesCount, 872, 'Expected 872 unique historical skill names');
     assert.equal(audit.sharedSkillIds.length, 5, 'Expected exactly 5 shared skills between active and historical');
-    assert.equal(audit.uniqueSkillDefinitionsCount, 942, 'Derived unique definitions (100 + 847 - 5) must equal 942');
+    assert.equal(audit.uniqueSkillDefinitionsCount, 967, 'Derived unique definitions (100 + 872 - 5) must equal 967');
   });
 
   await t.test('8. VFX Catalog: 100 unique identities, STRUCTURAL_ONLY, and 4-layer abstraction', () => {

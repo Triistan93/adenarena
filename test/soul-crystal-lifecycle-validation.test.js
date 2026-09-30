@@ -1,10 +1,11 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 
-import { applySoulCrystalToWeapon } from '../lineage-idle/src/services/ElementalService.js';
-import { processSoulDrainOnKill } from '../lineage-idle/src/services/CraftService.js';
+import { applySoulCrystalToWeapon, getItemGrade } from '../lineage-idle/src/services/ElementalService.js';
+import { applySoulCrystal, processSoulDrainOnKill } from '../lineage-idle/src/services/CraftService.js';
 import { pickRandomMonster } from '../lineage-idle/src/engine/CombatEngine.js';
 import { startRaidBoss } from '../lineage-idle/src/services/RaidService.js';
+import { WEAPONS } from '../lineage-idle/src/data/items/weapons.js';
 
 describe('Soul Crystal SA lifecycle validation', () => {
   function createState(crystal = null) {
@@ -26,6 +27,34 @@ describe('Soul Crystal SA lifecycle validation', () => {
     assert.equal(result, false);
     assert.equal(state.gold, 2_000_000);
     assert.equal(state.inventory[0].soulCrystal, undefined);
+  });
+
+  it('routes the legacy craft entry point through the same Soul Crystal requirements', () => {
+    const state = createState();
+    const result = applySoulCrystal(state, 'weapon-1', 'red', 'focus');
+
+    assert.equal(result, false);
+    assert.equal(state.gold, 2_000_000);
+    assert.equal(state.inventory[0].soulCrystal, undefined);
+  });
+
+  it('resolves the grade of real catalog weapons from their canonical catalog fields', () => {
+    assert.equal(getItemGrade(WEAPONS.weapon_crystal_staff), 'c');
+    assert.equal(getItemGrade(WEAPONS.weapon_sword_of_damascus), 'b');
+  });
+
+  it('allows SA installation on a real B-grade catalog weapon at its required level', () => {
+    const weapon = { uid: 'damascus', ...WEAPONS.weapon_sword_of_damascus };
+    const state = {
+      ...createState({ itemId: 'soul_crystal_red_stage7', isSoulCrystal: true, color: 'red', stage: 7 }),
+      level: 52,
+      inventory: [weapon, { uid: 'crystal-1', itemId: 'soul_crystal_red_stage7', isSoulCrystal: true, color: 'red', stage: 7 }]
+    };
+
+    assert.equal(applySoulCrystalToWeapon(state, 'damascus', 'red', 'focus'), true);
+    assert.equal(state.gold, 1_900_000);
+    assert.equal(weapon.soulCrystal.level, 7);
+    assert.equal(state.inventory.some(item => item.isSoulCrystal), false);
   });
 
   it('rejects Soul Crystal installation on a weapon with no recognized grade without charging', () => {

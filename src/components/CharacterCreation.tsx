@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { checkNicknameAvailability } from '../firebase';
 import { getClassIcon } from '../services/IconService';
+import CLASS_PORTRAITS_BY_RACE from '../idle/generatedClassPortraits.json';
 
 export interface CharacterCreationData {
   charName: string;
@@ -96,21 +97,23 @@ const RACES_INFO: Record<string, {
       { id: 'rose_vain_0', name: 'Blood Rose 🌹', desc: 'Mística devota de Shillien com magia de espinhos negros e drenagem de sangue.', icon: '🌹' }
     ],
     image: {
-      dark_fighter: { M: '/img/darkelfskM.png', F: '/img/darkelfskF.png' },
-      dark_mage: { M: '/img/darkelf_mage.png', F: '/img/darkelfmageF.png' },
-      delf_deathknight_0: { M: '/img/darkelfskM.png', F: '/img/darkelfskF.png' },
-      secret_assassin_female_0: { M: '/img/darkelfskM.png', F: '/img/darkelfskF.png' },
-      rose_vain_0: { M: '/img/darkelf_mage.png', F: '/img/darkelfmageF.png' },
-      darkElfFighter: { M: '/img/darkelfskM.png', F: '/img/darkelfskF.png' },
-      darkElfMage: { M: '/img/darkelf_mage.png', F: '/img/darkelfmageF.png' },
+      dark_fighter: { M: '/img/m_darkelf_dark_elf_fighter.webp', F: '/img/f_darkelf_dark_elf_fighter.webp' },
+      dark_mage: { M: '/img/m_darkelf_dark_elf_mage.webp', F: '/img/f_darkelf_dark_elf_mage.webp' },
+      delf_deathknight_0: { M: '/img/m_darkelf_death_knight.webp', F: '/img/f_darkelf_death_knight.webp' },
+      secret_assassin_female_0: { M: '/img/m_darkelf_assassin_de.webp', F: '/img/f_darkelf_assassin_de.webp' },
+      rose_vain_0: { M: '/img/m_darkelf_blood_rose_base.webp', F: '/img/f_darkelf_blood_rose_base.webp' },
+      darkElfFighter: { M: '/img/m_darkelf_dark_elf_fighter.webp', F: '/img/f_darkelf_dark_elf_fighter.webp' },
+      DarkElfFighter: { M: '/img/m_darkelf_dark_elf_fighter.webp', F: '/img/f_darkelf_dark_elf_fighter.webp' },
+      DarkElfMage: { M: '/img/m_darkelf_dark_elf_mage.webp', F: '/img/f_darkelf_dark_elf_mage.webp' },
+      darkElfMage: { M: '/img/m_darkelf_dark_elf_mage.webp', F: '/img/f_darkelf_dark_elf_mage.webp' },
       deathPilgrim: { M: '/img/darkelfskM.png', F: '/img/darkelfskF.png' },
       elfDeathPilgrim: { M: '/img/darkelfskM.png', F: '/img/darkelfskF.png' },
-      assassinS0: { M: '/img/darkelfskM.png', F: '/img/darkelfskF.png' },
-      assassinBase: { M: '/img/darkelfskM.png', F: '/img/darkelfskF.png' },
-      bloodRoseBase: { M: '/img/darkelf_mage.png', F: '/img/darkelfmageF.png' },
-      bloodRoseS1: { M: '/img/darkelf_mage.png', F: '/img/darkelfmageF.png' },
-      fighter: { M: '/img/darkelfskM.png', F: '/img/darkelfskF.png' },
-      mage: { M: '/img/darkelf_mage.png', F: '/img/darkelfmageF.png' }
+      assassinS0: { M: '/img/m_darkelf_assassin_de.webp', F: '/img/f_darkelf_assassin_de.webp' },
+      assassinBase: { M: '/img/m_darkelf_assassin_de.webp', F: '/img/f_darkelf_assassin_de.webp' },
+      bloodRoseBase: { M: '/img/m_darkelf_blood_rose_base.webp', F: '/img/f_darkelf_blood_rose_base.webp' },
+      bloodRoseS1: { M: '/img/m_darkelf_blood_rose_s1.webp', F: '/img/f_darkelf_blood_rose_s1.webp' },
+      fighter: { M: '/img/m_darkelf_dark_elf_fighter.webp', F: '/img/f_darkelf_dark_elf_fighter.webp' },
+      mage: { M: '/img/m_darkelf_dark_elf_mage.webp', F: '/img/f_darkelf_dark_elf_mage.webp' }
     },
     startZoneName: 'Ilha de Falar (Talking Island)'
   },
@@ -126,15 +129,16 @@ const RACES_INFO: Record<string, {
       { id: 'orc_rider_0', name: 'Vanguard Rider 🐉', desc: 'Cavaleiro Orc montado especialista em investidas e estocadas de lança.', icon: '🐉' }
     ],
     image: {
-      orc_fighter: { M: '/img/orcfighterM.png', F: '/img/orcfighterF.png' },
-      orc_mage: { M: '/img/orc_mage.png', F: '/img/orc_mage.png' },
-      orc_rider_0: { M: '/img/orcfighterM.png', F: '/img/orcfighterF.png' },
-      orcFighter: { M: '/img/orcfighterM.png', F: '/img/orcfighterF.png' },
-      orcMage: { M: '/img/orc_mage.png', F: '/img/orc_mage.png' },
-      rider: { M: '/img/orcfighterM.png', F: '/img/orcfighterF.png' },
-      orcRider: { M: '/img/orcfighterM.png', F: '/img/orcfighterF.png' },
-      fighter: { M: '/img/orcfighterM.png', F: '/img/orcfighterF.png' },
-      mage: { M: '/img/orc_mage.png', F: '/img/orc_mage.png' }
+      orc_fighter: { M: '/img/m_orc_orc_fighter.webp', F: '/img/f_orc_orc_fighter.webp' },
+      orc_mage: { M: '/img/m_orc_orc_mage.webp', F: '/img/f_orc_orc_mage.webp' },
+      orc_rider_0: { M: '/img/m_orc_rider.webp', F: '/img/f_orc_rider.webp' },
+      titan: { M: '/img/m_orc_titan.webp', F: '/img/f_orc_titan.webp' },
+      orcFighter: { M: '/img/m_orc_orc_fighter.webp', F: '/img/f_orc_orc_fighter.webp' },
+      orcMage: { M: '/img/m_orc_orc_mage.webp', F: '/img/f_orc_orc_mage.webp' },
+      rider: { M: '/img/m_orc_rider.webp', F: '/img/f_orc_rider.webp' },
+      orcRider: { M: '/img/m_orc_rider.webp', F: '/img/f_orc_rider.webp' },
+      fighter: { M: '/img/m_orc_orc_fighter.webp', F: '/img/f_orc_orc_fighter.webp' },
+      mage: { M: '/img/m_orc_orc_mage.webp', F: '/img/f_orc_orc_mage.webp' }
     },
     startZoneName: 'Ilha de Falar (Talking Island)'
   },
@@ -149,12 +153,12 @@ const RACES_INFO: Record<string, {
       { id: 'shineMakerBase', name: 'ShineMaker ✨', desc: 'Mestre da luz cristalina, suporte celestial e martelo luminoso.', icon: '✨' }
     ],
     image: {
-      dwarven_fighter: { M: '/img/dwarfmaestroM.png', F: '/img/dwarfmaestroF.png' },
-      dwarfFighter: { M: '/img/dwarfmaestroM.png', F: '/img/dwarfmaestroF.png' },
-      artisan: { M: '/img/dwarfmaestroM.png', F: '/img/dwarfmaestroF.png' },
-      fighter: { M: '/img/dwarfmaestroM.png', F: '/img/dwarfmaestroF.png' },
-      shinemakerS1: { M: '/img/dwarfmaestroM.png', F: '/img/dwarfmaestroF.png' },
-      shineMakerBase: { M: '/img/dwarfmaestroM.png', F: '/img/dwarfmaestroF.png' }
+      dwarven_fighter: { M: '/img/m_dwarf_artisan_dwarf.webp', F: '/img/f_dwarf_artisan_dwarf.webp' },
+      dwarfFighter: { M: '/img/m_dwarf_dwarf_fighter.webp', F: '/img/f_dwarf_dwarf_fighter.webp' },
+      artisan: { M: '/img/m_dwarf_artisan_dwarf.webp', F: '/img/f_dwarf_artisan_dwarf.webp' },
+      fighter: { M: '/img/m_dwarf_dwarf_fighter.webp', F: '/img/f_dwarf_dwarf_fighter.webp' },
+      shinemakerS1: { M: '/img/m_dwarf_shine_maker_base.webp', F: '/img/f_dwarf_shine_maker_base.webp' },
+      shineMakerBase: { M: '/img/m_dwarf_shine_maker_base.webp', F: '/img/f_dwarf_shine_maker_base.webp' }
     },
     startZoneName: 'Ilha de Falar (Talking Island)'
   },
@@ -169,13 +173,13 @@ const RACES_INFO: Record<string, {
       { id: 'crow_0', name: 'Samurai ⛩️', desc: 'Mestre da katana ancestral e técnica de corte veloz Iaijutsu.', icon: '⛩️' }
     ],
     image: {
-      jin_kamael_soldier: { M: '/img/kamael_soulbreaker.png', F: '/img/kamaelshF.png' },
-      crow_0: { M: '/img/kamaelDM.png', F: '/img/kamaelDF.png' },
-      kamaelSoldier: { M: '/img/kamael_soulbreaker.png', F: '/img/kamaelshF.png' },
-      soulbreaker: { M: '/img/kamael_soulbreaker.png', F: '/img/kamaelshF.png' },
-      fighter: { M: '/img/kamaelDM.png', F: '/img/kamaelDF.png' },
-      samuraiBase: { M: '/img/kamaelDM.png', F: '/img/kamaelDF.png' },
-      hatamoto: { M: '/img/kamaelDM.png', F: '/img/kamaelDF.png' }
+      jin_kamael_soldier: { M: '/img/m_kamael_kamael_soldier.webp', F: '/img/f_kamael_kamael_soldier.webp' },
+      crow_0: { M: '/img/m_kamael_samurai_base.webp', F: '/img/f_kamael_samurai_base.webp' },
+      kamaelSoldier: { M: '/img/m_kamael_kamael_soldier.webp', F: '/img/f_kamael_kamael_soldier.webp' },
+      soulbreaker: { M: '/img/m_kamael_kamael_soldier.webp', F: '/img/f_kamael_kamael_soldier.webp' },
+      fighter: { M: '/img/m_kamael_kamael_soldier.webp', F: '/img/f_kamael_kamael_soldier.webp' },
+      samuraiBase: { M: '/img/m_kamael_samurai_base.webp', F: '/img/f_kamael_samurai_base.webp' },
+      hatamoto: { M: '/img/m_kamael_hatamoto.webp', F: '/img/f_kamael_hatamoto.webp' }
     },
     startZoneName: 'Ilha de Falar (Talking Island)'
   },
@@ -189,9 +193,12 @@ const RACES_INFO: Record<string, {
       { id: 'sylphid', name: 'Storm Blaster 🔫', desc: 'Atirador elemental com armas de fogo rápidas e tiros de vento.', icon: '🔫' }
     ],
     image: {
-      sylphid: { M: '/img/sylphM.png', F: '/img/sylphF.png' },
-      sylphGunner: { M: '/img/sylphM.png', F: '/img/sylphF.png' },
-      fighter: { M: '/img/sylphM.png', F: '/img/sylphF.png' }
+      sylphid: { M: '/img/m_sylph_sylph_gunner.webp', F: '/img/f_sylph_sylph_gunner.webp' },
+      sylphGunner: { M: '/img/m_sylph_sylph_gunner.webp', F: '/img/f_sylph_sylph_gunner.webp' },
+      fighter: { M: '/img/m_sylph_sylph_gunner.webp', F: '/img/f_sylph_sylph_gunner.webp' },
+      sharpshooter: { M: '/img/m_sylph_sharpshooter.webp', F: '/img/f_sylph_sharpshooter.webp' },
+      windSniper: { M: '/img/m_sylph_wind_sniper.webp', F: '/img/f_sylph_wind_sniper.webp' },
+      stormBlaster: { M: '/img/m_sylph_storm_blaster.webp', F: '/img/f_sylph_storm_blaster.webp' }
     },
     startZoneName: 'Ilha de Falar (Talking Island)'
   },
@@ -206,14 +213,20 @@ const RACES_INFO: Record<string, {
       { id: 'spirit_0', name: 'Element Weaver 🌀', desc: 'Mago supremo combinando os três pilares de Fogo, Água e Vento.', icon: '🌀' }
     ],
     image: {
-      sacred_templar_0: { M: '/img/elfwswM.png', F: '/img/elfswsF.png' },
-      spirit_0: { M: '/img/elfmageM.png', F: '/img/elfmageF.png' },
-      divineTemplarBase: { M: '/img/elfwswM.png', F: '/img/elfswsF.png' },
-      divineTemplarS1: { M: '/img/elfwswM.png', F: '/img/elfswsF.png' },
-      elementWeaverBase: { M: '/img/elfmageM.png', F: '/img/elfmageF.png' },
-      elementWeaverS1: { M: '/img/elfmageM.png', F: '/img/elfmageF.png' },
-      fighter: { M: '/img/elfwswM.png', F: '/img/elfswsF.png' },
-      mage: { M: '/img/elfmageM.png', F: '/img/elfmageF.png' }
+      sacred_templar_0: { M: '/img/m_highelf_divine_templar.webp', F: '/img/f_highelf_divine_templar.webp' },
+      spirit_0: { M: '/img/m_highelf_spirit_0.webp', F: '/img/f_highelf_spirit_0.webp' },
+      highElfBase: { M: '/img/m_highelf_high_elf_base.webp', F: '/img/f_highelf_high_elf_base.webp' },
+      divineTemplarBase: { M: '/img/m_highelf_light_templar.webp', F: '/img/f_highelf_light_templar.webp' },
+      divineTemplarS1: { M: '/img/m_highelf_light_templar.webp', F: '/img/f_highelf_light_templar.webp' },
+      lightTemplar: { M: '/img/m_highelf_light_templar.webp', F: '/img/f_highelf_light_templar.webp' },
+      holyTemplar: { M: '/img/m_highelf_holy_templar.webp', F: '/img/f_highelf_holy_templar.webp' },
+      divineTemplar: { M: '/img/m_highelf_divine_templar.webp', F: '/img/f_highelf_divine_templar.webp' },
+      elementWeaverBase: { M: '/img/m_highelf_spirit_0.webp', F: '/img/f_highelf_spirit_0.webp' },
+      elementWeaverS1: { M: '/img/m_highelf_element_weaver_s1.webp', F: '/img/f_highelf_element_weaver_s1.webp' },
+      elementWeaverS2: { M: '/img/m_highelf_element_weaver_s2.webp', F: '/img/f_highelf_element_weaver_s2.webp' },
+      elementWeaver: { M: '/img/m_highelf_element_weaver.webp', F: '/img/f_highelf_element_weaver.webp' },
+      fighter: { M: '/img/m_highelf_light_templar.webp', F: '/img/f_highelf_light_templar.webp' },
+      mage: { M: '/img/m_highelf_spirit_0.webp', F: '/img/f_highelf_spirit_0.webp' }
     },
     startZoneName: 'Ilha de Falar (Talking Island)'
   },
@@ -228,12 +241,16 @@ const RACES_INFO: Record<string, {
       { id: 'sayhaMageBase', name: 'Sayha Seeker 🌀', desc: 'Invocadora de vendavais e espíritos protetores de Sayha.', icon: '🌀' }
     ],
     image: {
-      marauderBase: { M: '/img/elfwswM.png', F: '/img/elfswsF.png' },
-      marauder: { M: '/img/elfwswM.png', F: '/img/elfswsF.png' },
-      sayhaMageBase: { M: '/img/elfmageM.png', F: '/img/elfmageF.png' },
-      sayhaSeer: { M: '/img/elfmageM.png', F: '/img/elfmageF.png' },
-      fighter: { M: '/img/elfwswM.png', F: '/img/elfswsF.png' },
-      mage: { M: '/img/elfmageM.png', F: '/img/elfmageF.png' }
+      marauderBase: { M: '/img/m_ertheia_marauder_base.webp', F: '/img/f_ertheia_marauder_base.webp' },
+      marauder: { M: '/img/m_ertheia_marauder.webp', F: '/img/f_ertheia_marauder.webp' },
+      ertheiaWarrior: { M: '/img/m_ertheia_ertheia_warrior.webp', F: '/img/f_ertheia_ertheia_warrior.webp' },
+      eviscerator: { M: '/img/m_ertheia_eviscerator.webp', F: '/img/f_ertheia_eviscerator.webp' },
+      sayhaMageBase: { M: '/img/m_ertheia_sayha_mage_base.webp', F: '/img/f_ertheia_sayha_mage_base.webp' },
+      sayhaSeer: { M: '/img/m_ertheia_sayha_seer.webp', F: '/img/f_ertheia_sayha_seer.webp' },
+      windRiderErth: { M: '/img/m_ertheia_wind_rider_erth.webp', F: '/img/f_ertheia_wind_rider_erth.webp' },
+      sayhaSeeker: { M: '/img/m_ertheia_sayha_seeker.webp', F: '/img/f_ertheia_sayha_seeker.webp' },
+      fighter: { M: '/img/m_ertheia_marauder_base.webp', F: '/img/f_ertheia_marauder_base.webp' },
+      mage: { M: '/img/m_ertheia_sayha_mage_base.webp', F: '/img/f_ertheia_sayha_mage_base.webp' }
     },
     startZoneName: 'Ilha de Falar (Talking Island)'
   }
@@ -322,8 +339,12 @@ export const CharacterCreation: React.FC<CharacterCreationProps> = ({
   };
 
   // Pega a imagem baseada na classe e no gênero (com fallbacks de segurança)
-  const currentImgObj = currentRaceObj.image[selectedClass] || currentRaceObj.image.fighter;
-  const currentImg = currentImgObj?.[gender] || '/img/human_fighter.png';
+  // Never substitute another class/race/gender portrait silently. A missing
+  // class portrait is shown as an explicit placeholder and remains auditable.
+  const generatedPortraits = CLASS_PORTRAITS_BY_RACE as Record<string, Record<string, { M: string; F: string }>>;
+  const currentImgObj = currentRaceObj.image[selectedClass]
+    || generatedPortraits[selectedRace]?.[selectedClass.toLowerCase()];
+  const currentImg = currentImgObj?.[gender] || null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-start sm:items-center justify-center bg-black/90 backdrop-blur-md p-3 sm:p-6 overflow-y-auto min-h-[100dvh]">
@@ -537,18 +558,33 @@ export const CharacterCreation: React.FC<CharacterCreationProps> = ({
 
               {/* Character Card / Artwork */}
               <div className="relative mx-auto w-48 h-56 rounded-xl border border-amber-500/40 bg-gradient-to-b from-amber-500/10 via-black/60 to-black p-2 flex flex-col items-center justify-center shadow-xl overflow-hidden group">
-                <img
-                  key={`${selectedRace}_${selectedClass}_${gender}_${currentImg}`}
-                  src={currentImg}
-                  alt={currentRaceObj.name}
-                  className="w-full h-full object-contain filter drop-shadow-[0_0_12px_rgba(245,158,11,0.4)] transition-transform duration-300 group-hover:scale-105"
-                  onError={(e) => {
-                    const img = e.currentTarget;
-                    img.onerror = null;
-                    img.src = '/img/humanpalaM.png';
-                    img.style.display = 'block';
-                  }}
-                />
+                {currentImg ? (
+                  <img
+                    key={`${selectedRace}_${selectedClass}_${gender}_${currentImg}`}
+                    src={currentImg}
+                    alt={`${currentRaceObj.name} — ${selectedClass}`}
+                    className="w-full h-full object-contain filter drop-shadow-[0_0_12px_rgba(245,158,11,0.4)] transition-transform duration-300 group-hover:scale-105"
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none';
+                      const placeholder = e.currentTarget.parentElement?.querySelector('[data-portrait-placeholder]');
+                      if (placeholder instanceof HTMLElement) placeholder.style.display = 'flex';
+                    }}
+                    onLoad={(e) => {
+                      const placeholder = e.currentTarget.parentElement?.querySelector('[data-portrait-placeholder]');
+                      if (placeholder instanceof HTMLElement) placeholder.style.display = 'none';
+                    }}
+                  />
+                ) : null}
+                <div
+                  data-portrait-placeholder
+                  className="absolute inset-2 hidden flex-col items-center justify-center gap-2 rounded-lg border border-dashed border-amber-500/30 bg-black/70 px-3 text-center text-amber-200"
+                  style={{ display: currentImg ? undefined : 'flex' }}
+                  role="img"
+                  aria-label={`Retrato indisponível para ${currentRaceObj.name}, ${selectedClass}, ${gender === 'F' ? 'feminino' : 'masculino'}`}
+                >
+                  <span className="text-5xl" aria-hidden="true">{currentRaceObj.icon}</span>
+                  <span className="text-xs font-semibold">Retrato desta classe indisponível</span>
+                </div>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
                 <div className="absolute bottom-2 inset-x-2 text-center">
                   <span className="text-xs font-black text-amber-300 uppercase tracking-wide drop-shadow">

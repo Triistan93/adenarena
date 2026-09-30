@@ -68,7 +68,7 @@ import { CommunityCapService } from '../services/CommunityCapService.js';
 import { AURAS_CATALOG, ITEM_FRAMES_CATALOG, TITLES_CATALOG, CosmeticService } from '../services/CosmeticService.js';
 import { AchievementService, ACHIEVEMENTS } from '../services/AchievementService.js';
 import { SynthesisService, SYNTHESIS_CONFIG } from '../services/SynthesisService.js';
-import { ElementalService, ELEMENT_DEFINITIONS, ELEMENTAL_GRADE_GATING, SOUL_CRYSTAL_GRADE_GATING, getElementalGating, getItemGrade as getElementalItemGrade } from '../services/ElementalService.js';
+import { ElementalService, ELEMENT_DEFINITIONS, ELEMENTAL_GRADE_GATING, SOUL_CRYSTAL_GRADE_GATING, getElementalGating, getItemGrade as getElementalItemGrade, getItemElementalAttribute } from '../services/ElementalService.js';
 import { MonsterAIEngine, ARCHETYPE_INFO, HUNTING_DIFFICULTIES } from '../engine/MonsterAIEngine.js';
 import { heroSVG, monsterSVG, MON_IMG } from '../../art.js';
 import { AFFIX_MAP } from '../../data/affixes.js';
@@ -416,16 +416,16 @@ export function showItemTooltip(arg1, arg2, state, callbacks = {}) {
   // ─── Stats base diretos com Comparativo Delta ────────────────────────────
   const STAT_KEYS = [
     'atk', 'def', 'matk', 'mdef', 'hp', 'mp', 'eva', 'crit', 'speed', 'lifesteal',
-    'hit', 'atkSpeed', 'castSpeed', 'weightBonus', 'invSlots', 'xpBoost',
-    'stunChance', 'stunResist', 'blockRate', 'hpRegen', 'mpRegen', 'critDmg', 'aoeTargets'
+    'hit', 'atkSpeed', 'castSpeed', 'cdr', 'ssBonusPct', 'spsBonusPct', 'invSlots', 'xpBoost',
+    'stunChance', 'stunResist', 'blockRate', 'hpRegen', 'mpRegen', 'critDmg'
   ];
   const STAT_LABEL = {
     atk: 'P.ATK', def: 'P.DEF', matk: 'M.ATK', mdef: 'M.DEF', hp: 'HP Máximo', mp: 'MP Máximo',
     eva: 'Evasão', crit: 'Taxa Crítica', speed: 'Velocidade', lifesteal: 'Roubo de Vida',
-    hit: 'Precisão', atkSpeed: 'Atk Speed', castSpeed: 'Cast Speed', weightBonus: 'Capacidade de Carga',
+    hit: 'Precisão', atkSpeed: 'Atk Speed', castSpeed: 'Cast Speed', cdr: 'Redução de Recarga', ssBonusPct: 'Bônus de Soulshot', spsBonusPct: 'Bônus de Spiritshot',
     invSlots: 'Slots de Mochila', xpBoost: 'Bônus de XP', stunChance: 'Chance de Stun',
     stunResist: 'Resistência a Stun', blockRate: 'Taxa de Bloqueio', hpRegen: 'Regen HP/s',
-    mpRegen: 'Regen MP/s', critDmg: 'Dano Crítico', aoeTargets: 'Alvos em Área'
+    mpRegen: 'Regen MP/s', critDmg: 'Dano Crítico'
   };
 
   if (!state || typeof state !== 'object') {
@@ -506,7 +506,7 @@ export function showItemTooltip(arg1, arg2, state, callbacks = {}) {
   let statsHtml = '';
   for (const s of STAT_KEYS) {
     if (activeItemStats[s] !== undefined && activeItemStats[s] !== null && activeItemStats[s] !== 0) {
-      const isPercent = s === 'crit' || s === 'stunChance' || s === 'stunResist' || s === 'blockRate' || s === 'xpBoost' || s === 'critDmg';
+      const isPercent = s === 'crit' || s === 'stunChance' || s === 'stunResist' || s === 'blockRate' || s === 'xpBoost' || s === 'critDmg' || s === 'cdr' || s === 'ssBonusPct' || s === 'spsBonusPct';
       const rawVal = Number(activeItemStats[s]);
       let v = rawVal;
       if (!isPercent) {
@@ -3444,7 +3444,7 @@ export function updateCharacterUI(state) {
       if (invItem.isEpic || def.isEpic) specCp += (CP_WEIGHTS?.specialBonuses?.epicJewel || 1000);
 
       const itemCp = tierBase + encCp + specCp;
-      const grade = def.grade || (tier === 6 ? 'S' : tier === 5 ? 'A' : tier === 4 ? 'B' : tier === 3 ? 'C' : tier === 2 ? 'D' : 'NG');
+      const grade = getItemGradeCode(def).toUpperCase();
       const encPrefix = enc > 0 ? `+${enc} ` : '';
 
       equipCards.push(`
@@ -7926,7 +7926,7 @@ export function renderForgeElemental(container, state) {
   const playerLvl = Number(state.level || 1);
 
   let equipsHtml = equips.map(item => {
-    const elem = item.elementalAttribute || { element: 'none', val: 0 };
+    const elem = getItemElementalAttribute(item);
     const def = getItemDef(item.itemId) || item;
     const gating = getElementalGating(item);
     const isWpn = gating.isWeapon;

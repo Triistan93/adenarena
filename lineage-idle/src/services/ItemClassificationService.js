@@ -6,6 +6,8 @@
  * equipmentType: WEAPON | ARMOR | JEWELRY | ACCESSORY (definido apenas quando category === 'EQUIPMENT')
  */
 
+import { getItemGradeCode } from '../data/items/item_grade.js';
+
 export const ITEM_CATEGORIES = {
   EQUIPMENT: 'EQUIPMENT',
   CONSUMABLE: 'CONSUMABLE',
@@ -216,7 +218,7 @@ export function isItemCompatibleWithScroll(targetDef, scrollDef) {
   }
 
   // Validação de Grau (Grade)
-  const itemGrade = String(targetDef.grade || (targetDef.tier ? ['NG','NG','D','C','B','A','S'][targetDef.tier] : 'NG')).toUpperCase();
+  const itemGrade = getItemGradeCode(targetDef).toUpperCase();
   if (scrollInfo.grade && scrollInfo.grade !== 'ANY') {
     if (scrollInfo.grade !== itemGrade) {
       return {

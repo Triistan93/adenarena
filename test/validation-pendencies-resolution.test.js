@@ -22,8 +22,10 @@ import { CANONICAL_CLASS_REGISTRY_V2 } from '../lineage-idle/src/data/classes/Ca
 import { CANONICAL_SKILL_REGISTRY_V2 } from '../lineage-idle/src/data/skills/CanonicalSkillRegistryV2.js';
 import { resolveV2ClassContext, isSkillInProgressionPath, normalizeAndValidateSkills } from '../lineage-idle/src/services/SkillEligibility.js';
 import { isSkillAllowedForClass } from '../lineage-idle/src/services/CharacterService.js';
+import { canCastSkillWeapon } from '../lineage-idle/src/engine/SkillEngine.js';
 import { getStats } from '../lineage-idle/src/engine/StatsEngine.js';
 import { parseCooldownToMs, transformV2SkillToEcho } from '../lineage-idle/data/echo-adapter.js';
+import { EUROPEAN_ERTHEIA_SKILLS } from '../lineage-idle/src/data/skills/ertheia/european-roster.js';
 import { NEUTRAL_SKILL_PLACEHOLDER } from '../lineage-idle/src/ui/GameUI.js';
 
 // ─── 1. HABILIDADES DE SYLPH (sylphGunner) ──────────────────────────────────
@@ -150,25 +152,18 @@ test('3. Ciclo de combate rejeita habilidade estrangeira pré-equipada e passiva
 });
 
 // ─── 4. CLASSES CONTENT_GAP (CRIAÇÃO -> ATAQUE BÁSICO -> XP -> SAVE -> RELOAD)
-test('4. Classes ainda bloqueadas mantêm fallback seguro; ShineMaker já resolve suas habilidades', () => {
+test('4. Ertheia roots resolve their sourced rosters and keep safe starter progression', () => {
   const shineMaker = resolveV2ClassContext('shineMakerBase', 'dwarf');
   assert.equal(shineMaker.status, 'RESOLVED');
   assert.ok(shineMaker.authorizedSkillIds.includes('shineMakerBase_light_spark'));
 
-  const contentGapClasses = ['marauderBase', 'sayhaMageBase'];
+  const ertheiaRootClasses = ['marauderBase', 'sayhaMageBase'];
 
-  for (const cls of contentGapClasses) {
-    const v2Ctx = resolveV2ClassContext(cls);
-    assert.equal(v2Ctx.status, 'CONTENT_GAP', `${cls} deve ser CONTENT_GAP`);
-    assert.equal(v2Ctx.v2ClassId, null, `${cls} deve ter v2ClassId null`);
-    const expectedAuthorizedSkills = cls === 'marauderBase'
-      ? ['fist_mastery', 'iron_punch', 'light_armor_mastery']
-      : ['hydro_attack'];
-    assert.deepEqual(
-      v2Ctx.authorizedSkillIds.slice().sort(),
-      expectedAuthorizedSkills,
-      `${cls} deve expor somente as skills explicitamente liberadas para o estágio-base`
-    );
+  for (const cls of ertheiaRootClasses) {
+    const v2Ctx = resolveV2ClassContext(cls, 'ertheia');
+    assert.equal(v2Ctx.status, 'RESOLVED', `${cls} must resolve through sourced Ertheia data`);
+    assert.equal(v2Ctx.v2ClassId, cls);
+    assert.equal(v2Ctx.authorizedSkillIds.length, 6, `${cls} must expose all six sourced root-stage skills`);
 
     // 1. Criação do estado do personagem
     const state = {
@@ -217,9 +212,9 @@ test('4. Classes ainda bloqueadas mantêm fallback seguro; ShineMaker já resolv
     assert.equal(validated.level, 2, 'Nível 2 deve ser preservado');
     assert.equal(validated.sp, 50, 'SP acumulado deve ser preservado');
     const expectedStarterSkills = cls === 'marauderBase'
-      ? { iron_punch: 1, fist_mastery: 1, light_armor_mastery: 1 }
+      ? { eminent_light_armor_mastery: 1 }
       : { hydro_attack: 1 };
-    assert.deepEqual(validated.skills, expectedStarterSkills, `${cls} deve restaurar apenas o kit-base explicitamente autorizado`);
+    assert.deepEqual(validated.skills, expectedStarterSkills, `${cls} starts with only the first locally level-unlocked roster skill`);
   }
 });
 
@@ -293,4 +288,29 @@ test('5.4 transformV2SkillToEcho corrige o tipo legado quando o catálogo canôn
   const generated = transformV2SkillToEcho('inferno', canonicalInferno);
   assert.match(generated.canonicalEffect, /damage over time/);
   assert.equal(generated.canonicalCooldownMs, 30_000);
+});
+
+test('5.5 Echo runtime preserves Ertheia local effect contracts and equipment gates', () => {
+  for (const [skillId, source] of Object.entries(EUROPEAN_ERTHEIA_SKILLS)) {
+    const generated = transformV2SkillToEcho(skillId, source);
+    assert.deepEqual(generated.effectStats, source.effectStats, `${skillId} self-effect survives runtime transformation`);
+    assert.deepEqual(generated.targetStats, source.targetStats, `${skillId} target-effect survives runtime transformation`);
+    assert.equal(generated.requiredWeapon, source.requiredWeapon || 'any', `${skillId} keeps its authored equipment requirement`);
+
+    const enrichedLegacy = transformV2SkillToEcho(skillId, source, { id: skillId, name: source.name, type: source.type });
+    assert.equal(enrichedLegacy.type, source.type, `${skillId} must execute through its locally authored runtime branch`);
+    assert.equal(enrichedLegacy.effect, source.type === 'active' ? 'dmg' : source.type === 'passive' ? 'stat' : source.type);
+    assert.deepEqual(enrichedLegacy.effectStats, source.effectStats, `${skillId} existing Echo entries are enriched`);
+    assert.deepEqual(enrichedLegacy.targetStats, source.targetStats, `${skillId} existing Echo target entries are enriched`);
+  }
+});
+
+test('a runtime weapon requirement of any does not reject every equipped weapon', () => {
+  const state = {
+    equipment: { weapon: 'weapon-1' },
+    inventory: [{ uid: 'weapon-1', itemId: 'sword', type: 'weapon', weaponType: 'sword' }]
+  };
+  assert.deepEqual(canCastSkillWeapon(state, { id: 'source_buff', requiredWeapon: 'any' }), { ok: true });
+  assert.deepEqual(canCastSkillWeapon(state, { id: 'sword_attack', requiredWeapon: 'sword' }), { ok: true });
+  assert.equal(canCastSkillWeapon(state, { id: 'fist_attack', requiredWeapon: 'fist' }).ok, false);
 });

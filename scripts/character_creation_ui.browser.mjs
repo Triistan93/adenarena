@@ -13,12 +13,15 @@ const waitForImage = async getImage => {
     if (image?.complete && image.naturalWidth > 0) {
       return { src: image.getAttribute('src'), loaded: true };
     }
-    // Allow the production onError handler to replace a missing portrait with
-    // its fallback before recording the settled URL.
+    // Let the production onError handler expose its explicit missing-art state.
     await new Promise(resolve => setTimeout(resolve, 40));
   }
   image = getImage();
   return { src: image?.getAttribute('src') || null, loaded: Boolean(image?.complete && image.naturalWidth > 0) };
+};
+const portraitPlaceholderVisible = host => {
+  const placeholder = host.querySelector('[data-portrait-placeholder]');
+  return Boolean(placeholder && getComputedStyle(placeholder).display !== 'none');
 };
 
 export async function run() {
@@ -46,7 +49,40 @@ export async function run() {
   const raceButton = name => [...host.querySelectorAll('button[data-race-id]')].find(button => button.textContent.trim().endsWith(name));
   const rows = [];
   const failures = [];
-  const contentGaps = new Set(['marauderBase', 'sayhaMageBase']);
+  await import('/src/idle/heroImages.ts');
+  const [heroArtModule, generatedPortraitModule] = await Promise.all([
+    import('/lineage-idle/art.js'),
+    import('/src/idle/generatedClassPortraits.json')
+  ]);
+  const generatedPortraitRegistry = generatedPortraitModule.default;
+  let productionPortraitResolutionCount = 0;
+  const portraitAssetLoads = [];
+  for (const [raceId, classes] of Object.entries(generatedPortraitRegistry)) {
+    for (const [classId, genderPaths] of Object.entries(classes)) {
+      if (!genderPaths.M || !genderPaths.F) continue;
+      for (const gender of ['M', 'F']) {
+        const expected = genderPaths[gender];
+        const actual = heroArtModule.heroImgPath(raceId, classId, gender);
+        const html = heroArtModule.heroSVG({ race: raceId, class: classId, gender, mode: 'bust' });
+        const renderedPath = html.match(/<img src="([^"]+)"/)?.[1];
+        productionPortraitResolutionCount += 1;
+        if (actual !== expected || renderedPath !== expected) {
+          failures.push({ raceId, classId, gender, issue: 'production hero/promotion renderer did not select the registered portrait', expected, actual, renderedPath });
+        }
+        portraitAssetLoads.push(new Promise(resolve => {
+          const image = new Image();
+          image.onload = () => resolve({ raceId, classId, gender, src: expected, loaded: true });
+          image.onerror = () => resolve({ raceId, classId, gender, src: expected, loaded: false });
+          image.src = expected;
+        }));
+      }
+    }
+  }
+  const portraitAssetResults = await Promise.all(portraitAssetLoads);
+  const portraitAssetLoadFailures = portraitAssetResults.filter(result => !result.loaded);
+  failures.push(...portraitAssetLoadFailures.map(result => ({ ...result, issue: 'portrait asset did not load from the production public path' })));
+  // Ertheia root skill trees are populated from the indexed European roster.
+  const contentGaps = new Set();
 
   for (const [raceName, raceId] of Object.entries(raceNameToId)) {
     const button = raceButton(raceName);
@@ -72,9 +108,11 @@ export async function run() {
       const identityMatchesRace = canonicalRace?.baseClassIds.includes(id) === true;
       const currentPreview = () => host.querySelector('.group > img');
       const malePreview = await waitForImage(currentPreview);
+      const malePlaceholderVisible = portraitPlaceholderVisible(host);
       host.querySelector('button[data-gender="F"]')?.click();
       await nextPaint();
       const femalePreview = await waitForImage(currentPreview);
+      const femalePlaceholderVisible = portraitPlaceholderVisible(host);
       host.querySelector('button[data-gender="M"]')?.click();
       await nextPaint();
       const selectedSummaryMatches = [...host.querySelectorAll('span')].some(span => span.textContent.trim() === classLabel);
@@ -87,15 +125,21 @@ export async function run() {
         contentStatus: contentGaps.has(id) ? 'BLOCKED_CONTENT_GAP' : 'ACTIVE',
         malePreview,
         femalePreview,
+        malePlaceholderVisible,
+        femalePlaceholderVisible,
         previewFallback: malePreview.src === '/img/humanpalaM.png' || femalePreview.src === '/img/humanpalaM.png',
+        portraitPlaceholder: [...host.querySelectorAll('[data-portrait-placeholder]')].some(el => getComputedStyle(el).display !== 'none'),
         selectedSummaryMatches
       };
       options.push(row);
       if (!row.canonicalRoot) failures.push({ raceId, classId: id, issue: 'class option does not resolve to canonical stage-0 class' });
       if (!row.identityMatchesRace) failures.push({ raceId, classId: id, issue: 'class is not registered as a base class of the selected race' });
       if (!row.selectedStateMatches) failures.push({ raceId, classId: id, issue: 'selected state did not match the active race/class option' });
-      if (!malePreview.loaded || !femalePreview.loaded) failures.push({ raceId, classId: id, issue: 'character preview image did not load for both genders', malePreview, femalePreview });
+      if (!malePreview.loaded || !femalePreview.loaded) failures.push({ raceId, classId: id, issue: 'portrait asset missing for one or both genders; production UI must show explicit placeholder', malePreview, femalePreview });
       if (row.previewFallback) failures.push({ raceId, classId: id, issue: 'class portrait silently fell back to generic Human Paladin artwork', malePreview, femalePreview });
+      if ((!malePreview.loaded && !malePlaceholderVisible) || (!femalePreview.loaded && !femalePlaceholderVisible)) {
+        failures.push({ raceId, classId: id, issue: 'missing portrait did not expose an explicit placeholder', malePreview, femalePreview, malePlaceholderVisible, femalePlaceholderVisible });
+      }
       if (!row.selectedSummaryMatches) failures.push({ raceId, classId: id, issue: 'selected class summary did not follow selection' });
     }
     rows.push({ raceId, expectedClasses: canonicalRace?.baseClassIds || [], renderedClasses: options });
@@ -150,6 +194,8 @@ export async function run() {
   } : null;
   return {
     raceCount: rows.length,
+    productionPortraitResolutionCount,
+    portraitAssetLoadCount: portraitAssetResults.length - portraitAssetLoadFailures.length,
     classOptionCount: allClassRows.length,
     uniqueClassCount: uniqueIds.length,
     activeClassCount: uniqueIds.filter(id => !contentGaps.has(id)).length,

@@ -129,3 +129,25 @@ export const CRYSTAL_ITEMS = {
     stackable: true
   }
 };
+
+export const GEMSTONE_ITEMS = Object.fromEntries([
+  ['D', 'crystal_blue_d.png'],
+  ['C', 'crystal_green_c.png'],
+  ['B', 'crystal_red_b.png'],
+  ['A', 'crystal_silver_a.png'],
+  ['S', 'crystal_gold_s.png']
+].map(([grade, icon]) => {
+  const id = `gemstone_${grade.toLowerCase()}`;
+  return [id, {
+    id,
+    name: `Gemstone ${grade}-Grade`,
+    slot: 'material',
+    category: 'material',
+    grade,
+    tier: { D: 2, C: 3, B: 4, A: 5, S: 6 }[grade],
+    icon: `materials/${icon}`,
+    price: 0,
+    stackable: true,
+    desc: `Gemstone ${grade}-Grade usada exclusivamente para a augmentação de Life Stones da faixa correspondente.`
+  }];
+}));
