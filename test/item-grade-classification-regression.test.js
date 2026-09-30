@@ -13,12 +13,14 @@ import { applyElementalInfusion, applySoulCrystalToWeapon } from '../lineage-idl
 import { resolveSoulshotEffect } from '../lineage-idle/src/engine/CombatEngine.js';
 import { getEnchantPreview } from '../lineage-idle/src/services/EnchantmentService.js';
 import { isItemCompatibleWithScroll } from '../lineage-idle/src/services/ItemClassificationService.js';
+import { canCastSkill } from '../lineage-idle/src/data/balance/skillBalance.js';
 import { ALL_ITEMS } from '../lineage-idle/src/data/items/index.js';
 import { BELT_ITEMS } from '../lineage-idle/src/data/items/attributes_belts.js';
 import {
   applyPlayerPveDamageBonus,
   applyPlayerSkillPowerBonus,
-  applyPlayerDamageTakenReduction
+  applyPlayerDamageTakenReduction,
+  applyPlayerLifesteal
 } from '../lineage-idle/src/services/SkillEffectService.js';
 
 function statsWithEquipped(slot, itemDef) {
@@ -134,6 +136,36 @@ describe('Equipment grade classification from item identity', () => {
         assert.ok(improvesAnAItem, `${sItem.name} should improve at least one effective stat over an A-grade ${slot}`);
       }
     }
+  });
+
+  it('gives raid cloaks a stronger production effect than ordinary S cloaks', () => {
+    const baseline = statsWithEquipped('cloak', ALL_ITEMS.armor_dynasti_cloack);
+    const antharas = statsWithEquipped('cloak', ALL_ITEMS.armor_antharas_cloack);
+    const valakas = statsWithEquipped('cloak', ALL_ITEMS.armor_valakas_cloack);
+    const zaken = statsWithEquipped('cloak', ALL_ITEMS.armor_zaken_cloack);
+
+    assert.ok(antharas.damageTakenReductionPercent > baseline.damageTakenReductionPercent);
+    assert.equal(antharas.damageTakenReductionPercent, 0.04);
+    assert.equal(applyPlayerDamageTakenReduction(1000, antharas), 960);
+
+    assert.ok(valakas.pveDamagePercent > baseline.pveDamagePercent);
+    assert.equal(valakas.pveDamagePercent, 0.05);
+    assert.equal(applyPlayerPveDamageBonus(100, valakas), 105);
+    assert.equal(applyPlayerSkillPowerBonus(100, valakas, 'physical'), 105);
+
+    assert.ok(zaken.cdr > baseline.cdr);
+    assert.equal(zaken.cdr, 0.05);
+    assert.equal(zaken.lifeDrain, 0.03, 'Zaken cloak should apply its advertised 3% life drain');
+    const cooldownSkill = { id: 'cloak-cooldown-regression', type: 'active', baseCd: 10_000 };
+    const recentCast = { [cooldownSkill.id]: 1_000 };
+    assert.equal(canCastSkill({ mp: 100, stats: baseline }, cooldownSkill, 10_600, recentCast).reason, 'Habilidade em recarga (cooldown ativo).');
+    assert.equal(canCastSkill({ mp: 100, stats: zaken }, cooldownSkill, 10_600, recentCast).canCast, true);
+
+    const zakenEarring = statsWithEquipped('earring1', ALL_ITEMS.jewel_earring_of_zaken);
+    assert.ok(zakenEarring.lifeDrain > 0, 'fractional life steal on boss jewelry must survive equipment stat scaling');
+    const attacker = { hp: 50, maxHp: 100 };
+    assert.equal(applyPlayerLifesteal(100, attacker, zaken.lifeDrain), 3);
+    assert.equal(attacker.hp, 53, 'Zaken life drain must heal through the production combat helper');
   });
 
   it('applies the top-grade magic belt bonuses to PvE damage, skill damage, and incoming damage in production', () => {

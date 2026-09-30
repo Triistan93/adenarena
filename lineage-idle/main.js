@@ -335,7 +335,7 @@ import { OlympiadService } from './src/services/OlympiadService.js';
 import { ClanService } from './src/services/ClanService.js';
 import { SkillEnchantService } from './src/services/SkillEnchantService.js';
 import { AugmentationService, getEquippedAugmentationSkills, getAugmentationStunChancePercent, processAugmentationCombatTick } from './src/services/AugmentationService.js';
-import { applyPlayerBasicAttackDamageBonus, applyPlayerBasicCriticalDamageReduction, applyPlayerWeaponDamageReduction, applyPlayerBuffHitControlProc, applyPlayerBuffHitHealProc, applyPlayerBuffLifeDrainProc, applyPlayerDamageTakenReduction, applyPlayerHealingReceivedBonus, applyPlayerPveDamageBonus, applyPlayerSkillPowerBonus, applySkillBuffDurationBonus, applySkillDamageOverTime, applySkillTargetDebuff, applyTargetDamageTakenBonus, clearPlayerCombatDebuffs, getActivePlayerCombatDebuffIds, getPlayerBuffShockChanceBonus, getDebuffedMonsterAttack, getDebuffedMonsterAttackSpeed, getDebuffedMonsterDefense, getHpPotionHealAmount, isMonsterActionDisabled, isHpRecoveryPotion, isMonsterMagicSkillSilenced, processSkillDamageOverTime, resolveDebuffedMonsterSkillCooldownMs, resolveDwarvenWeaponMasteryStunChancePercent, resolveMechanicalMasterpieceHit, resolvePlayerBasicAttackIntervalMs, resolvePlayerDamageReflection, resolvePhysicalSkillCriticalDamage, resolveSkillBuffDurationMs, resolveSkillBuffStats, resolveSkillDamageOverTime, resolveSkillFixedHeal, resolveSkillHealPower, resolveSkillHpSacrificeCost, resolveSkillMpRecoveryAmount, resolveSkillSelfHealPercent, resolveSkillTargetDebuffStats, shouldEvadeMonsterSkill } from './src/services/SkillEffectService.js';
+import { applyPlayerBasicAttackDamageBonus, applyPlayerBasicCriticalDamageReduction, applyPlayerWeaponDamageReduction, applyPlayerBuffHitControlProc, applyPlayerBuffHitHealProc, applyPlayerBuffLifeDrainProc, applyPlayerDamageTakenReduction, applyPlayerHealingReceivedBonus, applyPlayerLifesteal, applyPlayerPveDamageBonus, applyPlayerSkillPowerBonus, applySkillBuffDurationBonus, applySkillDamageOverTime, applySkillTargetDebuff, applyTargetDamageTakenBonus, clearPlayerCombatDebuffs, getActivePlayerCombatDebuffIds, getPlayerBuffShockChanceBonus, getDebuffedMonsterAttack, getDebuffedMonsterAttackSpeed, getDebuffedMonsterDefense, getHpPotionHealAmount, isMonsterActionDisabled, isHpRecoveryPotion, isMonsterMagicSkillSilenced, processSkillDamageOverTime, resolveDebuffedMonsterSkillCooldownMs, resolveDwarvenWeaponMasteryStunChancePercent, resolveMechanicalMasterpieceHit, resolvePlayerBasicAttackIntervalMs, resolvePlayerDamageReflection, resolvePhysicalSkillCriticalDamage, resolveSkillBuffDurationMs, resolveSkillBuffStats, resolveSkillDamageOverTime, resolveSkillFixedHeal, resolveSkillHealPower, resolveSkillHpSacrificeCost, resolveSkillMpRecoveryAmount, resolveSkillSelfHealPercent, resolveSkillTargetDebuffStats, shouldEvadeMonsterSkill } from './src/services/SkillEffectService.js';
 import { SevenSignsService } from './src/services/SevenSignsService.js';
 import { SEAL_STONES, NECROPOLIS_ZONES } from './src/data/seven_signs.js';
 import { FortressService } from './src/services/FortressService.js';
@@ -6295,12 +6295,7 @@ export function attackMonster() {
     log(`${damage} basic damage to ${monster.name}`, 'damage'); 
   }
   
-  if (stats.lifeDrain > 0) {
-    const rawHeal = Math.floor(damage * stats.lifeDrain);
-    const maxHeal = Math.floor((stats.maxHp || state.maxHp || 100) * 0.30);
-    const heal = Math.min(rawHeal, maxHeal);
-    if (heal > 0) { state.hp = Math.min(state.maxHp, state.hp + heal); }
-  }
+  applyPlayerLifesteal(damage, state, stats.lifeDrain, stats.maxHp || state.maxHp || 100);
   
   const procBonuses = getEquippedProcBonuses();
   let affixDmgMult = 1.0;

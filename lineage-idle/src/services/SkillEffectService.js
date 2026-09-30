@@ -987,6 +987,21 @@ export function resolvePlayerDamageReflection(buffs, receivedDamage, now = Date.
   return Math.floor(damage * reflectPercent);
 }
 
+/** Applies the equipment-derived life-drain ratio to an actual player hit. */
+export function applyPlayerLifesteal(damage, state, lifeDrain, maxHp = state?.maxHp) {
+  const amount = Math.max(0, Number(damage) || 0);
+  const ratio = Math.max(0, Number(lifeDrain) || 0);
+  const hpLimit = Number(maxHp);
+  const currentHp = Number(state?.hp);
+  if (amount <= 0 || ratio <= 0 || !state || !Number.isFinite(hpLimit) || hpLimit <= 0 || !Number.isFinite(currentHp) || currentHp >= hpLimit) return 0;
+
+  const rawHeal = Math.floor(amount * ratio);
+  const healCap = Math.floor(hpLimit * 0.30);
+  const healed = Math.min(Math.max(0, hpLimit - currentHp), healCap, rawHeal);
+  if (healed > 0) state.hp = currentHp + healed;
+  return healed;
+}
+
 /** Applies chance-based lifesteal procs stored on active self-buffs. */
 export function applyPlayerBuffLifeDrainProc(damage, state, maxHp = state?.maxHp, now = Date.now(), random = Math.random) {
   const amount = Math.max(0, Number(damage) || 0);

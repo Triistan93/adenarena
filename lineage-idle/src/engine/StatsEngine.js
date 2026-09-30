@@ -246,7 +246,7 @@ export function getEquipBonus(state, slot) {
     if (out[k]) {
       const scaled = Number(out[k]) * rarityMult * enchantMult * foundationMult;
       // Critical damage is stored as a fractional multiplier (for example 0.30 = +30%).
-      const fractionalStat = ['critDmg','cdr','stunResist','pveDamagePercent','damageTakenReductionPercent','pSkillPowerPercent','mSkillPowerPercent'].includes(k);
+      const fractionalStat = ['critDmg','cdr','stunResist','lifesteal','pveDamagePercent','damageTakenReductionPercent','pSkillPowerPercent','mSkillPowerPercent'].includes(k);
       out[k] = fractionalStat ? Math.round(scaled * 1e6) / 1e6 : Math.floor(scaled);
     }
   });
