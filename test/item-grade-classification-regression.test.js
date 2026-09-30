@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import { getItemGradeCode } from '../lineage-idle/src/data/items/item_grade.js';
 import { WEAPONS } from '../lineage-idle/src/data/items/weapons.js';
 import { ARMORS } from '../lineage-idle/src/data/items/armors.js';
-import { RINGS, NECKLACES } from '../lineage-idle/src/data/items/jewels.js';
+import { RINGS, NECKLACES, EARRINGS } from '../lineage-idle/src/data/items/jewels.js';
 import { DEFAULT_STATE } from '../lineage-idle/src/core/StateManager.js';
 import { getStats } from '../lineage-idle/src/engine/StatsEngine.js';
 import { calculatePhysicalDamage, calculateMagicDamage } from '../lineage-idle/src/data/balance/combatBalance.js';
@@ -14,7 +14,8 @@ import { resolveSoulshotEffect } from '../lineage-idle/src/engine/CombatEngine.j
 import { getEnchantPreview } from '../lineage-idle/src/services/EnchantmentService.js';
 import { isItemCompatibleWithScroll } from '../lineage-idle/src/services/ItemClassificationService.js';
 import { canCastSkill } from '../lineage-idle/src/data/balance/skillBalance.js';
-import { ALL_ITEMS } from '../lineage-idle/src/data/items/index.js';
+import { ALL_ITEMS, ARMOR_SETS } from '../lineage-idle/src/data/items/index.js';
+import { getArmorType } from '../lineage-idle/src/data/items/item_class_rules.js';
 import { BELT_ITEMS } from '../lineage-idle/src/data/items/attributes_belts.js';
 import {
   applyPlayerPveDamageBonus,
@@ -31,7 +32,55 @@ function statsWithEquipped(slot, itemDef) {
   const uid = 'grade-regression-item';
   state.inventory = [{ ...itemDef, uid, itemId: itemDef.id || itemDef.itemId }];
   state.equipment = { ...state.equipment, [slot]: uid };
-  return getStats(state);
+  const previousGameData = globalThis.GameData;
+  globalThis.GameData = { ...(previousGameData || {}), ALL_ITEMS, ARMOR_SETS };
+  try {
+    return getStats(state);
+  } finally {
+    if (previousGameData === undefined) delete globalThis.GameData;
+    else globalThis.GameData = previousGameData;
+  }
+}
+
+function statsWithArmorSet(setId, armorType) {
+  const state = DEFAULT_STATE();
+  state.race = 'human';
+  state.class = armorType === 'robe' ? 'archmage' : 'hawkeye';
+  state.level = 90;
+  const setDef = ARMOR_SETS[setId];
+  let sequence = 0;
+
+  for (const slot of ['armor', 'helmet', 'boots', 'gloves', 'legs']) {
+    const variants = setDef.variantPieces?.[slot] || [];
+    const itemId = setDef.pieces?.[slot] || variants.find(id => {
+      const item = ALL_ITEMS[id];
+      return item && getArmorType(item.id, item.name) === armorType;
+    }) || variants[0];
+    if (!itemId) continue;
+    const item = ALL_ITEMS[itemId];
+    if (!item) continue;
+    const uid = `armor-set-${++sequence}`;
+    state.inventory.push({ ...item, uid, itemId: item.id });
+    state.equipment[slot] = uid;
+  }
+
+  if (setDef.shieldPiece) {
+    const item = ALL_ITEMS[setDef.shieldPiece];
+    if (item) {
+      const uid = `armor-set-${++sequence}`;
+      state.inventory.push({ ...item, uid, itemId: item.id });
+      state.equipment.shield = uid;
+    }
+  }
+
+  const previousGameData = globalThis.GameData;
+  globalThis.GameData = { ...(previousGameData || {}), ALL_ITEMS, ARMOR_SETS };
+  try {
+    return getStats(state);
+  } finally {
+    if (previousGameData === undefined) delete globalThis.GameData;
+    else globalThis.GameData = previousGameData;
+  }
 }
 
 describe('Equipment grade classification from item identity', () => {
@@ -113,6 +162,23 @@ describe('Equipment grade classification from item identity', () => {
     compareEverySItemToBosses(NECKLACES, 'necklace');
   });
 
+  it('keeps Epic Boss earrings above the available A-grade earrings in final stats', () => {
+    const unique = [...new Map(Object.values(EARRINGS).map(item => [item.id, item])).values()];
+    const bossItems = unique.filter(item => getItemGradeCode(item) === 'boss');
+    const aItems = unique.filter(item => getItemGradeCode(item) === 'a');
+    assert.ok(bossItems.length && aItems.length);
+    const fields = ['atk', 'matk', 'def', 'mdef', 'hp', 'mp', 'crit', 'cdr'];
+
+    for (const bossItem of bossItems) {
+      const bossStats = statsWithEquipped('earring1', bossItem);
+      assert.ok(aItems.some(aItem => {
+        const aStats = statsWithEquipped('earring1', aItem);
+        return fields.some(field => (bossStats[field] || 0) > (aStats[field] || 0));
+      }), `${bossItem.name} must exceed available A-grade earrings in at least one final attribute`);
+      if (Number(bossItem.lifesteal) > 0) assert.ok(bossStats.lifeDrain > 0, `${bossItem.name} must retain its life-drain effect`);
+    }
+  });
+
   it('preserves S-over-A progression across every armor piece slot with comparable catalog coverage', () => {
     const armorSlots = ['armor', 'helmet', 'gloves', 'legs', 'boots', 'cloak', 'belt', 'shield'];
     const uniqueItems = [...new Map(Object.values(ALL_ITEMS)
@@ -136,6 +202,26 @@ describe('Equipment grade classification from item identity', () => {
         assert.ok(improvesAnAItem, `${sItem.name} should improve at least one effective stat over an A-grade ${slot}`);
       }
     }
+  });
+
+  it('applies full A-to-S armor-set progression to final defensive and offensive combat values', () => {
+    const aHeavy = statsWithArmorSet('nightmare_set', 'heavy');
+    const sHeavy = statsWithArmorSet('imperial_crusader_set', 'heavy');
+    assert.ok(sHeavy.def > aHeavy.def);
+    assert.ok(sHeavy.mdef > aHeavy.mdef);
+    assert.ok(calculatePhysicalDamage({ atk: 500, def: sHeavy.def, applyVariance: false }) < calculatePhysicalDamage({ atk: 500, def: aHeavy.def, applyVariance: false }));
+
+    const aLight = statsWithArmorSet('doom_set', 'light');
+    const sLight = statsWithArmorSet('draconic_set', 'light');
+    assert.ok(sLight.atk > aLight.atk);
+    assert.ok(sLight.crit > aLight.crit);
+    assert.ok(calculatePhysicalDamage({ atk: sLight.atk, def: 100, applyVariance: false }) > calculatePhysicalDamage({ atk: aLight.atk, def: 100, applyVariance: false }));
+
+    const aRobe = statsWithArmorSet('majestic_set', 'robe');
+    const sRobe = statsWithArmorSet('major_arcana_set', 'robe');
+    assert.ok(sRobe.matk > aRobe.matk);
+    assert.ok(sRobe.mdef > aRobe.mdef);
+    assert.ok(calculateMagicDamage({ matk: sRobe.matk, mdef: 100, applyVariance: false }) > calculateMagicDamage({ matk: aRobe.matk, mdef: 100, applyVariance: false }));
   });
 
   it('gives raid cloaks a stronger production effect than ordinary S cloaks', () => {
