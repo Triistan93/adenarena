@@ -43,15 +43,15 @@ export const ZONES = {
   gludioCastle:    { name: 'Gludio Castle', level: 45, monsters: ['knight', 'cursedKnight', 'gludioRoyalArcher', 'gludioSorcerer', 'gludioShieldMaster'], boss: 'gludioCommander', shop: 'gludioCastle', town: true },
   wolfMountain:    { name: 'Wolf Mountain', level: 48, monsters: ['mountainWolf', 'mountainDireWolf', 'frostStalkerWolf', 'mountainSnowBear', 'frostFangBehemoth'], boss: 'mountainAlphaWolf', shop: 'gludioCastle' },
   riftOfTheVoid:   { name: 'Rift of the Void', level: 50, monsters: ['voidCreature', 'voidBrute', 'voidStalker', 'beholder', 'voidArchonEntity'], boss: 'voidDragonLord', shop: 'dragonValley', town: false },
-  emeraldGrove:    { name: 'Emerald Grove', level: 60, monsters: ['emeraldSnake', 'emeraldDrake', 'jadeGolem', 'groveSpiritMage', 'emeraldDragon'], boss: 'fafurion', shop: 'dragonValley', town: false },
+  emeraldGrove:    { name: 'Emerald Grove', level: 60, monsters: ['emeraldSnake', 'emeraldDrake', 'jadeGolem', 'groveSpiritMage'], boss: 'emeraldDragon', shop: 'dragonValley', town: false },
   underworldGate:  { name: 'Gates of the Underworld', level: 70, monsters: ['blazingWerewolf', 'swiftBlaze', 'infernalHound', 'lavaFiend', 'flameOverlordDemon'], boss: 'cerberus', shop: 'dragonValley', town: false },
   valleyOfSaints:  { name: 'Valley of Saints', level: 72, monsters: ['saintEye', 'saintGuardian', 'splendorLight', 'celestialArchon', 'divineSeraphim'], boss: 'splendorKnight', shop: 'adenCity', town: false },
   swampOfScreams:  { name: 'Swamp of Screams', level: 74, monsters: ['swampStrikers', 'corruptedSpiders', 'screamingSouls', 'stakatoWarrior', 'stakatoQueenBrood'], boss: 'swampAbomination', shop: 'adenCity', town: false },
   adenCity:        { name: 'Aden City', level: 76, monsters: ['royalKnight', 'highMage', 'adenCrossbowman', 'adenPaladin', 'adenHighJusticiar'], boss: 'adenCommander', shop: 'adenCity', town: true },
-  dragonValley:    { name: 'Dragon Valley', level: 80, monsters: ['dragon', 'dragonKnight', 'frostKnight', 'frostLordDragon', 'dragonValleyOverlord'], boss: 'lindvior', shop: 'dragonValley', town: true },
+  dragonValley:    { name: 'Dragon Valley', level: 80, monsters: ['dragon', 'dragonKnight', 'frostKnight', 'frostLordDragon'], boss: 'dragonValleyOverlord', shop: 'dragonValley', town: true },
   imperialTomb:    { name: 'Imperial Tomb', level: 85, monsters: ['tombGuardian', 'sepulcherArchon', 'undeadKnight', 'imperialGhostMage', 'lichLord'], boss: 'deathKing', shop: 'adenCity', town: false },
-  antharasLair:    { name: "Antharas' Lair", level: 90, monsters: ['caveDrake', 'magmaBeast', 'earthDrake', 'caveWyrmBehemoth', 'antharasBehemoth'], boss: 'antharas', shop: 'dragonValley', town: false },
-  forgeOfGods:     { name: 'Forge of the Gods', level: 95, monsters: ['valakasMinion', 'lavaGolem', 'flameArchon', 'flameGiantDragon', 'vulcanLord'], boss: 'valakas', shop: 'dragonValley', town: false },
+  antharasLair:    { name: "Antharas' Lair", level: 90, monsters: ['caveDrake', 'magmaBeast', 'earthDrake', 'caveWyrmBehemoth'], boss: 'antharasBehemoth', shop: 'dragonValley', town: false },
+  forgeOfGods:     { name: 'Forge of the Gods', level: 95, monsters: ['valakasMinion', 'lavaGolem', 'flameArchon', 'flameGiantDragon'], boss: 'vulcanLord', shop: 'dragonValley', town: false },
 
   // ═══════════════════════════════════════════════════════════════════════
   // SEVEN SIGNS: NECROPOLIS & CATACOMBS (Drops Canônicos de Seal Stones)
@@ -118,4 +118,3 @@ export const ZONE_BACKGROUNDS = {
   valakas:        '/img/Maps/forgeofgods.jpg',
   barakiel:       '/img/Maps/valleyofsaints.jpg'
 };
-

@@ -8,6 +8,9 @@ import { pickRandomMonster, selectZone, stopCombat } from '../lineage-idle/src/e
 import { MONSTERS } from '../lineage-idle/src/data/monsters.js';
 import { ZONE_BACKGROUNDS, ZONES, SAGAS } from '../lineage-idle/src/data/zones.js';
 import { ZONE_CP_REQUIREMENTS } from '../lineage-idle/src/data/balance/progressionBalance.js';
+import { RAID_BOSSES } from '../lineage-idle/src/data/raids.js';
+import { SOLO_INSTANCES } from '../lineage-idle/src/data/instances.js';
+import { WORLD_BOSS_CATALOG } from '../lineage-idle/src/services/WorldBossService.js';
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -26,6 +29,52 @@ test('every hunting zone has valid monsters, boss, saga, progression gate, and m
     const mapPath = ZONE_BACKGROUNDS[zoneId];
     assert.ok(mapPath, `${zoneId} must have a map background`);
     assert.ok(fs.existsSync(path.join(repoRoot, 'public', mapPath.replace(/^\//, ''))), `${zoneId} map asset ${mapPath} must exist`);
+  }
+});
+
+test('epic dragon bosses do not spawn in normal zones and have a special encounter route', () => {
+  const epicDragons = ['antharas', 'valakas', 'fafurion', 'lindvior'];
+  const zoneBosses = Object.values(ZONES).map(zone => zone.boss);
+  const raidIds = new Set(Object.keys(RAID_BOSSES));
+  const worldBossIds = new Set(Object.values(WORLD_BOSS_CATALOG).map(boss => boss.id));
+
+  for (const raidId of raidIds) {
+    assert.ok(!zoneBosses.includes(raidId), `${raidId} must not be configured as a normal hunting-zone boss`);
+  }
+  for (const worldBossId of worldBossIds) {
+    const raidId = worldBossId.replace(/_world$/, '');
+    assert.ok(!zoneBosses.includes(raidId), `${worldBossId} must not spawn as a normal hunting-zone boss`);
+  }
+
+  for (const epicId of epicDragons) {
+    const hasRaidRoute = raidIds.has(epicId);
+    const hasSpecialInstanceRoute = Object.values(SOLO_INSTANCES).some(instance => instance.stages?.some(stage => stage.id === epicId || stage.name.toLowerCase().startsWith(epicId)));
+    assert.ok(hasRaidRoute || hasSpecialInstanceRoute, `${epicId} must remain available through a special encounter`);
+    assert.ok(!zoneBosses.includes(epicId), `${epicId} must not spawn as a normal hunting-zone boss`);
+  }
+
+  for (const epicId of ['antharas', 'valakas']) {
+    assert.ok(worldBossIds.has(`${epicId}_world`), `${epicId} must remain available through the world-boss event`);
+  }
+
+  assert.equal(ZONES.antharasLair.boss, 'antharasBehemoth');
+  assert.equal(ZONES.forgeOfGods.boss, 'vulcanLord');
+  assert.equal(ZONES.emeraldGrove.boss, 'emeraldDragon');
+  assert.equal(ZONES.dragonValley.boss, 'dragonValleyOverlord');
+  assert.ok(MONSTERS[ZONES.antharasLair.boss].boss, 'Antharas Lair must retain its own regional boss');
+  assert.ok(MONSTERS[ZONES.forgeOfGods.boss].boss, 'Forge of the Gods must retain its own regional boss');
+  assert.ok(MONSTERS[ZONES.emeraldGrove.boss].boss, 'Emerald Grove must retain its own regional boss');
+  assert.ok(MONSTERS[ZONES.dragonValley.boss].boss, 'Dragon Valley must retain its own regional boss');
+
+  assert.equal(RAID_BOSSES.fafurion, undefined, 'Fafurion must use the dedicated Nest encounter rather than generic Raid entry');
+  assert.equal(RAID_BOSSES.lindvior.id, 'lindvior');
+  assert.ok(SOLO_INSTANCES.fafurion_nest.stages.some(stage => stage.id === 'fafurion'), 'Fafurion must be the Nest final-stage boss');
+
+  for (const epicId of ['lindvior']) {
+    const encounter = RAID_BOSSES[epicId];
+    assert.ok(encounter.fatalSkill?.name, `${epicId} must define its own fatal skill`);
+    assert.ok(encounter.mechanics?.length >= 2, `${epicId} must define encounter mechanics`);
+    assert.ok(encounter.drops?.length, `${epicId} must have configured raid rewards`);
   }
 });
 

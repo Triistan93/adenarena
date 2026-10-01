@@ -345,7 +345,7 @@ import { OlympiadService } from './src/services/OlympiadService.js';
 import { ClanService } from './src/services/ClanService.js';
 import { SkillEnchantService } from './src/services/SkillEnchantService.js';
 import { AugmentationService, getEquippedAugmentationSkills, getAugmentationStunChancePercent, processAugmentationCombatTick } from './src/services/AugmentationService.js';
-import { applyPlayerBasicAttackDamageBonus, applyPlayerBasicCriticalDamageReduction, applyPlayerWeaponDamageReduction, applyPlayerBuffHitControlProc, applyPlayerBuffHitHealProc, applyPlayerBuffLifeDrainProc, applyPlayerDamageTakenReduction, applyPlayerHealingReceivedBonus, applyPlayerLifesteal, applyPlayerPveDamageBonus, applyPlayerSkillPowerBonus, applySkillBuffDurationBonus, applySkillDamageOverTime, applySkillTargetDebuff, applyTargetDamageTakenBonus, clearPlayerCombatDebuffs, getActivePlayerCombatDebuffIds, getPlayerBuffShockChanceBonus, getDebuffedMonsterAttack, getDebuffedMonsterAttackSpeed, getDebuffedMonsterDefense, getHpPotionHealAmount, isMonsterActionDisabled, isHpRecoveryPotion, isMonsterMagicSkillSilenced, processSkillDamageOverTime, resolveDebuffedMonsterSkillCooldownMs, resolveDwarvenWeaponMasteryStunChancePercent, resolveMechanicalMasterpieceHit, resolvePlayerBasicAttackIntervalMs, resolvePlayerDamageReflection, resolvePhysicalSkillCriticalDamage, resolveSkillBuffDurationMs, resolveSkillBuffStats, resolveSkillDamageOverTime, resolveSkillFixedHeal, resolveSkillHealPower, resolveSkillHpSacrificeCost, resolveSkillMpRecoveryAmount, resolveSkillSelfHealPercent, resolveSkillTargetDebuffStats, rollPlayerHitStunProc, shouldEvadeMonsterSkill } from './src/services/SkillEffectService.js';
+import { applyMonsterSkillStatus, applyPlayerBasicAttackDamageBonus, applyPlayerBasicCriticalDamageReduction, applyPlayerWeaponDamageReduction, applyPlayerBuffHitControlProc, applyPlayerBuffHitHealProc, applyPlayerBuffLifeDrainProc, applyPlayerDamageTakenReduction, applyPlayerHealingReceivedBonus, applyPlayerLifesteal, applyPlayerPveDamageBonus, applyPlayerSkillPowerBonus, applySkillBuffDurationBonus, applySkillDamageOverTime, applySkillTargetDebuff, applyTargetDamageTakenBonus, clearPlayerCombatDebuffs, getActivePlayerCombatDebuffIds, getActiveSkillDebuffStats, getPlayerBuffShockChanceBonus, getDebuffedMonsterAttack, getDebuffedMonsterAttackSpeed, getDebuffedMonsterDefense, getHpPotionHealAmount, isMonsterActionDisabled, isHpRecoveryPotion, isMonsterMagicSkillSilenced, processMonsterSkillStatus, processSkillDamageOverTime, resolveDebuffedMonsterSkillCooldownMs, resolveDwarvenWeaponMasteryStunChancePercent, resolveMechanicalMasterpieceHit, resolvePlayerBasicAttackIntervalMs, resolvePlayerDamageReflection, resolvePhysicalSkillCriticalDamage, resolveSkillBuffDurationMs, resolveSkillBuffStats, resolveSkillDamageOverTime, resolveSkillFixedHeal, resolveSkillHealPower, resolveSkillHpSacrificeCost, resolveSkillMpRecoveryAmount, resolveSkillSelfHealPercent, resolveSkillTargetDebuffStats, rollPlayerHitStunProc, shouldEvadeMonsterSkill } from './src/services/SkillEffectService.js';
 import { SevenSignsService } from './src/services/SevenSignsService.js';
 import { SEAL_STONES, NECROPOLIS_ZONES } from './src/data/seven_signs.js';
 import { FortressService } from './src/services/FortressService.js';
@@ -5197,6 +5197,7 @@ function checkBuffsExpire() {
  */
 function processMonsterDefeat(monster, killingSkill = null) {
   stageMonsterDie();
+  let instanceStageAdvanced = false;
 
   // Evolução de XP do Mascote
   PetService.addPetXp(state, monster.xp || 100, { log, floatText });
@@ -5206,7 +5207,8 @@ function processMonsterDefeat(monster, killingSkill = null) {
 
   // Conclusão de Instância Solo (Kamaloka / Pailaka)
   if (monster.isInstanceBoss && monster.instanceId) {
-    InstanceService.onInstanceBossVictory(state, monster.instanceId, { log, floatText, updateAllUI, save });
+    const result = InstanceService.onInstanceBossVictory(state, monster.instanceId, { log, floatText, updateAllUI, renderStageMonster, save });
+    instanceStageAdvanced = !!result?.advanced;
   }
 
   const procBonuses = getEquippedProcBonuses();
@@ -5482,7 +5484,10 @@ function processMonsterDefeat(monster, killingSkill = null) {
   }
 
   checkLevelUp();
-  if (state.isCombatActive !== false) {
+  if (instanceStageAdvanced) {
+    updateAllUI();
+    save();
+  } else if (state.isCombatActive !== false) {
     if (monster.isTower && state.lastHuntingZone) {
       state.zone = state.lastHuntingZone;
     }
@@ -5532,6 +5537,18 @@ export function attackMonster() {
   }
 
   checkBuffsExpire();
+  const monsterStatusTick = processMonsterSkillStatus(state, Date.now());
+  if (monsterStatusTick?.damage > 0) {
+    log(`☠️ ${monsterStatusTick.name} de ${monsterStatusTick.sourceName} causou ${monsterStatusTick.damage} de dano contínuo.`, 'damage');
+    stageHeroHurt(monsterStatusTick.damage);
+    if (state.hp <= 0) {
+      state.hp = 0;
+      playerDeath(state.activeMonster);
+      updateStatsUI();
+      return;
+    }
+  }
+  if (isMonsterActionDisabled(state, Date.now())) return;
   const augmentationActivations = processAugmentationCombatTick(state, Date.now());
   for (const activation of augmentationActivations) {
     const itemSkill = getEquippedAugmentationSkills(state).find(skill => skill.id === activation.id);
@@ -5546,6 +5563,18 @@ export function attackMonster() {
     serviceProcessRaidBossMechanics(state, {
       log,
       floatText,
+      onPhaseChange: (phase, phaseNumber) => {
+        const zoneLabel = el('stage-zone');
+        if (zoneLabel) zoneLabel.textContent = `🌊 RAID · FASE ${phaseNumber}: ${phase.name}`;
+      },
+      onStatusImpact: (dmg) => {
+        stageHeroHurt(dmg);
+        if (state.hp <= 0) {
+          state.hp = 0;
+          playerDeath(monster);
+        }
+        updateStatsUI();
+      },
       onFatalImpact: (dmg) => {
         stageHeroHurt(dmg, true);
         if (state.hp <= 0) {
@@ -5555,6 +5584,25 @@ export function attackMonster() {
         updateStatsUI();
       }
     });
+  }
+  if (monster.isInstanceBoss) {
+    InstanceService.processInstanceBossMechanics(state, {
+      log,
+      floatText,
+      onPhaseChange: (phase, phaseNumber) => {
+        const zoneLabel = el('stage-zone');
+        if (zoneLabel) zoneLabel.textContent = `🌊 INSTÂNCIA · FASE ${phaseNumber}: ${phase.name}`;
+      },
+      onStatusImpact: (dmg) => {
+        stageHeroHurt(dmg);
+        if (state.hp <= 0) {
+          state.hp = 0;
+          playerDeath(monster);
+        }
+        updateStatsUI();
+      }
+    });
+    if (state.hp <= 0) return;
   }
   combatTick++;
 
@@ -6140,6 +6188,9 @@ export function attackMonster() {
   const atkType = useMagic ? 'magic' : 'physical';
   
   let damage = dealDamage(getSkillDebuffDefenseTarget(monster), atkVal, atkType);
+  const playerStatusDebuffs = getActiveSkillDebuffStats(state, Date.now());
+  const attackPenalty = useMagic ? playerStatusDebuffs.mAtkPercent : playerStatusDebuffs.pAtkPercent;
+  damage = Math.max(1, Math.floor(damage * Math.max(0.1, 1 + (Number(attackPenalty) || 0))));
   let wasCrit = false;
 
   // Bônus de Atributo Elemental das Armas Equipadas (Primária + Arsenal Secundário via ElementalService)
@@ -6489,6 +6540,12 @@ export function monsterAttack(monster) {
     } else if (monsterSkillEffect === 'poison') {
       stageFloat('🧪 ENVENENADO', 'sf-hurt', 'left');
       log(`🧪 **${monster.name}** usou [${skillName}] causando envenenamento!`, 'warning');
+    }
+    const statusResult = applyMonsterSkillStatus(state, monster, monsterSkillEffect, realNow, Math.random(), stats.debuffResistPercent);
+    if (statusResult.applied) {
+      log(`⏳ ${monster.name} aplicou ${statusResult.status === 'stun' ? 'atordoamento' : statusResult.status === 'root' ? 'enraizamento' : statusResult.status === 'bleed' ? 'sangramento' : 'veneno'} (${Math.ceil((statusResult.until - realNow) / 1000)}s).`, 'warning');
+    } else if (statusResult.reason === 'resisted') {
+      log(`🛡️ Você resistiu ao efeito de ${monster.name}.`, 'combat');
     }
   }
   atkVal = getDebuffedMonsterAttack(monster, atkVal, type, realNow);
@@ -10333,13 +10390,14 @@ export function init() {
       const listContainer = el('instances-list-container');
       if (!listContainer) return;
 
-      const entries = InstanceService.getDailyEntries(state);
+      InstanceService.getDailyEntries(state);
       listContainer.innerHTML = '';
 
       Object.values(SOLO_INSTANCES).forEach(inst => {
-        const completed = !!entries.completed[inst.id];
-        const pLvl = state.level || 1;
-        const canEnter = pLvl >= inst.minLvl && !completed;
+        const completed = !!InstanceService.getEntryCompletions(state, inst)[inst.id];
+        const playerCP = Number(state.stats?.combatPower ?? state.combatPower) || 0;
+        const entryCheck = InstanceService.canEnterInstance(state, inst.id);
+        const canEnter = entryCheck.ok && !completed;
 
         const card = mkEl('div');
         card.style.cssText = `
@@ -10362,6 +10420,9 @@ export function init() {
                 <span style="font-size:10px; padding:2px 6px; border-radius:4px; background:rgba(212,167,68,0.2); margin-left:6px; color:#fde047;">Lv. ${inst.minLvl}+</span>
               </div>
               <div style="font-size:11px; color:#cbd5e1; margin-top:2px;">Chefe: <strong style="color:#f87171;">${inst.bossName}</strong> (HP: ${inst.bossHp.toLocaleString()} · Atk: ${inst.bossAtk})</div>
+              ${inst.stages ? `<div style="font-size:10px; color:#93c5fd; margin-top:2px;">${inst.stages.length} etapas encadeadas · CP mínimo ${inst.minimumCP.toLocaleString()} (seu CP: ${playerCP.toLocaleString()})</div>` : ''}
+              ${inst.entryReset === 'weekly' ? '<div style="font-size:10px; color:#c4b5fd; margin-top:2px;">Entrada e recompensa: uma vez por semana</div>' : ''}
+              ${inst.eventWindow ? `<div style="font-size:10px; color:#c4b5fd; margin-top:2px;">Janela: sexta-feira, ${String(inst.eventWindow.startHourUTC).padStart(2, '0')}:00–${String(inst.eventWindow.endHourUTC).padStart(2, '0')}:00 UTC</div>` : ''}
               <div style="font-size:10px; color:#6ee7b7; margin-top:2px;">🎁 Recompensas: +${inst.rewards.xp.toLocaleString()} XP · +${inst.rewards.gold.toLocaleString()}g · +${inst.rewards.sp} SP · ${inst.rewards.guaranteedRewardText}</div>
             </div>
           </div>
@@ -10383,7 +10444,7 @@ export function init() {
     window.closeInstancesModal = closeInstancesModal;
     window.renderInstancesModalUI = renderInstancesModalUI;
     window.challengeInstanceAction = (instanceId) => {
-      const res = InstanceService.challengeInstance(state, instanceId, { log, floatText, renderStageMonster, updateAllUI });
+      const res = InstanceService.challengeInstance(state, instanceId, { log, floatText, renderStageMonster, updateAllUI, attackMonster, save });
       if (res.success) {
         closeInstancesModal();
       }

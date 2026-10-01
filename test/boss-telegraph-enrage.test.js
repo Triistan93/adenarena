@@ -404,3 +404,37 @@ test('5. handleRaidVictory resets active telegraphs and enrage class', () => {
   assert.equal(cleared, true);
   assert.equal(state.isRaidActive, false);
 });
+
+test('Fafurion and Lindvior apply their own timed damage statuses from the live raid mechanics', () => {
+  const cases = [
+    { raidId: 'lindvior', statusName: 'Ferida Tempestuosa', triggerHp: 0.72, expectedTick: 250 }
+  ];
+
+  for (const { raidId, statusName, triggerHp, expectedTick } of cases) {
+    const boss = RAID_BOSSES[raidId];
+    const state = {
+      hp: 10_000,
+      maxHp: 10_000,
+      activeMonster: {
+        ...boss,
+        id: raidId,
+        isRaid: true,
+        _maxHp: boss.hp,
+        hp: Math.floor(boss.hp * triggerHp)
+      }
+    };
+    const logLines = [];
+
+    processRaidBossMechanics(state, { now: 10_000, log: (line) => logLines.push(line) });
+    assert.equal(state.activeRaidStatus.name, statusName, `${raidId} applies its named status`);
+    assert.ok(logLines.some((line) => line.includes(statusName)));
+    const hpAfterBurst = state.hp;
+
+    processRaidBossMechanics(state, { now: 11_000, log: (line) => logLines.push(line) });
+    assert.equal(state.hp, hpAfterBurst - expectedTick, `${raidId} deals its configured periodic status damage`);
+    assert.ok(logLines.some((line) => line.includes('dano contínuo')));
+
+    processRaidBossMechanics(state, { now: 11_000, log: (line) => logLines.push(line) });
+    assert.equal(state.hp, hpAfterBurst - expectedTick, 'one combat timestamp cannot apply duplicate status ticks');
+  }
+});
