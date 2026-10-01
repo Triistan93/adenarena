@@ -43,7 +43,7 @@ export const DEFAULT_STATE = () => ({
   battlePass: { xp: 0, claimedFree: [], claimedPremium: [], unlockedPremium: false },
   dailyRewards: { currentDay: 1, claimedDays: [], lastClaimDate: '', streak: 0, totalClaims: 0 },
   tower: { highestFloor: 0, currentFloor: 1, lastSweepTime: 0, pendingFirstClearRewards: [] },
-  zone: 'talkingIsland', currentSaga: 0, gold: 2000, adenCoins: 0, dailyRaidTickets: 3, inventory: [],
+  zone: 'talkingIsland', currentSaga: 0, gold: 2000, adenCoins: 0, dailyRaidTickets: 3, pendingRaidRewards: [], inventory: [],
   equipment: {
     weapon: null, weapon2: null, shield: null,
     helmet: null, chest: null, gloves: null, legs: null, boots: null,
@@ -391,6 +391,7 @@ export function loadState() {
     currentState.equipment = { ...def.equipment, ...(data.equipment || {}) };
     currentState.base = { ...def.base, ...(data.base || {}) };
     currentState.inventory = safeInventory;
+    currentState.pendingRaidRewards = Array.isArray(data.pendingRaidRewards) ? data.pendingRaidRewards : [];
     currentState.selectedUids = new Set(Array.isArray(data.selectedUids) ? data.selectedUids : []);
 
     // ─── Migrações Canônicas de Save / Namespaces ───

@@ -277,6 +277,7 @@ import {
   getRaidStatus as serviceGetRaidStatus,
   canEnterRaid as serviceCanEnterRaid,
   handleRaidVictory as serviceHandleRaidVictory,
+  claimPendingRaidRewards as serviceClaimPendingRaidRewards,
   processRaidBossMechanics as serviceProcessRaidBossMechanics,
   checkAndResetDailyRaidTickets as serviceCheckAndResetDailyRaidTickets
 } from './src/services/RaidService.js';
@@ -2582,6 +2583,10 @@ function toggleCombatSpeed() {
 }
 
 function toggleCombatState() {
+  if (state.colosseum?.activeDuel || state.colosseum?.activeSurvival) {
+    log('Conclua o desafio do Coliseu antes de retomar a caça automática.', 'warning');
+    return;
+  }
   state.isCombatActive = state.isCombatActive === false ? true : false;
   state.combatActive = state.isCombatActive;
   if (state.isCombatActive) {
@@ -2615,21 +2620,24 @@ function updateCombatControlsUI() {
     ssBtn.classList.toggle('autoshot-active', isSsActive);
     const isMage = ClassValidationService.isMageClass(state.class);
     
-    // Contagem total de tiros no inventário (universais + legado por grau)
+    // Mostra apenas tiros que o ataque atual consegue consumir.
+    let weaponGrade = 'NG';
+    if (state.equipment?.weapon) {
+      const weapon = state.inventory?.find(item => item?.uid === state.equipment.weapon);
+      const weaponDef = weapon ? D().ALL_ITEMS[weapon.itemId] : null;
+      if (weaponDef) weaponGrade = getShotGradeCode(weaponDef).toUpperCase();
+    }
+    const usableShotId = `${isMage ? 'spiritshot' : 'soulshot'}_${weaponGrade.toLowerCase()}`;
     let shotCount = 0;
     if (state.inventory && Array.isArray(state.inventory)) {
       for (const item of state.inventory) {
-        if (!item || (item.count || 1) <= 0) continue;
+        const quantity = Number(item?.count ?? item?.qty ?? 1);
+        if (!item || !Number.isFinite(quantity) || quantity <= 0) continue;
         const id = String(item.itemId || '');
-        if (isMage) {
-          if (id === 'blessed_spiritshot_universal' || id === 'spiritshot_universal' || id.startsWith('spiritshot')) {
-            shotCount += (item.count || 1);
-          }
-        } else {
-          if (id === 'soulshot_universal' || id.startsWith('soulshot')) {
-            shotCount += (item.count || 1);
-          }
-        }
+        const isUniversal = isMage
+          ? id === 'blessed_spiritshot_universal' || id === 'spiritshot_universal'
+          : id === 'soulshot_universal';
+        if (id === usableShotId || isUniversal) shotCount += quantity;
       }
     }
     
@@ -2645,7 +2653,8 @@ function updateCombatControlsUI() {
     const mpCount = getInventoryCount('mp_potion_s') + getInventoryCount('mp_potion_m') + getInventoryCount('mp_potion_l') + getInventoryCount('mp_potion_xl');
     const hpPct = Math.round((state.autoPotionSettings?.hpThreshold || 0.6) * 100);
     apBtn.innerHTML = `<span>🧪 Auto-Pot</span> <span style="font-size:9px; color:${isApActive ? '#ffd877' : '#94a3b8'};">(${hpCount} HP / ${mpCount} MP)</span>`;
-    apBtn.title = `Auto-Poções: ${isApActive ? 'LIGADO' : 'DESLIGADO'} (HP < ${hpPct}%) - Clique para alternar ou configure no botão Macro ⚙️`;
+    const mpPct = Math.round((state.autoPotionSettings?.mpThreshold || 0.4) * 100);
+    apBtn.title = `Auto-Poções: ${isApActive ? 'LIGADO' : 'DESLIGADO'} (HP < ${hpPct}%, MP < ${mpPct}%) - Clique para alternar ou configure no botão Macro ⚙️`;
   }
   const spdBtn = el('speed-toggle-btn');
   if (spdBtn) {
@@ -7466,6 +7475,25 @@ function stopCombat() {
   } catch (_) {}
   return engineStopCombat(state);
 }
+function pauseCombatForColosseum() {
+  const colosseum = ColosseumService.ensureState(state);
+  colosseum.resumeCombatAfterChallenge = state.isCombatActive !== false;
+  if (colosseum.resumeCombatAfterChallenge) stopCombat();
+}
+function finishColosseumChallenge(result) {
+  if (!(result?.isVictory || result?.isDefeat || result?.isCompleted)) return;
+  const colosseum = ColosseumService.ensureState(state);
+  const resumeCombat = colosseum.resumeCombatAfterChallenge === true;
+  colosseum.resumeCombatAfterChallenge = false;
+  if (result.isDefeat && state.hp <= 0) {
+    playerDeath(state.activeMonster);
+    if (resumeCombat && state.hp > 0) startCombat();
+  } else if (resumeCombat && state.hp > 0) {
+    startCombat();
+  }
+  updateAllUI();
+  save();
+}
 function pickRandomMonster() {
   invalidateCombatCoordinates();
   try {
@@ -7480,7 +7508,14 @@ function selectZone(zoneId) {
     if (globalVFXOrchestrator && typeof globalVFXOrchestrator.clear === 'function') globalVFXOrchestrator.clear();
     if (VFX && typeof VFX.clear === 'function') VFX.clear();
   } catch (_) {}
-  return engineSelectZone(state, zoneId, { log, updateAllUI, save, attackMonster });
+  return engineSelectZone(state, zoneId, {
+    log, updateAllUI, save, attackMonster,
+    onBeforeZoneChange: () => {
+      if (state.isSpecialInstanceActive || state.activeInstanceId || state.activeMonster?.isInstanceBoss) {
+        InstanceService.leaveInstance(state, { log, renderStageMonster });
+      }
+    }
+  });
 }
 // Shows the Saga Unlock modal with saga name/description
 function showSagaModal(saga) {
@@ -7499,9 +7534,20 @@ function playerDeath(monster) {
     if (globalVFXOrchestrator && typeof globalVFXOrchestrator.clear === 'function') globalVFXOrchestrator.clear();
     if (VFX && typeof VFX.clear === 'function') VFX.clear();
   } catch (_) {}
-  return enginePlayerDeath(state, monster, { log, el });
+  const result = enginePlayerDeath(state, monster, { log, el });
+  // Preserve Born to Die's fatal-survival behavior; only abandon the encounter
+  // after the player has actually entered the death state.
+  if (state.hp <= 0 && (state.isSpecialInstanceActive || state.activeInstanceId || state.activeMonster?.isInstanceBoss)) {
+    InstanceService.leaveInstance(state, { log, save });
+  }
+  return result;
 }
-function resurrect(useScroll = false) { return engineResurrect(state, useScroll, { log, el, updateAllUI, save, attackMonster }); }
+function resurrect(useScroll = false) {
+  if (state.isSpecialInstanceActive || state.activeInstanceId || state.activeMonster?.isInstanceBoss) {
+    InstanceService.leaveInstance(state, { silent: true });
+  }
+  return engineResurrect(state, useScroll, { log, el, updateAllUI, save, attackMonster });
+}
 
 export function spendSP(skillId) { return engineSpendSP(state, skillId, { log, floatText, classSatisfies, removeFromInventory, updateAllUI, save }); }
 if (typeof window !== 'undefined') {
@@ -8250,7 +8296,7 @@ function attachGlobalErrorHandlers() {
 const tabScrollMap = {};
 
 export const PILLAR_TABS_MAP = {
-  combat: ['zones', 'raids', 'tower', 'colosseum', 'expeditions', 'fishing'],
+  combat: ['zones', 'raids', 'tower', 'colosseum', 'expeditions', 'fishing', 'hunting', 'gathering', 'mining'],
   character: ['character', 'inventory', 'skills', 'astral', 'dolls', 'cosmetics', 'quests'],
   economy: ['market', 'shop', 'craft', 'alchemy', 'warehouse', 'magiclamp'],
   glory: ['clan', 'olympiad', 'rankings', 'sevensigns', 'fortress', 'enchant', 'codex']
@@ -8277,6 +8323,9 @@ export const TAB_NAMES_MAP = {
   colosseum: 'Coliseu PvP',
   expeditions: 'Expedições',
   fishing: 'Pesca',
+  hunting: 'Caça Silvestre',
+  gathering: 'Coleta',
+  mining: 'Mineração',
   market: 'Mercado Giran',
   shop: 'Mercador',
   craft: 'Forja Imperial',
@@ -10423,19 +10472,23 @@ export function init() {
 
         section.instances.forEach(inst => {
           const completed = !!InstanceService.getEntryCompletions(state, inst)[inst.id];
+          const isActive = state.isSpecialInstanceActive && state.activeInstanceId === inst.id;
           const entryCheck = InstanceService.canEnterInstance(state, inst.id);
           const canEnter = entryCheck.ok && !completed;
           const resetLabel = inst.entryReset === 'weekly' ? 'Semanal' : 'Diário';
           const stageNames = inst.stages?.map(stage => stage.name).join('  →  ');
           const stageCount = inst.stages?.length || 1;
           const levelRange = inst.maxLvl ? `${inst.minLvl}–${inst.maxLvl}` : `${inst.minLvl}+`;
-          const statusLabel = completed
+          const activeStage = Math.min(stageCount, (Number(state.activeMonster?.instanceStage ?? state.activeInstanceStage) || 0) + 1);
+          const statusLabel = isActive
+            ? `⚔️ Em andamento · encontro ${activeStage}/${stageCount}`
+            : completed
             ? `✅ Concluído nesta ${inst.entryReset === 'weekly' ? 'semana' : 'rodada'}`
             : (!entryCheck.ok ? entryCheck.reason : `${resetLabel} · disponível`);
           const card = mkEl('article');
           card.style.cssText = `
             background: linear-gradient(110deg, ${completed ? 'rgba(10,30,20,.78)' : 'rgba(15,23,42,.88)'}, rgba(2,6,18,.92));
-            border: 1px solid ${completed ? 'rgba(34,197,94,.55)' : (canEnter ? 'rgba(212,167,68,.5)' : 'rgba(148,163,184,.2)')};
+            border: 1px solid ${isActive ? 'rgba(103,232,249,.65)' : (completed ? 'rgba(34,197,94,.55)' : (canEnter ? 'rgba(212,167,68,.5)' : 'rgba(148,163,184,.2)'))};
             border-radius: 9px; padding: 13px 14px; display: grid;
             grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 12px;
           `;
@@ -10456,16 +10509,20 @@ export function init() {
                 <div style="font-size:10px; color:#6ee7b7; line-height:1.45; margin-top:4px;">🎁 +${inst.rewards.xp.toLocaleString('pt-BR')} XP · +${inst.rewards.gold.toLocaleString('pt-BR')} Adena · +${inst.rewards.sp.toLocaleString('pt-BR')} SP · ${inst.rewards.guaranteedRewardText}</div>
                 ${inst.entryReset === 'weekly' ? '<div style="font-size:10px; color:#c4b5fd; margin-top:4px;">Entrada e recompensa: uma vez por semana UTC.</div>' : ''}
                 ${inst.eventWindow ? `<div style="font-size:10px; color:#c4b5fd; margin-top:3px;">Janela: sexta-feira, ${String(inst.eventWindow.startHourUTC).padStart(2, '0')}:00–${String(inst.eventWindow.endHourUTC).padStart(2, '0')}:00 UTC.</div>` : ''}
-                <div aria-live="polite" style="font-size:10px; color:${completed ? '#86efac' : (entryCheck.ok ? '#6ee7b7' : '#fca5a5')}; margin-top:5px;">${statusLabel}</div>
+                <div aria-live="polite" style="font-size:10px; color:${isActive ? '#67e8f9' : (completed ? '#86efac' : (entryCheck.ok ? '#6ee7b7' : '#fca5a5'))}; margin-top:5px;">${statusLabel}</div>
               </div>
             </div>
             <div style="display:flex; flex-direction:column; align-items:flex-end; gap:5px;">
-              ${completed ? '<span style="font-size:10px; font-weight:bold; color:#86efac;">CONCLUÍDO</span>' : `
+              ${isActive ? `
+                <button class="action-btn" style="padding:8px 13px; font-size:10px; font-weight:bold; font-family:'Cinzel',serif; white-space:nowrap; border-color:#67e8f9; color:#cffafe;" onclick="window.leaveSpecialInstanceAction()">
+                  ↩ Sair e voltar
+                </button>
+              ` : completed ? '<span style="font-size:10px; font-weight:bold; color:#86efac;">CONCLUÍDO</span>' : `
                 <button class="action-btn ${canEnter ? 'action-btn--primary' : ''}" style="padding:8px 13px; font-size:11px; font-weight:bold; font-family:'Cinzel',serif; white-space:nowrap;" ${!canEnter ? 'disabled aria-disabled="true"' : ''} onclick="window.challengeInstanceAction('${inst.id}')">
                   ⚔️ ${canEnter ? 'Entrar' : 'Indisponível'}
                 </button>
               `}
-              <span style="font-size:9px; color:#94a3b8;">${stageCount} ${stageCount === 1 ? 'encontro' : 'encontros'}</span>
+              <span style="font-size:9px; color:#94a3b8;">${isActive ? `${activeStage}/${stageCount} encontros` : `${stageCount} ${stageCount === 1 ? 'encontro' : 'encontros'}`}</span>
             </div>
           `;
           group.appendChild(card);
@@ -10483,6 +10540,11 @@ export function init() {
       if (res.success) {
         closeInstancesModal();
       }
+      return res;
+    };
+    window.leaveSpecialInstanceAction = () => {
+      const res = InstanceService.leaveInstance(state, { log, renderStageMonster, updateAllUI, save, attackMonster, resumeCombat: true });
+      if (res.success) closeInstancesModal();
       return res;
     };
     const closeInstBtn = el('close-instances-modal-btn');
@@ -10706,6 +10768,10 @@ export function init() {
         save();
       }
     };
+    window.claimPendingRaidRewardsAction = () => serviceClaimPendingRaidRewards(state, {
+      log,
+      onUpdate: () => { updateAllUI(); save(); }
+    });
 
     // Grand Olympiad & Noblesse Saga
     window.startOlympiadMatchAction = async () => {
@@ -11172,6 +11238,7 @@ export function init() {
         onUpdate: () => { updateAllUI(); save(); }
       });
       if (!res.success) { log(res.message || 'Não foi possível iniciar o duelo.', 'warning'); return res; }
+      pauseCombatForColosseum();
       updateAllUI();
       save();
       return res;
@@ -11182,6 +11249,7 @@ export function init() {
         onUpdate: () => { updateAllUI(); save(); }
       });
       if (!res.success) { log(res.message || 'Não foi possível executar o turno do duelo.', 'warning'); return res; }
+      finishColosseumChallenge(res);
       updateAllUI();
       save();
       return res;
@@ -11192,6 +11260,7 @@ export function init() {
         onUpdate: () => { updateAllUI(); save(); }
       });
       if (!res.success) { log(res.message || 'Não foi possível iniciar a sobrevivência.', 'warning'); return res; }
+      pauseCombatForColosseum();
       updateAllUI();
       save();
       return res;
@@ -11202,6 +11271,7 @@ export function init() {
         onUpdate: () => { updateAllUI(); save(); }
       });
       if (!res.success) { log(res.message || 'Não foi possível executar a onda.', 'warning'); return res; }
+      finishColosseumChallenge(res);
       updateAllUI();
       save();
       return res;
@@ -11323,7 +11393,7 @@ export function init() {
                   <input type="checkbox" ${ap.autoHp !== false ? 'checked' : ''} onchange="window.setMacroToggleHp(this.checked)" />
                   Auto-Poção de Vida (HP)
                 </label>
-                <span style="font-weight:bold; color:#ef4444; font-size:12px;">&lt; ${hpVal}%</span>
+                <span id="macro-hp-threshold-label" style="font-weight:bold; color:#ef4444; font-size:12px;">&lt; ${hpVal}%</span>
               </div>
               <input type="range" min="20" max="90" step="5" value="${hpVal}" oninput="window.setMacroHpThreshold(this.value)" style="width:100%; accent-color:#ef4444; cursor:pointer;" />
               <div style="display:flex; justify-content:space-between; font-size:10px; color:#94a3b8; margin-top:2px;">
@@ -11340,7 +11410,7 @@ export function init() {
                   <input type="checkbox" ${ap.autoMp !== false ? 'checked' : ''} onchange="window.setMacroToggleMp(this.checked)" />
                   Auto-Poção de Mana (MP)
                 </label>
-                <span style="font-weight:bold; color:#3b82f6; font-size:12px;">&lt; ${mpVal}%</span>
+                <span id="macro-mp-threshold-label" style="font-weight:bold; color:#3b82f6; font-size:12px;">&lt; ${mpVal}%</span>
               </div>
               <input type="range" min="15" max="85" step="5" value="${mpVal}" oninput="window.setMacroMpThreshold(this.value)" style="width:100%; accent-color:#3b82f6; cursor:pointer;" />
               <div style="display:flex; justify-content:space-between; font-size:10px; color:#94a3b8; margin-top:2px;">
@@ -11416,6 +11486,8 @@ export function init() {
     window.setMacroHpThreshold = (val) => {
       state.autoPotionSettings = state.autoPotionSettings || {};
       state.autoPotionSettings.hpThreshold = parseFloat(val) / 100;
+      const label = el('macro-hp-threshold-label');
+      if (label) label.textContent = `< ${Math.round(parseFloat(val))}%`;
       updateCombatControlsUI();
       save();
     };
@@ -11423,6 +11495,8 @@ export function init() {
     window.setMacroMpThreshold = (val) => {
       state.autoPotionSettings = state.autoPotionSettings || {};
       state.autoPotionSettings.mpThreshold = parseFloat(val) / 100;
+      const label = el('macro-mp-threshold-label');
+      if (label) label.textContent = `< ${Math.round(parseFloat(val))}%`;
       updateCombatControlsUI();
       save();
     };
@@ -11832,7 +11906,10 @@ export function init() {
 
     if (hasSave) { 
       updateAllUI(); 
-      if (state.zone) startCombat(); 
+      if (state.colosseum?.activeDuel || state.colosseum?.activeSurvival || state.isCombatActive === false) {
+        stopCombat();
+        updateCombatControlsUI();
+      } else if (state.zone) startCombat();
     } else { 
       state.race = 'human'; 
       state.class = 'fighter'; 

@@ -195,6 +195,10 @@ export const WorldBossService = {
   joinWorldBoss(state, callbacks = {}) {
     const { log = console.log, floatText = () => {}, renderStageMonster = () => {}, attackMonster = () => {}, save = () => {} } = callbacks;
     if (!state) return { success: false };
+    if (state.isRaidActive || state.towerCombatActive || state.isSpecialInstanceActive || state.activeInstanceId || state.activeMonster?.isRaid || state.activeMonster?.isTower || state.activeMonster?.isInstanceBoss || state.activeMonster?.isChaosBoss || state.activeMonster?.isWorldBoss) {
+      log('⚠️ Conclua ou saia do encontro atual antes de entrar no World Boss.', 'warning');
+      return { success: false, reason: 'another_instance_active' };
+    }
 
     const status = this.getStatus();
     if (!status.isActive) {

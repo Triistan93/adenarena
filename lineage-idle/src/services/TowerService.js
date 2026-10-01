@@ -95,7 +95,7 @@ export function challengeTowerFloor(state, callbacks = {}) {
     if (callbacks.log) callbacks.log('⚠️ Conclua o andar atual da Torre antes de iniciar outro desafio.', 'warning');
     return { success: false, reason: 'tower_in_progress' };
   }
-  if (state.isRaidActive || state.activeMonster?.isRaid || state.activeMonster?.isChaosBoss) {
+  if (state.isRaidActive || state.isSpecialInstanceActive || state.activeInstanceId || state.activeMonster?.isRaid || state.activeMonster?.isChaosBoss || state.activeMonster?.isInstanceBoss || state.activeMonster?.isWorldBoss) {
     return { success: false, reason: 'another_instance_active' };
   }
   const highestFloor = Math.max(0, Math.min(100, Math.floor(Number(state.tower.highestFloor) || 0)));

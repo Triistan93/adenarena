@@ -9859,7 +9859,12 @@ export function renderRaidsTab(container, state) {
   const cardsHtml = Object.entries(raidBosses).map(([id, boss]) => {
     const isLocked = currentHeroLvl < (boss.reqLvl || 1);
     const inCombat = state.isRaidActive && state.activeRaidId === id;
-    const anotherRaidActive = Boolean(state.isRaidActive && state.activeRaidId !== id);
+    const anotherRaidActive = Boolean((state.isRaidActive || state.activeRaidId) && !inCombat);
+    const otherSpecialEncounterActive = Boolean(
+      state.towerCombatActive || state.isSpecialInstanceActive || state.activeInstanceId ||
+      state.activeMonster?.isTower || state.activeMonster?.isInstanceBoss ||
+      state.activeMonster?.isWorldBoss || state.activeMonster?.isChaosBoss
+    );
     const playerCombatPower = Number(state.stats?.combatPower || state.combatPower) || 0;
     const insufficientCombatPower = Boolean(boss.minimumCP && playerCombatPower < boss.minimumCP);
     const timesCleared = status.clears[id] || 0;
@@ -9876,8 +9881,9 @@ export function renderRaidsTab(container, state) {
     let actionBtnHtml = '';
     if (inCombat) {
       actionBtnHtml = `<button disabled style="width:100%; padding:10px; font-weight:bold; font-size:12px; background:linear-gradient(180deg,#16a34a,#15803d); border:1px solid #4ade80; color:#fff; border-radius:6px; cursor:default; animation:pulse 1.5s infinite;">⚔️ EM COMBATE ATIVO</button>`;
-    } else if (anotherRaidActive) {
-      actionBtnHtml = `<button disabled title="Conclua o Raid atual antes de iniciar outro." style="width:100%; padding:10px; font-weight:bold; font-size:12px; background:#27272a; border:1px solid #3f3f46; color:#a1a1aa; border-radius:6px; cursor:not-allowed;">⚔️ Outro Raid em andamento</button>`;
+    } else if (anotherRaidActive || otherSpecialEncounterActive) {
+      const activeEncounterLabel = state.activeMonster?.name || (otherSpecialEncounterActive ? 'encontro especial' : 'Raid');
+      actionBtnHtml = `<button disabled title="Conclua ${escapeHTML(activeEncounterLabel)} antes de iniciar outro encontro." style="width:100%; padding:10px; font-weight:bold; font-size:12px; background:#27272a; border:1px solid #3f3f46; color:#a1a1aa; border-radius:6px; cursor:not-allowed;">⚔️ Encontro em andamento</button>`;
     } else if (isLocked) {
       actionBtnHtml = `<button disabled style="width:100%; padding:10px; font-weight:bold; font-size:12px; background:#27272a; border:1px solid #3f3f46; color:#71717a; border-radius:6px; cursor:not-allowed;">🔒 Bloqueado (Requer Lv. ${boss.reqLvl})</button>`;
     } else if (insufficientCombatPower) {
@@ -9994,6 +10000,13 @@ export function renderRaidsTab(container, state) {
           </div>
         </div>
       </div>
+
+      ${(status.pendingRewards || []).length > 0 ? `
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; background:rgba(120,53,15,0.35); border:1px solid rgba(251,191,36,0.55); border-radius:9px; padding:12px 14px; margin-bottom:14px;">
+          <div style="font-size:12px; color:#fde68a;">🎁 ${status.pendingRewards.length} recompensa(s) de Raid aguardam espaço na mochila.</div>
+          <button onclick="window.claimPendingRaidRewardsAction()" style="padding:7px 12px; border:1px solid #fbbf24; border-radius:6px; background:#92400e; color:#fff7ed; font-weight:bold; cursor:pointer;">Resgatar recompensas</button>
+        </div>
+      ` : ''}
 
       ${currentHeroLvl < 30 ? `
         <div style="background:linear-gradient(135deg, rgba(35,25,12,0.95), rgba(20,15,5,0.98)); border:1px solid #eab308; border-radius:10px; padding:14px 18px; margin-bottom:16px; display:flex; align-items:center; gap:14px; box-shadow:0 4px 15px rgba(0,0,0,0.4);">

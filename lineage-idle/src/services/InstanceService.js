@@ -1,6 +1,7 @@
 // InstanceService.js — Gerenciador de jornadas solo e desafios especiais
 import { SOLO_INSTANCES } from '../data/instances.js';
-import { startCombat } from '../engine/CombatEngine.js';
+import { ZONES } from '../data/zones.js';
+import { startCombat, stopCombat } from '../engine/CombatEngine.js';
 
 export const InstanceService = {
   getDailyEntries(state) {
@@ -35,6 +36,13 @@ export const InstanceService = {
   canEnterInstance(state, instanceId, now = Date.now()) {
     const inst = SOLO_INSTANCES[instanceId];
     if (!inst) return { ok: false, reason: 'invalid_instance' };
+
+    if (state.isSpecialInstanceActive || state.activeInstanceId || state.activeMonster?.isInstanceBoss) {
+      return { ok: false, reason: 'Você já está em uma instância. Conclua ou saia antes de entrar em outra.' };
+    }
+    if (state.isRaidActive || state.activeRaidId || state.towerCombatActive || state.activeMonster?.isRaid || state.activeMonster?.isTower || state.activeMonster?.isChaosBoss || state.activeMonster?.isWorldBoss) {
+      return { ok: false, reason: 'Conclua ou saia do encontro atual antes de entrar nesta instância.' };
+    }
 
     const pLvl = state.level || 1;
     if (pLvl < inst.minLvl) {
@@ -76,8 +84,10 @@ export const InstanceService = {
 
     const inst = SOLO_INSTANCES[instanceId];
 
-    // Spawn do Chefe de Instância
-    if (state.zone) state.lastHuntingZone = state.zone;
+    // Keep the exact origin separate so leaving from a town does not overwrite
+    // the player's last hunting zone in the normal progression state.
+    state.instanceReturnZone = state.zone || state.lastHuntingZone || state.lastSafeZone || 'talkingIsland';
+    if (state.zone && !ZONES[state.zone]?.town) state.lastHuntingZone = state.zone;
     state.zone = state.zone || state.lastSafeZone || 'talkingIsland';
     state.target = instanceId;
     state.isSpecialInstanceActive = true;
@@ -94,6 +104,36 @@ export const InstanceService = {
     if (callbacks.renderStageMonster) callbacks.renderStageMonster();
     if (callbacks.updateAllUI) callbacks.updateAllUI();
     return { success: true };
+  },
+
+  leaveInstance(state, callbacks = {}) {
+    const instanceId = state?.activeInstanceId || state?.activeMonster?.instanceId;
+    if (!state || (!state.isSpecialInstanceActive && !instanceId && !state.activeMonster?.isInstanceBoss)) {
+      return { success: false, reason: 'no_active_instance' };
+    }
+
+    const instanceName = SOLO_INSTANCES[instanceId]?.name || 'instância especial';
+    const returnZone = [state.instanceReturnZone, state.lastHuntingZone, state.lastSafeZone, state.zone].find(zoneId => ZONES[zoneId]) || 'talkingIsland';
+    stopCombat(state);
+    state.isSpecialInstanceActive = false;
+    state.activeInstanceId = null;
+    state.activeInstanceStage = null;
+    state.activeInstancePhase = null;
+    state.activeInstanceStatus = null;
+    state.instanceReturnZone = null;
+    state.activeMonster = null;
+    state.target = null;
+    state.zone = returnZone;
+    state.currentZone = returnZone;
+
+    if (callbacks.log && !callbacks.silent) {
+      callbacks.log(`↩️ Você saiu de ${instanceName} e voltou ao mapa anterior. A tentativa não foi consumida.`, 'system');
+    }
+    if (callbacks.resumeCombat && state.hp > 0) startCombat(state, callbacks);
+    if (callbacks.renderStageMonster) callbacks.renderStageMonster();
+    if (callbacks.updateAllUI) callbacks.updateAllUI();
+    if (callbacks.save) callbacks.save();
+    return { success: true, instanceId, returnZone };
   },
 
   createInstanceBoss(inst, stageIndex, alternateFinal = false) {
@@ -172,11 +212,13 @@ export const InstanceService = {
   onInstanceBossVictory(state, instanceId, callbacks = {}) {
     const inst = SOLO_INSTANCES[instanceId];
     if (!inst) return;
-
     const entries = inst.entryReset === 'weekly'
       ? this.getWeeklyEntries(state, Number.isFinite(callbacks.now) ? callbacks.now : Date.now())
       : this.getDailyEntries(state);
     if (entries.completed[instanceId]) return { completed: false, duplicate: true };
+    if (!state.isSpecialInstanceActive || state.activeInstanceId !== instanceId || !state.activeMonster?.isInstanceBoss || state.activeMonster.instanceId !== instanceId) {
+      return { completed: false, invalidEncounter: true };
+    }
     const stages = inst.stages || [];
     const currentStage = Number(state.activeMonster?.instanceStage ?? state.activeInstanceStage) || 0;
     if (stages.length && currentStage < stages.length - 1) {
@@ -196,6 +238,9 @@ export const InstanceService = {
     state.activeInstanceStage = null;
     state.activeInstancePhase = null;
     state.activeInstanceStatus = null;
+    state.instanceReturnZone = null;
+    state.activeMonster = null;
+    state.target = null;
 
     state.sp = (state.sp || 0) + (inst.rewards.sp || 0);
 

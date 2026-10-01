@@ -284,10 +284,11 @@ export function pickRandomMonster(state, callbacks = {}) {
  * Seleciona uma nova zona de caça para o jogador.
  * @param {Object} state
  * @param {string} zoneId
- * @param {Object} [callbacks] — { log, updateAllUI, save, attackMonster }
+ * @param {Object} [callbacks] — { log, updateAllUI, save, attackMonster, onBeforeZoneChange }
  */
 export function selectZone(state, zoneId, callbacks = {}) {
   if (!hasValidState(state)) return false;
+  const resumeCombatAfterChange = state.isCombatActive !== false;
   const zone = ZONES[zoneId];
   if (!zone) return false;
   if (zone.level > state.level) {
@@ -301,6 +302,7 @@ export function selectZone(state, zoneId, callbacks = {}) {
     if (callbacks.floatText) callbacks.floatText(`🔒 REQUER ${zoneProg.minCp.toLocaleString()} CP`, 'float-warning');
     return false;
   }
+  if (typeof callbacks.onBeforeZoneChange === 'function') callbacks.onBeforeZoneChange(zoneId);
   state.zone = zoneId;
   state.currentZone = zoneId;
   if (zone.town) {
@@ -311,7 +313,7 @@ export function selectZone(state, zoneId, callbacks = {}) {
   state.target = null;
   state.activeMonster = null;
   stopCombat(state);
-  startCombat(state, callbacks);
+  if (resumeCombatAfterChange) startCombat(state, callbacks);
   if (callbacks.updateAllUI) callbacks.updateAllUI();
   if (callbacks.save) callbacks.save();
   return true;
@@ -386,17 +388,6 @@ export function playerDeath(state, monster, callbacks = {}) {
       state.inventory.splice(state.inventory.indexOf(scroll), 1);
     }
     if (callbacks.log) callbacks.log('Scroll of Rebirth used! No XP loss!', 'loot');
-  } else {
-    const resScroll = state.inventory?.find(i => i.itemId === 'scroll_of_resurrection' && (i.count || 1) > 0);
-    if (resScroll) {
-      lossRate = 0.1;
-      if (resScroll.count > 1) resScroll.count--;
-      else {
-        resScroll.equipped = false;
-        state.inventory.splice(state.inventory.indexOf(resScroll), 1);
-      }
-      if (callbacks.log) callbacks.log('Scroll of Resurrection used! 10% XP loss.', 'loot');
-    }
   }
 
   const xpLoss = Math.floor(state.xp * lossRate);
@@ -405,6 +396,23 @@ export function playerDeath(state, monster, callbacks = {}) {
     if (xpEl) xpEl.textContent = xpLoss.toLocaleString();
     const modal = callbacks.el('death-modal');
     if (modal) modal.classList.add('active');
+    const freeButton = callbacks.el('res-free');
+    if (freeButton) {
+      freeButton.textContent = `Ressuscitar (Grátis, -${Math.round(lossRate * 100)}% XP)`;
+    }
+    const scrollButton = callbacks.el('res-scroll');
+    if (scrollButton) {
+      const hasResurrectionScroll = state.inventory?.some(item =>
+        item?.itemId === 'scroll_of_resurrection' && Number(item.count ?? item.qty ?? 1) > 0
+      );
+      const canReducePenalty = lossRate > 0.1;
+      scrollButton.disabled = !hasResurrectionScroll || !canReducePenalty;
+      scrollButton.title = !hasResurrectionScroll
+        ? 'Você não possui Pergaminho da Ressurreição.'
+        : canReducePenalty
+          ? 'Consome 1 Pergaminho da Ressurreição e reduz a perda de XP para 10%.'
+          : 'Sua perda de XP já é de 10% ou menos.';
+    }
   }
   state._pendingLoss = lossRate;
 }
@@ -417,11 +425,34 @@ export function playerDeath(state, monster, callbacks = {}) {
  */
 export function resurrect(state, useScroll = false, callbacks = {}) {
   if (!hasValidState(state)) return false;
+  let loss = state._pendingLoss ?? 0.2;
+  if (useScroll) {
+    if (loss <= 0.1) {
+      if (callbacks.log) callbacks.log('Sua perda de XP já é de 10% ou menos; o pergaminho não será consumido.', 'system');
+      return false;
+    }
+    const scroll = state.inventory?.find(item =>
+      item?.itemId === 'scroll_of_resurrection' && Number(item.count ?? item.qty ?? 1) > 0
+    );
+    if (!scroll) {
+      if (callbacks.log) callbacks.log('Você não possui Pergaminho da Ressurreição.', 'warning');
+      return false;
+    }
+    const count = Number(scroll.count ?? scroll.qty ?? 1);
+    if (count > 1) {
+      if (scroll.count != null) scroll.count = count - 1;
+      if (scroll.qty != null) scroll.qty = count - 1;
+    } else {
+      scroll.equipped = false;
+      state.inventory.splice(state.inventory.indexOf(scroll), 1);
+    }
+    loss = 0.1;
+    if (callbacks.log) callbacks.log('Pergaminho da Ressurreição usado! Perda de 10% de XP.', 'loot');
+  }
   if (callbacks.el) {
     const modal = callbacks.el('death-modal');
     if (modal) modal.classList.remove('active');
   }
-  const loss = state._pendingLoss || 0.2;
   state.xp = Math.max(0, state.xp - Math.floor(state.xp * loss));
   state._pendingLoss = 0;
 

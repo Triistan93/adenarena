@@ -3810,6 +3810,16 @@ Retomei após o commit `b254cad0`. A central antes aparecia como “Kamaloka & P
 
 As duas Pailakas deixaram de ser lutas contra um único chefe genérico: Song of Ice and Fire e Devil’s Legacy agora encadeiam três encontros e fecham com fases próprias, incluindo dano periódico no combate final. O limite de nível máximo já cadastrado para as jornadas solo também é aplicado na entrada. Atualizei o plano épico para registrar a integração. Não rodei testes nem build nesta rodada.
 
+### Instâncias especiais — saída e exclusão mútua (01/10/2026)
+
+O próximo ajuste encontrou um estado órfão: morrer durante uma instância limpava monstro/combate apenas na ressurreição, sem limpar `isSpecialInstanceActive`/`activeInstanceId`; trocar de zona também substituía o alvo sem encerrar a instância. Agora a central mostra o encontro ativo e oferece **Sair e voltar**, a saída restaura o mapa de origem sem consumir a tentativa, e o serviço limpa estado/status/alvo na derrota e em saves legados ao ressuscitar. A troca de zona só abandona o encontro depois que a zona solicitada passa pelos gates de nível/CP.
+
+Instâncias, Raids, World Bosses e Torre agora rejeitam a abertura de outro encontro especial enquanto um já estiver ativo. A vitória da instância valida identidade do encontro antes de avançar/conceder recompensa, mantendo a resposta idempotente para conclusão repetida. Adicionei à fila em `docs/PLANO_AUDITORIA_INTEGRAL_DAS_TELAS.md` a continuação solicitada: após este ajuste, avaliar todos os menus e submenus nas 30 áreas do plano, em ordem, registrando telas, estados, ações e fluxos. Não rodei testes nem build nesta etapa.
+
+### Auditoria de navegação — inventário dos menus (01/10/2026)
+
+Iniciei a próxima tarefa da fila com um inventário estático da navegação: quatro pilares, 29 abas desktop/panes correspondentes, Contatos & Mentoria como modal e seis destinos móveis. `battle` e `hero` são modos especiais de painel móvel; as outras opções móveis reutilizam as abas desktop. Encontrei três abas visíveis no strip de Combate ausentes de `PILLAR_TABS_MAP` (Caça Silvestre, Coleta e Mineração) e alinhei a tabela. A comparação também encontrou esses três rótulos ausentes de `TAB_NAMES_MAP`; cabeçalho móvel agora recebe os nomes legíveis. O inventário confere os 29 itens de cada strip, rótulos e panes e não encontra pane sem pilar. Isso não valida ações nem comportamento visual; as 29 áreas em escopo seguem parciais até a auditoria individual, enquanto Habilidades permanece fora do escopo definido pelo usuário.
+
 ### Fafurion e Lindvior em encontros especiais (01/10/2026, 11:35 BRT)
 
 Retirei Fafurion de Emerald Grove e Lindvior de Dragon Valley como bosses comuns. Ancient Emerald Dragon e Dragon Valley High Overlord passam a ocupar essas vagas como bosses regionais. Cadastrei Fafurion e Lindvior no `RAID_BOSSES`/`RAID_BOSS_BALANCE`, com requisitos de nível/CP, mecânicas de combate nomeadas e drops de capas já existentes no catálogo. O fluxo genérico de Raid mantém entrada por ticket, combate, loot e conclusão; a criação de itens não foi necessária. Ampliei `test/combat-zone-integrity.test.js` para garantir que Antharas, Valakas, Fafurion e Lindvior não apareçam como bosses de caça comum, e que os quatro mapas mantenham boss regional.
@@ -3823,3 +3833,27 @@ Continuei a execução aprovada. Fafurion's Nest agora tem entrada semanal próp
 A auditoria encontrou 157 dos 177 monstros sem habilidade definida. Mantive os kits explícitos válidos e passei a gerar habilidade temática para lacunas usando nome, elemento, perfil mágico e traits. Status de stun/root/bleed/poison agora têm efeito de combate, duração, chance afetada por resistência e limpeza. As regressões `test/monster-skill-coverage.test.js` e `test/monster-skill-status.test.js` validam cobertura e aplicação dos estados.
 
 Validação dirigida final: dez arquivos de teste passaram, zero falhas; `npm run build` passou em 11,64 s; `git diff --check` passou. O build mantém o aviso de chunks grandes (~1,67 MB e ~2,63 MB). Os protótipos são solo; validação manual dos kits gerados e retomada após desconexão permanecem como follow-up. Grupo, PvP e contribuição distribuída foram excluídos desta adaptação single-player. A agenda do Ninho foi adaptada como uma entrada semanal sem copiar uma janela horária Essence.
+
+### Continuação da auditoria — controles de auto-poção (01/10/2026)
+
+Retomei a fila pela área Combate e Zonas. A revisão do modal de macros mostrou que os sliders de HP e MP persistiam o novo limite, mas os percentuais apresentados ao lado deles não mudavam durante o arraste. Agora cada evento atualiza seu rótulo imediatamente, sem reconstruir o modal; o tooltip do botão Auto-Pot também informa os dois limites. O plano continua registrando Combate e Zonas como parcial, pois faltam os fluxos de Soulshots, pausa/retomada, morte/ressurreição e fechamento da matriz de dano. Não executei testes/build nesta retomada e não usei navegador local.
+
+Ao revisar o ciclo de morte, encontrei consumo prematuro do Pergaminho da Ressurreição: ele era gasto antes da escolha e as duas opções do modal aplicavam a penalidade já calculada automaticamente. Agora a opção com pergaminho procura e consome uma unidade ao confirmar, aplica perda de 10% e é desabilitada quando não há estoque. A opção grátis aplica 20%; o Pergaminho do Renascimento continua zerando a perda automática, e essa perda zero não é convertida em 20% por fallback. Não rodei testes/build nesta alteração.
+
+No contador de Soulshots, a tela somava qualquer grau, mas o combate só consome o grau correspondente à arma equipada ou um tiro universal. O número agora segue a regra de seleção do ataque e respeita quantidades legadas (`count`/`qty`), evitando mostrar estoque inutilizável como disponível. A auditoria de Combate e Zonas continua parcial.
+
+Na revisão de pausa/retomada, identifiquei que selecionar outra zona chamava `startCombat` incondicionalmente e desfazia uma pausa intencional. `selectZone` agora captura o estado antes dos gates e só reinicia o loop se o combate estava ativo antes da troca; durante pausa, o novo alvo fica sem spawn até o jogador retomar. Não rodei testes/build nesta alteração.
+
+### Coliseu PvP — isolamento do combate automático (01/10/2026)
+
+Ao seguir entrada e turnos pelo serviço e handlers reais, vi que o Coliseu altera `state.hp` enquanto o temporizador de caça continua atacando e consumindo recursos. Isso permitia interferência entre o HP do desafio e o combate de zona. Agora iniciar duelo/sobrevivência pausa a caça e grava se ela deve ser retomada; o controle de caça não pode ligá-la no meio do desafio; vitória/derrota/conclusão restaura o estado anterior, acionando o ciclo de morte quando o HP chega a zero. O bootstrap também mantém a caça parada ao carregar um save com desafio ativo e respeita saves que já estavam pausados. Não rodei testes/build nem inspeção visual nesta alteração.
+
+### Raids e bosses — drops com mochila cheia (01/10/2026)
+
+No caminho de vitória, o serviço concedia cada drop por `inventory.push`, sem consultar a capacidade da mochila. Isso podia deixar o inventário acima do limite. O serviço agora respeita o máximo de slots; quando o drop não cabe, preserva item, nome e UID em `pendingRaidRewards`. O painel de Raids exibe a quantidade pendente e permite resgate depois de liberar espaço. A entrega mantém as regras atuais do loot e empilha itens compatíveis quando possível. Não rodei testes/build nem inspeção visual nesta alteração.
+
+Também comparei os gates do serviço com os cartões do painel. Durante Torre, instância e World Boss, o serviço recusava Raid, mas a UI ainda oferecia “Desafiar”. Os cartões agora exibem o bloqueio de encontro ativo nessas condições e durante outro Raid. Não rodei testes/build nem inspeção visual.
+
+### Checkpoint antes do push (01/10/2026, 18:05 BRT)
+
+Consolidei nesta página as alterações pendentes de ciclo de vida das instâncias especiais, navegação dos submenus, controles de combate e auditoria de Coliseu/Raids. Inclui retorno seguro de instâncias, exclusão mútua de encontros, correções dos limites de auto-poção, escolha e custo de ressurreição, contagem de Soulshots por grau compatível, preservação de pausa ao trocar de zona, pausa do combate normal durante o Coliseu, fila resgatável de drops de Raid quando a mochila enche e estados de bloqueio coerentes na UI. `git diff --check` passou. Não rodei testes nem build nesta rodada; a auditoria de telas e a validação visual continuam em andamento.
