@@ -16,6 +16,8 @@ import {
 import { CharacterCreation, CharacterCreationData } from './CharacterCreation';
 import { getStarterKit } from '../data/starterKits';
 import { getClassIcon } from '../services/IconService';
+import CLASS_PORTRAITS_BY_RACE from '../idle/generatedClassPortraits.json' with { type: 'json' };
+import { classPortraitAliases } from '../idle/portraitAliases.js';
 
 interface LoginScreenProps {
   onEnterGame: (cloudState?: any) => void;
@@ -23,19 +25,26 @@ interface LoginScreenProps {
 
 // Helper para selecionar o retrato da classe/raça do herói
 function getHeroAvatar(state: any): string {
-  if (!state) return '/img/elfswsF.png';
+  if (!state) return '/img/m_elf_elf_fighter.webp';
   const race = (state.race || 'elf').toLowerCase();
-  const cls = (state.class || 'elfFighter').toLowerCase();
+  const cls = state.class || 'elfFighter';
   const gender = (state.gender || 'F').toUpperCase();
 
+  const normalizedRace = race.replace(/[\s_-]+/g, '');
+  const portraits = (CLASS_PORTRAITS_BY_RACE as Record<string, Record<string, { M: string; F: string }>>)[normalizedRace];
+  const generatedPortrait = classPortraitAliases(normalizedRace, cls)
+    .map(alias => portraits?.[alias]?.[gender === 'F' ? 'F' : 'M'])
+    .find(Boolean);
+  if (generatedPortrait) return generatedPortrait;
+
   if (race === 'elf' || cls.includes('elf')) {
-    return gender === 'F' ? '/img/elfswsF.png' : '/img/elfwswM.png';
+    return gender === 'F' ? '/img/f_elf_elf_scout.webp' : '/img/m_elf_elf_fighter.webp';
   }
   if (race === 'darkelf' || cls.includes('darkelf')) {
     return gender === 'F' ? '/img/darkelfskF.png' : '/img/darkelfskM.png';
   }
   if (race === 'orc' || cls.includes('orc')) {
-    return gender === 'F' ? '/img/orcmageF.png' : '/img/orcmageM.png';
+    return gender === 'F' ? '/img/f_orc_orc_mage.webp' : '/img/m_orc_orc_mage.webp';
   }
   if (race === 'dwarf' || cls.includes('dwarf')) {
     return gender === 'F' ? '/img/dwarfmaestroF.png' : '/img/dwarfmaestroM.png';
@@ -44,9 +53,9 @@ function getHeroAvatar(state: any): string {
     return gender === 'F' ? '/img/kamaelshF.png' : '/img/kamaelDM.png';
   }
   if (cls.includes('mage') || cls.includes('wizard') || cls.includes('cleric')) {
-    return gender === 'F' ? '/img/f_humanwizard.jpg' : '/img/m_humanwizard.jpg';
+    return gender === 'F' ? '/img/f_human_wizard.webp' : '/img/m_human_wizard.webp';
   }
-  return gender === 'F' ? '/img/f_humanwarrior.jpg' : '/img/m_humanfighter.jpg';
+  return gender === 'F' ? '/img/f_human_warrior.webp' : '/img/m_human_fighter.webp';
 }
 
 // Motor de Brasas & Fuligem de Forja em Canvas 2D

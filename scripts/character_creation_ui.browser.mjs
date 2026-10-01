@@ -127,7 +127,7 @@ export async function run() {
         femalePreview,
         malePlaceholderVisible,
         femalePlaceholderVisible,
-        previewFallback: malePreview.src === '/img/humanpalaM.png' || femalePreview.src === '/img/humanpalaM.png',
+        previewFallback: malePreview.src === '/img/m_human_paladin.webp' || femalePreview.src === '/img/m_human_paladin.webp',
         portraitPlaceholder: [...host.querySelectorAll('[data-portrait-placeholder]')].some(el => getComputedStyle(el).display !== 'none'),
         selectedSummaryMatches
       };

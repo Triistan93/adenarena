@@ -1,4 +1,4 @@
-import CLASS_PORTRAITS_BY_RACE from './generatedClassPortraits.json';
+import CLASS_PORTRAITS_BY_RACE from './generatedClassPortraits.json' with { type: 'json' };
 
 export const HERO_IMAGES: Record<string, string> = {};
 export const CLASS_PORTRAITS = CLASS_PORTRAITS_BY_RACE;

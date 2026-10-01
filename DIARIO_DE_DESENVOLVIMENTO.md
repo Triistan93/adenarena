@@ -2915,3 +2915,37 @@ No equipamento, o checkpoint corrente tem `npm test` 1.065/1.065, regressões 15
 Limite remanescente de catálogo, sem falsa alegação de cobertura: não existe um set de peitoral/corpo de boss acima de S nem uma armadura corporal Frost Lord para comparação direta. Os sets corporais S existentes foram comparados aos sets A completos no combate, e o conteúdo de boss de armadura disponível (capas/cinto) foi comparado e ajustado. Se o jogo vier a receber uma armadura corporal de boss, será necessária uma nova comparação para esse item. Nenhum save real foi lido ou alterado; `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` continuam intactos.
 
 A tarefa de checkpoint está ativa para 05:30 BRT: salva alterações locais e verifica que `main` está integralmente no upstream antes de iniciar o desligamento normal.
+
+#### Renovação dos retratos de Humanos e Elfos (30/09/2026)
+
+Refiz os pares masculino/feminino de **41 classes humanas e 21 classes élficas** (20 do registro canônico mais o Death Knight Élfico que já aparece como opção na criação). São 124 arquivos WebP com transparência, formato 512×600 e padrão `sexo_raça_classe`; os pares foram separados com o normalizador e registrados em `scripts/class_portrait_queue.json` e `public/img/generated-portrait-provenance.json`. A fila geral agora tem 149/149 classes completas, incluindo as outras raças. A arte nova humana/élfica ocupa 14.866.574 bytes.
+
+A criação, a tela de entrada, os quadros de personagem e o resolvedor usado pelos cartões de promoção agora priorizam o registro gerado por raça/classe/gênero. Adicionei aliases para os IDs de escolha inicial e um teste para eles. A auditoria de browser exercitou a tela React real em nove raças: 25 opções iniciais válidas, 324 caminhos registrados e 324 arquivos carregados, sem fallback, falha de interface ou erro de navegador; também passou em 768×1024 e 390×844. O Orc Mage não estava ausente: os arquivos `m_orc_orc_mage.webp` e `f_orc_orc_mage.webp` já constavam na fila e o caminho de produção continua coberto pelo teste de aliases.
+
+Removi da pasta servida 109 retratos antigos sem referências ativas e dois WebP humanos duplicados que não faziam parte do registro. Antes da remoção, os 111 arquivos foram copiados e verificados por SHA-256 em `C:\Users\duuha\Downloads\adenarena-local-backups\human-elf-portraits-2026-09-30\obsolete-assets-before-removal\manifest.json`; total de 23.511.207 bytes preservados fora do projeto. Não removi retratos das outras raças. O conjunto atualizado é menor que o material antigo removido.
+
+Validação desta etapa: `npm test` passou com 1.068/1.068 testes em 117 suítes; `npm run build` passou com o aviso já conhecido sobre chunks maiores que 1,5 MiB; `git diff --check` passou, restando apenas avisos de conversão LF/CRLF do Windows. `npm run typecheck` permanece falhando em problemas de tipagem/imports de outros módulos (Game/GameConfig, Firebase, imports sem uso e declarations incompletas); não apontou erros nos novos aliases após adicionar a declaração TypeScript.
+
+Estado desta atualização: branch `main`, HEAD ainda em `8ea7d79e02ebaaf63fe409eae745232b38e802d4`; mudanças anteriores e locais permanecem no workspace, sem commit nem push nesta etapa.
+
+#### Revisão dos retratos Orc Shaman, Warlord e arqueiros élficos (30/09/2026)
+
+Investiguei as duas telas do Orc Shaman. A classe já tinha retratos WebP masculino/feminino no registro gerado; a promoção caía no retrato antigo de Orc Mage quando o componente global ainda não havia inicializado. Reproduzi a falha removendo `window.__CLASS_PORTRAITS` no teste de produção: `heroImgPath('orc','orc_shaman','M')` retornava `/img/orc_mage.png`. O resolvedor agora consulta também o JSON estático do registro, e a regressão confirma os dois gêneros e o HTML produzido por `heroSVG`, que é usado nos cartões de promoção.
+
+Refiz os pares de Warlord humano com lanças retas e hastes contínuas; refiz Elf Scout, Silver Ranger e Moonlight Sentinel com arcos recurve, cordas, flechas e aljavas facilmente identificáveis. Revisei visualmente os oito WebPs resultantes: o equipamento está inteiro dentro do quadro, e os arqueiros não carregam armas corpo a corpo confundíveis com o arco. Plains Walker e Wind Rider mantêm adagas, coerentes com seus arquétipos. Todos os novos arquivos preservam o padrão de gênero/raça/classe, WebP transparente em 512×600, e a fila/proveniência foi atualizada pelo normalizador.
+
+Validação desta revisão: regressões dirigidas dos retratos **6/6**; auditoria real de criação passou com **9 raças, 324/324 resoluções e carregamentos**, nenhum fallback e nenhum erro de navegador; `npm test` passou **1.069/1.069 em 117 suítes**; `npm run build` concluiu; `git diff --check` passou. O build mantém o aviso já conhecido sobre chunks maiores que 1,5 MiB. Nenhum commit ou push foi feito.
+
+#### Postura e identidade de Death Knights, Wargs e Samurais Kamael (30/09/2026)
+
+Atualizei 12 variantes de classe e seus pares masculino/feminino (24 retratos): quatro etapas humanas de Death Knight, Death Knight Élfico, Death Knight Dark Elf, quatro etapas de Warg e Bushi/Samurai Kamael. A revisão do usuário definiu aço e chamas para o Death Knight humano; mantive prata/gelo no Elfo, violeta/negro no Dark Elf, couro/pelo/manoplas no Warg e a identidade Kamael com asa negra e armadura samurai preta/vermelha.
+
+Ajustei as poses frontais para três quartos, usando os arqueiros élficos como referência de ângulo. Os rostos e olhares ficam voltados para a direita; nas mulheres, o braço esquerdo permanece atrás do tronco. Posicionei espadas para as bordas externas dos quadros para evitar que o recorte masculino/feminino misture as armas. Normalizei e comprimi todos os arquivos para WebP 512×600 com canal alfa e atualizei a fila e a proveniência das imagens.
+
+Validação: teste do registro e resolvedor de retratos passou **4/4**, cobrindo formatos, transparência, ambos os gêneros e aliases da fila completa; auditoria da criação em produção passou com **324/324** arquivos carregados e sem fallback; `npm run build` passou, e confirmei que os **24 retratos** atualizados foram copiados para `dist/img`. `git diff --check` passou. Permanece apenas o aviso conhecido de chunks acima de 1,5 MiB. Nenhum commit ou push foi feito.
+
+#### Ligação final dos retratos no jogo (01/10/2026)
+
+Ao preparar a publicação, uma regressão nova detectou referências `/img//img/` em `lineage-idle/art.js`, `CharacterCreation.tsx` e `LoginScreen.tsx`, além de caminhos de fallback inválidos para o mago Dark Elf e os retratos de Orc/Kamael. Corrigi os caminhos para o diretório público real e alinhei os fallbacks femininos de Fighter/Death Knight Élfico aos retratos próprios da classe. O registro de raça/classe/gênero mantém 149 pares de classe da fila e seus dois gêneros; aliases duplicados representam IDs alternativos da mesma classe canônica.
+
+Validação: a regressão falhava antes da correção e agora verifica raízes duplicadas, existência física de cada asset referenciado e caminhos de fallback élficos. `npm test` passou com 1.070/1.070; `npm run build` passou com o aviso conhecido de chunks acima de 1,5 MiB; `git diff --check` passou. Nenhum save foi acessado ou alterado. A publicação será feita por push em `main`, que aciona a integração Git do Vercel se o projeto estiver conectado ao repositório.

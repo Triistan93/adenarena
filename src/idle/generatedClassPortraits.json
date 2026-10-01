@@ -412,5 +412,257 @@
       "M": "/img/m_ertheia_sayha_seeker.webp",
       "F": "/img/f_ertheia_sayha_seeker.webp"
     }
+  },
+  "human": {
+    "fighter": {
+      "M": "/img/m_human_fighter.webp",
+      "F": "/img/f_human_fighter.webp"
+    },
+    "warrior": {
+      "M": "/img/m_human_warrior.webp",
+      "F": "/img/f_human_warrior.webp"
+    },
+    "gladiator": {
+      "M": "/img/m_human_gladiator.webp",
+      "F": "/img/f_human_gladiator.webp"
+    },
+    "duelist": {
+      "M": "/img/m_human_duelist.webp",
+      "F": "/img/f_human_duelist.webp"
+    },
+    "warlord": {
+      "M": "/img/m_human_warlord.webp",
+      "F": "/img/f_human_warlord.webp"
+    },
+    "dreadnought": {
+      "M": "/img/m_human_dreadnought.webp",
+      "F": "/img/f_human_dreadnought.webp"
+    },
+    "knight": {
+      "M": "/img/m_human_knight.webp",
+      "F": "/img/f_human_knight.webp"
+    },
+    "paladin": {
+      "M": "/img/m_human_paladin.webp",
+      "F": "/img/f_human_paladin.webp"
+    },
+    "phoenixknight": {
+      "M": "/img/m_human_phoenix_knight.webp",
+      "F": "/img/f_human_phoenix_knight.webp"
+    },
+    "darkavenger": {
+      "M": "/img/m_human_dark_avenger.webp",
+      "F": "/img/f_human_dark_avenger.webp"
+    },
+    "hellknight": {
+      "M": "/img/m_human_hell_knight.webp",
+      "F": "/img/f_human_hell_knight.webp"
+    },
+    "rogue": {
+      "M": "/img/m_human_rogue.webp",
+      "F": "/img/f_human_rogue.webp"
+    },
+    "treasurehunter": {
+      "M": "/img/m_human_treasure_hunter.webp",
+      "F": "/img/f_human_treasure_hunter.webp"
+    },
+    "adventurer": {
+      "M": "/img/m_human_adventurer.webp",
+      "F": "/img/f_human_adventurer.webp"
+    },
+    "hawkeye": {
+      "M": "/img/m_human_hawkeye.webp",
+      "F": "/img/f_human_hawkeye.webp"
+    },
+    "sagittarius": {
+      "M": "/img/m_human_sagittarius.webp",
+      "F": "/img/f_human_sagittarius.webp"
+    },
+    "mage": {
+      "M": "/img/m_human_mage.webp",
+      "F": "/img/f_human_mage.webp"
+    },
+    "wizard": {
+      "M": "/img/m_human_wizard.webp",
+      "F": "/img/f_human_wizard.webp"
+    },
+    "sorcerer": {
+      "M": "/img/m_human_sorcerer.webp",
+      "F": "/img/f_human_sorcerer.webp"
+    },
+    "archmage": {
+      "M": "/img/m_human_archmage.webp",
+      "F": "/img/f_human_archmage.webp"
+    },
+    "necromancer": {
+      "M": "/img/m_human_necromancer.webp",
+      "F": "/img/f_human_necromancer.webp"
+    },
+    "soultaker": {
+      "M": "/img/m_human_soultaker.webp",
+      "F": "/img/f_human_soultaker.webp"
+    },
+    "warlock": {
+      "M": "/img/m_human_warlock.webp",
+      "F": "/img/f_human_warlock.webp"
+    },
+    "arcanalord": {
+      "M": "/img/m_human_arcana_lord.webp",
+      "F": "/img/f_human_arcana_lord.webp"
+    },
+    "cleric": {
+      "M": "/img/m_human_cleric.webp",
+      "F": "/img/f_human_cleric.webp"
+    },
+    "bishop": {
+      "M": "/img/m_human_bishop.webp",
+      "F": "/img/f_human_bishop.webp"
+    },
+    "cardinal": {
+      "M": "/img/m_human_cardinal.webp",
+      "F": "/img/f_human_cardinal.webp"
+    },
+    "prophet": {
+      "M": "/img/m_human_prophet.webp",
+      "F": "/img/f_human_prophet.webp"
+    },
+    "hierophant": {
+      "M": "/img/m_human_hierophant.webp",
+      "F": "/img/f_human_hierophant.webp"
+    },
+    "deathpilgrim": {
+      "M": "/img/m_human_death_pilgrim.webp",
+      "F": "/img/f_human_death_pilgrim.webp"
+    },
+    "deathblade": {
+      "M": "/img/m_human_death_blade.webp",
+      "F": "/img/f_human_death_blade.webp"
+    },
+    "deathmessenger": {
+      "M": "/img/m_human_death_messenger.webp",
+      "F": "/img/f_human_death_messenger.webp"
+    },
+    "deathknight": {
+      "M": "/img/m_human_death_knight.webp",
+      "F": "/img/f_human_death_knight.webp"
+    },
+    "wargs0": {
+      "M": "/img/m_human_warg_s0.webp",
+      "F": "/img/f_human_warg_s0.webp"
+    },
+    "wargs1": {
+      "M": "/img/m_human_warg_s1.webp",
+      "F": "/img/f_human_warg_s1.webp"
+    },
+    "wargs2": {
+      "M": "/img/m_human_warg_s2.webp",
+      "F": "/img/f_human_warg_s2.webp"
+    },
+    "warg": {
+      "M": "/img/m_human_warg.webp",
+      "F": "/img/f_human_warg.webp"
+    },
+    "assassins0": {
+      "M": "/img/m_human_assassin_s0.webp",
+      "F": "/img/f_human_assassin_s0.webp"
+    },
+    "assassins1": {
+      "M": "/img/m_human_assassin_s1.webp",
+      "F": "/img/f_human_assassin_s1.webp"
+    },
+    "assassins2": {
+      "M": "/img/m_human_assassin_s2.webp",
+      "F": "/img/f_human_assassin_s2.webp"
+    },
+    "assassins3": {
+      "M": "/img/m_human_assassin_s3.webp",
+      "F": "/img/f_human_assassin_s3.webp"
+    }
+  },
+  "elf": {
+    "elffighter": {
+      "M": "/img/m_elf_elf_fighter.webp",
+      "F": "/img/f_elf_elf_fighter.webp"
+    },
+    "elvenknight": {
+      "M": "/img/m_elf_elven_knight.webp",
+      "F": "/img/f_elf_elven_knight.webp"
+    },
+    "templeknight": {
+      "M": "/img/m_elf_temple_knight.webp",
+      "F": "/img/f_elf_temple_knight.webp"
+    },
+    "evatemplar": {
+      "M": "/img/m_elf_eva_templar.webp",
+      "F": "/img/f_elf_eva_templar.webp"
+    },
+    "swordsinger": {
+      "M": "/img/m_elf_sword_singer.webp",
+      "F": "/img/f_elf_sword_singer.webp"
+    },
+    "swordmuse": {
+      "M": "/img/m_elf_sword_muse.webp",
+      "F": "/img/f_elf_sword_muse.webp"
+    },
+    "elfscout": {
+      "M": "/img/m_elf_elf_scout.webp",
+      "F": "/img/f_elf_elf_scout.webp"
+    },
+    "plainswalker": {
+      "M": "/img/m_elf_plains_walker.webp",
+      "F": "/img/f_elf_plains_walker.webp"
+    },
+    "windrider": {
+      "M": "/img/m_elf_wind_rider.webp",
+      "F": "/img/f_elf_wind_rider.webp"
+    },
+    "silverranger": {
+      "M": "/img/m_elf_silver_ranger.webp",
+      "F": "/img/f_elf_silver_ranger.webp"
+    },
+    "moonlightsentinel": {
+      "M": "/img/m_elf_moonlight_sentinel.webp",
+      "F": "/img/f_elf_moonlight_sentinel.webp"
+    },
+    "elfmage": {
+      "M": "/img/m_elf_elf_mage.webp",
+      "F": "/img/f_elf_elf_mage.webp"
+    },
+    "elvenwizard": {
+      "M": "/img/m_elf_elven_wizard.webp",
+      "F": "/img/f_elf_elven_wizard.webp"
+    },
+    "spellsinger": {
+      "M": "/img/m_elf_spellsinger.webp",
+      "F": "/img/f_elf_spellsinger.webp"
+    },
+    "mysticmuse": {
+      "M": "/img/m_elf_mystic_muse.webp",
+      "F": "/img/f_elf_mystic_muse.webp"
+    },
+    "elementalsummoner": {
+      "M": "/img/m_elf_elemental_summoner.webp",
+      "F": "/img/f_elf_elemental_summoner.webp"
+    },
+    "elementalmaster": {
+      "M": "/img/m_elf_elemental_master.webp",
+      "F": "/img/f_elf_elemental_master.webp"
+    },
+    "elforacle": {
+      "M": "/img/m_elf_elf_oracle.webp",
+      "F": "/img/f_elf_elf_oracle.webp"
+    },
+    "elfelder": {
+      "M": "/img/m_elf_elf_elder.webp",
+      "F": "/img/f_elf_elf_elder.webp"
+    },
+    "evasaint": {
+      "M": "/img/m_elf_eva_saint.webp",
+      "F": "/img/f_elf_eva_saint.webp"
+    },
+    "elfdeathknight": {
+      "M": "/img/m_elf_elf_death_knight.webp",
+      "F": "/img/f_elf_elf_death_knight.webp"
+    }
   }
 }

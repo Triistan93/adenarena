@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import sharp from 'sharp';
+import { selectPortraitSplit } from './lib/portrait-pair-layout.mjs';
 
 const [sourcePath, maleFile, femaleFile, race, classId, className = classId] = process.argv.slice(2);
 if (!sourcePath || !maleFile || !femaleFile) {
@@ -17,6 +18,18 @@ const metadata = await source.metadata();
 if (!metadata.width || !metadata.height || metadata.width < 2) {
   throw new Error('The generated pair must have a side-by-side canvas at least two pixels wide.');
 }
+
+const sourcePixels = await source.clone().ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+const opacityByColumn = new Array(metadata.width).fill(0);
+for (let y = 0; y < metadata.height; y += 1) {
+  for (let x = 0; x < metadata.width; x += 1) {
+    if (sourcePixels.data[(y * metadata.width + x) * sourcePixels.info.channels + 3] > 4) {
+      opacityByColumn[x] += 1;
+    }
+  }
+}
+const splitX = selectPortraitSplit(opacityByColumn);
+const splitGutter = Math.max(4, Math.round(metadata.width * 0.005));
 
 function findAlphaBounds({ data, info }) {
   const { width, height, channels } = info;
@@ -38,21 +51,15 @@ function findAlphaBounds({ data, info }) {
 }
 
 async function writePanel(side, outputFile) {
-  const leftPanelWidth = Math.floor(metadata.width / 2);
-  const panelX = side === 'left' ? 0 : leftPanelWidth;
-  const panelWidth = side === 'left' ? leftPanelWidth : metadata.width - leftPanelWidth;
+  const panelX = side === 'left' ? 0 : splitX + splitGutter;
+  const panelWidth = side === 'left'
+    ? splitX - splitGutter
+    : metadata.width - panelX;
   const half = sharp(sourcePath)
     .extract({ left: panelX, top: 0, width: panelWidth, height: metadata.height })
     .ensureAlpha();
   const raw = await half.clone().raw().toBuffer({ resolveWithObject: true });
   const bounds = findAlphaBounds(raw);
-  const edgeGap = side === 'left'
-    ? panelWidth - (bounds.left + bounds.width)
-    : bounds.left;
-  if (edgeGap < panelWidth * 0.001) {
-    throw new Error(`${side} portrait touches the center split; regenerate the pair with a wider transparent gutter.`);
-  }
-
   const outputPath = path.join('public', 'img', outputFile);
   await sharp(sourcePath)
     .extract({ ...bounds, left: bounds.left + panelX })

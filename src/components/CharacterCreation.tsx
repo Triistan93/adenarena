@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { checkNicknameAvailability } from '../firebase';
 import { getClassIcon } from '../services/IconService';
-import CLASS_PORTRAITS_BY_RACE from '../idle/generatedClassPortraits.json';
+import CLASS_PORTRAITS_BY_RACE from '../idle/generatedClassPortraits.json' with { type: 'json' };
+import { classPortraitAliases } from '../idle/portraitAliases.js';
 
 export interface CharacterCreationData {
   charName: string;
@@ -44,20 +45,20 @@ const RACES_INFO: Record<string, {
       { id: 'secret_assassin_male_0', name: 'Assassin 🗡️', desc: 'Caçador das sombras mortal com adagas velozes e clones sombrios.', icon: '🗡️' }
     ],
     image: {
-      fighter: { M: '/img/m_humanfighter.jpg', F: '/img/f_humanfighter.jpg' },
-      warrior: { M: '/img/m_humanwarrior.jpg', F: '/img/f_humanwarrior.jpg' },
-      knight: { M: '/img/m_humanknight.jpg', F: '/img/f_humanknight.jpg' },
-      rogue: { M: '/img/m_humanrogue.jpg', F: '/img/f_humanrogue.jpg' },
-      mage: { M: '/img/m_humanmistyc.jpg', F: '/img/f_humanmistyc.jpg' },
-      wizard: { M: '/img/m_humanwizard.jpg', F: '/img/f_humanwizard.jpg' },
-      cleric: { M: '/img/m_cleric.jpg', F: '/img/f_cleric.jpg' },
-      human_deathknight_0: { M: '/img/m_darkavenger.jpg', F: '/img/f_darkavenger.jpg' },
-      deathPilgrim: { M: '/img/m_darkavenger.jpg', F: '/img/f_darkavenger.jpg' },
-      werewolf_0: { M: '/img/m_humanwarrior.jpg', F: '/img/f_humanwarrior.jpg' },
-      wargBase: { M: '/img/m_humanwarrior.jpg', F: '/img/f_humanwarrior.jpg' },
-      secret_assassin_male_0: { M: '/img/m_treasurehunter.jpg', F: '/img/f_treasurehunter.jpg' },
-      assassinS0: { M: '/img/m_treasurehunter.jpg', F: '/img/f_treasurehunter.jpg' },
-      assassinBase: { M: '/img/m_treasurehunter.jpg', F: '/img/f_treasurehunter.jpg' }
+      fighter: { M: '/img/m_human_fighter.webp', F: '/img/f_human_fighter.webp' },
+      warrior: { M: '/img/m_human_warrior.webp', F: '/img/f_human_warrior.webp' },
+      knight: { M: '/img/m_human_knight.webp', F: '/img/f_human_knight.webp' },
+      rogue: { M: '/img/m_human_rogue.webp', F: '/img/f_human_rogue.webp' },
+      mage: { M: '/img/m_human_mage.webp', F: '/img/f_human_mage.webp' },
+      wizard: { M: '/img/m_human_wizard.webp', F: '/img/f_human_wizard.webp' },
+      cleric: { M: '/img/m_human_cleric.webp', F: '/img/f_human_cleric.webp' },
+      human_deathknight_0: { M: '/img/m_human_dark_avenger.webp', F: '/img/f_human_dark_avenger.webp' },
+      deathPilgrim: { M: '/img/m_human_dark_avenger.webp', F: '/img/f_human_dark_avenger.webp' },
+      werewolf_0: { M: '/img/m_human_warrior.webp', F: '/img/f_human_warrior.webp' },
+      wargBase: { M: '/img/m_human_warrior.webp', F: '/img/f_human_warrior.webp' },
+      secret_assassin_male_0: { M: '/img/m_human_treasure_hunter.webp', F: '/img/f_human_treasure_hunter.webp' },
+      assassinS0: { M: '/img/m_human_treasure_hunter.webp', F: '/img/f_human_treasure_hunter.webp' },
+      assassinBase: { M: '/img/m_human_treasure_hunter.webp', F: '/img/f_human_treasure_hunter.webp' }
     },
     startZoneName: 'Ilha de Falar (Talking Island)'
   },
@@ -73,13 +74,13 @@ const RACES_INFO: Record<string, {
       { id: 'elf_deathknight_0', name: 'Death Knight 💀', desc: 'Cavaleiro da Morte Élfico focado em esquiva e lâminas de gelo.', icon: '💀' }
     ],
     image: {
-      elven_fighter: { M: '/img/elfwswM.png', F: '/img/elfswsF.png' },
-      elven_mage: { M: '/img/elfmageM.png', F: '/img/elfmageF.png' },
-      elf_deathknight_0: { M: '/img/elfwswM.png', F: '/img/elfswsF.png' },
-      elfFighter: { M: '/img/elfwswM.png', F: '/img/elfswsF.png' },
-      elfMage: { M: '/img/elfmageM.png', F: '/img/elfmageF.png' },
-      fighter: { M: '/img/elfwswM.png', F: '/img/elfswsF.png' },
-      mage: { M: '/img/elfmageM.png', F: '/img/elfmageF.png' }
+      elven_fighter: { M: '/img/m_elf_elf_fighter.webp', F: '/img/f_elf_elf_fighter.webp' },
+      elven_mage: { M: '/img/m_elf_elf_mage.webp', F: '/img/f_elf_elf_mage.webp' },
+      elf_deathknight_0: { M: '/img/m_elf_elf_death_knight.webp', F: '/img/f_elf_elf_death_knight.webp' },
+      elfFighter: { M: '/img/m_elf_elf_fighter.webp', F: '/img/f_elf_elf_fighter.webp' },
+      elfMage: { M: '/img/m_elf_elf_mage.webp', F: '/img/f_elf_elf_mage.webp' },
+      fighter: { M: '/img/m_elf_elf_fighter.webp', F: '/img/f_elf_elf_fighter.webp' },
+      mage: { M: '/img/m_elf_elf_mage.webp', F: '/img/f_elf_elf_mage.webp' }
     },
     startZoneName: 'Ilha de Falar (Talking Island)'
   },
@@ -342,8 +343,12 @@ export const CharacterCreation: React.FC<CharacterCreationProps> = ({
   // Never substitute another class/race/gender portrait silently. A missing
   // class portrait is shown as an explicit placeholder and remains auditable.
   const generatedPortraits = CLASS_PORTRAITS_BY_RACE as Record<string, Record<string, { M: string; F: string }>>;
-  const currentImgObj = currentRaceObj.image[selectedClass]
-    || generatedPortraits[selectedRace]?.[selectedClass.toLowerCase()];
+  const racePortraits = generatedPortraits[selectedRace];
+  const generatedClassPortrait = classPortraitAliases(selectedRace, selectedClass)
+    .map(alias => racePortraits?.[alias])
+    .find(Boolean);
+  const currentImgObj = generatedClassPortrait
+    || currentRaceObj.image[selectedClass];
   const currentImg = currentImgObj?.[gender] || null;
 
   return (

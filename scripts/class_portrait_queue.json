@@ -1,8 +1,8 @@
 {
-  "generatedFrom": "CanonicalClassRegistryV2",
-  "updatedAt": "2026-09-30T05:44:21.426Z",
-  "totalClasses": 87,
-  "completedClasses": 87,
+  "generatedFrom": "CanonicalClassRegistryV2+CharacterCreation",
+  "updatedAt": "2026-10-01T02:49:20.664Z",
+  "totalClasses": 149,
+  "completedClasses": 149,
   "rows": [
     {
       "race": "orc",
@@ -354,11 +354,11 @@
       "femaleFile": "f_darkelf_death_knight.webp",
       "status": "generated",
       "classDescription": "Cavaleiro da Morte Dark Elf — cavaleiro sombrio com armadura gélida e energia profana.",
-      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-1e6cfdcc-1ed4-43a2-8532-a1a9dbc2c8e0.png",
-      "generatedAt": "2026-09-30T04:39:32.788Z",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-94ebc391-4893-4224-ba42-98a9047e8dbb.png",
+      "generatedAt": "2026-10-01T02:44:50.561Z",
       "outputBytes": {
-        "male": 106048,
-        "female": 106426
+        "male": 103474,
+        "female": 98280
       }
     },
     {
@@ -932,11 +932,11 @@
       "femaleFile": "f_kamael_samurai_base.webp",
       "status": "generated",
       "classDescription": "Bushi — aprendiz do caminho da lâmina e técnicas de Katana.",
-      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-b31f2849-08c8-4d1c-a8e5-003ccc7f35b1.png",
-      "generatedAt": "2026-09-30T05:08:53.622Z",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-8f334de4-0843-44ae-87b4-e9e9e1d9172d.png",
+      "generatedAt": "2026-10-01T02:49:17.259Z",
       "outputBytes": {
-        "male": 97580,
-        "female": 92688
+        "male": 109962,
+        "female": 112306
       }
     },
     {
@@ -1102,11 +1102,11 @@
       "femaleFile": "f_kamael_samurai.webp",
       "status": "generated",
       "classDescription": "Samurai — mestre supremo da lâmina com técnicas lendárias de Kenjutsu.",
-      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-c8f5c9e0-b6dd-4bc1-bfd0-33cf98d9598a.png",
-      "generatedAt": "2026-09-30T05:21:13.074Z",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-5ae96b84-8b91-4aa3-974e-8f0c0407ce3e.png",
+      "generatedAt": "2026-10-01T02:49:20.664Z",
       "outputBytes": {
-        "male": 101412,
-        "female": 104282
+        "male": 107172,
+        "female": 110646
       }
     },
     {
@@ -1481,6 +1481,1060 @@
       "outputBytes": {
         "male": 155628,
         "female": 161410
+      }
+    },
+    {
+      "race": "human",
+      "classId": "fighter",
+      "className": "Human Fighter",
+      "stage": 0,
+      "lineageId": "duelist",
+      "maleFile": "m_human_fighter.webp",
+      "femaleFile": "f_human_fighter.webp",
+      "status": "generated",
+      "classDescription": "Classe base de combate humana.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-ed95a1f3-4eae-4d47-a265-428468f3e5f4.png",
+      "generatedAt": "2026-10-01T00:24:03.550Z",
+      "outputBytes": {
+        "male": 101260,
+        "female": 95148
+      }
+    },
+    {
+      "race": "human",
+      "classId": "warrior",
+      "className": "Warrior",
+      "stage": 1,
+      "lineageId": "duelist",
+      "maleFile": "m_human_warrior.webp",
+      "femaleFile": "f_human_warrior.webp",
+      "status": "generated",
+      "classDescription": "Guerreiro corpo-a-corpo especializado em espadas e polearms. Skills anteriores permanecem.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-086a88c1-75c9-4523-b7d6-761182ac4d15.png",
+      "generatedAt": "2026-10-01T00:24:07.955Z",
+      "outputBytes": {
+        "male": 106894,
+        "female": 111912
+      }
+    },
+    {
+      "race": "human",
+      "classId": "gladiator",
+      "className": "Gladiator",
+      "stage": 2,
+      "lineageId": "duelist",
+      "maleFile": "m_human_gladiator.webp",
+      "femaleFile": "f_human_gladiator.webp",
+      "status": "generated",
+      "classDescription": "Mestre em dual wield e combos devastadores. Skills anteriores permanecem.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-e191f7e7-d5a9-43db-8508-daa07864b336.png",
+      "generatedAt": "2026-10-01T00:24:11.736Z",
+      "outputBytes": {
+        "male": 115550,
+        "female": 98456
+      }
+    },
+    {
+      "race": "human",
+      "classId": "duelist",
+      "className": "Duelist",
+      "stage": 3,
+      "lineageId": "duelist",
+      "maleFile": "m_human_duelist.webp",
+      "femaleFile": "f_human_duelist.webp",
+      "status": "generated",
+      "classDescription": "Duelista supremo, mestre do dual wield. Skills anteriores permanecem.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-6567ff17-3d52-434b-80a1-03ae03a96346.png",
+      "generatedAt": "2026-10-01T00:24:24.015Z",
+      "outputBytes": {
+        "male": 110190,
+        "female": 96724
+      }
+    },
+    {
+      "race": "human",
+      "classId": "warlord",
+      "className": "Warlord",
+      "stage": 2,
+      "lineageId": "dreadnought",
+      "maleFile": "m_human_warlord.webp",
+      "femaleFile": "f_human_warlord.webp",
+      "status": "generated",
+      "classDescription": "Senhor da guerra com polearms e AoE devastador. Skills anteriores permanecem.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-7dc29440-0d17-47d3-830d-7bd78cf13ea1.png",
+      "generatedAt": "2026-10-01T02:03:49.802Z",
+      "outputBytes": {
+        "male": 82694,
+        "female": 74266
+      }
+    },
+    {
+      "race": "human",
+      "classId": "dreadnought",
+      "className": "Dreadnought",
+      "stage": 3,
+      "lineageId": "dreadnought",
+      "maleFile": "m_human_dreadnought.webp",
+      "femaleFile": "f_human_dreadnought.webp",
+      "status": "generated",
+      "classDescription": "Encouraçado vivo, AoE massivo com polearm. Skills anteriores permanecem.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-eac43875-7617-4621-8b32-28f31840a751.png",
+      "generatedAt": "2026-10-01T00:30:34.043Z",
+      "outputBytes": {
+        "male": 111370,
+        "female": 92176
+      }
+    },
+    {
+      "race": "human",
+      "classId": "knight",
+      "className": "Knight",
+      "stage": 1,
+      "lineageId": "phoenixKnight",
+      "maleFile": "m_human_knight.webp",
+      "femaleFile": "f_human_knight.webp",
+      "status": "generated",
+      "classDescription": "Cavaleiro tanque com escudo. Skills anteriores permanecem.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-0834a26e-5eaa-4096-923c-fe6c1e30a9e7.png",
+      "generatedAt": "2026-10-01T00:30:39.445Z",
+      "outputBytes": {
+        "male": 106038,
+        "female": 100262
+      }
+    },
+    {
+      "race": "human",
+      "classId": "paladin",
+      "className": "Paladin",
+      "stage": 2,
+      "lineageId": "phoenixKnight",
+      "maleFile": "m_human_paladin.webp",
+      "femaleFile": "f_human_paladin.webp",
+      "status": "generated",
+      "classDescription": "Cavaleiro sagrado, tank com cura e proteção. Skills anteriores permanecem.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-4c99a3f7-361f-4df6-a43d-6a3d76fb1f70.png",
+      "generatedAt": "2026-10-01T00:30:45.235Z",
+      "outputBytes": {
+        "male": 115126,
+        "female": 105168
+      }
+    },
+    {
+      "race": "human",
+      "classId": "phoenixKnight",
+      "className": "Phoenix Knight",
+      "stage": 3,
+      "lineageId": "phoenixKnight",
+      "maleFile": "m_human_phoenix_knight.webp",
+      "femaleFile": "f_human_phoenix_knight.webp",
+      "status": "generated",
+      "classDescription": "Cavaleiro da Fênix, tank supremo com ressurreição. Skills anteriores permanecem.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-b30efb1c-0f7a-454a-8685-3a8605c306fe.png",
+      "generatedAt": "2026-10-01T00:31:10.032Z",
+      "outputBytes": {
+        "male": 121368,
+        "female": 119090
+      }
+    },
+    {
+      "race": "human",
+      "classId": "darkAvenger",
+      "className": "Dark Avenger",
+      "stage": 2,
+      "lineageId": "hellKnight",
+      "maleFile": "m_human_dark_avenger.webp",
+      "femaleFile": "f_human_dark_avenger.webp",
+      "status": "generated",
+      "classDescription": "Cavaleiro sombrio com pantera e drain. Skills anteriores permanecem.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-41174d71-b447-42d6-9c2d-df7defc9e745.png",
+      "generatedAt": "2026-10-01T00:37:14.931Z",
+      "outputBytes": {
+        "male": 107272,
+        "female": 83954
+      }
+    },
+    {
+      "race": "human",
+      "classId": "hellKnight",
+      "className": "Hell Knight",
+      "stage": 3,
+      "lineageId": "hellKnight",
+      "maleFile": "m_human_hell_knight.webp",
+      "femaleFile": "f_human_hell_knight.webp",
+      "status": "generated",
+      "classDescription": "Cavaleiro infernal com aura de trevas. Skills anteriores permanecem.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-625d12eb-6379-4448-bcd9-07d104c5b6c3.png",
+      "generatedAt": "2026-10-01T00:37:20.212Z",
+      "outputBytes": {
+        "male": 117390,
+        "female": 95408
+      }
+    },
+    {
+      "race": "human",
+      "classId": "rogue",
+      "className": "Rogue",
+      "stage": 1,
+      "lineageId": "adventurer",
+      "maleFile": "m_human_rogue.webp",
+      "femaleFile": "f_human_rogue.webp",
+      "status": "generated",
+      "classDescription": "Ladino ágil, especialista em dagger e bow. Skills anteriores permanecem.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-9c0cf7bf-af7f-4110-bc12-2241f5569fe9.png",
+      "generatedAt": "2026-10-01T00:37:24.972Z",
+      "outputBytes": {
+        "male": 98604,
+        "female": 85576
+      }
+    },
+    {
+      "race": "human",
+      "classId": "treasureHunter",
+      "className": "Treasure Hunter",
+      "stage": 2,
+      "lineageId": "adventurer",
+      "maleFile": "m_human_treasure_hunter.webp",
+      "femaleFile": "f_human_treasure_hunter.webp",
+      "status": "generated",
+      "classDescription": "Caçador de tesouros, mestre em adagas. Skills anteriores permanecem.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-ef7a33b4-d9ba-4760-9f5b-c9d9cf7c9098.png",
+      "generatedAt": "2026-10-01T00:37:29.828Z",
+      "outputBytes": {
+        "male": 99652,
+        "female": 77562
+      }
+    },
+    {
+      "race": "human",
+      "classId": "adventurer",
+      "className": "Adventurer",
+      "stage": 3,
+      "lineageId": "adventurer",
+      "maleFile": "m_human_adventurer.webp",
+      "femaleFile": "f_human_adventurer.webp",
+      "status": "generated",
+      "classDescription": "Aventureiro supremo, mestre da evasão e dano furtivo. Skills anteriores permanecem.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-6544c864-a34e-486c-bf42-d9fac571f98f.png",
+      "generatedAt": "2026-10-01T00:37:34.733Z",
+      "outputBytes": {
+        "male": 102156,
+        "female": 87422
+      }
+    },
+    {
+      "race": "human",
+      "classId": "hawkeye",
+      "className": "Hawkeye",
+      "stage": 2,
+      "lineageId": "sagittarius",
+      "maleFile": "m_human_hawkeye.webp",
+      "femaleFile": "f_human_hawkeye.webp",
+      "status": "generated",
+      "classDescription": "Arqueiro de elite com dano à distância. Skills anteriores permanecem.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-7df795ba-f80c-455e-8214-3ad8df7d355e.png",
+      "generatedAt": "2026-10-01T00:37:39.518Z",
+      "outputBytes": {
+        "male": 102708,
+        "female": 89302
+      }
+    },
+    {
+      "race": "human",
+      "classId": "sagittarius",
+      "className": "Sagittarius",
+      "stage": 3,
+      "lineageId": "sagittarius",
+      "maleFile": "m_human_sagittarius.webp",
+      "femaleFile": "f_human_sagittarius.webp",
+      "status": "generated",
+      "classDescription": "Atirador lendário, mestre do arco. Skills anteriores permanecem.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-4b425a15-e5a1-4617-8fec-11af800ae2ce.png",
+      "generatedAt": "2026-10-01T00:44:20.431Z",
+      "outputBytes": {
+        "male": 118446,
+        "female": 97178
+      }
+    },
+    {
+      "race": "human",
+      "classId": "mage",
+      "className": "Human Mage",
+      "stage": 0,
+      "lineageId": "archmage",
+      "maleFile": "m_human_mage.webp",
+      "femaleFile": "f_human_mage.webp",
+      "status": "generated",
+      "classDescription": "Classe base mágica humana.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-7d6331b0-7f24-43c2-9dd7-17f81795472f.png",
+      "generatedAt": "2026-10-01T00:44:26.813Z",
+      "outputBytes": {
+        "male": 114548,
+        "female": 111512
+      }
+    },
+    {
+      "race": "human",
+      "classId": "wizard",
+      "className": "Wizard",
+      "stage": 1,
+      "lineageId": "archmage",
+      "maleFile": "m_human_wizard.webp",
+      "femaleFile": "f_human_wizard.webp",
+      "status": "generated",
+      "classDescription": "Mago elemental versátil. Skills anteriores permanecem.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-e877e34e-cbe5-46ab-bbb4-97e82b40e07b.png",
+      "generatedAt": "2026-10-01T00:44:32.855Z",
+      "outputBytes": {
+        "male": 129706,
+        "female": 83658
+      }
+    },
+    {
+      "race": "human",
+      "classId": "sorcerer",
+      "className": "Sorcerer",
+      "stage": 2,
+      "lineageId": "archmage",
+      "maleFile": "m_human_sorcerer.webp",
+      "femaleFile": "f_human_sorcerer.webp",
+      "status": "generated",
+      "classDescription": "Mestre da magia elemental ofensiva. Skills anteriores permanecem.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-7c91fdde-4693-4f7f-9562-70add9d636c9.png",
+      "generatedAt": "2026-10-01T00:44:38.326Z",
+      "outputBytes": {
+        "male": 132834,
+        "female": 110984
+      }
+    },
+    {
+      "race": "human",
+      "classId": "archmage",
+      "className": "Archmage",
+      "stage": 3,
+      "lineageId": "archmage",
+      "maleFile": "m_human_archmage.webp",
+      "femaleFile": "f_human_archmage.webp",
+      "status": "generated",
+      "classDescription": "Arquimago do fogo, dano massivo. Skills anteriores permanecem. Foco: FOGO.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-e4bd6ef1-bb21-4d6e-880b-a77c8f1af1eb.png",
+      "generatedAt": "2026-10-01T00:44:44.872Z",
+      "outputBytes": {
+        "male": 140924,
+        "female": 132722
+      }
+    },
+    {
+      "race": "human",
+      "classId": "necromancer",
+      "className": "Necromancer",
+      "stage": 2,
+      "lineageId": "soultaker",
+      "maleFile": "m_human_necromancer.webp",
+      "femaleFile": "f_human_necromancer.webp",
+      "status": "generated",
+      "classDescription": "Mago das trevas e mortos-vivos. Skills anteriores permanecem. Foco: DARK/UNDEAD.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-14acebef-9095-416c-b6f8-2527ce387263.png",
+      "generatedAt": "2026-10-01T00:44:50.874Z",
+      "outputBytes": {
+        "male": 145360,
+        "female": 122582
+      }
+    },
+    {
+      "race": "human",
+      "classId": "soultaker",
+      "className": "Soultaker",
+      "stage": 3,
+      "lineageId": "soultaker",
+      "maleFile": "m_human_soultaker.webp",
+      "femaleFile": "f_human_soultaker.webp",
+      "status": "generated",
+      "classDescription": "Ceifador de almas, dano dark massivo. Skills anteriores permanecem. Foco: DARK.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-695e782d-7350-4ac8-a2b3-93cefd6cd587.png",
+      "generatedAt": "2026-10-01T00:50:32.290Z",
+      "outputBytes": {
+        "male": 155644,
+        "female": 132720
+      }
+    },
+    {
+      "race": "human",
+      "classId": "warlock",
+      "className": "Warlock",
+      "stage": 2,
+      "lineageId": "arcanaLord",
+      "maleFile": "m_human_warlock.webp",
+      "femaleFile": "f_human_warlock.webp",
+      "status": "generated",
+      "classDescription": "Invocador de criaturas das trevas. Skills anteriores permanecem. Foco: SUMMON.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-db114480-907f-45ca-87a9-1624a3e348cf.png",
+      "generatedAt": "2026-10-01T00:50:37.913Z",
+      "outputBytes": {
+        "male": 153502,
+        "female": 154412
+      }
+    },
+    {
+      "race": "human",
+      "classId": "arcanaLord",
+      "className": "Arcana Lord",
+      "stage": 3,
+      "lineageId": "arcanaLord",
+      "maleFile": "m_human_arcana_lord.webp",
+      "femaleFile": "f_human_arcana_lord.webp",
+      "status": "generated",
+      "classDescription": "Senhor arcano dos invocadores. Skills anteriores permanecem. Foco: SUMMON.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-865de818-b8fb-44ce-ad73-e814653e3df1.png",
+      "generatedAt": "2026-10-01T00:50:45.830Z",
+      "outputBytes": {
+        "male": 162766,
+        "female": 142270
+      }
+    },
+    {
+      "race": "human",
+      "classId": "cleric",
+      "className": "Cleric",
+      "stage": 1,
+      "lineageId": "cardinal",
+      "maleFile": "m_human_cleric.webp",
+      "femaleFile": "f_human_cleric.webp",
+      "status": "generated",
+      "classDescription": "Clérigo curador e suporte. Skills anteriores permanecem.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-7943477e-82aa-472c-b4ff-e669c96eb878.png",
+      "generatedAt": "2026-10-01T00:50:53.390Z",
+      "outputBytes": {
+        "male": 143142,
+        "female": 142072
+      }
+    },
+    {
+      "race": "human",
+      "classId": "bishop",
+      "className": "Bishop",
+      "stage": 2,
+      "lineageId": "cardinal",
+      "maleFile": "m_human_bishop.webp",
+      "femaleFile": "f_human_bishop.webp",
+      "status": "generated",
+      "classDescription": "Bispo curador poderoso. Skills anteriores permanecem.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-77c98fdc-ee88-4e37-9320-a450a4456522.png",
+      "generatedAt": "2026-10-01T00:51:00.821Z",
+      "outputBytes": {
+        "male": 176256,
+        "female": 157470
+      }
+    },
+    {
+      "race": "human",
+      "classId": "cardinal",
+      "className": "Cardinal",
+      "stage": 3,
+      "lineageId": "cardinal",
+      "maleFile": "m_human_cardinal.webp",
+      "femaleFile": "f_human_cardinal.webp",
+      "status": "generated",
+      "classDescription": "Cardeal supremo, mestre da cura E do dano sagrado (Dark Side). Skills anteriores permanecem.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-ee8db40f-23da-4f83-80fb-29edda1fc609.png",
+      "generatedAt": "2026-10-01T00:51:07.589Z",
+      "outputBytes": {
+        "male": 160830,
+        "female": 123150
+      }
+    },
+    {
+      "race": "human",
+      "classId": "prophet",
+      "className": "Prophet",
+      "stage": 2,
+      "lineageId": "hierophant",
+      "maleFile": "m_human_prophet.webp",
+      "femaleFile": "f_human_prophet.webp",
+      "status": "generated",
+      "classDescription": "Profeta, mestre dos buffs. Skills anteriores permanecem.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-ba12f152-046d-4c43-afb0-df18a39fb026.png",
+      "generatedAt": "2026-10-01T00:57:22.082Z",
+      "outputBytes": {
+        "male": 136086,
+        "female": 108698
+      }
+    },
+    {
+      "race": "human",
+      "classId": "hierophant",
+      "className": "Hierophant",
+      "stage": 3,
+      "lineageId": "hierophant",
+      "maleFile": "m_human_hierophant.webp",
+      "femaleFile": "f_human_hierophant.webp",
+      "status": "generated",
+      "classDescription": "Hierofante, profeta supremo com profecias e dano. Skills anteriores permanecem.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-5e9f28e4-63f8-49ba-ab47-07e172638c46.png",
+      "generatedAt": "2026-10-01T00:57:28.536Z",
+      "outputBytes": {
+        "male": 153660,
+        "female": 114256
+      }
+    },
+    {
+      "race": "human",
+      "classId": "deathPilgrim",
+      "className": "Death Pilgrim",
+      "stage": 0,
+      "lineageId": "deathKnight",
+      "maleFile": "m_human_death_pilgrim.webp",
+      "femaleFile": "f_human_death_pilgrim.webp",
+      "status": "generated",
+      "classDescription": "Peregrino da morte — começo da jornada dark.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-d0e2f788-e053-442d-8b14-1413826fc6ae.png",
+      "generatedAt": "2026-10-01T02:39:54.653Z",
+      "outputBytes": {
+        "male": 112674,
+        "female": 106090
+      }
+    },
+    {
+      "race": "human",
+      "classId": "deathBlade",
+      "className": "Death Blade",
+      "stage": 1,
+      "lineageId": "deathKnight",
+      "maleFile": "m_human_death_blade.webp",
+      "femaleFile": "f_human_death_blade.webp",
+      "status": "generated",
+      "classDescription": "Lâmina da morte — combate dark agressivo.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-0eccbc15-24e7-4470-8401-5949b1ad1581.png",
+      "generatedAt": "2026-10-01T02:39:58.291Z",
+      "outputBytes": {
+        "male": 111828,
+        "female": 103934
+      }
+    },
+    {
+      "race": "human",
+      "classId": "deathMessenger",
+      "className": "Death Messenger",
+      "stage": 2,
+      "lineageId": "deathKnight",
+      "maleFile": "m_human_death_messenger.webp",
+      "femaleFile": "f_human_death_messenger.webp",
+      "status": "generated",
+      "classDescription": "Mensageiro da morte — ataques dark devastadores.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-22de0579-59a0-44cd-9b0f-c8a6ff99aa89.png",
+      "generatedAt": "2026-10-01T02:40:01.787Z",
+      "outputBytes": {
+        "male": 109938,
+        "female": 104280
+      }
+    },
+    {
+      "race": "human",
+      "classId": "deathKnight",
+      "className": "Death Knight",
+      "stage": 3,
+      "lineageId": "deathKnight",
+      "maleFile": "m_human_death_knight.webp",
+      "femaleFile": "f_human_death_knight.webp",
+      "status": "generated",
+      "classDescription": "Cavaleiro da Morte — devastação dark absoluta com Death Points.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-d8f3f43b-0a73-4955-be49-cc8e0a9a307e.png",
+      "generatedAt": "2026-10-01T02:36:37.327Z",
+      "outputBytes": {
+        "male": 107052,
+        "female": 102500
+      }
+    },
+    {
+      "race": "human",
+      "classId": "wargS0",
+      "className": "Warg",
+      "stage": 0,
+      "lineageId": "warg",
+      "maleFile": "m_human_warg_s0.webp",
+      "femaleFile": "f_human_warg_s0.webp",
+      "status": "generated",
+      "classDescription": "Warg — combatente humano de curta e média distância que luta com armas de punho.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-852c2e2b-4198-46a2-a09c-0c9d4e9cafcd.png",
+      "generatedAt": "2026-10-01T02:44:54.207Z",
+      "outputBytes": {
+        "male": 112624,
+        "female": 93450
+      }
+    },
+    {
+      "race": "human",
+      "classId": "wargS1",
+      "className": "Warg",
+      "stage": 1,
+      "lineageId": "warg",
+      "maleFile": "m_human_warg_s1.webp",
+      "femaleFile": "f_human_warg_s1.webp",
+      "status": "generated",
+      "classDescription": "Warg — combatente de punhos que usa o poder especial do lobo.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-1066e645-a6e9-4c02-9ab2-d3c4abe3ec40.png",
+      "generatedAt": "2026-10-01T02:44:57.858Z",
+      "outputBytes": {
+        "male": 111732,
+        "female": 100738
+      }
+    },
+    {
+      "race": "human",
+      "classId": "wargS2",
+      "className": "Warg",
+      "stage": 2,
+      "lineageId": "warg",
+      "maleFile": "m_human_warg_s2.webp",
+      "femaleFile": "f_human_warg_s2.webp",
+      "status": "generated",
+      "classDescription": "Warg — forma avançada, com ataques físicos e bênçãos lunares.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-f7af6286-031b-4649-b210-5cd99f0ed8ef.png",
+      "generatedAt": "2026-10-01T02:49:09.826Z",
+      "outputBytes": {
+        "male": 129492,
+        "female": 145788
+      }
+    },
+    {
+      "race": "human",
+      "classId": "warg",
+      "className": "Warg",
+      "stage": 3,
+      "lineageId": "warg",
+      "maleFile": "m_human_warg.webp",
+      "femaleFile": "f_human_warg.webp",
+      "status": "generated",
+      "classDescription": "Warg — guerreiro feral com transformação em lobo ancestral e vampirismo feral.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-849e0ec4-10f9-4c4f-9981-b357b5640434.png",
+      "generatedAt": "2026-10-01T02:49:13.652Z",
+      "outputBytes": {
+        "male": 126620,
+        "female": 129986
+      }
+    },
+    {
+      "race": "human",
+      "classId": "assassinS0",
+      "className": "Assassin",
+      "stage": 0,
+      "lineageId": "assassinS3",
+      "maleFile": "m_human_assassin_s0.webp",
+      "femaleFile": "f_human_assassin_s0.webp",
+      "status": "generated",
+      "classDescription": "Caçador das sombras com adagas.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-e63af30c-e3a0-4840-aa31-145c184e5434.png",
+      "generatedAt": "2026-10-01T01:07:23.039Z",
+      "outputBytes": {
+        "male": 91514,
+        "female": 82660
+      }
+    },
+    {
+      "race": "human",
+      "classId": "assassinS1",
+      "className": "Assassin",
+      "stage": 1,
+      "lineageId": "assassinS3",
+      "maleFile": "m_human_assassin_s1.webp",
+      "femaleFile": "f_human_assassin_s1.webp",
+      "status": "generated",
+      "classDescription": "",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-27a0d259-3f93-4be1-83a1-12b8f06826b6.png",
+      "generatedAt": "2026-10-01T01:07:28.761Z",
+      "outputBytes": {
+        "male": 105988,
+        "female": 90608
+      }
+    },
+    {
+      "race": "human",
+      "classId": "assassinS2",
+      "className": "Assassin",
+      "stage": 2,
+      "lineageId": "assassinS3",
+      "maleFile": "m_human_assassin_s2.webp",
+      "femaleFile": "f_human_assassin_s2.webp",
+      "status": "generated",
+      "classDescription": "Assassino com sistema de sombras desbloqueado.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-15bd8dcd-5354-4358-804f-145766c8b52c.png",
+      "generatedAt": "2026-10-01T01:07:34.034Z",
+      "outputBytes": {
+        "male": 108782,
+        "female": 93714
+      }
+    },
+    {
+      "race": "human",
+      "classId": "assassinS3",
+      "className": "Assassin",
+      "stage": 3,
+      "lineageId": "assassinS3",
+      "maleFile": "m_human_assassin_s3.webp",
+      "femaleFile": "f_human_assassin_s3.webp",
+      "status": "generated",
+      "classDescription": "Assassino supremo — sombras letais e execuções instantâneas.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-4b9aed2f-5a2a-48fd-adb0-1a9002e8b99b.png",
+      "generatedAt": "2026-10-01T01:07:39.460Z",
+      "outputBytes": {
+        "male": 108244,
+        "female": 95284
+      }
+    },
+    {
+      "race": "elf",
+      "classId": "elfFighter",
+      "className": "Elf Fighter",
+      "stage": 0,
+      "lineageId": "evaTemplar",
+      "maleFile": "m_elf_elf_fighter.webp",
+      "femaleFile": "f_elf_elf_fighter.webp",
+      "status": "generated",
+      "classDescription": "Guerreiro élfico ágil.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-4a5dd362-415f-44c3-8e79-f93aeec74305.png",
+      "generatedAt": "2026-10-01T01:14:25.649Z",
+      "outputBytes": {
+        "male": 96402,
+        "female": 126716
+      }
+    },
+    {
+      "race": "elf",
+      "classId": "elvenKnight",
+      "className": "Elven Knight",
+      "stage": 1,
+      "lineageId": "evaTemplar",
+      "maleFile": "m_elf_elven_knight.webp",
+      "femaleFile": "f_elf_elven_knight.webp",
+      "status": "generated",
+      "classDescription": "Cavaleiro élfico com escudo. Skills anteriores permanecem.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-3fff3330-8252-49a0-b938-89f435594f5f.png",
+      "generatedAt": "2026-10-01T01:14:31.009Z",
+      "outputBytes": {
+        "male": 117474,
+        "female": 115742
+      }
+    },
+    {
+      "race": "elf",
+      "classId": "templeKnight",
+      "className": "Temple Knight",
+      "stage": 2,
+      "lineageId": "evaTemplar",
+      "maleFile": "m_elf_temple_knight.webp",
+      "femaleFile": "f_elf_temple_knight.webp",
+      "status": "generated",
+      "classDescription": "Cavaleiro do templo de Eva. Skills anteriores permanecem.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-e6060a9e-96c6-48b8-9e03-cf7680fe575d.png",
+      "generatedAt": "2026-10-01T01:14:37.059Z",
+      "outputBytes": {
+        "male": 113504,
+        "female": 144032
+      }
+    },
+    {
+      "race": "elf",
+      "classId": "evaTemplar",
+      "className": "Eva's Templar",
+      "stage": 3,
+      "lineageId": "evaTemplar",
+      "maleFile": "m_elf_eva_templar.webp",
+      "femaleFile": "f_elf_eva_templar.webp",
+      "status": "generated",
+      "classDescription": "Templário de Eva, tank divino aquático. Skills anteriores permanecem.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-2f5fc31c-d6e7-47dc-86f5-3a5533e95aeb.png",
+      "generatedAt": "2026-10-01T01:14:43.125Z",
+      "outputBytes": {
+        "male": 139666,
+        "female": 132414
+      }
+    },
+    {
+      "race": "elf",
+      "classId": "swordSinger",
+      "className": "Sword Singer",
+      "stage": 2,
+      "lineageId": "swordMuse",
+      "maleFile": "m_elf_sword_singer.webp",
+      "femaleFile": "f_elf_sword_singer.webp",
+      "status": "generated",
+      "classDescription": "Bardo élfico com canções de buff. Skills anteriores permanecem.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-0d8a48d0-c2d7-48d8-be0a-a62ce493242d.png",
+      "generatedAt": "2026-10-01T01:14:49.155Z",
+      "outputBytes": {
+        "male": 137120,
+        "female": 142524
+      }
+    },
+    {
+      "race": "elf",
+      "classId": "swordMuse",
+      "className": "Sword Muse",
+      "stage": 3,
+      "lineageId": "swordMuse",
+      "maleFile": "m_elf_sword_muse.webp",
+      "femaleFile": "f_elf_sword_muse.webp",
+      "status": "generated",
+      "classDescription": "Musa da espada, bardo supremo com DPS. Skills anteriores permanecem.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-c75708c4-ebff-4f4b-969e-a09550e60d22.png",
+      "generatedAt": "2026-10-01T01:14:55.095Z",
+      "outputBytes": {
+        "male": 139670,
+        "female": 136208
+      }
+    },
+    {
+      "race": "elf",
+      "classId": "elfScout",
+      "className": "Scout",
+      "stage": 1,
+      "lineageId": "windRider",
+      "maleFile": "m_elf_elf_scout.webp",
+      "femaleFile": "f_elf_elf_scout.webp",
+      "status": "generated",
+      "classDescription": "Batedor élfico, dagger e bow. Skills anteriores permanecem.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-e72d6bd7-7d94-4254-b6a5-b25e4ced7764.png",
+      "generatedAt": "2026-10-01T02:03:57.311Z",
+      "outputBytes": {
+        "male": 95058,
+        "female": 107368
+      }
+    },
+    {
+      "race": "elf",
+      "classId": "plainsWalker",
+      "className": "Plains Walker",
+      "stage": 2,
+      "lineageId": "windRider",
+      "maleFile": "m_elf_plains_walker.webp",
+      "femaleFile": "f_elf_plains_walker.webp",
+      "status": "generated",
+      "classDescription": "Caminhante das planícies, dagger stealth. Skills anteriores permanecem.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-4e32b2c0-0eb6-4283-82a9-d5c42213b999.png",
+      "generatedAt": "2026-10-01T01:21:03.201Z",
+      "outputBytes": {
+        "male": 103190,
+        "female": 129616
+      }
+    },
+    {
+      "race": "elf",
+      "classId": "windRider",
+      "className": "Wind Rider",
+      "stage": 3,
+      "lineageId": "windRider",
+      "maleFile": "m_elf_wind_rider.webp",
+      "femaleFile": "f_elf_wind_rider.webp",
+      "status": "generated",
+      "classDescription": "Cavaleiro do vento, dagger supremo. Skills anteriores permanecem.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-ebb115a2-a437-4195-aea9-9818fc9502a6.png",
+      "generatedAt": "2026-10-01T01:21:09.697Z",
+      "outputBytes": {
+        "male": 114366,
+        "female": 143994
+      }
+    },
+    {
+      "race": "elf",
+      "classId": "silverRanger",
+      "className": "Silver Ranger",
+      "stage": 2,
+      "lineageId": "moonlightSentinel",
+      "maleFile": "m_elf_silver_ranger.webp",
+      "femaleFile": "f_elf_silver_ranger.webp",
+      "status": "generated",
+      "classDescription": "Arqueiro prateado élfico. Skills anteriores permanecem.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-e15ec006-29b1-42cb-8ac8-f3691443b49a.png",
+      "generatedAt": "2026-10-01T02:04:05.540Z",
+      "outputBytes": {
+        "male": 100526,
+        "female": 121038
+      }
+    },
+    {
+      "race": "elf",
+      "classId": "moonlightSentinel",
+      "className": "Moonlight Sentinel",
+      "stage": 3,
+      "lineageId": "moonlightSentinel",
+      "maleFile": "m_elf_moonlight_sentinel.webp",
+      "femaleFile": "f_elf_moonlight_sentinel.webp",
+      "status": "generated",
+      "classDescription": "Sentinela do luar, arqueiro supremo élfico. Skills anteriores permanecem.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-d56f28b7-10d4-433d-8f3a-602ca7e61be1.png",
+      "generatedAt": "2026-10-01T02:04:13.231Z",
+      "outputBytes": {
+        "male": 121876,
+        "female": 122124
+      }
+    },
+    {
+      "race": "elf",
+      "classId": "elfMage",
+      "className": "Elf Mage",
+      "stage": 0,
+      "lineageId": "mysticMuse",
+      "maleFile": "m_elf_elf_mage.webp",
+      "femaleFile": "f_elf_elf_mage.webp",
+      "status": "generated",
+      "classDescription": "Mago élfico da natureza.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-efee4dc5-8a16-4754-9fe0-805e9a9f03fa.png",
+      "generatedAt": "2026-10-01T01:33:17.842Z",
+      "outputBytes": {
+        "male": 127070,
+        "female": 100664
+      }
+    },
+    {
+      "race": "elf",
+      "classId": "elvenWizard",
+      "className": "Elven Wizard",
+      "stage": 1,
+      "lineageId": "mysticMuse",
+      "maleFile": "m_elf_elven_wizard.webp",
+      "femaleFile": "f_elf_elven_wizard.webp",
+      "status": "generated",
+      "classDescription": "Mago élfico elemental. Skills anteriores permanecem.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-507b998c-a9ab-449b-8027-a2b33af7bcc6.png",
+      "generatedAt": "2026-10-01T01:33:23.214Z",
+      "outputBytes": {
+        "male": 112978,
+        "female": 104018
+      }
+    },
+    {
+      "race": "elf",
+      "classId": "spellsinger",
+      "className": "Spellsinger",
+      "stage": 2,
+      "lineageId": "mysticMuse",
+      "maleFile": "m_elf_spellsinger.webp",
+      "femaleFile": "f_elf_spellsinger.webp",
+      "status": "generated",
+      "classDescription": "Cantor de magias, foco em água e vento. Skills anteriores permanecem.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-0d92c323-f5d5-4557-a543-ad40bc0d97e5.png",
+      "generatedAt": "2026-10-01T01:33:30.200Z",
+      "outputBytes": {
+        "male": 145104,
+        "female": 110496
+      }
+    },
+    {
+      "race": "elf",
+      "classId": "mysticMuse",
+      "className": "Mystic Muse",
+      "stage": 3,
+      "lineageId": "mysticMuse",
+      "maleFile": "m_elf_mystic_muse.webp",
+      "femaleFile": "f_elf_mystic_muse.webp",
+      "status": "generated",
+      "classDescription": "Musa mística, mestre da magia aquática. Skills anteriores permanecem. Foco: WATER.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-6819a22f-43f8-4656-9eee-e7130c2da078.png",
+      "generatedAt": "2026-10-01T01:33:51.930Z",
+      "outputBytes": {
+        "male": 127168,
+        "female": 121766
+      }
+    },
+    {
+      "race": "elf",
+      "classId": "elementalSummoner",
+      "className": "Elemental Summoner",
+      "stage": 2,
+      "lineageId": "elementalMaster",
+      "maleFile": "m_elf_elemental_summoner.webp",
+      "femaleFile": "f_elf_elemental_summoner.webp",
+      "status": "generated",
+      "classDescription": "Invocador elemental élfico. Skills anteriores permanecem. Foco: SUMMON.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-dbab4bc6-abdb-4362-9a3d-dcba883600ce.png",
+      "generatedAt": "2026-10-01T01:34:00.832Z",
+      "outputBytes": {
+        "male": 136044,
+        "female": 114716
+      }
+    },
+    {
+      "race": "elf",
+      "classId": "elementalMaster",
+      "className": "Elemental Master",
+      "stage": 3,
+      "lineageId": "elementalMaster",
+      "maleFile": "m_elf_elemental_master.webp",
+      "femaleFile": "f_elf_elemental_master.webp",
+      "status": "generated",
+      "classDescription": "Mestre elemental, invocador supremo élfico. Skills anteriores permanecem.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-5be1db1f-d379-4d8e-9e30-7250b9023fa5.png",
+      "generatedAt": "2026-10-01T01:34:12.283Z",
+      "outputBytes": {
+        "male": 164984,
+        "female": 128186
+      }
+    },
+    {
+      "race": "elf",
+      "classId": "elfOracle",
+      "className": "Oracle",
+      "stage": 1,
+      "lineageId": "evaSaint",
+      "maleFile": "m_elf_elf_oracle.webp",
+      "femaleFile": "f_elf_elf_oracle.webp",
+      "status": "generated",
+      "classDescription": "Oráculo élfico curador. Skills anteriores permanecem.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-18861b0e-5292-4a2c-8844-cd98ce82ecb4.png",
+      "generatedAt": "2026-10-01T01:34:34.553Z",
+      "outputBytes": {
+        "male": 173550,
+        "female": 142202
+      }
+    },
+    {
+      "race": "elf",
+      "classId": "elfElder",
+      "className": "Elder",
+      "stage": 2,
+      "lineageId": "evaSaint",
+      "maleFile": "m_elf_elf_elder.webp",
+      "femaleFile": "f_elf_elf_elder.webp",
+      "status": "generated",
+      "classDescription": "Ancião élfico, curador e buffer. Skills anteriores permanecem.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-4a7c9430-ab43-42d0-8d38-9e378885f820.png",
+      "generatedAt": "2026-10-01T01:34:44.199Z",
+      "outputBytes": {
+        "male": 181998,
+        "female": 153472
+      }
+    },
+    {
+      "race": "elf",
+      "classId": "evaSaint",
+      "className": "Eva's Saint",
+      "stage": 3,
+      "lineageId": "evaSaint",
+      "maleFile": "m_elf_eva_saint.webp",
+      "femaleFile": "f_elf_eva_saint.webp",
+      "status": "generated",
+      "classDescription": "Santa de Eva, curadora suprema élfica. Skills anteriores permanecem.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-d383bd76-0e7b-4e75-aebe-e621673f0fce.png",
+      "generatedAt": "2026-10-01T01:35:05.655Z",
+      "outputBytes": {
+        "male": 186460,
+        "female": 162010
+      }
+    },
+    {
+      "race": "elf",
+      "classId": "elfDeathKnight",
+      "className": "Elf Death Knight",
+      "stage": 0,
+      "lineageId": "elfDeathKnight",
+      "maleFile": "m_elf_elf_death_knight.webp",
+      "femaleFile": "f_elf_elf_death_knight.webp",
+      "status": "generated",
+      "classDescription": "Cavaleiro da Morte Élfico — armadura espectral e combate de vanguarda.",
+      "source": "C:\\Users\\duuha\\.codex\\generated_images\\01a0b1f7-1896-7fe2-afbf-e56b251030f9\\exec-0e16adeb-8862-4195-8899-4e97c423d595.png",
+      "generatedAt": "2026-10-01T02:44:46.923Z",
+      "outputBytes": {
+        "male": 116028,
+        "female": 119842
       }
     }
   ]
