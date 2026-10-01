@@ -288,6 +288,37 @@ export const RAID_BOSS_BALANCE = {
       { name: 'Inferno Vulcânico', triggerHp: 0.35, damagePercent: 0.14, text: '🌋 Vulcão entra em Erupção Máxima!' }
     ],
     targetMetrics: { ttkMin: 90, ttkMax: 180, ttdBase: 22 }
+  },
+
+  lindvior: {
+    id: 'lindvior',
+    name: 'Lindvior, Dragão dos Ventos 🌪️',
+    title: 'Soberano dos Céus de Aden',
+    lvl: 84,
+    reqLvl: 80,
+    minimumCP: 70000,
+    recommendedCP: 100000,
+    hp: 620000,
+    atk: 560,
+    def: 250,
+    mdef: 310,
+    eva: 20,
+    crit: 24,
+    atkSpd: 1.25,
+    xp: 1150000,
+    sp: 9000,
+    gold: [550000, 1100000],
+    fatalSkill: {
+      name: 'Cataclismo da Tempestade Celeste',
+      triggerHps: [0.50, 0.25],
+      duration: 5000,
+      damageHeroPercent: 0.38
+    },
+    mechanics: [
+      { name: 'Rasante das Asas Tempestuosas', triggerHp: 0.72, damagePercent: 0.20, text: '🌪️ Lindvior rasga a arena com suas Asas Tempestuosas!', statusEffect: { name: 'Ferida Tempestuosa', durationMs: 4000, intervalMs: 1000, damagePercent: 0.025 } },
+      { name: 'Olho da Tempestade', triggerHp: 0.32, damagePercent: 0.24, text: '⚡ O Olho da Tempestade de Lindvior descarrega sobre você!' }
+    ],
+    targetMetrics: { ttkMin: 85, ttkMax: 150, ttdBase: 28 }
   }
 };
 

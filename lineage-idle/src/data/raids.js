@@ -1,7 +1,7 @@
 /**
  * raids.js — Definições dos Raid Bosses e Masmorras Diárias do Lineage Idle.
  *
- * Contém os 8 Chefes Épicos canônicos de Lineage II:
+ * Contém os Epic Bosses canônicos e os encontros especiais catalogados no Aden Arena:
  * 1. Queen Ant (Lv. 40 - Ermos de Gludio)
  * 2. Core (Lv. 50 - Torre Cruma)
  * 3. Orfen (Lv. 55 - Mar de Esporos)
@@ -10,6 +10,8 @@
  * 6. Frintezza & Scarlet van Halisha (Lv. 85 - Sepulcro Imperial)
  * 7. Dragão Antharas (Lv. 95 - Covil do Dragão da Terra)
  * 8. Dragão Valakas (Lv. 100 - Vulcão Forja dos Deuses)
+ * 9. Fafurion (Lv. 69 - encontro de raid; candidato a Special Zone própria)
+ * 10. Lindvior (Lv. 84 - encontro de raid)
  */
 
 import { RAID_BOSS_BALANCE } from './balance/bossBalance.js';
@@ -328,6 +330,43 @@ export const RAID_BOSSES = {
     ]
   },
 
+  lindvior: {
+    id: 'lindvior',
+    name: 'Lindvior, Dragão dos Ventos 🌪️',
+    title: 'Soberano dos Céus de Aden',
+    lvl: 84,
+    hp: 620000,
+    atk: 560,
+    def: 250,
+    mdef: 310,
+    eva: 20,
+    crit: 24,
+    xp: 1150000,
+    sp: 9000,
+    gold: [550000, 1100000],
+    boss: true,
+    raid: true,
+    reqLvl: 80,
+    icon: 'gradespecial/armors/armor_lindvior_cloack.png',
+    bg: 'dragonvalley',
+    desc: 'O Dragão dos Ventos domina o campo aéreo com rajadas cortantes e a calmaria enganosa do olho da tempestade.',
+    fatalSkill: {
+      name: 'Cataclismo da Tempestade Celeste',
+      triggerHps: [0.50, 0.25],
+      duration: 5000,
+      damageHeroPercent: 0.38
+    },
+    mechanics: [
+      { name: 'Rasante das Asas Tempestuosas', triggerHp: 0.72, damagePercent: 0.20, text: '🌪️ Lindvior rasga a arena com suas Asas Tempestuosas!', statusEffect: { name: 'Ferida Tempestuosa', durationMs: 4000, intervalMs: 1000, damagePercent: 0.025 } },
+      { name: 'Olho da Tempestade', triggerHp: 0.32, damagePercent: 0.24, text: '⚡ O Olho da Tempestade de Lindvior descarrega sobre você!' }
+    ],
+    drops: [
+      { itemId: 'armor_lindvior_cloack', name: 'Lindvior Cloack', chance: 0.25 },
+      { itemId: 'scroll_blessed_weapon', name: 'Blessed Scroll: Enchant Weapon', chance: 0.45 },
+      { itemId: 'adena_coins', count: 65, name: '65x Aden Coins (AC)', chance: 0.50 }
+    ]
+  },
+
   barakiel: {
     id: 'barakiel',
     name: 'Flame of Splendor Barakiel 🔥',
@@ -379,6 +418,7 @@ for (const [key, balancedBoss] of Object.entries(RAID_BOSS_BALANCE)) {
       def: balancedBoss.def,
       mdef: balancedBoss.mdef,
       fatalSkill: balancedBoss.fatalSkill || RAID_BOSSES[key].fatalSkill,
+      phases: balancedBoss.phases || RAID_BOSSES[key].phases,
       mechanics: balancedBoss.mechanics || RAID_BOSSES[key].mechanics,
       targetMetrics: balancedBoss.targetMetrics
     });

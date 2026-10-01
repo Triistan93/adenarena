@@ -3793,3 +3793,33 @@ A suíte completa passou com **1.296 testes, 140 grupos, zero falhas**; `npm run
 ### Baú privado — contagens legadas concatenavam ao transferir pilhas (01/10/2026, 05:59 BRT)
 
 Na sequência da auditoria do Baú, reproduzi que uma contagem legada armazenada como texto (`"990"`) era concatenada ao depositar/sacar quatro unidades (`"9904"`), corrompendo a quantidade da pilha. Normalizei a contagem numérica antes da soma nos dois sentidos e acrescentei regressão de serviço. `node --test test/warehouse-transfer-integrity.test.js`: **6/6**. A suíte completa e o build ainda não foram repetidos após esta alteração; auditoria do Baú permanece parcial.
+
+### Pesquisa web — épicos e zonas especiais (01/10/2026)
+
+Continuei a pesquisa pendente via Firecrawl em páginas de Hellbound, Celestial Tower, Frost Lord's Castle e catálogo de bosses. Registrei os achados e um roteiro faseado em `docs/PLANO_EPICOS_E_ZONAS_ESPECIAIS.md`. As fontes apontam para conteúdos de versões distintas: Steel Citadel é Hellbound Chronicle 1.5; Celestial Tower e Frost Lord's Castle são Lineage II Essence. O plano usa esses casos como referências, distingue o roster local da classificação Essence e adia qualquer implementação de jogo até fixarmos o cânone, revisarmos spawns e adaptarmos agenda, acesso, combate e economia ao Aden Arena. Esta etapa foi documental; não rodei testes.
+
+### Epic Bosses fora das zonas de caça (01/10/2026, 10:39 BRT)
+
+Iniciei a execução aprovada do plano: Antharas e Valakas deixaram de ser os bosses de caça comum em seus mapas. Antharas' Lair agora enfrenta Antharas Guardian Behemoth; Forge of the Gods, Vulcan Lord. Removi esses guardiões das listas de monstros aleatórios e marquei-os como bosses regionais. Antharas e Valakas continuam disponíveis nos sistemas de Raid e World Boss. `node --test test/combat-zone-integrity.test.js`: passou; `git diff --check`: passou. A auditoria confirmou a próxima lacuna: Fafurion e Lindvior ainda aparecem como bosses regionais e não têm entrada nos catálogos de Raid/World Boss; a separação e o acesso especial deles seguem pendentes. A mudança não altera seus dados de balanceamento nem cria drops novos.
+
+Pesquisa complementar no L2Wiki Essence confirma Fafurion's Nest como uma Special Zone de evento com três fases, mudanças de arena, guardiões/adds e recompensas de participação. Acrescentei essa evidência ao plano para orientar a retirada de Fafurion de Emerald Grove. Isso é uma referência Essence; valores e agenda ainda exigem adaptação ao Aden Arena.
+
+### Central de Combate & Zonas — jornadas solo e desafios especiais (01/10/2026)
+
+Retomei após o commit `b254cad0`. A central antes aparecia como “Kamaloka & Pailaka” e misturava as seis atividades numa lista sem categorias. O botão e a janela agora se chamam “Instâncias & Desafios”, dentro do submenu Combate & Zonas, com grupos separados para jornadas diárias e desafios especiais. Cada ficha mostra faixa de nível, CP mínimo e atual, sequência de encontros, reset/janela, estado de acesso e recompensas.
+
+As duas Pailakas deixaram de ser lutas contra um único chefe genérico: Song of Ice and Fire e Devil’s Legacy agora encadeiam três encontros e fecham com fases próprias, incluindo dano periódico no combate final. O limite de nível máximo já cadastrado para as jornadas solo também é aplicado na entrada. Atualizei o plano épico para registrar a integração. Não rodei testes nem build nesta rodada.
+
+### Fafurion e Lindvior em encontros especiais (01/10/2026, 11:35 BRT)
+
+Retirei Fafurion de Emerald Grove e Lindvior de Dragon Valley como bosses comuns. Ancient Emerald Dragon e Dragon Valley High Overlord passam a ocupar essas vagas como bosses regionais. Cadastrei Fafurion e Lindvior no `RAID_BOSSES`/`RAID_BOSS_BALANCE`, com requisitos de nível/CP, mecânicas de combate nomeadas e drops de capas já existentes no catálogo. O fluxo genérico de Raid mantém entrada por ticket, combate, loot e conclusão; a criação de itens não foi necessária. Ampliei `test/combat-zone-integrity.test.js` para garantir que Antharas, Valakas, Fafurion e Lindvior não apareçam como bosses de caça comum, e que os quatro mapas mantenham boss regional.
+
+Validação dirigida: as suítes de integridade de zonas, ciclo de Raid, telegraph/enrage, thresholds e balanceamento passaram em **7 arquivos**, zero falhas. `npm run build` passou em 9,40 s; persistem os avisos conhecidos para os bundles `game-data-classes` (~1,67 MB) e `index` (~2,62 MB). `git diff --check` passou. A Special Zone própria de Fafurion's Nest — agenda, fases de arena, adds e rewards participativas — continua como evolução pendente; o acesso atual já está separado da caça comum pelo Raid.
+
+### Protótipos das zonas especiais e cobertura de habilidades (01/10/2026)
+
+Continuei a execução aprovada. Fafurion's Nest agora tem entrada semanal própria, Pedra Guardiã e Fafurion em sequência; o Dragão muda por três fases, ganha ataque e aplica dois status com dano periódico. Removi a entrada de Fafurion do catálogo genérico de Raid para deixar o Ninho como rota canônica. Frost Lord's Castle funciona em três etapas e escolhe a forma final de Glakias pelo HP restante do jogador após Tiron. Steel Citadel encadeia cinco chefes até Beleth; Celestial Tower abre às sextas, 22:00–23:00 UTC, com acesso semanal, Praetorian e Ferion. As quatro zonas usam o serviço de instâncias e recompensas existentes, com requisitos de nível/CP e checagem de conclusão duplicada.
+
+A auditoria encontrou 157 dos 177 monstros sem habilidade definida. Mantive os kits explícitos válidos e passei a gerar habilidade temática para lacunas usando nome, elemento, perfil mágico e traits. Status de stun/root/bleed/poison agora têm efeito de combate, duração, chance afetada por resistência e limpeza. As regressões `test/monster-skill-coverage.test.js` e `test/monster-skill-status.test.js` validam cobertura e aplicação dos estados.
+
+Validação dirigida final: dez arquivos de teste passaram, zero falhas; `npm run build` passou em 11,64 s; `git diff --check` passou. O build mantém o aviso de chunks grandes (~1,67 MB e ~2,63 MB). Os protótipos são solo; validação manual dos kits gerados e retomada após desconexão permanecem como follow-up. Grupo, PvP e contribuição distribuída foram excluídos desta adaptação single-player. A agenda do Ninho foi adaptada como uma entrada semanal sem copiar uma janela horária Essence.

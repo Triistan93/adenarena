@@ -21,7 +21,7 @@ export const MONSTERS = {
   // ──────────────────────────────────────────────────────────────────────────
   goblin: { name: 'Goblin', lvl: 1, hp: 140, atk: 6, def: 6, eva: 2, matk: 0, mdef: 3, xp: 14, sp: 0, gold: [5, 12] },
   goblinThief: { name: 'Goblin Thief', lvl: 2, hp: 180, atk: 9, def: 8, eva: 10, matk: 0, mdef: 4, xp: 20, sp: 0, gold: [8, 20], element: 'none', traits: ['ambush'], stealsGold: 0.15, skill: { name: 'Golpe Sorrateiro', type: 'physical', mult: 1.3, cd: 4, vfx: 'energy_slash' } },
-  armoredGoblin: { name: 'Armored Goblin', lvl: 3, hp: 240, atk: 11, def: 14, eva: 2, matk: 0, mdef: 6, xp: 26, sp: 0, gold: [10, 24], traits: ['block'], skill: { name: 'Postura Defensiva', type: 'buff', effect: 'def_boost', val: 0.3, cd: 6 } },
+  armoredGoblin: { name: 'Armored Goblin', lvl: 3, hp: 240, atk: 11, def: 14, eva: 2, matk: 0, mdef: 6, xp: 26, sp: 0, gold: [10, 24], traits: ['block'], skill: { name: 'Escudada do Goblin Blindado', type: 'physical', effect: 'stun', mult: 1.3, cd: 6 } },
   goblinMage: { name: 'Goblin Mage', lvl: 4, hp: 210, atk: 8, def: 9, eva: 3, matk: 16, mdef: 12, xp: 30, sp: 0, gold: [12, 28], element: 'fire', magic: true, skill: { name: 'Firebolt', type: 'magical', mult: 1.4, cd: 4, vfx: 'fireball' } },
   talkingIslandWerewolf: { name: 'Island Werewolf Leader', lvl: 5, hp: 550, atk: 17, def: 18, eva: 8, matk: 0, mdef: 10, xp: 75, sp: 6, gold: [30, 70], traits: ['bleed'], elite: true, skill: { name: 'Uivo Dilacerante', type: 'physical', effect: 'bleed', mult: 1.4, cd: 5, vfx: 'slash' } },
   goblinKing: { name: 'Goblin King', lvl: 5, hp: 1100, atk: 22, def: 25, eva: 4, matk: 0, mdef: 15, xp: 160, sp: 25, gold: [60, 140], boss: true, skill: { name: 'Ira do Rei Goblin', type: 'physical', effect: 'stun', mult: 1.6, cd: 6, vfx: 'spiral_spear' } },
@@ -174,7 +174,7 @@ export const MONSTERS = {
   emeraldDrake: { name: 'Emerald Drake', lvl: 63, hp: 14500, atk: 680, def: 270, eva: 12, xp: 13500, sp: 145, gold: [4200, 8800], element: 'earth' },
   jadeGolem: { name: 'Jade Stone Golem', lvl: 65, hp: 18000, atk: 740, def: 320, eva: 5, xp: 16500, sp: 170, gold: [5200, 11000], element: 'earth' },
   groveSpiritMage: { name: 'Grove Spirit Sorceress', lvl: 67, hp: 13000, atk: 320, def: 220, eva: 15, matk: 780, mdef: 320, xp: 18500, sp: 190, gold: [6000, 12500], magic: true },
-  emeraldDragon: { name: 'Ancient Emerald Dragon', lvl: 68, hp: 28000, atk: 900, def: 370, eva: 10, xp: 24000, sp: 260, gold: [9000, 18000], element: 'earth', elite: true },
+  emeraldDragon: { name: 'Ancient Emerald Dragon', lvl: 68, hp: 28000, atk: 900, def: 370, eva: 10, xp: 24000, sp: 260, gold: [9000, 18000], element: 'earth', boss: true },
   fafurion: { name: 'Fafurion Water Sovereign', lvl: 69, hp: 45000, atk: 1100, def: 440, eva: 12, xp: 32000, sp: 350, gold: [14000, 28000], boss: true },
 
   // ──────────────────────────────────────────────────────────────────────────
@@ -224,7 +224,7 @@ export const MONSTERS = {
   dragonKnight: { name: 'Dragon Knight Elite', lvl: 81, hp: 32000, atk: 1280, def: 490, eva: 10, xp: 37000, sp: 330, gold: [11500, 24000] },
   frostKnight: { name: 'Frost Knight', lvl: 82, hp: 36000, atk: 1400, def: 540, eva: 10, xp: 43000, sp: 370, gold: [13500, 28000], element: 'water' },
   frostLordDragon: { name: 'Frost Lord Dragon', lvl: 83, hp: 52000, atk: 1700, def: 640, eva: 12, xp: 65000, sp: 500, gold: [20000, 42000], element: 'water' },
-  dragonValleyOverlord: { name: 'Dragon Valley High Overlord', lvl: 84, hp: 68000, atk: 1850, def: 720, eva: 14, xp: 82000, sp: 620, gold: [26000, 52000], elite: true },
+  dragonValleyOverlord: { name: 'Dragon Valley High Overlord', lvl: 84, hp: 68000, atk: 1850, def: 720, eva: 14, xp: 82000, sp: 620, gold: [26000, 52000], boss: true },
   lindvior: { name: 'Lindvior Wind Sovereign', lvl: 84, hp: 95000, atk: 2100, def: 820, eva: 20, xp: 110000, sp: 800, gold: [35000, 70000], element: 'wind', boss: true },
 
   // ──────────────────────────────────────────────────────────────────────────
@@ -244,7 +244,7 @@ export const MONSTERS = {
   magmaBeast: { name: 'Magma Beast', lvl: 91, hp: 75000, atk: 2350, def: 900, eva: 10, xp: 115000, sp: 820, gold: [34000, 68000], element: 'fire' },
   earthDrake: { name: 'Earth Drake', lvl: 92, hp: 95000, atk: 2700, def: 1080, eva: 12, xp: 150000, sp: 1000, gold: [45000, 90000], element: 'earth' },
   caveWyrmBehemoth: { name: 'Cave Wyrm Behemoth', lvl: 93, hp: 115000, atk: 2900, def: 1180, eva: 10, xp: 175000, sp: 1150, gold: [52000, 105000], element: 'earth' },
-  antharasBehemoth: { name: 'Antharas Guardian Behemoth', lvl: 94, hp: 160000, atk: 3300, def: 1320, eva: 12, xp: 230000, sp: 1500, gold: [70000, 140000], element: 'earth', elite: true },
+  antharasBehemoth: { name: 'Antharas Guardian Behemoth', lvl: 94, hp: 160000, atk: 3300, def: 1320, eva: 12, xp: 230000, sp: 1500, gold: [70000, 140000], element: 'earth', boss: true },
   antharas: { name: 'Antharas Earth Dragon Lord', lvl: 94, hp: 250000, atk: 3800, def: 1500, eva: 15, xp: 350000, sp: 2200, gold: [100000, 200000], element: 'earth', boss: true },
 
   // ──────────────────────────────────────────────────────────────────────────
@@ -254,7 +254,7 @@ export const MONSTERS = {
   lavaGolem: { name: 'Lava Golem', lvl: 96, hp: 110000, atk: 2950, def: 1250, eva: 5, xp: 175000, sp: 1150, gold: [50000, 100000], element: 'fire' },
   flameArchon: { name: 'Flame Archon', lvl: 97, hp: 125000, atk: 1300, def: 1100, eva: 14, matk: 3600, mdef: 1500, xp: 210000, sp: 1350, gold: [60000, 120000], element: 'fire', magic: true },
   flameGiantDragon: { name: 'Flame Giant Dragon', lvl: 98, hp: 180000, atk: 3800, def: 1550, eva: 15, xp: 320000, sp: 1900, gold: [90000, 180000], element: 'fire' },
-  vulcanLord: { name: 'Vulcan Lord', lvl: 99, hp: 220000, atk: 4200, def: 1700, eva: 18, xp: 420000, sp: 2400, gold: [120000, 240000], element: 'fire', elite: true },
+  vulcanLord: { name: 'Vulcan Lord', lvl: 99, hp: 220000, atk: 4200, def: 1700, eva: 18, xp: 420000, sp: 2400, gold: [120000, 240000], element: 'fire', boss: true },
   valakas: { name: 'Valakas Fire Sovereign Dragon', lvl: 100, hp: 450000, atk: 5500, def: 2200, eva: 20, xp: 800000, sp: 4500, gold: [250000, 500000], element: 'fire', boss: true },
 
   // ──────────────────────────────────────────────────────────────────────────
@@ -316,6 +316,32 @@ for (const [key, m] of Object.entries(MONSTERS)) {
   m.id    = key;
   m.level = m.level ?? m.lvl ?? 1;
 
+  // Habilidade individual de combate para entradas antigas que só tinham stats/traits.
+  // O tema usa arquétipo, elemento e traços já declarados; bosses e elites recebem nomes próprios.
+  if (!m.skill) {
+    const traits = Array.isArray(m.traits) ? m.traits : [];
+    const isMagical = m.magic === true || m.isMage === true || (Number(m.matk) || 0) > (Number(m.atk) || 0);
+    const effectByTrait = {
+      poison: 'poison', bleed: 'bleed', entangle: 'root', ambush: 'stun'
+    };
+    const effect = traits.map(trait => effectByTrait[trait]).find(Boolean);
+    const role = m.boss ? 'Técnica Suprema' : (m.elite ? 'Técnica de Elite' : (isMagical ? 'Feitiço de Combate' : 'Ataque Assinatura'));
+    const elementName = ({ fire: 'Ígnea', water: 'Abissal', earth: 'Telúrica', dark: 'Sombria', void: 'do Vazio', holy: 'Sagrada', wind: 'Tempestuosa' })[m.element];
+    const skillName = `${role} ${elementName || ''}: ${m.name}`.replace(/\s+/g, ' ').trim();
+    m.skill = {
+      name: skillName,
+      type: isMagical ? 'magical' : 'physical',
+      ...(effect ? { effect } : {}),
+      mult: m.boss ? 1.7 : (m.elite ? 1.45 : 1.25),
+      cd: m.boss ? 6 : (m.elite ? 5 : 4)
+    };
+  }
+  const skillIsMagical = m.skill.type === 'magical' || m.skill.type === 'magic';
+  if (!['physical', 'magical', 'magic'].includes(m.skill.type)) m.skill.type = skillIsMagical ? 'magical' : ((m.magic || m.isMage || (m.matk || 0) > (m.atk || 0)) ? 'magical' : 'physical');
+  if (m.skill.effect && !['stun', 'root', 'bleed', 'poison'].includes(m.skill.effect)) delete m.skill.effect;
+  if (!Number.isFinite(m.skill.mult) || m.skill.mult <= 1) m.skill.mult = m.boss ? 1.7 : (m.elite ? 1.45 : 1.25);
+  if (!Number.isFinite(m.skill.cd) || m.skill.cd <= 0) m.skill.cd = m.boss ? 6 : (m.elite ? 5 : 4);
+
   // Drops canônicos de Tomos e Livros de Habilidade (1★ a 4★)
   m.drops = m.drops || [];
   if (m.level >= 76) {
@@ -370,4 +396,3 @@ export const MONSTER_BY_NAME = Object.freeze(
     ])
   )
 );
-

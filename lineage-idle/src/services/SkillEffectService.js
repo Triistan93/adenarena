@@ -748,6 +748,58 @@ export function applySkillTargetDebuff(target, def, now = Date.now(), roll = Mat
   return { ...application, effect };
 }
 
+/** Applies timed control or damage-over-time effects from a monster's landed skill. */
+export function applyMonsterSkillStatus(target, source, status, now = Date.now(), roll = Math.random(), resistance = 0) {
+  if (!target || !source || !['stun', 'root', 'bleed', 'poison'].includes(status)) {
+    return { applied: false, reason: 'unsupported_status' };
+  }
+  const baseChance = source.boss ? 0.75 : (source.elite ? 0.60 : 0.45);
+  const resist = Math.max(0, Math.min(0.90, Number(resistance) || 0));
+  const chance = baseChance * (1 - resist);
+  if (!(Number(roll) < chance)) return { applied: false, reason: 'resisted', chance };
+
+  if (status === 'bleed' || status === 'poison') {
+    const durationMs = status === 'poison' ? 5000 : 4000;
+    target._monsterSkillDamageOverTime = {
+      name: status === 'poison' ? 'Envenenamento' : 'Sangramento',
+      sourceName: source.name,
+      damagePercent: status === 'poison' ? 0.018 : 0.014,
+      expiresAt: now + durationMs,
+      nextTickAt: now + 1000
+    };
+    return { applied: true, status, until: now + durationMs };
+  }
+
+  const targetStats = status === 'stun'
+    ? { actionsDisabled: 1 }
+    : { pAtkPercent: -0.25, mAtkPercent: -0.25 };
+  const id = `monster_skill_${status}_${source.id || 'unknown'}`;
+  const result = applySkillTargetDebuff(target, {
+    id,
+    type: 'debuff',
+    targetStats,
+    targetDurationMs: status === 'stun' ? 1500 : 4000
+  }, now, 0);
+  return { applied: !!result.stats, status, until: result.effect?.until };
+}
+
+/** Advances one timed tick from a monster-applied bleed or poison effect. */
+export function processMonsterSkillStatus(target, now = Date.now()) {
+  const status = target?._monsterSkillDamageOverTime;
+  if (!status) return null;
+  if (now >= status.expiresAt) {
+    target._monsterSkillDamageOverTime = null;
+    return { expired: true, name: status.name };
+  }
+  if (now < status.nextTickAt || !(target.hp > 0)) return null;
+  const damage = Math.max(1, Math.floor((Number(target.maxHp) || 100) * status.damagePercent));
+  const appliedDamage = Math.min(target.hp, damage);
+  target.hp = Math.max(0, target.hp - appliedDamage);
+  status.nextTickAt = now + 1000;
+  if (target.hp <= 0) target._monsterSkillDamageOverTime = null;
+  return { expired: false, damage: appliedDamage, name: status.name, sourceName: status.sourceName };
+}
+
 /** Resolves Winter Skin's reactive paralysis only when the player is hit. */
 export function applyPlayerBuffHitControlProc(target, buffs, now = Date.now(), roll = Math.random()) {
   if (Number(buffs?.winter_skin?.until) <= now) return { stats: null, procSucceeded: false, procChance: 0 };
@@ -965,9 +1017,19 @@ export function getActivePlayerCombatDebuffIds(state, now = Date.now()) {
 
 /** Removes only active monster-applied debuffs; ordinary class buffs remain intact. */
 export function clearPlayerCombatDebuffs(state, now = Date.now()) {
-  if (!state?.buffs) return [];
+  if (!state) return [];
   const ids = getActivePlayerCombatDebuffIds(state, now);
-  for (const id of ids) delete state.buffs[id];
+  for (const id of ids) delete state.buffs?.[id];
+  for (const [id, debuff] of Object.entries(state._skillDebuffs || {})) {
+    if (String(debuff?.source || id).startsWith('monster_skill_')) {
+      delete state._skillDebuffs[id];
+      ids.push(id);
+    }
+  }
+  if (state._monsterSkillDamageOverTime) {
+    state._monsterSkillDamageOverTime = null;
+    ids.push('monster_skill_dot');
+  }
   return ids;
 }
 

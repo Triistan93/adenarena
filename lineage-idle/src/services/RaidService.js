@@ -125,6 +125,7 @@ export function startRaidBoss(state, raidId, callbacks = {}) {
   state.target = raidId;
   state.isRaidActive = true;
   state.activeRaidId = raidId;
+  state.activeRaidPhase = 1;
   MONSTERS[raidId] = bossTemplate;
 
   state.activeMonster = {
@@ -135,9 +136,11 @@ export function startRaidBoss(state, raidId, callbacks = {}) {
     hp: bossTemplate.hp,
     _stunnedUntil: 0,
     isRaid: true,
+    _triggeredPhases: {},
     _triggeredMechanics: {},
     _fatalTriggered: {}
   };
+  state.activeRaidStatus = null;
   StaggerEngine.initMonsterStagger(state.activeMonster);
 
   if (callbacks.el) {
@@ -176,10 +179,24 @@ export function processRaidBossMechanics(state, callbacks = {}) {
   const m = state.activeMonster;
   if (!m || !m.isRaid || !m._maxHp) return;
 
-  const now = Date.now();
+  const now = Number.isFinite(callbacks.now) ? callbacks.now : Date.now();
   const hpRatio = m.hp / m._maxHp;
+  m._triggeredPhases = m._triggeredPhases || {};
   m._triggeredMechanics = m._triggeredMechanics || {};
   m._fatalTriggered = m._fatalTriggered || {};
+
+  for (let i = 0; i < (m.phases || []).length; i++) {
+    const phase = m.phases[i];
+    if (hpRatio <= phase.triggerHp && !m._triggeredPhases[i]) {
+      m._triggeredPhases[i] = true;
+      state.activeRaidPhase = i + 2;
+      const multiplier = Number(phase.atkMultiplier) || 1;
+      m.atk = Math.floor((m.atk || 100) * multiplier);
+      if (callbacks.log) callbacks.log(`${phase.text} **${phase.name}**!`, 'rarity-epic');
+      if (callbacks.floatText) callbacks.floatText(`🌊 FASE ${i + 2}: ${phase.name}`, 'sf-crit');
+      if (callbacks.onPhaseChange) callbacks.onPhaseChange(phase, i + 2);
+    }
+  }
 
   // 1. Canalização de Habilidade Fatal (Epic Boss Fatal Channeling nos limiares 50% e 25% HP)
   if (m.fatalSkill) {
@@ -280,8 +297,35 @@ export function processRaidBossMechanics(state, callbacks = {}) {
             callbacks.log(`${mech.text} (+${heal.toLocaleString()} HP)`, 'rarity-epic');
           }
         }
+
+        if (mech.statusEffect) {
+          const effect = mech.statusEffect;
+          const intervalMs = Math.max(250, Number(effect.intervalMs) || 1000);
+          const durationMs = Math.max(intervalMs, Number(effect.durationMs) || intervalMs);
+          state.activeRaidStatus = {
+            name: effect.name || mech.name,
+            damagePercent: Math.max(0, Number(effect.damagePercent) || 0),
+            expiresAt: now + durationMs,
+            nextTickAt: now + intervalMs
+          };
+          if (callbacks.log) callbacks.log(`☠️ **${state.activeRaidStatus.name}**: efeito ativo por ${Math.ceil(durationMs / 1000)}s.`, 'rarity-epic');
+        }
       }
     }
+  }
+
+  const status = state.activeRaidStatus;
+  if (status && now >= status.expiresAt) {
+    state.activeRaidStatus = null;
+    if (callbacks.log) callbacks.log(`💨 O efeito **${status.name}** terminou.`, 'system');
+  } else if (status && now >= status.nextTickAt && state.hp > 0) {
+    const damage = Math.max(1, Math.floor((state.maxHp || 100) * status.damagePercent));
+    const appliedDamage = Math.min(state.hp, damage);
+    state.hp = Math.max(0, state.hp - appliedDamage);
+    status.nextTickAt = now + 1000;
+    if (callbacks.log) callbacks.log(`☠️ **${status.name}** causa ${appliedDamage.toLocaleString('pt-BR')} de dano contínuo.`, 'combat');
+    if (callbacks.onStatusImpact) callbacks.onStatusImpact(appliedDamage, status);
+    if (state.hp <= 0) state.activeRaidStatus = null;
   }
 }
 
@@ -300,6 +344,8 @@ export function handleRaidVictory(state, raidId, callbacks = {}) {
   checkAndResetDailyRaidTickets(state);
   state.isRaidActive = false;
   state.activeRaidId = null;
+  state.activeRaidPhase = null;
+  state.activeRaidStatus = null;
   state.dailyRaidClears[raidId] = (state.dailyRaidClears[raidId] || 0) + 1;
   state.totalRaidKills = (state.totalRaidKills || 0) + 1;
 
