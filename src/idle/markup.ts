@@ -849,7 +849,7 @@ export const IDLE_MARKUP = `
                     </div>
                   </div>
 
-                  <!-- Linha 3: Filtro por Grau (NG, D, C, B, A, S) -->
+                  <!-- Linha 3: Filtro por Grau (NG, D, C, B, A, S, Frost Lord) -->
                   <div class="l2inv-grade-pills" style="display:flex; align-items:center; gap:3px; padding-top:2px; border-top:1px solid rgba(212,167,68,0.15); flex-wrap:wrap;">
                     <span style="font-size:10px; color:var(--gilt); font-weight:600; margin-right:4px;">Grau:</span>
                     <button class="grade-filter-btn active" data-grade="all" style="padding:2px 7px; font-size:10px; border-radius:3px; cursor:pointer; background:#1e293b; color:#cbd5e1; border:1px solid rgba(212,167,68,0.3);">Todos</button>
@@ -859,6 +859,7 @@ export const IDLE_MARKUP = `
                     <button class="grade-filter-btn" data-grade="b" style="padding:2px 7px; font-size:10px; border-radius:3px; cursor:pointer; background:#0f172a; color:#f87171; border:1px solid rgba(248,113,113,0.3);">B</button>
                     <button class="grade-filter-btn" data-grade="a" style="padding:2px 7px; font-size:10px; border-radius:3px; cursor:pointer; background:#0f172a; color:#e2e8f0; border:1px solid rgba(226,232,240,0.4);">A</button>
                     <button class="grade-filter-btn" data-grade="s" style="padding:2px 7px; font-size:10px; border-radius:3px; cursor:pointer; background:#0f172a; color:#facc15; border:1px solid rgba(250,204,21,0.5); font-weight:bold;">S</button>
+                    <button class="grade-filter-btn" data-grade="frostlord" title="Equipamentos exclusivos Frost Lord" style="padding:2px 7px; font-size:10px; border-radius:3px; cursor:pointer; background:#0f172a; color:#c4b5fd; border:1px solid rgba(196,181,253,0.5); font-weight:bold;">FL</button>
                   </div>
                 </div>
 
@@ -868,7 +869,7 @@ export const IDLE_MARKUP = `
                 <div class="l2inv-trash-actions" style="display:flex; gap:6px; flex-wrap:wrap;">
                   <button id="sell-selected-btn" class="l2inv-trash-btn sell" disabled title="Vender Itens Selecionados">💰 Vender</button>
                   <button id="salvage-selected-btn" class="l2inv-trash-btn salvage" disabled title="Desmontar Selecionados">🔨 Desmontar</button>
-                  <button id="crystallize-selected-btn" class="l2inv-trash-btn crystallize" style="background:linear-gradient(135deg, #1e3a8a, #2563eb); border:1px solid #60a5fa; color:#fff; border-radius:4px; padding:4px 10px; font-size:11px; cursor:pointer; font-weight:600;" title="Cristalizar Equipamentos Selecionados de Grau D a S">💎 Cristalizar Lote</button>
+                  <button id="crystallize-selected-btn" class="l2inv-trash-btn crystallize" style="background:linear-gradient(135deg, #1e3a8a, #2563eb); border:1px solid #60a5fa; color:#fff; border-radius:4px; padding:4px 10px; font-size:11px; cursor:pointer; font-weight:600;" title="Cristalizar Equipamentos Selecionados de Grau D a S e Frost Lord">💎 Cristalizar Lote</button>
                 </div>
 
                 <!-- Intelligent Comparison Dock: Detail & Side-by-Side Comparison -->
@@ -1391,6 +1392,7 @@ export const IDLE_MARKUP = `
               </div>
               <div class="tower-reset-info">
                 <button id="tower-sweep-btn" class="inv-batch-btn gold-glow-btn" title="Reclamar 50% de todas as recompensas dos andares conquistados">🧹 Varredura Diária</button>
+                <button id="tower-claim-pending-btn" class="inv-batch-btn" style="display:none;" title="Resgatar recompensas de primeiro abate guardadas pela Torre">🎁 Resgatar Recompensas</button>
               </div>
             </div>
 

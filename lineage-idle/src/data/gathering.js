@@ -115,7 +115,7 @@ export const GATHERING_TACTICS = {
 export const BOTANICAL_HAZARDS = {
   none: 'Sem perigo.',
   thorn: 'Espinhos afiados (ao colher descuidadamente com ceifa rápida, causa perda de 5% HP).',
-  toxin: 'Esporos venenosos (reduz pureza em 25% e causa debuff temporário).',
+  toxin: 'Esporos venenosos (reduz pureza em 25%).',
   resin: 'Seiva resinosa densa (cola na foice e consome +1 durabilidade se colhido sem cuidado).'
 };
 

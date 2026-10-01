@@ -66,6 +66,31 @@ describe('Glory Pillar — Subtab 7: Monster Card Codex (Codex de Cartas)', () =
     assert.ok(statsWithCodex.maxHp > stats0.maxHp);
   });
 
+  it('5a. StatsEngine applies every declared combat passive from absorbed cards', () => {
+    const baseline = DEFAULT_STATE();
+    baseline.race = 'human';
+    baseline.class = 'fighter';
+    baseline.codex = {};
+    const baseStats = getStats(baseline);
+    const basePrimary = { ...baseline.primaryStats };
+
+    const codexState = DEFAULT_STATE();
+    codexState.race = 'human';
+    codexState.class = 'fighter';
+    codexState.codex = {
+      card_queen_ant: { count: 1, rank: 1 },
+      card_zaken: { count: 1, rank: 1 },
+      card_baium: { count: 1, rank: 1 }
+    };
+    const cardStats = getStats(codexState);
+
+    assert.equal(cardStats.critDmg, baseStats.critDmg + 0.04, 'Queen Ant critical damage reaches the combat stat');
+    assert.equal(cardStats.lifeDrain, baseStats.lifeDrain + 0.04, 'Zaken lifesteal reaches the combat stat');
+    for (const attribute of ['str', 'dex', 'con', 'int', 'wit', 'men']) {
+      assert.equal(codexState.primaryStats[attribute], basePrimary[attribute] + 6, `Baium allStats applies to ${attribute}`);
+    }
+  });
+
   it('6. Save/Load Persistence: Full codex collection and card counts survive JSON cycle', () => {
     const state = DEFAULT_STATE();
     state.codex = {

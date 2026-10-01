@@ -74,3 +74,17 @@ export function applyConsumableStatBuff(state, itemDefinition, now = Date.now())
   };
   return true;
 }
+
+/** Restores CP up to the current character cap, without consuming a full-CP potion. */
+export function restoreCharacterCp(state, amount, maxCp) {
+  if (!state || typeof state !== 'object') return { success: false, restored: 0 };
+
+  const currentCp = Math.max(0, Number(state.cp) || 0);
+  const cpCap = Math.max(0, Number(maxCp) || Number(state.maxCp) || 0);
+  const restoreAmount = Math.max(0, Number(amount) || 0);
+  const restored = Math.min(restoreAmount, Math.max(0, cpCap - currentCp));
+  if (restored <= 0) return { success: false, restored: 0, currentCp };
+
+  state.cp = currentCp + restored;
+  return { success: true, restored, currentCp: state.cp };
+}

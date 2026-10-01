@@ -129,6 +129,27 @@ describe('Augmentation item skills on class and combat runtime paths', () => {
     assert.equal(state.gold, 8_000_000);
   });
 
+  it('augmentation and removal reject a malformed wallet without consuming materials or effects', () => {
+    const state = DEFAULT_STATE();
+    state.class = 'gladiator';
+    state.gold = 'invalid-wallet';
+    const weapon = { uid: 'invalid-wallet-weapon', itemId: 'weapon_test', slot: 'weapon' };
+    const stone = { uid: 'invalid-wallet-stone', itemId: 'life_stone_28', count: 1 };
+    const gems = { uid: 'invalid-wallet-gems', itemId: 'gemstone_d', count: 5 };
+    state.inventory = [weapon, stone, gems];
+
+    const result = AugmentationService.augmentWeapon(state, weapon, 'life_stone_28', { log: () => {} });
+    assert.equal(result.reason, 'insufficient_funds');
+    assert.equal(stone.count, 1);
+    assert.equal(gems.count, 5);
+    assert.equal(weapon.augmentation, undefined);
+    assert.equal(state.gold, 'invalid-wallet');
+
+    weapon.augmentation = { stats: { patk: 10 } };
+    assert.deepEqual(AugmentationService.removeAugmentation(state, weapon, { log: () => {} }), { success: false, reason: 'gold_low' });
+    assert.deepEqual(weapon.augmentation, { stats: { patk: 10 } });
+  });
+
   it('applies passive Focus from the equipped augmented weapon to effective crit', () => {
     const plain = stateWithAugmentation('gladiator', null);
     const augmented = stateWithAugmentation('gladiator', {

@@ -358,5 +358,25 @@ describe('Commercial Inventory & Equipment Hub — 89-Point Validation Suite', (
       assert.strictEqual(sorted[0].uid, 'i3', 'Equipped item must always be first');
       assert.strictEqual(sorted[1].uid, 'i2', 'Rare item must be sorted before Common');
     });
+
+    it('6.3 organizing preserves lock and favorite boundaries between stackable items', () => {
+      const state = DEFAULT_STATE();
+      state.inventory = [
+        { uid: 'free', itemId: 'hp_potion', count: 3, slot: 'consumable' },
+        { uid: 'locked', itemId: 'hp_potion', count: 4, slot: 'consumable', isLocked: true },
+        { uid: 'favorite', itemId: 'hp_potion', count: 2, slot: 'consumable', isFavorite: true }
+      ];
+
+      organizeInventory(state, 'recommended');
+
+      assert.strictEqual(state.inventory.length, 3, 'Protected stacks must keep their own identity');
+      assert.deepStrictEqual(Object.fromEntries(state.inventory.map((item) => [item.uid, item.count])), {
+        free: 3,
+        locked: 4,
+        favorite: 2
+      });
+      assert.ok(state.inventory.find((item) => item.uid === 'locked').isLocked);
+      assert.ok(state.inventory.find((item) => item.uid === 'favorite').isFavorite);
+    });
   });
 });

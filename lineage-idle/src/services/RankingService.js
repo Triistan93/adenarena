@@ -6,6 +6,7 @@
  */
 
 import { CombatPowerService } from './CombatPowerService.js';
+import { addToInventory } from './InventoryService.js';
 import { D } from '../core/GameConfig.js';
 
 let _cachedRankings = {
@@ -114,18 +115,22 @@ export const RankingService = {
     const clansList = _cachedRankings.clans?.length ? _cachedRankings.clans : [];
 
     return {
-      cp: this._mergeCurrentPlayer(cpList, state, 'cp'),
-      level: this._mergeCurrentPlayer(cpList.slice(), state, 'level'),
-      olympiad: this._mergeCurrentPlayer(olyList, state, 'olympiad'),
-      duels: this._mergeCurrentPlayer(duelList, state, 'duels'),
-      wealth: this._mergeCurrentPlayer(wealthList, state, 'wealth'),
-      clans: this._mergeCurrentPlayer(clansList, state, 'clans'),
-      castles: (_cachedRankings.castles && _cachedRankings.castles.length > 0) ? _cachedRankings.castles : [
-        { castle: 'Castelo de Aden', lord: 'LordValen', clan: 'BloodThorn', tax: '15%' },
-        { castle: 'Castelo de Giran', lord: 'SirAres', clan: 'GloryKnights', tax: '10%' },
-        { castle: 'Castelo de Dion', lord: 'LadyElena', clan: 'SilverDawn', tax: '5%' }
-      ]
+      cp: cpList.slice(),
+      level: cpList.slice().sort((a, b) => (Number(b.level) || 0) - (Number(a.level) || 0) || (Number(b.combatPower) || 0) - (Number(a.combatPower) || 0)),
+      olympiad: olyList.slice(),
+      duels: duelList.slice(),
+      wealth: wealthList.slice(),
+      clans: clansList.slice(),
+      castles: _cachedRankings.castles || []
     };
+  },
+
+  getAuthoritativePlayerRank(category = 'cp') {
+    const currentUserId = typeof window !== 'undefined' && window.FirebaseBridge?.getCurrentUserId?.();
+    if (!currentUserId) return null;
+    const list = Array.isArray(_cachedRankings[category]) ? _cachedRankings[category] : [];
+    const index = list.findIndex(profile => profile?.userId === currentUserId || profile?.id === currentUserId);
+    return index < 0 ? null : index + 1;
   },
 
   /**
@@ -145,11 +150,16 @@ export const RankingService = {
       return { success: false, reason: 'cooldown', remainingHours };
     }
 
-    const leaderboards = this.getLeaderboards(state);
-    const cpList = leaderboards.cp || [];
-    const myProfile = this.buildPublicProfile(state);
-    const rankIndex = cpList.findIndex(p => p.charName === myProfile.charName);
-    const rank = rankIndex !== -1 ? rankIndex + 1 : 12;
+    const currentUserId = typeof window !== 'undefined' && window.FirebaseBridge?.getCurrentUserId?.();
+    const authoritativeCpList = Array.isArray(_cachedRankings.cp) ? _cachedRankings.cp : [];
+    const rankIndex = currentUserId
+      ? authoritativeCpList.findIndex(profile => profile?.userId === currentUserId || profile?.id === currentUserId)
+      : -1;
+    if (rankIndex < 0) {
+      log('Não foi possível confirmar sua posição no ranking mundial. Atualize o ranking e tente novamente.', 'warning');
+      return { success: false, reason: 'ranking_unavailable' };
+    }
+    const rank = rankIndex + 1;
 
     let coins = 50;
     let scrolls = 0;
@@ -169,22 +179,21 @@ export const RankingService = {
       adena = 1000000;
     }
 
+    const nextInventoryState = {
+      ...state,
+      inventory: (Array.isArray(state.inventory) ? state.inventory : []).map(item => ({ ...item }))
+    };
+    if (scrolls > 0) {
+      if (!addToInventory(nextInventoryState, 'scroll_enchant_weapon_b', scrolls, null, false, {}, true)) {
+        log('Não foi possível guardar os pergaminhos da recompensa. Libere espaço e tente novamente.', 'warning');
+        return { success: false, reason: 'inventory_full' };
+      }
+    }
+
+    state.inventory = nextInventoryState.inventory;
     state.lastRankingRewardClaim = now;
     state.adenCoins = (state.adenCoins || 0) + coins;
     state.gold = (state.gold || 0) + adena;
-
-    if (scrolls > 0) {
-      state.inventory = state.inventory || [];
-      const scrollItem = {
-        uid: 'b_scrl_' + Date.now(),
-        itemId: 'scrl_enchant_wp_b',
-        name: 'Scroll: Enchant Weapon (Grade B)',
-        grade: 'b',
-        qty: scrolls,
-        type: 'scroll'
-      };
-      state.inventory.push(scrollItem);
-    }
 
     log(`🏆 **[Recompensa Diária de Ranking - Rank #${rank}]** Você recebeu ${coins} Aden Coins, ${adena.toLocaleString()} Adena${scrolls > 0 ? ` e ${scrolls}x Enchant Scrolls` : ''}!`, 'rarity-legendary');
     floatText(`+${coins} COINS!`, 'float-jackpot');
@@ -207,10 +216,10 @@ export const RankingService = {
    * @param {Object} state - Estado atual do jogador para mesclar no ranking
    * @returns {Promise<Array>} Lista ordenada de perfis
    */
-  async getLeaderboard(category = 'cp', state = null) {
+  async getLeaderboard(category = 'cp', state = null, { forceRefresh = false } = {}) {
     const now = Date.now();
     // Cache de 30 segundos
-    if (_cachedRankings[category] && _cachedRankings[category].length > 0 && (now - _cachedRankings.lastFetchTime < 30000)) {
+    if (!forceRefresh && _cachedRankings[category] && _cachedRankings[category].length > 0 && (now - _cachedRankings.lastFetchTime < 30000)) {
       return this._mergeCurrentPlayer(_cachedRankings[category], state, category);
     }
 

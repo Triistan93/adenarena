@@ -26,25 +26,27 @@ describe('Glory Pillar — Subtab 4: Seven Signs & Mammon (Sete Selos & Mammon)'
     assert.equal(state.inventory[0].count, 50);
   });
 
-  it('3. Lilith / Anakim Epic Boss Fight: Opens sanctuary and resolves boss combat turns', () => {
+  it('3. Lilith / Anakim Epic Boss Fight: Resolves victory and grants canonical reward items', () => {
     const state = DEFAULT_STATE();
     state.level = 80;
     SevenSignsService.joinFaction(state, 'dawn');
     state.sevenSigns.ancientAdena = 100000;
-    state.stats = { atk: 3500, def: 2500, maxHp: 10000, combatPower: 120000 };
+    state.stats = { atk: 500000, def: 2500, maxHp: 10000, combatPower: 120000 };
 
     const startRes = SevenSignsService.startBossFight(state, 'lilith');
     assert.equal(startRes.success, true);
     assert.ok(state.sevenSigns.activeBossFight);
 
-    // Execute turns
-    let turns = 0;
-    while (state.sevenSigns.activeBossFight && turns < 20) {
-      SevenSignsService.executeBossTurn(state);
-      turns++;
+    const result = SevenSignsService.executeBossTurn(state);
+    assert.equal(result.success, true);
+    assert.equal(result.isVictory, true);
+    assert.equal(state.sevenSigns.activeBossFight, null);
+    assert.equal(state.sevenSigns.bossDefeats.lilith, 1);
+    for (const rewardId of result.rewards.items) {
+      const reward = state.inventory.find(item => item.itemId === rewardId);
+      assert.ok(reward, `missing reward ${rewardId}`);
+      assert.ok(reward.uid, `reward ${rewardId} must have a UID`);
     }
-
-    assert.ok(turns > 0);
   });
 
   it('4. Merchant of Mammon Store: Purchases items with Ancient Adena', () => {
@@ -56,7 +58,9 @@ describe('Glory Pillar — Subtab 4: Seven Signs & Mammon (Sete Selos & Mammon)'
     const buyRes = SevenSignsService.buyMammonItem(state, 'scroll_of_enchant_weapon');
     assert.equal(buyRes.success, true);
     assert.ok(state.sevenSigns.ancientAdena < 500000);
-    assert.ok(state.inventory.length > 0);
+    const scroll = state.inventory.find(item => item.itemId === 'scroll_of_enchant_weapon');
+    assert.ok(scroll);
+    assert.ok(scroll.uid);
   });
 
   it('5. Blacksmith of Mammon Unsealing: Removes seal from A-grade armor for winning faction', () => {
@@ -68,11 +72,12 @@ describe('Glory Pillar — Subtab 4: Seven Signs & Mammon (Sete Selos & Mammon)'
 
     const sealedArmor = {
       uid: 'tallum_1',
-      itemId: 'tallum_armor',
-      name: 'Tallum Heavy Armor (Sealed)',
+      itemId: 'armor_draconic_armor',
+      name: 'Draconic Armor (Sealed)',
       slot: 'armor',
       isUnsealed: false
     };
+    state.inventory = [sealedArmor];
 
     const unsealRes = SevenSignsService.unsealArmor(state, sealedArmor);
     assert.equal(unsealRes.success, true);

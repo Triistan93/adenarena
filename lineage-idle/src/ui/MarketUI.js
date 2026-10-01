@@ -6,7 +6,7 @@
  */
 
 import { MarketService, MARKET_CATEGORIES } from '../services/MarketService.js';
-import { getItemIconUrl, getItemIcon } from './GameUI.js';
+import { getItemIcon, escapeHTML } from './GameUI.js';
 import { D } from '../core/GameConfig.js';
 
 let _activeMarketTab = 'buy'; // 'buy' | 'sell' | 'my_sales'
@@ -126,6 +126,12 @@ function matchesCategory(item, category) {
   return true;
 }
 
+function getSafeMarketItemIcon(item) {
+  const itemId = item?.itemId || item?.id;
+  const canonicalItem = itemId ? D()?.ALL_ITEMS?.[itemId] : null;
+  return canonicalItem ? getItemIcon(canonicalItem) : '📦';
+}
+
 export function renderMarketTab(container, state, callbacks = {}) {
   if (!container || !state) return;
 
@@ -197,7 +203,7 @@ export function renderMarketTab(container, state, callbacks = {}) {
         </div>
 
         <div style="display: flex; align-items: center; gap: 8px; flex: 1; max-width: 420px; justify-content: flex-end;">
-          <input type="text" id="market-search-input" value="${_searchQuery}" placeholder="🔍 Buscar item ou vendedor..." style="flex: 1; background: rgba(0,0,0,0.6); border: 1px solid rgba(212,167,68,0.3); border-radius: 4px; padding: 5px 10px; color: #fff; font-size: 11px; font-family: 'Inter', sans-serif;" />
+          <input type="text" id="market-search-input" value="${escapeHTML(_searchQuery)}" placeholder="🔍 Buscar item ou vendedor..." style="flex: 1; background: rgba(0,0,0,0.6); border: 1px solid rgba(212,167,68,0.3); border-radius: 4px; padding: 5px 10px; color: #fff; font-size: 11px; font-family: 'Inter', sans-serif;" />
           <button id="btn-market-refresh" class="l2wt-refresh-btn" title="Sincronizar ofertas">
             🔄 Refresh
           </button>
@@ -277,22 +283,23 @@ function renderBuyTab(state) {
             const currencyColor = isAdena ? '#ffd877' : '#60a5fa';
             const totalCost = Number(l.totalPrice) || (l.pricePerUnit * l.quantity);
             const isOwnListing = MarketService._isMyListing(l, state);
-            const enchantStr = (l.item?.enchant && l.item.enchant > 0) ? `<span style="color: #38bdf8; font-weight: bold; margin-right: 4px;">+${l.item.enchant}</span>` : '';
+            const enchantLevel = Number(l.item?.enchant) || 0;
+            const enchantStr = enchantLevel > 0 ? `<span style="color: #38bdf8; font-weight: bold; margin-right: 4px;">+${enchantLevel}</span>` : '';
 
             return `
-              <tr class="l2wt-listing-row" data-search="${(l.item.name + ' ' + l.sellerName).toLowerCase()}">
+              <tr class="l2wt-listing-row" data-search="${escapeHTML(`${l.item.name} ${l.sellerName}`.toLowerCase())}">
                 <!-- Goods: Authentic Radial Slot + Enchant + Name + Seller -->
                 <td>
                   <div style="display: flex; align-items: center; gap: 10px;">
                     <div style="width: 36px; height: 36px; background: radial-gradient(circle at 50% 35%, #56161b 0%, #200608 100%); border: 1px solid rgba(212,167,68,0.45); border-radius: 4px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: inset 0 0 6px rgba(0,0,0,0.8);">
-                      ${getItemIcon(l.item)}
+                      ${getSafeMarketItemIcon(l.item)}
                     </div>
                     <div style="min-width: 0;">
                       <div style="font-size: 12px; font-weight: bold; color: #f4d58a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                        ${enchantStr}${l.item.name}
+                        ${enchantStr}${escapeHTML(l.item.name)}
                       </div>
                       <div style="font-size: 10px; color: #94a3b8; font-family: 'Inter', sans-serif; margin-top: 1px;">
-                        Vendedor: <span style="color: ${l.isPlayerListing ? '#34d399' : '#a78bfa'}; font-weight: 600;">${l.sellerName}</span>
+                        Vendedor: <span style="color: ${l.isPlayerListing ? '#34d399' : '#a78bfa'}; font-weight: 600;">${escapeHTML(l.sellerName)}</span>
                       </div>
                     </div>
                   </div>
@@ -318,11 +325,11 @@ function renderBuyTab(state) {
                 <!-- Action: Buy or Cancel -->
                 <td style="text-align: center;">
                   ${isOwnListing ? `
-                    <button class="market-cancel-btn action-btn" data-id="${l.id}" style="background: rgba(239,68,68,0.2); border: 1px solid #ef4444; color: #fca5a5; padding: 4px 10px; border-radius: 4px; font-size: 11px; cursor: pointer; font-weight: bold;">
+                    <button class="market-cancel-btn action-btn" data-id="${escapeHTML(l.id)}" style="background: rgba(239,68,68,0.2); border: 1px solid #ef4444; color: #fca5a5; padding: 4px 10px; border-radius: 4px; font-size: 11px; cursor: pointer; font-weight: bold;">
                       ✕ Cancelar
                     </button>
                   ` : `
-                    <button class="l2wt-buy-btn market-buy-btn" data-id="${l.id}">
+                    <button class="l2wt-buy-btn market-buy-btn" data-id="${escapeHTML(l.id)}">
                       Buy
                     </button>
                   `}
@@ -381,8 +388,8 @@ function renderSellTab(state) {
               const count = Number(item.count || item.quantity) || 1;
 
               return `
-                <div class="market-select-item ${isSelected ? 'selected' : ''}" data-uid="${item.uid || item.id}" style="width: 44px; height: 44px; background: rgba(0,0,0,0.6); border: 2px solid ${isSelected ? '#ffd877' : 'rgba(255,255,255,0.1)'}; border-radius: 8px; position: relative; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: ${isSelected ? '0 0 10px rgba(253,224,71,0.4)' : 'none'};">
-                  ${getItemIcon(item)}
+                <div class="market-select-item ${isSelected ? 'selected' : ''}" data-uid="${escapeHTML(item.uid || item.id)}" style="width: 44px; height: 44px; background: rgba(0,0,0,0.6); border: 2px solid ${isSelected ? '#ffd877' : 'rgba(255,255,255,0.1)'}; border-radius: 8px; position: relative; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: ${isSelected ? '0 0 10px rgba(253,224,71,0.4)' : 'none'};">
+                  ${getSafeMarketItemIcon(item)}
                   ${count > 1 ? `<span style="position: absolute; bottom: 1px; right: 3px; font-size: 9px; font-weight: bold; color: #fff; background: rgba(0,0,0,0.8); padding: 0 3px; border-radius: 3px;">${count}</span>` : ''}
                 </div>
               `;
@@ -402,10 +409,10 @@ function renderSellTab(state) {
           ${selectedItem ? `
             <!-- Selected Item Card -->
             <div style="background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 10px; display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
-              ${getItemIcon(selectedItem)}
+              ${getSafeMarketItemIcon(selectedItem)}
               <div>
                 <div style="font-weight: bold; color: #ffd877; font-size: 13px;">
-                  ${selectedItem.enchant > 0 ? '+' + selectedItem.enchant + ' ' : ''}${selectedItem.name}
+                  ${selectedItem.enchant > 0 ? '+' + Number(selectedItem.enchant) + ' ' : ''}${escapeHTML(selectedItem.name)}
                 </div>
                 <div style="font-size: 11px; color: #94a3b8;">
                   Disponível: ${maxQty} unidade(s)
@@ -430,11 +437,11 @@ function renderSellTab(state) {
             <div style="display: flex; gap: 10px; margin-bottom: 10px;">
               <div style="flex: 1;">
                 <label style="font-size: 11px; color: #94a3b8; display: block; margin-bottom: 2px;">Quantidade:</label>
-                <input type="number" id="input-sell-qty" value="${_sellQuantity}" min="1" max="${maxQty}" style="width: 100%; background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; padding: 6px 8px; color: #fff; font-size: 12px; font-family: 'IBM Plex Mono', monospace; box-sizing: border-box;" />
+                <input type="number" id="input-sell-qty" value="${_sellQuantity}" min="1" max="${maxQty}" step="1" style="width: 100%; background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; padding: 6px 8px; color: #fff; font-size: 12px; font-family: 'IBM Plex Mono', monospace; box-sizing: border-box;" />
               </div>
               <div style="flex: 2;">
                 <label style="font-size: 11px; color: #94a3b8; display: block; margin-bottom: 2px;">Preço Unitário (${_sellCurrency === 'adena' ? '🪙' : '👑'}):</label>
-                <input type="number" id="input-sell-price" value="${_sellPriceUnit}" min="1" style="width: 100%; background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; padding: 6px 8px; color: #fff; font-size: 12px; font-family: 'IBM Plex Mono', monospace; box-sizing: border-box;" />
+                <input type="number" id="input-sell-price" value="${_sellPriceUnit}" min="1" step="1" style="width: 100%; background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; padding: 6px 8px; color: #fff; font-size: 12px; font-family: 'IBM Plex Mono', monospace; box-sizing: border-box;" />
               </div>
             </div>
 
@@ -526,17 +533,17 @@ function renderMySalesTab(state, salesData) {
               return `
                 <div style="background: rgba(0,0,0,0.4); border: 1px solid rgba(212,167,68,0.3); border-radius: 8px; padding: 10px; display: flex; justify-content: space-between; align-items: center; box-shadow: inset 0 0 10px rgba(0,0,0,0.5);">
                   <div style="display: flex; align-items: center; gap: 10px;">
-                    ${getItemIcon(l.item)}
+                    ${getSafeMarketItemIcon(l.item)}
                     <div>
                       <div style="font-weight: bold; color: #ffd877; font-size: 12px;">
-                        ${l.item?.enchant > 0 ? `<span style="color:#60a5fa;">+${l.item.enchant}</span> ` : ''}${l.quantity}x ${l.item?.name}
+                        ${l.item?.enchant > 0 ? `<span style="color:#60a5fa;">+${Number(l.item.enchant)}</span> ` : ''}${Number(l.quantity)}x ${escapeHTML(l.item?.name)}
                       </div>
                       <div style="font-size: 11px; color: ${isAdena ? '#fde047' : '#93c5fd'}; font-family: 'IBM Plex Mono', monospace;">
                         ${isAdena ? '🪙' : '👑'} ${Number(l.totalPrice).toLocaleString()} ${isAdena ? 'Adena' : 'AC'}
                       </div>
                     </div>
                   </div>
-                  <button class="market-cancel-btn action-btn" data-id="${l.id}" style="background: rgba(239,68,68,0.2); border: 1px solid #ef4444; color: #fca5a5; border-radius: 6px; padding: 6px 12px; font-size: 11px; cursor: pointer; font-weight: bold;">
+                  <button class="market-cancel-btn action-btn" data-id="${escapeHTML(l.id)}" style="background: rgba(239,68,68,0.2); border: 1px solid #ef4444; color: #fca5a5; border-radius: 6px; padding: 6px 12px; font-size: 11px; cursor: pointer; font-weight: bold;">
                     ✕ Cancelar
                   </button>
                 </div>
@@ -559,7 +566,7 @@ function renderMySalesTab(state, salesData) {
             ${history.slice(0, 15).map(h => `
               <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.04); border-radius: 6px; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center; font-size: 11px;">
                 <span style="color: #cbd5e1;">
-                  Vendido <strong style="color:#ffd877;">${h.quantity}x ${h.itemName}</strong> para <span style="color:#34d399;">${h.buyer}</span>
+                  Vendido <strong style="color:#ffd877;">${Number(h.quantity)}x ${escapeHTML(h.itemName)}</strong> para <span style="color:#34d399;">${escapeHTML(h.buyer)}</span>
                 </span>
                 <span style="font-weight: bold; color: ${h.currency === 'adena' ? '#ffd877' : '#60a5fa'}; font-family: 'IBM Plex Mono', monospace;">
                   +${h.currency === 'adena' ? '🪙 ' : '👑 '}${h.totalCost.toLocaleString()}
@@ -782,7 +789,12 @@ function attachMarketEvents(container, state, callbacks = {}) {
   const qtyInput = container.querySelector('#input-sell-qty');
   if (qtyInput) {
     qtyInput.onchange = (e) => {
-      _sellQuantity = Math.max(1, Number(e.target.value) || 1);
+      const requestedQty = Number(e.target.value);
+      const maxQty = Number(qtyInput.max);
+      const boundedMax = Number.isSafeInteger(maxQty) && maxQty > 0 ? maxQty : requestedQty;
+      _sellQuantity = Number.isSafeInteger(requestedQty) && requestedQty > 0
+        ? Math.min(requestedQty, boundedMax)
+        : 1;
       renderMarketTab(container, state, callbacks);
     };
   }
@@ -790,7 +802,10 @@ function attachMarketEvents(container, state, callbacks = {}) {
   const priceInput = container.querySelector('#input-sell-price');
   if (priceInput) {
     priceInput.onchange = (e) => {
-      _sellPriceUnit = Math.max(1, Number(e.target.value) || 1);
+      const requestedPrice = Number(e.target.value);
+      _sellPriceUnit = Number.isSafeInteger(requestedPrice) && requestedPrice > 0
+        ? requestedPrice
+        : 1;
       renderMarketTab(container, state, callbacks);
     };
   }

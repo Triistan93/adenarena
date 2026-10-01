@@ -64,12 +64,14 @@ describe('Glory Pillar — Subtab 1: Clan & Castles (Clã & Castelos)', () => {
 
     // Execute turns until siege completion
     let turns = 0;
-    while ((state.activeSiege || state.clan.activeSiege) && turns < 20) {
+    while (state.activeSiege && !state.activeSiege.isCompleted && turns < 500) {
       ClanService.executeSiegeTurn(state);
       turns++;
     }
 
     assert.ok(turns > 0);
+    assert.equal(state.activeSiege.isCompleted, true, 'Siege should complete all three phases');
+    assert.ok(state.clan.castles.includes('giran'), 'Victory should add the castle to clan ownership');
   });
 
   it('5. Castle Tax Revenue & Claiming: Accumulates taxes and claims to player treasury', () => {

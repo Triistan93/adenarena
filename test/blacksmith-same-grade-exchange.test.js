@@ -46,4 +46,25 @@ describe('Pushkin weapon exchange grade validation', () => {
       else globalThis.GameData = previousGameData;
     }
   });
+
+  it('rejects a malformed Adena wallet before changing a valid source weapon', () => {
+    const previousGameData = globalThis.GameData;
+    globalThis.GameData = {
+      ALL_ITEMS: {
+        weapon_d_source: { id: 'weapon_d_source', name: 'D Source', slot: 'weapon', tier: 2, desc: '(D Grade)' },
+        weapon_d_target: { id: 'weapon_d_target', name: 'D Target', slot: 'weapon', tier: 2, desc: '(D Grade)' }
+      }
+    };
+    try {
+      const source = { uid: 'source-uid', itemId: 'weapon_d_source', name: 'D Source', equipped: false };
+      const state = { gold: 'invalid-wallet', inventory: [source] };
+      assert.equal(swapWeaponSameGrade(state, source.uid, 'weapon_d_target'), false);
+      assert.equal(state.gold, 'invalid-wallet');
+      assert.equal(source.itemId, 'weapon_d_source');
+      assert.equal(source.name, 'D Source');
+    } finally {
+      if (previousGameData === undefined) delete globalThis.GameData;
+      else globalThis.GameData = previousGameData;
+    }
+  });
 });

@@ -9,6 +9,7 @@ import {
 import { addToInventory, removeFromInventory } from '../InventoryService.js';
 import { LifeActivityCore } from './LifeActivityCore.js';
 import { RewardEngine } from './RewardEngine.js';
+import { hasRoomForStackRewards } from './RewardCapacity.js';
 import { resolveCanonicalResourceId } from './ResourceDictionary.js';
 
 export const MiningService = {
@@ -81,6 +82,7 @@ export const MiningService = {
 
   probeVein(state, callbacks = {}) {
     const mState = this.getMiningState(state);
+    if (mState.isMining) return false;
     mState.veinProbed = true;
     if (callbacks.log) callbacks.log("🔍 O eco metálico revela a estrutura interna da rocha...", 'system');
     if (callbacks.updateAllUI) callbacks.updateAllUI();
@@ -90,8 +92,12 @@ export const MiningService = {
 
   shoreUpGallery(state, callbacks = {}) {
     const mState = this.getMiningState(state);
-    const branchItem = state.inventory?.find(i => (i.itemId || i.id) === 'branch' && (i.qty || i.count) > 0);
-    const woodItem = state.inventory?.find(i => (i.itemId || i.id) === 'compressed_wood' && (i.qty || i.count) > 0);
+    if (mState.isMining) return false;
+    const hasUsableMaterial = (itemId) => state.inventory?.some(i =>
+      (i.itemId || i.id) === itemId && !i.equipped && (i.qty || i.count || 0) > 0
+    );
+    const branchItem = hasUsableMaterial('branch');
+    const woodItem = hasUsableMaterial('compressed_wood');
 
     const targetMatId = branchItem ? 'branch' : (woodItem ? 'compressed_wood' : null);
     if (!targetMatId) {
@@ -124,6 +130,10 @@ export const MiningService = {
 
   selectZone(state, zoneId, callbacks = {}) {
     const mState = this.getMiningState(state);
+    if (mState.isMining) {
+      if (callbacks.log) callbacks.log('⚠️ Termine a extração atual antes de mudar de galeria.', 'warning');
+      return false;
+    }
     const zone = MINING_ZONES[zoneId];
     if (!zone) return false;
 
@@ -148,6 +158,7 @@ export const MiningService = {
     if (!lampId) {
       mState.activeLamp = null;
       if (callbacks.updateAllUI) callbacks.updateAllUI();
+      if (callbacks.save) callbacks.save();
       return true;
     }
 
@@ -168,10 +179,11 @@ export const MiningService = {
 
   buyLamp(state, lampId, qty = 1, callbacks = {}) {
     const lamp = LAMPS_CATALOG[lampId];
-    if (!lamp) return false;
+    if (!lamp || !Number.isSafeInteger(qty) || qty <= 0) return false;
 
-    const count = Math.max(1, Math.floor(qty));
+    const count = qty;
     const totalCost = lamp.buyPrice * count;
+    if (!Number.isSafeInteger(totalCost) || totalCost < 0) return false;
 
     if ((state.gold || 0) < totalCost) {
       if (callbacks.log) callbacks.log(`⚠️ Ouro insuficiente! Requer ${totalCost.toLocaleString()} Adena para comprar ${count}x ${lamp.name}.`, 'warning');
@@ -197,6 +209,7 @@ export const MiningService = {
     if (!pick) return false;
 
     const mState = this.getMiningState(state);
+    if (mState.isMining) return false;
     if (mState.pickaxeDurability[pickaxeId] !== undefined) {
       if (callbacks.log) callbacks.log(`⚠️ Você já adquiriu a ${pick.name}!`, 'warning');
       return false;
@@ -227,6 +240,7 @@ export const MiningService = {
     if (!pick) return false;
 
     const mState = this.getMiningState(state);
+    if (mState.isMining) return false;
     if (mState.pickaxeDurability[pickaxeId] === undefined && pickaxeId !== 'pickaxe_none') {
       if (callbacks.log) callbacks.log('⚠️ Você não possui esta picareta em sua coleção!', 'warning');
       return false;
@@ -242,6 +256,7 @@ export const MiningService = {
 
   repairPickaxe(state, pickaxeId, callbacks = {}) {
     const mState = this.getMiningState(state);
+    if (mState.isMining) return false;
     const targetPickaxeId = pickaxeId || mState.pickaxe;
     const pick = PICKAXES_CATALOG[targetPickaxeId];
     if (!pick) return false;
@@ -263,9 +278,13 @@ export const MiningService = {
     state.gold -= cost;
     mState.pickaxeDurability[targetPickaxeId] = pick.durabilityMax;
 
-    // Sincroniza com LifeActivityCore
-    const actState = LifeActivityCore.getActivityState(state, 'mining');
-    actState.toolDurability = pick.durabilityMax;
+    // Mantém a durabilidade canônica alinhada somente quando a ferramenta reparada está equipada.
+    if (mState.pickaxe === targetPickaxeId) {
+      const actState = LifeActivityCore.getActivityState(state, 'mining');
+      actState.tool = targetPickaxeId;
+      actState.toolDurability = pick.durabilityMax;
+      actState.maxDurability = pick.durabilityMax;
+    }
 
     if (callbacks.log) callbacks.log(`✨ **${pick.name}** foi reforjada! Durabilidade restaurada (${pick.durabilityMax}/${pick.durabilityMax}).`, 'system');
     if (callbacks.updateAllUI) callbacks.updateAllUI();
@@ -275,7 +294,8 @@ export const MiningService = {
 
   selectTactic(state, tacticId, callbacks = {}) {
     const mState = this.getMiningState(state);
-    const tactic = MINING_TACTICS[tacticId] || MINING_TACTICS.standard;
+    const tactic = MINING_TACTICS[tacticId];
+    if (!tactic || mState.isMining) return false;
     mState.selectedTactic = tactic.id;
     mState.activeTactic = tactic.id;
     if (callbacks.log) callbacks.log(`⛏️ Técnica de escavação selecionada: **${tactic.name}** (${tactic.desc}).`, 'system');
@@ -328,6 +348,7 @@ export const MiningService = {
 
   startMining(state, tacticId = null, callbacks = {}) {
     const mState = this.getMiningState(state);
+    if (mState.isMining) return { success: false, reason: 'already_mining' };
     const activePickaxeId = mState.pickaxe || 'pickaxe_none';
     const pickDef = PICKAXES_CATALOG[activePickaxeId];
     const dur = mState.pickaxeDurability[activePickaxeId] ?? 0;
@@ -365,6 +386,7 @@ export const MiningService = {
     mineDuration = Math.max(1200, Math.floor((mineDuration * (tactic.timeMult || 1.0)) / lampSpeedMult));
 
     mState.isMining = true;
+    mState.pendingMineReward = null;
     mState.mineStartTime = Date.now();
     mState.targetedNodeId = node.id;
     mState.mineDuration = mineDuration;
@@ -397,49 +419,25 @@ export const MiningService = {
     if (!node) {
       mState.isMining = false;
       mState.targetedNodeId = null;
+      mState.pendingMineReward = null;
       return false;
     }
 
-    // Consome durabilidade da picareta
     const activePickaxeId = mState.pickaxe || 'pickaxe_none';
     const pickDef = PICKAXES_CATALOG[activePickaxeId];
-    if (mState.pickaxeDurability[activePickaxeId] !== undefined) {
-      mState.pickaxeDurability[activePickaxeId] = Math.max(0, mState.pickaxeDurability[activePickaxeId] - 1);
-    }
-    const actState = LifeActivityCore.getActivityState(state, 'mining');
-    actState.toolDurability = mState.pickaxeDurability[activePickaxeId] ?? 0;
-
-    if (actState.toolDurability <= 0) {
-      mState.isMining = false;
-      mState.targetedNodeId = null;
-      mState.autoMining = false;
-      if (callbacks.log) callbacks.log(`💥 **PICARETA PARTIDA!** Sua ${pickDef?.name || 'picareta'} quebrou a ponta. Reforje-a no ferreiro para continuar.`, 'error');
-      if (callbacks.updateAllUI) callbacks.updateAllUI();
-      if (callbacks.save) callbacks.save();
-      return false;
-    }
-
     const tactic = MINING_TACTICS[mState.activeTactic] || MINING_TACTICS.standard;
     let stabilityLoss = tactic.stabilityLoss || 12;
     if (mState.veinHazard === 'seismic_fault') {
       stabilityLoss *= 2;
     }
-    mState.galleryStability = Math.max(0, mState.galleryStability - stabilityLoss);
-
-    if (mState.galleryStability <= 15) {
-      if (callbacks.log) callbacks.log('⚠️ DESABAMENTO PARCIAL NA MINA! Pedras caem do teto, você perdeu 50% dos minérios do veio.', 'error');
-    }
-
-    if (mState.veinHazard === 'gas_pocket' && tactic.id === 'heavy') {
-      state.hp = Math.max(1, state.hp - Math.floor(state.maxHp * 0.10));
-      mState.pickaxeDurability[activePickaxeId] = Math.max(0, mState.pickaxeDurability[activePickaxeId] - 2);
-      if (callbacks.log) callbacks.log('💥 EXPLOSÃO DE GÁS! Suas faíscas detonaram um bolsão de gás. -10% HP e dano extra na picareta!', 'error');
-    }
+    const stabilityAfter = Math.max(0, mState.galleryStability - stabilityLoss);
+    const gasPocketExplosion = mState.veinHazard === 'gas_pocket' && tactic.id === 'heavy';
 
     const pickBonus = pickDef?.qualityBonus || 0.0;
     const qualityMod = pickBonus + (tactic.qualityBonus || 0.0);
 
-    const quality = RewardEngine.rollQuality(mState.skillLevel, qualityMod);
+    const pending = mState.pendingMineReward?.nodeId === node.id ? mState.pendingMineReward : null;
+    const quality = pending?.quality || RewardEngine.rollQuality(mState.skillLevel, qualityMod);
     const primaryMatRaw = node.yields.primary;
     const secMatRaw = node.yields.secondary;
 
@@ -455,13 +453,49 @@ export const MiningService = {
       if (callbacks.log) callbacks.log('✨ Extração cirúrgica de Veio Cristalino bem-sucedida! Rendimento DOBRADO.', 'system');
     }
 
-    if (mState.galleryStability <= 15) {
+    if (stabilityAfter <= 15) {
       basePrimaryQty = Math.max(1, Math.floor(basePrimaryQty * 0.5));
       baseSecQty = Math.floor(baseSecQty * 0.5);
     }
 
-    const primaryQty = RewardEngine.calculateYield(basePrimaryQty, quality);
-    const secQty = baseSecQty > 0 ? RewardEngine.calculateYield(baseSecQty, quality) : 0;
+    const primaryQty = pending?.primaryQty ?? RewardEngine.calculateYield(basePrimaryQty, quality);
+    const secQty = pending?.secQty ?? (baseSecQty > 0 ? RewardEngine.calculateYield(baseSecQty, quality) : 0);
+    const finalXp = pending?.finalXp ?? Math.round((node.xpReward || 8) * quality.mult);
+    const rewardDrops = [{ itemId: primaryMat, count: primaryQty }];
+    if (secMat && secQty > 0) rewardDrops.push({ itemId: secMat, count: secQty });
+    if (!hasRoomForStackRewards(state, rewardDrops)) {
+      const alreadyNotified = Boolean(pending?.inventoryFullNotified);
+      mState.pendingMineReward = { nodeId: node.id, quality, primaryQty, secQty, finalXp, inventoryFullNotified: true };
+      if (!alreadyNotified) {
+        if (callbacks.log) callbacks.log('⚠️ Mochila cheia! Libere espaço para concluir e receber esta extração.', 'warning');
+        if (callbacks.updateAllUI) callbacks.updateAllUI();
+        if (callbacks.save) callbacks.save();
+      }
+      return false;
+    }
+
+    if (mState.pickaxeDurability[activePickaxeId] !== undefined) {
+      mState.pickaxeDurability[activePickaxeId] = Math.max(0, mState.pickaxeDurability[activePickaxeId] - 1);
+    }
+    const actState = LifeActivityCore.getActivityState(state, 'mining');
+    actState.toolDurability = mState.pickaxeDurability[activePickaxeId] ?? 0;
+
+    if (gasPocketExplosion) {
+      const maxHp = Number(state.maxHp) || Number(state.hp) || 1;
+      state.hp = Math.max(1, (Number(state.hp) || maxHp) - Math.floor(maxHp * 0.10));
+      mState.pickaxeDurability[activePickaxeId] = Math.max(0, mState.pickaxeDurability[activePickaxeId] - 2);
+      actState.toolDurability = mState.pickaxeDurability[activePickaxeId];
+      if (callbacks.log) callbacks.log('💥 EXPLOSÃO DE GÁS! Suas faíscas detonaram um bolsão de gás. -10% HP e dano extra na picareta!', 'error');
+    }
+
+    mState.galleryStability = stabilityAfter;
+    const brokeOnThisExtraction = actState.toolDurability <= 0;
+    if (mState.galleryStability <= 15 && callbacks.log) {
+      callbacks.log('⚠️ DESABAMENTO PARCIAL NA MINA! Pedras caem do teto, você perdeu 50% dos minérios do veio.', 'error');
+    }
+    if (mState.veinHazard === 'dense_crystal' && tactic.id === 'precision' && callbacks.log) {
+      callbacks.log('✨ Extração cirúrgica de Veio Cristalino bem-sucedida! Rendimento DOBRADO.', 'system');
+    }
 
     addToInventory(state, primaryMat, primaryQty, node.rarity, false, callbacks, true);
     if (secMat && secQty > 0) {
@@ -474,17 +508,20 @@ export const MiningService = {
     LifeActivityCore.recordCodexDiscovery(state, 'mining', node.id);
 
     // XP
-    const xpBase = node.xpReward || 8;
-    const finalXp = Math.round(xpBase * quality.mult);
     LifeActivityCore.addXp(state, 'mining', finalXp, callbacks);
 
     mState.isMining = false;
     mState.targetedNodeId = null;
+    mState.pendingMineReward = null;
     mState.veinProbed = false;
     
     // Rola próximo hazard
     const hazards = ['none', 'none', 'none', 'gas_pocket', 'seismic_fault', 'dense_crystal'];
     mState.veinHazard = hazards[Math.floor(Math.random() * hazards.length)];
+    if (brokeOnThisExtraction || mState.pickaxeDurability[activePickaxeId] <= 0) {
+      mState.autoMining = false;
+      if (callbacks.log) callbacks.log(`💥 **PICARETA PARTIDA!** Sua ${pickDef?.name || 'picareta'} quebrou a ponta após esta extração. Reforje-a para continuar.`, 'error');
+    }
 
     if (callbacks.log) {
       const qualityPrefix = quality.tier === 'perfect' ? '💎 **MINÉRIO IMACULADO!**'
@@ -557,7 +594,10 @@ export const MiningService = {
 
     const activePickaxeId = mState.pickaxe || 'pickaxe_none';
     let availableDur = mState.pickaxeDurability[activePickaxeId] ?? 0;
-    if (availableDur <= 0) return null;
+    if (availableDur <= 0) {
+      mState.autoMining = false;
+      return null;
+    }
 
     const clampedMinutes = Math.min(480, Math.max(0, minutesOffline));
     if (clampedMinutes < 2) return null;
@@ -567,6 +607,12 @@ export const MiningService = {
     const actualMines = Math.min(availableDur, Math.max(1, totalPotential));
 
     if (actualMines <= 0) return null;
+
+    // O pagamento offline substitui, em vez de duplicar, o veio que estava salvo em andamento.
+    mState.isMining = false;
+    mState.targetedNodeId = null;
+    mState.mineStartTime = 0;
+    mState.pendingMineReward = null;
 
     mState.pickaxeDurability[activePickaxeId] -= actualMines;
     const actState = LifeActivityCore.getActivityState(state, 'mining');
@@ -599,10 +645,15 @@ export const MiningService = {
     }
 
     LifeActivityCore.addXp(state, 'mining', totalXp, callbacks);
+    mState.lastAutoTick = Date.now();
+    if (mState.pickaxeDurability[activePickaxeId] <= 0) mState.autoMining = false;
 
     if (callbacks.log) {
       callbacks.log(`💤 **Relatório de Mineração Offline (${clampedMinutes}m):** Extraiu ${actualMines} veios minerais em Aden! (+${totalXp} XP de Mineração)`, 'rarity-legendary');
     }
+
+    if (callbacks.updateAllUI) callbacks.updateAllUI();
+    if (callbacks.save) callbacks.save();
 
     return { actualMines, matsGained, totalXp };
   },

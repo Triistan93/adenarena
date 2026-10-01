@@ -31,6 +31,12 @@ globalThis.GameData.ALL_ITEMS['wooden_breastplate'] = {
   pDef: 30,
   req: { level: 1 }
 };
+globalThis.GameData.ALL_ITEMS['test_health_potion'] = {
+  id: 'test_health_potion',
+  name: 'Test Health Potion',
+  slot: 'consumable',
+  stack: 100
+};
 
 describe('Paperdoll Chest Slot & Auto-Equip Advisor Sync', () => {
 
@@ -133,5 +139,21 @@ describe('Paperdoll Chest Slot & Auto-Equip Advisor Sync', () => {
     migrateEquipmentSlots(legacyState);
     assert.strictEqual(legacyState.equipment.chest, 'legacy_armor_uid');
     assert.strictEqual(legacyState.equipment.armor, 'legacy_armor_uid');
+  });
+
+  it('7. Item Type Gate: explicit equipment slot cannot equip a consumable', () => {
+    const state = DEFAULT_STATE();
+    state.inventory.push({ uid: 'potion-uid', itemId: 'test_health_potion', count: 1, equipped: false });
+    const before = structuredClone(state);
+
+    equipItem(state, 'potion-uid', 'weapon');
+
+    assert.deepEqual(state.equipment, before.equipment);
+    assert.equal(state.inventory.find(item => item.uid === 'potion-uid').equipped, false);
+
+    state.inventory.push({ uid: 'armor-uid', itemId: 'wooden_breastplate', equipped: false });
+    equipItem(state, 'armor-uid', 'weapon');
+    assert.equal(state.equipment.weapon, null);
+    assert.equal(state.inventory.find(item => item.uid === 'armor-uid').equipped, false);
   });
 });

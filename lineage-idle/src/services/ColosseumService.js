@@ -1,4 +1,6 @@
 import { DUEL_BET_TIERS, DUEL_OPPONENT_ARCHETYPES, SURVIVAL_WAVES, COLOSSEUM_SHOP_CATALOG } from '../data/colosseum.js';
+import { ALL_ITEMS } from '../data/items/index.js';
+import { addToInventory } from './InventoryService.js';
 
 export class ColosseumService {
   /**
@@ -10,12 +12,15 @@ export class ColosseumService {
         badges: 0,
         duelWins: 0,
         duelLosses: 0,
+      survivalLosses: 0,
         highestWave: 0,
         activeDuel: null,
         activeSurvival: null
       };
     }
-    if (typeof state.colosseum.badges !== 'number') state.colosseum.badges = 0;
+    for (const key of ['badges', 'duelWins', 'duelLosses', 'survivalLosses', 'highestWave']) {
+      if (typeof state.colosseum[key] !== 'number' || !Number.isFinite(state.colosseum[key])) state.colosseum[key] = 0;
+    }
     return state.colosseum;
   }
 
@@ -24,16 +29,23 @@ export class ColosseumService {
    */
   static startDuel(state, tierId, hooks = {}, customOpponent = null) {
     const colState = this.ensureState(state);
-    const tier = DUEL_BET_TIERS.find(t => t.id === tierId) || DUEL_BET_TIERS[0];
+    if (colState.activeDuel || colState.activeSurvival) {
+      return { success: false, message: 'Conclua o desafio atual antes de iniciar outro modo do Coliseu.' };
+    }
+    const tier = DUEL_BET_TIERS.find(t => t.id === tierId);
+    if (!tier) return { success: false, message: 'Aposta de duelo inválida.' };
 
     if ((state.gold || 0) < tier.bet) {
       return { success: false, message: `Ouro insuficiente para cobrir a aposta de ${tier.bet.toLocaleString()}g.` };
     }
 
+    const pStats = state.stats || { atk: 2000, def: 1800, maxHp: 8000 };
+    const playerHp = Number.isFinite(Number(state.hp)) ? Math.max(0, Number(state.hp)) : (pStats.maxHp || 8000);
+    if (playerHp <= 0) return { success: false, message: 'Você precisa estar vivo para entrar em um duelo.' };
+
     // Deduz a aposta
     state.gold -= tier.bet;
 
-    const pStats = state.stats || { atk: 2000, def: 1800, maxHp: 8000 };
     let oppName, oppTitle, oppIcon, oppHp, oppPAtk, oppPDef;
 
     if (customOpponent) {
@@ -67,8 +79,8 @@ export class ColosseumService {
       maxHp: oppHp,
       pAtk: oppPAtk,
       pDef: oppPDef,
-      playerHp: state.hp || pStats.maxHp,
-      playerMaxHp: pStats.maxHp,
+      playerHp,
+      playerMaxHp: pStats.maxHp || state.maxHp || 8000,
       turn: 1
     };
 
@@ -106,8 +118,18 @@ export class ColosseumService {
 
     // Contra-ataque do oponente
     const oppDmg = Math.max(100, Math.floor(duel.pAtk * 1.4 - (pStats.def || 1800) * 0.3));
-    state.hp = Math.max(1, (state.hp || 5000) - oppDmg);
+    const currentPlayerHp = Number.isFinite(Number(duel.playerHp)) ? Number(duel.playerHp) : (Number(state.hp) || duel.playerMaxHp || 5000);
+    duel.playerHp = Math.max(0, currentPlayerHp - oppDmg);
+    state.hp = duel.playerHp;
     hooks.log?.(`💥 **${duel.opponentName}** desferiu uma combinação de golpes causando **${oppDmg.toLocaleString()}** de dano no seu herói!`, 'danger');
+
+    if (duel.playerHp <= 0) {
+      colState.duelLosses++;
+      colState.activeDuel = null;
+      hooks.log?.(`☠️ Você perdeu o duelo contra **${duel.opponentName}**. A aposta de ${duel.bet.toLocaleString()}g foi perdida.`, 'danger');
+      hooks.onUpdate?.();
+      return { success: true, isVictory: false, isDefeat: true, goldLost: duel.bet };
+    }
 
     duel.turn++;
     hooks.onUpdate?.();
@@ -119,7 +141,13 @@ export class ColosseumService {
    */
   static startSurvival(state, hooks = {}) {
     const colState = this.ensureState(state);
+    if (colState.activeDuel || colState.activeSurvival) {
+      return { success: false, message: 'Conclua o desafio atual antes de iniciar outro modo do Coliseu.' };
+    }
     const wave1 = SURVIVAL_WAVES[0];
+    const playerMaxHp = Number(state.stats?.maxHp) || Number(state.maxHp) || Number(state.hp) || 1000;
+    const playerHp = Number.isFinite(Number(state.hp)) ? Math.max(0, Number(state.hp)) : playerMaxHp;
+    if (playerHp <= 0) return { success: false, message: 'Você precisa estar vivo para entrar no desafio de sobrevivência.' };
 
     colState.activeSurvival = {
       waveIndex: 0,
@@ -128,6 +156,8 @@ export class ColosseumService {
       maxHp: wave1.hp,
       pAtk: wave1.pAtk,
       pDef: wave1.pDef,
+      playerHp,
+      playerMaxHp,
       totalBadgesAccumulated: 0,
       isCompleted: false
     };
@@ -185,6 +215,19 @@ export class ColosseumService {
       return { success: true, nextWave: s.waveIndex + 1 };
     }
 
+    const incomingDamage = Math.max(1, Math.floor(s.pAtk * 1.4 - (pStats.def || 1800) * 0.3));
+    const currentPlayerHp = Number.isFinite(Number(s.playerHp)) ? Number(s.playerHp) : (Number(state.hp) || s.playerMaxHp || 1000);
+    s.playerHp = Math.max(0, currentPlayerHp - incomingDamage);
+    state.hp = s.playerHp;
+    hooks.log?.(`💥 ${s.waveData.name} contra-ataca e causa ${incomingDamage.toLocaleString()} de dano.`, 'danger');
+    if (s.playerHp <= 0) {
+      colState.survivalLosses++;
+      colState.activeSurvival = null;
+      hooks.log?.(`☠️ Desafio encerrado na Onda ${s.waveIndex + 1}.`, 'danger');
+      hooks.onUpdate?.();
+      return { success: true, isVictory: false, isDefeat: true, waveReached: s.waveIndex + 1 };
+    }
+
     hooks.onUpdate?.();
     return { success: true, isVictory: false, survival: s };
   }
@@ -196,20 +239,22 @@ export class ColosseumService {
     const colState = this.ensureState(state);
     const item = COLOSSEUM_SHOP_CATALOG.find(i => i.id === itemId);
     if (!item) return { success: false, message: 'Item não encontrado na Loja do Coliseu.' };
+    const itemDef = ALL_ITEMS[item.id];
+    if (!itemDef) return { success: false, message: 'Este prêmio ainda não está disponível no catálogo de itens.' };
 
     if (colState.badges < item.costBadges) {
       return { success: false, message: `Badges insuficientes. Requer ${item.costBadges} Colosseum Badges.` };
     }
 
-    colState.badges -= item.costBadges;
+    const quantity = item.quantity ?? 1;
+    if (!Number.isSafeInteger(quantity) || quantity <= 0) {
+      return { success: false, message: 'Quantidade de prêmio inválida.' };
+    }
     state.inventory = state.inventory || [];
-    state.inventory.push({
-      id: item.id,
-      itemId: item.id,
-      name: item.name,
-      uid: 'colosseum_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
-      count: 1
-    });
+    if (!addToInventory(state, itemDef.id || item.id, quantity, null, false, hooks, true)) {
+      return { success: false, message: 'Mochila cheia. Libere espaço antes de comprar este prêmio.' };
+    }
+    colState.badges -= item.costBadges;
 
     hooks.log?.(`🛒 Você adquiriu **${item.name}** por **${item.costBadges} Badges**!`, 'gain');
     hooks.onUpdate?.();

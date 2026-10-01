@@ -26,6 +26,8 @@ import { CANONICAL_RESOURCES } from '../../services/lifeActivities/ResourceDicti
 import { FISH_CATALOG } from '../fishing.js';
 import { PREY_CATALOG } from '../hunting.js';
 import { BROOCHES, BROOCH_JEWELS } from './broochJewels.js';
+import { COLOSSEUM_ITEMS } from './colosseum_items.js';
+import { CASTLE_SHOP_ITEMS } from './castle_shop_items.js';
 
 // Normaliza recursos canônicos de Life Activities para o catálogo oficial ALL_ITEMS
 const CANONICAL_RESOURCE_ITEMS = {};
@@ -103,7 +105,9 @@ export const ALL_ITEMS = {
   ...FISH_ITEMS,
   ...PREY_ITEMS,
   ...BROOCHES,
-  ...BROOCH_JEWELS
+  ...BROOCH_JEWELS,
+  ...COLOSSEUM_ITEMS,
+  ...CASTLE_SHOP_ITEMS
 };
 
 if (typeof window !== 'undefined') {

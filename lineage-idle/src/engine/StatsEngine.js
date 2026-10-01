@@ -82,14 +82,14 @@ export const ASTRAL_NODES = {
   midas_1: { id: 'midas_1', const: 'midas', name: 'Toque de Midas', icon: '🪙', desc: '+5% Ouro Ganho por nível', max: 10, cost: 1, stat: 'goldBoost', val: 0.05 },
   midas_2: { id: 'midas_2', const: 'midas', name: 'Sorte dos Deuses', icon: '🍀', desc: '+3% Taxa de Drop por nível', max: 10, cost: 1, stat: 'luckBoost', val: 0.03 },
   midas_3: { id: 'midas_3', const: 'midas', name: 'Sabedoria Ancestral', icon: '📚', desc: '+5% XP Bônus por nível', max: 10, cost: 1, stat: 'xpBoost', val: 0.05 },
-  midas_4: { id: 'midas_4', const: 'midas', name: 'Aceleração Temporal', icon: '⚡', desc: '+2% Velocidade de Ataque por nível', max: 10, cost: 2, stat: 'speed', val: 2 },
+  midas_4: { id: 'midas_4', const: 'midas', name: 'Aceleração Temporal', icon: '⚡', desc: '+2% Redução de Recarga por nível', max: 10, cost: 2, stat: 'cdr', val: 0.02 },
 };
 
 export function getAstralMasteryBonuses(state) {
   const out = {
     patkMult: 0, matkMult: 0, crit: 0, critDmg: 0,
     hpMult: 0, mpMult: 0, mpRegen: 0, defMult: 0,
-    goldBoost: 0, luckBoost: 0, xpBoost: 0, speed: 0
+    goldBoost: 0, luckBoost: 0, xpBoost: 0, cdr: 0
   };
   if (!state?.astralMastery || typeof state.astralMastery !== 'object') return out;
 
@@ -242,11 +242,11 @@ export function getEquipBonus(state, slot) {
     out = { ...out, ...scaled };
   }
 
-  ['atk','def','matk','mdef','hp','mp','eva','hit','crit','critDmg','cdr','speed','atkSpeed','castSpeed','mpRegen','hpRegen','stunChance','stunResist','blockRate','lifesteal','ssBonusPct','spsBonusPct','pveDamagePercent','damageTakenReductionPercent','pSkillPowerPercent','mSkillPowerPercent'].forEach(k => {
+  ['atk','def','matk','mdef','hp','mp','hpPercent','cpPercent','eva','hit','crit','critDmg','cdr','speed','atkSpeed','castSpeed','mpRegen','hpRegen','stunChance','stunResist','blockRate','lifesteal','ssBonusPct','spsBonusPct','pveDamagePercent','damageTakenReductionPercent','pSkillPowerPercent','mSkillPowerPercent'].forEach(k => {
     if (out[k]) {
       const scaled = Number(out[k]) * rarityMult * enchantMult * foundationMult;
       // Critical damage is stored as a fractional multiplier (for example 0.30 = +30%).
-      const fractionalStat = ['critDmg','cdr','stunResist','lifesteal','pveDamagePercent','damageTakenReductionPercent','pSkillPowerPercent','mSkillPowerPercent'].includes(k);
+      const fractionalStat = ['hpPercent','cpPercent','critDmg','cdr','stunChance','stunResist','lifesteal','pveDamagePercent','damageTakenReductionPercent','pSkillPowerPercent','mSkillPowerPercent'].includes(k);
       out[k] = fractionalStat ? Math.round(scaled * 1e6) / 1e6 : Math.floor(scaled);
     }
   });
@@ -269,7 +269,7 @@ export function getEquipBonus(state, slot) {
  * @returns {Object}
  */
 export function getTotalEquipBonuses(state) {
-  const totals = { atk: 0, def: 0, matk: 0, mdef: 0, hp: 0, mp: 0, eva: 0, hit: 0, crit: 0, critDmg: 0, cdr: 0, speed: 0, atkSpeed: 0, castSpeed: 0, mpRegen: 0, hpRegen: 0, stunChance: 0, stunResist: 0, blockRate: 0, lifesteal: 0, ssBonusPct: 0, spsBonusPct: 0, pveDamagePercent: 0, damageTakenReductionPercent: 0, pSkillPowerPercent: 0, mSkillPowerPercent: 0, xpBoost: 0, goldBoost: 0, adenaBoost: 0, str: 0, dex: 0, con: 0, int: 0, wit: 0, men: 0 };
+  const totals = { atk: 0, def: 0, matk: 0, mdef: 0, hp: 0, mp: 0, hpPercent: 0, cpPercent: 0, eva: 0, hit: 0, crit: 0, critDmg: 0, cdr: 0, speed: 0, atkSpeed: 0, castSpeed: 0, mpRegen: 0, hpRegen: 0, stunChance: 0, stunResist: 0, blockRate: 0, lifesteal: 0, ssBonusPct: 0, spsBonusPct: 0, pveDamagePercent: 0, damageTakenReductionPercent: 0, pSkillPowerPercent: 0, mSkillPowerPercent: 0, xpBoost: 0, goldBoost: 0, adenaBoost: 0, str: 0, dex: 0, con: 0, int: 0, wit: 0, men: 0 };
   if (!state.equipment) return totals;
   const seenUids = new Set();
   for (const slot of Object.keys(state.equipment)) {
@@ -457,7 +457,7 @@ export function getActiveSetBonuses(state) {
  * @returns {Object}
  */
 export function getCodexBonuses(state) {
-  const totals = { atk: 0, def: 0, matk: 0, mdef: 0, hp: 0, mp: 0, eva: 0, crit: 0 };
+  const totals = { atk: 0, def: 0, matk: 0, mdef: 0, hp: 0, mp: 0, eva: 0, crit: 0, critDmg: 0, lifesteal: 0, healPower: 0, allStats: 0 };
   const codex = state.codex || {};
   for (const [setId, setDef] of Object.entries(CODEX_SETS)) {
     const regList = codex[setId] || [];
@@ -478,6 +478,10 @@ export function getCodexBonuses(state) {
     totals.hp += Math.floor(cardB.maxHp || 0);
     totals.mp += Math.floor(cardB.maxMp || 0);
     totals.crit += Math.floor(cardB.critRate || 0);
+    totals.critDmg += Number(cardB.critDmg) || 0;
+    totals.lifesteal += Number(cardB.lifesteal) || 0;
+    totals.healPower += Number(cardB.healPower) || 0;
+    totals.allStats += Number(cardB.allStats) || 0;
   }
 
   return totals;
@@ -846,7 +850,10 @@ export function getStats(state) {
   mpRegenBonus += sk('mp_recovery') * 0.5;
 
   const eb = getTotalEquipBonuses(state);
+  const codexB = getCodexBonuses(state);
+  const cardSocketB = CardCodexService.getEquippedSocketBonuses(state);
   mpRegenBonus += Number(eb.mpRegen) || 0;
+  mpRegenBonus += Number(cardSocketB.mpRegen) || 0;
   const setRes = getActiveSetBonuses(state);
   const setB = setRes.statTotals;
 
@@ -882,8 +889,13 @@ export function getStats(state) {
   // Shot to a small bow/crossbow attack bonus so its passive remains useful.
   if (isBowEquipped) buffAtkMult += sk('long_shot') * 0.05;
   let buffCrit = (sk('focus') * 5) + (sk('critical_chance') * 5) + (sk('eye_of_slayer') * 2) + (sk('assassin_critical_dagger') * 5) + (sk('shadow_sense') * 5);
+  buffAtk += Number(cardSocketB.pAtk) || 0;
+  buffMatk += Number(cardSocketB.mAtk) || 0;
+  buffDef += Number(cardSocketB.pDef) || 0;
+  buffMdef += Number(cardSocketB.mDef) || 0;
+  buffCrit += Number(cardSocketB.critRate) || 0;
   let buffCritDmg = (sk('critical_power') * 0.05) + (sk('assassin_critical_dagger') * 0.05) + (sk('death_whisper') * 0.25);
-  buffCritDmg += Number(eb.critDmg) || 0;
+  buffCritDmg += (Number(eb.critDmg) || 0) + (Number(codexB.critDmg) || 0) + (Number(cardSocketB.critDmg) || 0);
   let augmentationMpCostReduction = 0;
   let skillBuffMpCostReduction = 0;
   let skillBuffCdr = sk('unleashed_potential') * 0.05;
@@ -1046,7 +1058,7 @@ export function getStats(state) {
   goldBoost += astralB.goldBoost;
   luckBoost += astralB.luckBoost;
   xpBoost += astralB.xpBoost;
-  buffSpd += astralB.speed;
+  skillBuffCdr += astralB.cdr;
 
   // Process Legacy Passives (Herança de Classes Passadas - 25% Eficácia da Linhagem)
   let legacyCrit = 0;
@@ -1292,6 +1304,8 @@ export function getStats(state) {
   let cdr = sk('quickRecycle') * 0.10 + skillBuffCdr + passiveCooldownReduction;
   cdr += Number(eb.cdr) || 0;
   cdr += (Number(eb.castSpeed) || 0) / 100;
+  cdr += (Number(eb.atkSpeed) || 0) / 100;
+  cdr += ((Number(cardSocketB.castSpeed) || 0) + (Number(cardSocketB.atkSpeed) || 0)) / 100;
   let pSkillCdr = skillBuffPSkillCdr + passivePSkillCooldownReduction;
   let mSkillCdr = skillBuffMSkillCdr + passiveMSkillCooldownReduction;
 
@@ -1308,6 +1322,7 @@ export function getStats(state) {
 
       if (item.isMasterwork && item.masterworkBonus) {
         buffSpd += (item.masterworkBonus.atkSpdPct || 0) * 100;
+        cdr += Number(item.masterworkBonus.atkSpdPct) || 0;
         cdr += Number(item.masterworkBonus.castSpdPct) || 0;
         masterworkHpBonusFlat += Number(item.masterworkBonus.hpBonus) || 0;
         mpRegenBonus += (item.masterworkBonus.mpRegenPct || 0);
@@ -1347,7 +1362,6 @@ export function getStats(state) {
   };
   const monsterPDefMult = 1 - activeMonsterDebuffPercent('monster_hex');
   const monsterMdefMult = 1 - activeMonsterDebuffPercent('monster_gloom');
-  const codexB = getCodexBonuses(state);
   // Process Soul Crystal (SA) Bonus on Both Equipped Weapons (Dual Arsenal)
   let saCrit = 0, saPatkMult = 0, saMatkMult = 0, saSpeed = 0, saHpMult = 0, saAccuracy = 0;
   for (const wpnKey of ['weapon', 'weapon2']) {
@@ -1369,9 +1383,9 @@ export function getStats(state) {
     if (itemSa) {
       if (itemSa.stat === 'crit' || itemSa.key === 'focus') saCrit += (itemSa.val || 0);
       else if (itemSa.stat === 'patk' || itemSa.key === 'might') buffAtkMult += (typeof itemSa.val === 'number' && itemSa.val < 1 ? itemSa.val : (itemSa.val || 0) / 100);
-      else if (itemSa.stat === 'castSpd' || itemSa.key === 'acumen') {
-        const castSpeed = Number(itemSa.val) || 0;
-        cdr += castSpeed > 1 ? castSpeed / 100 : castSpeed;
+      else if (['castSpd', 'atkSpd'].includes(itemSa.stat) || ['acumen', 'haste'].includes(itemSa.key)) {
+        const speedBonus = Number(itemSa.val) || 0;
+        cdr += speedBonus > 1 ? speedBonus / 100 : speedBonus;
       }
       else if (itemSa.stat === 'hp' || itemSa.key === 'health') elixirHpMult += (typeof itemSa.val === 'number' && itemSa.val < 1 ? itemSa.val : (itemSa.val || 0) / 100);
       else if (itemSa.stat === 'matk' || itemSa.key === 'empower') buffMatk += Math.floor(baseMatk * (typeof itemSa.val === 'number' && itemSa.val < 1 ? itemSa.val : (itemSa.val || 0) / 100));
@@ -1391,12 +1405,12 @@ export function getStats(state) {
   // Calculate consolidated primary attributes (Base Race + Tattoos/Dyes + Equipment + Set Bonuses)
   const baseAttrs = getBaseAttributes(state.race, state.class);
   const primaryStats = {
-    str: (baseAttrs.str || 0) + (setRes.primaryStats?.str || 0) + (Number(eb.str) || 0) + tatStr,
-    dex: (baseAttrs.dex || 0) + (setRes.primaryStats?.dex || 0) + (Number(eb.dex) || 0) + tatDex,
-    con: (baseAttrs.con || 0) + (setRes.primaryStats?.con || 0) + (Number(eb.con) || 0) + tatCon + skillBuffCon,
-    int: (baseAttrs.int || 0) + (setRes.primaryStats?.int || 0) + (Number(eb.int) || 0) + tatInt,
-    wit: (baseAttrs.wit || 0) + (setRes.primaryStats?.wit || 0) + (Number(eb.wit) || 0) + tatWit + (elementalAcumenActive ? 1 : 0),
-    men: (baseAttrs.men || 0) + (setRes.primaryStats?.men || 0) + (Number(eb.men) || 0) + tatMen + skillBuffMen
+    str: (baseAttrs.str || 0) + (setRes.primaryStats?.str || 0) + (Number(eb.str) || 0) + tatStr + (Number(codexB.allStats) || 0),
+    dex: (baseAttrs.dex || 0) + (setRes.primaryStats?.dex || 0) + (Number(eb.dex) || 0) + tatDex + (Number(codexB.allStats) || 0),
+    con: (baseAttrs.con || 0) + (setRes.primaryStats?.con || 0) + (Number(eb.con) || 0) + tatCon + skillBuffCon + (Number(codexB.allStats) || 0),
+    int: (baseAttrs.int || 0) + (setRes.primaryStats?.int || 0) + (Number(eb.int) || 0) + tatInt + (Number(codexB.allStats) || 0),
+    wit: (baseAttrs.wit || 0) + (setRes.primaryStats?.wit || 0) + (Number(eb.wit) || 0) + tatWit + (elementalAcumenActive ? 1 : 0) + (Number(codexB.allStats) || 0),
+    men: (baseAttrs.men || 0) + (setRes.primaryStats?.men || 0) + (Number(eb.men) || 0) + tatMen + skillBuffMen + (Number(codexB.allStats) || 0)
   };
   state.primaryStats = primaryStats;
 
@@ -1434,6 +1448,8 @@ export function getStats(state) {
 
   const dollsB = getDollsBonuses(state);
   const certB  = getCertificationsBonuses(state);
+  cdr += Number(certB.atkSpdPercent) || 0;
+  cdr += (Number(certB.atkSpd) || 0) / 100;
   cdr += (Number(certB.castSpd) || 0) / 100;
   const towerMult = 1 + ((state.tower?.highestFloor || 0) * 0.01);
 
@@ -1453,14 +1469,14 @@ export function getStats(state) {
   const finalAtk  = Math.floor((baseAtk + (Number(eb.atk) || 0) + (Number(setB.atk) || 0) + buffAtk + codexB.atk + dollsB.atk + certB.atk) * atkMult * towerMult * certAtkMult * resAtkMult);
   const shieldDefBuff = isShieldEquipped ? Math.floor(equippedShieldDef * skillBuffShieldDefPercent) : 0;
   const finalDef  = Math.floor((baseDef + (Number(eb.def) || 0) + (Number(setB.def) || 0) + buffDef + shieldDefBuff + codexB.def + dollsB.def + certB.def) * defMult * towerMult * certDefMult * resDefMult * monsterPDefMult);
-  const finalEva  = Math.floor(baseEva + (Number(eb.eva) || 0) + (Number(setB.eva) || 0) + codexB.eva + dollsB.eva + (certB.evaAdd || 0) + skillBuffEva);
+  const finalEva  = Math.floor(baseEva + (Number(eb.eva) || 0) + (Number(setB.eva) || 0) + codexB.eva + dollsB.eva + (certB.evaAdd || 0) + skillBuffEva + (Number(cardSocketB.eva) || 0));
   const finalMatk = Math.floor((baseMatk + (Number(eb.matk) || 0) + (Number(setB.matk) || 0) + buffMatk + codexB.matk + dollsB.matk + certB.matk) * towerMult * certMatkMult * resMatkMult);
   const finalMdef = Math.floor((baseMdef + (Number(eb.mdef) || 0) + (Number(setB.mdef) || 0) + buffMdef + codexB.mdef + dollsB.mdef + certB.mdef) * towerMult * certMdefMult * resMdefMult * monsterMdefMult);
   const finalCrit = (Number(eb.crit) || 0) + (Number(setB.crit) || 0) + codexB.crit + dollsB.crit + certB.crit + astralB.crit + saCrit + augCrit + legacyCrit + buffCrit + resonanceCrit;
 
   const lootBonus  = (Number(race?.stats?.lootBonus) || 0) + (Number(cls?.base?.lootBonus) || 0) + itemLootBonus + luckBoost;
   const rawAtkSpd  = ((buffSpd + (dollsB.speed || 0)) / 100) + (certB.atkSpdPercent || 0);
-  const lifeDrain  = ((Number(eb.lifesteal) || 0) + (dollsB.lifesteal || 0) + ((setB.lifesteal || 0) / 100)) + resonanceLifeDrain + skillBuffLifeDrain;
+  const lifeDrain  = ((Number(eb.lifesteal) || 0) + (Number(codexB.lifesteal) || 0) + (Number(cardSocketB.lifesteal) || 0) + (dollsB.lifesteal || 0) + ((setB.lifesteal || 0) / 100)) + resonanceLifeDrain + skillBuffLifeDrain;
   const craftBonus = itemCraftBonus;
 
   const baseCritDmg = 1 + sk('executioner') * 0.15 + astralB.critDmg + buffCritDmg;
@@ -1491,14 +1507,15 @@ export function getStats(state) {
   // 3. Velocidade de Ataque: Retornos decrescentes suaves acima de 2.0x
   const atkSpd = rawAtkSpd > 2.0 ? (2.0 + Math.log10(1 + (rawAtkSpd - 2.0) * 0.5)) : rawAtkSpd;
 
-  const maxHp = Math.floor((100 + state.level * 10 + (sk('boostHp') + sk('boost_hp') + sk('vital_force')) * 60 + (elementWeaverArmorMasteryActive ? 100 : 0) + (elementalAcumenActive ? 700 : 0) + (expertArmorMasteryActive ? 200 : 0) + (wizardArmorMasteryGearActive || summonerArmorMasteryGearActive ? 60 : 0) + (Number(eb.hp) || 0) + (Number(setB.hp) || 0) + codexB.hp + dollsB.hp + setEnchantHp) * (1 + elixirHpMult + skillBuffMaxHpPercent) * certHpMult);
-  const maxMp = Math.floor((50 + state.level * 5 + (sk('boostMana') + sk('boost_mp') + sk('higher_mana')) * 30 + (elementalAcumenActive ? 700 : 0) + (Number(eb.mp) || 0) + (Number(setB.mp) || 0) + codexB.mp + dollsB.mp) * (1 + skillBuffMaxMpPercent) * certMpMult);
-  const maxCpMultiplier = 1 + (Number(certB.maxCpPercent) || 0) + skillBuffMaxCpPercent;
+  const maxHp = Math.floor((100 + state.level * 10 + (sk('boostHp') + sk('boost_hp') + sk('vital_force')) * 60 + (elementWeaverArmorMasteryActive ? 100 : 0) + (elementalAcumenActive ? 700 : 0) + (expertArmorMasteryActive ? 200 : 0) + (wizardArmorMasteryGearActive || summonerArmorMasteryGearActive ? 60 : 0) + (Number(eb.hp) || 0) + (Number(setB.hp) || 0) + codexB.hp + dollsB.hp + (Number(cardSocketB.maxHp) || 0) + setEnchantHp) * (1 + elixirHpMult + skillBuffMaxHpPercent + (Number(eb.hpPercent) || 0)) * certHpMult);
+  const maxMp = Math.floor((50 + state.level * 5 + (sk('boostMana') + sk('boost_mp') + sk('higher_mana')) * 30 + (elementalAcumenActive ? 700 : 0) + (Number(eb.mp) || 0) + (Number(setB.mp) || 0) + codexB.mp + dollsB.mp + (Number(cardSocketB.maxMp) || 0)) * (1 + skillBuffMaxMpPercent) * certMpMult);
+  const maxCpMultiplier = 1 + (Number(certB.maxCpPercent) || 0) + skillBuffMaxCpPercent + (Number(eb.cpPercent) || 0);
   const maxCp = Math.floor(maxHp * 0.60 * maxCpMultiplier + skillBuffMaxCpFlat);
 
   const rawStats = {
     atk: finalAtk || 1, def: finalDef || 0, eva: effectiveEvasion || 0, matk: finalMatk || 1, mdef: finalMdef || 0,
-    crit: effectiveCritRate, rawCrit, critOverflowDmgBonus, critDmg, loot: 1 + lootBonus, speed: 1 + (buffSpd + (setB.speed || 0)) / 100 + (certB.speedPercent || 0), movementSpeedPercent: Math.max(-0.90, Math.min(2, skillBuffMovementSpeedPercent + passiveMovementSpeedPercent)), cdr, pSkillCdr, mSkillCdr,
+    crit: effectiveCritRate, rawCrit, critOverflowDmgBonus, critDmg, loot: 1 + lootBonus, speed: 1 + (buffSpd + (Number(eb.speed) || 0) + (setB.speed || 0)) / 100 + (certB.speedPercent || 0), movementSpeedPercent: Math.max(-0.90, Math.min(2, skillBuffMovementSpeedPercent + passiveMovementSpeedPercent + ((Number(eb.speed) || 0) / 100) + ((Number(setB.speed) || 0) / 100) + (Number(certB.speedPercent) || 0))), cdr, pSkillCdr, mSkillCdr,
+    healPower: Math.max(0, (Number(codexB.healPower) || 0) + (Number(cardSocketB.healPower) || 0)) / 100,
     pAccuracy: skillBuffPAccuracy + saAccuracy + (Number(eb.hit) || 0), mAccuracy: skillBuffMAccuracy + saAccuracy + (Number(eb.hit) || 0),
     ssBonusPct: Number(eb.ssBonusPct) || 0, spsBonusPct: Number(eb.spsBonusPct) || 0,
     buffDurationPercent,

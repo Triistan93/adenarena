@@ -65,4 +65,20 @@ describe('Hero Pillar — Subtab 4: Astral Mastery (Maestria Astral)', () => {
     assert.strictEqual(loaded.astralMastery.phoenix_4, 8);
     assert.strictEqual(loaded.astralMastery.midas_3, 5);
   });
+
+  it('5. Temporal Acceleration converts its speed bonus into skill cooldown reduction', () => {
+    const baseState = DEFAULT_STATE();
+    baseState.level = 76;
+    baseState.race = 'human';
+    baseState.class = 'gladiator';
+
+    const acceleratedState = JSON.parse(JSON.stringify(baseState));
+    acceleratedState.astralMastery = { midas_4: 1 };
+
+    const baseStats = getStats(baseState);
+    const acceleratedStats = getStats(acceleratedState);
+
+    assert.equal(acceleratedStats.cdr, baseStats.cdr + 0.02);
+    assert.equal(acceleratedStats.atkSpd, baseStats.atkSpd);
+  });
 });

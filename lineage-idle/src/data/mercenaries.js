@@ -58,7 +58,7 @@ export const MERCENARY_TRAITS = {
     id: 'veteran',
     name: 'Veterano',
     icon: '🎖️',
-    desc: '+10% Poder geral nas expedições',
+    desc: '+10% Poder de Esquadrão',
     powerBonusPct: 0.10,
     color: '#eab308'
   },
@@ -75,7 +75,7 @@ export const MERCENARY_TRAITS = {
     id: 'cautious',
     name: 'Cauteloso',
     icon: '🛡️',
-    desc: '-25% Dano sofrido em perigos, +10% duração',
+    desc: '-25% Dano sofrido em perigos',
     hazardDamageReduction: 0.25,
     durationMult: 1.10,
     color: '#3b82f6'
@@ -92,7 +92,7 @@ export const MERCENARY_TRAITS = {
     id: 'lucky',
     name: 'Sortudo',
     icon: '🍀',
-    desc: '+15% Chance de baú bônus e relíquias raras',
+    desc: '+15% Chance de baú bônus',
     bonusChestChance: 0.15,
     color: '#22c55e'
   },
@@ -125,7 +125,7 @@ export const MERCENARY_SPECIALIZATIONS = {
     role: 'Batedor & Navegador',
     desc: 'Domina trilhas secretas pelos ermos de Aden. Encurta a marcha e encontra atalhos.',
     synergyName: 'Passo Ágil',
-    synergyDesc: '-20% Duração da expedição (+20% nós de recursos extras)',
+    synergyDesc: '-20% Duração da expedição (+25% chance de materiais extras)',
     speedReduction: 0.20,
     extraResourceChance: 0.20
   },
@@ -136,7 +136,7 @@ export const MERCENARY_SPECIALIZATIONS = {
     role: 'Infiltrador & Gatuno',
     desc: 'Especialista em desarmar armadilhas antigas e arrombar arcas de tesouro.',
     synergyName: 'Mãos de Seda',
-    synergyDesc: '+35% Chance de Baú Bônus (-40% dano de armadilhas)',
+    synergyDesc: '+35% Chance de Baú Bônus (-25% dano de perigos)',
     bonusChestChance: 0.35,
     trapMitigation: 0.40
   },
@@ -147,7 +147,7 @@ export const MERCENARY_SPECIALIZATIONS = {
     role: 'Dano Arcano & Elemental',
     desc: 'Canaliza correntes arcanas para dispersar barreiras mágicas e demônios.',
     synergyName: 'Sifão Astral',
-    synergyDesc: '+50% Cacos Astrais (+25% chance de câmara secreta)',
+    synergyDesc: '+50% Cacos Astrais',
     extraShardsPct: 0.50,
     secretChamberChance: 0.25
   },
@@ -158,7 +158,7 @@ export const MERCENARY_SPECIALIZATIONS = {
     role: 'Luz Sagrada & Suporte',
     desc: 'Purifica ferimentos de batalha, sustenta a moral e expurga maldições.',
     synergyName: 'Bênção de Eva',
-    synergyDesc: '+30% XP para o esquadrão (-25% dano residual da caravana)',
+    synergyDesc: '+30% XP para o esquadrão (-20% dano de perigos)',
     extraXpPct: 0.30,
     residualMitigation: 0.25
   }

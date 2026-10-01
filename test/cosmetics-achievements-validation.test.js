@@ -82,4 +82,112 @@ describe('Hero Pillar — Subtab 6: Cosmetics & Achievements (Cosméticos & Conq
     assert.strictEqual(loaded.achievements.claimed.length, 2);
     assert.ok(loaded.achievements.claimed.includes('ach_first_blood'));
   });
+
+  it('6. Cosmetic equip: rejects an unknown category without reporting success or saving', () => {
+    const state = DEFAULT_STATE();
+    const events = { saves: 0, updates: 0 };
+
+    const result = CosmeticService.equipCosmetic(state, 'unknown', 'aura_crimson_warlord', {
+      save: () => events.saves++,
+      updateAllUI: () => events.updates++
+    });
+
+    assert.deepStrictEqual(result, { success: false, reason: 'invalid_category' });
+    assert.strictEqual(state.cosmetics.activeAura, 'aura_none');
+    assert.strictEqual(events.saves, 0);
+    assert.strictEqual(events.updates, 0);
+  });
+
+  it('7. Cosmetic purchase: charges once, unlocks and equips; duplicate purchase is rejected', () => {
+    const state = DEFAULT_STATE();
+    state.gold = 2_000_000;
+    const callbacks = { log: () => {}, save: () => {}, updateAllUI: () => {} };
+
+    const purchase = CosmeticService.buyCosmetic(state, 'aura', 'aura_crimson_warlord', callbacks);
+    assert.strictEqual(purchase.success, true);
+    assert.strictEqual(state.gold, 1_000_000);
+    assert.ok(state.cosmetics.unlockedAuras.includes('aura_crimson_warlord'));
+    assert.strictEqual(state.cosmetics.activeAura, 'aura_crimson_warlord');
+
+    const duplicate = CosmeticService.buyCosmetic(state, 'aura', 'aura_crimson_warlord', callbacks);
+    assert.strictEqual(duplicate.success, false);
+    assert.strictEqual(duplicate.reason, 'already_owned');
+    assert.strictEqual(state.gold, 1_000_000);
+  });
+
+  it('8. Hero-only aura: blocks ordinary characters and grants the aura to Olympiad heroes', () => {
+    const state = DEFAULT_STATE();
+    state.gold = 500_000;
+    const callbacks = { log: () => {}, save: () => {}, updateAllUI: () => {} };
+
+    const locked = CosmeticService.buyCosmetic(state, 'aura', 'aura_hero_golden', callbacks);
+    assert.strictEqual(locked.success, false);
+    assert.strictEqual(locked.reason, 'hero_required');
+    assert.strictEqual(state.gold, 500_000);
+
+    state.isHero = true;
+    const autoAura = CosmeticService.getActiveAura(state);
+    assert.strictEqual(autoAura.id, 'aura_hero_golden');
+    assert.ok(state.cosmetics.unlockedAuras.includes('aura_hero_golden'));
+    const equipped = CosmeticService.equipCosmetic(state, 'aura', 'aura_hero_golden', callbacks);
+    assert.strictEqual(equipped.success, true);
+    assert.strictEqual(state.gold, 500_000);
+    assert.strictEqual(state.cosmetics.activeAura, 'aura_hero_golden');
+  });
+
+  it('9. Hero-only aura: rechecks eligibility when equipping a legacy-unlocked aura', () => {
+    const state = DEFAULT_STATE();
+    state.cosmetics = {
+      unlockedAuras: ['aura_none', 'aura_hero_golden'],
+      activeAura: 'aura_none',
+      unlockedFrames: ['frame_default'], activeFrame: 'frame_default',
+      unlockedTitles: ['title_none'], activeTitle: 'title_none'
+    };
+
+    const result = CosmeticService.equipCosmetic(state, 'aura', 'aura_hero_golden', {
+      log: () => {}, save: () => {}, updateAllUI: () => {}
+    });
+
+    assert.strictEqual(result.success, false);
+    assert.strictEqual(result.reason, 'hero_required');
+    assert.strictEqual(state.cosmetics.activeAura, 'aura_none');
+  });
+
+  it('10. Cosmetic state: repairs malformed legacy unlock lists and active ids safely', () => {
+    const state = DEFAULT_STATE();
+    state.isHero = true;
+    state.cosmetics = {
+      unlockedAuras: 'aura_none',
+      activeAura: 'removed_aura',
+      unlockedFrames: { frame_gold: true },
+      activeFrame: 'removed_frame',
+      unlockedTitles: null,
+      activeTitle: 'removed_title'
+    };
+
+    assert.doesNotThrow(() => CosmeticService.getActiveAura(state));
+    assert.ok(Array.isArray(state.cosmetics.unlockedAuras));
+    assert.ok(state.cosmetics.unlockedAuras.includes('aura_none'));
+    assert.ok(state.cosmetics.unlockedAuras.includes('aura_hero_golden'));
+    assert.deepEqual(state.cosmetics.unlockedFrames, ['frame_default']);
+    assert.deepEqual(state.cosmetics.unlockedTitles, ['title_none']);
+    assert.equal(state.cosmetics.activeAura, 'aura_none');
+    assert.equal(state.cosmetics.activeFrame, 'frame_default');
+    assert.equal(state.cosmetics.activeTitle, 'title_none');
+  });
+
+  it('11. Cosmetic purchase rejects corrupted Adena without granting the item', () => {
+    const state = DEFAULT_STATE();
+    state.gold = 'invalid-balance';
+    let saves = 0;
+    const beforeUnlocked = structuredClone(state.cosmetics?.unlockedAuras);
+
+    const result = CosmeticService.buyCosmetic(state, 'aura', 'aura_crimson_warlord', { save: () => saves++ });
+
+    assert.deepEqual(result, { success: false, reason: 'insufficient_funds' });
+    assert.equal(state.gold, 'invalid-balance');
+    assert.equal(state.cosmetics.unlockedAuras.includes('aura_crimson_warlord'), false);
+    assert.equal(saves, 0);
+    if (beforeUnlocked) assert.deepEqual(state.cosmetics.unlockedAuras, beforeUnlocked);
+  });
 });

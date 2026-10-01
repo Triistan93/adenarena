@@ -118,4 +118,32 @@ describe('Hero Pillar — Subtab 7: Quests & Battle Pass (Missões & Passe)', ()
     assert.strictEqual(loaded.battlePass.unlockedPremium, true);
     assert.strictEqual(loaded.battlePass.claimedFree.length, 2);
   });
+
+  it('6. Battle Pass craft-point rewards are credited on both free and premium tracks', () => {
+    const state = DEFAULT_STATE();
+    state.battlePass = { xp: 500, claimedFree: [], claimedPremium: [], unlockedPremium: true };
+    state.craftXp = 7;
+
+    claimPassReward(state, 3, 'free');
+    assert.equal(state.craftXp, 27);
+    assert.ok(state.battlePass.claimedFree.includes(3));
+
+    state.battlePass.xp = 1750;
+    claimPassReward(state, 7, 'premium');
+    assert.equal(state.craftXp, 127);
+    assert.ok(state.battlePass.claimedPremium.includes(7));
+  });
+
+  it('7. Quest progress accepts only finite positive amounts and never stores progress above its target', () => {
+    const state = DEFAULT_STATE();
+    triggerQuestEvent(state, 'kill', -4);
+    triggerQuestEvent(state, 'kill', Infinity);
+    triggerQuestEvent(state, 'kill', '3');
+    triggerQuestEvent(state, 'kill', 1.5);
+    assert.equal(state.quests.progress.d_kills, undefined);
+
+    triggerQuestEvent(state, 'kill', 500);
+    assert.equal(state.quests.progress.d_kills, QUEST_DEFS.daily.find(q => q.id === 'd_kills').target);
+    assert.equal(state.quests.progress.w_kills, QUEST_DEFS.weekly.find(q => q.id === 'w_kills').target);
+  });
 });

@@ -8,20 +8,35 @@ import { CardCodexService } from '../lineage-idle/src/services/CardCodexService.
 import { DEFAULT_STATE } from '../lineage-idle/src/core/StateManager.js';
 
 describe('Glory Pillar Deep Validation — Suite 3: No-Duplication & Loss Prevention', () => {
-  it('1. Rapid Multi-Claim Immunity (Idempotence): Executing ranking tribute claim 10 times in parallel yields exactly 1 reward', () => {
+  it('1. Rapid Multi-Claim Immunity (Idempotence): Executing ranking tribute claim 10 times in parallel yields exactly 1 reward', async () => {
     const state = DEFAULT_STATE();
+    state.heroName = 'IdempotenceDisposable';
     state.lastRankingRewardClaim = 0;
     state.adenCoins = 0;
     state.gold = 0;
+    const previousWindow = globalThis.window;
+    globalThis.window = {
+      FirebaseBridge: {
+        getCurrentUserId: () => 'idempotence-disposable-user',
+        fetchLeaderboard: async category => category === 'cp' ? [
+          { userId: 'idempotence-disposable-user', charName: 'IdempotenceDisposable', combatPower: 1000 }
+        ] : []
+      }
+    };
+    try {
+      await RankingService.getLeaderboard('cp', state, { forceRefresh: true });
+      let successes = 0;
+      for (let i = 0; i < 10; i++) {
+        const res = RankingService.claimRankingReward(state);
+        if (res.success) successes++;
+      }
 
-    let successes = 0;
-    for (let i = 0; i < 10; i++) {
-      const res = RankingService.claimRankingReward(state);
-      if (res.success) successes++;
+      assert.equal(successes, 1, 'Exactly 1 claim out of 10 rapid attempts must succeed');
+      assert.ok(state.lastRankingRewardClaim > 0);
+    } finally {
+      if (previousWindow === undefined) delete globalThis.window;
+      else globalThis.window = previousWindow;
     }
-
-    assert.equal(successes, 1, 'Exactly 1 claim out of 10 rapid attempts must succeed');
-    assert.ok(state.lastRankingRewardClaim > 0);
   });
 
   it('2. Castle Tax Claim Idempotence: Claiming castle taxes 10 times results in exactly 1 payout', () => {

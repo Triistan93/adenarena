@@ -2949,3 +2949,835 @@ Validação: teste do registro e resolvedor de retratos passou **4/4**, cobrindo
 Ao preparar a publicação, uma regressão nova detectou referências `/img//img/` em `lineage-idle/art.js`, `CharacterCreation.tsx` e `LoginScreen.tsx`, além de caminhos de fallback inválidos para o mago Dark Elf e os retratos de Orc/Kamael. Corrigi os caminhos para o diretório público real e alinhei os fallbacks femininos de Fighter/Death Knight Élfico aos retratos próprios da classe. O registro de raça/classe/gênero mantém 149 pares de classe da fila e seus dois gêneros; aliases duplicados representam IDs alternativos da mesma classe canônica.
 
 Validação: a regressão falhava antes da correção e agora verifica raízes duplicadas, existência física de cada asset referenciado e caminhos de fallback élficos. `npm test` passou com 1.070/1.070; `npm run build` passou com o aviso conhecido de chunks acima de 1,5 MiB; `git diff --check` passou. Nenhum save foi acessado ou alterado. A publicação será feita por push em `main`, que aciona a integração Git do Vercel se o projeto estiver conectado ao repositório.
+
+#### Auditoria integral das telas e fluxos de Aden Arena (início: 01/10/2026)
+
+Este novo capítulo inicia o objetivo de percorrer as 30 áreas do jogo na ordem solicitada, incluindo cada subtela, modal, estado e ação; corrigir defeitos reproduzidos; implementar sistemas ausentes; e melhorar a experiência sem perder a identidade de Aden Arena. O escopo e o procedimento por área estão registrados em `docs/PLANO_AUDITORIA_INTEGRAL_DAS_TELAS.md`.
+
+Decisões confirmadas pelo usuário: percorrer todas as subtelas/ações, seguir a lista original, completar sistemas ausentes, permitir reformulações que melhorem a experiência, usar somente dados descartáveis em economia e verificar o consumo do agente a cada 30 minutos. Nenhuma transação, contato com jogador real ou alteração em save real será usada para testes.
+
+O primeiro domínio é Combate e Zonas. A primeira investigação será mapear todas as entradas e estados visuais da área e ligar cada ação ao cálculo/serviço de produção; os resultados desta área não serão extrapolados para as demais.
+
+No início desta sessão, `main` estava limpa e sincronizada no commit `8b8a6cce480009c9c97d2318f25b51c21c48650b`. O limite reportava 11% de uso na janela de cinco horas e 67% na janela semanal; o reset da janela de cinco horas está confirmado pela API às 03:39:57 BRT de 01/10/2026. Foi criada uma automação de heartbeat a cada 30 minutos para medir e informar os limites e retomar o objetivo.
+
+O desligamento local está solicitado para 06:00 BRT de 01/10/2026. Antes dele, o progresso desta tarefa deverá ser salvo aqui, validado e enviado em commit/push a `main`; o push deve acionar a integração de deploy do Vercel. Este capítulo será atualizado com evidências e pendências no checkpoint final. A auditoria integral permanece aberta até haver evidência própria para todas as áreas.
+
+##### Primeiro checkpoint — Combate e Zonas (01/10/2026, 00:25 BRT)
+
+Mapeei as 32 zonas configuradas: todas apontam para pelo menos um monstro existente, chefe existente, saga, requisito de nível/CP e mapa físico. Com estados descartáveis no motor de combate real, testei a entrada em cada zona usando exatamente os mínimos configurados; **32/32** selecionaram um monstro válido.
+
+Reproduzi uma falha visual na seleção de zonas: o catálogo declara cidades pelo campo `town`, mas os cartões procuravam `isTown`, então nenhum selo “Vila” era exibido. Acrescentei `test/zone-map-rendering.test.js`; ele falhou antes da correção e agora verifica que Talking Island mostra o selo e Elven Forest não. A interface aceita ambos os nomes de propriedade para manter compatibilidade.
+
+Reproduzi uma falha no controle da velocidade: o botão tentava reiniciar um `combatInterval` local que nunca era o temporizador mantido pelo `CombatEngine`; assim a tela podia mostrar 2x sem acelerar a luta. O atalho Espaço seguia outra lógica, mostrava 4x e não atualizava o timer. Implementei `setCombatSpeed` no motor e conectei botão e atalho à mesma operação, com os valores suportados 1x (200 ms) e 2x (100 ms). Removi as declarações locais que induziam à ligação errada. `test/combat-speed-control.test.js` valida o cancelamento do intervalo anterior, o novo intervalo efetivo e a normalização de 4x para 1x.
+
+Verificação: `npm test` passou **1.072/1.072**; `npm run build` concluiu e mantém apenas o aviso de bundle acima de 1,5 MiB. Os testes focados de mapa, jornada e bloqueio por CP passaram **14/14**. Os dados foram descartáveis; saves reais e áreas econômicas não foram acessados.
+
+A tentativa de abrir a aplicação local no navegador foi bloqueada por uma preferência salva do navegador para `127.0.0.1`; a própria política impede trocar de navegador, iniciar um navegador headless ou usar CDP para contornar. Por isso, combate/zona continuam sem validação visual manual e sua cobertura é parcial. Ainda faltam ações de Soulshot, auto-poções, pausa/retomada, dificuldade, recompensas, morte/ressurreição e os subestados visuais do mapa.
+
+Ao percorrer a trilha de drops encontrei outra falha: o multiplicador `dropMult` da dificuldade era aplicado à tabela genérica da zona, mas não a `monster.drops` (incluindo livros e itens configurados no monstro), apesar do painel prometer bônus nos drops. Extraí o cálculo para `calculateConfiguredDropChance` no motor e liguei-o à resolução de recompensas de produção, combinando chance-base, penalidade de nível, taxa de item e dificuldade. A regressão `test/combat-difficulty-drop-rate.test.js` comprova as taxas Normal, Difícil e Infernal; o efeito é chamado pelo caminho de vitória em `processMonsterDefeat`.
+
+Formalizei a verificação de conteúdo/progressão em `test/combat-zone-integrity.test.js`: valida os dados e percorre todas as zonas pelo serviço de produção, incluindo spawn de chefe após 50 abates. Na última execução, os testes dirigidos de mapa, velocidade, dificuldade/drop, limites de dificuldade e as 32 zonas passaram **7/7**.
+
+O controle da dificuldade também foi checado nas fronteiras de nível: Difícil abre no 40, Pesadelo no 60 e Infernal no 76. A interface reflete os estados bloqueados/desbloqueados, e `test/hunting-difficulty.test.js` confirma a alteração de HP, ataque, defesa, experiência e Adena do monstro em cada modo, além dos locks um nível antes de cada requisito.
+
+O uso consultado às 00:23 BRT estava em 12% na janela de cinco horas e 68% na semanal, com reset confirmado às 03:39:57 BRT. As tarefas de checkpoint e desligamento foram registradas no Agendador do Windows: checkpoint às 05:45 e desligamento forçado às 06:00. A edição direta do texto do pursuing goal não está exposta na ferramenta disponível; mantive-o ativo e tornei o escopo verificável neste plano, no diário e no heartbeat de 30 minutos.
+
+##### Segundo checkpoint — Coliseu PvP (01/10/2026, 00:42 BRT)
+
+Investiguei o Coliseu no serviço e no HTML que a tela de produção gera. Com estados de personagem descartáveis, reproduzi que era possível iniciar duelos simultâneos e misturar duelo com sobrevivência, pagando várias apostas; que o oponente nunca derrotava o personagem no duelo; que as ondas não contra-atacavam; e que três recompensas da loja não existiam no catálogo geral. O pacote de poção Heroic CP também prometia vinte unidades, mas o item não tinha tipo restaurador nem fluxo de uso.
+
+Corrigi a exclusividade dos modos e os registros de vitória/derrota, fiz o inimigo da sobrevivência causar dano e encerrar a tentativa quando o HP chega a zero, registrei os três itens ausentes, e conectei a poção de CP ao serviço que restaura até o limite calculado. O item de circlet não anuncia mais um bônus PvP que o cálculo não implementa. A tela agora desativa inícios conflitantes, mostra o HP do jogador e escapa nomes provenientes do ranking antes de inserir o HTML.
+
+`test/colosseum-service.test.js` passou **8/8**, cobrindo sobreposição e cobrança, derrota e aposta perdida, vitória/recompensa, ondas e derrota, todos os itens e sua compra por badges, restauração de CP até o limite, e geração segura da interface. A primeira suíte completa revelou que minha edição inicial havia removido duas exportações antigas de `ConsumableService` ainda usadas pelo combate e pelos testes. Restaurei a API original junto à nova função de CP e repeti a verificação: `npm test` passou **1.085/1.085 em 117 suítes**, e `npm run build` concluiu. O build ainda avisa que há chunks acima de 1,5 MiB. Esta falha de integração foi corrigida antes do checkpoint.
+
+A janela de cinco horas resetou às 03:39:57 BRT; a consulta das 00:42 BRT após o reset registrou **21%** de uso nessa janela e **69%** na semanal. Nenhum save real ou transação externa foi usado. A validação visual manual continua bloqueada pelo navegador local e não é substituída pelo teste de renderização HTML. Assim, as áreas 1 e 2 permanecem **parciais**, e as outras 28 áreas seguem sem auditoria nesta execução; o escopo integral continua aberto.
+
+##### Terceiro checkpoint — Raids e chefes (01/10/2026, 00:49 BRT)
+
+Segui os botões da tela para `startRaidBoss`, `canEnterRaid` e `handleRaidVictory`, e a morte dos chefes até o serviço de recompensa. A regressão `test/raid-lifecycle.test.js` reproduziu que iniciar outro chefe durante um raid substituía o encontro ativo e consumia um segundo ingresso. Também reproduziu que `handleRaidVictory` podia ser invocado duas vezes para o mesmo chefe, duplicando Adena, XP, SP e todos os drops; quando vários itens caíam no mesmo milissegundo com o mesmo sorteio, seus UIDs ainda podiam colidir. A interface também deixava botões dos outros chefes clicáveis durante um raid e não refletia o limite de CP que o serviço já aplicava.
+
+O serviço agora rejeita qualquer início enquanto outro raid está ativo; vitória só é processada uma vez para o chefe atualmente ativo, e os drops simultâneos recebem UIDs distintos. A tela desativa os outros raids e explicita o CP exigido. A regressão percorre todos os bosses configurados para confirmar que cada nível/CP mínimo permite a entrada e que cada drop remete a item real (ou ao tratador de Aden Coins). As regressões do ciclo de raid e as mecânicas VFX/enrage/canalização existentes passaram **9/9**.
+
+Após as áreas 1–3, `npm test` passou **1.089/1.089 em 117 suítes**, `npm run build` concluiu com o aviso conhecido dos chunks grandes e `git diff --check` passou. `npm run typecheck` continua falhando pelos erros TypeScript preexistentes em UI/Firebase/Game.ts e imports não usados; os diagnósticos não apontam para os arquivos desta alteração. Nenhum save real ou transação externa foi usado. O browser segue bloqueado para validação visual manual, portanto as áreas 1–3 continuam parciais até percorrer as telas e mecânicas visualmente. As outras **27** áreas ainda não foram auditadas.
+
+##### Quarto checkpoint — Expedições e mercenários (01/10/2026, 00:55 BRT)
+
+Mantive `ExpeditionService.js` sem qualquer alteração e segui as ações pelos wrappers de produção da interface. A auditoria encontrou referências inválidas nos requisitos dos dilemas: `veteran`, `medic`, `striker` e `scout` não eram especializações disponíveis; `veteran` é um traço. Isso deixava escolhas legítimas inalcançáveis. A tela também permitia escolher sem cumprir requisito, embora a própria descrição do sistema dissesse que a interface deveria restringi-las. As opções de forçar/destrancar anunciavam 65%/90%, mas o serviço entrega recompensas garantidas e diferentes (+2/+5 Cacos Astrais). Algumas descrições de sinergias também divergiam do cálculo efetivo ou prometiam efeitos que não existem.
+
+Corrigi o roster exigido para usar `healer`/`mage`, `guardian`, `thief` e as diretivas/traços cadastrados; corrigi as descrições das duas opções sem chance; a tela agora carrega as definições de dilema diretamente, desativa opções sem requisito com explicação e o handler de ação repete a elegibilidade antes de chamar o serviço. Alinhei descrições visíveis de especializações/traços ao cálculo comprovado (por exemplo, materiais extras do Rastreador e mitigação real do Ladino/Curandeiro). `test/expedition-dilemma-policy.test.js` cobre cada requisito, as sinergias calculadas, a guarda da ação de produção e a tela renderizada sem depender de globais. Passou **6/6**; os testes prévios de integridade temporal e dos pilares imutáveis passaram **12/12**.
+
+O bloqueio concreto que permanece é interno a `ExpeditionService.js`: `hazardDamage`, `hazardMitigation` e `totalSquadPower` são calculados/declarados mas não influenciam a resolução nem o resultado da recompensa; ainda não há uma mecânica de perigo que consuma esses valores. A rotina também mantém essa camada explicitamente protegida pela instrução do usuário, então não fiz workaround que pudesse duplicar ou alterar recompensas. Para concluir os efeitos de risco/esquadrão, será necessária uma autorização para editar esse serviço; até lá, a área fica **parcial** e o efeito não pode ser declarado funcional.
+
+Validação acumulada depois da mudança: `npm test` **1.095/1.095 em 117 suítes**, `npm run build` concluiu (aviso de chunks acima de 1,5 MiB) e `git diff --check` passou. `npm run typecheck` repetiu apenas os mesmos erros existentes em UI/Firebase/Game.ts/imports não usados, sem diagnósticos nos arquivos desta área. `ExpeditionService.js`, `LevelEngine.js`, `MarketService.js` e saves reais continuam intactos. Sem navegador local, a apresentação visual manual permanece bloqueada; áreas 1–4 estão parciais, as outras **26** ainda não foram percorridas.
+
+##### Quinto checkpoint — Coleta botânica (01/10/2026, 00:57 BRT)
+
+Abri a primeira bateria de regressões da Coleta. A execução com foice em uma durabilidade mostrava a falha: `finishHarvest` gastava a última carga e retornava antes de calcular/entregar recursos e XP. Corrigi a ordem para premiar essa última colheita e quebrar a ferramenta em seguida, interrompendo também a coleta AFK. A regressão reproduzia `false`/nenhum item antes e passou depois.
+
+Também reproduzi a duplicação ao voltar ao jogo: `processOfflineGathering` já contabilizava as colheitas offline, mas preservava no save `isGathering` e o nó iniciado antes de dormir; o primeiro tick online podia colher o mesmo nó novamente. Agora o caminho offline consome/limpa o ciclo salvo, alvo e inspeção, e desativa o AFK quando a ferramenta se esgota. O terceiro teste mostrou que uma segunda chamada a `startHarvest` substituía a tarefa ativa e consumia outro cesto. A chamada agora é rejeitada; a troca de zona, ferramenta, reparo e tática também é bloqueada durante a execução, para não destruir ou alterar no meio do processo um ciclo que já começou.
+
+Retirei ainda da descrição de perigo dos esporos a promessa de um debuff temporário que o resultado real nunca aplicava; permanece o efeito reproduzido de redução de pureza. `test/gathering-harvest.test.js` passou **3/3**. A suíte completa passou **1.098/1.098 em 117 suítes**, e `npm run build` concluiu com o aviso conhecido de chunks grandes. A inspeção visual manual permanece bloqueada; não tratei esses três casos como cobertura total da Coleta. Ainda falta exercitar todas as zonas e nós, cada tática/hazard, aquisição/seleção/reparo de ferramentas e cestos, AFK e os limites offline.
+
+`ExpeditionService.js`, `LevelEngine.js` e `MarketService.js` permanecem sem alteração; nenhum save real foi lido ou escrito. As áreas 1–5 continuam **parciais**; as outras **25** ainda aguardam auditoria nesta execução.
+
+##### Sexto checkpoint — Pesca (01/10/2026, 01:03 BRT)
+
+Segui os handlers da interface para o `FishingService` e reproduzi falhas na cobrança e persistência. O lançamento já consumia uma durabilidade, mas captura e linha rompida descontavam outra; fuga não sincronizava o registro da atividade. Os caminhos AFK e offline consumiam só o registro canônico, deixando o painel da profissão mostrar carga diferente, e a simulação offline não limitava arremessos à durabilidade restante. Também era possível trocar de zona no meio de uma disputa.
+
+Centralizei o desconto no início de cada tentativa válida e sincronizei a vara equipada nos dois registros. Capturar, escapar ou romper a linha não cobra uma segunda vez; o último ponto permite exatamente um arremesso e interrompe o AFK para os seguintes. O modo offline limita tentativas por isca, tempo e durabilidade. Reparar a vara equipada restaura ambos os valores, e a interface/serviço bloqueia mudança de zona ou vara durante a disputa. Ações persistentes de isca, equipamento, lançamento, início de luta e turnos intermediários agora chamam o salvamento fornecido pelo jogo. Também preservei durabilidade de saves antigos quando o campo canônico ainda não existia.
+
+A nova regressão `test/fishing-durability.test.js` passou **10/10**, incluindo manual, AFK/offline, última carga, captura, fuga, bloqueio de zona e reparo. Após a área 6, `npm test` passou **1.108/1.108 em 117 suítes** e `npm run build` concluiu; o aviso de chunks maiores que 1,5 MiB continua presente. Isso confirma os casos automatizados exercitados, não todas as telas nem a auditoria integral. A inspeção visual continua bloqueada pelo acesso local do navegador.
+
+Nenhum save real ou pagamento foi usado. As áreas 1–6 permanecem **parciais**; as outras **24** ainda não foram auditadas nesta execução. Próxima área, na ordem do plano: Mineração.
+
+##### Sétimo checkpoint — Mineração (01/10/2026, 01:10 BRT)
+
+A auditoria de catálogo falhou antes da correção: zonas listavam dez IDs de veios que não existiam e quatro nós concediam `cokes`, um ID sem item canônico; o material vigente é `synthetic_cokes`. Criei os dez nós que faltavam com materiais já cadastrados e ajustei os quatro yields para o item canônico. Agora o teste percorre cada uma das 24 entradas pelo fluxo real de extração/recompensa, confere o registro de zona e a existência dos materiais concedidos; os seis gates aceitam o nível mínimo e rejeitam um nível abaixo.
+
+As regressões também reproduziram que a última carga da picareta fazia a extração retornar antes do prêmio; um segundo clique podia substituir o veio e consumir outro lampião; era possível trocar zona/tática com a extração ativa; o pagamento offline deixava o veio salvo prestes a ser pago novamente; e a escora aceitava galho equipado sem consumi-lo. Corrigi esses casos. O último uso agora rende os materiais antes de interromper AFK, ações concorrentes são bloqueadas, o ciclo offline limpa o alvo antigo e a escora só aceita material não equipado. Reparo só sincroniza a ferramenta canônica quando ela é a picareta equipada.
+
+`test/mining-integrity.test.js` passou **11/11**, incluindo perigos reais de bolsão de gás e veio cristalino, renderização HTML da interface e os 24 veios. Depois das áreas 1–7, `npm test` passou **1.119/1.119 em 117 suítes**, build passou e `git diff --check` não reporta erros (só avisos de conversão LF/CRLF). A área é parcial: sem navegador permitido, não conferi visualmente modais/cartões, e faltam percorrer manualmente aquisição, reparo, cada lampião, AFK e offline.
+
+##### Oitavo checkpoint — Torre da Insolência (01/10/2026, 01:12 BRT)
+
+O cálculo de CP mínimo já existia e havia teste de escala, mas o serviço real não o consultava. A entrada agora compara o CP calculado pelo handler de produção com o mínimo do andar, persiste o início, mostra na tela os valores mínimo/recomendado e bloqueia o botão quando nível/CP estão abaixo ou outra instância está ativa. A defesa mágica calculada para cada andar também agora é copiada para o monstro criado, antes faltava no objeto de combate.
+
+A conclusão agora exige a derrota observável do mesmo andar ativo, com número válido; chamadas diretas, andar trocado e repetição não liberam progresso/recompensa. O Sweep limita saves corrompidos a 100 andares e só a execução bem-sucedida conta para a missão. `test/tower-lifecycle.test.js` passou **6/6**: CP, sobreposição/raid, progressão única, stats dos 100 andares e limite diário.
+
+Após as áreas 1–8, `npm test` passou **1.125/1.125 em 117 suítes** e `npm run build` concluiu, ainda com o aviso de chunks acima de 1,5 MiB. `npm run typecheck` continua falhando nos mesmos problemas TypeScript preexistentes de React/UI, Firebase e `Game.ts` relatados no começo, fora dos arquivos JS desta área. As correções são parciais enquanto não houver validação visual/combate no browser; ainda faltam simular cada andar, timeout, morte, vitória e recompensas na aplicação real. Nenhum save real ou serviço protegido foi alterado.
+
+##### Nono checkpoint — Caça Silvestre (01/10/2026, 01:20 BRT)
+
+O catálogo das seis zonas listava duas presas sem definição (`prey_giran_gorgon_hound` e `prey_phoenix_hawk`) e o teste de todos os materiais encontrou `cokes` e `mold_lubricant`, IDs que não existem no inventário canônico. Completei as duas presas com rendimentos de itens cadastrados e troquei os recursos inválidos por `synthetic_cokes` e `varnish`. Agora cada zona lista apenas espécies cadastradas, cada espécie aponta de volta à zona e todos os yields/trocas resolvem para itens existentes.
+
+Reproduzi e corrigi: AFK descartava a última presa quando a faca zerava; offline pagava as presas mas preservava o rastreio ativo do save, possibilitando pagamento repetido e deixando a durabilidade do painel divergente; outra chamada podia substituir o rastreio e gastar outro atrativo; zona/tática/faca podiam mudar durante o processo; a tática de atrair reduzia alerta sem exigir consumível; e o nível de caça mostrado na tela não avançava ao descarnear manualmente porque essa rota atualizava a progressão paralela, não `hunting.skillLevel`. O ciclo AFK/offline agora concede o último abate, encerra quando a faca quebra, sincroniza atividade e limpa o alvo offline. A interface e serviço mantêm uma atividade estável, os atrativos obrigatórios por zona são realmente exigidos antes de gastar durabilidade, e o descarne manual incrementa a mesma progressão exibida na tela.
+
+`test/hunting-integrity.test.js` passou **11/11**: abates de todas as 24 espécies por ambas as escolhas de descarne, gates/iscas, progressão, limites de ferramenta e renderização da interface. Junto com a regressão de dificuldade, passou **12/12**. Após as áreas 1–9, `npm test` passou **1.136/1.136 em 117 suítes**, `npm run build` concluiu com o aviso conhecido de chunks acima de 1,5 MiB, e `git diff --check` não encontrou erros. Visual ainda depende do navegador local, que segue bloqueado; portanto a área permanece parcial. Não toquei em saves reais nem nos serviços protegidos.
+
+## Página de continuidade — Auditoria integral das áreas do jogo
+
+### Décimo checkpoint — Personagem (01/10/2026, 01:20 BRT)
+
+Ao inspecionar o resumo tático da ficha, reproduzi uma informação enganosa: a interface lia `stats.spd`, campo que o cálculo canônico não retorna, e por isso sempre exibia `100`, independentemente dos atributos do personagem. A velocidade de ataque/conjuração já alimenta recarga e o movimento afeta o intervalo do ataque básico; a ficha não refletia esses resultados. A regressão nova chama o renderizador de produção `updateCharacterUI` e falhava antes da correção porque não encontrava o intervalo calculado.
+
+A ficha agora exibe o intervalo entre ataques básicos usando `resolvePlayerBasicAttackIntervalMs`, a mesma função chamada pelo combate, além da recarga geral, física e mágica que veio de `getStats`. `test/character-ui-attack-interval.test.js` verifica o HTML efetivamente produzido pela função da interface e compara o intervalo ao contrato compartilhado com combate. O teste passou.
+
+Após esta alteração, `npm test` passou **1.137/1.137 em 118 suítes** e `npm run build` concluiu. Continua o aviso já conhecido de chunks acima de 1,5 MiB. `git diff --check` passou, com avisos de normalização LF/CRLF. A inspeção visual manual permanece bloqueada pela preferência salva do navegador; portanto a área Personagem e as áreas 1–9 seguem **parciais**, sem extrapolar o teste de renderização para validação visual completa. Ainda falta percorrer cada aba, sub tela, modal e ação da ficha.
+
+O limite consultado às 01:18 BRT estava em **38%** na janela de cinco horas e **72%** na semanal; a API indica o próximo reset às **03:39:57 BRT**. O desligamento segue agendado para 06:00 BRT, com checkpoint de salvamento/push às 05:45. O pursuing goal ativo permanece amplo; a ferramenta de goal disponível só permite consultar ou alterar o status, não reescrever a descrição. Este plano e o diário servem como especificação operacional mais objetiva, sem encerrar o goal.
+
+Nenhum save real, transação ou contato com jogador foi usado. `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` continuam intactos. Próximo passo na ordem: finalizar as demais ações e estados acessíveis da ficha do personagem; depois, auditar Dolls & Pets.
+
+### Décimo primeiro checkpoint — Dolls & Pets (01/10/2026, 01:24 BRT)
+
+Rastreei a tela de Dolls e o modal de Pets pelos serviços e pelo uso no combate. Uma recompensa grande de XP de chefe reproduziu uma inconsistência: com 4.000 XP de mascote acumulados, `PetService.addPetXp` subia apenas um nível e deixava 3.600 XP mesmo que isso já ultrapassasse o requisito seguinte. Alterei o cálculo para consumir sucessivamente cada requisito até o nível devido, respeitando o teto 60. A regressão antes falhava em nível 2 e agora confirma nível 3 com 2.000 XP restantes.
+
+Também reproduzi que o botão de alimentação cobrava 5.000 Adena mesmo com o mascote já em saciedade máxima (100), sem mudar o estado do pet. O serviço agora rejeita a tentativa sem debitar a carteira e a tela desabilita o botão enquanto estiver saciado; com 75 de saciedade, o teste confirma um único débito e restauração até 100.
+
+`test/dolls-pets-validation.test.js` passou **6/6** para catálogo/bônus de Dolls, adoção/requisitos, invocação/bônus, persistência, níveis múltiplos e alimentação. A tela ainda lista habilidades exclusivas de cada pet (recuperação de MP/HP, sangramento, fogo) sem implementação correspondente; a rotina de alimentação grava saciedade, mas não existe decaimento nem influência da saciedade no combate. Registrei essas lacunas como pendências, sem inventar taxa de fome/balanceamento. A síntese de Dolls ainda requer teste pelo handler da interface com RNG controlado. Sem browser local permitido, validação visual não ocorreu.
+
+Após este lote, `npm test` passou **1.139/1.139 em 118 suítes** e `npm run build` concluiu; persiste o aviso conhecido de chunks acima de 1,5 MiB. Esta área também permanece **parcial**, e o plano não presume validade visual ou de combate para o que não percorreu. Próximo passo pela lista: avançar para Mochila e voltar às lacunas de Pets com testes pelo combate de produção.
+
+### Décimo segundo checkpoint — Mochila e equipamento (01/10/2026, 01:27 BRT)
+
+Na organização da mochila, um inventário descartável com três pilhas iguais — comum, favorita e travada — era consolidado em uma só pilha. Isso perdia os metadados de segurança de duas delas, permitindo que itens marcados pudessem ser vendidos em lote depois. O teste `6.3` em `test/inventory-commercial-validation.test.js` falhou com `1` pilha em vez de `3`. Ajustei a regra para não agrupar qualquer item que `isItemProtected` reconheça; agora os UIDs, quantidades e proteções permanecem separados. Os 18 testes dessa suíte passaram após a correção.
+
+Este achado cobre a ação Organizar e sua consequência em ações destrutivas, não toda a Mochila. Ainda faltam verificar a seleção em lote e limites de venda/desmontagem/cristalização, busca e filtros simultâneos, comparação de itens, equipar/desequipar, autoequipamento e compatibilidade do loadout; visual continua sem navegador. Economias e inventário foram apenas fixtures descartáveis. A contagem completa de testes/build será atualizada depois de encerrar este lote.
+
+Também comparei os filtros de grau da Mochila com `getItemGradeCode`: a lógica local colocava item tier 6 (Frost Lord) junto de S e a interface não oferecia filtro FL, embora o restante do jogo mantenha essas categorias distintas. A tela agora usa `matchesItemGradeFilter`, baseado no classificador canônico, e oferece um botão FL separado; o texto de cristalização explicita que Frost Lord também está incluído. A regressão confirma que arma S passa em S, Frost Lord não passa em S e aparece em FL. As baterias dirigidas de inventário e classificação passaram **34/34**. Esta é uma correção do filtro; ainda não substitui o exercício visual da Mochila.
+
+Respeitando a decisão explícita do usuário, classes e habilidades não serão revalidadas quanto a conteúdo, procedência ou balanceamento nesta rodada. A antiga linha “Habilidades” fica registrada como **fora do escopo**, e o próximo domínio após Mochila é Cosméticos; nada do que foi aceito sobre classes/skills será inferido a partir destas áreas.
+
+### Décimo quarto checkpoint — Cosméticos e Maestria Astral (01/10/2026, 01:35 BRT)
+
+Na ação de equipar cosmético, o serviço aceitava categorias inexistentes e podia reportar sucesso sem alterar um cosmético válido. A regressão confirmou ausência de validação prévia; agora categoria e ID do catálogo são conferidos antes de tocar no save. Também reproduzi um bypass em aura exclusiva de Herói: um desbloqueio legado no save permitia equipá-la depois de perder o título. `equipCosmetic` agora revalida a elegibilidade no momento do uso, sem confiar somente no registro persistido. Compra única, duplicata, herói elegível e personagem comum foram exercitados com estado descartável. `test/cosmetics-achievements-validation.test.js` passou **9/9**.
+
+Na Maestria Astral, “Aceleração Temporal” dizia conceder velocidade de ataque e elevava `atkSpd`, mas não alterava recargas. A nova regressão comparou `getStats` antes/depois do nó e falhou com CDR `0` em vez de `0,02`. Corrigi o contrato do nó para +2% de redução de recarga por nível e removi sua contribuição para velocidade de ataque; a mesma tela usa a descrição do catálogo, sem texto duplicado. `test/astral-hero-pillar-validation.test.js`, `test/hero-pillar-feature-coverage.test.js` e `test/hero-pillar-runtime-proof.test.js` passaram **18/18** após o ajuste. Isso prova o cálculo do nó, não a compra por clique nem todo o ciclo de Reencarnação.
+
+Cosméticos e Maestria seguem **parciais**: a preferência de navegador continua impedindo a inspeção visual, e ainda não percorri cada modal/ação de compra, equipar, reencarnar e melhorar pelo aplicativo. As linhas 14–15 do plano foram atualizadas com essas evidências e bloqueios. O goal ativo não pode ter sua descrição reescrita pela ferramenta disponibilizada (ela só permite consultar ou mudar status); por isso, o plano local é a especificação objetiva da execução e o goal permanece ativo.
+
+### Décimo quinto checkpoint — Missões e Passe de Batalha (01/10/2026, 01:36 BRT)
+
+Ao percorrer as definições e a rotina de resgate do Passe, comparei todos os tipos de recompensa cadastrados com os campos tratados pelo serviço. Os tiers 3 grátis e 7 premium anunciam Pontos de Ofício, mas `claimPassReward` nunca os adicionava a `craftXp`. Acrescentei primeiro uma regressão nos dois caminhos; ela falhou com saldo `7` em vez de `27`. O serviço agora credita os 20/100 pontos nas respectivas trilhas.
+
+Também reproduzi a entrada malformada em progresso: eventos Infinity e string eram somados por coerção, chegando a gravar progresso textual; eventos grandes deixavam o valor salvo acima do alvo. A função agora ignora quantidades que não sejam números finitos positivos e limita o progresso ao alvo de cada missão. Após os ajustes, `test/quests-battlepass-validation.test.js` passou **7/7**, incluindo progresso, claim duplicado, baú diário, limite de reset, trilhas grátis/premium e recompensas de ofício.
+
+A área Missões continua **parcial**: os testes exercitam o serviço usado em produção, mas não todas as telas, o modal, a lista inteira de tiers e os estados de nível por clique, e a inspeção visual ainda está bloqueada. Não usei conta, compra ou save real. Próxima área na ordem: Mercado Giran P2P, somente com dados descartáveis.
+
+### Décimo sexto checkpoint — Mercado de Giran P2P (01/10/2026, 01:38 BRT)
+
+O mural recebe anúncios do serviço de mercado e os interpola diretamente no HTML. A regressão usou apenas dados sintéticos descartáveis e reproduziu execução de marcação/atributo via nome de item, nome de vendedor e ID remoto; o texto salvo no campo de busca também era reemitido sem escaping ao redesenhar a aba. Corrigi a renderização para escapar conteúdo e atributos, converter encantamento em número, e carregar o ícone somente do catálogo local canônico. `test/market-ui-untrusted-data.test.js` passou após comprovar as entradas malformadas.
+
+Preservei `MarketService.js` conforme restrição explícita, e o teste substitui o inicializador de nuvem por um stub: não houve assinatura Firebase, conta de jogador, transação ou gravação de mercado real. Por isso, a correção cobre a saída da UI e não prova o ciclo de compra/anúncio/cancelamento/saque. A área permanece **parcial** e essas ações ainda exigem ambiente isolado e mocks de persistência antes de qualquer exercício. Não foi feita transação real.
+
+### Décimo sétimo checkpoint — Mercador e recompra (01/10/2026, 01:41 BRT)
+
+Com dados descartáveis, reproduzi que `sellItem` e `sellAllJunk` confiavam apenas no booleano legado `item.equipped`; quando o UID ainda estava referenciado em `state.equipment`, ambas as rotas vendiam o equipamento. A nova validação consulta os slots equipados, então as duas regressões passaram a rejeitar esse estado inconsistente.
+
+Também reproduzi o ciclo venda parcial/recompra de pilha: a fila preservava o mesmo UID da pilha que continuava no inventário, e a recompra criava dois itens com a mesma identidade. A recompra agora repõe a quantidade na pilha original. Com a mochila cheia, um item sem pilha correspondente é rejeitado antes de cobrar ou remover o registro da fila. Os quatro testes de `test/shop-service-disposable-integrity.test.js` passaram **4/4**.
+
+Não usei inventário/save real; as quatro situações usam estados novos em memória. A área Mercador permanece **parcial**: ainda falta atravessar os cliques da interface de loja, compras normais e místicas, estoque/rotação e buyback visual. Build e suíte ampla serão repetidos após o próximo lote; no checkpoint anterior, suíte estava em **1.149/1.149 (119 suítes)** e build passou com o aviso conhecido de chunks grandes. Próximo domínio: Lâmpada Mágica.
+
+### Décimo oitavo checkpoint — Lâmpada Mágica (01/10/2026, 01:42 BRT)
+
+O progresso da lâmpada era atualizado no handler de abate: ele removia apenas um limiar de 50.000 EXP, mesmo que o abate acumulasse mais, gerando no máximo uma lâmpada por chamada. Criei uma regressão com 400.000 EXP de abate (160.000 para a lâmpada); antes a regra equivalente concedia uma e não processava a sobra. Agora o serviço concede as três lâmpadas devidas e mantém 10.000 de progresso.
+
+Também isolei a ação de uso no serviço invocado pelo handler real. Um estado descartável com uma lâmpada e uma rolagem determinística confirmou que apenas uma é consumida e a carta credita EXP/SP uma vez; sem lâmpadas, o serviço não muda o saldo. `test/magic-lamp-production-flow.test.js` passou **2/2**. O sorteio oficial continua usando a tabela e probabilidades existentes.
+
+Lâmpada Mágica permanece **parcial**: não validei o cartão visual nem todas as faixas de nível pelo navegador; sem inspeção visual, essa evidência não é reivindicada. Nenhuma conta ou save real foi usado. Próxima área pela lista: Forja Imperial.
+
+### Décimo nono checkpoint — Forja Imperial, Bancada de Refino (01/10/2026, 01:44 BRT)
+
+No refino de `Madeira Comprimida`, reproduzi um caso em que a mochila estava cheia e os insumos estavam em pilhas que não liberavam espaço. O serviço deduzia os recursos e Adena, chamava `addToInventory` sem verificar o retorno e mesmo assim informava sucesso, embora o produto não entrasse. A regressão agora verifica retorno de falha e igualdade integral de inventário, saldo e EXP; o serviço restaura as pilhas e Adena antes de retornar `inventory_full`.
+
+O refinamento em lote também cruzava mais de um nível da Forja e só incrementava um. Um estado descartável refinando 40 lotes de Cânhamo Trançado ganha 320 EXP; com custos crescentes de 100 e 200, agora progride corretamente do nível 1 ao 3 e guarda 20 EXP. A bateria `test/refinery-disposable-integrity.test.js` passou **2/2**.
+
+Esse resultado cobre apenas a Bancada de Refino, não as demais subtelas da Forja Imperial. Ainda faltam criação geral, SA, elementais, Masterwork, tatuagens, síntese, Life Stones, Random Craft, navegação visual e resultados via UI. Nenhum item ou saldo real foi utilizado.
+
+### Vigésimo checkpoint — Alquimia e Cadinho (01/10/2026, 01:49 BRT)
+
+No Cadinho, cinco regressões descartáveis reproduziram/fecharam quatro defeitos: um equipamento favorito podia ser dissolvido pela ação individual; a ação em lote não protegia favoritos/itens ainda equipados no UID canônico e não filtrava Frost Lord como categoria própria; equipamentos Frost Lord tier 6/nível 80 eram classificados como S e recebiam rendimento/taxa menores; e a prévia mostrava simultaneamente essências que o serviço não concede. Também reproduzi cobrança de essências e Adena ao fabricar a Pedra de Convocação quando a mochila cheia não permitia armazenar o item.
+
+O serviço agora reutiliza a classificação canônica de item, distingue Frost Lord de S, usa 300 essências e taxa 15.000 para essa categoria, protege favoritos/bloqueios e UIDs equipados em dissoluções individuais/em lote e oferece filtro próprio de Frost Lord. A UI chama o cálculo de rendimento do serviço e só mostra o tipo real de essência; controles A, S e Frost Lord foram adicionados. A receita de item armazena primeiro e só consome recursos após sucesso.
+
+`test/alchemy-disposable-integrity.test.js` passou **5/5**, incluindo renderização efetiva de `renderAlchemyUI` com DOM descartável e catálogo local. Nenhum save real, item real ou saldo de jogador foi tocado. A área Alquimia segue **parcial**: receitas de elixir e demais caminhos de UI/ações ainda precisam ser percorridos; validação visual em navegador continua bloqueada pela preferência salva. Próxima área: Baú privado, na ordem do plano.
+
+O goal abrangente permanece ativo e a ferramenta de goal disponível não permite editar a descrição (somente consultar ou alterar status); plano e diário descrevem o escopo operacional desta execução. Às 01:49 BRT, a janela de cinco horas estava em 52% de uso e a semanal em 74%, com reset esperado às 03:39:57 BRT. Checkpoint/push autorizado permanece previsto para 05:45 BRT e desligamento já agendado para 06:00 BRT. `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` seguem protegidos e sem alteração.
+
+### Vigésimo primeiro checkpoint — Baú privado e transferências (01/10/2026, 01:52 BRT)
+
+A análise encontrou cópias de depósito/saque em `main.js`, além do `InventoryService`; a interface real chamava as cópias locais, então corrigir só o serviço deixaria o jogo vulnerável. Centralizei os handlers de produção para delegarem ao serviço canônico e mantive as atualizações da mochila, do baú, da UI e do save por callbacks.
+
+Quatro regressões descartáveis falharam antes do ajuste: depósito de dez Pedras de Convocação com baú cheio e pilha compatível quase cheia movia uma unidade para o destino, retornava falha e deixava a fonte com dez (duplicação); saque equivalente também alterava o destino antes de falhar; quantidades zero/inválida eram aceitas (zero podia apagar a pilha); e UID ainda referenciado por equipamento podia ser depositado. Agora depósito e saque calculam a capacidade total antes de mutar; rejeitam quantidade que não seja inteiro positivo; depósito bloqueia UIDs equipados mesmo quando `item.equipped` está obsoleto; e a UI não apresenta esses itens como depositáveis.
+
+`test/warehouse-transfer-integrity.test.js` passou **5/5**, cobrindo falha sem mutação e transferências parciais válidas nos dois sentidos. A suíte completa passou **1.167/1.167 em 124 suítes** e `npm run build` passou; persiste o aviso conhecido de chunks acima de 1,5 MiB. `git diff --check` passou com apenas avisos de normalização LF/CRLF. Serviços protegidos permanecem intactos; sem saves ou transações reais. A área Baú segue **parcial**: faltam todos os estados e ações da interface e inspeção visual. Próxima área, conforme a lista, é a subseção seguinte do plano; continuar após consultar o plano completo.
+
+### Vigésimo segundo checkpoint — Clã, cercos e doações (01/10/2026, 01:56 BRT)
+
+Na área seguinte da lista, encontrei que `startSiege` permitia declarar outro castelo enquanto o anterior ainda estava em andamento, substituindo todo o progresso. A regressão confirmou a substituição; agora a segunda declaração retorna `siege_in_progress` e preserva o estado ativo. `donateToClan` aceitava Adena negativa junto com SP positivo, elevando indevidamente a carteira, além de permitir quantidade fracionária, texto e valores não finitos. O serviço agora só aceita valores inteiros seguros, não negativos, com pelo menos um recurso positivo.
+
+O teste antigo de cerco dizia “vitória”, mas parava após 20 ações e só verificava que alguma ação ocorreu; Giran não teria concluído suas três fases. Ampliei o limite até completar de fato, verifiquei `isCompleted` e posse do castelo. `test/clan-siege-donation-integrity.test.js` e `test/clan-glory-pillar-validation.test.js` passaram **9/9**.
+
+A área permanece **parcial**. Falha concreta ainda aberta: a compra da Loja do Castelo debita antes de validar espaço e insere objetos sem UID/`itemId` do catálogo, logo não há garantia de que os itens comprados possam aparecer, equipar ou ser usados pelos caminhos normais. Preciso ligar seus produtos a definições canônicas e exercitar suas ações; não marquei aprovação. Também faltam tabs/ações do clã e visualização no browser.
+
+Complemento do checkpoint 22 (01:56 BRT): também corrigi a loja de castelo. Os quatro produtos agora apontam para IDs canônicos; coroa e manto entraram no catálogo de equipamento, o elixir CP é um consumível utilizável e o pacote entrega três Giant's Codex. `buyCastleShopItem` simula a entrega em inventário descartável e só substitui/incrementa o inventário e debita Adena se a operação inteira couber. Acrescentei `hpPercent` e `cpPercent` ao contrato de bônus de equipamento para que a coroa aplique de fato seu +15% nos dois atributos. Regressões confirmam compra de todos os produtos, sem UID ausente, recusa sem cobrança em mochila cheia e alteração de HP/CP/ataque com a coroa equipada. Testes dirigidos do clã/castelo e grade de equipamentos passaram **28/28**.
+
+### Vigésimo terceiro checkpoint — Fortalezas (01/10/2026, 02:02 BRT)
+
+A criação de cerco na Fortaleza sobrescrevia o estado ativo se o jogador selecionasse outro alvo. Também permitia cercar de novo uma fortaleza já possuída, recebendo repetidamente a recompensa em Epaulettes sem alterar a posse. As regressões falharam antes e agora a ação retorna `siege_in_progress` ou `already_owned` sem substituir estado nem conceder recursos.
+
+O teste antigo de talismã só observava o resultado interno de `FortressService.getBonuses`, embora o nome prometesse impacto em atributos. Fortaleci a prova pelo `StatsEngine.getStats`: equipar o talismã aumenta o ataque de combate e remover restaura o valor original. `test/fortress-lifecycle-integrity.test.js`, `test/fortress-glory-pillar-validation.test.js` e `test/glory-pillar-runtime-proof.test.js` passaram **12/12**.
+
+Fortalezas segue **parcial**: não auditei ainda limite/recuperação de produção offline, todos os braceletes/talismãs e seus efeitos finais, todos os cliques/subtelas nem a aparência no browser. Próxima área pela lista: Olimpíadas.
+
+### Vigésimo quarto checkpoint — Grand Olympiad (01/10/2026, 02:08 BRT)
+
+A coroa de Herói podia ser reivindicada repetidamente, duplicando arma Infinity e habilidades. Também concedia status antes de confirmar espaço para a arma. Agora a entrega é pré-validada em inventário descartável, exige arma Infinity válida e a coroação fica de uso único; mochila cheia deixa status/habilidades/armas inalterados. A compra da Loja de Tokens tinha o mesmo problema de cobrar antes de entregar, corrigido com entrega transacional. A bolsa chamada “100 poções CP” tinha recompensa `hp_potion_xl`; alterei para o item canônico `potion_heroic_cp`, que é tipo CP.
+
+Dois cliques simultâneos durante matchmaking podiam resolver dois duelos para o mesmo save. Reproduzi com matchmaking Firebase controlado por Promise, sem acessar Firebase real; o serviço agora recusa a segunda partida enquanto a primeira está pendente e limpa o lock em `finally`. Os testes provam uma única vitória e 200 Tokens, e cobrem espaço cheio, claim repetido, IDs de itens e CP. `test/olympiad-transaction-integrity.test.js` passou **5/5**; suites Olimpíada/cross-system passaram **13/13** após aceitar alias legado `infinity_blade` com normalização explícita.
+
+A área segue **parcial**: não provei a regra de vitória/derrota por placar, todas as faixas de pontos, tela/modal e cada ação visual. Rede/conta real não foi usada. Próxima área: Encantamento.
+
+### Vigésimo sexto checkpoint — Encantamento e Rankings (01/10/2026, 02:05 BRT)
+
+No encantamento, reproduzi cristalização que elevava `crystal_d` acima do limite canônico da pilha quando já havia 99.990 unidades. A operação agora usa `InventoryService.addToInventory` e restaura inventário/equipamento se os cristais não puderem ser guardados; nessa falha, o scroll ainda não é consumido. A regressão descartável confere o rendimento integral em pilhas válidas. `test/enchantment-runtime-validation.test.js` passou **8/8**, cobrindo leitura/compatibilidade, preview, sucesso e recalculo de stats/CP, falha abençoada, cristalização, consumo de scroll e limite de pilha. Ainda não percorri todos os modais/ações nem a UI visual.
+
+Nos rankings, reproduzi que o quadro local mesclava o próprio personagem na lista vazia e a recompensa o tratava como posição #1, mesmo sem autenticação ou resultado remoto. Também constatei que a recompensa usava ID inexistente (`scrl_enchant_wp_b`), anexava um objeto sem UID e creditava moeda/cooldown sem garantir espaço. Agora o prêmio exige que o usuário autenticado apareça na lista remota em cache; os pergaminhos usam `scroll_enchant_weapon_b` via serviço de inventário e entrega sem espaço aborta antes de moedas/cooldown. Também removi a lista de lordes de castelos fictícios quando não há dados. As regressões demonstraram o comportamento antes/depois com perfis descartáveis e FirebaseBridge stub; não houve consulta a conta real. `test/rankings-glory-pillar-validation.test.js` junto do encantamento passou **17/17**.
+
+As áreas 26 e 27 continuam **parciais**. Ainda faltam todos os cliques/abas/telas e estado visual dos rankings; validação com Firebase real continua intencionalmente fora da execução, sem perfil descartável configurado. Não extrapolei teste de serviço para cobertura de interface. A próxima área da sequência é Contatos e Mentoria. Build/suíte completa ainda precisam rodar após estas alterações. `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` foram verificados intactos neste checkpoint.
+
+### Vigésimo sétimo checkpoint — Rankings e Sete Selos (01/10/2026, 02:11 BRT)
+
+Fechei mais a auditoria de Rankings: a interface deixou de misturar a cópia local do personagem na classificação e de inventar posição `#12`; agora mostra posição somente quando o ID autenticado existe no resultado remoto. A ação de recompensa consulta o ranking CP atualizado antes do resgate. A regressão de prêmio confirma ranking #2, ID canônico e quantidade do pergaminho; sem usuário remoto não dá recompensa, e mochila cheia não credita Adena/coins nem cooldown. O quadro de castelos não mostra mais proprietários fictícios. A suíte específica passou **9/9**; nenhum Firebase real foi acessado.
+
+No Sete Selos, regressões primeiro falharam em quatro reproduções: depósito aceitava quantidades `0`, negativas e fracionárias; compra de Mammon cobrava sem espaço; início de um segundo boss substituía a luta já ativa; e o golpe final concedia itens apesar de mochila cheia. Corrigi as transações: quantidades devem ser inteiros positivos, entrega da loja/loot é pré-validada com `InventoryService` e IDs/UIDs de inventário, falta de espaço mantém recursos e combate intactos, e luta em andamento bloqueia outra. Também fortalecei o teste de Lilith para afirmar vitória efetiva e conferir cada drop canônico. Rankings, Sete Selos, Encantamento e Olimpíadas passaram **27/27** testes dirigidos.
+
+Sete Selos permanece **parcial**: `resolveWeeklyCycle` existe mas não encontrei integração automática; os efeitos anunciados de facção e o serviço de deselamento/SA não têm evidência de efeito no cálculo/itens reais; as subabas e ações não foram exercitadas visualmente. Na área social (ainda em auditoria), a leitura do código já confirmou que bloqueios são locais, mensagens/correio/convites são somente toasts e a ação “tornar mentor” só prepara o formulário de indicação. Ainda vou verificar o vínculo/recompensa pelo handler com identidade descartável antes de corrigir; nenhuma mensagem ou transação real foi enviada.
+
+### Vigésimo oitavo checkpoint — Codex de cartas e coleções (01/10/2026, 02:12 BRT)
+
+O serviço de absorção podia adicionar cópias ao Codex sem haver carta no inventário/baú, aceitava zero/negativo/fracionário/texto como uma cópia e registrava mais cartas do que existiam. As três regressões novas falharam antes da mudança. Agora a operação exige inteiro positivo, valida o estoque antes de qualquer mutação e consome a mesma quantidade que registra; é possível consumir do inventário ou do baú. O handler de produção `absorbCardAction` deixou de remover a carta separadamente e delega todo o fluxo ao serviço, incluindo absorção em lote.
+
+Também substituí o registro duplicado de coleções em `main.js` pelo `CollectionService`, que valida existência do set, pertencimento do item, duplicidade e estoque antes de sacrificar o equipamento. `test/codex-absorption-integrity.test.js`, `test/codex-glory-pillar-validation.test.js` e `test/canonical-lineage2-adaptations.test.js` passaram **30/30** após refatorar o caminho de produção. A área Codex segue **parcial**: não validei cada bônus final/tela visual, e abrir a UI local segue bloqueado pela preferência de navegador salva.
+
+### Complemento do checkpoint 28 — Contatos e Mentoria (01/10/2026, 02:16 BRT)
+
+Na inspeção da sub-tela de contatos, nomes vindos do Firestore/save eram interpolados diretamente em HTML e atributos `data-*`. Corrigi escaping em nome/classe de amigos, bloqueados e mentor, normalizei listas persistidas e limitei bloqueados a 64. Um teste DOM descartável tentou inserir tags `<img>`, `<svg>`, `<script>` e `<iframe>` e verificou que entram como texto escapado, sem injetar marcação. Também conectei Bloquear/Desbloquear ao FirebaseBridge: o estado local só muda após confirmação do backend, e falha/offline não deixa um bloqueio falso. `test/contacts-mentorship-validation.test.js` passou **7/7** com identidade Firebase descartável simulada.
+
+Contatos continua **parcial** e nenhum jogador real foi contatado. Mensagem, correio e convites para Grupo/Clã ainda são somente toast; não há serviço correspondente no repositório. “Tornar Mentor” somente preenche o campo de indicação. A submissão de mentoria ainda concede o pacote local antes de confirmar o registro cloud, e não chama `bindMentorship`; as recompensas de indicação também têm acoplamento remoto/local que precisa de um contrato transacional idempotente. As regras Firestore não foram alteradas nem verificadas em ambiente real.
+
+### Complemento do checkpoint 28 — Corrigida transação da Mentoria (01/10/2026, 02:20 BRT)
+
+Corrigi o handler para delegar à nova `MentorshipReferralService`: exige uma sessão autenticada, resolução de personagem real, mentor de nível 40+, aprendiz até nível 20 e impede autoindicação/vínculo duplicado. O pacote é pré-adicionado a um estado de inventário descartável e o save não muda se a mochila estiver cheia. A sequência confirma `bindMentorship` e `recordReferral` por bridge antes de aplicar localmente o mentor, os itens e o bônus persistente de EXP; em erro remoto, não credita pacote. `test/mentorship-referral-integrity.test.js` prova sucesso, lookup offline, mentor inelegível, gravação negada e mochila cheia por bridge simulado; contatos + mentoria passaram **10/10**.
+
+Esse fluxo remoto consiste em duas gravações separadas: se a mentoria for persistida e o registro de referral falhar, a operação retorna erro sem prêmio local; um retry reutiliza o ID determinístico da mentoria, mas não temos transação Firestore envolvendo os dois documentos. O claim das recompensas do mentor ainda marca documentos como resgatados antes de validar/guardar o pagamento local. Resolver isso integralmente requer claim server-side idempotente com depósito de prêmio coordenado; não tratei os mocks como prova dessa garantia. Mensagens, correio e convites continuam não implementados. Nenhuma conta real foi chamada.
+
+### Trigésimo checkpoint — Validação depois da integração da Mentoria (01/10/2026, 02:20 BRT)
+
+Com a mudança conectada ao handler real, repeti toda a suíte: **1.195/1.195 testes em 130 suítes**, sem falhas. `npm run build` também passou em 14,56 s; os bundles minificados continuam acima de 1,5 MiB em `index` (~2,62 MiB) e `game-data-classes` (~1,67 MiB). A última consulta de uso, 02:19 BRT, marcava 68% da janela de cinco horas e 76% semanal, reset curto às 03:39:57 BRT.
+
+### Vigésimo nono checkpoint — Suíte integrada e build (01/10/2026, 02:17 BRT)
+
+Após as correções dos checkpoints 26–28, rodei a suíte completa: **1.192/1.192 testes em 129 suítes, zero falhas**. A primeira execução expôs uma fixture antiga de idempotência de Ranking que esperava a posição padrão #1 criada pelo código anterior; atualizei a fixture para autenticar usuário descartável e carregar resultado remoto simulado, sem flexibilizar a regra de produção. A segunda execução passou integralmente. `npm run build` também concluiu em 14,93 s. O build mantém alertas de bundle acima de 1,5 MiB: `game-data-classes` ~1,67 MiB e `index` ~2,62 MiB minificados; gzip reportado ~211 KiB e ~651 KiB.
+
+A auditoria global permanece **bloqueada/parcial** pelas ações que ainda são demonstrativas no social, falta de ciclo semanal automático do Seven Signs, validação visual browser bloqueada, serviços/abas ainda não percorridos e dados de Firebase sem identidade descartável provisionada. Nenhum save ou jogador real foi acessado. Falta testar as mudanças restantes, reexecutar diff/protegidos, atualizar diário antes do checkpoint, commit/push autorizado antes de 05:45 BRT; desligamento continua agendado para 06:00 BRT. Uso às 02:15 BRT: 67% na janela de cinco horas e 76% semanal; reset da janela curta confirmado para 03:39:57 BRT.
+
+### Complemento — Efeitos passivos do Codex e dano elemental (01/10/2026, 02:34 BRT)
+
+Uma nova regressão por `getStats` de produção reproduziu que bônus declarados de cartas eram silenciosamente perdidos: `critDmg`/`lifesteal` com valores fracionários eram arredondados a zero pelo `CardCodexService`; mesmo quando agregados, o `StatsEngine` descartava esses dois efeitos e `allStats`. Preservei as frações e conectei os bônus a dano crítico, roubo de vida e aos seis atributos primários. Com `Queen Ant`, `Zaken` e `Baium` no Codex descartável, as comparações contra o estado sem cartas confirmam +4% crit damage, +4% life drain e +6 em STR/DEX/CON/INT/WIT/MEN.
+
+Também reproduzi que o bônus `fireDmg` do Codex de Valakas não chegava ao serviço de dano elemental. Agora o cálculo usado em `main.js` aplica o bônus da carta ao elemento correspondente e resolve a oposição: dano base 1.000 com 30 de dano de fogo contra alvo de água resulta em 1.036. Regressão falhou antes da correção e passou depois. Testes dirigidos de Codex, atributos elementais, augmentação, maestria e efeitos de equipamento passaram **34/34**; Codex/elemental/equipamento/Astral mais amplos passaram **36/36**.
+
+Naquele ponto do trabalho, confirmei que `socketCardToItem` não tinha chamada de produção nem tela/ação acionável, e que os `socketBonus` definidos não chegavam aos equipamentos. Essa lacuna foi endereçada no checkpoint seguinte abaixo; continuam pendentes a inspeção visual e a matriz completa de elementos, criaturas e armaduras.
+
+### Continuação — Engaste de cartas ligado à produção e build integrado (01/10/2026, 02:32 BRT)
+
+Implementei o fluxo que faltava do engaste. `socketCardToEquipment` exige uma carta real na mochila e uma arma equipada, testa a capacidade antes de qualquer mutação, consome uma cópia e grava a carta no slot. O Álbum apresenta botões separados para arma principal e secundária somente quando há cópia e vaga; o handler salva/atualiza após sucesso. O `StatsEngine` consome os bônus das cartas equipadas (ataque/defesa, crítico, velocidade de conjuração/ataque convertida em CDR, HP/MP, regeneração, cura, evasão e vampirismo); `ElementalService` aplica dano e resistência elementais nos cálculos de combate.
+
+As regressões em `test/codex-absorption-integrity.test.js` e `test/elemental-attribute-runtime-validation.test.js` validam gasto da carta, falta de posse/arma, limite de slots, ataque físico/mágico, CDR, heal power efetivamente aplicado, bônus de dano e mitigação elementais. Codex, elemental, consumíveis e equipamentos passaram **48/48** testes dirigidos. A suíte completa atual passou **1.201/1.201 em 130 suítes**; `npm run build` concluiu em 14,87 s. O bundle minificado continua emitindo alertas: `index` ~2,62 MiB e `game-data-classes` ~1,67 MiB; gzip ~652 KiB e ~211 KiB.
+
+O Codex fica **parcial** até validação visual pelo navegador e exercícios de todas as cartas/combinações de slots. A área elemental também não está globalmente aprovada: os casos verificados não cobrem toda a matriz de seis elementos, todos os monstros nem todas as combinações de armadura. Nenhuma conta, save ou inventário real foi usado. `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` permanecem protegidos e devem ser conferidos novamente antes do commit. Uso às 02:31 BRT: 74% da janela de cinco horas, 77% semanal; reset da janela curta às 03:39:57 BRT. O commit e push continuam autorizados, planejados para antes do desligamento agendado às 06:00 BRT.
+
+### Complemento — Bordas do engaste e hierarquia de equipamento (01/10/2026, 02:37 BRT)
+
+Novas regressões reproduziram a aceitação de cartas com pilhas `0`, negativas ou fracionárias e o fallback incorreto de `socketsMax: 0` para dois slots. Corrigi os gates para recusar esses estados sem consumir a carta nem gravar engaste. Acrescentei `test/equipment-tier-balance.test.js`: percorre cada arma Frost Lord canônica contra o maior ataque S comum da mesma família pelo `StatsEngine`. Todas passaram: 172 P. Atk contra máximo S 138; armas mágicas, 212 M. Atk contra máximo S 170. O teste compara pelo resultado final de produção, não só pelo campo bruto do catálogo.
+
+Também comparei o manto de Castelo com o manto S de proteção e o colar de Valakas com o Tateossian; ambos têm atributos finais superiores nas dimensões verificadas. Não existe armadura/joia `Frost Lord` no catálogo, portanto não há comparação dessa classe de item; mantive como lacuna de conteúdo sem criar números arbitrários. Atualizei o catálogo de funcionalidades para apontar o handler de engaste real. Teste novo de tiers, Codex e elemental passaram; suíte completa agora **1.204/1.204 testes em 131 suítes**, build **15,09 s**. Os bundles continuam acima do alerta de 1,5 MiB. `git diff --check` passa e os serviços protegidos seguem sem diff. Uso às 02:36 BRT: 77% na janela de cinco horas e 78% semanal; reset da janela curta às 03:39:57 BRT.
+
+### Complemento — Bônus Sagrado em combate contra demônios e mortos-vivos (01/10/2026, 02:40 BRT)
+
+Ao continuar a matriz elemental, a descrição local de Sagrado (+30% contra mortos-vivos, necrópoles e demônios) não correspondia ao cálculo final: oposição genérica Trevas aplicava só +20% contra mortos-vivos, e demônios sem elemento explícito não recebiam o bônus de categoria. A regressão via `calculatePlayerElementalDamage`, o mesmo serviço chamado pelo combate, falhou antes da correção: ataque base 1.000 com 300 Sagrado retornou 1.400 contra demônio e 1.600 contra morto-vivo, em vez de 1.700. O bônus de categoria agora precede a oposição genérica e reconhece `category: 'demon'`, mortos-vivos e `isUndead`; os dois resultados observados passaram a 1.700. Elemental, Codex e comparação de tiers passaram **19/19** testes dirigidos; isso valida esses casos, não toda a matriz de criaturas/elementos. A suíte completa e build ainda precisam ser repetidos no fechamento. Uso consultado às 02:38 BRT: 78% da janela de cinco horas e 78% semanal, reset curto às 03:39:57 BRT.
+
+### Checkpoint integrado — Auditoria elemental e build de produção (01/10/2026, 02:41 BRT)
+
+Após a regressão de Sagrado, rodei a suíte inteira: **1.205/1.205 testes, 131 suítes, zero falhas**, incluindo a prova de combate elemental, Codex engastado e tiers Frost Lord. `npm run build` também passou em 11,80 s. Continuam os avisos de chunks acima de 1,5 MiB: `index` 2.622,42 kB e `game-data-classes` 1.667,35 kB minificados (gzip 652,30/210,73 kB). Conferi as chamadas em `main.js`: o cálculo elemental é aplicado à habilidade ativa, ao ataque básico e à mitigação de dano recebido; portanto a regressão exercita o mesmo serviço chamado nesses três caminhos, embora não simule o ciclo visual inteiro do navegador. A auditoria global permanece parcial: falta percorrer todas as telas/ações visualmente, a matriz elementar completa e os sistemas ainda listados no plano. Nenhum save real foi aberto. `git diff --check` já havia passado antes deste build e será repetido no fechamento. O reset da janela de uso segue previsto para 03:39:57 BRT; consulta de 02:38 marcou 78% da janela de cinco horas e 78% semanal. Desligamento permanece às 06:00 BRT.
+
+### Complemento — Resistência elemental declarada no bestiário (01/10/2026, 02:43 BRT)
+
+A leitura de `monsters.js` encontrou `MONSTERS.crimsonBabyDragon.resist.fire = 0.75`, mas nenhum consumidor de `monster.resist` no projeto. A regressão com o objeto real do catálogo falhou antes: uma arma com 300 Fogo causava 1.200 (poder elemental x1,4 e penalidade genérica x1,2), sem aplicar a resistência declarada. `calculatePlayerElementalDamage`, usado por ataques básicos e habilidades em `main.js`, agora multiplica o dano final pelo fator de resistência do elemento ativo e retorna esse fator para inspeção; o caso do catálogo resulta 900 (1.200 x0,75). Fatores inválidos/negativos são ignorados. Elemental, Codex e tiers passaram **20/20** testes dirigidos. O bestiário só declara atualmente esta resistência, então não estou inferindo cobertura de outros elementos/monstros. A suíte e build completas serão repetidas após a alteração.
+
+### Complemento — Matriz canônica dos seis elementos e precisão de dano (01/10/2026, 02:44 BRT)
+
+Ampliei a regressão para conferir ataque do mesmo elemento e da oposição declarada em cada um dos seis elementos. O teste revelou um erro adicional de ponto flutuante: Fogo contra Água calculava aproximadamente 1.599,999999999 e o `Math.floor` produzia 1.599, apesar do contrato de +20%; corrigi a tolerância numérica antes do arredondamento, sem alterar bônus fracionários legítimos. Os seis pares canônicos (mesmo/oposto), o bônus especial Sagrado e a resistência do Crimson Hatchling passaram **12/12** no arquivo elemental. A cobertura agora inclui a relação das seis definições, mas não todos os monstros, variações de resistência, armaduras e efeitos de combate; a área continua parcial. Resultado integrado anterior era 1.205 testes e build aprovado antes destas duas últimas mudanças, então farei nova suíte/build antes do commit.
+
+### Complemento — Slots legados e resistência de armadura contra mortos-vivos (01/10/2026, 02:46 BRT)
+
+Duas regressões defensivas falharam antes do ajuste. Uma save/fixture com equipamento no slot legado `head` e 120 de resistência de Fogo recebia 1.000 de dano contra Fogo, pois o agregador omitia esse slot; agora recebe 800. Outra tinha 120 de Trevas e enfrentava `isUndead: true`, mas recebia 960 por cair na mitigação geral em vez de 800 pela resistência específica; o cálculo agora normaliza também esse sinalizador para Trevas. Os testes elementais dirigidos (incluindo os seis elementos) e os do Codex/tier passaram **23/23**. A cobertura é explícita para esses dois contratos de defesa, não todas as armaduras ou inimigos. Próxima suíte completa/build substituirá a contagem integrada anterior.
+
+### Complemento — Criaturas demoníacas e mortos-vivos do bestiário (01/10/2026, 02:47 BRT)
+
+A regressão revelou que o teste artificial `category: 'demon'` não comprovava o efeito em nenhum encontro catalogado: `Flaming Demon Lord` não tinha categoria/sinalizador de demônio e recebia só o bônus elemental comum. O bestiário agora marca `isDemon` nos nomes claramente demoníacos/fiends infernais e `isUndead` em esqueletos, fantasmas, vampiros, liches e chefes de morte, sem alterar `category` (que também alimenta classificação de arma). O serviço sagrado reconhece ambos os sinalizadores. A regressão usa agora os monstros reais `flamingDemonLord` e `lichLord` e confirma 1.700 de dano com 300 Sagrado contra cada; os testes elementais, de zona e dificuldade de caça passaram **17/17**. Essa classificação ainda é amostra dos nomes óbvios do catálogo, não auditoria semântica de cada monstro.
+
+### Checkpoint integrado — Elementos, bestiário e equipamento após regressões (01/10/2026, 02:48 BRT)
+
+A suíte completa atual passou **1.209/1.209 testes em 131 suítes**, zero falhas, depois das regressões da resistência do bestiário, da matriz dos seis elementos e da mitigação legado/undead. O build de produção passou em 11,93 s. Bundles grandes continuam alertados pelo Vite: `index` 2.622,86 kB e `game-data-classes` 1.667,35 kB minificados (gzip 652,45/210,73 kB); não fiz divisão de chunks nesta rodada. A alteração local do bestiário classifica mortos-vivos/demônios óbvios via flags dedicadas sem mexer em `category`. Aprovação geral continua bloqueada por cobertura incompleta das telas e sistemas e pela inspeção visual local indisponível. Nenhum save real foi usado. Reset de uso previsto 03:39:57 BRT; última consulta 02:48 indicava 80% da janela de cinco horas e 78% semanal. O computador segue com desligamento às 06:00 BRT.
+
+### Verificação da agenda de fechamento (01/10/2026, 02:48 BRT)
+
+Consultei o Agendador de Tarefas, sem alterar sua configuração: o checkpoint automático `AdenArena_Checkpoint_20261001_0545` está em estado Ready para 05:45 BRT, executa o script deste projeto para registrar o estado no diário, fazer commit/push e confirmar `origin/main`; o desligamento `AdenArena_Shutdown_20261001_0600` está Ready para 06:00 BRT. O script de checkpoint já foi lido e corresponde ao repositório e à branch `main`. O uso foi consultado às 02:48 BRT: 80% da janela de cinco horas e 78% semanal; reset da janela curta às 03:39:57 BRT.
+
+### Exceção encontrada na hierarquia de armas (01/10/2026, 02:50 BRT)
+
+Ampliei a leitura do catálogo para além do comparativo de S comum: as armas `Infinity` exigem `req.isHero` e, pelo `StatsEngine`, algumas superam as Frost Lord em P./M. Atk (por exemplo, Infinity Bow e Infinity Rod). Elas são prêmio especial de Herói da Olympiad, não armas S comuns; não as alterei automaticamente porque isso pode desfazer uma progressão exclusiva distinta. O plano registra a exceção: se Frost Lord deve ser literalmente o teto absoluto, inclusive acima de armas de Herói, essa regra precisa ser aplicada também ao tier Infinity. Não há armaduras/joias Frost Lord no catálogo; joias épicas e o manto de castelo ficam acima dos exemplos S comparados, enquanto a coroa de castelo troca parte de P./M. Def por HP/MP. Não inventei um score único para pesar esse trade-off.
+
+### Complemento — Cobertura de demônios do Inferno (01/10/2026, 02:51 BRT)
+
+Uma varredura dos nomes do bestiário encontrou `Infernal Hell Hound` e `Cerberus Hell Guardian` com Fogo, porém sem sinalizador demoníaco. O teste real via catálogo falhava para Sagrado (+30% não aplicado). Marquei ambos como `isDemon`, sem alterar categoria ou atributos de combate; junto de `Flaming Demon Lord`, `Underworld Flame Overlord` e fiends infernais, agora recebem a regra documentada. A regressão para o Hell Hound passou no cálculo final elemental. Um teste percorre todos os 17 monstros atualmente marcados como demônio ou morto-vivo e confirma o bônus Sagrado; o arquivo elemental passou 16/16. A lista foi baseada em nomes/títulos evidentes; referências ambíguas como `Death Treant` ou `Ancient Necro Gargoyle` foram deixadas sem classificação inferida.
+
+### Validação pelo encontro real da zona (01/10/2026, 02:52 BRT)
+
+Fechei a prova de integração dos novos sinalizadores: `pickRandomMonster` cria o `flameOverlordDemon` na zona Gates of the Underworld, preserva `isDemon` ao copiar o template para `state.activeMonster`, e o cálculo de ataque com 300 Sagrado entrega 1.700 no serviço de dano. O teste controla aleatoriedade somente dentro do fixture e restaura `Math.random` em `finally`; nenhuma conta, combate ou save real foi tocado. O arquivo elemental passou **16/16**.
+
+### Velocidade de movimento de equipamento integrada ao combate básico (01/10/2026, 02:56 BRT)
+
+Uma varredura dos campos numéricos dos equipamentos mostrou que `speed` é declarado em joias, botas de Herança e armas de Herói, mas `getTotalEquipBonuses` acumulava `eb.speed` sem que `StatsEngine` o usasse. Em particular, “+15 Velocidade de Movimento” da Infinity Bow não chegava a `movementSpeedPercent`, o campo consumido por `resolvePlayerBasicAttackIntervalMs`. A regressão no `StatsEngine` falhou antes: bônus +15 não alterava o intervalo. Agora speed do equipamento, conjuntos e certificação entra no movimento efetivo exibido e no mesmo cálculo que define a espera entre ataques básicos. Testes pelos itens reais confirmam Earring of Zaken (+6%), Infinity Bow (+15%) e Botas de Couro de Herança (+10%); +15% transforma 1.000 ms em 870 ms sem alterar `atkSpd`. Equipamento/intervalo de personagem/Astral passaram **28/28** testes direcionados. O inventário contém bônus especiais adicionais e ainda requer validação visual e de cada combinação.
+
+### Checkpoint integrado — Velocidade de equipamento, elemental e build (01/10/2026, 02:58 BRT)
+
+A suíte completa passou **1.212/1.212 testes em 131 suítes**, zero falhas, incluindo resistência/flag elemental dos encontros, armadura legada `head`, matriz dos seis elementos e velocidade de item até o intervalo básico. Build passou em 11,89 s. O Vite continua sinalizando chunks grandes: `index` 2.623,00 kB e `game-data-classes` 1.667,35 kB minificados (gzip 652,48/210,73 kB). O build confirmou compilação da correção de `StatsEngine`; a tela/browser ainda não pôde ser inspecionada visualmente. Nenhum save real foi usado; aprovação integral continua bloqueada pelas áreas e ações sem evidência própria listadas no plano. A revisão do diff e dos arquivos protegidos será repetida antes do commit/push autorizado.
+
+### Continuação — Saciedade de pets no ciclo de produção (01/10/2026, 03:04 BRT)
+
+A inspeção de `PetService` e de `tickUI` confirmou uma lacuna reproduzível: saciedade era inicializada e a ação de alimentar cobrava 5.000 Adena, mas não existia consumo, mantendo permanentemente o botão “Saciado” e os bônus de um pet convocado. Antes da implementação, acrescentei testes descartáveis que falharam por ausência de `tickPetHunger`. O serviço agora desconta um ponto por dez minutos somente enquanto o pet está invocado, conserva intervalos parciais, não consome com o pet descansando e deixa de conceder bônus/ataque quando chega a zero. O tick por segundo de produção alimenta o serviço; a janela do pet exibe e atualiza a saciedade. Saves legados sem o campo são tratados como cheios para não remover vantagens abruptamente; a alimentação reinicia o acumulador. A regra de 10 minutos é decisão local de balanceamento, não alegação sobre Lineage II.
+
+
+Validação concluída às 03:04: `node --test test/dolls-pets-validation.test.js` **9/9**, `npm test` **1.215/1.215 em 131 suítes**, `npm run build` concluído em 14,45 s. Permanecem os avisos existentes de chunks acima de 1,5 MiB (`index` 2.624,51 kB e `game-data-classes` 1.667,35 kB minificados). Nenhum save real foi usado nem serviço protegido alterado. A ferramenta de pursuing goal só permite mudança de status, portanto o objetivo ativo não pode ser reescrito por ela; os critérios operacionais estão explicitados no cabeçalho e na tabela do plano. Janela de cinco horas consultada às 03:02 BRT: 88% usada, com reset previsto às 03:39:57 BRT; janela semanal em 79%. Checkpoint 05:45 e desligamento 06:00 seguem agendados.
+
+### Continuação — Adição transacional na mochila (01/10/2026, 03:08 BRT)
+
+Seguindo a ordem do plano, auditei o ingresso de itens no inventário. Dois fixtures lotados reproduziram que `addToInventory` podia falhar por capacidade depois de mutar estado: aumentava uma pilha existente e depois não conseguia abrir uma nova, ou inseria só parte de uma recompensa não empilhável. Adicionei primeiro as regressões, observei ambas falharem, e então o serviço passou a rejeitar quantidades não inteiras/positivas, calcular todos os slots antes de alterar pilhas, e inserir recompensas de equipamento em lote. A verificação usa somente `DEFAULT_STATE` descartável e um catálogo de teste efêmero.
+
+Resultado direcionado atualizado: pets **10/10**; integridade de adição/remoção **6/6**; regressão comercial do inventário **18/18**, no total combinado **34/34**. Além da adição, a remoção por UID agora rejeita quantidade zero, negativa, fracionária ou não finita; a remoção por item valida o saldo total antes de modificar pilhas e não considera itens cujo UID ainda aparece no equipamento, mesmo com `equipped: false`. As regressões reproduziram insuficiência que esvaziava pilhas e quantidades inválidas que retornavam sucesso antes da correção. A suíte total e o build precisam ser reexecutados após estas últimas alterações de mochila. Protegidos `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` seguem sem diff; saves reais não foram abertos. Continuação do plano e limitações visuais continuam registrados em `docs/PLANO_AUDITORIA_INTEGRAL_DAS_TELAS.md`.
+
+### Verificação integrada após saciedade e transações da mochila (01/10/2026, 03:10 BRT)
+
+Executei as regressões dirigidas (**34/34**), depois `npm test`: **1.222/1.222 em 132 suítes, zero falhas**. `npm run build` concluiu em 14,74 s. Persistem os avisos de bundle: `index` 2.625,38 kB e `game-data-classes` 1.667,35 kB minificados. `git diff --check` passou; os avisos são apenas conversão de LF/CRLF. Isto valida código/testes; a inspeção de tela no browser permanece bloqueada e a auditoria geral segue parcial.
+
+### Continuação — Forja Universal transacional (01/10/2026, 03:12 BRT)
+
+Auditei `CraftService.craftItem` pelo serviço usado pela produção. O teste descartável com uma receita que consome uma unidade de minério, mochila cheia e saída não empilhável falhou antes da correção: a função retornava sucesso e debitava Adena/minério, mas o item não era entregue. Agora o serviço calcula a operação numa cópia de trabalho, incluindo consumo dos materiais, rolagem de yield/Foundation e tentativa de guardar o produto; só confirma inventário, ouro, pity e progresso de forja quando a saída cabe. Consumo de ingrediente reutiliza a remoção transacional e recusa um UID equipado. Outra regressão confirmou que quantidades zero, negativas, fracionárias e não finitas eram tratadas como craft de uma unidade; `canCraft`/`craftItem` agora as rejeitam. `test/craft-output-transaction.test.js` cobre falha transacional, entradas inválidas e sucesso inteiro; junto com `test/canonical-lineage2-adaptations.test.js` passou **24/24** direcionados. Ainda não usei saves reais; serviços protegidos sem diff.
+
+Validação completa em 03:13 BRT: `npm test` **1.223/1.223 em 133 suítes, zero falhas**; `npm run build` passou em 14,44 s. Os avisos de bundle seguem em `index` 2.625,48 kB e `game-data-classes` 1.667,35 kB minificados. A inspeção visual segue bloqueada; não trato build ou testes como aprovação de UI.
+
+`npm run typecheck` continua falhando com diagnósticos preexistentes fora dos arquivos desta rodada: imports não usados em `App.tsx`, `LoginScreen.tsx`, `Aden2DGame.tsx` e serviços Firebase; tipos ausentes para `import.meta.env`, `GameConfig.idleState`, `Game.facingAngle`, `s.cd/maxCd`, declaração de módulo de `skills/index.js` e erro `Element.style` em `ArenaApp.tsx`. O código que alterei não é apontado pelo compilador. Build de produção continua passando; erros de typecheck permanecem abertos para uma rodada própria de tipagem.
+
+Após rejeitar quantidades inválidas no `CraftService`, reexecutei em 03:16 BRT: `npm test` **1.224/1.224 em 133 suítes**; build **14,52 s**, passou. `git diff --check` continua limpo, exceto avisos de autocrlf. Chunk `index` agora 2.625,60 kB minificado; o alerta >1,5 MiB permanece.
+
+### Continuação — Validação de lote na Alquimia (01/10/2026, 03:18 BRT)
+
+Na sequência do plano, auditei a fabricação de elixires. `craftElixir` usava `Math.max(1, floor(qty))`, então valores inválidos e zero eram transformados em fabricação de uma unidade. A regressão com Adena e essências descartáveis falhou antes da mudança; agora só aceita inteiro positivo e preserva todos os recursos para entradas inválidas. `test/alchemy-disposable-integrity.test.js` passou **6/6**. A suíte geral/build ainda precisam rodar novamente após esta mudança; inspeção visual e outras receitas continuam parciais.
+
+Na primeira suíte geral posterior, houve uma falha estatística isolada no teste Monte Carlo `phase4-threshold-consistency.test.js`: um dos nove bosses ficou em 94% contra limiar 95% com 100 simulações. O arquivo passou isoladamente **6/6** em seguida e repetiu **5/5 execuções**; a suíte inteira foi repetida e passou **1.226/1.226 em 133 suítes**. O build também passou em 15,39 s; tamanho de `index` 2.625,70 kB. Registrei o falso alarme como intermitência do teste (amostra Monte Carlo pequena) e não mudei sua lógica nem afrouxei o limiar. Deve ser repetido no fechamento final, e a intermitência fica anotada como ressalva.
+
+Correção da auditoria de teste: `phase4-threshold-consistency.test.js` já possuía `withSeededRandom`, usado por Valakas, mas a matriz dos nove bosses chamava o simulador sem seed. Cada boss agora tem seed estável; mantive 100 lutas, o limite de WR de 95% e SM de 1,50x. A reprodução determinística do arquivo passou **26/26**. Reexecutarei a suíte integral após esta mudança.
+
+Fechamento desta verificação: `npm test` **1.226/1.226 em 133 suítes** e `npm run build` passou em **14,99 s**. A matriz determinística manteve os limiares canônicos. O diff dos três serviços protegidos continuou vazio; nenhum save real foi usado. Há 98 caminhos locais alterados/adicionados no total do workspace, acumulando trabalho pré-existente e alterações desta sessão; tudo permanece preservado para o checkpoint autorizado de 05:45.
+
+### Continuação — Recuperação de estado legado em Cosméticos (01/10/2026, 03:21 BRT)
+
+Um fixture de save cosmético legado com `unlockedAuras` textual reproduziu uma exceção no getter de aura de personagem Herói (`.push` não era função); listas e ids ativos malformados também não eram reparados. `CosmeticService.ensureState` agora normaliza arrays contra os catálogos, deduplica IDs, garante opções padrão e troca IDs ativos inválidos por defaults. O teste só usa `DEFAULT_STATE` sintético e conserva o status de Herói sem modificar saves reais. `test/cosmetics-achievements-validation.test.js` passou **10/10**. A suíte integral/build precisam ser rodados após esta alteração.
+
+### Marco de retomada — Uso e validação integrada (01/10/2026, 03:22 BRT)
+
+Retomada após compactação do contexto: workspace `C:\Users\duuha\Downloads\adenarena-main\adenarena-main`, branch `main`, HEAD `8b8a6cce480009c9c97d2318f25b51c21c48650b`. Há alterações locais rastreadas e arquivos de teste/serviço novos; nenhuma foi descartada. `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` continuam sem diff. Última validação integrada registrada antes deste marco: `npm test` passou 1.227/1.227 em 133 suítes e `npm run build` passou em 14,76 s; permanecem avisos de chunks Vite grandes e verificações visuais pendentes. O uso consultado às 03:22 BRT está em 98% da janela de cinco horas, com reset às 03:39:57 BRT, e 81% da janela semanal. Vou evitar ampliar mudanças antes do reset e retomar depois, observando o limite de reserva de 1%. As tarefas automáticas de checkpoint 05:45 e desligamento 06:00 constam como Ready. Esta auditoria permanece parcial; nenhum save real ou transação real foi usado.
+
+### Investigação em andamento — Compra de nó da Maestria Astral (01/10/2026, 03:26 BRT)
+
+A próxima entrada na ordem é Maestria. O handler `upgradeAstralNode` consulta `ASTRAL_NODES[nodeId]` sem validar propriedade própria. Uma inspeção executável do catálogo confirmou que `__proto__`, `constructor` e `toString` não são nós próprios, mas a consulta retorna valores herdados; custo ausente pode contaminar `astralShards` com `NaN`. Isso é uma hipótese de defeito no handler, ainda não reproduzida pelo caminho de produção. A regressão atual da Maestria cobre 12 nós e efeitos em `getStats`, mas não exercita compra pelo handler. O próximo passo após o reset é adicionar teste pelo serviço/caminho real usado pelo handler e corrigir somente se a regressão confirmar. Nenhuma alteração de produção feita por esta hipótese até aqui.
+
+### Correção reproduzida — Validação de ID na Maestria Astral (01/10/2026, 03:30 BRT)
+
+Executei o corpo exato de `upgradeAstralNode` extraído de `main.js`, com callbacks/UI de teste e estado descartável: `upgradeAstralNode('__proto__')` retornou sucesso e subtraiu um custo inexistente, deixando `astralShards` como `NaN` (JSON apresenta `null`). A regressão foi escrita primeiro e falhou pelo motivo esperado. O handler agora aceita somente IDs próprios de `ASTRAL_NODES`, rejeitando `__proto__`, `constructor` e `toString` antes de qualquer mutação. `node --test test/astral-mastery-handler-validation.test.js test/astral-hero-pillar-validation.test.js`: **6/6**, incluindo bônus, integração de atributo e as três chaves inválidas sem mutação. Isso comprova a correção da entrada do handler; ainda não cobre visualmente as subtelas, todos os estados de compra nem o fluxo de reencarnação. Nenhum save real foi lido.
+
+### Correção reproduzida — Progresso fracionário de missões (01/10/2026, 03:31 BRT)
+
+Na área Missões, acrescentei antes da mudança uma regressão descartável com `triggerQuestEvent(state, 'kill', 1.5)`. O teste falhou como esperado: o serviço armazenava 1,5 progresso para um evento de abate. O contrato atual de todos os emissores é por contagem/moeda inteira; o serviço agora aceita somente inteiros seguros positivos e ainda limita cada missão ao alvo. `test/quests-battlepass-validation.test.js` passou **7/7** depois da correção. Junto da regressão de compra da Maestria e sua suíte de efeitos, os testes dirigidos passaram **13/13**. O teste da missão chama diretamente o serviço real consumido pelo adaptador de produção. Ainda faltam modal, tiers completos e inspeção visual; status continua parcial.
+
+### Marco pré-reset — uso em 99% (01/10/2026, 03:37:52 BRT)
+
+Consulta direta do limite: janela de cinco horas em **99% usada**, janela semanal em **81%**, reset da curta às **03:39:57 BRT**. Pauso alterações de código até confirmar a renovação, preservando a reserva de 1% da próxima janela. Estado salvo no próprio workspace e no diário; não houve commit parcial nem operação remota neste marco.
+
+### Marco pós-reset — janela renovada (01/10/2026, 03:40 BRT)
+
+Confirmei às 03:40:16 BRT o reset efetivo: janela de cinco horas em **0% usada**, janela semanal em **81%**. Retomada autorizada com reserva mínima de 1%. O trabalho novo desde o snapshot anterior contém duas correções com regressões: ID herdado inválido no handler de Maestria e progresso fracionário em Missões. Próxima etapa: suíte e build completos antes de ampliar a auditoria.
+
+### Correção reproduzida — Campos fracionários no anúncio do Mercado (01/10/2026, 03:45 BRT)
+
+A jornada de `renderMarketTab` foi executada com inventário e saldo descartáveis e `MarketService` substituído por fake. Uma quantidade `1.5` chegou ao handler de anúncio; escrevi a regressão primeiro e observei a falha. Depois da validação de quantidade inteira, a UI passou a limitar ao estoque disponível. Uma segunda regressão revelou que preço unitário `1.5` também chegava ao serviço, enquanto o backend converte para inteiro — divergindo o resumo do formulário do anúncio criado. O campo de preço agora restringe e valida inteiro positivo. `test/market-listing-quantity-ui.test.js` e `test/market-ui-untrusted-data.test.js`: **2/2 suítes dirigidas aprovadas**. O teste não executa transação: criação foi interceptada pelo fake; `MarketService.js` continua sem diff. Assim, a validação cobre o envio pela UI, não compra/listagem contra servidor nem idempotência de transações.
+
+### Checkpoint integrado — Maestria, Missões e formulário do Mercado (01/10/2026, 03:47 BRT)
+
+Após as novas regressões, `npm test` passou **1.229/1.229 testes em 135 suítes**, zero falhas. `npm run build` passou em 14,68 s. Permanecem avisos de chunks minificados acima de 1,5 MB: `index` 2.626,27 kB (gzip 653,46 kB) e `game-data-classes` 1.667,35 kB (gzip 210,73 kB). `git diff --check` passou. As três proteções continuam intactas, sem transação remota ou save real. Aprovação geral segue parcial: fluxos adicionais e validação visual ainda pendentes.
+
+### Mercador — compra comum e mística em estado descartável (01/10/2026, 03:45 BRT)
+
+Ampliei a cobertura do Mercador sem alterar produção: compra de dez poções credita a pilha e desconta exatamente preço x quantidade; mochila lotada barra compra comum e mística sem cobrar Adena nem remover o item do estoque místico. Corrigi apenas um identificador incorreto no fixture (`healing_potion` não existe no catálogo; a poção canônica é `hp_potion_s`); após ajustar os dados de teste, `test/shop-service-disposable-integrity.test.js` passou **6/6**. Esses casos exercitam o `ShopService` consumido pelo handler de UI usando estado sintético, mas não executam compra visual/manual, giro do estoque, filtros ou todos os estados de save.
+
+### Lâmpada Mágica — cobertura do botão e salvamento de produção (01/10/2026, 03:54 BRT)
+
+O teste existente exercitava o serviço, mas não o handler global. Acrescentei cobertura que extrai e executa o corpo de `useMagicLamp` de `main.js` com callbacks de UI/save descartáveis e rolagem determinística; confirma que o botão consome uma unidade, aplica XP/SP, solicita checagem de nível, atualização da interface e salvamento. A suíte `test/magic-lamp-production-flow.test.js` passou **3/3**. Isso fecha esse caminho de handler em teste, mas não a inspeção visual nem a validação de todos os níveis de progressão.
+
+### Forja Imperial — Random Craft não perde carga nem prêmio (01/10/2026, 03:47 BRT)
+
+Reproduzi em `spinRandomCraft` que mochila cheia fazia `addToInventory` falhar, mas o serviço ainda consumia uma carga, registrava a recompensa no histórico, renovava os cinco itens e retornava o prêmio como se tivesse sido concedido. A regressão com catálogo, inventário e slots descartáveis falhou antes. Agora o serviço só debita a carga, registra o histórico e renova slots depois de a mochila aceitar o item; se a inserção falha, retorna `false` e mantém carga, prêmio e histórico. `test/random-craft-transaction.test.js`, `test/craft-output-transaction.test.js` e `test/refinery-disposable-integrity.test.js`: **6/6** aprovados. Ainda falta testar outras bancadas da Forja e a UI visual.
+
+### Fortalezas — limite de produção offline alinhado ao jogo (01/10/2026, 03:49 BRT)
+
+Uma fixture de 24 horas comprovou que `FortressService.updateProductionTick` concedia o ciclo inteiro (21.600 Knight’s Epaulettes no exemplo), embora `SecurityEngine` limite progresso offline a 720 minutos. A regressão falhou antes da correção. O teto agora vem da constante compartilhada `MAX_OFFLINE_MINUTES`; tempo negativo por relógio adiantado fica em zero, e o checkpoint é atualizado após produção concedida. A primeira versão da expectativa do teste confundiu taxa por minuto com taxa por hora; corrigi a unidade e a regressão então falhou pelo excesso real de 12 horas. `test/fortress-lifecycle-integrity.test.js` junto de `test/fortress-glory-pillar-validation.test.js`: **9/9**. `SecurityEngine.js` permanece funcionalmente igual; apenas exporta a constante que já usava. Nenhum save real foi usado.
+
+### Checkpoint integrado — Random Craft, Fortalezas e regressões da rodada (01/10/2026, 03:50 BRT)
+
+`npm test`: **1.234/1.234 testes em 136 suítes**, zero falhas. `npm run build`: sucesso em 14,50 s. Os bundles continuam sinalizados pelo Vite: `index` 2.626,38 kB e `game-data-classes` 1.667,35 kB minificados. Últimas correções passaram pelo ciclo teste vermelho/verde: prêmio do Random Craft não perde carga com mochila cheia; tick de Fortalezas obedece o máximo offline global; Maestria rejeita chaves herdadas; Missões rejeitam progresso fracionário; UI do Mercado envia quantidade/preço inteiros. Os arquivos protegidos seguem sem alteração. Diário/plano atualizados, sem save real/transação remota. Auditoria visual permanece parcial.
+
+### Olimpíadas — resultado de derrota em combate descartável (01/10/2026, 03:51 BRT)
+
+A cobertura existente validava duelo concorrente/vitória e loja, mas não a rota de derrota nem a consolação. Acrescentei um duelo offline com oponente canônico, RNG fixa e save sintético. O serviço aplicou derrota: -15 pontos (sem cair abaixo de 500), +50 tokens e contador de derrota +1, sem vitória. `test/olympiad-transaction-integrity.test.js` passou **6/6**. A primeira expectativa do teste assumia que `olympiadWins` inicia explicitamente em zero; o save padrão o omite, então a asserção foi corrigida para tratar campo ausente como zero, sem alterar produção. Este resultado não prova todas as composições de status, placares ou requisitos nem acessa conta Firebase real.
+
+### Reteste integrado — pós-cobertura de Olimpíadas (01/10/2026, 03:54 BRT)
+
+Depois do teste de derrota da Olimpíada e da cobertura de compra do Mercador, `npm test` passou **1.235/1.235 testes em 136 suítes**, zero falhas. O build mais recente permanece o de 03:50 BRT (14,50 s), pois desde então não houve alteração de produção. As mudanças de código desta rodada foram testadas e o build segue vigente. `git diff --check` e arquivos protegidos devem ser verificados novamente antes do checkpoint. Auditoria global e cobertura visual continuam parciais.
+
+### Sete Selos — botões e serviços de Mammon exercitados na produção (01/10/2026, 04:02 BRT)
+
+A renderização real de `renderSevenSignsTab` reproduziu que troca, deselamento e infusão apontavam todos para `unsealArmorAction`; os serviços de troca e infusão não existiam. A regressão foi escrita e falhou antes da implementação. Separei os handlers e implementei os dois serviços ausentes: a troca seleciona uma arma A/S da mochila e destino da mesma graduação por 25.000 AA; mantém o UID para preservar referência de equipamento, mas recusa item com melhorias ou campos de instância inesperados para não perder SA/encantamentos/atributos/Foundation. A infusão usa arma equipada, aceita Focus, Haste ou Acumen, registra SA nível 13 e cobra 100.000 AA. Haste agora passa pelo cálculo de `getStats` como redução de recarga; o teste verifica CDR maior após infusão. O deselamento cobra 50.000 uma vez e valida que o item está no inventário, selado e é armadura A/S. Tudo foi exercitado com `DEFAULT_STATE` descartável.
+
+`node --test test/seven-signs-blacksmith-services.test.js test/sevensigns-glory-pillar-validation.test.js test/seven-signs-transaction-integrity.test.js`: **15/15**, incluindo renderizador, custos, troca, recusa segura de arma aprimorada, três SAs e cálculo de CDR. O plano da área 29 foi atualizado. Falta rodar suíte/build integrados, revisar estado do checkpoint e manter validação visual como pendente; nenhuma conta/salvamento real foi usado. A auditoria geral continua parcial.
+
+### Verificação integrada — serviços de Mammon (01/10/2026, 04:04 BRT)
+
+Depois de incluir no renderizador o seletor de armadura, repetição geral: `npm test` **1.240/1.240 em 137 suítes, zero falhas**; `npm run build` passou em **12,12 s**. Bundle `index` 2.632,89 kB minificado (gzip 655,41 kB) e `game-data-classes` 1.667,35 kB (gzip 210,73 kB); o aviso Vite de chunks >1,5 MB permanece. O item de deselamento é escolhido entre as armaduras A/S ainda sem flag `isUnsealed`; seleção não depende do idioma no nome da peça. Plano da área 29 atualizado. Nenhuma tela foi confirmada visualmente.
+
+### Sete Selos — ciclo semanal acionado pelo tick normal (01/10/2026, 04:07 BRT)
+
+O catálogo de auditoria mostrava um handler `resolveWeeklyCycle`, mas a busca pelo código não encontrou consumidor. A simulação com relógio antes da correção falhou porque `advanceWeeklyCycle` não existia; implementado avanço no serviço e chamada em `tickUI` (1 s). O estado começa em competição por 7 dias, fecha calculando Dawn/Dusk/tie, mantém o vencedor na validação por outros 7 dias, depois inicia competição seguinte e reseta placares. O serviço processa períodos vencidos durante ausência e a mesma chamada não duplica transições; a UI mostra a fase/ciclo e a mudança faz log, atualização de tela e save. A escolha de 7 dias por fase reutiliza a duração que a função antiga já gravava; não foi feita pesquisa para apresentá-la como regra oficial de qualquer crônica.
+
+`node --test test/seven-signs-blacksmith-services.test.js test/sevensigns-glory-pillar-validation.test.js test/seven-signs-transaction-integrity.test.js`: **18/18** com relógio sintético e estado descartável. Um teste dirigido inicialmente não tinha facção no fixture; corrigi o fixture (o handler corretamente bloqueava ferreiro sem facção) e todos passaram. Repetir suíte geral/build após integrar ciclo. A área segue parcial por falta das regras completas de participação/facção e inspeção visual.
+
+### Integração do ciclo semanal — suíte e build (01/10/2026, 04:08 BRT)
+
+Após integrar o avanço semanal em `tickUI`, `npm test` passou **1.243/1.243 em 138 suítes**, zero falhas; `npm run build` passou em **11,90 s**. Chunk `index` 2.634,56 kB minificado (gzip 656,04 kB) e `game-data-classes` 1.667,35 kB (gzip 210,73 kB), ambos ainda acima do alerta de 1,5 MB do Vite. `git diff --check` passou com apenas avisos CRLF do Git para arquivos LF. `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` seguem sem diff. Ainda não foi feita a verificação visual.
+
+### Codex — exibição, busca e alias de compatibilidade (01/10/2026, 04:09 BRT)
+
+Na área 30, uma regressão mostrou que a UI exibia bônus fracionários sem aplicar o rank (por exemplo, lifesteal/crit damage continuavam 4% em todos os ranks), embora o serviço já escalasse o valor. O mesmo trecho usava `Math.round` para números absolutos; agora serviço e label usam o multiplicador aplicado, com percentuais em uma casa decimal. A busca entrava de volta no HTML do input sem escape; o valor agora passa por `escapeHTML` antes de ser interpolado, com regressão de atributo HTML malicioso. O alias antigo `card_ant_queen` e `card_queen_ant` somavam ambos: com rank 2 canônico + rank 1 legado, o teste reproduziu PATK 88 em vez de 53. Agregação agora consolida equivalentes pelo melhor rank sem reescrever save; a UI apresenta uma única carta e aceita o estado legado.
+
+Red/green: `test/codex-ui-render-integrity.test.js` falhou antes nas duas ligações esperadas e agora cobre formatter, escape e uso pelos templates. `test/codex-absorption-integrity.test.js` reproduziu e corrigiu duplicação. Validação dirigida `test/codex-ui-render-integrity.test.js test/codex-absorption-integrity.test.js test/codex-glory-pillar-validation.test.js`: **17/17**. `npm test`: **1.246/1.246 em 139 suítes**; `npm run build`: passou em **11,95 s**. Bundles grandes seguem com aviso. Nenhum save real tocado; tela ainda sem validação visual manual.
+
+### Página de continuidade — Velocidade de equipamento e recarga (01/10/2026, 04:15 BRT)
+
+**Plano de ação operacional:** seguir a ordem do plano de auditoria, priorizando reproduções em produção com estado descartável; escrever regressão antes de cada correção; validar o efeito no resultado final; registrar pendências reais e atualizar este plano/diário. Próxima frente após este marco: continuar Combate e Zonas em efeitos de atributo/elemento e balanceamento comparativo; depois avançar na ordem para Coliseu PvP. Não reauditar classes/skills nesta rodada por decisão do usuário. Browser visual permanece bloqueado pela preferência salva, então não declarar telas aprovadas sem verificação manual.
+
+**Correção reproduzida:** no caminho de `StatsEngine.getStats`, o Anel de Baium entregava `atkSpeed` e `castSpeed`, mas só `castSpeed` reduzia CDR. A regressão pré-correção falhou: o anel aplicava +15% em vez de +30% de CDR; pelo `canCastSkill`, o cooldown resultante ficava em 8,5 s, em vez dos 7 s esperados para 10 s base. Corrigi para que bônus de `atkSpeed` e `castSpeed` de equipamentos reduzam a recarga, junto com contribuições de velocidade de Masterwork e certificações; velocidade de movimento continua alterando o intervalo entre ataques básicos. O teste agora verifica `getStats` e o gate real de `canCastSkill`, além da velocidade de movimento e do Masterwork. `test/equipment-effect-runtime-validation.test.js`, `test/character-ui-attack-interval.test.js` e `test/combat-speed-control.test.js`: **25/25**.
+
+**Validação integrada:** `npm test` passou **1.247/1.247 testes em 139 suítes**, sem falhas. `npm run build` passou em **11,99 s**. O Vite ainda sinaliza chunks grandes: `index` 2.635,20 kB e `game-data-classes` 1.667,35 kB minificados. `git diff --check` passou; os avisos exibidos são somente conversão LF/CRLF. `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` seguem sem diff. Nenhum save real, compra real ou transação remota foi usado.
+
+**Estado e impedimentos:** aprovação global continua parcial. O plano registra cobertura incompleta em várias áreas e falta de validação visual em navegador; os resultados acima valem para os caminhos e casos listados, não para todas as telas nem todos os itens. O limite consultado às 04:14 BRT estava em 17% usado na janela de cinco horas e 84% na semanal. As tarefas de checkpoint às 05:45 e desligamento às 06:00 seguem `Ready`.
+
+### Continuação — Varredura de atributos em equipamentos (01/10/2026, 04:18 BRT)
+
+Ampliei a regressão de equipamento para percorrer cada definição única equipável do catálogo e cada campo de bônus de combate não nulo. A medição dinâmica inicial encontrou 416 itens e 1.107 efeitos; nenhum deixou de chegar ao agregado de bônus do equipamento. `test/equipment-effect-runtime-validation.test.js` agora mantém essa varredura automática, com aliases legados de P./M.Atk e Adena incluídos, e verificações de consumo pelo `StatsEngine` seguem nos casos dirigidos. Teste dirigido passou **24/24**. Isso valida presença no agregador para os dados atuais; não prova por si só que todos os bônus alteram dano final, pois os consumidores específicos seguem sendo verificados pelos testes de cada domínio.
+
+Conferi o balanceamento local já codificado: armas Frost Lord têm 172 P.Atk contra máximo de 138 nas armas S comuns (+24,6%) e 212 M.Atk contra máximo S de 170 (+24,7%); `equipment-tier-balance.test.js` testa cada arma Frost Lord contra todo o catálogo S pelo `getStats`. O catálogo não tem armaduras chamadas Frost Lord; para equipamento defensivo e joias, os tiers superiores locais existentes são itens de Boss/Épicos e do Lorde do Castelo. Os testes atuais comparam o manto do castelo com uma capa S e Necklace of Valakas com Tateossian; a varredura mostrou também joias de Boss chegando a `getStats` (por exemplo, lifesteal do Earring of Antharas). Não inventei um novo tier/armadura para preencher um nome que não existe no catálogo.
+
+O plano foi atualizado. A suíte completa e o build precisam ser repetidos após esta nova regressão, antes do checkpoint. Aprovação de toda a auditoria permanece parcial por resistências/mitigações restantes, telas e ações não exercitadas e validação visual indisponível.
+
+### Correção reproduzida — Proc fracionário do Martelo de Herança (01/10/2026, 04:23 BRT)
+
+A varredura levou a um efeito que realmente não executava: `weapon_heirloom_blunt` declara `stunChance: 0.15` na fase final, porém `getEquipBonus` arredondava todo `stunChance` para inteiro e o agregador entregava zero. Escrevi a regressão primeiro; ela falhou com `0 !== 0.15`. `StatsEngine` agora preserva precisão fracionária deste campo. Também extraí o teste do proc de ataque em `rollPlayerHitStunProc` e liguei a chamada do ataque básico em `main.js` a esse consumidor de produção; os casos determinísticos confirmam que 0,1% aciona contra 0,15%, 0,2% não, limites 25% se comportam corretamente e valores não positivos falham fechados. A suíte dirigida de equipamento e efeitos de combate passou **161/161**; não foi usado RNG real no teste do proc. A auditoria de itens completa ainda está em andamento.
+
+### Validação integrada — efeitos de equipamento pós-correção de Stun (01/10/2026, 04:25 BRT)
+
+Após incluir a varredura transversal e a correção do Martelo de Herança, `npm test` passou **1.249/1.249 em 139 suítes**, zero falhas. `npm run build` passou em **15,23 s**. O aviso do Vite permanece para `index` (2.635,32 kB minificado) e `game-data-classes` (1.667,35 kB); a geração do build não comprova a revisão visual. O diff-check e a conferência final dos três arquivos protegidos ainda serão repetidos antes do checkpoint de 05:45. Trabalho local segue preservado; sem save real nem transação online.
+
+### Balanceamento — dano e mitigação na fórmula de combate (01/10/2026, 04:27 BRT)
+
+Fortaleci a comparação de tiers para não parar no número de P./M.Atk do `getStats`: `test/equipment-tier-balance.test.js` agora avalia cada uma das armas Frost Lord contra o maior dano das armas S comuns, com fórmulas física e mágica determinísticas contra a mesma defesa. A capa do Lorde do Castelo também precisa reduzir tanto dano físico quanto mágico mais que a referência S; Necklace of Valakas continua comparada a Tateossian nos atributos finais. O teste dirigido passou **2/2**. Nenhum valor de item foi alterado nesta etapa porque a hierarquia que existe no catálogo já passa o comparativo de combate; o próximo trabalho pode se concentrar em efeitos faltantes reproduzidos e exceções de balanceamento concretas.
+
+### Correção reproduzida — Compra do Coliseu com mochila cheia (01/10/2026, 04:27 BRT)
+
+Na área Coliseu, `buyShopItem` debitava badges e inseria prêmio diretamente em `state.inventory`, sem usar capacidade, consolidação ou transação da mochila. A regressão com 150 espaços ocupados falhou antes: a compra de `gladiator_circlet` retornou sucesso. Agora a quantidade do catálogo é validada, `addToInventory` faz a inclusão atômica e badges só são debitados depois da confirmação; a rota desativa auto-venda para que um prêmio não seja convertido em Adena. A compra de pacote de CP ainda empilha as 20 unidades corretas. `test/colosseum-service.test.js` e `test/colosseum-glory-pillar-validation.test.js`: **9/9**. Usa apenas estado sintético; a suíte completa/build precisam ser repetidos após a correção.
+
+Complemento da área Coliseu (04:29 BRT): o renderizador real também foi percorrido em repouso, duelo e sobrevivência e comparado aos catálogos. Os testes agora confirmam todos os botões de aposta, golpe, início/ataque de ondas e compra, além do bloqueio de sobreposição. `test/colosseum-service.test.js`: **11/11**. Isso é prova do HTML gerado e de handlers nomeados, não inspeção visual manual nem clique em navegador.
+
+### Checkpoint integrado — equipamento e Coliseu (01/10/2026, 04:29 BRT)
+
+Após a correção de compra da loja e os testes do renderer do Coliseu, `npm test` passou **1.252/1.252 em 139 suítes**, zero falhas; `npm run build` passou em **15,09 s**. Avisos de bundles permanecem: `index` 2.635,41 kB e `game-data-classes` 1.667,35 kB minificados (>1,5 MB). Resultado confirma testes automatizados e build; validação visual, outras subtelas e a auditoria global não estão fechadas. Nenhuma conta real ou save real foi utilizado.
+
+Complemento do balanceamento (04:31 BRT): `equipment-tier-balance.test.js` agora também monta os slots reais `ring1`/`earring1`. A regressão confirma que Ring of Valakas supera Tateossian em ataque, defesa, crítico e HP; o Earring of Antharas aplica lifesteal, XP, Adena e HP ao resultado efetivo de `getStats`. O teste segue sem presumir que todas as joias de Boss sejam superiores em cada atributo — há especializações e trade-offs. Casos dirigidos de hierarquia passaram **2/2**.
+
+### Verificação de efeitos até os atributos finais (01/10/2026, 04:33 BRT)
+
+A varredura anterior comprovava que bônus de catálogo chegavam ao agregador. Para fechar o elo seguinte, acrescentei uma regressão que compara cada um dos 416 equipamentos contra um personagem descartável antes/depois e confirma cada campo no atributo derivado apropriado. Foram verificadas **1.102 saídas efetivas** sem lacunas; o `stunChance` do Infinity Axe é o único bônus que deliberadamente não é stat direto e segue para o proc separado. `test/equipment-effect-runtime-validation.test.js` passou no teste transversal. Isso cobre catálogo → agregador → `getStats`; dano/mitigação final continua coberto pelas fórmulas de combate e pelos casos específicos, não extrapolado a todos os atributos.
+
+Continuação da área Raids e Bosses (01/10/2026, 04:39 BRT): acrescentei um teste de renderização da tela real que confere que cada ID de raid no catálogo tem seu botão de entrada ligado ao handler de produção, com nível/CP suficientes e sem raid ativo. `test/raid-lifecycle.test.js`: **5/5**. Continua faltando executar cada mecânica de boss até o dano/derrota no ciclo real e conferir visualmente a tela; a presença do botão não vale como prova dessas partes.
+
+
+### Reteste integrado — varredura final e Raids (01/10/2026, 04:34 BRT)
+
+Depois dos testes transversais de atributos de equipamento, expansão da comparação de tiers e teste de ações de Raids, `npm test` passou **1.254/1.254 em 139 suítes**, sem falhas. `npm run build` passou em **15,04 s**. Bundles sinalizados permanecem em `index` 2.635,41 kB e `game-data-classes` 1.667,35 kB minificados. `git diff --check` e inspeção dos arquivos protegidos continuam a ser repetidos no checkpoint; inspeção visual manual continua impedida pela preferência do navegador. Nenhum save real ou transação online foi usado.
+
+### Raids — matriz de mecânicas dos nove bosses (01/10/2026, 04:35 BRT)
+
+Adicionei uma regressão que percorre os nove registros de `RAID_BOSSES` pelo `processRaidBossMechanics` de produção. Com HP em 20%, todos acionam as mecânicas configuradas, iniciam canalização fatal e Enrage; o teste comprova dano imediato ao jogador, cura quando o boss possui essa mecânica e que nenhuma saída se repete no tick seguinte. Resultado dirigido passou **1/1**. A matriz não faz a contagem regressiva dos cinco segundos até o impacto fatal nem executa `monsterAttack`; o loop de dano e a inspeção visual continuam pendentes.
+### Raids — impacto pelo handler real de combate (01/10/2026, 04:39 BRT)
+
+A regressão dos nove bosses agora executa o corpo atual de `monsterAttack` extraído de `lineage-idle/main.js`, com relógio e saves descartáveis. Para cada raid, o teste percorre o ramo de canalização já expirada, confirma que `processRaidBossMechanics` aplica exatamente o dano fatal catalogado, que o callback real chama o feedback `stageHeroHurt`, atualiza os stats e despacha `playerDeath` quando o HP chega a zero. Os testes anteriores também comprovam que o impacto não se repete no serviço e que o renderer tem entrada ligada para os nove raids. A suíte focada de Raid/Boss passou **13/13**, incluindo VFX, serviço, catálogo e handler de combate; `git diff --check` passou, com avisos usuais de CRLF.
+
+O escopo comprovado fecha apenas o ramo do golpe fatal. As mecânicas de HP normais ainda não foram executadas cada uma até o resultado no loop de combate; faltam também inspeção visual e as outras ações/subtelas da área. Não houve falha de produção reproduzida nesta etapa. Atualizei o estado e os limites no plano; a auditoria geral continua parcial. O objetivo persistente do Codex não expõe edição do texto por ferramenta nesta sessão; por isso a descrição operacional detalhada e versionada permanece no plano do repositório, sem encerrar o goal.
+
+### Próxima área — compra de cestos na Coleta (01/10/2026, 04:40 BRT)
+
+Adicionei primeiro uma regressão para quantidades inválidas na compra de cestos. Ela falhou: `buyPouch` convertia zero em uma unidade, arredondava frações e aceitava `NaN`, podendo alterar Adena e a contagem armazenada incorretamente. O serviço agora exige quantidade inteira positiva segura e custo seguro antes de debitar ou criar o cesto. `test/gathering-harvest.test.js` passou **4/4**, cobrindo também a durabilidade final, processamento offline sem prêmio duplicado e bloqueio de início concorrente. A correção usa apenas fixture local descartável.
+
+O plano foi atualizado para tornar explícitos o objetivo e os marcos até o checkpoint das 05:45 e para esclarecer o bloqueio já conhecido em Expedições: `ExpeditionService.js` permanece protegido, embora `hazardDamage`, `hazardMitigation` e `totalSquadPower` não cheguem a modificar recompensas. A ferramenta de goal disponível permite consultar/status, não editar a descrição; não alterei seu status nem o encerrei. Próximo passo: continuar as regressões da Coleta na ordem da auditoria e registrar novas lacunas sem mexer em saves reais ou serviços protegidos.
+
+### Coleta — inventário cheio e garantia do prêmio (01/10/2026, 04:44 BRT)
+
+Ao seguir o caminho de encerramento, reproduzi outra perda real: `finishHarvest` ignorava o retorno de falha de `addToInventory`, concluía a colheita e consumia a durabilidade mesmo sem entregar os materiais. A regressão pré-correção falhou com o inventário de 150 espaços cheio. Agora a checagem de capacidade considera os materiais primário e secundário juntos antes de aplicar hazard, XP ou durabilidade; quando não cabe, a coleta permanece ativa e salva o mesmo resultado rolado como pendente. Após liberar espaço, a coleta entrega os valores guardados exatamente uma vez e só então consome a foice. O serviço também limpa o resultado pendente ao concluir, descartar broto, invalidar nó ou liquidar coleta offline; esses caminhos de limpeza ainda precisam de regressões próprias.
+
+Além do caso de mochila cheia, `skipNode` sem proteção durante a colheita foi reproduzido e corrigido: a chamada não pode cancelar/substituir o nó em progresso. Compra inválida de cesta já está coberta. `node --test test/gathering-harvest.test.js`: **6/6**. Essas regressões usam dados descartáveis; a matriz visual e a cobertura de zonas/hazards/AFK/offline permanecem parciais.
+
+### Pesca — entrada de quantidade segura na compra de iscas (01/10/2026, 04:45 BRT)
+
+Na transição para a área de Pesca, apliquei a mesma auditoria de entrada ao serviço de compra de iscas. A regressão falhou porque zero, frações e `NaN` eram tratados como quantidade válida por arredondamento/default, com risco de cobrar uma unidade ou corromper a carteira/estoque. `buyBait` agora recusa quantidades que não sejam inteiros positivos seguros e custos fora do limite seguro, sem alterar o save. `node --test test/fishing-durability.test.js test/gathering-harvest.test.js`: **17/17**. Nenhum saldo real foi usado. Pesca segue parcial quanto a todas as zonas, iscas, resultados até inventário e validação visual.
+
+### Mineração — lâmpadas e retenção do veio com mochila cheia (01/10/2026, 04:47 BRT)
+
+Na mineração encontrei a mesma aceitação de quantidade zero, fracionária e `NaN` na compra de lâmpadas. A regressão foi vermelha antes da correção; `buyLamp` agora exige inteiro positivo e total de custo seguro antes de mexer em Adena ou estoque. Também segui a saída do veio até `addToInventory`: quando a mochila lotava, o serviço consumia picareta, estabilidade/hazard e XP mesmo sem guardar os minérios. A capacidade conjunta de material primário/secundário é verificada antes das mutações; a extração mantém qualidade e quantidades pendentes e, depois de liberar espaço, conclui uma única vez e consome a ferramenta normalmente.
+
+`node --test test/mining-integrity.test.js test/gathering-harvest.test.js test/fishing-durability.test.js`: **30/30**. A matriz anterior ainda atravessa os 24 veios no fluxo real. A regressão de mochila cheia confirma retenção da ferramenta/estabilidade e conclusão após liberar dois espaços. Mineração segue parcial: inspeção visual e checagem de offline com inventário cheio não foram validadas. Saves usados são sintéticos.
+
+### Torre da Insolência — prêmio de boss preservado com mochila cheia (01/10/2026, 04:52 BRT)
+
+No primeiro clear dos andares 10–100, o serviço marcava progresso e concedia lâmpadas, mas ignorava falha ao inserir três cristais A/S numa mochila cheia. A regressão falhou porque não havia fila recuperável. Agora cristais de first-clear que não cabem ficam em `tower.pendingFirstClearRewards`; o painel da Torre mostra um botão de resgate, e o handler simula a inclusão em uma mochila descartável antes de transferir a fila atomicamente. A carga de saves legados inicializa a nova fila sem modificar outros dados. O prêmio de lâmpadas e o progresso continuam sendo concedidos uma única vez, e o cristal fica resgatável após liberar espaço.
+
+`node --test test/tower-lifecycle.test.js`: **8/8**, incluindo gates de CP, conflito de instâncias, derrota ativa, 100 definições de andar, Sweep, fila de first-clear e ligação da ação de UI. Os casos usam estado descartável. A validação visual do botão e a experiência completa de combate seguem pendentes.
+
+### Caça Silvestre — quantidades e troca de couro transacional (01/10/2026, 04:53 BRT)
+
+Na ordem da auditoria, adicionei regressões para duas ações: compra de atrativos e troca de couros no curtume. Antes, a compra arredondava entradas inválidas e a troca subtraía os abates do bestiário antes de saber se o material cabia na mochila. As regressões falharam; agora compra aceita apenas inteiro positivo/custo seguro, e o curtume confere espaço, insere a recompensa e só então consome o progresso do bestiário. Os casos cobrem zero, negativos, frações, `NaN`, infinito e texto sem qualquer cobrança/consumo.
+
+`node --test test/hunting-integrity.test.js`: **14/14**. A troca com mochila cheia agora falha sem consumir couro nem progresso, podendo ser repetida após abrir espaço. A tela e os fluxos de outras zonas/AFK/offline seguem parciais; dados de caça são descartáveis.
+
+### Pesca — troca de peixes com quantidade e inventário atômicos (01/10/2026, 04:55 BRT)
+
+Retomando a ação de troca da Pesca, as regressões reproduziram dois defeitos: quantidade zero/menor que o pacote virava troca de cinco peixes, e inventário cheio podia consumir uma pilha parcial antes de perder o material. A troca agora exige quantidade inteira positiva, calcula pacotes completos e simula remoção dos peixes + adição do material em uma cópia antes de gravar o inventário final. Falta de peixe, pacote inválido ou mochila cheia deixam o inventário original intacto. `node --test test/fishing-durability.test.js`: **13/13**, todos com dados descartáveis.
+
+### Caça Silvestre — recompensa pendente nas três rotas (01/10/2026, 04:58 BRT)
+
+Ao seguir a entrega real, encontrei perda de itens nas três rotas de descarne quando a mochila estava cheia: manual, AFK e liquidação offline ignoravam falha de `addToInventory` ou consumiam ferramenta/progresso antes da confirmação. Os casos foram reproduzidos com inventário descartável. Agora cada rota mantém o resultado sorteado como pendente e só efetiva durabilidade, contagem de presas, Bestiário/Codex e XP depois que todos os materiais cabem. A liquidação offline também mantém o lote e seus materiais exatos para resgate posterior; no descarne manual, uma tentativa pendente não pode trocar de escolha nem rerrolar a qualidade.
+
+`node --test test/hunting-integrity.test.js`: **17/17**; a suíte combinada com Pesca, Torre, Mineração e Coleta passou **57/57** após o ajuste offline. Um teste serializa/recarrega o estado pendente e resgata o lote sem nova rolagem, e as rotas manuais/offline verificam que a falha de espaço chama o salvamento. Os estados e inventários são descartáveis. A matriz completa de UI e inspeção visual continuam parciais.
+
+Em revisão do ciclo de UI, acrescentei uma regressão: repetir o tick automático com a mochila cheia estava chamando log, atualização e salvamento a cada tick. O primeiro caso reproduzido falhou; agora o aviso/salvamento de espaço insuficiente ocorre uma vez por recompensa pendente, e as tentativas seguintes só verificam capacidade. `node --test test/hunting-integrity.test.js` segue **17/17**.
+
+### Coleta e Mineração — aviso de mochila cheia em loops automáticos (01/10/2026, 05:10 BRT)
+
+Ao revisar os outros loops de vida, encontrei o mesmo padrão de repetição em `finishHarvest` e `finishMining`. O primeiro fixture da Coleta tinha callbacks fora do escopo; ajustei a regressão e rodei-a novamente contra o comportamento anterior: falhou com dois saves para duas tentativas, confirmando o defeito. A regressão de Mineração também falhou antes. Os dois serviços agora persistem o primeiro aviso junto do prêmio pendente, e ticks bloqueados seguintes não geram novas gravações nem ruído. Quando o item cabe, a extração/colheita conclui com a mesma qualidade e custos uma só vez.
+
+`node --test test/gathering-harvest.test.js test/mining-integrity.test.js test/hunting-integrity.test.js`: **36/36**. Não foram alterados os saldos de saves reais. A liquidação offline de Mineração com mochila cheia segue uma lacuna independente ainda não coberta.
+
+### Pesca — captura preservada quando a mochila está cheia (01/10/2026, 05:13 BRT)
+
+A inspeção de entrega revelou que `_finalizeFightCatch`, `processAutoFish` e `processOfflineFish` atualizavam Bestiário/XP/capturas sem verificar a falha de `addToInventory`. A regressão manual falhou antes da correção. Agora as três rotas registram os peixes exatos numa fila pendente de `state.fishing`, salvam o resgate no ciclo automático, interrompem a pesca automática diante de espaço insuficiente e impedem novo arremesso enquanto houver prêmio. A ação transacional de resgate foi ligada ao painel de pesca; ela simula todas as adições antes de gravar inventário e limpar a fila. O botão aparece apenas quando a fila existe.
+
+`node --test test/fishing-durability.test.js`: **16/16**, abrangendo captura manual, AFK/offline determinísticos, claim depois de liberar slots e renderização da ação. `StateManager` mantém o novo campo por serialização/migração por spread, mas ainda falta exercitar o adaptador real de save/reload. Nenhuma conta ou inventário real foi usado.
+
+### Dolls e Pets — moeda inválida na adoção e alimentação (01/10/2026, 05:01 BRT)
+
+Na continuação da área 11, adicionei primeiro a regressão de um save descartável com saldo `NaN`. Ela reproduziu um caso real no código: como `NaN < custo` é falso, a adoção prosseguia e a carteira permanecia corrompida; a mesma comparação permitia alimentar gratuitamente. `PetService` agora exige saldo e custo inteiro/seguro antes de alterar moeda ou conceder o pet/alimento. As regras para moeda normal e a alimentação de pet faminto continuam passando.
+
+`node --test test/dolls-pets-validation.test.js`: **11/11**. Isso valida a lógica do serviço com estado sintético, mas não comprova a experiência da tela. A síntese de Dolls permanece num handler direto em `main.js`, sem cobertura de produção isolada; não marquei essa lacuna como concluída.
+
+### Dolls — síntese pelo handler de produção (01/10/2026, 05:03 BRT)
+
+Transformei em regressão uma entrada de save inválida observada no handler: dois registros com um `dollId` inexistente passavam a síntese, consumiam um material e elevavam o outro sem definição de bônus. O teste executa o corpo atual de `synthesizeDolls` extraído de `lineage-idle/main.js` e falhava antes. O handler agora valida a existência no catálogo e nível inteiro entre 1 e 5 antes de sortear ou consumir. A mesma execução descartável cobre rolagens determinísticas de sucesso e falha, consumo único do sacrifício e chamadas de atualização/salvamento.
+
+`node --test test/dolls-pets-validation.test.js`: **13/13**. Isso comprova o serviço de adoção/alimentação e o handler de síntese, mas ainda não percorre adoção pela interface, cada origem de drop, todas as sub-telas nem habilidades exclusivas dos pets. A auditoria visual continua parcial.
+
+### Mochila — bloqueio de categoria e slot incompatível (01/10/2026, 05:03 BRT)
+
+Na área seguinte, escrevi regressão para `equipItem` do serviço de produção com um consumível enviado ao slot `weapon`. O teste falhou: o item ficou referenciado como arma equipada, pois o caminho aceitava qualquer slot explicitamente válido sem verificar a categoria. Ampliei o teste para armadura forçada ao slot de arma; ambas as entradas são recusadas agora. `EquipmentService` verifica se a definição é equipamento e se slot explicitado pertence à família correta (duas armas, anéis, brincos, cabelos e subslots de acessórios); o item incompatível permanece no inventário sem equipar.
+
+`paperdoll-chest-slot-sync.test.js`, `hero-pillar-no-duplication.test.js` e `hero-pillar-feature-coverage.test.js`: **19/19**. Essa checagem funcional usa fixtures; combinações de filtros, ações em lote/modais e inspeção visual do inventário continuam pendentes.
+
+### Cosméticos — compra com carteira corrompida (01/10/2026, 05:05 BRT)
+
+Na revisão dos cosméticos, a regressão inicial com `NaN` não encontrou concessão gratuita porque o fallback `|| 0` a tratava como zero. Ampliei a entrada inválida para uma string arbitrária, que reproduziu o defeito: a comparação numérica deixava passar e a aura era desbloqueada, convertendo a carteira em `NaN`. `buyCosmetic` agora valida saldo e custo como inteiros seguros antes de qualquer alteração. O caso confirma que item/carteira ficam intactos e não ocorre save.
+
+`node --test test/cosmetics-achievements-validation.test.js`: **11/11**. A validação de lógica econômica usa apenas fixture; compras/seleções pela tela e inspeção visual continuam pendentes.
+
+### Checkpoint integrado — Caça, Dolls/Pets e Mochila (01/10/2026, 05:04 BRT)
+
+Depois dessas mudanças, `npm test` passou **1.277/1.277 testes em 139 suítes**. `npm run build` concluiu em 12,01 s; continuam os avisos de chunks acima de 1,5 MB (`index` ~2,64 MB e `game-data-classes` ~1,67 MB minificados). A auditoria geral segue parcial porque ainda há áreas sem cobertura própria e nenhuma revisão visual foi autorizada pelo navegador local.
+
+O limite consultado às 05:04 BRT indicou **41% consumido na janela de cinco horas e 88% na janela semanal**. As tarefas agendadas de checkpoint para 05:45 e desligamento às 06:00 continuam em estado `Ready`. Antes da publicação ainda serão conferidos o diário, `git diff --check`, serviços protegidos e o resultado remoto do push; não executar publicação manual antecipada.
+
+### Validação pós-cosméticos e mochila (01/10/2026, 05:06 BRT)
+
+Depois da correção em `CosmeticService` e do gate de slot/categoria no equipamento, repeti a suíte completa: **1.278/1.278 testes em 139 suítes**, sem falhas. O build concluiu em 11,84 s; os avisos de chunk grande permanecem (`index` ~2,64 MB e `game-data-classes` ~1,67 MB minificados). `dist` gerou novos hashes como esperado; não removi nem substituí ativos do diretório.
+
+### Validação integrada — novas filas de recompensa de atividades (01/10/2026, 05:15 BRT)
+
+Após as correções de mochila cheia em Coleta, Mineração, Caça e Pesca, a suíte completa passou **1.281/1.281 testes em 139 suítes**. `npm run build` concluiu em 12,04 s; os chunks continuam acima do limite configurado (`index` ~2,65 MB e `game-data-classes` ~1,67 MB minificados). A mudança da Pesca foi testada em captura manual, automática e offline com fila resgatável e ação presente no painel; os serviços protegidos continuam sem alterações nesta rodada. Não declarar aprovação visual: o navegador local segue bloqueado pela preferência registrada.
+
+### Mercador — compras recusam carteira inválida (01/10/2026, 05:18 BRT)
+
+Durante a revisão de compras no serviço de produção, uma carteira textual malformada passava pela comparação de saldo e concedia o item; a subtração posterior convertia o saldo em `NaN`. Primeiro acrescentei uma regressão para compra normal e mística e confirmei a falha no código anterior. `ShopService` agora valida carteira e custo como inteiros seguros antes de tocar inventário ou estoque. Com uma carteira inválida, ambas as operações retornam sem alterar saldo, itens ou estoque místico.
+
+`node --test test/shop-service-disposable-integrity.test.js`: **7/7**. Os casos usam catálogo e estado descartáveis. A validação do fluxo pelo handler visual, rotação de estoque, recompra completa e inspeção visual ainda está pendente; não considero a área concluída.
+
+### Mercador — integridade de carteira em vendas e recompra (01/10/2026, 05:21 BRT)
+
+A segunda etapa da auditoria do mesmo serviço revelou risco simétrico: venda individual e em lote removiam itens mesmo quando o saldo não era numérico; a recompra também confiava apenas em uma comparação que falha com valores malformados. Três rotas foram exercitadas com estados descartáveis e uma delas falhou antes da correção, reproduzindo venda em lote e mutação de inventário. Agora venda unitária e recompra recusam saldo/custo inválidos antes de mudar itens; venda em lote prepara entradas de recompra em memória e só as grava após validar o ganho total e a carteira.
+
+`node --test test/shop-service-disposable-integrity.test.js`: **8/8**. Estes casos validam lógica do serviço, não os modais/handlers visuais. O Mercador permanece parcial até cobrir estoque rotativo, ações de tela e inspeção visual.
+
+### Integração e build após carteira do Mercador (01/10/2026, 05:19 BRT)
+
+A suíte integrada passou **1.282/1.282 testes em 139 suítes**. `npm run build` concluiu em 11,68 s; persistem os avisos de pacotes minificados acima de 1,5 MB. O Mercador teve uma regressão nova depois deste checkpoint, então estes números não representam ainda as últimas alterações; repetir suíte e build antes do checkpoint/publicação.
+
+### Mercador — handler do tooltip ligado à venda transacional (01/10/2026, 05:21 BRT)
+
+A análise da interface encontrou um caminho legado: o tooltip chamava um `sellItem` local em `main.js`, fora do serviço que acabamos de corrigir. Uma regressão extraiu e executou esse handler de produção com inventário/carteira descartáveis; ela falhou antes da correção ao não recusar a venda. O handler agora preserva a confirmação de item valioso e delega a mutação ao `ShopService`, que valida saldo, favoritos/equipamento, valor e fila antes de remover item. A aba de venda e a recompra já chamavam os serviços.
+
+`node --test test/shop-service-disposable-integrity.test.js`: **9/9**. O caso cobre o handler real do tooltip; não cobre a inspeção visual de todos os estados do Mercador.
+
+### Verificação integrada do Mercador — ação real e handlers (01/10/2026, 05:22 BRT)
+
+Após ligar o tooltip ao serviço e incluir os gates transacionais, `npm test` passou **1.284/1.284 testes em 139 suítes**. `npm run build` concluiu em 15,20 s; seguem os avisos de chunks `index` (~2,65 MB) e `game-data-classes` (~1,67 MB) acima de 1,5 MB. O snapshot de `dist` foi regenerado pelo build local; não houve deploy manual. Os três serviços protegidos continuam sem diferenças. O Mercador segue parcial por falta da matriz completa de estoque rotativo/estados visuais; o auditor global também não foi aprovado.
+
+### Mercador Místico — reroll sem custo inválido (01/10/2026, 05:24 BRT)
+
+A revisão da rotação de estoque encontrou `rerollMysticStock` com a mesma comparação de carteira vulnerável. A regressão inicialmente falhou: uma carteira textual era aceita, a callback do sorteio era executada e o estoque mudava sem custo válido. O serviço agora exige carteira/custo seguros, a callback deve existir e retornar uma lista antes do débito e da troca de estoque. O teste cobre recusa sem alterar saldo/estoque, callback ou save e sucesso descontando uma única taxa.
+
+`node --test test/shop-service-disposable-integrity.test.js`: **10/10** com estado descartável. A seleção e a apresentação de estoques em todos os níveis de personagem ainda exigem matriz própria e inspeção visual.
+
+### Checkpoint integrado — Mercador completo pelo serviço e handler legado (01/10/2026, 05:24 BRT)
+
+Com o reroll do estoque místico protegido e o tooltip da venda delegado ao serviço, a suíte completa passou **1.285/1.285 testes em 139 suítes**. `npm run build` concluiu em 14,82 s; permanecem os avisos de tamanho dos chunks `index` (~2,65 MB) e `game-data-classes` (~1,67 MB) minificados. `git diff --check` passa com avisos informativos de conversão LF/CRLF. A busca nos dados de produção não encontrou `weightBonus`, `aoeTargets` nem `aoeDmg`. A auditoria global segue parcial; não foram validados visualmente os fluxos que dependem de browser local.
+
+### Estoque místico — seis ofertas e respeita gate de nível (01/10/2026, 05:25 BRT)
+
+Uma regressão com `Math.random` determinístico reproduziu que o laço fixo de seis tentativas descartava repetidos e entregava apenas uma oferta. O mesmo fixture, com o catálogo filtrado vazio para nível baixo, expôs um fallback que reintroduzia itens S/S84 não elegíveis. A geração agora seleciona ofertas únicas quando há seis opções, preenche os slots restantes somente quando o pool é menor e não injeta itens de nível proibido: sem item elegível, oferece consumíveis catalogados compatíveis. O teste verifica seis ofertas/deduplicação e ausência de armas S de personagem nível 1.
+
+`node --test test/shop-service-disposable-integrity.test.js`: **11/11** no primeiro ciclo. Depois acrescentei uma segunda regressão contra o catálogo real, cobrindo os limites 1/20/39/40/51/52/61/62/75/76/80/81; ela também passou. Ainda falta exercitar estoque místico pela tela e inspeção visual.
+
+### Integração após correção da vitrine mística (01/10/2026, 05:27 BRT)
+
+A suíte integrada passou **1.287/1.287 testes em 139 suítes** após corrigir o preenchimento de seis ofertas e o fallback por nível. `npm run build` concluiu em 11,84 s; continuam os avisos de chunks acima de 1,5 MB. A validação da loja cobre o serviço com catálogo real e sintético e o handler real de venda do tooltip, mas não substitui a inspeção visual nem valida todas as telas de compra/recompra.
+
+### Checkpoint final — reroll só cobra após gerar seis ofertas (01/10/2026, 05:29 BRT)
+
+Acrescentei regressão para callback de reroll que retorna estoque vazio: antes o serviço aceitava a lista e debitava; agora preserva o saldo/estoque e só executa o save quando recebe as seis ofertas esperadas. Depois desse gate, `npm test` passou **1.287/1.287 testes em 139 suítes**, e `npm run build` concluiu em 11,78 s, com os mesmos avisos de tamanho de chunks. Os testes de catálogo sintético e real percorrem limites de nível do estoque místico; a interação visual e estados do modal continuam parciais.
+
+### Integração final — serviço de reroll e geração de ofertas (01/10/2026, 05:30 BRT)
+
+Após exigir exatamente seis ofertas antes de cobrar o reroll, a suíte integrada passou **1.287/1.287 testes em 139 suítes**; o build concluiu em 12,17 s. Os chunks `index` (~2,65 MB) e `game-data-classes` (~1,67 MB) seguem acima do aviso de 1,5 MB. O limite da janela de cinco horas será consultado novamente perto das 05:34; as tarefas de checkpoint/push às 05:45 e desligamento às 06:00 seguem programadas.
+
+### Recompra sem efeitos colaterais e teste final (01/10/2026, 05:31 BRT)
+
+A regressão adicional de recompra com carteira inválida e `inventory` ausente falhou antes: o serviço inicializava o array antes de validar pagamento. A recompra agora lê filas/inventário localmente e só os grava após passar capacidade e carteira. `npm test`: **1.288/1.288 testes em 139 suítes**. `npm run build`: 11,88 s, com os avisos de chunks grandes já registrados. O serviço do Mercador passou **13/13** casos dirigidos.
+
+### Monitoramento de limite e checkpoint agendado (01/10/2026, 05:31 BRT)
+
+Consulta de uso: **54%** consumido na janela de cinco horas (reset às 03:40 BRT) e **90%** na janela semanal. Há margem superior ao 1% reservado. O plano de execução está em `docs/PLANO_AUDITORIA_INTEGRAL_DAS_TELAS.md`; o texto do pursuing goal não é editável pela API de goal desta sessão. Tarefas Windows conferidas: checkpoint/push às 05:45 e desligamento às 06:00 em estado Ready.
+
+### Forja — pagamentos seguros e validação integrada (01/10/2026, 05:34 BRT)
+
+A regressão reproduziu troca de arma gratuita com carteira textual inválida. `CraftService` agora valida carteira Adena e custo como inteiros seguros em Pushkin (deslacramento, Masterwork, troca), símbolos, síntese de cintos e cobranças do Random Craft; a prévia de fabricação retorna zero lotes para saldo malformado/inseguro. Casos dirigidos passaram **5/5** entre a suíte de troca e nova suíte cobrindo seis endpoints. A integração passou **1.291/1.291 testes em 140 suítes**; build concluído em 11,74 s, ainda com avisos de chunks grandes.
+
+Monitoramento às 05:34 BRT: **55%** consumido da janela de cinco horas e **90%** da semanal, preservando folga acima de 1%. O checkpoint/push às 05:45 e desligamento às 06:00 seguem agendados. Os serviços protegidos permanecem intactos.
+
+### Forja — correção de saldo inválido e rejeição sem mutação (01/10/2026, 05:36 BRT)
+
+A nova regressão mostrou que aprimorar um slot de tinta vazio adicionava `dyeSymbols` ao estado antes de retornar falha. A validação agora usa um array local e só grava após confirmar slot e Adena válidos. A suíte completa passou **1.292/1.292 testes em 140 suítes**; `npm run build` concluiu em 11,89 s, persistindo apenas o aviso de chunks acima de 1,5 MB. Nenhum save real foi aberto ou modificado.
+
+### Atributos, Soul Crystals e Augmentation — saldo inválido não consome recursos (01/10/2026, 05:38 BRT)
+
+A varredura pós-Forja encontrou a mesma comparação vulnerável em infusão/purificação elementar, SA e augmentação. Uma regressão falhou com carteira textual inválida e reproduziu infusão concedida sem pagamento. Agora `ElementalService` e `AugmentationService` exigem carteira Adena segura antes de consumir pedras, gemas ou efeitos. A prova cobre infusão, purificação, aplicação/extração de Soul Crystal e aplicação/remoção de augmentação; os materiais/efeitos permanecem intactos com o saldo inválido. Testes dirigidos: **39/39** em Elemental, Augmentation, CraftService e troca de armas Pushkin. Suíte integrada passou **1.294/1.294**, build em 11,69 s. Isso comprova apenas os caminhos exercitados; inspeção visual e demais ações das telas continuam parciais.
+
+### Método e fontes desta rodada (01/10/2026, 05:39 BRT)
+
+Usei as skills RPG, depuração sistemática, TDD e revisão de código para mapear o fluxo de serviço, reproduzir falhas antes da implementação e inspecionar o diff/testes depois. Pesquisa web não era necessária para os defeitos desta rodada: foram inconsistências executáveis no contrato interno de moeda/transação, reproduzidas com catálogo e estado descartáveis; não alterei regras factuais do Lineage II. O plano não foi encerrado e permanece parcial.
+
+#### Checkpoint programado antes do desligamento (01/10/2026)
+
+Registrado automaticamente em 2026-10-01 05:45:40 -03:00, antes do desligamento solicitado para 06:00 BRT. Branch: main; HEAD de início: 8b8a6cce480009c9c97d2318f25b51c21c48650b.
+
+Estado de arquivos antes do commit:
+-  M DIARIO_DE_DESENVOLVIMENTO.md
+-  M glory-pillar-feature-catalog.json
+-  M lineage-idle/main.js
+-  M lineage-idle/src/core/StateManager.js
+-  M lineage-idle/src/data/castles.js
+-  M lineage-idle/src/data/colosseum.js
+-  M lineage-idle/src/data/expeditions.js
+-  M lineage-idle/src/data/gathering.js
+-  M lineage-idle/src/data/hunting.js
+-  M lineage-idle/src/data/items/index.js
+-  M lineage-idle/src/data/items/item_grade.js
+-  M lineage-idle/src/data/mercenaries.js
+-  M lineage-idle/src/data/mining.js
+-  M lineage-idle/src/data/monsters.js
+-  M lineage-idle/src/data/olympiad.js
+-  M lineage-idle/src/engine/CombatEngine.js
+-  M lineage-idle/src/engine/SecurityEngine.js
+-  M lineage-idle/src/engine/StatsEngine.js
+-  M lineage-idle/src/services/AlchemyService.js
+-  M lineage-idle/src/services/AugmentationService.js
+-  M lineage-idle/src/services/CardCodexService.js
+-  M lineage-idle/src/services/ClanService.js
+-  M lineage-idle/src/services/ColosseumService.js
+-  M lineage-idle/src/services/ConsumableService.js
+-  M lineage-idle/src/services/CosmeticService.js
+-  M lineage-idle/src/services/CraftService.js
+-  M lineage-idle/src/services/ElementalService.js
+-  M lineage-idle/src/services/EnchantmentService.js
+-  M lineage-idle/src/services/EquipmentService.js
+-  M lineage-idle/src/services/FishingService.js
+-  M lineage-idle/src/services/FortressService.js
+-  M lineage-idle/src/services/HuntingService.js
+-  M lineage-idle/src/services/InventoryService.js
+-  M lineage-idle/src/services/OlympiadService.js
+-  M lineage-idle/src/services/PetService.js
+-  M lineage-idle/src/services/QuestService.js
+-  M lineage-idle/src/services/RaidService.js
+-  M lineage-idle/src/services/RankingService.js
+-  M lineage-idle/src/services/SevenSignsService.js
+-  M lineage-idle/src/services/ShopService.js
+-  M lineage-idle/src/services/SkillEffectService.js
+-  M lineage-idle/src/services/TowerService.js
+-  M lineage-idle/src/services/lifeActivities/GatheringService.js
+-  M lineage-idle/src/services/lifeActivities/MiningService.js
+-  M lineage-idle/src/services/lifeActivities/RefineryService.js
+-  M lineage-idle/src/ui/FishingUI.js
+-  M lineage-idle/src/ui/GameUI.js
+-  M lineage-idle/src/ui/MarketUI.js
+-  M lineage-idle/src/ui/RankingUI.js
+-  M src/idle/markup.ts
+-  M test/astral-hero-pillar-validation.test.js
+-  M test/augmentation-combat-runtime-validation.test.js
+-  M test/blacksmith-same-grade-exchange.test.js
+-  M test/boss-telegraph-enrage.test.js
+-  M test/clan-glory-pillar-validation.test.js
+-  M test/codex-glory-pillar-validation.test.js
+-  M test/contacts-mentorship-validation.test.js
+-  M test/cosmetics-achievements-validation.test.js
+-  M test/dolls-pets-validation.test.js
+-  M test/elemental-attribute-runtime-validation.test.js
+-  M test/enchantment-runtime-validation.test.js
+-  M test/equipment-effect-runtime-validation.test.js
+-  M test/glory-pillar-no-duplication.test.js
+-  M test/glory-pillar-runtime-proof.test.js
+-  M test/inventory-commercial-validation.test.js
+-  M test/item-grade-classification-regression.test.js
+-  M test/paperdoll-chest-slot-sync.test.js
+-  M test/phase4-threshold-consistency.test.js
+-  M test/quests-battlepass-validation.test.js
+-  M test/rankings-glory-pillar-validation.test.js
+-  M test/sevensigns-glory-pillar-validation.test.js
+- ?? docs/PLANO_AUDITORIA_INTEGRAL_DAS_TELAS.md
+- ?? lineage-idle/src/data/items/castle_shop_items.js
+- ?? lineage-idle/src/data/items/colosseum_items.js
+- ?? lineage-idle/src/services/ExpeditionDilemmaPolicy.js
+- ?? lineage-idle/src/services/MagicLampService.js
+- ?? lineage-idle/src/services/MentorshipReferralService.js
+- ?? lineage-idle/src/services/lifeActivities/RewardCapacity.js
+- ?? test/alchemy-disposable-integrity.test.js
+- ?? test/astral-mastery-handler-validation.test.js
+- ?? test/character-ui-attack-interval.test.js
+- ?? test/clan-siege-donation-integrity.test.js
+- ?? test/codex-absorption-integrity.test.js
+- ?? test/codex-ui-render-integrity.test.js
+- ?? test/colosseum-service.test.js
+- ?? test/combat-difficulty-drop-rate.test.js
+- ?? test/combat-speed-control.test.js
+- ?? test/combat-zone-integrity.test.js
+- ?? test/craft-output-transaction.test.js
+- ?? test/craft-service-wallet-integrity.test.js
+- ?? test/equipment-tier-balance.test.js
+- ?? test/expedition-dilemma-policy.test.js
+- ?? test/fishing-durability.test.js
+- ?? test/fortress-lifecycle-integrity.test.js
+- ?? test/gathering-harvest.test.js
+- ?? test/hunting-difficulty.test.js
+- ?? test/hunting-integrity.test.js
+- ?? test/inventory-addition-atomicity.test.js
+- ?? test/magic-lamp-production-flow.test.js
+- ?? test/market-listing-quantity-ui.test.js
+- ?? test/market-ui-untrusted-data.test.js
+- ?? test/mentorship-referral-integrity.test.js
+- ?? test/mining-integrity.test.js
+- ?? test/olympiad-transaction-integrity.test.js
+- ?? test/raid-lifecycle.test.js
+- ?? test/random-craft-transaction.test.js
+- ?? test/refinery-disposable-integrity.test.js
+- ?? test/seven-signs-blacksmith-services.test.js
+- ?? test/seven-signs-transaction-integrity.test.js
+- ?? test/shop-service-disposable-integrity.test.js
+- ?? test/tower-lifecycle.test.js
+- ?? test/warehouse-transfer-integrity.test.js
+- ?? test/zone-map-rendering.test.js
+
+O checkpoint deve ser preservado no repositório; o escopo da auditoria integral continua aberto até a validação individual das 30 áreas documentadas em docs/PLANO_AUDITORIA_INTEGRAL_DAS_TELAS.md.

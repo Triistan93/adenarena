@@ -72,7 +72,7 @@ export const MONSTERS = {
   // ──────────────────────────────────────────────────────────────────────────
   kamaelScout: { name: 'Kamael Scout', lvl: 11, hp: 240, atk: 34, def: 13, eva: 9, matk: 0, mdef: 6, xp: 85, sp: 2, gold: [35, 75] },
   soullessScout: { name: 'Soulless Scout', lvl: 13, hp: 290, atk: 40, def: 15, eva: 10, matk: 0, mdef: 8, xp: 115, sp: 3, gold: [46, 96] },
-  spitefulGhost: { name: 'Spiteful Soul Ghost', lvl: 15, hp: 340, atk: 30, def: 14, eva: 14, matk: 55, mdef: 18, xp: 155, sp: 4, gold: [58, 125], element: 'dark', magic: true },
+  spitefulGhost: { name: 'Spiteful Soul Ghost', lvl: 15, hp: 340, atk: 30, def: 14, eva: 14, matk: 55, mdef: 18, xp: 155, sp: 4, gold: [58, 125], element: 'dark', isUndead: true, magic: true },
   crimsonWarder: { name: 'Crimson Warder', lvl: 17, hp: 450, atk: 56, def: 22, eva: 8, matk: 0, mdef: 12, xp: 210, sp: 5, gold: [80, 170] },
   kamaelInfiltrator: { name: 'Kamael Infiltrator', lvl: 18, hp: 780, atk: 70, def: 27, eva: 15, matk: 0, mdef: 16, xp: 340, sp: 8, gold: [140, 290], traits: ['ambush'], elite: true },
   darkInquisitorKamael: { name: 'Kamael Dark Inquisitor', lvl: 18, hp: 1350, atk: 88, def: 36, eva: 10, matk: 40, mdef: 24, xp: 600, sp: 15, gold: [280, 580], boss: true },
@@ -100,9 +100,9 @@ export const MONSTERS = {
   // ──────────────────────────────────────────────────────────────────────────
   // 9. GIRAN OUTSKIRTS (Level 25-29)
   // ──────────────────────────────────────────────────────────────────────────
-  skeleton: { name: 'Skeletal Trooper', lvl: 25, hp: 1200, atk: 120, def: 48, eva: 5, matk: 0, mdef: 18, xp: 700, sp: 6, gold: [240, 500] },
-  skeletonArcher: { name: 'Skeletal Marksman', lvl: 26, hp: 1100, atk: 135, def: 44, eva: 8, matk: 0, mdef: 20, xp: 780, sp: 6, gold: [260, 550], weaponType: 'bow' },
-  deathRider: { name: 'Death Rider', lvl: 27, hp: 1600, atk: 145, def: 56, eva: 10, xp: 920, sp: 7, gold: [300, 650] },
+  skeleton: { name: 'Skeletal Trooper', lvl: 25, hp: 1200, atk: 120, def: 48, eva: 5, matk: 0, mdef: 18, xp: 700, sp: 6, gold: [240, 500], isUndead: true },
+  skeletonArcher: { name: 'Skeletal Marksman', lvl: 26, hp: 1100, atk: 135, def: 44, eva: 8, matk: 0, mdef: 20, xp: 780, sp: 6, gold: [260, 550], weaponType: 'bow', isUndead: true },
+  deathRider: { name: 'Death Rider', lvl: 27, hp: 1600, atk: 145, def: 56, eva: 10, xp: 920, sp: 7, gold: [300, 650], isUndead: true },
   giranGargoyle: { name: 'Giran Stone Gargoyle', lvl: 28, hp: 1900, atk: 160, def: 68, eva: 6, matk: 0, mdef: 26, xp: 1050, sp: 8, gold: [340, 720], element: 'earth' },
   giranGladiator: { name: 'Cursed Giran Gladiator', lvl: 29, hp: 2700, atk: 185, def: 74, eva: 8, xp: 1500, sp: 10, gold: [550, 1150], elite: true },
   minotaurKnight: { name: 'Minotaur Knight', lvl: 29, hp: 3800, atk: 210, def: 85, eva: 6, xp: 2200, sp: 12, gold: [850, 1800], boss: true },
@@ -123,19 +123,19 @@ export const MONSTERS = {
   darkMage: { name: 'Crypt Dark Mage', lvl: 35, hp: 2600, atk: 140, def: 60, eva: 12, matk: 220, mdef: 80, xp: 1500, sp: 10, gold: [500, 1100], element: 'dark', magic: true },
   corpseWorm: { name: 'Corpse Worm', lvl: 36, hp: 3000, atk: 210, def: 90, eva: 4, xp: 1750, sp: 10, gold: [550, 1200] },
   furiousSouls: { name: 'Furious Souls', lvl: 37, hp: 2800, atk: 230, def: 70, eva: 16, matk: 140, mdef: 65, xp: 1850, sp: 11, gold: [600, 1300] },
-  cryptVampire: { name: 'Crypt Vampire', lvl: 38, hp: 3600, atk: 260, def: 85, eva: 18, xp: 2300, sp: 12, gold: [750, 1600], traits: ['lifesteal'] },
+  cryptVampire: { name: 'Crypt Vampire', lvl: 38, hp: 3600, atk: 260, def: 85, eva: 18, xp: 2300, sp: 12, gold: [750, 1600], isUndead: true, traits: ['lifesteal'] },
   devilBone: { name: 'Devil Bone', lvl: 39, hp: 4200, atk: 280, def: 115, eva: 3, xp: 2700, sp: 13, gold: [850, 1800], element: 'dark', traits: ['boneArmor'], elite: true },
   cryptLord: { name: 'Crypt Lord Supreme', lvl: 40, hp: 9500, atk: 380, def: 150, eva: 8, xp: 6000, sp: 20, gold: [2200, 4800], boss: true },
 
   // ──────────────────────────────────────────────────────────────────────────
   // 12. BLACK CITADEL (Level 40-44)
   // ──────────────────────────────────────────────────────────────────────────
-  deathKnight: { name: 'Death Knight Guardian', lvl: 40, hp: 4800, atk: 310, def: 125, eva: 10, xp: 3100, sp: 14, gold: [1000, 2200], element: 'dark' },
-  deathWizard: { name: 'Death Wizard Archon', lvl: 41, hp: 4400, atk: 180, def: 95, eva: 10, matk: 340, mdef: 145, xp: 3500, sp: 15, gold: [1150, 2500], magic: true },
+  deathKnight: { name: 'Death Knight Guardian', lvl: 40, hp: 4800, atk: 310, def: 125, eva: 10, xp: 3100, sp: 14, gold: [1000, 2200], element: 'dark', isUndead: true },
+  deathWizard: { name: 'Death Wizard Archon', lvl: 41, hp: 4400, atk: 180, def: 95, eva: 10, matk: 340, mdef: 145, xp: 3500, sp: 15, gold: [1150, 2500], isUndead: true, magic: true },
   citadelDarkPriest: { name: 'Citadel Dark Priest', lvl: 42, hp: 4600, atk: 190, def: 105, eva: 8, matk: 360, mdef: 155, xp: 3900, sp: 16, gold: [1250, 2700], element: 'dark', magic: true },
   blackDragonWhelp: { name: 'Black Dragon Whelp', lvl: 43, hp: 6200, atk: 360, def: 140, eva: 10, xp: 4800, sp: 18, gold: [1500, 3300], element: 'dark' },
   blackDragon: { name: 'Black Dragon Sovereign', lvl: 44, hp: 12000, atk: 450, def: 180, eva: 10, xp: 8500, sp: 25, gold: [3200, 7000], elite: true },
-  flamingDemonLord: { name: 'Flaming Demon Lord', lvl: 44, hp: 16000, atk: 540, def: 210, eva: 12, xp: 11000, sp: 30, gold: [4500, 9500], boss: true },
+  flamingDemonLord: { name: 'Flaming Demon Lord', lvl: 44, hp: 16000, atk: 540, def: 210, eva: 12, xp: 11000, sp: 30, gold: [4500, 9500], boss: true, isDemon: true },
 
   // ──────────────────────────────────────────────────────────────────────────
   // 13. GLUDIO CASTLE (Level 45-48)
@@ -181,11 +181,11 @@ export const MONSTERS = {
   // 17. GATES OF THE UNDERWORLD (Level 70-75)
   // ──────────────────────────────────────────────────────────────────────────
   blazingWerewolf: { name: 'Blazing Werewolf', lvl: 70, hp: 18000, atk: 820, def: 330, eva: 20, xp: 18000, sp: 190, gold: [5500, 11500], element: 'fire', traits: ['bleed'] },
-  swiftBlaze: { name: 'Swift Blaze Fiend', lvl: 71, hp: 16500, atk: 910, def: 300, eva: 28, xp: 20000, sp: 210, gold: [6200, 13000], element: 'fire' },
-  infernalHound: { name: 'Infernal Hell Hound', lvl: 72, hp: 19500, atk: 880, def: 350, eva: 18, xp: 21500, sp: 225, gold: [6800, 14000], element: 'fire' },
-  lavaFiend: { name: 'Molten Lava Fiend', lvl: 74, hp: 23000, atk: 980, def: 390, eva: 10, matk: 850, mdef: 380, xp: 25500, sp: 250, gold: [8000, 16500], element: 'fire', magic: true },
-  flameOverlordDemon: { name: 'Underworld Flame Overlord', lvl: 75, hp: 38000, atk: 1180, def: 460, eva: 12, xp: 33000, sp: 340, gold: [12000, 25000], element: 'fire', elite: true },
-  cerberus: { name: 'Cerberus Hell Guardian', lvl: 75, hp: 58000, atk: 1350, def: 520, eva: 14, xp: 42000, sp: 450, gold: [18000, 36000], boss: true },
+  swiftBlaze: { name: 'Swift Blaze Fiend', lvl: 71, hp: 16500, atk: 910, def: 300, eva: 28, xp: 20000, sp: 210, gold: [6200, 13000], element: 'fire', isDemon: true },
+  infernalHound: { name: 'Infernal Hell Hound', lvl: 72, hp: 19500, atk: 880, def: 350, eva: 18, xp: 21500, sp: 225, gold: [6800, 14000], element: 'fire', isDemon: true },
+  lavaFiend: { name: 'Molten Lava Fiend', lvl: 74, hp: 23000, atk: 980, def: 390, eva: 10, matk: 850, mdef: 380, xp: 25500, sp: 250, gold: [8000, 16500], element: 'fire', isDemon: true, magic: true },
+  flameOverlordDemon: { name: 'Underworld Flame Overlord', lvl: 75, hp: 38000, atk: 1180, def: 460, eva: 12, xp: 33000, sp: 340, gold: [12000, 25000], element: 'fire', elite: true, isDemon: true },
+  cerberus: { name: 'Cerberus Hell Guardian', lvl: 75, hp: 58000, atk: 1350, def: 520, eva: 14, xp: 42000, sp: 450, gold: [18000, 36000], boss: true, isDemon: true },
 
   // ──────────────────────────────────────────────────────────────────────────
   // 18. VALLEY OF SAINTS (Level 72-75)
@@ -232,10 +232,10 @@ export const MONSTERS = {
   // ──────────────────────────────────────────────────────────────────────────
   tombGuardian: { name: 'Imperial Tomb Guardian', lvl: 85, hp: 40000, atk: 1500, def: 580, eva: 10, xp: 50000, sp: 420, gold: [15000, 30000], element: 'dark' },
   sepulcherArchon: { name: 'Sepulcher Archon', lvl: 86, hp: 44000, atk: 700, def: 500, eva: 12, matk: 1850, mdef: 750, xp: 58000, sp: 470, gold: [17500, 35000], element: 'dark', magic: true },
-  undeadKnight: { name: 'Imperial Undead Knight', lvl: 87, hp: 52000, atk: 1750, def: 680, eva: 8, xp: 70000, sp: 550, gold: [21000, 42000], element: 'dark' },
-  imperialGhostMage: { name: 'Imperial Ghost Mage', lvl: 88, hp: 48000, atk: 800, def: 560, eva: 14, matk: 2100, mdef: 880, xp: 82000, sp: 620, gold: [25000, 50000], element: 'dark', magic: true },
-  lichLord: { name: 'Lich Lord Archmage', lvl: 88, hp: 78000, atk: 900, def: 620, eva: 15, matk: 2400, mdef: 1100, xp: 110000, sp: 800, gold: [32000, 65000], elite: true },
-  deathKing: { name: 'Death King Supreme', lvl: 89, hp: 130000, atk: 2600, def: 1050, eva: 15, xp: 180000, sp: 1200, gold: [55000, 110000], boss: true },
+  undeadKnight: { name: 'Imperial Undead Knight', lvl: 87, hp: 52000, atk: 1750, def: 680, eva: 8, xp: 70000, sp: 550, gold: [21000, 42000], element: 'dark', isUndead: true },
+  imperialGhostMage: { name: 'Imperial Ghost Mage', lvl: 88, hp: 48000, atk: 800, def: 560, eva: 14, matk: 2100, mdef: 880, xp: 82000, sp: 620, gold: [25000, 50000], element: 'dark', isUndead: true, magic: true },
+  lichLord: { name: 'Lich Lord Archmage', lvl: 88, hp: 78000, atk: 900, def: 620, eva: 15, matk: 2400, mdef: 1100, xp: 110000, sp: 800, gold: [32000, 65000], elite: true, isUndead: true },
+  deathKing: { name: 'Death King Supreme', lvl: 89, hp: 130000, atk: 2600, def: 1050, eva: 15, xp: 180000, sp: 1200, gold: [55000, 110000], boss: true, isUndead: true },
 
   // ──────────────────────────────────────────────────────────────────────────
   // 23. ANTHARAS' LAIR (Level 90-94)

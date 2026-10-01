@@ -12,7 +12,7 @@ export const EXPEDITION_DILEMMAS = {
     desc: 'Um altar de pedra negra exsudando magia corrompida. O que fazer?',
     options: {
       saquear: { name: 'Saquear Altar', reqTrait: 'greedy', desc: '+Adena, sofre dano', result: 'gold' },
-      purificar: { name: 'Purificar Altar', reqSpecs: ['veteran', 'medic'], desc: '+EXP Esquadrão', result: 'xp' },
+      purificar: { name: 'Purificar Altar', reqSpecs: ['healer', 'mage'], desc: '+EXP para o esquadrão', result: 'xp' },
       evitar: { name: 'Evitar', reqDirective: 'cautious', desc: 'Passa sem interagir', result: 'skip' }
     }
   },
@@ -21,8 +21,8 @@ export const EXPEDITION_DILEMMAS = {
     name: 'Arca Ancestral Trancada',
     desc: 'Um pesado baú de carvalho e ferro com uma armadilha evidente.',
     options: {
-      forcar: { name: 'Forçar Trinco', reqSpec: 'striker', desc: '65% chance de sucesso', result: 'force' },
-      destrancar: { name: 'Destrancar com Gazuá', reqSpec: 'scout', desc: '90% chance de sucesso', result: 'pick' },
+      forcar: { name: 'Forçar Trinco', reqSpec: 'guardian', desc: '+2 Cacos Astrais', result: 'force' },
+      destrancar: { name: 'Destrancar com Gazua', reqSpec: 'thief', desc: '+5 Cacos Astrais', result: 'pick' },
       ignorar: { name: 'Ignorar Armadilha', reqDirective: 'cautious', desc: 'Não corre o risco', result: 'skip' }
     }
   }

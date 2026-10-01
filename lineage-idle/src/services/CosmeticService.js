@@ -188,6 +188,17 @@ export const TITLES_CATALOG = {
   }
 };
 
+function normalizeUnlockedCosmetics(value, catalog, defaultId) {
+  const validIds = Array.isArray(value)
+    ? value.filter(id => typeof id === 'string' && Object.hasOwn(catalog, id))
+    : [];
+  return [...new Set([defaultId, ...validIds])];
+}
+
+function normalizeActiveCosmetic(value, catalog, defaultId) {
+  return typeof value === 'string' && Object.hasOwn(catalog, value) ? value : defaultId;
+}
+
 export class CosmeticService {
   /**
    * Garante a estrutura correta de cosméticos no estado do jogador.
@@ -204,9 +215,12 @@ export class CosmeticService {
         activeTitle: 'title_none'
       };
     }
-    state.cosmetics.unlockedAuras = state.cosmetics.unlockedAuras || ['aura_none'];
-    state.cosmetics.unlockedFrames = state.cosmetics.unlockedFrames || ['frame_default'];
-    state.cosmetics.unlockedTitles = state.cosmetics.unlockedTitles || ['title_none'];
+    state.cosmetics.unlockedAuras = normalizeUnlockedCosmetics(state.cosmetics.unlockedAuras, AURAS_CATALOG, 'aura_none');
+    state.cosmetics.unlockedFrames = normalizeUnlockedCosmetics(state.cosmetics.unlockedFrames, ITEM_FRAMES_CATALOG, 'frame_default');
+    state.cosmetics.unlockedTitles = normalizeUnlockedCosmetics(state.cosmetics.unlockedTitles, TITLES_CATALOG, 'title_none');
+    state.cosmetics.activeAura = normalizeActiveCosmetic(state.cosmetics.activeAura, AURAS_CATALOG, 'aura_none');
+    state.cosmetics.activeFrame = normalizeActiveCosmetic(state.cosmetics.activeFrame, ITEM_FRAMES_CATALOG, 'frame_default');
+    state.cosmetics.activeTitle = normalizeActiveCosmetic(state.cosmetics.activeTitle, TITLES_CATALOG, 'title_none');
 
     // Se o jogador é Herói das Olimpíadas, desbloqueia automaticamente a Aura Dourada
     if ((state.isHero || state.heroStatus?.isHero) && !state.cosmetics.unlockedAuras.includes('aura_hero_golden')) {
@@ -284,7 +298,8 @@ export class CosmeticService {
     }
 
     const cost = def.costAdena || 0;
-    if ((state.gold || 0) < cost) {
+    const gold = state.gold ?? 0;
+    if (!Number.isSafeInteger(gold) || !Number.isSafeInteger(cost) || cost < 0 || gold < cost) {
       log(`Adena insuficiente! Preço: ${cost.toLocaleString()} Adena (você tem ${(state.gold || 0).toLocaleString()}).`, 'error');
       return { success: false, reason: 'insufficient_funds' };
     }
@@ -309,6 +324,21 @@ export class CosmeticService {
   static equipCosmetic(state, category, itemId, callbacks = {}) {
     this.ensureState(state);
     const { log = console.log, save = () => {}, updateAllUI = () => {} } = callbacks;
+
+    const catalogs = { aura: AURAS_CATALOG, frame: ITEM_FRAMES_CATALOG, title: TITLES_CATALOG };
+    const requestedCatalog = catalogs[category];
+    if (!requestedCatalog) {
+      log('Categoria de cosmético inválida.', 'error');
+      return { success: false, reason: 'invalid_category' };
+    }
+    if (!requestedCatalog[itemId]) {
+      log('Cosmético inválido.', 'error');
+      return { success: false, reason: 'invalid_item' };
+    }
+    if (category === 'aura' && requestedCatalog[itemId].reqHero && !state.isHero && !state.heroStatus?.isHero) {
+      log('Esta aura é exclusividade dos Heróis coroados da Grand Olympiad!', 'warning');
+      return { success: false, reason: 'hero_required' };
+    }
 
     let catalog = null;
     let unlockedList = null;

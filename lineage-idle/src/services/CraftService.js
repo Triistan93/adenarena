@@ -16,7 +16,7 @@
 
 import { D } from '../core/GameConfig.js';
 import { getItemGradeCode } from '../data/items/item_grade.js';
-import { addToInventory, getInventoryCount, getSelectedSet } from './InventoryService.js';
+import { addToInventory, getInventoryCount, getSelectedSet, removeFromInventoryByItemId } from './InventoryService.js';
 import {
   RANDOM_CRAFT_POINTS_PER_CHARGE,
   RANDOM_CRAFT_REROLL_COST,
@@ -27,6 +27,11 @@ import {
 } from '../data/economy/randomCraftBalance.js';
 import { CRAFTING_RECIPES } from '../data/items/recipes_drops.js';
 import { applyElementalInfusion, applySoulCrystalToWeapon } from './ElementalService.js';
+
+function canAffordAdena(state, cost) {
+  return Number.isSafeInteger(state?.gold) && state.gold >= 0
+    && Number.isSafeInteger(cost) && cost >= 0 && state.gold >= cost;
+}
 
 /**
  * Retorna o nível de personagem necessário para cada nível de receita de craft.
@@ -108,8 +113,10 @@ export function getRecipeMaterials(recipe) {
 export function calculateMaxCraftableQty(state, recipeOrId) {
   const recipe = (typeof recipeOrId === 'object' && recipeOrId !== null) ? recipeOrId : getRecipeDef(recipeOrId);
   if (!recipe) return 0;
+  if (!Number.isSafeInteger(state?.gold) || state.gold < 0) return 0;
 
   const costGold = recipe.gold || 250;
+  if (!Number.isSafeInteger(costGold) || costGold < 0) return 0;
   let maxByGold = costGold > 0 ? Math.floor((state.gold || 0) / costGold) : 999999;
   if (maxByGold <= 0) return 0;
 
@@ -137,7 +144,8 @@ export function calculateMaxCraftableQty(state, recipeOrId) {
  * @returns {boolean}
  */
 export function canCraft(state, recipeId, qty = 1) {
-  const count = Math.max(1, parseInt(qty, 10) || 1);
+  const count = Number(qty);
+  if (!Number.isSafeInteger(count) || count <= 0) return false;
   const maxPossible = calculateMaxCraftableQty(state, recipeId);
   return maxPossible >= count;
 }
@@ -156,31 +164,31 @@ export function craftItem(state, recipeId, qty = 1, callbacks = {}) {
     return false;
   }
 
-  const countToCraft = Math.max(1, parseInt(qty, 10) || 1);
+  const countToCraft = Number(qty);
+  if (!Number.isSafeInteger(countToCraft) || countToCraft <= 0) {
+    if (callbacks.log) callbacks.log('A quantidade de craft deve ser um inteiro positivo.', 'system');
+    return false;
+  }
   const maxPossible = calculateMaxCraftableQty(state, recipeId);
   if (maxPossible < countToCraft) {
     if (callbacks.log) callbacks.log('Materiais ou Adena insuficientes para esta quantidade.', 'system');
     return false;
   }
 
+  const workingState = {
+    ...state,
+    inventory: (state.inventory || []).map(item => item && ({ ...item })),
+    equipment: { ...(state.equipment || {}) }
+  };
   const costGold = (recipe.gold || 250) * countToCraft;
-  state.gold = (state.gold || 0) - costGold;
+  workingState.gold = (workingState.gold || 0) - costGold;
 
   const mats = getRecipeMaterials(recipe);
   for (const { matId, qty: baseQty } of mats) {
-    let needed = baseQty * countToCraft;
-    for (let i = state.inventory.length - 1; i >= 0 && needed > 0; i--) {
-      const it = state.inventory[i];
-      if ((it.itemId === matId || it.id === matId) && !it.equipped) {
-        const take = Math.min(it.count || 1, needed);
-        if ((it.count || 1) > take) {
-          it.count -= take;
-          needed = 0;
-        } else {
-          state.inventory.splice(i, 1);
-          needed -= take;
-        }
-      }
+    const needed = baseQty * countToCraft;
+    if (!removeFromInventoryByItemId(workingState, matId, needed)) {
+      if (callbacks.log) callbacks.log('Materiais ou Adena insuficientes para esta quantidade.', 'system');
+      return false;
     }
   }
 
@@ -191,28 +199,34 @@ export function craftItem(state, recipeId, qty = 1, callbacks = {}) {
   const baseYieldPerUnit = recipe.outputQty || ((isConsumable && (recipeId.includes('shot') || recipeId.includes('potion'))) ? 50 : 1);
 
   // Cálculo de Critical Craft (Double Craft & Foundation)
-  const isDwarf = state.race === 'dwarf' || state.class === 'artisan' || state.class === 'warsmith';
-  const forgeLvl = state.accountForgeLevel || state.craftLevel || 1;
+  const isDwarf = workingState.race === 'dwarf' || workingState.class === 'artisan' || workingState.class === 'warsmith';
+  const forgeLvl = workingState.accountForgeLevel || workingState.craftLevel || 1;
   const doubleCraftChance = (isDwarf ? 0.15 : 0.05) + (forgeLvl * 0.005);
   const isDouble = Math.random() < doubleCraftChance;
 
   const totalYield = (baseYieldPerUnit * countToCraft) * (isDouble ? 2 : 1);
 
-  const pityBonus = (state.craftFoundationPity || 0) * 0.002;
+  const pityBonus = (workingState.craftFoundationPity || 0) * 0.002;
   const foundationChance = 0.06 + (isDwarf ? 0.04 : 0) + pityBonus;
   const isFoundation = !isConsumable && (Math.random() < foundationChance);
 
   if (isFoundation) {
-    state.craftFoundationPity = 0;
+    workingState.craftFoundationPity = 0;
   } else {
-    state.craftFoundationPity = (state.craftFoundationPity || 0) + countToCraft;
+    workingState.craftFoundationPity = (workingState.craftFoundationPity || 0) + countToCraft;
   }
 
   const rarityBoost = isDwarf ? 1 : 0;
   const rolledRarity = gData?.rollRarity ? gData.rollRarity(rarityBoost) : 'common';
 
   const targetItemId = recipe?.result || recipeId;
-  addToInventory(state, targetItemId, totalYield, rolledRarity, isFoundation, callbacks, true);
+  if (!addToInventory(workingState, targetItemId, totalYield, rolledRarity, isFoundation, callbacks, true)) {
+    if (callbacks.log) callbacks.log('Mochila cheia; a forja não consumiu materiais nem Adena.', 'system');
+    return false;
+  }
+
+  // Commit only after costs and output are all valid on the disposable working state.
+  Object.assign(state, workingState);
 
   // Mensagens e Notificações de Sucesso
   const displayName = itemDef?.name || recipeId;
@@ -402,7 +416,7 @@ export function unsealItem(state, itemUid, callbacks = {}) {
   if (!item) return false;
 
   const unsealCost = 25000;
-  if ((state.gold || 0) < unsealCost) {
+  if (!canAffordAdena(state, unsealCost)) {
     if (callbacks.log) callbacks.log(`Ferreiro Pushkin requer ${unsealCost.toLocaleString()} Adena para quebrar o selo ancestral.`, 'system');
     return false;
   }
@@ -430,7 +444,7 @@ export function polishMasterwork(state, itemUid, callbacks = {}) {
   }
 
   const mwCost = 100000;
-  if ((state.gold || 0) < mwCost) {
+  if (!canAffordAdena(state, mwCost)) {
     if (callbacks.log) callbacks.log(`Requer ${mwCost.toLocaleString()} Adena para o polimento Masterwork.`, 'system');
     return false;
   }
@@ -482,7 +496,7 @@ export function swapWeaponSameGrade(state, weaponUid, targetWeaponId, callbacks 
   }
 
   const swapFee = 150000;
-  if ((state.gold || 0) < swapFee) {
+  if (!canAffordAdena(state, swapFee)) {
     if (callbacks.log) callbacks.log(`Ferreiro Pushkin cobra ${swapFee.toLocaleString()} Adena pela troca de armas.`, 'system');
     return false;
   }
@@ -561,8 +575,8 @@ export function applyDyeSymbol(state, slotIdx = 0, dyeKey = 'dye_str_con', stage
 }
 
 export function upgradeDyeSymbol(state, slotIdx = 0, callbacks = {}) {
-  state.dyeSymbols = state.dyeSymbols || [null, null, null];
-  const current = state.dyeSymbols[slotIdx];
+  const dyeSymbols = Array.isArray(state.dyeSymbols) ? state.dyeSymbols : [null, null, null];
+  const current = dyeSymbols[slotIdx];
   if (!current) {
     if (callbacks.log) callbacks.log('Nenhum símbolo instalado neste slot.', 'system');
     return false;
@@ -576,11 +590,12 @@ export function upgradeDyeSymbol(state, slotIdx = 0, callbacks = {}) {
   const costs = [0, 50000, 150000, 400000, 1000000];
   const upgradeCost = costs[current.stage] || 100000;
 
-  if ((state.gold || 0) < upgradeCost) {
+  if (!canAffordAdena(state, upgradeCost)) {
     if (callbacks.log) callbacks.log(`Adena insuficiente! Requer ${upgradeCost.toLocaleString()} Adena para evoluir a tatuagem.`, 'system');
     return false;
   }
 
+  state.dyeSymbols = dyeSymbols;
   state.gold -= upgradeCost;
 
   const successChances = [0, 0.75, 0.55, 0.40, 0.25];
@@ -665,7 +680,7 @@ export function compoundBeltsWithDuplicates(state, primaryUid, secondaryUid, cal
   }
 
   const compoundCost = 100000;
-  if ((state.gold || 0) < compoundCost) {
+  if (!canAffordAdena(state, compoundCost)) {
     if (callbacks.log) callbacks.log(`Adena insuficiente! Requer ${compoundCost.toLocaleString()} Adena para a fusão.`, 'system');
     return false;
   }
@@ -843,7 +858,7 @@ export function chargeRandomCraftWithItem(state, itemUid, callbacks = {}) {
 
 export function chargeRandomCraftWithAdena(state, callbacks = {}) {
   const feeAdena = RANDOM_CRAFT_ADENA_CHARGE_COST;
-  if ((state.gold || 0) < feeAdena) {
+  if (!canAffordAdena(state, feeAdena)) {
     if (callbacks.log) callbacks.log(`Requer ${feeAdena.toLocaleString()} Adena para carregar +${RANDOM_CRAFT_ADENA_CHARGE_POINTS} pontos.`, 'system');
     return false;
   }
@@ -877,7 +892,7 @@ export function chargeRandomCraft(state, pointsToAdd = 20, callbacks = {}) {
 
 export function refreshRandomCraftSlots(state, callbacks = {}) {
   const feeAdena = RANDOM_CRAFT_REROLL_COST;
-  if ((state.gold || 0) < feeAdena) {
+  if (!canAffordAdena(state, feeAdena)) {
     if (callbacks.log) callbacks.log(`Requer ${feeAdena.toLocaleString()} Adena para atualizar os 5 slots da Roleta.`, 'system');
     return false;
   }
@@ -912,7 +927,6 @@ export function spinRandomCraft(state, callbacks = {}) {
   }
 
   // Sorteio aleatório uniforme entre os 5 slots (20% para cada item gerado, sem escolha manual do jogador)
-  rc.charge -= 1;
   const wonIdx = Math.floor(Math.random() * rc.slots.length);
   const reward = rc.slots[wonIdx];
 
@@ -920,7 +934,12 @@ export function spinRandomCraft(state, callbacks = {}) {
   const def = gData?.ALL_ITEMS?.[reward.itemId] || { name: reward.itemId };
 
   // Adiciona a recompensa ao inventário
-  addToInventory(state, reward.itemId, reward.count || 1, reward.rarity || 'rare', false, callbacks);
+  if (!addToInventory(state, reward.itemId, reward.count || 1, reward.rarity || 'rare', false, callbacks)) {
+    if (callbacks.log) callbacks.log('Mochila cheia! Libere espaço antes de girar o Random Craft.', 'system');
+    return false;
+  }
+
+  rc.charge -= 1;
 
   rc.history.unshift({
     itemId: reward.itemId,

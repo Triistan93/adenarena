@@ -29,6 +29,7 @@ export function renderFishingUI(state) {
   const activeBaitId = fState.activeBait;
   const activeBait = activeBaitId ? BAIT_CATALOG[activeBaitId] : null;
   const activeBaitCount = activeBaitId ? (fState.baitInventory?.[activeBaitId] || 0) : 0;
+  const pendingFishCount = fState.pendingFishRewards.reduce((total, reward) => total + (Number(reward.count) || 0), 0);
 
   // --- ZONAS DE PESCA ---
   const zonesList = getFishingZonesList();
@@ -478,6 +479,13 @@ export function renderFishingUI(state) {
           </div>
         </div>
       </div>
+
+      ${pendingFishCount > 0 ? `
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px 12px; margin-bottom:16px; border:1px solid #f59e0b; border-radius:8px; background:rgba(120,53,15,0.22); color:#fde68a;">
+          <span>🎣 ${pendingFishCount} peixe(s) capturado(s) aguardam espaço na mochila.</span>
+          <button onclick="window.claimPendingFishingRewards()" style="padding:6px 10px; border:1px solid #fbbf24; border-radius:6px; color:#1c1917; background:#fbbf24; font-weight:bold; cursor:pointer;">Resgatar</button>
+        </div>
+      ` : ''}
 
       <!-- Stage Interativo de Pesca -->
       <div style="

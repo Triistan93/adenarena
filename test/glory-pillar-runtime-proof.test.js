@@ -37,16 +37,20 @@ describe('Glory Pillar Deep Validation — Suite 1: Runtime Proof & Stat Isolati
     state.fortresses.equippedTalismans = [];
     state.fortresses.epaulettes = 1000;
 
+    const baselineStats = getStats(state);
     const baselineBonuses = FortressService.getBonuses(state);
     assert.equal(baselineBonuses.pAtk, 0);
 
     FortressService.equipTalisman(state, 'talisman_power');
     const withTalisman = FortressService.getBonuses(state);
     assert.ok(withTalisman.pAtk > 0);
+    const equippedStats = getStats(state);
+    assert.ok(equippedStats.atk > baselineStats.atk, 'equipped talisman must change production combat attack');
 
     FortressService.unequipTalisman(state, 'talisman_power');
     const rolledBack = FortressService.getBonuses(state);
     assert.equal(rolledBack.pAtk, 0);
+    assert.equal(getStats(state).atk, baselineStats.atk, 'unequip must remove the combat bonus');
   });
 
   it('3. Zero Double-Counting: Simultaneous activation of Clan + Talisman + Codex bonuses', () => {

@@ -307,6 +307,11 @@ export const RefineryService = {
       }
     }
 
+    // Snapshot stack counts and ordering so a failed output insertion can roll back
+    // all ingredient mutations atomically, even if addToInventory partially merged.
+    const inventoryBeforeRefine = state.inventory.map(item => item ? { ...item } : item);
+    const goldBeforeRefine = Number(state.gold) || 0;
+
     // Deduz materiais através de todos os stacks disponíveis
     for (const inp of recipe.inputs) {
       let toDeduct = inp.qty * count;
@@ -333,19 +338,26 @@ export const RefineryService = {
 
     // Entrega material refinado
     const outputQty = (recipe.output.qty || 1) * count;
-    addToInventory(state, recipe.output.matId, outputQty, 'common', false, callbacks, true);
+    if (!addToInventory(state, recipe.output.matId, outputQty, 'common', false, callbacks, true)) {
+      state.inventory = inventoryBeforeRefine;
+      state.gold = goldBeforeRefine;
+      if (callbacks.log) callbacks.log('⚠️ Mochila cheia! Nenhum material foi consumido.', 'warning');
+      return { success: false, reason: 'inventory_full' };
+    }
 
     // Concede EXP para a Forja Imperial
     const earnedForgeExp = (recipe.forgeExp || 5) * count;
-    state.accountForgeExp = (state.accountForgeExp || 0) + earnedForgeExp;
-    const forgeLvl = state.accountForgeLevel || state.craftLevel || 1;
-    const reqExp = forgeLvl * 100;
+    state.accountForgeExp = Math.max(0, Number(state.accountForgeExp) || 0) + earnedForgeExp;
+    let forgeLvl = Math.max(1, Number(state.accountForgeLevel || state.craftLevel) || 1);
     let forgeLeveledUp = false;
-    if (state.accountForgeExp >= reqExp) {
-      state.accountForgeExp -= reqExp;
-      state.accountForgeLevel = forgeLvl + 1;
-      state.craftLevel = state.accountForgeLevel;
+    while (state.accountForgeExp >= forgeLvl * 100) {
+      state.accountForgeExp -= forgeLvl * 100;
+      forgeLvl += 1;
       forgeLeveledUp = true;
+    }
+    if (forgeLeveledUp) {
+      state.accountForgeLevel = forgeLvl;
+      state.craftLevel = state.accountForgeLevel;
     }
 
     const outDef = RESOURCE_DICTIONARY[recipe.output.matId] || { name: recipe.name };

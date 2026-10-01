@@ -840,6 +840,14 @@ export function applyPlayerBasicAttackDamageBonus(damage, stats) {
   return Math.floor(amount * (1 + bonus));
 }
 
+/** Resolves the equipped weapon's stun proc in percentage points, preserving fractional chances. */
+export function rollPlayerHitStunProc(chancePercent, roll = Math.random()) {
+  const chance = Number(chancePercent);
+  const safeRoll = Number(roll);
+  if (!Number.isFinite(chance) || chance <= 0 || !Number.isFinite(safeRoll) || safeRoll < 0 || safeRoll >= 1) return false;
+  return safeRoll * 100 < Math.min(100, chance);
+}
+
 /** Applies general received-critical resistance plus basic-only resistance when appropriate. */
 export function applyPlayerBasicCriticalDamageReduction(damage, stats, isBasicAttack = true) {
   const amount = Math.max(0, Number(damage) || 0);
@@ -967,12 +975,13 @@ export function getHpPotionHealAmount(baseHeal, stats) {
   const amount = Math.max(0, Number(baseHeal) || 0);
   const bonus = Math.max(0, Number(stats?.hpPotionEffectPercent) || 0);
   const receivedBonus = Math.max(0, Number(stats?.healingReceivedPercent) || 0);
-  return Math.floor(amount * (1 + bonus) * (1 + receivedBonus));
+  const healPower = Math.max(0, Number(stats?.healPower) || 0);
+  return Math.floor(amount * (1 + bonus) * (1 + receivedBonus + healPower));
 }
 
 export function applyPlayerHealingReceivedBonus(amount, stats) {
   const base = Math.max(0, Number(amount) || 0);
-  const bonus = Math.max(0, Number(stats?.healingReceivedPercent) || 0);
+  const bonus = Math.max(0, Number(stats?.healingReceivedPercent) || 0) + Math.max(0, Number(stats?.healPower) || 0);
   return Math.floor(base * (1 + bonus));
 }
 

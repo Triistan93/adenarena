@@ -17,6 +17,7 @@ import { HEIRLOOM_ITEMS } from '../lineage-idle/src/data/items/heirloom_items.js
 import { BROOCH_JEWELS } from '../lineage-idle/src/data/items/broochJewels.js';
 import { ALL_ITEMS } from '../lineage-idle/src/data/items/index.js';
 import { CANONICAL_SKILL_REGISTRY_V2 } from '../lineage-idle/src/data/skills/CanonicalSkillRegistryV2.js';
+import { resolvePlayerBasicAttackIntervalMs, rollPlayerHitStunProc } from '../lineage-idle/src/services/SkillEffectService.js';
 
 function withEquippedItem(slot, item) {
   const state = DEFAULT_STATE();
@@ -29,6 +30,100 @@ function withEquippedItem(slot, item) {
 }
 
 describe('Equipment effects through the production StatsEngine path', () => {
+  it('aggregates every declared combat bonus on all unique equippable catalog items', () => {
+    const equipmentSlots = new Set([
+      'weapon', 'armor', 'helmet', 'head', 'legs', 'gloves', 'boots', 'shield',
+      'cloak', 'belt', 'necklace', 'earring', 'ring', 'brooch', 'artifact', 'underwear'
+    ]);
+    const slotAliases = { earring: 'earring1', ring: 'ring1', head: 'helmet' };
+    const effectFields = [
+      'atk', 'pAtk', 'def', 'pDef', 'matk', 'mAtk', 'mdef', 'mDef', 'hp', 'mp',
+      'hpPercent', 'cpPercent', 'eva', 'hit', 'crit', 'critDmg', 'cdr', 'speed',
+      'atkSpeed', 'castSpeed', 'mpRegen', 'hpRegen', 'stunChance', 'stunResist',
+      'blockRate', 'lifesteal', 'ssBonusPct', 'spsBonusPct', 'pveDamagePercent',
+      'damageTakenReductionPercent', 'pSkillPowerPercent', 'mSkillPowerPercent',
+      'xpBoost', 'goldBoost', 'adenaBoost', 'str', 'dex', 'con', 'int', 'wit', 'men'
+    ];
+    const uniqueItems = [...new Map(Object.values(ALL_ITEMS)
+      .filter(item => equipmentSlots.has(item.slot))
+      .map(item => [item.id, item])).values()];
+    let checkedEffects = 0;
+
+    for (const item of uniqueItems) {
+      const state = DEFAULT_STATE();
+      const uid = `catalog-${item.id}`;
+      state.inventory = [{ ...item, uid, itemId: item.id }];
+      state.equipment[slotAliases[item.slot] || item.slot] = uid;
+      const totals = getTotalEquipBonuses(state);
+
+      for (const field of effectFields) {
+        if (!Number.isFinite(Number(item[field])) || Number(item[field]) === 0) continue;
+        const normalizedField = ({ pAtk: 'atk', pDef: 'def', mAtk: 'matk', mDef: 'mdef', adenaBoost: 'goldBoost' })[field] || field;
+        assert.notEqual(totals[normalizedField], 0, `${item.id}.${field} must reach getTotalEquipBonuses()`);
+        checkedEffects++;
+      }
+    }
+
+    assert.ok(uniqueItems.length >= 416, 'the audit includes every currently cataloged unique equip entry');
+    assert.ok(checkedEffects >= 1_107, 'the audit checks every currently declared nonzero combat bonus');
+  });
+
+  it('routes every cataloged equipment bonus into its effective StatsEngine output', () => {
+    const equipmentSlots = new Set([
+      'weapon', 'armor', 'helmet', 'head', 'legs', 'gloves', 'boots', 'shield',
+      'cloak', 'belt', 'necklace', 'earring', 'ring', 'brooch', 'artifact', 'underwear'
+    ]);
+    const slotAliases = { earring: 'earring1', ring: 'ring1', head: 'helmet' };
+    const outputByField = {
+      atk: ['atk'], pAtk: ['atk'], def: ['def'], pDef: ['def'],
+      matk: ['matk'], mAtk: ['matk'], mdef: ['mdef'], mDef: ['mdef'],
+      hp: ['maxHp'], mp: ['maxMp'], hpPercent: ['maxHp'], cpPercent: ['maxCp'],
+      eva: ['eva'], hit: ['pAccuracy'], crit: ['rawCrit'], critDmg: ['critDmg'],
+      cdr: ['cdr'], speed: ['movementSpeedPercent'], atkSpeed: ['cdr'], castSpeed: ['cdr'],
+      mpRegen: ['mpRegen'], hpRegen: ['hpRegenFlat'], stunResist: ['debuffResistancePercent'],
+      blockRate: ['block'], lifesteal: ['lifeDrain'], ssBonusPct: ['ssBonusPct'],
+      spsBonusPct: ['spsBonusPct'], pveDamagePercent: ['pveDamagePercent'],
+      damageTakenReductionPercent: ['damageTakenReductionPercent'],
+      pSkillPowerPercent: ['pSkillPowerPercent'], mSkillPowerPercent: ['mSkillPowerPercent'],
+      xpBoost: ['xpBoost'], goldBoost: ['goldBoost'], adenaBoost: ['goldBoost'],
+      str: ['atk'], dex: ['crit', 'eva'], con: ['maxHp'], int: ['matk'],
+      wit: ['maxMp'], men: ['mdef']
+    };
+    const uniqueItems = [...new Map(Object.values(ALL_ITEMS)
+      .filter(item => equipmentSlots.has(item.slot))
+      .map(item => [item.id, item])).values()];
+    let checkedEffects = 0;
+    let procEffects = 0;
+
+    for (const item of uniqueItems) {
+      const baseline = DEFAULT_STATE();
+      baseline.level = 90;
+      baseline.race = 'human';
+      baseline.class = 'fighter';
+      const before = getStats(baseline);
+      const equipped = structuredClone(baseline);
+      const uid = `derived-${item.id}`;
+      equipped.inventory = [{ ...item, uid, itemId: item.id }];
+      equipped.equipment[slotAliases[item.slot] || item.slot] = uid;
+      const after = getStats(equipped);
+
+      if (Number(item.stunChance)) {
+        procEffects++;
+        continue; // Verified separately against the production hit proc below.
+      }
+      for (const [field, outputs] of Object.entries(outputByField)) {
+        if (!Number.isFinite(Number(item[field])) || Number(item[field]) === 0) continue;
+        assert.ok(outputs.some(key => Number(after[key]) > Number(before[key])),
+          `${item.id}.${field} must affect an effective stat: ${outputs.join(' / ')}`);
+        checkedEffects++;
+      }
+    }
+
+    assert.ok(uniqueItems.length >= 416);
+    assert.ok(checkedEffects >= 1_102);
+    assert.ok(procEffects >= 1, 'weapon stun chances are routed through the separate attack-proc contract');
+  });
+
   it('uses M.Def for both magic and magical monster attacks, and P.Def for physical attacks', () => {
     const defenses = { def: 100, mdef: 500 };
     const physical = calculateIncomingDamageMitigation(1000, defenses, 'physical');
@@ -65,6 +160,64 @@ describe('Equipment effects through the production StatsEngine path', () => {
     assert.ok(buffed.atk > baseline.atk, 'fish stew increases P.Atk');
     assert.ok(buffed.matk > baseline.matk, 'fish stew increases M.Atk');
     assert.ok(state.buffs.stew_fish.until > Date.now());
+  });
+
+  it('applies equipped movement-speed bonuses to the basic-attack interval', () => {
+    const baseline = withEquippedItem('earring1', {
+      itemId: 'runtime_speed_earring', slot: 'earring', mdef: 80
+    });
+    const swift = withEquippedItem('earring1', {
+      itemId: 'runtime_speed_earring', slot: 'earring', mdef: 80, speed: 15
+    });
+    const zaken = withEquippedItem('earring1', {
+      ...ALL_ITEMS.jewel_earring_of_zaken,
+      uid: 'test_item', itemId: 'jewel_earring_of_zaken', slot: 'earring'
+    });
+
+    const baselineStats = getStats(baseline);
+    const swiftStats = getStats(swift);
+    const zakenStats = getStats(zaken);
+
+    assert.equal(baselineStats.movementSpeedPercent, 0);
+    assert.equal(swiftStats.movementSpeedPercent, 0.15);
+    assert.ok(swiftStats.speed > baselineStats.speed);
+    assert.equal(resolvePlayerBasicAttackIntervalMs(baselineStats), 1_000);
+    assert.equal(resolvePlayerBasicAttackIntervalMs(swiftStats), 870);
+    assert.equal(zakenStats.movementSpeedPercent, 0.06);
+    assert.equal(resolvePlayerBasicAttackIntervalMs(zakenStats), Math.round(1_000 / 1.06));
+
+    const infinityBow = withEquippedItem('weapon', {
+      ...WEAPONS.weapon_infinity_bow, uid: 'test_item', itemId: 'weapon_infinity_bow'
+    });
+    const bowStats = getStats(infinityBow);
+    assert.equal(bowStats.movementSpeedPercent, 0.15);
+    assert.equal(resolvePlayerBasicAttackIntervalMs(bowStats), 870);
+
+    const lightBoots = withEquippedItem('boots', {
+      ...HEIRLOOM_ITEMS.armor_heirloom_boots_light, uid: 'test_item', itemId: 'armor_heirloom_boots_light'
+    });
+    const bootsStats = getStats(lightBoots);
+    assert.equal(bootsStats.movementSpeedPercent, 0.10);
+    assert.equal(resolvePlayerBasicAttackIntervalMs(bootsStats), Math.round(1_000 / 1.10));
+  });
+
+  it('converts both attack-speed and cast-speed bonuses on equipped gear into skill cooldown reduction', () => {
+    const baseline = DEFAULT_STATE();
+    baseline.race = 'human';
+    baseline.class = 'gladiator';
+    baseline.level = 80;
+    const baiumRing = withEquippedItem('ring1', {
+      ...RINGS.jewel_ring_of_baium,
+      uid: 'test_item', itemId: 'jewel_ring_of_baium', slot: 'ring'
+    });
+
+    const baseCdr = getStats(baseline).cdr;
+    const ringStats = getStats(baiumRing);
+    const ringCdr = ringStats.cdr;
+    assert.equal(ringCdr - baseCdr, 0.30);
+    const skill = { id: 'baium_cooldown_test', type: 'active', baseCd: 10_000 };
+    assert.equal(canCastSkill({ mp: 100, stats: ringStats }, skill, 6_999, { baium_cooldown_test: 0 }).canCast, false);
+    assert.equal(canCastSkill({ mp: 100, stats: ringStats }, skill, 7_000, { baium_cooldown_test: 0 }).canCast, true);
   });
 
   it('replaces spear area targets/damage with effective physical attack in production stats', () => {
@@ -199,6 +352,21 @@ describe('Equipment effects through the production StatsEngine path', () => {
     assert.equal(earringStats.debuffResistancePercent, 0.10);
     assert.ok(exposedResult.appliedDebuff);
     assert.equal(protectedResult.appliedDebuff, null);
+  });
+
+  it('preserves fractional heirloom stun-chance points for the production hit-proc aggregator', () => {
+    const hammer = withEquippedItem('weapon', {
+      ...HEIRLOOM_ITEMS.weapon_heirloom_blunt,
+      uid: 'test_item', itemId: 'weapon_heirloom_blunt', isHeirloom: true
+    });
+
+    const chance = getTotalEquipBonuses(hammer).stunChance;
+    assert.equal(chance, 0.15);
+    assert.equal(rollPlayerHitStunProc(chance, 0.001), true, 'a 0.1% roll succeeds against 0.15% chance');
+    assert.equal(rollPlayerHitStunProc(chance, 0.002), false, 'a 0.2% roll does not exceed the 0.15% chance');
+    assert.equal(rollPlayerHitStunProc(25, 0.249), true);
+    assert.equal(rollPlayerHitStunProc(25, 0.25), false);
+    assert.equal(rollPlayerHitStunProc(0, 0), false);
   });
 
   it('adds equipped heirloom inventory slots to the real backpack capacity', () => {
@@ -398,7 +566,7 @@ describe('Equipment effects through the production StatsEngine path', () => {
 
     const after = getStats(state);
     assert.equal(after.maxHp - before.maxHp, 250);
-    assert.equal(after.cdr - before.cdr, 0.05, 'Masterwork cast speed reduces cooldown');
+    assert.equal(after.cdr - before.cdr, 0.09, 'Masterwork attack and cast speed reduce cooldown while retaining attack speed');
     assert.equal(after.atkSpd - before.atkSpd, 0.04, 'Masterwork attack speed remains attack speed');
     assert.equal(after.mpRegen - before.mpRegen, 0.08, 'Masterwork MP regeneration bonus is applied');
   });

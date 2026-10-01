@@ -25,7 +25,9 @@ import { MONSTERS }                                                          fro
 import { RAID_BOSSES }                                                       from './src/data/raids.js';
 import { QUEST_DEFS, BATTLE_PASS_TIERS, PASS_DEFS, DAILY_COMPLETION_BONUS } from './src/data/quests.js';
 import { CODEX_SETS, BOSS_DOLLS }                                           from './src/data/codex.js';
-import { MONSTER_CARDS, CardCodexService }                                    from './src/services/CardCodexService.js';
+import { MONSTER_CARDS, CardCodexService, getCanonicalCardId }                 from './src/services/CardCodexService.js';
+import { CollectionService }                                                   from './src/services/CollectionService.js';
+import { MentorshipReferralService }                                            from './src/services/MentorshipReferralService.js';
 import { DYES_CATALOG }                                                       from './src/data/dyes.js';
 import { DyeService }                                                         from './src/services/DyeService.js';
 import { PET_CATALOG }                                                        from './src/data/pets.js';
@@ -37,10 +39,12 @@ import { ManorService }                                                       fr
 import { FishingService }                                                     from './src/services/FishingService.js';
 import { HuntingService }                                                     from './src/services/HuntingService.js';
 import { GatheringService }                                                   from './src/services/lifeActivities/GatheringService.js';
+import { restoreCharacterCp }                                                 from './src/services/ConsumableService.js';
 import { MiningService }                                                      from './src/services/lifeActivities/MiningService.js';
 import { MercenaryService }                                                   from './src/services/MercenaryService.js';
 import { MERCENARY_RARITIES, MERCENARY_SPECIALIZATIONS, MERCENARY_TRAITS }           from './src/data/mercenaries.js';
 import { ExpeditionService, EXPEDITION_DESTINATIONS as CANONICAL_EXPEDITION_DESTINATIONS, EXPEDITION_DILEMMAS, RISK_DIRECTIVES } from './src/services/ExpeditionService.js';
+import { getExpeditionDilemmaActionEligibility } from './src/services/ExpeditionDilemmaPolicy.js';
 import { renderFishingUI }                                                    from './src/ui/FishingUI.js';
 import { renderHuntingUI }                                                    from './src/ui/HuntingUI.js';
 import { renderGatheringUI }                                                  from './src/ui/GatheringUI.js';
@@ -171,7 +175,7 @@ import {
   spinRandomCraft as serviceSpinRandomCraft,
   claimRandomCraft as serviceClaimRandomCraft
 } from './src/services/CraftService.js';
-import { rollMagicLampCard } from './src/data/economy/magicLampBalance.js';
+import { consumeMagicLamp, grantMagicLampProgressFromKill, MAGIC_LAMP_EXP_THRESHOLD } from './src/services/MagicLampService.js';
 import {
   ALCHEMY_RECIPES,
   dissolveItem as serviceDissolveItem,
@@ -185,6 +189,8 @@ import {
 import {
   startCombat as engineStartCombat,
   stopCombat as engineStopCombat,
+  setCombatSpeed as engineSetCombatSpeed,
+  calculateConfiguredDropChance,
   pickRandomMonster as enginePickRandomMonster,
   selectZone as engineSelectZone,
   updateSagaProgress as engineUpdateSagaProgress,
@@ -260,7 +266,10 @@ import {
   getTowerFloorDef as serviceGetTowerFloorDef,
   challengeTowerFloor as serviceChallengeTowerFloor,
   completeTowerFloor as serviceCompleteTowerFloor,
-  sweepTowerDaily as serviceSweepTowerDaily
+  claimPendingTowerRewards as serviceClaimPendingTowerRewards,
+  sweepTowerDaily as serviceSweepTowerDaily,
+  getTowerFloorMinimumCP,
+  getTowerFloorRecommendedCP
 } from './src/services/TowerService.js';
 
 import {
@@ -326,7 +335,8 @@ import {
   openBatchCrystallizeModal,
   closeInventoryPreviewModal,
   renderItemDetailAndComparison,
-  positionSkillTooltip as uiPositionSkillTooltip
+  positionSkillTooltip as uiPositionSkillTooltip,
+  escapeHTML as uiEscapeHTML
 } from './src/ui/GameUI.js';
 import { CashShopService } from './src/services/CashShopService.js';
 import { applyConsumableStatBuff, getConsumableRestoreAmount } from './src/services/ConsumableService.js';
@@ -335,7 +345,7 @@ import { OlympiadService } from './src/services/OlympiadService.js';
 import { ClanService } from './src/services/ClanService.js';
 import { SkillEnchantService } from './src/services/SkillEnchantService.js';
 import { AugmentationService, getEquippedAugmentationSkills, getAugmentationStunChancePercent, processAugmentationCombatTick } from './src/services/AugmentationService.js';
-import { applyPlayerBasicAttackDamageBonus, applyPlayerBasicCriticalDamageReduction, applyPlayerWeaponDamageReduction, applyPlayerBuffHitControlProc, applyPlayerBuffHitHealProc, applyPlayerBuffLifeDrainProc, applyPlayerDamageTakenReduction, applyPlayerHealingReceivedBonus, applyPlayerLifesteal, applyPlayerPveDamageBonus, applyPlayerSkillPowerBonus, applySkillBuffDurationBonus, applySkillDamageOverTime, applySkillTargetDebuff, applyTargetDamageTakenBonus, clearPlayerCombatDebuffs, getActivePlayerCombatDebuffIds, getPlayerBuffShockChanceBonus, getDebuffedMonsterAttack, getDebuffedMonsterAttackSpeed, getDebuffedMonsterDefense, getHpPotionHealAmount, isMonsterActionDisabled, isHpRecoveryPotion, isMonsterMagicSkillSilenced, processSkillDamageOverTime, resolveDebuffedMonsterSkillCooldownMs, resolveDwarvenWeaponMasteryStunChancePercent, resolveMechanicalMasterpieceHit, resolvePlayerBasicAttackIntervalMs, resolvePlayerDamageReflection, resolvePhysicalSkillCriticalDamage, resolveSkillBuffDurationMs, resolveSkillBuffStats, resolveSkillDamageOverTime, resolveSkillFixedHeal, resolveSkillHealPower, resolveSkillHpSacrificeCost, resolveSkillMpRecoveryAmount, resolveSkillSelfHealPercent, resolveSkillTargetDebuffStats, shouldEvadeMonsterSkill } from './src/services/SkillEffectService.js';
+import { applyPlayerBasicAttackDamageBonus, applyPlayerBasicCriticalDamageReduction, applyPlayerWeaponDamageReduction, applyPlayerBuffHitControlProc, applyPlayerBuffHitHealProc, applyPlayerBuffLifeDrainProc, applyPlayerDamageTakenReduction, applyPlayerHealingReceivedBonus, applyPlayerLifesteal, applyPlayerPveDamageBonus, applyPlayerSkillPowerBonus, applySkillBuffDurationBonus, applySkillDamageOverTime, applySkillTargetDebuff, applyTargetDamageTakenBonus, clearPlayerCombatDebuffs, getActivePlayerCombatDebuffIds, getPlayerBuffShockChanceBonus, getDebuffedMonsterAttack, getDebuffedMonsterAttackSpeed, getDebuffedMonsterDefense, getHpPotionHealAmount, isMonsterActionDisabled, isHpRecoveryPotion, isMonsterMagicSkillSilenced, processSkillDamageOverTime, resolveDebuffedMonsterSkillCooldownMs, resolveDwarvenWeaponMasteryStunChancePercent, resolveMechanicalMasterpieceHit, resolvePlayerBasicAttackIntervalMs, resolvePlayerDamageReflection, resolvePhysicalSkillCriticalDamage, resolveSkillBuffDurationMs, resolveSkillBuffStats, resolveSkillDamageOverTime, resolveSkillFixedHeal, resolveSkillHealPower, resolveSkillHpSacrificeCost, resolveSkillMpRecoveryAmount, resolveSkillSelfHealPercent, resolveSkillTargetDebuffStats, rollPlayerHitStunProc, shouldEvadeMonsterSkill } from './src/services/SkillEffectService.js';
 import { SevenSignsService } from './src/services/SevenSignsService.js';
 import { SEAL_STONES, NECROPOLIS_ZONES } from './src/data/seven_signs.js';
 import { FortressService } from './src/services/FortressService.js';
@@ -979,117 +989,23 @@ function getWarehouseCount(itemId) {
 }
 
 function depositToWarehouse(uid, amount = 1) {
-  const invIdx = state.inventory.findIndex(i => i.uid === uid);
-  if (invIdx < 0) return false;
-  const item = state.inventory[invIdx];
-  if (item.equipped) {
-    log('Desequipe o item antes de guardá-lo no baú.', 'system');
-    return false;
-  }
-
-  const def = getItemDef(item.itemId);
-  if (!def) return false;
-
-  state.warehouse = state.warehouse || [];
-  const maxSlots = getMaxWarehouseSlots();
-
-  const isStackable = def.stack || ['consumable','material','scroll','powerup'].includes(def.slot);
-  if (isStackable) {
-    let remaining = Math.min(amount, item.count || 1);
-    const maxStack = def.stack || 9999;
-    while (remaining > 0) {
-      const existing = state.warehouse.find(i => i.itemId === item.itemId && (i.count || 1) < maxStack);
-      if (existing) {
-        const space = maxStack - (existing.count || 1);
-        const add = Math.min(space, remaining);
-        existing.count = (existing.count || 1) + add;
-        remaining -= add;
-      } else {
-        if (state.warehouse.length >= maxSlots) {
-          log('Baú cheio!', 'system');
-          return false;
-        }
-        const add = Math.min(maxStack, remaining);
-        state.warehouse.push({ ...item, uid: Date.now() + '_' + Math.random().toString(36).slice(2, 8), count: add, equipped: false });
-        remaining -= add;
-      }
-    }
-    if ((item.count || 1) > amount) {
-      item.count -= amount;
-    } else {
-      state.inventory.splice(invIdx, 1);
-    }
-  } else {
-    if (state.warehouse.length >= maxSlots) {
-      log('Baú cheio!', 'system');
-      return false;
-    }
-    state.inventory.splice(invIdx, 1);
-    state.warehouse.push({ ...item, equipped: false });
-  }
-
-  const formattedName = uiFormatItemDisplayName(item, def);
-  log(`📦 Guardou ${formattedName} no Baú.`, 'loot');
-  hideItemTooltip();
-  updateInventoryUI();
-  updateWarehouseUI();
-  updateAllUI(); save();
-  return true;
+  const result = serviceDepositToWarehouse(state, uid, amount, {
+    log,
+    updateAllUI: () => { updateInventoryUI(); updateWarehouseUI(); updateAllUI(); },
+    save
+  });
+  if (result) hideItemTooltip();
+  return result;
 }
 
 function withdrawFromWarehouse(uid, amount = 1) {
-  state.warehouse = state.warehouse || [];
-  const whIdx = state.warehouse.findIndex(i => i.uid === uid);
-  if (whIdx < 0) return false;
-  const item = state.warehouse[whIdx];
-
-  const def = getItemDef(item.itemId);
-  if (!def) return false;
-
-  const maxInvSlots = getMaxInventorySlots();
-
-  const isStackable = def.stack || ['consumable','material','scroll','powerup'].includes(def.slot);
-  if (isStackable) {
-    let remaining = Math.min(amount, item.count || 1);
-    const maxStack = def.stack || 9999;
-    while (remaining > 0) {
-      const existing = state.inventory.find(i => i.itemId === item.itemId && (i.count || 1) < maxStack);
-      if (existing) {
-        const space = maxStack - (existing.count || 1);
-        const add = Math.min(space, remaining);
-        existing.count = (existing.count || 1) + add;
-        remaining -= add;
-      } else {
-        if (state.inventory.length >= maxInvSlots) {
-          log('Mochila cheia!', 'system');
-          return false;
-        }
-        const add = Math.min(maxStack, remaining);
-        state.inventory.push({ ...item, uid: Date.now() + '_' + Math.random().toString(36).slice(2, 8), count: add, equipped: false });
-        remaining -= add;
-      }
-    }
-    if ((item.count || 1) > amount) {
-      item.count -= amount;
-    } else {
-      state.warehouse.splice(whIdx, 1);
-    }
-  } else {
-    if (state.inventory.length >= maxInvSlots) {
-      log('Mochila cheia!', 'system');
-      return false;
-    }
-    state.warehouse.splice(whIdx, 1);
-    state.inventory.push({ ...item, equipped: false });
-  }
-
-  const formattedName = uiFormatItemDisplayName(item, def);
-  log(`🎒 Retirou ${formattedName} do Baú.`, 'loot');
-  hideItemTooltip();
-  updateInventoryUI();
-  updateWarehouseUI();
-  updateAllUI(); save();
-  return true;
+  const result = serviceWithdrawFromWarehouse(state, uid, amount, {
+    log,
+    updateAllUI: () => { updateInventoryUI(); updateWarehouseUI(); updateAllUI(); },
+    save
+  });
+  if (result) hideItemTooltip();
+  return result;
 }
 
 function resolveEquipSlot(slot) { return serviceResolveEquipSlot(slot, state.equipment); }
@@ -1464,6 +1380,17 @@ export function useItem(uid) {
     log(`✨ Usou ${def.name}: +${healAmt} HP`, 'heal');
     if (typeof floatText === 'function') floatText(`+${healAmt} HP`, 'sf-heal');
   }
+  // ── CP Potions ─────────────────────────────────────────────────────────────
+  else if (def.type === 'cp') {
+    const maxCp = Number(getStats().maxCp) || Number(state.maxCp) || Number(state.cp) || 0;
+    const result = restoreCharacterCp(state, def.amount, maxCp);
+    if (!result.success) {
+      log(`${def.name}: seu CP já está cheio.`, 'system');
+      return false;
+    }
+    log(`🛡️ Usou ${def.name}: +${result.restored.toLocaleString()} CP`, 'heal');
+    if (typeof floatText === 'function') floatText(`+${result.restored} CP`, 'sf-heal');
+  }
   // ── MP Potions ─────────────────────────────────────────────────────────────
   else if (def.type === 'mana' || item.itemId.startsWith('mp_potion')) {
     const potNow = Date.now();
@@ -1790,38 +1717,21 @@ function checkLevelUp() {
 export function sellItem(uid) {
   if (typeof window !== 'undefined') window.sellItem = sellItem;
   const idx = state.inventory.findIndex(i => i.uid === uid);
-  if (idx < 0) return;
+  if (idx < 0) return false;
   const item = state.inventory[idx];
-  if (item.equipped) { log('Desequipe o item antes de vender.', 'system'); return; }
+  if (item.equipped) { log('Desequipe o item antes de vender.', 'system'); return false; }
   const def = D()?.ALL_ITEMS?.[item.itemId];
-  if (!def) return;
+  if (!def) return false;
 
   if (isHighValueItem(item)) {
     const rarityName = D().RARITY?.[item.rarity]?.name || item.rarity;
-    if (!confirm(`⚠️ Deseja realmente VENDER o item valioso "${def.name}" [${rarityName}]?`)) return;
+    if (!confirm(`⚠️ Deseja realmente VENDER o item valioso "${def.name}" [${rarityName}]?`)) return false;
   }
 
-  const qty = item.count || 1;
-  const goldEarned = getSellValue(item) * qty;
-
-  // Registrar na fila de Buyback (Canônico)
-  state.buybackQueue = state.buybackQueue || [];
-  state.buybackQueue.unshift({
-    itemCopy: { ...item, count: qty },
-    sellPrice: goldEarned,
-    soldAt: Date.now()
-  });
-  if (state.buybackQueue.length > 10) {
-    state.buybackQueue.pop();
-  }
-
-  state.inventory.splice(idx, 1);
-  state.gold += goldEarned;
-  const name = uiFormatItemDisplayName(item, def);
-  log(`💰 Vendeu ${name} por ${goldEarned.toLocaleString()}g!`, 'loot');
+  const sold = serviceSellItem(state, uid, item.count || 1, { log, updateAllUI, save });
+  if (!sold) return false;
   hideItemTooltip();
-  updateAllUI();
-  save();
+  return true;
 }
 
 // --------------------------- CRAFTING (Sprint 3: Delegados) ---------------------------
@@ -1834,6 +1744,7 @@ function craftItem(recipeId, qty = 1) {
 
 // --------------------------- UI HELPERS ---------------------------
 let ROOT = document; let _intervals = []; let _listeners = [];
+let _lastPetHungerTickAt = Date.now();
 export function setRoot(r) {
   ROOT = r || document;
   initializeVFX(ROOT);
@@ -2663,12 +2574,9 @@ function toggleAutoPotion() {
 }
 
 function toggleCombatSpeed() {
-  state.combatSpeed = state.combatSpeed === 1 ? 2 : 1;
+  const nextSpeed = state.combatSpeed === 1 ? 2 : 1;
+  engineSetCombatSpeed(state, nextSpeed, { attackMonster });
   updateCombatControlsUI();
-  if (state.combatActive) {
-    if (combatInterval) clearInterval(combatInterval);
-    combatInterval = setInterval(attackMonster, Math.round(200 / state.combatSpeed));
-  }
   log(`Velocidade de combate: ${state.combatSpeed}x ${state.combatSpeed === 2 ? 'TURBO ⏩' : 'Normal'}.`, 'system');
   save();
 }
@@ -3574,16 +3482,25 @@ function renderBattlePassUI() {
 
 // --------------------------- TOWER OF INSOLENCE ---------------------------
 function challengeTowerFloor() {
-  triggerQuestEvent('tower', 1);
-  return serviceChallengeTowerFloor(state, { log, floatText, el, renderStageMonster, attackMonster });
+  const result = serviceChallengeTowerFloor(state, {
+    log, floatText, el, renderStageMonster, attackMonster, save,
+    getCombatPower: () => Number(getStats().combatPower) || Number(state.combatPower) || 0
+  });
+  if (result?.success) triggerQuestEvent('tower', 1);
+  return result;
 }
 function onTowerFloorVictory(floorNum) {
-  triggerQuestEvent('tower', 1);
-  return serviceCompleteTowerFloor(state, floorNum, { log, floatText, updateAllUI, save });
+  const completed = serviceCompleteTowerFloor(state, floorNum, { log, floatText, updateAllUI, save });
+  if (completed) triggerQuestEvent('tower', 1);
+  return completed;
 }
 function sweepTowerDaily() {
-  triggerQuestEvent('tower', 1);
-  return serviceSweepTowerDaily(state, { log, floatText, updateAllUI, save });
+  const result = serviceSweepTowerDaily(state, { log, floatText, updateAllUI, save });
+  if (result?.success) triggerQuestEvent('tower', 1);
+  return result;
+}
+function claimPendingTowerRewards() {
+  return serviceClaimPendingTowerRewards(state, { log, updateAllUI, save });
 }
 
 
@@ -3607,8 +3524,12 @@ function updateTowerUI() {
       challengeBtn.textContent = '🏆 Torre 100% Concluída';
       challengeBtn.disabled = true;
     } else {
+      const currentCp = Number(getStats().combatPower) || Number(state.combatPower) || 0;
+      const minimumCp = getTowerFloorMinimumCP(nextFloor);
+      const levelReady = (Number(state.level) || 1) >= getTowerFloorDef(nextFloor).reqLvl;
+      const instanceBusy = Boolean(state.towerCombatActive || state.isRaidActive);
       challengeBtn.textContent = `⚔️ Desafiar Andar ${nextFloor}`;
-      challengeBtn.disabled = false;
+      challengeBtn.disabled = !levelReady || currentCp < minimumCp || instanceBusy;
       challengeBtn.onclick = () => challengeTowerFloor();
     }
   }
@@ -3621,15 +3542,27 @@ function updateTowerUI() {
     sweepBtn.onclick = () => sweepTowerDaily();
   }
 
+  const claimPendingBtn = el('tower-claim-pending-btn');
+  if (claimPendingBtn) {
+    const pendingRewards = Array.isArray(state.tower.pendingFirstClearRewards) ? state.tower.pendingFirstClearRewards : [];
+    claimPendingBtn.style.display = pendingRewards.length > 0 ? '' : 'none';
+    claimPendingBtn.disabled = pendingRewards.length === 0;
+    claimPendingBtn.textContent = pendingRewards.length > 0
+      ? `🎁 Resgatar ${pendingRewards.reduce((sum, reward) => sum + (Number(reward.count) || 0), 0)} recompensa(s)`
+      : '🎁 Resgatar Recompensas';
+    claimPendingBtn.onclick = () => claimPendingTowerRewards();
+  }
+
   const nextDef = getTowerFloorDef(nextFloor);
   const recommendEl = el('tower-floor-recommend');
-  if (recommendEl) recommendEl.textContent = `Lv. Requerido: ${nextDef.reqLvl}`;
+  if (recommendEl) recommendEl.textContent = `Nv. ${nextDef.reqLvl} · CP mínimo ${getTowerFloorMinimumCP(nextFloor).toLocaleString()} · recomendado ${getTowerFloorRecommendedCP(nextFloor).toLocaleString()}`;
 
   const detailsCard = el('tower-floor-details-card');
   if (detailsCard) {
     const rewardsStr = [];
     rewardsStr.push(`💰 +${nextDef.gold.toLocaleString()}g`);
     rewardsStr.push(`✦ +${nextDef.sp} SP`);
+    rewardsStr.push(`⚡ ${getTowerFloorMinimumCP(nextFloor).toLocaleString()} CP mínimo`);
     if (nextDef.rewardLamps > 0) rewardsStr.push(`🪔 +${nextDef.rewardLamps} Lâmpadas`);
     if (nextDef.rewardCrystals) rewardsStr.push(`✨ +3x ${D().ALL_ITEMS[nextDef.rewardCrystals]?.name || nextDef.rewardCrystals}`);
 
@@ -4145,7 +4078,7 @@ export function renderSubclassesUI() {
           </div>
           <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Certificados MasterWork disponíveis nos Lvs. 65, 70, 75 e 80.</div>
         </div>
-        <div style="display:flex; gap:6px;">
+        <div style="display:flex; gap:6px; flex-wrap:wrap; justify-content:flex-end;">
           <button class="inv-batch-btn" style="padding:4px 8px; font-size:10px;" onclick="window.openResetCertificationsModal('${sub.id}')" title="Redistribuir certificações desta subclasse">🔄 Resetar (1kk)</button>
           <button class="action-btn" style="padding:6px 12px; font-size:11px;" ${isSubActive ? 'disabled' : ''} onclick="switchSubclass(${idx})">
             ${isSubActive ? '✓ Em Uso' : 'Alternar ⚔️'}
@@ -4803,7 +4736,7 @@ function stageFloat(text, cls, side) {
 }
 
 // --------------------------- COMBAT ---------------------------
-let combatInterval = null; let combatTick = 0; let monsterAttackTimeout = null;
+let combatTick = 0;
 
 let _cachedHeroCenter = null;
 let _cachedHeroBase = null;
@@ -5378,17 +5311,8 @@ function processMonsterDefeat(monster, killingSkill = null) {
   }
 
   // Acúmulo de Lâmpada Mágica & Craft Points por Abate
-  state.magicLampExp = (state.magicLampExp || 0) + Math.floor(xpGain * 0.4);
+  grantMagicLampProgressFromKill(state, xpGain, { log, floatText });
   state.craftPoints = (state.craftPoints || 0) + Math.floor((monster.boss ? 50 : 10) * spoilRate);
-
-  if (state.magicLampExp >= 50000) {
-    state.magicLampExp -= 50000;
-    state.magicLamps = (state.magicLamps || 0) + 1;
-    log(`🪔 NOVA LÂMPADA MÁGICA ACUMULADA! (Total: ${state.magicLamps})`, 'rarity-legendary');
-    if (typeof window !== 'undefined' && window.floatText) {
-      window.floatText('🪔 LÂMPADA MÁGICA +1!', 'float-jackpot');
-    }
-  }
 
   if (state.craftPoints >= 1000) {
     state.craftPoints -= 1000;
@@ -5446,7 +5370,7 @@ function processMonsterDefeat(monster, killingSkill = null) {
       const dropRoll = Math.random();
       const isBook = drop.itemId && (drop.itemId.startsWith('book_') || drop.itemId.startsWith('spellbook_'));
       const effectiveRate = isBook ? bookRate : dropRate;
-      const dropChance = (drop.chance || 0) * levelGapPenalty * effectiveRate;
+      const dropChance = calculateConfiguredDropChance(drop.chance, levelGapPenalty, effectiveRate, diffDropMult);
       if (dropRoll < dropChance) {
         addToInventory(drop.itemId, drop.count || 1);
         const allDict = (typeof D === 'function' && D()?.ALL_ITEMS) ? D().ALL_ITEMS : ALL_ITEMS;
@@ -6328,7 +6252,7 @@ export function attackMonster() {
   damage = resonanceResult.finalDamage;
 
   const realNowAttack = Date.now();
-  if (procBonuses.stun_chance > 0 && Math.random() * 100 < Math.min(100, procBonuses.stun_chance)) {
+  if (rollPlayerHitStunProc(procBonuses.stun_chance)) {
     monster._stunnedUntil = realNowAttack + 1500;
     log(`💫 Stun Proc! ${monster.name} foi Atordoado por 1.5s`, 'rarity-rare');
     floatText('STUN!', 'float-epic');
@@ -7735,7 +7659,8 @@ function updateCodexUI() {
 
 function renderMonsterCardsCodex(container, summaryEl) {
   const allCards = MONSTER_CARDS || {};
-  let totalCards = Object.keys(allCards).length;
+  const canonicalCards = Object.entries(allCards).filter(([cardId]) => getCanonicalCardId(cardId) === cardId);
+  let totalCards = canonicalCards.length;
   let absorbedCards = 0;
 
   const searchQuery = (window._cardSearchQuery || '').toLowerCase().trim();
@@ -7751,7 +7676,7 @@ function renderMonsterCardsCodex(container, summaryEl) {
         type="text" 
         id="card-search-input" 
         placeholder="🔍 Buscar por nome do monstro ou carta..." 
-        value="${window._cardSearchQuery || ''}"
+        value="${uiEscapeHTML(window._cardSearchQuery || '')}"
         style="width:100%; background:#090b10; color:#fff; border:1px solid rgba(212,167,68,0.3); border-radius:6px; padding:6px 10px; font-size:12px; font-family:sans-serif;"
       />
     </div>
@@ -7797,8 +7722,9 @@ function renderMonsterCardsCodex(container, summaryEl) {
 
   let matchingCardsCount = 0;
 
-  for (const [cardId, cardDef] of Object.entries(allCards)) {
-    const current = state.cardCodex?.[cardId] || { rank: 0, count: 0 };
+  for (const [cardId, cardDef] of canonicalCards) {
+    const legacyAlias = Object.keys(allCards).find(id => getCanonicalCardId(id) === cardId && id !== cardId);
+    const current = state.cardCodex?.[cardId] || (legacyAlias ? state.cardCodex?.[legacyAlias] : null) || { rank: 0, count: 0 };
     const isAbsorbed = current.rank > 0;
     if (isAbsorbed) absorbedCards++;
 
@@ -7823,12 +7749,7 @@ function renderMonsterCardsCodex(container, summaryEl) {
     const invCount = getInventoryCount(cardId) + getWarehouseCount(cardId);
 
     const rankMult = isAbsorbed ? CardCodexService.getRankMultiplier(current.rank) : 1.0;
-    const bonusLabel = Object.entries(cardDef.codexBonus || {})
-      .map(([stat, val]) => {
-        const multipliedVal = isAbsorbed ? Math.round(val * rankMult) : val;
-        return `+${typeof val === 'number' && val < 1 ? (val * 100).toFixed(0) + '%' : multipliedVal} ${stat.toUpperCase()}`;
-      })
-      .join(', ');
+    const bonusLabel = CardCodexService.formatCodexBonusLabel(cardDef.codexBonus || {}, rankMult);
 
     const nextRankReq = CardCodexService.getNextRankRequirement(current.rank);
     const dropPct = (Number(cardDef.dropChance || 0.0005) * 100).toFixed(2);
@@ -7891,7 +7812,7 @@ function renderMonsterCardsCodex(container, summaryEl) {
         <span style="font-size:11px; color:${invCount > 0 ? '#86efac' : '#64748b'}; font-weight:bold;">
           ${invCount > 0 ? `📦 Possui: ${invCount}x` : 'Sem cartas no inventário'}
         </span>
-        <div style="display:flex; gap:6px;">
+        <div class="codex-card-actions" style="display:flex; gap:6px; flex-wrap:wrap; justify-content:flex-end;">
           ${invCount > 0 ? `
             <button class="action-btn action-btn--primary" style="padding:4px 10px; font-size:11px; font-weight:bold;" onclick="window.absorbCardAction('${cardId}', false)">Absorver 📥</button>
             ${invCount > 1 ? `
@@ -7901,6 +7822,28 @@ function renderMonsterCardsCodex(container, summaryEl) {
         </div>
       </div>
     `;
+
+    const cardInventoryCount = state.inventory?.reduce((total, item) => {
+      if (item?.itemId !== cardId && item?.id !== cardId) return total;
+      if (item.count === undefined) return total + 1;
+      return total + (Number.isSafeInteger(item.count) && item.count > 0 ? item.count : 0);
+    }, 0) || 0;
+    const actionRow = cardBox.querySelector('.codex-card-actions');
+    if (cardInventoryCount > 0 && actionRow) {
+      for (const slot of ['weapon', 'weapon2']) {
+        const weaponUid = state.equipment?.[slot];
+        if (!weaponUid || typeof weaponUid !== 'string') continue;
+        const weapon = state.inventory?.find(item => item?.uid === weaponUid || item?.id === weaponUid);
+        const socketCount = Array.isArray(weapon?.slottedCards) ? weapon.slottedCards.length : 0;
+        if (!weapon || socketCount >= (Number(weapon.socketsMax) || 2)) continue;
+        const button = mkEl('button');
+        button.className = 'action-btn';
+        button.style.cssText = 'padding:4px 8px; font-size:11px; font-weight:bold; background:rgba(59,130,246,0.18); border-color:#3b82f6; color:#bfdbfe;';
+        button.textContent = `Engastar na ${slot === 'weapon' ? 'arma principal' : 'arma secundária'}`;
+        button.onclick = () => window.socketCardAction?.(cardId, weaponUid);
+        actionRow.appendChild(button);
+      }
+    }
 
     cardsContainer.appendChild(cardBox);
   }
@@ -7920,39 +7863,11 @@ function renderMonsterCardsCodex(container, summaryEl) {
 }
 
 function registerCodexItem(setId, itemId) {
-  const invIdx = state.inventory.findIndex(i => i.itemId === itemId && !i.equipped);
-  let foundInWarehouse = false;
-  let whIdx = -1;
-
-  if (invIdx >= 0) {
-    state.inventory.splice(invIdx, 1);
-  } else {
-    whIdx = (state.warehouse || []).findIndex(i => i.itemId === itemId && !i.equipped);
-    if (whIdx >= 0) {
-      state.warehouse.splice(whIdx, 1);
-      foundInWarehouse = true;
-    } else {
-      log('Você não possui este item para registrar no Codex.', 'system');
-      return;
-    }
-  }
-
-  state.codex = state.codex || {};
-  state.codex[setId] = state.codex[setId] || [];
-  if (!state.codex[setId].includes(itemId)) state.codex[setId].push(itemId);
-
-  const itemDef = D().ALL_ITEMS[itemId];
-  log(`📜 Item **${itemDef?.name || itemId}** registrado com sucesso no Codex!${foundInWarehouse ? ' (Retirado do Baú)' : ''}`, 'rarity-rare');
-  floatText('📜 CODEX REGISTRADO!', 'float-jackpot');
+  const result = CollectionService.registerItem(state, setId, itemId, { log, floatText });
+  if (!result.success) return result;
   triggerQuestEvent('codex', 1);
-
-  const setDef = CODEX_SETS[setId];
-  if (setDef && setDef.items.every(i => state.codex[setId].includes(i))) {
-    log(`🏆 PARABÉNS! Coleção **${setDef.name}** 100% Completa! Bônus Permanente Ativado: ${setDef.label}`, 'rarity-legendary');
-    floatText('🏆 COLEÇÃO COMPLETA!', 'float-jackpot');
-  }
-
   updateAllUI(); save();
+  return result;
 }
 
 // BOSS_DOLLS foi movido para src/data/codex.js (Sprint 1)
@@ -8098,6 +8013,12 @@ function synthesizeDolls() {
   if (idx1 < 0 || idx2 < 0) return;
 
   const d1 = state.dolls[idx1], d2 = state.dolls[idx2];
+  if (!BOSS_DOLLS[d1.dollId] || !BOSS_DOLLS[d2.dollId] ||
+      !Number.isInteger(d1.level) || d1.level < 1 || d1.level > 5 ||
+      !Number.isInteger(d2.level) || d2.level < 1 || d2.level > 5) {
+    log('Síntese indisponível: os dados de uma das Dolls não são válidos.', 'system');
+    return;
+  }
   if (d1.dollId !== d2.dollId || d1.level !== d2.level) { log('As duas Dolls devem ser do mesmo tipo e nível!', 'system'); return; }
   if (d1.level >= 5) { log('Sua Doll já está no Nível Máximo (Lv. 5)!', 'system'); return; }
 
@@ -8125,7 +8046,7 @@ function updateMagicLampUI() {
   updateImperialEconomyHeader(state);
   const bar = el('lamp-progress-bar');
   const countLabel = el('lamp-count-label');
-  const pct = Math.min(100, Math.floor(((state.magicLampExp || 0) / 50000) * 100));
+  const pct = Math.min(100, Math.floor(((state.magicLampExp || 0) / MAGIC_LAMP_EXP_THRESHOLD) * 100));
   if (bar) bar.style.width = pct + '%';
   if (countLabel) {
     countLabel.textContent = `${state.magicLamps || 0} Lâmpadas Prontas (${pct}% para a próxima)`;
@@ -8139,16 +8060,12 @@ function updateMagicLampUI() {
 }
 
 function useMagicLamp() {
-  if (!state.magicLamps || state.magicLamps < 1) {
+  const lampUse = consumeMagicLamp(state);
+  if (!lampUse.success) {
     log('Você não possui Lâmpadas Mágicas para sortear!', 'system');
     return;
   }
-
-  state.magicLamps -= 1;
-  const result = rollMagicLampCard(state.level || 1);
-
-  state.xp += result.expWon;
-  state.sp += result.spWon;
+  const result = lampUse.result;
   checkLevelUp();
 
   const cardRes = el('lamp-result-card');
@@ -8599,9 +8516,7 @@ export function bindEvents() {
         }
       } else if (e.key === ' ' || e.code === 'Space') {
         e.preventDefault();
-        state.combatSpeed = state.combatSpeed === 1 ? 2 : (state.combatSpeed === 2 ? 4 : 1);
-        log(`⚡ Velocidade de Combate: ${state.combatSpeed}x`, 'system');
-        updateAllUI();
+        toggleCombatSpeed();
       } else if (e.key === 's' || e.key === 'S') {
         if (e.ctrlKey || e.metaKey) e.preventDefault();
         save(true);
@@ -9178,8 +9093,8 @@ function upgradeAstralNode(nodeId) {
     }
     return false;
   }
+  if (!Object.hasOwn(ASTRAL_NODES, nodeId)) return false;
   const node = ASTRAL_NODES[nodeId];
-  if (!node) return false;
 
   if (!state.astralMastery) state.astralMastery = {};
   const currentLvl = state.astralMastery[nodeId] || 0;
@@ -9955,6 +9870,7 @@ export function init() {
       if (actionType === 'rest') return FishingService.actionRest(state, { log, updateAllUI, save, floatText });
     };
     window.toggleAutoFishing = () => FishingService.toggleAutoFish(state, { log, updateAllUI, save, floatText });
+    window.claimPendingFishingRewards = () => FishingService.claimPendingFishRewards(state, { log, updateAllUI, save });
     window.exchangeFishForMaterials = (fId, qty) => FishingService.exchangeFish(state, fId, qty, { log, updateAllUI, save, floatText });
     window.FishingService = FishingService;
     window.selectHuntingZone = (zId) => HuntingService.selectZone(state, zId, { log, updateAllUI, save });
@@ -10036,7 +9952,13 @@ export function init() {
       updateAllUI();
     };
     window.resolveExpeditionDilemma = (destId, optionKey) => {
-      ExpeditionService.resolveDilemma(state, destId, optionKey, { log, updateAllUI, save, floatText });
+      const eligibility = getExpeditionDilemmaActionEligibility(state, destId, optionKey);
+      if (!eligibility.eligible) {
+        log(`⚠️ ${eligibility.reason}`, 'warning');
+        return false;
+      }
+
+      return ExpeditionService.resolveDilemma(state, destId, optionKey, { log, updateAllUI, save, floatText });
     };
     window.MercenaryService = MercenaryService;
     window.ExpeditionService = ExpeditionService;
@@ -10284,6 +10206,8 @@ export function init() {
           const bonus = PetService.getActivePetBonus(state);
           const reqXp = activePet.level * activePet.level * 400;
           const xpPct = Math.min(100, Math.floor(((activePet.xp || 0) / reqXp) * 100));
+          const petHunger = activePet.hunger == null ? 100 : Math.max(0, Math.min(100, Number(activePet.hunger) || 0));
+          const petIsFull = petHunger >= 100;
 
           activeContainer.innerHTML = `
             <div style="background:rgba(212,167,68,0.15); border:1px solid var(--border-gilt); border-radius:8px; padding:14px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
@@ -10297,11 +10221,15 @@ export function init() {
                     <div style="width:${xpPct}%; height:100%; background:#eab308;"></div>
                   </div>
                   <div style="font-size:9px; color:#94a3b8; margin-top:2px;">XP Pet: ${activePet.xp || 0} / ${reqXp} (${xpPct}%)</div>
+                  <div style="font-size:9px; color:#cbd5e1; margin-top:5px;">Saciedade: <span id="pet-hunger-label">${petHunger}%</span></div>
+                  <div style="width:160px; height:5px; background:rgba(0,0,0,0.6); border-radius:3px; margin-top:3px; overflow:hidden;">
+                    <div id="pet-hunger-meter" style="width:${petHunger}%; height:100%; background:#34d399; transition:width .3s ease;"></div>
+                  </div>
                 </div>
               </div>
               <div style="display:flex; flex-direction:column; gap:6px;">
-                <button class="action-btn action-btn--primary" onclick="window.feedPetAction()" style="padding:6px 12px; font-size:11px; font-weight:bold;">
-                  🍖 Alimentar (5k Adena)
+                <button id="pet-feed-button" class="action-btn action-btn--primary" onclick="window.feedPetAction()" ${petIsFull ? 'disabled title="Seu mascote já está saciado"' : ''} style="padding:6px 12px; font-size:11px; font-weight:bold;">
+                  ${petIsFull ? '✓ Saciado' : '🍖 Alimentar (5k Adena)'}
                 </button>
                 <button class="action-btn" onclick="window.summonPetAction('${activePet.id}')" style="padding:6px 12px; font-size:11px;">
                   🛑 Recolher Mascote
@@ -10589,83 +10517,20 @@ export function init() {
     };
     window.submitReferralCodeAction = async () => {
       const input = document.getElementById('ref-friend-code-input');
-      const rawCode = input ? input.value : '';
-      const code = (rawCode || '').trim();
+      const code = (input?.value || '').trim();
+      const result = await MentorshipReferralService.bindStarterMentorship(state, code, window.FirebaseBridge);
+      if (!result.success) {
+        log(`⚠️ ${result.message || 'Não foi possível vincular o mentor.'}`, 'warning');
+        return result;
+      }
+      if (typeof localStorage !== 'undefined') localStorage.setItem('aden_referred_by', result.mentorName);
 
-      if (!code) {
-        log('⚠️ Por favor, digite o nome do aventureiro que te indicou.', 'warning');
-        return;
-      }
-      if ((state.level || 1) > 20) {
-        log('⚠️ O vínculo manual de código de indicação só é permitido até o Nível 20.', 'warning');
-        return;
-      }
-      if (state.referredBy) {
-        log(`⚠️ Você já possui uma indicação vinculada a [${state.referredBy}].`, 'warning');
-        return;
-      }
-      const myName = (state.name || state.charName || '').trim().toLowerCase();
-      if (code.toLowerCase() === myName) {
-        log('⚠️ Você não pode indicar a si mesmo!', 'warning');
-        return;
-      }
-
-      // Validação Canônica (Gate 8): O herói indicador deve ser um jogador real existente
-      let resolvedReferrerName = code;
-      if (typeof window !== 'undefined' && window.FirebaseBridge?.getPlayerByName) {
-        try {
-          const referrerPlayer = await window.FirebaseBridge.getPlayerByName(code);
-          if (!referrerPlayer) {
-            log(`⚠️ O herói [${code}] não foi encontrado em Aden. Verifique a grafia do nome.`, 'error');
-            return;
-          }
-          resolvedReferrerName = referrerPlayer.name;
-        } catch (e) {
-          console.debug('Referral verification notice:', e);
-        }
-      }
-
-      state.referredBy = resolvedReferrerName;
-      if (typeof localStorage !== 'undefined') {
-        localStorage.setItem('aden_referred_by', resolvedReferrerName);
-      }
-
-      // Concede o Pacote de Novato se ainda não concedido
-      if (!state.referralStarterGranted) {
-        state.inventory = state.inventory || [];
-        const shots = state.inventory.find(i => i.itemId === 'soulshot_ng' || i.itemId === 'spiritshot_ng' || (i.itemId && i.itemId.includes('shot')));
-        if (shots) {
-          shots.count = (shots.count || 0) + 1000;
-        } else {
-          state.inventory.push({
-            uid: `ref_shots_${Date.now()}`,
-            itemId: 'soulshot_ng',
-            name: 'Soulshot: No-Grade',
-            count: 1000,
-            rarity: 'common',
-            type: 'consumable'
-          });
-        }
-        const pots = state.inventory.find(i => i.itemId === 'hp_potion_s' || i.itemId === 'hp_potion_m' || (i.itemId && i.itemId.includes('potion')));
-        if (pots) {
-          pots.count = (pots.count || 0) + 10;
-        }
-        state.referralStarterGranted = true;
-      }
-
-      if (typeof window !== 'undefined' && window.lineageIdleCloud?.recordReferral) {
-        try {
-          window.lineageIdleCloud.recordReferral(code, state.name || state.charName, state.level || 1);
-        } catch (e) {
-          console.debug('Error registering referral in cloud:', e);
-        }
-      }
-
-      log(`✨ **Vínculo Confirmado!** Você foi indicado por **${code}**! Bônus de novato ativado: **+10% EXP permanente** e **+1.000 Shots** concedidos!`, 'rarity-legendary');
+      log(`✨ **Vínculo Confirmado!** Você foi indicado por **${result.mentorName}**! Bônus de novato ativado: **+10% EXP permanente**, **+1.000 Soulshots** e **10 Poções de Vida** concedidos!`, 'rarity-legendary');
       if (typeof floatText === 'function') floatText('✨ VÍNCULO DE INDICAÇÃO ATIVADO (+10% EXP)!', 'float-jackpot');
       updateAllUI();
       save();
       uiOpenReferralModal(state);
+      return result;
     };
 
     window.claimReferralRewardsAction = async () => {
@@ -10778,46 +10643,26 @@ export function init() {
     };
     window.absorbCardAction = (cardId, absorbAll = false) => {
       let absorbedCount = 0;
-
-      const absorbOne = () => {
-        const invIdx = state.inventory.findIndex(i => i.itemId === cardId && !i.equipped);
-        if (invIdx >= 0) {
-          if ((state.inventory[invIdx].count || 1) > 1) {
-            state.inventory[invIdx].count -= 1;
-          } else {
-            state.inventory.splice(invIdx, 1);
-          }
-          return true;
-        }
-        const whIdx = (state.warehouse || []).findIndex(i => i.itemId === cardId && !i.equipped);
-        if (whIdx >= 0) {
-          if ((state.warehouse[whIdx].count || 1) > 1) {
-            state.warehouse[whIdx].count -= 1;
-          } else {
-            state.warehouse.splice(whIdx, 1);
-          }
-          return true;
-        }
-        return false;
-      };
-
       if (!absorbAll) {
-        if (absorbOne()) {
-          CardCodexService.absorbCardIntoCodex(state, cardId, { log });
-          absorbedCount = 1;
-        } else {
-          log('Você não possui esta carta para absorver.', 'system');
-          return;
+        const result = CardCodexService.absorbCardIntoCodex(state, cardId, { log });
+        if (!result.success) {
+          log(result.message || 'Você não possui esta carta para absorver.', 'system');
+          return result;
         }
+        absorbedCount = 1;
       } else {
-        while (absorbOne()) {
-          CardCodexService.absorbCardIntoCodex(state, cardId, {});
+        while (true) {
+          const result = CardCodexService.absorbCardIntoCodex(state, cardId, 1, {});
+          if (!result.success) break;
           absorbedCount++;
         }
         if (absorbedCount > 0) {
           const cardDef = MONSTER_CARDS[cardId];
           const cur = state.cardCodex?.[cardId] || {};
           log(`🃏 Absorvidas **${absorbedCount}x cartas de ${cardDef?.name || cardId}** no Codex! (Rank ${cur.rank}/5 · Total: ${cur.count})`, 'gain');
+        } else {
+          log('Você não possui esta carta para absorver.', 'system');
+          return { success: false, message: 'Você não possui esta carta para absorver.' };
         }
       }
 
@@ -10826,6 +10671,19 @@ export function init() {
         updateAllUI();
         save();
       }
+      return { success: true, absorbedCount };
+    };
+    window.socketCardAction = (cardId, weaponUid) => {
+      const result = CardCodexService.socketCardToEquipment(state, weaponUid, cardId);
+      if (!result.success) {
+        log(result.message || 'Não foi possível engastar esta carta.', 'system');
+        return result;
+      }
+      const cardDef = MONSTER_CARDS[cardId];
+      log(`🃏 ${cardDef?.name || cardId} engastada na arma.`, 'gain');
+      updateAllUI();
+      save();
+      return result;
     };
     window.claimHeroStatusAction = (weaponId) => {
       const res = OlympiadService.claimHeroStatus(state, weaponId, {
@@ -11132,14 +10990,35 @@ export function init() {
       save();
       return res;
     };
-    window.unsealArmorAction = () => {
-      const armor = state.equipment?.armor ? (state.inventory?.find(i => i.uid === state.equipment.armor) || state.equipment.armor) : null;
+    window.unsealArmorAction = (armorUid) => {
+      const selectedUid = armorUid || state.equipment?.armor;
+      const armor = selectedUid ? (state.inventory?.find(i => i.uid === selectedUid) || (typeof selectedUid === 'object' ? selectedUid : null)) : null;
       const res = SevenSignsService.unsealArmor(state, armor, {
         log,
         onUpdate: () => { updateAllUI(); save(); }
       });
       updateAllUI();
       save();
+      return res;
+    };
+    window.exchangeMammonWeaponAction = (weaponUid, targetItemId) => {
+      const res = SevenSignsService.exchangeWeapon(state, weaponUid, targetItemId, {
+        log,
+        onUpdate: () => { updateAllUI(); save(); }
+      });
+      updateAllUI();
+      if (res.success) save();
+      return res;
+    };
+    window.infuseMammonSoulCrystalAction = (saKey) => {
+      const equipped = state.equipment?.weapon;
+      const weaponUid = typeof equipped === 'object' ? equipped?.uid || equipped?.id : equipped;
+      const res = SevenSignsService.infuseMammonSoulCrystal(state, weaponUid, saKey, {
+        log,
+        onUpdate: () => { updateAllUI(); save(); }
+      });
+      updateAllUI();
+      if (res.success) save();
       return res;
     };
 
@@ -11196,6 +11075,7 @@ export function init() {
         log,
         onUpdate: () => { updateAllUI(); save(); }
       });
+      if (!res.success) { log(res.message || 'Não foi possível iniciar o duelo.', 'warning'); return res; }
       updateAllUI();
       save();
       return res;
@@ -11205,6 +11085,7 @@ export function init() {
         log,
         onUpdate: () => { updateAllUI(); save(); }
       });
+      if (!res.success) { log(res.message || 'Não foi possível executar o turno do duelo.', 'warning'); return res; }
       updateAllUI();
       save();
       return res;
@@ -11214,6 +11095,7 @@ export function init() {
         log,
         onUpdate: () => { updateAllUI(); save(); }
       });
+      if (!res.success) { log(res.message || 'Não foi possível iniciar a sobrevivência.', 'warning'); return res; }
       updateAllUI();
       save();
       return res;
@@ -11223,6 +11105,7 @@ export function init() {
         log,
         onUpdate: () => { updateAllUI(); save(); }
       });
+      if (!res.success) { log(res.message || 'Não foi possível executar a onda.', 'warning'); return res; }
       updateAllUI();
       save();
       return res;
@@ -11232,6 +11115,7 @@ export function init() {
         log,
         onUpdate: () => { updateAllUI(); save(); }
       });
+      if (!res.success) { log(res.message || 'Não foi possível comprar este prêmio.', 'warning'); return res; }
       updateAllUI();
       save();
       return res;
@@ -11267,6 +11151,7 @@ export function init() {
           pDef: Math.floor(oppCP * 0.04)
         }
       });
+      if (!res.success) { log(res.message || 'Não foi possível desafiar este rival.', 'warning'); return res; }
       updateAllUI();
       save();
       return res;
@@ -11636,7 +11521,8 @@ export function init() {
       return res;
     };
 
-    window.claimRankingRewardAction = () => {
+    window.claimRankingRewardAction = async () => {
+      await RankingService.getLeaderboard('cp', state, { forceRefresh: true });
       const res = RankingService.claimRankingReward(state, {
         log,
         floatText,
@@ -12270,6 +12156,32 @@ export function init() {
 
 function tickUI() {
   const now = Date.now(); let buffChanged = false;
+  const signsCycle = SevenSignsService.advanceWeeklyCycle(state, now);
+  if (signsCycle.transitions.length) {
+    for (const transition of signsCycle.transitions) {
+      log(transition.to === 'seal_validation'
+        ? `🏛️ As Sete Selos entraram em validação. Facção vencedora: ${(transition.winnerFaction || 'tie').toUpperCase()}.`
+        : '🏛️ A validação das Sete Selos terminou; uma nova competição começou.', 'system');
+    }
+    safeUiUpdate('seven-signs-cycle', updateSevenSignsUI);
+    save();
+  }
+  PetService.tickPetHunger(state, Math.max(0, now - _lastPetHungerTickAt));
+  _lastPetHungerTickAt = now;
+  const hungerPet = state.petData?.pets?.[state.petData?.activePetId];
+  const hungerMeter = el('pet-hunger-meter');
+  if (hungerPet && hungerMeter) {
+    const hunger = Math.max(0, Math.min(100, Number(hungerPet.hunger) || 0));
+    hungerMeter.style.width = `${hunger}%`;
+    const hungerLabel = el('pet-hunger-label');
+    if (hungerLabel) hungerLabel.textContent = `${hunger}%`;
+    const feedButton = el('pet-feed-button');
+    if (feedButton) {
+      feedButton.disabled = hunger >= 100;
+      feedButton.title = hunger >= 100 ? 'Seu mascote já está saciado' : '';
+      feedButton.textContent = hunger >= 100 ? '✓ Saciado' : '🍖 Alimentar (5k Adena)';
+    }
+  }
   for (const k of Object.keys(state.buffs || {})) { if (state.buffs[k].until < now) { delete state.buffs[k]; buffChanged = true; } }
   const gpsEl = el('gps-text'); if (gpsEl) { gpsEl.textContent = getGoldPerSec() > 0 ? `${getGoldPerSec().toFixed(1)}/s` : '—'; }
   safeUiUpdate('stats-tick', updateStatsUI);

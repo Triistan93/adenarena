@@ -4,6 +4,7 @@
 
 import { CLAN_LEVEL_DATA, CLAN_SKILLS } from '../data/clan.js';
 import { CASTLES, CASTLE_SHOP_CATALOG } from '../data/castles.js';
+import { addToInventory } from './InventoryService.js';
 
 export class ClanService {
   /**
@@ -124,6 +125,11 @@ export class ClanService {
 
     if (!castle) {
       return { success: false, reason: 'invalid_castle' };
+    }
+
+    if (state.activeSiege && !state.activeSiege.isCompleted) {
+      log('Seu Clã já está em um cerco. Conclua ou encerre o confronto atual antes de declarar outro.', 'warning');
+      return { success: false, reason: 'siege_in_progress' };
     }
 
     if ((state.clan?.level || 1) < castle.reqClanLevel) {
@@ -303,26 +309,17 @@ export class ClanService {
       return { success: false, reason: 'gold_low' };
     }
 
-    state.gold -= item.priceAdena;
-
-    // Adicionar item ao inventário
-    if (!state.inventory) state.inventory = [];
-    const existing = state.inventory.find(i => (typeof i === 'object' ? i.id : i) === item.id);
-
-    if (existing && typeof existing === 'object' && existing.count) {
-      existing.count += (item.count || 1);
-    } else {
-      state.inventory.push({
-        id: item.id,
-        name: item.name,
-        slot: item.slot || 'misc',
-        tier: 5,
-        price: item.priceAdena,
-        stats: item.stats || {},
-        icon: item.icon,
-        desc: item.desc
-      });
+    const outputItemId = item.outputItemId || item.id;
+    const quantity = Number.isSafeInteger(item.count) && item.count > 0 ? item.count : 1;
+    const trialState = { ...state, inventory: (state.inventory || []).map(entry => ({ ...entry })) };
+    const added = addToInventory(trialState, outputItemId, quantity, null, false, { log }, true);
+    if (!added) {
+      log('Não há espaço suficiente na mochila para essa compra.', 'error');
+      return { success: false, reason: 'inventory_full' };
     }
+
+    state.inventory = trialState.inventory;
+    state.gold -= item.priceAdena;
 
     log(`✨ Você adquiriu ${item.name} da Loja do Castelo!`, 'success');
     onUpdate();
@@ -367,7 +364,10 @@ export class ClanService {
    */
   static donateToClan(state, adenaAmt = 0, spAmt = 0, callbacks = {}) {
     const { log = console.log, onUpdate = () => {}, floatText = () => {} } = callbacks;
-    if (adenaAmt <= 0 && spAmt <= 0) return { success: false };
+    if (!Number.isSafeInteger(adenaAmt) || !Number.isSafeInteger(spAmt) || adenaAmt < 0 || spAmt < 0 || (adenaAmt === 0 && spAmt === 0)) {
+      log('Informe uma quantidade inteira e positiva de Adena e/ou SP para doar.', 'error');
+      return { success: false, reason: 'invalid_amount' };
+    }
 
     if ((state.gold || 0) < adenaAmt) {
       log('Adena insuficiente para realizar a doação.', 'error');

@@ -8,6 +8,7 @@
 import { D } from '../core/GameConfig.js';
 import { MONSTERS } from '../data/monsters.js';
 import { addToInventory } from './InventoryService.js';
+import { hasRoomForStackRewards } from './lifeActivities/RewardCapacity.js';
 import { triggerQuestEvent } from './QuestService.js';
 import { startCombat, stopCombat } from '../engine/CombatEngine.js';
 
@@ -90,17 +91,32 @@ export function getTowerFloorRecommendedCP(floorNum) {
  */
 export function challengeTowerFloor(state, callbacks = {}) {
   state.tower = state.tower || { highestFloor: 0, currentFloor: 1, lastSweepTime: 0 };
-  const targetFloor = (state.tower.highestFloor || 0) + 1;
+  if (state.towerCombatActive) {
+    if (callbacks.log) callbacks.log('⚠️ Conclua o andar atual da Torre antes de iniciar outro desafio.', 'warning');
+    return { success: false, reason: 'tower_in_progress' };
+  }
+  if (state.isRaidActive || state.activeMonster?.isRaid || state.activeMonster?.isChaosBoss) {
+    return { success: false, reason: 'another_instance_active' };
+  }
+  const highestFloor = Math.max(0, Math.min(100, Math.floor(Number(state.tower.highestFloor) || 0)));
+  const targetFloor = highestFloor + 1;
   if (targetFloor > 100) {
     if (callbacks.log) callbacks.log('🏆 Você já conquistou todos os 100 Andares da Torre da Insolência!', 'rarity-legendary');
-    return;
+    return { success: false, reason: 'tower_complete' };
   }
 
   const fDef = getTowerFloorDef(targetFloor);
 
-  if (state.level < fDef.reqLvl) {
+  if ((Number(state.level) || 1) < fDef.reqLvl) {
     if (callbacks.log) callbacks.log(`⚠️ Nível insuficiente! O Andar ${targetFloor} requer Nível ${fDef.reqLvl}.`, 'system');
-    return;
+    return { success: false, reason: 'insufficient_level', requiredLevel: fDef.reqLvl };
+  }
+
+  const combatPower = Number(callbacks.getCombatPower?.(state) ?? state.stats?.combatPower ?? state.combatPower) || 0;
+  const minimumCP = getTowerFloorMinimumCP(targetFloor);
+  if (combatPower < minimumCP) {
+    if (callbacks.log) callbacks.log(`⚠️ Poder de combate insuficiente! O Andar ${targetFloor} requer ${minimumCP.toLocaleString()} CP.`, 'warning');
+    return { success: false, reason: 'insufficient_cp', requiredCP: minimumCP, currentCP: combatPower };
   }
 
   if (callbacks.log) callbacks.log(`🏰 Desafiando Andar ${targetFloor}: **${fDef.name}**!`, 'rarity-legendary');
@@ -115,6 +131,7 @@ export function challengeTowerFloor(state, callbacks = {}) {
     maxHp: fDef.hp,
     atk: fDef.atk,
     def: fDef.def,
+    mdef: fDef.mdef,
     eva: Math.min(20, Math.floor(fDef.floor / 5)),
     xp: fDef.xp,
     sp: fDef.sp,
@@ -150,6 +167,8 @@ export function challengeTowerFloor(state, callbacks = {}) {
   stopCombat(state);
   startCombat(state, callbacks);
   if (callbacks.renderStageMonster) callbacks.renderStageMonster();
+  if (callbacks.save) callbacks.save();
+  return { success: true, floor: targetFloor, monster: monsterObj };
 }
 
 /**
@@ -159,6 +178,14 @@ export function challengeTowerFloor(state, callbacks = {}) {
  * @param {Object} [callbacks]
  */
 export function completeTowerFloor(state, floorNum, callbacks = {}) {
+  const completedFloor = Math.floor(Number(floorNum));
+  const encounter = state.activeMonster;
+  if (
+    !Number.isInteger(completedFloor) || completedFloor < 1 || completedFloor > 100 ||
+    !state.towerCombatActive || !encounter?.isTower || encounter.towerFloor !== completedFloor ||
+    !Number.isFinite(Number(encounter.hp)) || Number(encounter.hp) > 0
+  ) return false;
+
   state.towerCombatActive = false;
   state.tower = state.tower || { highestFloor: 0, currentFloor: 1, lastSweepTime: 0 };
   if (floorNum > state.tower.highestFloor) {
@@ -174,10 +201,21 @@ export function completeTowerFloor(state, floorNum, callbacks = {}) {
       if (callbacks.log) callbacks.log(`🪔 Recompensa de Primeiro Abate: +${fDef.rewardLamps} Lâmpadas Mágicas!`, 'rarity-epic');
     }
     if (fDef.rewardCrystals) {
-      addToInventory(state, fDef.rewardCrystals, 3, null, false, callbacks);
       const gData = D();
       const cName = gData?.ALL_ITEMS?.[fDef.rewardCrystals]?.name || fDef.rewardCrystals;
-      if (callbacks.log) callbacks.log(`✨ Recompensa de Primeiro Abate: +3x ${cName}!`, 'rarity-legendary');
+      const reward = { floor: completedFloor, itemId: fDef.rewardCrystals, count: 3 };
+      const hasEarlierPending = Array.isArray(state.tower.pendingFirstClearRewards) && state.tower.pendingFirstClearRewards.length > 0;
+      const delivered = !hasEarlierPending && hasRoomForStackRewards(state, [reward])
+        && addToInventory(state, reward.itemId, reward.count, null, false, callbacks, true);
+      if (delivered) {
+        if (callbacks.log) callbacks.log(`✨ Recompensa de Primeiro Abate: +3x ${cName}!`, 'rarity-legendary');
+      } else {
+        state.tower.pendingFirstClearRewards = Array.isArray(state.tower.pendingFirstClearRewards)
+          ? state.tower.pendingFirstClearRewards
+          : [];
+        state.tower.pendingFirstClearRewards.push(reward);
+        if (callbacks.log) callbacks.log(`🎁 A recompensa de ${cName} ficou guardada na Torre: libere espaço e resgate pelo painel da Torre.`, 'warning');
+      }
     }
 
     triggerQuestEvent(state, 'boss', 1);
@@ -185,6 +223,30 @@ export function completeTowerFloor(state, floorNum, callbacks = {}) {
 
   if (callbacks.updateAllUI) callbacks.updateAllUI();
   if (callbacks.save) callbacks.save(true, true);
+  return true;
+}
+
+export function claimPendingTowerRewards(state, callbacks = {}) {
+  const pending = state?.tower?.pendingFirstClearRewards;
+  if (!Array.isArray(pending) || pending.length === 0) return false;
+  const rewards = pending
+    .filter(reward => reward?.itemId && Number.isSafeInteger(reward.count) && reward.count > 0)
+    .map(reward => ({ itemId: reward.itemId, count: reward.count }));
+  if (rewards.length !== pending.length || !hasRoomForStackRewards(state, rewards)) {
+    if (callbacks.log) callbacks.log('⚠️ Libere espaço na mochila para resgatar as recompensas da Torre.', 'warning');
+    return false;
+  }
+
+  const previewState = { ...state, inventory: structuredClone(Array.isArray(state.inventory) ? state.inventory : []) };
+  for (const reward of rewards) {
+    if (!addToInventory(previewState, reward.itemId, reward.count, null, false, {}, true)) return false;
+  }
+  state.inventory = previewState.inventory;
+  state.tower.pendingFirstClearRewards = [];
+  if (callbacks.log) callbacks.log(`✨ Recompensas pendentes da Torre resgatadas: ${rewards.reduce((sum, reward) => sum + reward.count, 0)} item(ns).`, 'rarity-legendary');
+  if (callbacks.updateAllUI) callbacks.updateAllUI();
+  if (callbacks.save) callbacks.save(true, true);
+  return true;
 }
 
 /**
@@ -194,7 +256,8 @@ export function completeTowerFloor(state, floorNum, callbacks = {}) {
  */
 export function sweepTowerDaily(state, callbacks = {}) {
   state.tower = state.tower || { highestFloor: 0, currentFloor: 1, lastSweepTime: 0 };
-  const highest = state.tower.highestFloor || 0;
+  const highest = Math.max(0, Math.min(100, Math.floor(Number(state.tower.highestFloor) || 0)));
+  state.tower.highestFloor = highest;
   if (highest < 1) {
     if (callbacks.log) callbacks.log('Conquiste ao menos 1 Andar da Torre para realizar a Varredura Diária!', 'system');
     return;
@@ -225,4 +288,5 @@ export function sweepTowerDaily(state, callbacks = {}) {
 
   if (callbacks.updateAllUI) callbacks.updateAllUI();
   if (callbacks.save) callbacks.save(true, true);
+  return { success: true, gold: totalGold, sp: totalSp, highestFloor: highest };
 }

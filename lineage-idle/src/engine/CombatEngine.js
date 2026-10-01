@@ -20,6 +20,14 @@ import { getShotGradeCode } from '../data/items/item_grade.js';
 
 export { combatEvents, CombatEventType, CombatEventFactory };
 
+/** Combina a chance configurada com as penalidades e bônus usados na caçada. */
+export function calculateConfiguredDropChance(baseChance, levelGapMultiplier, itemDropRate, difficultyDropMultiplier = 1) {
+  return (Number(baseChance) || 0)
+    * (Number(levelGapMultiplier) || 0)
+    * (Number(itemDropRate) || 0)
+    * (Number(difficultyDropMultiplier) || 1);
+}
+
 /**
  * Dispatches a combat event both to callbacks and the decoupled combatEvents bus.
  * @param {string} type 
@@ -116,14 +124,36 @@ export function startCombat(state, callbacks = {}) {
   }
   state._cds = state._cds || {};
 
-  if (combatInterval) clearInterval(combatInterval);
-  if (typeof callbacks.attackMonster === 'function') {
-    const spd = Math.max(1, state.combatSpeed || 1);
-    combatInterval = setInterval(() => callbacks.attackMonster(), Math.round(200 / spd));
-    if (combatInterval && typeof combatInterval.unref === 'function') {
-      combatInterval.unref();
-    }
+  startCombatInterval(state, callbacks);
+}
+
+function startCombatInterval(state, callbacks = {}) {
+  if (combatInterval) {
+    clearInterval(combatInterval);
+    combatInterval = null;
   }
+  if (typeof callbacks.attackMonster !== 'function') return;
+
+  const speed = state.combatSpeed === 2 ? 2 : 1;
+  state.combatSpeed = speed;
+  combatInterval = setInterval(() => callbacks.attackMonster(), Math.round(200 / speed));
+  if (combatInterval && typeof combatInterval.unref === 'function') {
+    combatInterval.unref();
+  }
+}
+
+/**
+ * Altera a velocidade do loop real de combate (1x ou 2x).
+ * @param {Object} state
+ * @param {number} speed
+ * @param {Object} [callbacks]
+ * @returns {number|false}
+ */
+export function setCombatSpeed(state, speed, callbacks = {}) {
+  if (!hasValidState(state)) return false;
+  state.combatSpeed = Number(speed) === 2 ? 2 : 1;
+  if (state.isCombatActive !== false) startCombatInterval(state, callbacks);
+  return state.combatSpeed;
 }
 
 /**

@@ -14,6 +14,12 @@ const LEGACY_LIFE_STONE_ALIASES = Object.freeze({
   lifestone_top: 'life_stone_top_76'
 });
 
+function canAffordAdena(state, cost) {
+  const wallet = state?.gold !== undefined ? state.gold : state?.adena;
+  return Number.isSafeInteger(wallet) && wallet >= 0
+    && Number.isSafeInteger(cost) && cost >= 0 && wallet >= cost;
+}
+
 export function getAugmentationGemstoneGrade(level) {
   const stoneLevel = Number(level);
   if (!Number.isFinite(stoneLevel) || stoneLevel < 1) return null;
@@ -177,8 +183,7 @@ export class AugmentationService {
 
     // 3. Verificar taxa de Adena do Ferreiro
     const feeAdena = requirements.adena;
-    const currentGold = (state.gold !== undefined ? state.gold : (state.adena || 0));
-    if (currentGold < feeAdena) {
+    if (!canAffordAdena(state, feeAdena)) {
       log(`⚠️ Adena insuficiente para a mão de obra do Ferreiro (${feeAdena.toLocaleString()} Adena necessária).`, 'error');
       return { success: false, reason: 'insufficient_funds' };
     }
@@ -277,7 +282,7 @@ export class AugmentationService {
       return { success: false, reason: 'not_augmented' };
     }
 
-    if ((state.gold || 0) < removalFee) {
+    if (!canAffordAdena(state, removalFee)) {
       log(`Adena insuficiente para a taxa do Ferreiro (${removalFee.toLocaleString()} Adena).`, 'error');
       return { success: false, reason: 'gold_low' };
     }

@@ -40,6 +40,12 @@ export function getItemGradeCode(itemDef) {
   return 'ng';
 }
 
+/** Exact-grade filter used by the inventory selector; Frost Lord is not S grade. */
+export function matchesItemGradeFilter(itemDef, gradeFilter = 'all') {
+  const filter = String(gradeFilter || 'all').trim().toLowerCase();
+  return filter === 'all' || getItemGradeCode(itemDef) === filter;
+}
+
 /** Maps unique boss grades to the existing S progression band used by upgrades. */
 export function getEquipmentProgressionGradeCode(itemDef) {
   const grade = getItemGradeCode(itemDef);

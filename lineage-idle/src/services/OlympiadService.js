@@ -11,8 +11,10 @@
 
 import { OLYMPIAD_GLADIATORS, OLYMPIAD_SHOP_CATALOG, INFINITY_WEAPONS, HEROIC_SKILLS } from '../data/olympiad.js';
 import { NoblesseService } from './NoblesseService.js';
+import { addToInventory } from './InventoryService.js';
 
 export class OlympiadService {
+  static activeMatches = new WeakSet();
   /**
    * Retorna o status completo do herói na Grand Olympiad.
    * @param {Object} state
@@ -154,6 +156,17 @@ export class OlympiadService {
    * @returns {Promise<Object>}
    */
   static async startOlympiadMatch(state, callbacks = {}) {
+    if (!state || typeof state !== 'object') return { ok: false, reason: 'Estado inválido' };
+    if (this.activeMatches.has(state)) return { ok: false, reason: 'Já existe um duelo de Olimpíada em andamento.' };
+    this.activeMatches.add(state);
+    try {
+      return await this._resolveOlympiadMatch(state, callbacks);
+    } finally {
+      this.activeMatches.delete(state);
+    }
+  }
+
+  static async _resolveOlympiadMatch(state, callbacks = {}) {
     const check = this.canJoinMatch(state);
     if (!check.ok) {
       if (callbacks.log) callbacks.log(`❌ ${check.reason}`, 'system');
@@ -265,12 +278,30 @@ export class OlympiadService {
    */
   static claimHeroStatus(state, infinityWeaponId = 'weapon_infinity_blade', callbacks = {}) {
     if (!state) return false;
+    if (state.isHero) {
+      callbacks.log?.('Você já foi coroado Herói da Grand Olympiad.', 'system');
+      return false;
+    }
     const points = state.olympiadPoints ?? 1000;
     if (points < 1500) {
       if (callbacks.log) callbacks.log('❌ Requer pelo menos 1.500 Pontos de Olimpíada para ser coroado Herói!', 'system');
       return false;
     }
 
+    const requestedWeaponId = String(infinityWeaponId || '').trim();
+    const weaponDef = INFINITY_WEAPONS[requestedWeaponId] || INFINITY_WEAPONS[`weapon_${requestedWeaponId}`];
+    if (!weaponDef) {
+      callbacks.log?.('Arma Infinity inválida para a coroação.', 'system');
+      return false;
+    }
+
+    const trialState = { ...state, inventory: (state.inventory || []).map(entry => ({ ...entry })) };
+    if (!addToInventory(trialState, weaponDef.id, 1, 'legendary', false, { log: callbacks.log }, true)) {
+      callbacks.log?.('Libere um espaço na mochila antes de reivindicar a arma de Herói.', 'system');
+      return false;
+    }
+
+    state.inventory = trialState.inventory;
     state.isHero = true;
     state.heroTitle = 'Grand Olympiad Hero 👑';
     state.heroAura = 'golden_hero_aura';
@@ -281,17 +312,6 @@ export class OlympiadService {
     state.skills['heroic_miracle'] = 1;
     state.skills['heroic_berserker'] = 1;
     state.skills['heroic_grandeur'] = 1;
-
-    // Entrega a Arma Infinity escolhida
-    const weaponDef = INFINITY_WEAPONS[infinityWeaponId] || INFINITY_WEAPONS['weapon_infinity_blade'];
-    state.inventory = state.inventory || [];
-    const uid = 'inf_' + Date.now();
-    state.inventory.push({
-      uid,
-      itemId: weaponDef.id,
-      enchant: 0,
-      count: 1
-    });
 
     if (callbacks.log) {
       callbacks.log('👑🌟 **COROAÇÃO DE HERÓI SUPREMO DE ADEN!** 🌟👑', 'rarity-legendary');
@@ -318,21 +338,20 @@ export class OlympiadService {
     }
 
     const currentTokens = state.olympiadTokens ?? 0;
-    if (currentTokens < item.priceTokens) {
+    if (!Number.isSafeInteger(currentTokens) || currentTokens < item.priceTokens) {
       if (callbacks.log) callbacks.log(`❌ Olympiad Tokens insuficientes! Necessário: ${item.priceTokens} (Você tem: ${currentTokens})`, 'system');
       return false;
     }
 
-    state.olympiadTokens -= item.priceTokens;
-    state.inventory = state.inventory || [];
+    const quantity = Number.isSafeInteger(item.reward?.count) && item.reward.count > 0 ? item.reward.count : 1;
+    const trialState = { ...state, inventory: (state.inventory || []).map(entry => ({ ...entry })) };
+    if (!addToInventory(trialState, item.reward?.itemId, quantity, null, false, { log: callbacks.log }, true)) {
+      callbacks.log?.('Libere espaço na mochila antes de comprar este item.', 'system');
+      return false;
+    }
 
-    const uid = 'olyshop_' + Date.now();
-    state.inventory.push({
-      uid,
-      itemId: item.reward.itemId,
-      enchant: 0,
-      count: item.reward.count || 1
-    });
+    state.inventory = trialState.inventory;
+    state.olympiadTokens -= item.priceTokens;
 
     if (callbacks.log) {
       callbacks.log(`🛍️ **Compra Concluída:** Você adquiriu **${item.name}** por ${item.priceTokens} Tokens de Olimpíada!`, 'rarity-epic');

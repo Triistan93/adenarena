@@ -244,7 +244,7 @@ describe('PHASE 4: STRICT THRESHOLD RECONCILIATION & CANDIDATE SEARCH', () => {
     };
 
     test('6.1. 100% of all 9 Epic Bosses satisfy SM >= 1.50x without special exceptions', () => {
-      for (const bEntry of bossProgression) {
+      for (const [index, bEntry] of bossProgression.entries()) {
         const boss = RAID_BOSS_BALANCE[bEntry.id];
         const player = {
           level: bEntry.pLvl, maxHp: bEntry.hp, hp: bEntry.hp, maxMp: 1000, mp: 1000,
@@ -252,7 +252,9 @@ describe('PHASE 4: STRICT THRESHOLD RECONCILIATION & CANDIDATE SEARCH', () => {
           skills: { power_strike: 5, triple_slash: 5 },
           inventory: [{ itemId: bEntry.potId, count: bEntry.pots }, { itemId: 'mp_potion_m', count: 25 }]
         };
-        const sim = simulateMany({ player, enemy: boss, skills: standardSkills, runs: 100, config: { maxDurationSec: 240 } });
+        const sim = withSeededRandom(0xA11CE + index, () =>
+          simulateMany({ player, enemy: boss, skills: standardSkills, runs: 100, config: { maxDurationSec: 240 } })
+        );
         assert.ok(sim.survivalMargin >= ACCEPTANCE_MATRIX.RECOMMENDED_SM_STANDARD,
           `Boss ${bEntry.id} SM (${sim.survivalMargin}x) failed canonical requirement (>= 1.50x)`);
         assert.ok(sim.winRate >= ACCEPTANCE_MATRIX.RECOMMENDED_WR_STANDARD,

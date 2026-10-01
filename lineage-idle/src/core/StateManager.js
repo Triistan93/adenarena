@@ -42,7 +42,7 @@ export const DEFAULT_STATE = () => ({
   quests: { progress: {}, claimed: [], lastDailyReset: 0, lastWeeklyReset: 0 },
   battlePass: { xp: 0, claimedFree: [], claimedPremium: [], unlockedPremium: false },
   dailyRewards: { currentDay: 1, claimedDays: [], lastClaimDate: '', streak: 0, totalClaims: 0 },
-  tower: { highestFloor: 0, currentFloor: 1, lastSweepTime: 0 },
+  tower: { highestFloor: 0, currentFloor: 1, lastSweepTime: 0, pendingFirstClearRewards: [] },
   zone: 'talkingIsland', currentSaga: 0, gold: 2000, adenCoins: 0, dailyRaidTickets: 3, inventory: [],
   equipment: {
     weapon: null, weapon2: null, shield: null,
@@ -113,6 +113,9 @@ export const DEFAULT_STATE = () => ({
   },
   sevenSigns: {
     faction: null,
+    phase: 'competition',
+    cycleNumber: 1,
+    cycleEndsAt: 0,
     playerScore: 0,
     dawnScore: 250000,
     duskScore: 240000,
@@ -182,6 +185,7 @@ export const DEFAULT_STATE = () => ({
     lastAutoTick: 0,
     rodDurability: {},
     baitInventory: {},
+    pendingFishRewards: [],
   },
   hunting: {
     skillLevel: 1,
@@ -558,6 +562,7 @@ export function loadState() {
     currentState.createdAt = Number(data.createdAt) || (currentState.createdAt || Date.now());
     currentState.dailyRewards = data.dailyRewards && typeof data.dailyRewards === 'object' ? data.dailyRewards : { currentDay: 1, claimedDays: [], lastClaimDate: '', streak: 0, totalClaims: 0 };
     currentState.tower = data.tower && typeof data.tower === 'object' ? data.tower : { highestFloor: 0, currentFloor: 1, lastSweepTime: 0 };
+    if (!Array.isArray(currentState.tower.pendingFirstClearRewards)) currentState.tower.pendingFirstClearRewards = [];
     currentState.bonusInventorySlots = Number(data.bonusInventorySlots) || 0;
     currentState.vipTeleportUntil = Number(data.vipTeleportUntil) || 0;
     currentState.referredBy = data.referredBy || (typeof localStorage !== 'undefined' ? localStorage.getItem('aden_referred_by') : null) || null;

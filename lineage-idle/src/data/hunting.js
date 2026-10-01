@@ -164,7 +164,7 @@ export const PREY_CATALOG = {
   prey_plains_boar: {
     id: 'prey_plains_boar', name: 'Javali Couraçado', icon: '🐗', rarity: 'uncommon', behavior: 'tenacious',
     weightRange: '60-110 kg', xpReward: 20, sellPrice: 95,
-    skinYield: { primary: 'leather', primaryQty: 2, secondary: 'cokes', secondaryQty: 1 },
+    skinYield: { primary: 'leather', primaryQty: 2, secondary: 'synthetic_cokes', secondaryQty: 1 },
     exchangeRate: 3, exchangeReward: 'leather', exchangeRewardName: 'Couro Curtido',
     zones: ['zone_gludio_plains']
   },
@@ -194,7 +194,7 @@ export const PREY_CATALOG = {
   prey_brown_bear: {
     id: 'prey_brown_bear', name: 'Urso Pardo das Colinas', icon: '🐻', rarity: 'rare', behavior: 'tenacious',
     weightRange: '180-320 kg', xpReward: 45, sellPrice: 300,
-    skinYield: { primary: 'crafted_leather', primaryQty: 1, secondary: 'cokes', secondaryQty: 2 },
+    skinYield: { primary: 'crafted_leather', primaryQty: 1, secondary: 'synthetic_cokes', secondaryQty: 2 },
     exchangeRate: 2, exchangeReward: 'crafted_leather', exchangeRewardName: 'Couro Trabalhado',
     zones: ['zone_dion_hills']
   },
@@ -242,10 +242,17 @@ export const PREY_CATALOG = {
     exchangeRate: 1, exchangeReward: 'metallic_thread', exchangeRewardName: 'Fio Metálico',
     zones: ['zone_giran_wilderness']
   },
+  prey_giran_gorgon_hound: {
+    id: 'prey_giran_gorgon_hound', name: 'Cão-Serpente Górgona de Giran', icon: '🐍', rarity: 'epic', behavior: 'aggressive',
+    weightRange: '110-190 kg', xpReward: 120, sellPrice: 1300,
+    skinYield: { primary: 'crafted_leather', primaryQty: 4, secondary: 'metallic_thread', secondaryQty: 2 },
+    exchangeRate: 1, exchangeReward: 'metallic_thread', exchangeRewardName: 'Fio Metálico',
+    zones: ['zone_giran_wilderness']
+  },
   prey_frost_tiger: {
     id: 'prey_frost_tiger', name: 'Tigre Dentes-de-Sabre Glacial', icon: '🐅', rarity: 'epic', behavior: 'aggressive',
     weightRange: '180-280 kg', xpReward: 125, sellPrice: 1400,
-    skinYield: { primary: 'crafted_leather', primaryQty: 5, secondary: 'mold_lubricant', secondaryQty: 2 },
+    skinYield: { primary: 'crafted_leather', primaryQty: 5, secondary: 'varnish', secondaryQty: 2 },
     exchangeRate: 1, exchangeReward: 'durable_metal_plate', exchangeRewardName: 'Placa de Metal Durável',
     zones: ['zone_oren_snowlands']
   },
@@ -284,6 +291,13 @@ export const PREY_CATALOG = {
     weightRange: '600-1200 kg', xpReward: 400, sellPrice: 7500,
     skinYield: { primary: 'crafted_leather', primaryQty: 20, secondary: 'metallic_thread', secondaryQty: 6 },
     exchangeRate: 1, exchangeReward: 'durable_metal_plate', exchangeRewardName: 'Placa de Metal Durável x4',
+    zones: ['zone_goddard_peaks']
+  },
+  prey_phoenix_hawk: {
+    id: 'prey_phoenix_hawk', name: 'Falcão-Fênix das Chamas', icon: '🔥🦅', rarity: 'legendary', behavior: 'elusive',
+    weightRange: '280-520 kg', xpReward: 380, sellPrice: 7000,
+    skinYield: { primary: 'crafted_leather', primaryQty: 14, secondary: 'enria', secondaryQty: 4 },
+    exchangeRate: 1, exchangeReward: 'enria', exchangeRewardName: 'Enria',
     zones: ['zone_goddard_peaks']
   }
 };

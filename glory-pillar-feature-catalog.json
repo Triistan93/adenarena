@@ -884,11 +884,12 @@
           "name": "Card Socketing into Equipment Slots",
           "criticality": "CRITICAL",
           "trigger": "Socket Card to Item",
-          "handler": "CardCodexService.socketCardToItem",
+          "handler": "CardCodexService.socketCardToEquipment",
           "service": "CardCodexService",
           "statePaths": [
-            "item.cardSocket",
-            "state.inventory"
+            "item.slottedCards",
+            "state.inventory",
+            "state.equipment"
           ],
           "evidenceLevel": "L5",
           "verified": true

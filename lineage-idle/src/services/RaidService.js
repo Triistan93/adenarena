@@ -75,6 +75,10 @@ export function canEnterRaid(state, raidId) {
   const boss = RAID_BOSSES[raidId];
   if (!boss) return { canEnter: false, reason: 'Chefe de Raid inexistente.' };
 
+  if (state.isRaidActive || state.activeRaidId || state.activeMonster?.isRaid) {
+    return { canEnter: false, reason: 'Conclua o Raid atual antes de iniciar outro.' };
+  }
+
   if ((state.level || 1) < boss.reqLvl) {
     return { canEnter: false, reason: `Nível ${boss.reqLvl} necessário para este Raid!` };
   }
@@ -289,14 +293,15 @@ export function processRaidBossMechanics(state, callbacks = {}) {
  * @returns {Array<Object>} Lista de itens recebidos
  */
 export function handleRaidVictory(state, raidId, callbacks = {}) {
+  if (!state?.isRaidActive || state.activeRaidId !== raidId || !state.activeMonster?.isRaid) return [];
   const boss = RAID_BOSSES[raidId] || state.activeMonster;
   if (!boss) return [];
 
   checkAndResetDailyRaidTickets(state);
-  state.dailyRaidClears[raidId] = (state.dailyRaidClears[raidId] || 0) + 1;
-  state.totalRaidKills = (state.totalRaidKills || 0) + 1;
   state.isRaidActive = false;
   state.activeRaidId = null;
+  state.dailyRaidClears[raidId] = (state.dailyRaidClears[raidId] || 0) + 1;
+  state.totalRaidKills = (state.totalRaidKills || 0) + 1;
 
   // Limpa telegrafias e aura de enrage
   if (typeof window !== 'undefined' && window.globalVFXOrchestrator?.clearTelegraphs) {
@@ -307,6 +312,7 @@ export function handleRaidVictory(state, raidId, callbacks = {}) {
   }
 
   const droppedItems = [];
+  let dropIndex = 0;
 
   // 1. Recompensa Garantida em Adena
   const minGold = boss.gold?.[0] || 25000;
@@ -342,7 +348,7 @@ export function handleRaidVictory(state, raidId, callbacks = {}) {
           }
         } else {
           state.inventory = state.inventory || [];
-          const uid = 'item_' + Date.now() + '_' + Math.floor(Math.random() * 10000);
+          const uid = `raid_${raidId}_${Date.now()}_${dropIndex++}_${Math.floor(Math.random() * 10000)}`;
           state.inventory.push({
             uid,
             itemId: drop.itemId,

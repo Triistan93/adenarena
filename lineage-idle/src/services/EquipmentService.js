@@ -43,6 +43,17 @@ export function resolveEquipSlot(rawSlot, equipmentState = {}, preferredSlot = n
   return ALL_EQUIP_SLOTS.includes(mapped) ? mapped : slot;
 }
 
+function isCompatibleEquipSlot(itemSlot, targetSlot) {
+  const canonical = resolveEquipSlot(itemSlot, {});
+  const slotFamilies = [
+    ['weapon', 'weapon2'], ['earring1', 'earring2'], ['ring1', 'ring2'], ['hair1', 'hair2'],
+    ...Array.from({ length: 6 }, (_, index) => [`agathion${index + 1}`]),
+    ...Array.from({ length: 6 }, (_, index) => [`jewel${index + 1}`]),
+    ...Array.from({ length: 6 }, (_, index) => [`talisman${index + 1}`])
+  ];
+  return slotFamilies.some(family => family.includes(canonical) && family.includes(targetSlot)) || canonical === targetSlot;
+}
+
 export function migrateEquipmentSlots(state) {
   if (!state?.equipment) return;
   if (!('chest' in state.equipment) && state.equipment.armor) {
@@ -82,10 +93,14 @@ export function equipItem(state, uid, targetSlotOrCallbacks = null, maybeCallbac
   const item = state.inventory.find(i => i.uid === uid);
   if (!item) return;
   const def = D()?.ALL_ITEMS?.[item.itemId];
-  if (!def) return;
+  if (!isEquippableItem(def)) return;
   migrateEquipmentSlots(state);
 
   const targetSlot = explicitSlot || resolveEquipSlot(def.slot, state.equipment);
+  if (!isCompatibleEquipSlot(def.slot, targetSlot)) {
+    if (callbacks.log) callbacks.log(`${def.name} não pode ser equipado nesse espaço.`, 'system');
+    return;
+  }
 
   // Validate level
   if (def.req?.level && state.level < def.req.level) {

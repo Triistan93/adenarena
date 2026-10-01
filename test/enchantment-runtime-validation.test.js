@@ -31,6 +31,8 @@ import {
 } from '../lineage-idle/src/services/ItemClassificationService.js';
 import { getStats } from '../lineage-idle/src/engine/StatsEngine.js';
 import { CombatPowerService } from '../lineage-idle/src/services/CombatPowerService.js';
+import { DEFAULT_STATE } from '../lineage-idle/src/core/StateManager.js';
+import { ALL_ITEMS } from '../lineage-idle/src/data/items/index.js';
 
 function createMockState() {
   return {
@@ -194,6 +196,31 @@ describe('P0-ENC: Enchantment Runtime & Atomic Transaction Validation', () => {
       assert.ok(crystals && crystals.count > 0, 'Cristais de Grau C devem ter sido concedidos');
     } finally {
       Math.random = originalRandom;
+    }
+  });
+
+  it('1.8 Cristalização respeita limite de pilha e preserva todo o rendimento', () => {
+    const previousWindow = globalThis.window;
+    globalThis.window = { GameData: { ALL_ITEMS } };
+    const state = DEFAULT_STATE();
+    state.inventory = [
+      { uid: 'target-crystal-test', itemId: 'dual_bastard_sword', enchant: 4, count: 1, equipped: true },
+      { uid: 'scroll-crystal-test', itemId: 'scroll_enchant_weapon_d', count: 1 },
+      { uid: 'existing-d-crystals', itemId: 'crystal_d', count: 99_990 }
+    ];
+    state.equipment.weapon = 'target-crystal-test';
+    const originalRandom = Math.random;
+    Math.random = () => 0.999;
+    try {
+      const result = executeAtomicEnchant(state, 'target-crystal-test', 'scroll-crystal-test');
+      assert.equal(result.result, 'CRYSTALLIZED');
+      const crystalStacks = state.inventory.filter(item => item.itemId === 'crystal_d');
+      assert.equal(crystalStacks.reduce((sum, item) => sum + item.count, 0), 100_035);
+      assert.ok(crystalStacks.every(item => item.count <= 99_999));
+    } finally {
+      Math.random = originalRandom;
+      if (previousWindow === undefined) delete globalThis.window;
+      else globalThis.window = previousWindow;
     }
   });
 });

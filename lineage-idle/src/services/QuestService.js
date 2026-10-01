@@ -51,11 +51,13 @@ export function checkQuestResets(state) {
  * @param {number} [amount=1]
  */
 export function triggerQuestEvent(state, type, amount = 1) {
+  if (!Number.isSafeInteger(amount) || amount <= 0) return;
   checkQuestResets(state);
   const allQuests = [...(QUEST_DEFS.daily || []), ...(QUEST_DEFS.weekly || [])];
   for (const q of allQuests) {
     if (q.type === type) {
-      state.quests.progress[q.id] = (state.quests.progress[q.id] || 0) + amount;
+      const current = Number(state.quests.progress[q.id]) || 0;
+      state.quests.progress[q.id] = Math.min(q.target, Math.max(0, current) + amount);
     }
   }
 }
@@ -175,6 +177,7 @@ export function claimPassReward(state, tierLevel, passType = 'free', callbacks =
     if (rew.gold) state.gold = (state.gold || 0) + rew.gold;
     if (rew.sp) state.sp = (state.sp || 0) + rew.sp;
     if (rew.magicLamps) state.magicLamps = (state.magicLamps || 0) + rew.magicLamps;
+    if (rew.craftPoints) state.craftXp = (state.craftXp || 0) + rew.craftPoints;
     if (rew.item) addToInventory(state, rew.item, rew.count || 1, null, false, callbacks);
     if (callbacks.log) callbacks.log(`🎫 Recompensa Grátis do Passe Nv.${tierLevel} Reclamada!`, 'loot');
   } else if (passType === 'premium') {
@@ -183,6 +186,7 @@ export function claimPassReward(state, tierLevel, passType = 'free', callbacks =
     state.battlePass.claimedPremium.push(tierLevel);
     const rew = tier.premium;
     if (rew.gold) state.gold = (state.gold || 0) + rew.gold;
+    if (rew.craftPoints) state.craftXp = (state.craftXp || 0) + rew.craftPoints;
     if (rew.title) {
       state.titles = state.titles || [];
       if (!state.titles.includes(rew.title)) state.titles.push(rew.title);

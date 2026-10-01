@@ -7,6 +7,11 @@ import { RAID_BOSSES } from '../data/raids.js';
 import { MON_IMG } from '../../art.js';
 
 export const MONSTER_CARDS = {};
+const CARD_ID_ALIASES = { card_ant_queen: 'card_queen_ant' };
+
+export function getCanonicalCardId(cardId) {
+  return CARD_ID_ALIASES[cardId] || cardId;
+}
 
 // 1. Chefes Épicos & Raid Bosses com stats de alta linhagem
 const EPIC_RAID_CARDS = {
@@ -194,6 +199,18 @@ for (const [monId, m] of Object.entries(MONSTERS || {})) {
 }
 
 export class CardCodexService {
+  /** Formata bônus de carta usando o mesmo multiplicador aplicado pelo serviço. */
+  static formatCodexBonusLabel(bonuses = {}, multiplier = 1) {
+    return Object.entries(bonuses || {})
+      .filter(([, value]) => typeof value === 'number' && Number.isFinite(value))
+      .map(([stat, value]) => {
+        const scaled = value * (Number.isFinite(Number(multiplier)) ? Number(multiplier) : 1);
+        const formatted = Math.abs(value) < 1 ? `${(scaled * 100).toFixed(1)}%` : Math.round(scaled);
+        return `+${formatted} ${stat.toUpperCase()}`;
+      })
+      .join(', ');
+  }
+
   /**
    * Determina o Rank da Carta com base no total de cópias absorvidas.
    * @param {number} count
@@ -251,26 +268,35 @@ export class CardCodexService {
       hooks = count;
       count = 1;
     }
-    const numToAbsorb = typeof count === 'number' && count > 0 ? count : 1;
+    const numToAbsorb = count;
+    if (!Number.isSafeInteger(numToAbsorb) || numToAbsorb <= 0) {
+      return { success: false, message: 'A quantidade de cartas deve ser um inteiro positivo.' };
+    }
     const cardDef = MONSTER_CARDS[cardId];
     if (!cardDef) return { success: false, message: 'Carta de monstro desconhecida.' };
 
-    if (Array.isArray(accountState.inventory)) {
-      const invItemIdx = accountState.inventory.findIndex(i => (i.id === cardId || i.itemId === cardId));
-      if (invItemIdx !== -1) {
-        const item = accountState.inventory[invItemIdx];
-        if ((item.count || 1) <= numToAbsorb) {
-          accountState.inventory.splice(invItemIdx, 1);
-        } else {
-          item.count -= numToAbsorb;
-        }
-      }
+    const inventory = Array.isArray(accountState.inventory) ? accountState.inventory : [];
+    const warehouse = Array.isArray(accountState.warehouse) ? accountState.warehouse : [];
+    const container = inventory.some(item => (item?.itemId === cardId || item?.id === cardId) && !item.equipped)
+      ? inventory
+      : warehouse;
+    const itemIndex = container.findIndex(item => (item?.itemId === cardId || item?.id === cardId) && !item.equipped);
+    if (itemIndex < 0) return { success: false, message: 'Você não possui esta carta no inventário ou no baú.' };
+    const item = container[itemIndex];
+    const available = Number.isSafeInteger(item.count) ? item.count : 1;
+    if (available < numToAbsorb) return { success: false, message: `Você possui apenas ${available} carta(s) disponíveis.` };
+
+    const current = accountState.cardCodex?.[cardId] || { rank: 0, count: 0 };
+    const priorCount = Number.isSafeInteger(current.count) && current.count >= 0 ? current.count : 0;
+    if (priorCount + numToAbsorb > Number.MAX_SAFE_INTEGER) {
+      return { success: false, message: 'A coleção atingiu o limite permitido.' };
     }
 
-    if (!accountState.cardCodex) accountState.cardCodex = {};
-    const current = accountState.cardCodex[cardId] || { rank: 0, count: 0 };
+    if (available === numToAbsorb) container.splice(itemIndex, 1);
+    else item.count = available - numToAbsorb;
 
-    current.count += numToAbsorb;
+    if (!accountState.cardCodex) accountState.cardCodex = {};
+    current.count = priorCount + numToAbsorb;
     current.rank = CardCodexService.getRankFromCount(current.count);
     accountState.cardCodex[cardId] = current;
     if (accountState.codex && typeof accountState.codex === 'object') {
@@ -289,20 +315,35 @@ export class CardCodexService {
    * @returns {Object}
    */
   static getCodexPassiveBonuses(accountState) {
-    const totals = { pAtk: 0, mAtk: 0, pDef: 0, mDef: 0, maxHp: 0, maxMp: 0, critRate: 0, critDmg: 0, lifesteal: 0, allStats: 0 };
+    const totals = { pAtk: 0, mAtk: 0, pDef: 0, mDef: 0, maxHp: 0, maxMp: 0, maxCp: 0, critRate: 0, critDmg: 0, lifesteal: 0, healPower: 0, allStats: 0 };
     const cardCodex = (accountState?.cardCodex && Object.keys(accountState.cardCodex).length > 0)
       ? accountState.cardCodex
       : (accountState?.codex || {});
 
-    for (const [cardId, data] of Object.entries(cardCodex)) {
-      if (!data || data.rank <= 0) continue;
+    const canonicalRecords = new Map();
+    for (const [storedCardId, data] of Object.entries(cardCodex)) {
+      const cardId = getCanonicalCardId(storedCardId);
+      const rank = Number(data?.rank) || 0;
+      if (!data || rank <= 0) continue;
+      const prior = canonicalRecords.get(cardId);
+      if (!prior || rank > prior.rank || (rank === prior.rank && (Number(data.count) || 0) > (Number(prior.data.count) || 0))) {
+        canonicalRecords.set(cardId, { rank, data });
+      }
+    }
+
+    for (const [cardId, record] of canonicalRecords) {
       const def = MONSTER_CARDS[cardId];
       if (!def || !def.codexBonus) continue;
 
-      const rankMultiplier = CardCodexService.getRankMultiplier(data.rank);
+      const rankMultiplier = CardCodexService.getRankMultiplier(record.rank);
       for (const [stat, val] of Object.entries(def.codexBonus)) {
         if (typeof val === 'number') {
-          totals[stat] = (totals[stat] || 0) + Math.round(val * rankMultiplier);
+          const scaledValue = val * rankMultiplier;
+          // Preserve fractional combat ratios; rounding 0.04 lifesteal or
+          // critical-damage bonuses to an integer silently erased them.
+          totals[stat] = (totals[stat] || 0) + (['critDmg', 'lifesteal'].includes(stat)
+            ? scaledValue
+            : Math.round(scaledValue));
         }
       }
     }
@@ -316,6 +357,56 @@ export class CardCodexService {
     totals.maxHp += wildlife.maxHp;
 
     return totals;
+  }
+
+  /** Combina os bônus das cartas engastadas nas peças atualmente equipadas. */
+  static getEquippedSocketBonuses(state) {
+    const totals = {};
+    const inventory = Array.isArray(state?.inventory) ? state.inventory : [];
+    const seen = new Set();
+    for (const equipped of Object.values(state?.equipment || {})) {
+      const item = equipped && typeof equipped === 'object'
+        ? equipped
+        : inventory.find(candidate => candidate?.uid === equipped || candidate?.id === equipped);
+      if (!item) continue;
+      const identity = item.uid || item.id || item.itemId || item;
+      if (seen.has(identity)) continue;
+      seen.add(identity);
+      for (const cardId of Array.isArray(item.slottedCards) ? item.slottedCards : []) {
+        const bonus = MONSTER_CARDS[cardId]?.socketBonus;
+        if (!bonus) continue;
+        for (const [stat, value] of Object.entries(bonus)) {
+          const amount = Number(value);
+          if (Number.isFinite(amount)) totals[stat] = (totals[stat] || 0) + amount;
+        }
+      }
+    }
+    return totals;
+  }
+
+  /** Engasta uma carta possuída em uma arma equipada e consome uma cópia. */
+  static socketCardToEquipment(state, weaponUid, cardId) {
+    const inventory = Array.isArray(state?.inventory) ? state.inventory : null;
+    if (!inventory || !state.equipment || !['weapon', 'weapon2'].some(slot => state.equipment[slot] === weaponUid)) {
+      return { success: false, message: 'Equipe a arma antes de engastar uma carta.' };
+    }
+    const weapon = inventory.find(item => item?.uid === weaponUid || item?.id === weaponUid);
+    const cardIndex = inventory.findIndex(item => (item?.itemId === cardId || item?.id === cardId) && !item.equipped);
+    if (!weapon || cardIndex < 0) return { success: false, message: 'Arma ou carta não encontrada no inventário.' };
+
+    const card = inventory[cardIndex];
+    const count = card.count === undefined ? 1 : card.count;
+    if (!Number.isSafeInteger(count) || count <= 0) {
+      return { success: false, message: 'A quantidade desta carta é inválida.' };
+    }
+    const candidate = { ...weapon, slottedCards: Array.isArray(weapon.slottedCards) ? [...weapon.slottedCards] : [] };
+    const result = CardCodexService.socketCardToItem(candidate, cardId);
+    if (!result.success) return result;
+
+    if (count === 1) inventory.splice(cardIndex, 1);
+    else card.count = count - 1;
+    weapon.slottedCards = candidate.slottedCards;
+    return { success: true, slottedCards: [...weapon.slottedCards], weaponUid, cardId };
   }
 
   /**
@@ -356,7 +447,9 @@ export class CardCodexService {
     const cardDef = MONSTER_CARDS[cardId];
     if (!cardDef) return { success: false, message: 'Carta inválida.' };
 
-    const maxSockets = itemInstance.socketsMax || 2;
+    const maxSockets = Number.isSafeInteger(itemInstance.socketsMax)
+      ? Math.max(0, itemInstance.socketsMax)
+      : 2;
     if (!itemInstance.slottedCards) itemInstance.slottedCards = [];
 
     if (itemInstance.slottedCards.length >= maxSockets) {

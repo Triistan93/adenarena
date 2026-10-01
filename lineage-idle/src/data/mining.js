@@ -155,7 +155,7 @@ export const MINERAL_NODES_CATALOG = {
   node_pure_iron_seam: {
     id: 'node_pure_iron_seam', name: 'Costura de Ferro dos Anões', icon: '⚙️', rarity: 'uncommon',
     desc: 'Veio contínuo e denso escavado nas profundezas das montanhas.',
-    yields: { primary: 'iron_ore', primaryQty: 5, secondary: 'cokes', secondaryQty: 1 },
+    yields: { primary: 'iron_ore', primaryQty: 5, secondary: 'synthetic_cokes', secondaryQty: 1 },
     baseTime: 3800, xpReward: 18, zones: ['zone_mithril_mines']
   },
   node_silver_vein: {
@@ -167,13 +167,13 @@ export const MINERAL_NODES_CATALOG = {
   node_dense_coal_pillar: {
     id: 'node_dense_coal_pillar', name: 'Coluna de Antracito Puro', icon: '🪨', rarity: 'uncommon',
     desc: 'Carvão fóssil de queima limpa e poder calorífico superior.',
-    yields: { primary: 'coal', primaryQty: 6, secondary: 'cokes', secondaryQty: 1 },
+    yields: { primary: 'coal', primaryQty: 6, secondary: 'synthetic_cokes', secondaryQty: 1 },
     baseTime: 3900, xpReward: 20, zones: ['zone_mithril_mines']
   },
   node_cokes_rock: {
     id: 'node_cokes_rock', name: 'Formação Natural de Coque', icon: '🔥', rarity: 'uncommon',
     desc: 'Nódulo de carvão calcinado pela proximidade de fendas térmicas.',
-    yields: { primary: 'cokes', primaryQty: 2, secondary: 'iron_ore', secondaryQty: 3 },
+    yields: { primary: 'synthetic_cokes', primaryQty: 2, secondary: 'iron_ore', secondaryQty: 3 },
     baseTime: 4100, xpReward: 24, zones: ['zone_mithril_mines']
   },
 
@@ -190,6 +190,18 @@ export const MINERAL_NODES_CATALOG = {
     yields: { primary: 'silver_nugget', primaryQty: 4, secondary: 'iron_ore', secondaryQty: 4 },
     baseTime: 4600, xpReward: 48, zones: ['zone_plains_quarry']
   },
+  node_mithril_crust: {
+    id: 'node_mithril_crust', name: 'Crosta de Mithril de Dion', icon: '💠', rarity: 'rare',
+    desc: 'Veios finos de mithril surgem entre placas de rocha metamórfica.',
+    yields: { primary: 'mithril_ore', primaryQty: 2, secondary: 'silver_nugget', secondaryQty: 2 },
+    baseTime: 4750, xpReward: 50, zones: ['zone_plains_quarry']
+  },
+  node_quarry_granite: {
+    id: 'node_quarry_granite', name: 'Núcleo de Granito Ferrífero', icon: '🪨', rarity: 'rare',
+    desc: 'Granito compacto que contém bolsões de ferro e coque natural.',
+    yields: { primary: 'iron_ore', primaryQty: 7, secondary: 'synthetic_cokes', secondaryQty: 2 },
+    baseTime: 4850, xpReward: 53, zones: ['zone_plains_quarry']
+  },
   node_deep_mithril_lode: {
     id: 'node_deep_mithril_lode', name: 'Filão Profundo de Mithril', icon: '💎', rarity: 'rare',
     desc: 'Minério de mithril bruto com tons azulados prateados.',
@@ -199,8 +211,20 @@ export const MINERAL_NODES_CATALOG = {
   node_cokes_furnace_core: {
     id: 'node_cokes_furnace_core', name: 'Cerne de Rocha Calcinada', icon: '🌋', rarity: 'rare',
     desc: 'Mineralização que suporta as temperaturas de forja C-Grade.',
-    yields: { primary: 'cokes', primaryQty: 3, secondary: 'steel', secondaryQty: 1 },
+    yields: { primary: 'synthetic_cokes', primaryQty: 3, secondary: 'steel', secondaryQty: 1 },
     baseTime: 4700, xpReward: 52, zones: ['zone_giran_deep_vein']
+  },
+  node_silver_nugget_mother: {
+    id: 'node_silver_nugget_mother', name: 'Matriz de Pepitas de Prata', icon: '🌙', rarity: 'rare',
+    desc: 'Uma matriz mineral rara que concentra prata nativa e resíduos de coque.',
+    yields: { primary: 'silver_nugget', primaryQty: 6, secondary: 'synthetic_cokes', secondaryQty: 2 },
+    baseTime: 5000, xpReward: 60, zones: ['zone_giran_deep_vein']
+  },
+  node_steel_shale: {
+    id: 'node_steel_shale', name: 'Xisto de Aço Natural', icon: '⚙️', rarity: 'rare',
+    desc: 'Camadas ferruginosas comprimidas que rendem ferro e aço bruto.',
+    yields: { primary: 'steel', primaryQty: 2, secondary: 'iron_ore', secondaryQty: 5 },
+    baseTime: 5100, xpReward: 62, zones: ['zone_giran_deep_vein']
   },
 
   // Épico
@@ -216,6 +240,18 @@ export const MINERAL_NODES_CATALOG = {
     yields: { primary: 'mithril_ore', primaryQty: 4, secondary: 'oriharukon_ore', secondaryQty: 1 },
     baseTime: 5500, xpReward: 105, zones: ['zone_iron_stronghold']
   },
+  node_iron_bedrock: {
+    id: 'node_iron_bedrock', name: 'Leito de Ferro Glacial', icon: '🧊', rarity: 'epic',
+    desc: 'Ferro antigo preservado sob o permafrost, entre cristais de mithril.',
+    yields: { primary: 'iron_ore', primaryQty: 12, secondary: 'mithril_ore', secondaryQty: 2 },
+    baseTime: 5650, xpReward: 115, zones: ['zone_iron_stronghold']
+  },
+  node_dense_mineral_mass: {
+    id: 'node_dense_mineral_mass', name: 'Massa Mineral de Alta Pressão', icon: '🔷', rarity: 'epic',
+    desc: 'Agregado profundo de mithril e oriárukon formado sob pressão extrema.',
+    yields: { primary: 'mithril_ore', primaryQty: 6, secondary: 'oriharukon_ore', secondaryQty: 2 },
+    baseTime: 5800, xpReward: 125, zones: ['zone_iron_stronghold']
+  },
 
   // Lendário
   node_adamantite_core_rock: {
@@ -229,6 +265,18 @@ export const MINERAL_NODES_CATALOG = {
     desc: 'Geodo vulcânico gigante preenchido de cristais de ouro primordial.',
     yields: { primary: 'oriharukon_ore', primaryQty: 4, secondary: 'adamantite', secondaryQty: 1 },
     baseTime: 6400, xpReward: 300, zones: ['zone_forge_of_gods']
+  },
+  node_magma_tempered_slag: {
+    id: 'node_magma_tempered_slag', name: 'Escória Temperada pelo Magma', icon: '🌋', rarity: 'legendary',
+    desc: 'Escória vulcânica com fragmentos de adamantite e oriárukon solidificados.',
+    yields: { primary: 'adamantite', primaryQty: 3, secondary: 'oriharukon_ore', secondaryQty: 4 },
+    baseTime: 6600, xpReward: 320, zones: ['zone_forge_of_gods']
+  },
+  node_primordial_bedrock: {
+    id: 'node_primordial_bedrock', name: 'Rocha Matriz Primordial', icon: '👑', rarity: 'legendary',
+    desc: 'Matriz mineral lendária que envolve adamantite e cristais de oriárukon.',
+    yields: { primary: 'adamantite', primaryQty: 4, secondary: 'oriharukon_ore', secondaryQty: 5 },
+    baseTime: 6800, xpReward: 340, zones: ['zone_forge_of_gods']
   }
 };
 

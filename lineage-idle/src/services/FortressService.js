@@ -1,5 +1,6 @@
 import { FORTRESSES } from '../data/fortresses.js';
 import { BRACELETS, TALISMANS } from '../data/talismans.js';
+import { MAX_OFFLINE_MINUTES } from '../engine/SecurityEngine.js';
 
 export class FortressService {
   /**
@@ -29,6 +30,14 @@ export class FortressService {
     const fState = this.ensureState(state);
     const fort = FORTRESSES[fortId];
     if (!fort) return { success: false, message: 'Fortaleza não encontrada.' };
+
+    if (fState.activeSiege && !fState.activeSiege.isCompleted) {
+      return { success: false, reason: 'siege_in_progress', message: 'Conclua o cerco atual antes de atacar outra fortaleza.' };
+    }
+
+    if (fState.owned.includes(fortId)) {
+      return { success: false, reason: 'already_owned', message: 'Esta fortaleza já está sob seu controle.' };
+    }
 
     if (state.level < fort.level) {
       return { success: false, message: `Nível ${fort.level}+ necessário para atacar ${fort.name}.` };
@@ -106,7 +115,10 @@ export class FortressService {
     if (!fState.owned || fState.owned.length === 0) return;
 
     const now = Date.now();
-    const elapsedMinutes = (now - (fState.lastCollectionTime || now)) / 60000;
+    const elapsedMinutes = Math.min(
+      MAX_OFFLINE_MINUTES,
+      Math.max(0, now - (fState.lastCollectionTime || now)) / 60000
+    );
     if (elapsedMinutes >= 1) {
       let totalRate = 0;
       for (const fId of fState.owned) {

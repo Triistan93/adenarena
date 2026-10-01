@@ -120,17 +120,21 @@ export const CASTLES = {
 export const CASTLE_SHOP_CATALOG = [
   {
     id: 'crown_of_lord',
+    outputItemId: 'crown_of_lord',
+    count: 1,
     name: 'Crown of the Lord 👑',
     priceAdena: 10000000,
     priceAc: 0,
     reqCastle: true,
-    slot: 'head',
+    slot: 'helmet',
     icon: 'gradespecial/jewels/jewel_ring_queen_ant.png',
     desc: 'Coroa sagrada usada apenas pelos Lordes de Castelo de Aden. Concede +5 em Todos os Atributos (STR/DEX/INT/WIT/CON/MEN) e +15% Max HP/CP.',
     stats: { allStats: 5, hpPercent: 0.15, cpPercent: 0.15 }
   },
   {
     id: 'castle_cloak',
+    outputItemId: 'castle_cloak',
+    count: 1,
     name: 'Castle Lord Cloak 🛡️',
     priceAdena: 5000000,
     priceAc: 0,
@@ -142,6 +146,8 @@ export const CASTLE_SHOP_CATALOG = [
   },
   {
     id: 'elixir_lord_cp_10x',
+    outputItemId: 'castle_lord_cp_elixir',
+    count: 10,
     name: '10x Elixir Real de CP 🧪',
     priceAdena: 250000,
     priceAc: 0,
@@ -151,6 +157,8 @@ export const CASTLE_SHOP_CATALOG = [
   },
   {
     id: 'giant_codex_castle_pack',
+    outputItemId: 'giants_codex',
+    count: 3,
     name: 'Pacote de 3x Giant\'s Codex 📜',
     priceAdena: 3000000,
     priceAc: 0,

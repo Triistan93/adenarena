@@ -215,7 +215,7 @@ export const OLYMPIAD_SHOP_CATALOG = [
     priceTokens: 150,
     icon: 'consumables/cp_potion.png',
     desc: 'Pacote com 100 Poções de Restauração Imediata de Pontos de Combate.',
-    reward: { itemId: 'hp_potion_xl', count: 100 }
+    reward: { itemId: 'potion_heroic_cp', count: 100 }
   },
   {
     id: 'secret_elixir_vigor',

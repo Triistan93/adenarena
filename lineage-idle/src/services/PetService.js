@@ -1,6 +1,14 @@
 // PetService.js — Gerenciador de Mascotes & Companheiros de Batalha
 import { PET_CATALOG } from '../data/pets.js';
 
+const PET_HUNGER_POINT_INTERVAL_MS = 10 * 60 * 1000;
+
+function getPetHunger(pet) {
+  if (pet?.hunger == null) return 100;
+  const hunger = Number(pet.hunger);
+  return Number.isFinite(hunger) ? Math.max(0, Math.min(100, hunger)) : 100;
+}
+
 export const PetService = {
   getPetState(state) {
     if (!state.petData) {
@@ -24,7 +32,8 @@ export const PetService = {
     }
 
     const cost = petDef.cost || 50000;
-    if ((state.gold || 0) < cost) {
+    const gold = state.gold ?? 0;
+    if (!Number.isSafeInteger(gold) || !Number.isSafeInteger(cost) || cost < 0 || gold < cost) {
       if (callbacks.log) callbacks.log(`Adena insuficiente! Custo para adotar: ${cost.toLocaleString()} Adena.`, 'warning');
       return { success: false, reason: 'insufficient_gold' };
     }
@@ -41,6 +50,7 @@ export const PetService = {
       level: 1,
       xp: 0,
       hunger: 100, // 0 a 100%
+      hungerElapsedMs: 0,
       adoptedAt: Date.now()
     };
 
@@ -81,14 +91,20 @@ export const PetService = {
     }
 
     const feedCost = 5000;
-    if ((state.gold || 0) < feedCost) {
+    const gold = state.gold ?? 0;
+    if (!Number.isSafeInteger(gold) || gold < feedCost) {
       if (callbacks.log) callbacks.log('Adena insuficiente para comprar Ração Especial de Pet (5.000 Adena).', 'warning');
       return { success: false, reason: 'insufficient_gold' };
     }
 
-    state.gold -= feedCost;
     const pet = pState.pets[pState.activePetId];
+    if (getPetHunger(pet) >= 100) {
+      if (callbacks.log) callbacks.log(`${pet.name} já está completamente saciado.`, 'system');
+      return { success: false, reason: 'already_fed' };
+    }
+    state.gold -= feedCost;
     pet.hunger = 100;
+    pet.hungerElapsedMs = 0;
     pState.lastFeedTime = Date.now();
 
     if (callbacks.log) callbacks.log(`🍖 Você alimentou **${pet.name}**! Saciedade 100% restaurada.`, 'gain');
@@ -105,14 +121,35 @@ export const PetService = {
     if (pet.level >= 60) return; // Cap 60
 
     pet.xp = (pet.xp || 0) + Math.floor(xpAmount * 0.25); // 25% do XP do herói
-    const reqXp = pet.level * pet.level * 400;
-
-    if (pet.xp >= reqXp && pet.level < 60) {
+    while (pet.level < 60) {
+      const reqXp = pet.level * pet.level * 400;
+      if (pet.xp < reqXp) break;
       pet.xp -= reqXp;
       pet.level++;
       if (callbacks.log) callbacks.log(`🌟 Seu companheiro **${pet.name}** subiu para o **Nível ${pet.level}**!`, 'rarity-epic');
       if (callbacks.floatText) callbacks.floatText(`🐾 PET LEVEL UP! (Lv.${pet.level})`, 'float-epic');
     }
+  },
+
+  tickPetHunger(state, elapsedMs) {
+    const pState = state?.petData;
+    if (!pState?.pets || typeof pState.pets !== 'object') return;
+    const pet = pState.activePetId ? pState.pets[pState.activePetId] : null;
+    const elapsed = Number(elapsedMs);
+    if (!pet || !Number.isFinite(elapsed) || elapsed <= 0) return;
+
+    const hunger = getPetHunger(pet);
+    if (hunger === 0) {
+      pet.hunger = 0;
+      pet.hungerElapsedMs = 0;
+      return;
+    }
+
+    const previousElapsed = Math.max(0, Number(pet.hungerElapsedMs) || 0);
+    const totalElapsed = previousElapsed + elapsed;
+    const consumedPoints = Math.floor(totalElapsed / PET_HUNGER_POINT_INTERVAL_MS);
+    pet.hunger = Math.max(0, hunger - consumedPoints);
+    pet.hungerElapsedMs = pet.hunger === 0 ? 0 : totalElapsed % PET_HUNGER_POINT_INTERVAL_MS;
   },
 
   getActivePetBonus(state) {
@@ -124,8 +161,10 @@ export const PetService = {
     if (!def) return null;
 
     const lvl = pet.level || 1;
-    const buffVal = def.buff.baseVal + (lvl * def.buff.valPerLvl);
-    const petAtk = def.baseAtk + (lvl * def.atkPerLvl);
+    const hungerRatio = getPetHunger(pet) / 100;
+    if (hungerRatio <= 0) return null;
+    const buffVal = (def.buff.baseVal + (lvl * def.buff.valPerLvl)) * hungerRatio;
+    const petAtk = (def.baseAtk + (lvl * def.atkPerLvl)) * hungerRatio;
 
     return {
       id: pet.id,
@@ -134,6 +173,7 @@ export const PetService = {
       stat: def.buff.stat,
       val: buffVal,
       atk: petAtk,
+      hunger: Math.round(hungerRatio * 100),
       desc: def.buff.desc
     };
   }

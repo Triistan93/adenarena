@@ -10,10 +10,31 @@
  */
 
 import { D } from '../core/GameConfig.js';
-import { addToInventory, removeFromInventory, getSelectedSet } from './InventoryService.js';
+import { addToInventory, removeFromInventory, getSelectedSet, getMaxInventorySlots } from './InventoryService.js';
 import { SELL_RATIO, MYSTIC_REROLL_COST, MAX_BUYBACK_ITEMS, getSellValue } from '../data/economy/economyBalance.js';
 
 export { SELL_RATIO, MYSTIC_REROLL_COST, MAX_BUYBACK_ITEMS, getSellValue };
+
+function hasValidWallet(state, cost) {
+  return Number.isSafeInteger(state?.gold) && state.gold >= 0
+    && Number.isSafeInteger(cost) && cost >= 0;
+}
+
+function isEquippedByState(state, item) {
+  if (item?.equipped) return true;
+  const equippedIds = new Set(Object.values(state?.equipment || {}).filter(Boolean));
+  return equippedIds.has(item?.uid) || equippedIds.has(item?.id);
+}
+
+function makeUniqueInventoryUid(state, baseUid) {
+  const existing = new Set((state.inventory || []).map(item => item.uid).filter(Boolean));
+  if (baseUid && !existing.has(baseUid)) return baseUid;
+  let uid;
+  do {
+    uid = `${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
+  } while (existing.has(uid));
+  return uid;
+}
 
 /**
  * Realiza a compra de um item regular da loja.
@@ -33,7 +54,8 @@ export function buyItem(state, itemId, qty = 1, rarity = 'common', callbacks = {
   const basePrice = def.price || 100;
   const cost = basePrice * cleanQty;
 
-  if ((state.gold || 0) < cost) {
+  if (!hasValidWallet(state, cost)) return false;
+  if (state.gold < cost) {
     if (callbacks.log) callbacks.log('Ouro insuficiente para realizar a compra!', 'system');
     return false;
   }
@@ -76,7 +98,8 @@ export function buyMysticItem(state, itemId, rarity, callbacks = {}) {
   const rarityMult = gData?.RARITY?.[rarity]?.mult || 1;
   const price = Math.floor((def.price || 500) * rarityMult * 2);
 
-  if ((state.gold || 0) < price) {
+  if (!hasValidWallet(state, price)) return false;
+  if (state.gold < price) {
     if (callbacks.log) callbacks.log('Ouro insuficiente para o Mercador Místico!', 'system');
     return false;
   }
@@ -121,12 +144,13 @@ export function buyMysticItem(state, itemId, rarity, callbacks = {}) {
  */
 export function sellItem(state, uid, qty = 1, callbacks = {}) {
   if (!state.inventory || !Array.isArray(state.inventory)) return false;
+  if (!hasValidWallet(state, 0)) return false;
 
   const itemIndex = state.inventory.findIndex(i => i.uid === uid || i.id === uid);
   if (itemIndex === -1) return false;
 
   const item = state.inventory[itemIndex];
-  if (item.equipped) {
+  if (isEquippedByState(state, item)) {
     if (callbacks.log) callbacks.log('Desequipe o item antes de vendê-lo!', 'system');
     return false;
   }
@@ -142,6 +166,7 @@ export function sellItem(state, uid, qty = 1, callbacks = {}) {
   const sellUnitVal = getSellValue(item);
   const sellCount = Math.min(item.count || 1, Math.max(1, parseInt(qty, 10) || 1));
   const totalAdena = sellUnitVal * sellCount;
+  if (!Number.isSafeInteger(totalAdena) || !Number.isSafeInteger(state.gold + totalAdena)) return false;
 
   // Registrar na fila de Buyback
   state.buybackQueue = state.buybackQueue || [];
@@ -180,6 +205,7 @@ export function sellItem(state, uid, qty = 1, callbacks = {}) {
  */
 export function sellAllJunk(state, callbacks = {}) {
   if (!state.inventory || !Array.isArray(state.inventory)) return { count: 0, goldGained: 0 };
+  if (!hasValidWallet(state, 0)) return { count: 0, goldGained: 0 };
 
   const selectedSet = getSelectedSet(state);
   const gData = D();
@@ -187,11 +213,11 @@ export function sellAllJunk(state, callbacks = {}) {
   let itemsSold = 0;
 
   const keptItems = [];
-  state.buybackQueue = state.buybackQueue || [];
+  const buybackEntries = [];
 
   for (const item of state.inventory) {
     // Proteger itens equipados
-    if (item.equipped) {
+    if (isEquippedByState(state, item)) {
       keptItems.push(item);
       continue;
     }
@@ -223,16 +249,18 @@ export function sellAllJunk(state, callbacks = {}) {
     itemsSold += count;
 
     // Registra no buyback
-    state.buybackQueue.unshift({
+    buybackEntries.push({
       itemCopy: { ...item },
       sellPrice: itemGold,
       soldAt: Date.now()
     });
   }
 
-  while (state.buybackQueue.length > MAX_BUYBACK_ITEMS) {
-    state.buybackQueue.pop();
+  if (!Number.isSafeInteger(totalGold) || !Number.isSafeInteger(state.gold + totalGold)) {
+    return { count: 0, goldGained: 0 };
   }
+
+  state.buybackQueue = [...buybackEntries.reverse(), ...(state.buybackQueue || [])].slice(0, MAX_BUYBACK_ITEMS);
 
   state.inventory = keptItems;
   state.gold = (state.gold || 0) + totalGold;
@@ -260,23 +288,40 @@ export function sellAllJunk(state, callbacks = {}) {
  * @returns {boolean}
  */
 export function buybackItem(state, buybackIndex, callbacks = {}) {
-  state.buybackQueue = state.buybackQueue || [];
-  if (buybackIndex < 0 || buybackIndex >= state.buybackQueue.length) return false;
+  const buybackQueue = Array.isArray(state.buybackQueue) ? state.buybackQueue : [];
+  if (buybackIndex < 0 || buybackIndex >= buybackQueue.length) return false;
 
-  const entry = state.buybackQueue[buybackIndex];
+  const entry = buybackQueue[buybackIndex];
   if (!entry || !entry.itemCopy) return false;
 
-  if ((state.gold || 0) < entry.sellPrice) {
+  const inventory = Array.isArray(state.inventory) ? state.inventory : [];
+  const restoredItem = { ...entry.itemCopy };
+  const matchingStack = inventory.find(item =>
+    item.uid === restoredItem.uid && (item.itemId || item.id) === (restoredItem.itemId || restoredItem.id)
+  );
+  if (!matchingStack && inventory.length >= getMaxInventorySlots(state)) {
+    if (callbacks.log) callbacks.log('Mochila cheia! Libere um espaço antes de recomprar.', 'system');
+    return false;
+  }
+
+  if (!hasValidWallet(state, entry.sellPrice)) return false;
+  if (state.gold < entry.sellPrice) {
     if (callbacks.log) callbacks.log(`Ouro insuficiente para recompra! Requer ${entry.sellPrice.toLocaleString()} Adena.`, 'system');
     return false;
   }
 
+  state.inventory = inventory;
+  state.buybackQueue = buybackQueue;
   // Tenta adicionar ao inventário
-  state.inventory = state.inventory || [];
-  state.inventory.push(entry.itemCopy);
+  if (matchingStack) {
+    matchingStack.count = (Number(matchingStack.count) || 1) + (Number(restoredItem.count) || 1);
+  } else {
+    restoredItem.uid = makeUniqueInventoryUid(state, restoredItem.uid);
+    state.inventory.push(restoredItem);
+  }
   state.gold -= entry.sellPrice;
 
-  state.buybackQueue.splice(buybackIndex, 1);
+  buybackQueue.splice(buybackIndex, 1);
 
   if (callbacks.log) {
     callbacks.log(`↩️ Recomprou item por ${entry.sellPrice.toLocaleString()} Adena!`, 'loot');
@@ -295,16 +340,18 @@ export function buybackItem(state, buybackIndex, callbacks = {}) {
  * @returns {boolean}
  */
 export function rerollMysticStock(state, rollStockFn, callbacks = {}) {
-  if ((state.gold || 0) < MYSTIC_REROLL_COST) {
+  if (!hasValidWallet(state, MYSTIC_REROLL_COST) || typeof rollStockFn !== 'function') return false;
+  if (state.gold < MYSTIC_REROLL_COST) {
     if (callbacks.log) callbacks.log(`Requer 💰 ${MYSTIC_REROLL_COST.toLocaleString()} Adena para invocar novos itens ancestrais!`, 'system');
     return false;
   }
 
+  const nextStock = rollStockFn();
+  if (!Array.isArray(nextStock) || nextStock.length !== 6) return false;
+
   state.gold -= MYSTIC_REROLL_COST;
   state.mysticShopLastReset = Date.now();
-  if (typeof rollStockFn === 'function') {
-    state.mysticShopInventory = rollStockFn();
-  }
+  state.mysticShopInventory = nextStock;
 
   if (callbacks.log) {
     callbacks.log(`🔮 O Mercador Místico revelou um novo lote de relíquias ancestrais! (-${MYSTIC_REROLL_COST.toLocaleString()}g)`, 'rarity-legendary');
@@ -351,14 +398,30 @@ export function rollMysticStock(stateOrLevel) {
     return gIdx <= maxGradeIdx;
   });
 
-  const candidateIds = [...(filteredPool.length > 0 ? filteredPool : pool.slice(0, 3)), ...baseConsumables];
+  const candidateIds = [...new Set([
+    ...filteredPool,
+    ...baseConsumables.filter(id => Boolean(gData?.ALL_ITEMS?.[id]))
+  ])];
+  if (candidateIds.length === 0) return [];
   const stock = [];
-  const chosen = new Set();
-
-  for (let i = 0; i < 6; i++) {
+  const selectedIds = new Set();
+  let attempts = 0;
+  const uniqueOfferCount = Math.min(6, candidateIds.length);
+  while (selectedIds.size < uniqueOfferCount) {
     const randomId = candidateIds[Math.floor(Math.random() * candidateIds.length)];
-    if (chosen.has(randomId) && candidateIds.length > 6) continue;
-    chosen.add(randomId);
+    attempts += 1;
+    if (selectedIds.has(randomId)) {
+      if (attempts < candidateIds.length * 3) continue;
+      const fallbackId = candidateIds.find(id => !selectedIds.has(id));
+      if (!fallbackId) break;
+      selectedIds.add(fallbackId);
+    } else {
+      selectedIds.add(randomId);
+    }
+  }
+  const selected = [...selectedIds];
+  while (selected.length < 6) selected.push(candidateIds[Math.floor(Math.random() * candidateIds.length)]);
+  for (const randomId of selected) {
     const rarity = rarities[Math.floor(Math.random() * rarities.length)];
     stock.push({ id: randomId, itemId: randomId, rarity, amount: 1 });
   }

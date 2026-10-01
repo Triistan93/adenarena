@@ -4,7 +4,8 @@
 
 import { D } from '../core/GameConfig.js';
 import { ALL_ITEMS as CATALOG_ALL_ITEMS } from '../data/items/index.js';
-import { addToInventory, getInventoryCount } from './InventoryService.js';
+import { addToInventory, getInventoryCount, isItemProtected } from './InventoryService.js';
+import { getItemGradeCode } from '../data/items/item_grade.js';
 import {
   CHAOS_BOSS_SUMMON_COST,
   CHAOS_BOSS_STAT_MULTIPLIERS,
@@ -135,6 +136,8 @@ export function getEssenceTypeForItem(def) {
  * Retorna o grau do item normalizado para Alquimia.
  */
 export function getGradeForItem(def, inv) {
+  const canonicalGrade = getItemGradeCode(def);
+  if (canonicalGrade === 'frostlord') return 'frostlord';
   if (inv && inv.rarity) {
     const r = String(inv.rarity).toLowerCase();
     if (r.includes('frost') || r === 'sovereign') return 'frostlord';
@@ -143,6 +146,10 @@ export function getGradeForItem(def, inv) {
     if (r.includes('rare') || r === 'b') return 'b';
     if (r.includes('uncommon') || r === 'c') return 'c';
     if (r === 'd') return 'd';
+  }
+  if (canonicalGrade === 'boss') return 's';
+  if (['ng', 'd', 'c', 'b', 'a', 's'].includes(canonicalGrade)) {
+    return canonicalGrade === 'ng' ? 'nograde' : canonicalGrade;
   }
   if (def) {
     if (def.req?.level) {
@@ -210,7 +217,7 @@ export function dissolveItem(state, uid, callbacks = {}) {
     return false;
   }
 
-  if (state.lockedItems && state.lockedItems.includes(uid)) {
+  if ((state.lockedItems && state.lockedItems.includes(uid)) || isItemProtected(inv, getItemDef(inv.itemId))) {
     log('🔒 Este item está bloqueado contra venda/dissolução!', 'warning');
     return false;
   }
@@ -265,6 +272,7 @@ export function dissolveItemsByGrade(state, targetGrade = 'all', callbacks = {})
     if (inv.equipped || equippedSet.has(inv.uid) || lockedSet.has(inv.uid)) continue;
     const def = getItemDef(inv.itemId);
     if (!def) continue;
+    if (isItemProtected(inv, def)) continue;
     const slot = (def.slot || '').toLowerCase();
     if (!EQUIP_SLOTS.includes(slot) || def.stack || def.isQuestItem || def.type === 'material' || def.type === 'quest' || def.type === 'consumable') continue;
 
@@ -275,7 +283,8 @@ export function dissolveItemsByGrade(state, targetGrade = 'all', callbacks = {})
       || (targetGrade === 'c' && grade === 'c')
       || (targetGrade === 'b' && grade === 'b')
       || (targetGrade === 'a' && grade === 'a')
-      || (targetGrade === 's' && grade === 's');
+      || (targetGrade === 's' && grade === 's')
+      || (['frost', 'frostlord'].includes(targetGrade) && grade === 'frostlord');
 
     if (isTarget) {
       toDissolve.push({ inv, def, grade });
@@ -348,7 +357,11 @@ export function craftElixir(state, recipeId, qty = 1, callbacks = {}) {
 
   const recipe = ALCHEMY_RECIPES[recipeId];
   if (!recipe) return false;
-  const count = Math.max(1, Math.floor(qty));
+  const count = Number(qty);
+  if (!Number.isSafeInteger(count) || count <= 0) {
+    log('A quantidade de alquimia deve ser um inteiro positivo.', 'warning');
+    return false;
+  }
   const totalGold = recipe.gold * count;
 
   if ((state.gold || 0) < totalGold) {
@@ -369,13 +382,9 @@ export function craftElixir(state, recipeId, qty = 1, callbacks = {}) {
     }
   }
 
-  state.gold -= totalGold;
-  for (const [type, amt] of Object.entries(recipe.cost)) {
-    state.essences[type] -= amt * count;
-  }
-
   if (recipe.isItem) {
-    addToInventory(state, recipe.itemId || recipeId, count, 'rare', false, { log, updateAllUI, save }, true);
+    const added = addToInventory(state, recipe.itemId || recipeId, count, 'rare', false, { log, updateAllUI, save }, true);
+    if (!added) return false;
     log(`🧪 Alquimia: Fabricou ${count}x [${recipe.name}] e guardou na mochila!`, 'loot');
   } else {
     if (!state.activeElixirs) state.activeElixirs = {};
@@ -395,6 +404,11 @@ export function craftElixir(state, recipeId, qty = 1, callbacks = {}) {
       isElixir: true
     };
     log(`🧪 Ativou ${recipe.name} por ${count} hora(s)! Bônus ativo em Active Buffs e Atributos!`, 'rarity-legendary');
+  }
+
+  state.gold -= totalGold;
+  for (const [type, amt] of Object.entries(recipe.cost)) {
+    state.essences[type] -= amt * count;
   }
 
   updateAllUI();

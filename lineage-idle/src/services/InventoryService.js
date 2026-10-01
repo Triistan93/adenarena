@@ -322,6 +322,9 @@ export function consolidateInventoryStacks(state) {
 }
 
 export function addToInventory(state, itemId, amount = 1, rarity = null, foundation = false, callbacks = {}, skipAutoSell = false) {
+  amount = Number(amount);
+  if (!Number.isSafeInteger(amount) || amount <= 0) return false;
+
   const gData = D();
   const def = gData?.ALL_ITEMS?.[itemId] || {
     id: itemId,
@@ -340,8 +343,17 @@ export function addToInventory(state, itemId, amount = 1, rarity = null, foundat
   const isStackable = !!def.stack || ['consumable', 'material', 'scroll', 'powerup', 'potion', 'food', 'quest'].includes(String(def.slot || '').toLowerCase()) || ['consumable', 'material', 'scroll'].includes(String(def.type || '').toLowerCase());
 
   if (isStackable) {
+    const maxStack = Math.max(1, Math.floor(Number(def.stack) || 99999));
+    const compatibleCount = state.inventory
+      .filter(i => (i.itemId === itemId || i.itemId === def.id) && !i.equipped)
+      .reduce((sum, item) => sum + Math.max(0, maxStack - (Number(item.count) || 1)), 0);
+    const requiredNewSlots = Math.ceil(Math.max(0, amount - compatibleCount) / maxStack);
+    if (state.inventory.length + requiredNewSlots > maxSlots) {
+      if (callbacks.log) callbacks.log('Mochila cheia!', 'system');
+      return false;
+    }
+
     let remaining = amount;
-    const maxStack = def.stack || 99999;
     while (remaining > 0) {
       const existing = state.inventory.find(i => (i.itemId === itemId || i.itemId === def.id) && !i.equipped && (i.count || 1) < maxStack);
       if (existing) {
@@ -395,11 +407,13 @@ export function addToInventory(state, itemId, amount = 1, rarity = null, foundat
     }
   }
 
+  if (state.inventory.length + amount > maxSlots) {
+    if (callbacks.log) callbacks.log('Mochila cheia!', 'system');
+    return false;
+  }
+
+  const newItems = [];
   for (let i = 0; i < amount; i++) {
-    if (state.inventory.length >= maxSlots) {
-      if (callbacks.log) callbacks.log('Inventory full!', 'system');
-      return false;
-    }
     const isEquip = def.slot && def.slot !== 'consumable' && def.slot !== 'material' && def.slot !== 'scroll' && def.slot !== 'powerup';
     // Detecta tipo do item para afixos temáticos (robe/light/heavy/bow/staff/dagger/melee)
     let affixes = [];
@@ -417,11 +431,12 @@ export function addToInventory(state, itemId, amount = 1, rarity = null, foundat
           : gData.rollAffixes(rarity || 'common');
       }
     }
-    state.inventory.push({
+    newItems.push({
       uid: Date.now() + '_' + Math.random().toString(36).slice(2, 8),
       itemId, count: 1, rarity, affixes, equipped: false, foundation: !!foundation
     });
   }
+  state.inventory.push(...newItems);
   return true;
 }
 
@@ -433,11 +448,16 @@ export function addToInventory(state, itemId, amount = 1, rarity = null, foundat
  * @returns {boolean}
  */
 export function removeFromInventory(state, uid, amount = 1) {
+  amount = Number(amount);
+  if (!Number.isSafeInteger(amount) || amount <= 0 || !Array.isArray(state?.inventory)) return false;
   const idx = state.inventory.findIndex(i => i.uid === uid);
   if (idx < 0) return false;
   const item = state.inventory[idx];
-  if (item.count > amount) {
-    item.count -= amount;
+  if (item.equipped || Object.values(state.equipment || {}).includes(uid)) return false;
+  const currentCount = Math.max(1, Number(item.count) || 1);
+  if (currentCount < amount) return false;
+  if (currentCount > amount) {
+    item.count = currentCount - amount;
     return true;
   }
   state.inventory.splice(idx, 1);
@@ -452,13 +472,21 @@ export function removeFromInventory(state, uid, amount = 1) {
  * @returns {boolean}
  */
 export function removeFromInventoryByItemId(state, itemId, count) {
+  count = Number(count);
+  if (!Number.isSafeInteger(count) || count <= 0 || !Array.isArray(state?.inventory)) return false;
+  const equippedUids = new Set(Object.values(state.equipment || {}));
+  const candidates = state.inventory.filter(item => item.itemId === itemId && !item.equipped && !equippedUids.has(item.uid));
+  const available = candidates.reduce((total, item) => total + Math.max(1, Number(item.count) || 1), 0);
+  if (available < count) return false;
+
   let remaining = count;
   for (let i = state.inventory.length - 1; i >= 0; i--) {
     const item = state.inventory[i];
-    if (item.itemId === itemId && !item.equipped) {
-      const take = Math.min(remaining, item.count || 1);
-      if ((item.count || 1) > take) {
-        item.count -= take;
+    if (item.itemId === itemId && !item.equipped && !equippedUids.has(item.uid)) {
+      const currentCount = Math.max(1, Number(item.count) || 1);
+      const take = Math.min(remaining, currentCount);
+      if (currentCount > take) {
+        item.count = currentCount - take;
       } else {
         state.inventory.splice(i, 1);
       }
@@ -477,10 +505,11 @@ export function removeFromInventoryByItemId(state, itemId, count) {
  * @param {Object} [callbacks]
  */
 export function depositToWarehouse(state, uid, amount = 1, callbacks = {}) {
+  if (!Number.isSafeInteger(amount) || amount <= 0) return false;
   const invIdx = state.inventory.findIndex(i => i.uid === uid);
   if (invIdx < 0) return false;
   const item = state.inventory[invIdx];
-  if (item.equipped) {
+  if (item.equipped || Object.values(state.equipment || {}).includes(uid)) {
     if (callbacks.log) callbacks.log('Desequipe o item antes de guardá-lo no baú.', 'system');
     return false;
   }
@@ -494,6 +523,15 @@ export function depositToWarehouse(state, uid, amount = 1, callbacks = {}) {
 
   if (def.stack && (def.slot === 'consumable' || def.slot === 'material' || def.slot === 'scroll' || def.slot === 'powerup') && !item.rarity) {
     let remaining = Math.min(amount, item.count || 1);
+    const maxStack = def.stack || 9999;
+    const existingCapacity = state.warehouse
+      .filter(i => i.itemId === item.itemId && !i.rarity)
+      .reduce((capacity, i) => capacity + Math.max(0, maxStack - (i.count || 1)), 0);
+    const requiredSlots = Math.ceil(Math.max(0, remaining - existingCapacity) / maxStack);
+    if (state.warehouse.length + requiredSlots > maxSlots) {
+      if (callbacks.log) callbacks.log('Baú cheio!', 'system');
+      return false;
+    }
     while (remaining > 0) {
       const existing = state.warehouse.find(i => i.itemId === item.itemId && !i.rarity && (i.count || 1) < def.stack);
       if (existing) {
@@ -506,7 +544,7 @@ export function depositToWarehouse(state, uid, amount = 1, callbacks = {}) {
           if (callbacks.log) callbacks.log('Baú cheio!', 'system');
           return false;
         }
-        const add = Math.min(def.stack, remaining);
+        const add = Math.min(maxStack, remaining);
         state.warehouse.push({ ...item, uid: Date.now() + '_' + Math.random().toString(36).slice(2, 8), count: add, equipped: false });
         remaining -= add;
       }
@@ -536,6 +574,7 @@ export function depositToWarehouse(state, uid, amount = 1, callbacks = {}) {
  * @param {Object} [callbacks]
  */
 export function withdrawFromWarehouse(state, uid, amount = 1, callbacks = {}) {
+  if (!Number.isSafeInteger(amount) || amount <= 0) return false;
   state.warehouse = state.warehouse || [];
   const whIdx = state.warehouse.findIndex(i => i.uid === uid);
   if (whIdx < 0) return false;
@@ -549,6 +588,15 @@ export function withdrawFromWarehouse(state, uid, amount = 1, callbacks = {}) {
 
   if (def.stack && (def.slot === 'consumable' || def.slot === 'material' || def.slot === 'scroll' || def.slot === 'powerup') && !item.rarity) {
     let remaining = Math.min(amount, item.count || 1);
+    const maxStack = def.stack || 9999;
+    const existingCapacity = state.inventory
+      .filter(i => i.itemId === item.itemId && !i.rarity)
+      .reduce((capacity, i) => capacity + Math.max(0, maxStack - (i.count || 1)), 0);
+    const requiredSlots = Math.ceil(Math.max(0, remaining - existingCapacity) / maxStack);
+    if (state.inventory.length + requiredSlots > maxInvSlots) {
+      if (callbacks.log) callbacks.log('Mochila cheia!', 'system');
+      return false;
+    }
     while (remaining > 0) {
       const existing = state.inventory.find(i => i.itemId === item.itemId && !i.rarity && (i.count || 1) < def.stack);
       if (existing) {
@@ -561,7 +609,7 @@ export function withdrawFromWarehouse(state, uid, amount = 1, callbacks = {}) {
           if (callbacks.log) callbacks.log('Mochila cheia!', 'system');
           return false;
         }
-        const add = Math.min(def.stack, remaining);
+        const add = Math.min(maxStack, remaining);
         state.inventory.push({ ...item, uid: Date.now() + '_' + Math.random().toString(36).slice(2, 8), count: add, equipped: false });
         remaining -= add;
       }
@@ -732,7 +780,7 @@ export function organizeInventory(state, sortCriteria = 'recommended') {
 
     const maxStack = Number(def.stack) || (isInherentlyStackable ? 99999 : 1);
     const canStack = (maxStack > 1 || isInherentlyStackable) &&
-      !item.equipped &&
+      !isItemProtected(item, def) &&
       (!item.enchant || item.enchant === 0) &&
       !item.augmented &&
       !item.soulCrystal &&

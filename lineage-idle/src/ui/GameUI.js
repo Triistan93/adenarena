@@ -6,7 +6,8 @@
 import { D, ALL_EQUIP_SLOTS, TIER_NAMES } from '../core/GameConfig.js';
 import { getSellValue } from '../data/economy/economyBalance.js';
 import { ALL_ITEMS } from '../data/items/index.js';
-import { getItemGradeCode } from '../data/items/item_grade.js';
+import { getItemGradeCode, matchesItemGradeFilter } from '../data/items/item_grade.js';
+import { getDissolveYield } from '../services/AlchemyService.js';
 export { getItemGradeCode } from '../data/items/item_grade.js';
 import { getState } from '../core/StateManager.js';
 import { el, qsa, mkEl, mkNS, updateBar } from '../core/DomHelpers.js';
@@ -61,6 +62,7 @@ import { ColosseumService } from '../services/ColosseumService.js';
 import { CombatPowerService } from '../services/CombatPowerService.js';
 import { EnchantmentService } from '../services/EnchantmentService.js';
 import { NextActionAdvisor } from '../services/NextActionAdvisor.js';
+import { resolvePlayerBasicAttackIntervalMs } from '../services/SkillEffectService.js';
 import { parseEnchantScroll, isItemCompatibleWithScroll, isEquippableItem } from '../services/ItemClassificationService.js';
 import { renderRankingTab, setActiveRankingTab } from './RankingUI.js';
 import { renderMarketTab, setActiveMarketTab } from './MarketUI.js';
@@ -74,7 +76,8 @@ import { heroSVG, monsterSVG, MON_IMG } from '../../art.js';
 import { AFFIX_MAP } from '../../data/affixes.js';
 import { MercenaryService } from '../services/MercenaryService.js';
 import { MERCENARY_RARITIES, MERCENARY_SPECIALIZATIONS, MERCENARY_TRAITS, calculateMercenaryPower, getMercenaryXpForLevel } from '../data/mercenaries.js';
-import { EXPEDITION_DESTINATIONS, ExpeditionService } from '../services/ExpeditionService.js';
+import { EXPEDITION_DESTINATIONS, EXPEDITION_DILEMMAS, ExpeditionService } from '../services/ExpeditionService.js';
+import { checkExpeditionDilemmaEligibility } from '../services/ExpeditionDilemmaPolicy.js';
 import { renderForgeRefinery, setRefineryCategory } from './RefineryUI.js';
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -1638,25 +1641,7 @@ export function updateInventoryUI(state, callbacks = {}) {
     if (equipFilter === 'bag' && item.equipped) continue;
 
     if (gradeFilter !== 'all') {
-      const reqLvl = def.req ? def.req.level : 1;
-      let itemGrade = (def.grade || '').toLowerCase();
-      if (!itemGrade) {
-        if (def.tier === 1) itemGrade = 'ng';
-        else if (def.tier === 2) itemGrade = 'd';
-        else if (def.tier === 3) itemGrade = 'c';
-        else if (def.tier === 4) itemGrade = 'b';
-        else if (def.tier === 4.5) itemGrade = 'a';
-        else if (def.tier === 5 || def.tier === 6) itemGrade = 's';
-        else {
-          if (reqLvl < 20) itemGrade = 'ng';
-          else if (reqLvl < 40) itemGrade = 'd';
-          else if (reqLvl < 52) itemGrade = 'c';
-          else if (reqLvl < 61) itemGrade = 'b';
-          else if (reqLvl < 76) itemGrade = 'a';
-          else itemGrade = 's';
-        }
-      }
-      if (!itemGrade.includes(gradeFilter.toLowerCase())) continue;
+      if (!matchesItemGradeFilter(def, gradeFilter)) continue;
     }
 
     const isSelected = selectedSet.has(item.uid);
@@ -2664,7 +2649,8 @@ export function updateWarehouseUI(state, callbacks = {}) {
   // 2. Render Left Side: Inventory Items for Warehouse view
   if (whInvGrid) {
     whInvGrid.innerHTML = '';
-    const unequipped = (state.inventory || []).filter(i => i && i.itemId && !i.equipped);
+    const equippedUids = new Set(Object.values(state.equipment || {}).filter(Boolean));
+    const unequipped = (state.inventory || []).filter(i => i && i.itemId && !i.equipped && !equippedUids.has(i.uid));
     for (const item of unequipped) {
       const def = getItemDef(item.itemId);
       if (!def) continue;
@@ -3308,6 +3294,12 @@ export function updateCharacterUI(state) {
   if (charStatsContainer) {
     const wpnUid = state.equipment?.weapon;
     const socket = (wpnUid && state.weaponSockets) ? state.weaponSockets[wpnUid] : null;
+    const basicAttackIntervalSeconds = (resolvePlayerBasicAttackIntervalMs(stats) / 1000).toFixed(2);
+    const cooldownSummary = [
+      `Geral ${Math.round((stats.cdr || 0) * 100)}%`,
+      `Físicas ${Math.round((stats.pSkillCdr || 0) * 100)}%`,
+      `Mágicas ${Math.round((stats.mSkillCdr || 0) * 100)}%`
+    ].join(' · ');
 
     let tattoosHtml = '';
     if (tattoos.length > 0) {
@@ -3341,8 +3333,12 @@ export function updateCharacterUI(state) {
             <span class="l2-row-val val-crit">${stats.critDmg ? stats.critDmg.toFixed(2) : '1.50'}x</span>
           </div>
           <div class="l2-matrix-row">
-            <span class="l2-row-lbl">🏹 Velocidade de Ação</span>
-            <span class="l2-row-val val-spd">${stats.spd || 100}</span>
+            <span class="l2-row-lbl">⏱️ Intervalo do Ataque Básico</span>
+            <span class="l2-row-val val-spd">${basicAttackIntervalSeconds} s</span>
+          </div>
+          <div class="l2-matrix-row">
+            <span class="l2-row-lbl">⌛ Recarga de Habilidades</span>
+            <span class="l2-row-val val-cdr">${cooldownSummary}</span>
           </div>
           <div class="l2-matrix-row">
             <span class="l2-row-lbl">🎯 Precisão de Golpe</span>
@@ -3631,7 +3627,7 @@ export function renderZoneMap(state, callbacks = {}) {
       return `
         <div class="zone-card ${isCurrent ? 'active' : ''} ${isLocked ? 'locked' : ''}" data-zone="${zId}" data-locked="${isLocked}" data-current="${isCurrent}">
           <div class="zone-card-thumb" ${thumbStyle}>
-            ${zDef.isTown ? '<span class="zone-flag town">🏡 Vila</span>' : ''}
+            ${(zDef.town || zDef.isTown) ? '<span class="zone-flag town">🏡 Vila</span>' : ''}
             ${isLocked ? '<span class="zone-flag lock">🔒</span>' : ''}
             ${isCurrent ? '<span class="zone-flag here">★</span>' : ''}
           </div>
@@ -6616,10 +6612,11 @@ export function renderAlchemyUI(state) {
   }
 
   // Cadinho de Almas — Módulo de Seleção e Preview de Dissolução
+  const equippedCrucibleUids = new Set(Object.values(state.equipment || {}).filter(Boolean));
   const inventoryItems = (state.inventory || []).filter(i => {
-    if (!i || !i.itemId || i.equipped) return false;
+    if (!i || !i.itemId || i.equipped || equippedCrucibleUids.has(i.uid)) return false;
     const def = getItemDef(i.itemId);
-    if (!def) return false;
+    if (!def || isItemProtected(i, def)) return false;
     const slot = (def.slot || '').toLowerCase();
     const type = (def.type || '').toLowerCase();
     if (def.stack || def.isQuestItem || type === 'material' || type === 'quest' || type === 'consumable') return false;
@@ -6638,15 +6635,8 @@ export function renderAlchemyUI(state) {
     const selectedItem = inventoryItems.find(i => i.uid === selectedUid) || inventoryItems[0];
     const selectedDef = getItemDef(selectedItem.itemId);
 
-    const grade = getItemGradeCode(selectedDef);
-    const yields = {
-      ng: { fire: 1, earth: 1, wind: 1, water: 0, fee: 50 },
-      d:  { fire: 3, earth: 3, wind: 3, water: 1, fee: 150 },
-      c:  { fire: 8, earth: 8, wind: 8, water: 2, fee: 400 },
-      b:  { fire: 20, earth: 20, wind: 20, water: 5, fee: 1000 },
-      a:  { fire: 50, earth: 50, wind: 50, water: 15, fee: 2500 },
-      s:  { fire: 120, earth: 120, wind: 120, water: 40, fee: 6000 }
-    }[grade] || { fire: 1, earth: 1, wind: 1, water: 0, fee: 50 };
+    const yields = getDissolveYield(selectedItem, selectedDef);
+    const grade = yields.grade;
 
     const optionsHtml = inventoryItems.map(item => {
       const def = getItemDef(item.itemId);
@@ -6684,14 +6674,11 @@ export function renderAlchemyUI(state) {
             </div>
             <div>
               <div style="font-weight:700; color:#f4d58a; font-size:13px; font-family:'Cinzel',serif;">${selectedDef?.name || 'Item'}</div>
-              <div style="font-size:11px; color:#94a3b8;">Rendimento estimado ao dissolver no Cadinho (Taxa: 🪙 ${yields.fee}g):</div>
+              <div style="font-size:11px; color:#94a3b8;">${yields.count} essência de ${({ fire: 'Fogo 🔥', earth: 'Terra 🛡️', wind: 'Vento 🍃', water: 'Água 💧' })[yields.essenceType]} (Taxa: 🪙 ${yields.fee.toLocaleString()}g):</div>
             </div>
           </div>
           <div style="display:flex; gap:10px; font-size:12px; font-weight:700; font-family:'IBM Plex Mono',monospace;">
-            <span style="color:#fca5a5;">🔥 +${yields.fire}</span>
-            <span style="color:#86efac;">🛡️ +${yields.earth}</span>
-            <span style="color:#7dd3fc;">🍃 +${yields.wind}</span>
-            <span style="color:#38bdf8;">💧 +${yields.water ?? yields.astral ?? 0}</span>
+            <span style="color:${({ fire: '#fca5a5', earth: '#86efac', wind: '#7dd3fc', water: '#38bdf8' })[yields.essenceType]};">+${yields.count}</span>
           </div>
         </div>
       </div>
@@ -6791,6 +6778,27 @@ export function renderAlchemyUI(state) {
             style="color:#d8b4fe; border-color:rgba(168,85,247,0.4);"
           >
             🔥 B-Grade
+          </button>
+          <button
+            onclick="if (window.dissolveItemsByFilter) window.dissolveItemsByFilter('a');"
+            class="imp-forge-subtab-btn"
+            style="color:#fcd34d; border-color:rgba(245,158,11,0.4);"
+          >
+            🔥 A-Grade
+          </button>
+          <button
+            onclick="if (window.dissolveItemsByFilter) window.dissolveItemsByFilter('s');"
+            class="imp-forge-subtab-btn"
+            style="color:#fb7185; border-color:rgba(244,63,94,0.4);"
+          >
+            🔥 S-Grade
+          </button>
+          <button
+            onclick="if (window.dissolveItemsByFilter) window.dissolveItemsByFilter('frostlord');"
+            class="imp-forge-subtab-btn"
+            style="color:#67e8f9; border-color:rgba(6,182,212,0.4);"
+          >
+            ❄️ Frost Lord
           </button>
           <button
             onclick="if (window.dissolveAllJunkAction) window.dissolveAllJunkAction();"
@@ -7303,9 +7311,11 @@ export function renderExpeditionsUI(state) {
 
     let dilemmaHtml = '';
     if (active && active.activeDilemmaId && !active.dilemmaResolved) {
-      // Need to dynamically import or reference EXPEDITION_DILEMMAS
-      const dDef = window.GameData?.EXPEDITION_DILEMMAS ? window.GameData.EXPEDITION_DILEMMAS[active.activeDilemmaId] : null;
+      const dDef = EXPEDITION_DILEMMAS[active.activeDilemmaId];
       if (dDef) {
+        const activeMercs = (Array.isArray(active.squad) ? active.squad : [])
+          .map(uid => MercenaryService.getMercenaryByUid(state, uid))
+          .filter(Boolean);
         dilemmaHtml = `
           <div style="margin-top:12px; padding:10px; background:radial-gradient(circle, rgba(50,20,10,0.85) 0%, rgba(20,10,5,0.95) 100%); border:1px solid #ef4444; border-radius:8px; box-shadow:0 0 10px rgba(239,68,68,0.3);">
             <div style="font-family:'Cinzel',serif; font-size:13px; font-weight:bold; color:#fca5a5; margin-bottom:4px;">
@@ -7313,14 +7323,19 @@ export function renderExpeditionsUI(state) {
             </div>
             <p style="font-size:10px; color:#aaa; margin:0 0 8px 0;">${dDef.desc}</p>
             <div style="display:flex; gap:6px; flex-wrap:wrap;">
-              ${Object.entries(dDef.options).map(([k, o]) => `
+              ${Object.entries(dDef.options).map(([k, o]) => {
+                const eligibility = checkExpeditionDilemmaEligibility(active, o, activeMercs);
+                return `
                 <button 
                   onclick="window.resolveExpeditionDilemma('${dId}', '${k}')"
-                  style="flex:1; padding:6px; font-size:10px; font-weight:bold; background:rgba(0,0,0,0.5); border:1px solid #f87171; color:#fecaca; border-radius:4px; cursor:pointer;"
+                  ${eligibility.eligible ? '' : 'disabled'}
+                  ${eligibility.eligible ? '' : `title="${escapeHTML(eligibility.reason)}"`}
+                  style="flex:1; padding:6px; font-size:10px; font-weight:bold; background:rgba(0,0,0,0.5); border:1px solid #f87171; color:${eligibility.eligible ? '#fecaca' : '#71717a'}; border-radius:4px; cursor:${eligibility.eligible ? 'pointer' : 'not-allowed'};"
                 >
                   ${o.name}<br/><span style="font-size:8px; color:#fca5a5; font-weight:normal;">${o.desc}</span>
                 </button>
-              `).join('')}
+              `;
+              }).join('')}
             </div>
           </div>
         `;
@@ -9340,15 +9355,14 @@ export function uiOpenReferralModal(state, defaultTab) {
   const rewardsClaimed = s?.referralRewardsClaimed || 0;
   const referredBy = s?.referredBy || (typeof localStorage !== 'undefined' ? localStorage.getItem('aden_referred_by') : null) || null;
 
-  if (!Array.isArray(s.friends)) {
-    s.friends = [];
-  } else {
-    // Gate 10 Purge: remove any legacy ghost friends permanently
-    s.friends = s.friends.filter(f => !['vaelin', 'elwen', 'sirgalahad'].includes(String(f?.name || f || '').toLowerCase()));
-  }
-  if (!Array.isArray(s.blocked)) {
-    s.blocked = [];
-  }
+  s.friends = (Array.isArray(s.friends) ? s.friends : []).filter(f =>
+    f && typeof f === 'object' && typeof f.name === 'string' &&
+    !['vaelin', 'elwen', 'sirgalahad'].includes(f.name.toLowerCase())
+  );
+  s.blocked = [...new Set((Array.isArray(s.blocked) ? s.blocked : [])
+    .map(entry => typeof entry === 'string' ? entry : entry?.blockedName)
+    .filter(name => typeof name === 'string' && name.trim())
+    .map(name => name.trim()))].slice(0, 64);
 
   let contentHtml = '';
 
@@ -9393,24 +9407,24 @@ export function uiOpenReferralModal(state, defaultTab) {
             ` : s.friends.map(f => {
               const isSelected = _contactsSelectedFriendName === f.name;
               return `
-                <tr class="contact-friend-row" data-name="${f.name}" style="cursor: pointer; ${isSelected ? 'background: rgba(212,167,68,0.2) !important; outline: 1px solid rgba(212,167,68,0.4);' : ''}">
+                <tr class="contact-friend-row" data-name="${escapeHTML(f.name)}" style="cursor: pointer; ${isSelected ? 'background: rgba(212,167,68,0.2) !important; outline: 1px solid rgba(212,167,68,0.4);' : ''}">
                   <td style="font-weight: bold; color: ${isSelected ? '#ffd877' : '#f1f5f9'};">
-                    ${f.name}
+                    ${escapeHTML(f.name)}
                   </td>
                   <td style="text-align: center; font-family: 'IBM Plex Mono', monospace; color: #94a3b8;">
-                    ${f.level}
+                    ${Math.max(0, Math.floor(Number(f.level) || 0))}
                   </td>
                   <td style="color: #cbd5e1; font-size: 10.5px;">
-                    ${f.classTitle || 'Adventurer'}
+                    ${escapeHTML(f.classTitle || 'Adventurer')}
                   </td>
                   <td>
                     ${f.online ? '<span style="color: #22c55e; font-size: 10px; font-weight: bold;">● Online</span>' : '<span style="color: #64748b; font-size: 10px;">○ Offline</span>'}
                   </td>
                   <td style="text-align: center;">
-                    <button class="btn-friend-msg" data-name="${f.name}" style="background: none; border: none; cursor: pointer; color: #38bdf8; font-size: 12px;" title="Enviar mensagem privada">💬</button>
+                    <button class="btn-friend-msg" data-name="${escapeHTML(f.name)}" style="background: none; border: none; cursor: pointer; color: #38bdf8; font-size: 12px;" title="Enviar mensagem privada">💬</button>
                   </td>
                   <td style="text-align: center;">
-                    <button class="btn-friend-mail" data-name="${f.name}" style="background: none; border: none; cursor: pointer; color: #ffd877; font-size: 12px;" title="Enviar correio">✉️</button>
+                    <button class="btn-friend-mail" data-name="${escapeHTML(f.name)}" style="background: none; border: none; cursor: pointer; color: #ffd877; font-size: 12px;" title="Enviar correio">✉️</button>
                   </td>
                 </tr>
               `;
@@ -9466,10 +9480,10 @@ export function uiOpenReferralModal(state, defaultTab) {
               </tr>
             ` : s.blocked.map(bName => `
               <tr>
-                <td style="color: #fca5a5; font-weight: bold;">${bName}</td>
+                <td style="color: #fca5a5; font-weight: bold;">${escapeHTML(bName)}</td>
                 <td style="color: #64748b; font-size: 10px;">Bloqueado</td>
                 <td style="text-align: center;">
-                  <button class="btn-unblock-player" data-name="${bName}" style="background: rgba(239,68,68,0.2); border: 1px solid #ef4444; color: #fca5a5; border-radius: 4px; padding: 2px 8px; font-size: 10px; cursor: pointer;">
+                  <button class="btn-unblock-player" data-name="${escapeHTML(bName)}" style="background: rgba(239,68,68,0.2); border: 1px solid #ef4444; color: #fca5a5; border-radius: 4px; padding: 2px 8px; font-size: 10px; cursor: pointer;">
                     Desbloquear
                   </button>
                 </td>
@@ -9496,7 +9510,7 @@ export function uiOpenReferralModal(state, defaultTab) {
           <div style="background: rgba(16,185,129,0.12); border: 1px solid rgba(16,185,129,0.5); border-radius: 8px; padding: 10px 14px; margin-bottom: 14px; font-size: 11px; color: #6ee7b7; display: flex; align-items: center; gap: 10px;">
             <span style="font-size: 20px;">✨</span>
             <div>
-              <div>Mentor Vinculado: <strong style="color:#ffd877; font-size: 12px;">${referredBy}</strong></div>
+              <div>Mentor Vinculado: <strong style="color:#ffd877; font-size: 12px;">${escapeHTML(referredBy)}</strong></div>
               <div style="font-size: 10px; color: #a7f3d0; margin-top: 2px;">Bônus ativo: <strong>+10% EXP permanente</strong> e Pacote de Boas-Vindas concedido.</div>
             </div>
           </div>
@@ -9762,27 +9776,59 @@ export function uiOpenReferralModal(state, defaultTab) {
 
   const addBlockBtn = modal.querySelector('#btn-contact-add-block');
   if (addBlockBtn) {
-    addBlockBtn.onclick = () => {
+    addBlockBtn.onclick = async () => {
       const name = prompt('Digite o nome do jogador para bloquear:');
       if (name && name.trim()) {
         const cleanName = name.trim();
-        if (!s.blocked.includes(cleanName)) {
-          s.blocked.push(cleanName);
+        if (s.blocked.some(existing => existing.toLowerCase() === cleanName.toLowerCase())) {
+          if (window.showMarketToast) window.showMarketToast('Este jogador já está bloqueado.', 'warning');
+          return;
+        }
+        const ownerUid = window.FirebaseBridge?.getCurrentUserId?.();
+        const myCharId = s.characterId || (ownerUid ? `char_${String(ownerUid).slice(0, 16)}` : null);
+        if (!ownerUid || !myCharId || !window.FirebaseBridge?.blockPlayer) {
+          if (window.showMarketToast) window.showMarketToast('Entre em uma conta conectada para sincronizar o bloqueio.', 'error');
+          return;
+        }
+        addBlockBtn.disabled = true;
+        try {
+          const blockedName = await window.FirebaseBridge.blockPlayer(myCharId, ownerUid, cleanName);
+          if (!blockedName) throw new Error('O servidor não confirmou o bloqueio.');
+          s.blocked.push(blockedName);
           if (typeof window.saveGameState === 'function') window.saveGameState();
-          if (window.showMarketToast) window.showMarketToast(`Jogador ${cleanName} bloqueado.`, 'info');
-          uiOpenReferralModal(s);
+          if (window.showMarketToast) window.showMarketToast(`Jogador ${blockedName} bloqueado.`, 'success');
+          uiOpenReferralModal(s, 'block');
+        } catch (error) {
+          if (window.showMarketToast) window.showMarketToast(error?.message || 'Não foi possível bloquear esse jogador.', 'error');
+        } finally {
+          addBlockBtn.disabled = false;
         }
       }
     };
   }
 
   modal.querySelectorAll('.btn-unblock-player').forEach(b => {
-    b.onclick = () => {
+    b.onclick = async () => {
       const name = b.dataset.name;
-      s.blocked = s.blocked.filter(n => n !== name);
-      if (typeof window.saveGameState === 'function') window.saveGameState();
-      if (window.showMarketToast) window.showMarketToast(`Jogador ${name} desbloqueado.`, 'success');
-      uiOpenReferralModal(s);
+      const ownerUid = window.FirebaseBridge?.getCurrentUserId?.();
+      const myCharId = s.characterId || (ownerUid ? `char_${String(ownerUid).slice(0, 16)}` : null);
+      if (!ownerUid || !myCharId || !window.FirebaseBridge?.unblockPlayer) {
+        if (window.showMarketToast) window.showMarketToast('Entre em uma conta conectada para sincronizar o desbloqueio.', 'error');
+        return;
+      }
+      b.disabled = true;
+      try {
+        const removed = await window.FirebaseBridge.unblockPlayer(myCharId, name);
+        if (!removed) throw new Error('O servidor não confirmou o desbloqueio.');
+        s.blocked = s.blocked.filter(existing => existing !== name);
+        if (typeof window.saveGameState === 'function') window.saveGameState();
+        if (window.showMarketToast) window.showMarketToast(`Jogador ${name} desbloqueado.`, 'success');
+        uiOpenReferralModal(s, 'block');
+      } catch (error) {
+        if (window.showMarketToast) window.showMarketToast(error?.message || 'Não foi possível desbloquear esse jogador.', 'error');
+      } finally {
+        b.disabled = false;
+      }
     };
   });
 }
@@ -9813,6 +9859,9 @@ export function renderRaidsTab(container, state) {
   const cardsHtml = Object.entries(raidBosses).map(([id, boss]) => {
     const isLocked = currentHeroLvl < (boss.reqLvl || 1);
     const inCombat = state.isRaidActive && state.activeRaidId === id;
+    const anotherRaidActive = Boolean(state.isRaidActive && state.activeRaidId !== id);
+    const playerCombatPower = Number(state.stats?.combatPower || state.combatPower) || 0;
+    const insufficientCombatPower = Boolean(boss.minimumCP && playerCombatPower < boss.minimumCP);
     const timesCleared = status.clears[id] || 0;
     const hasTickets = (status.tickets || 0) > 0;
 
@@ -9827,8 +9876,12 @@ export function renderRaidsTab(container, state) {
     let actionBtnHtml = '';
     if (inCombat) {
       actionBtnHtml = `<button disabled style="width:100%; padding:10px; font-weight:bold; font-size:12px; background:linear-gradient(180deg,#16a34a,#15803d); border:1px solid #4ade80; color:#fff; border-radius:6px; cursor:default; animation:pulse 1.5s infinite;">⚔️ EM COMBATE ATIVO</button>`;
+    } else if (anotherRaidActive) {
+      actionBtnHtml = `<button disabled title="Conclua o Raid atual antes de iniciar outro." style="width:100%; padding:10px; font-weight:bold; font-size:12px; background:#27272a; border:1px solid #3f3f46; color:#a1a1aa; border-radius:6px; cursor:not-allowed;">⚔️ Outro Raid em andamento</button>`;
     } else if (isLocked) {
       actionBtnHtml = `<button disabled style="width:100%; padding:10px; font-weight:bold; font-size:12px; background:#27272a; border:1px solid #3f3f46; color:#71717a; border-radius:6px; cursor:not-allowed;">🔒 Bloqueado (Requer Lv. ${boss.reqLvl})</button>`;
+    } else if (insufficientCombatPower) {
+      actionBtnHtml = `<button disabled title="Poder de Combate insuficiente. Requer ${boss.minimumCP.toLocaleString('pt-BR')} CP." style="width:100%; padding:10px; font-weight:bold; font-size:12px; background:#27272a; border:1px solid #3f3f46; color:#a1a1aa; border-radius:6px; cursor:not-allowed;">🔒 Requer ${boss.minimumCP.toLocaleString('pt-BR')} CP</button>`;
     } else if (!hasTickets) {
       actionBtnHtml = `<button disabled style="width:100%; padding:10px; font-weight:bold; font-size:12px; background:#450a0a; border:1px solid #7f1d1d; color:#fca5a5; border-radius:6px; cursor:not-allowed;">🎟️ Sem Ingressos Diários</button>`;
     } else {
@@ -10971,6 +11024,9 @@ export function renderSevenSignsTab(container, state) {
             <div style="font-size:12px; color:#c084fc; margin-top:4px;">
               Facção Atual: <strong>${ss.faction ? FACTIONS[ss.faction].name : 'Nenhuma (Escolha sua facção)'}</strong> | Ancient Adena: <strong style="color:#fef08a;">${(ss.ancientAdena || 0).toLocaleString()} AA</strong>
             </div>
+            <div style="font-size:11px; color:#c4b5fd; margin-top:4px;">
+              Período: <strong>${ss.phase === 'competition' ? 'Competição' : 'Validação dos Selos'}</strong> · Ciclo ${Number(ss.cycleNumber) || 1} · ${Number(ss.cycleEndsAt) > 0 ? `próxima virada ${new Date(Number(ss.cycleEndsAt)).toLocaleString('pt-BR')}` : 'calendário inicia na primeira atualização'}
+            </div>
           </div>
           <div style="display:flex; gap:12px; align-items:center;">
             <div style="background:rgba(234,179,8,0.15); border:1px solid #eab308; border-radius:8px; padding:6px 12px; text-align:center;">
@@ -11122,13 +11178,25 @@ function renderSevenSignsBossesView(ss, state) {
 
 function renderSevenSignsMammonView(ss, state) {
   const accessCheck = SevenSignsService.canAccessExclusiveBlacksmith(state);
+  const exchangeableWeapons = [...new Map(Object.values(ALL_ITEMS)
+    .filter(item => item?.slot === 'weapon' && ['a', 's'].includes(getItemGradeCode(item)))
+    .map(item => [item.id, item])).values()]
+    .sort((a, b) => a.name.localeCompare(b.name));
+  const playerExchangeableWeapons = (state.inventory || []).filter(item => {
+    const def = ALL_ITEMS[item?.itemId || item?.id];
+    return item?.uid && def?.slot === 'weapon' && ['a', 's'].includes(getItemGradeCode({ ...def, ...item }));
+  });
+  const playerUnsealableArmor = (state.inventory || []).filter(item => {
+    const def = ALL_ITEMS[item?.itemId || item?.id];
+    return item?.uid && def?.slot === 'armor' && item.isUnsealed !== true && ['a', 's'].includes(getItemGradeCode({ ...def, ...item }));
+  });
   return `
     <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:14px;">
       <!-- Exclusivity Status Banner -->
       ${accessCheck.allowed ? `
         <div style="grid-column:1/-1; background:rgba(34,197,94,0.15); border:1px solid #22c55e; border-radius:8px; padding:10px 14px; font-size:12px; color:#86efac; display:flex; align-items:center; gap:8px;">
           <span>✅</span>
-          <div><strong>Bênção dos Selos Ativa:</strong> Sua facção [${(ss.winnerFaction || ss.faction || 'DAWN').toUpperCase()}] domina o ciclo semanal! Blacksmith of Mammon liberado para SA e deselamento de armaduras.</div>
+          <div><strong>Bênção dos Selos Ativa:</strong> Sua facção [${(ss.winnerFaction || ss.faction || 'DAWN').toUpperCase()}] domina o ciclo semanal! Blacksmith of Mammon liberado para troca, SA e deselamento.</div>
         </div>
       ` : `
         <div style="grid-column:1/-1; background:rgba(239,68,68,0.15); border:1px solid #ef4444; border-radius:8px; padding:10px 14px; font-size:12px; color:#fca5a5; display:flex; align-items:center; gap:8px;">
@@ -11149,11 +11217,29 @@ function renderSevenSignsMammonView(ss, state) {
                 <div style="font-size:11px; color:#fde047; font-weight:bold; margin-top:2px;">${srv.costAA.toLocaleString()} AA</div>
               </div>
               <button
-                ${accessCheck.allowed ? 'onclick="window.unsealArmorAction()"' : 'disabled'}
+                ${srv.id === 'weapon_exchange' ? (accessCheck.allowed && playerExchangeableWeapons.length && exchangeableWeapons.length ? 'onclick="window.exchangeMammonWeaponAction(document.getElementById(\'mammon-exchange-source\').value, document.getElementById(\'mammon-exchange-target\').value)"' : 'disabled') : srv.id === 'unseal_armor' ? (accessCheck.allowed && playerUnsealableArmor.length ? 'onclick="window.unsealArmorAction(document.getElementById(\'mammon-unseal-armor\').value)"' : 'disabled') : (accessCheck.allowed ? 'onclick="window.infuseMammonSoulCrystalAction(document.getElementById(\'mammon-sa-choice\').value)"' : 'disabled')}
                 style="padding:6px 12px; font-size:11px; font-weight:bold; ${accessCheck.allowed ? 'background:#9333ea; border:1px solid #c084fc; color:#fff; cursor:pointer;' : 'background:#4b5563; border:1px solid #6b7280; color:#9ca3af; cursor:not-allowed; opacity:0.6;'} border-radius:6px;"
               >
                 ${accessCheck.allowed ? 'Utilizar' : '🔒 Bloqueado'}
               </button>
+              ${srv.id === 'weapon_exchange' ? `
+                <div style="display:flex; gap:6px; flex-wrap:wrap; width:100%; margin-top:8px;">
+                  <select id="mammon-exchange-source" aria-label="Arma para trocar" style="min-width:150px; flex:1; background:#111827; color:#e5e7eb; border:1px solid #6b7280; border-radius:4px; padding:4px;">
+                    ${playerExchangeableWeapons.map(item => `<option value="${escapeHTML(item.uid)}">${escapeHTML(item.name || item.itemId)} (${getItemGradeCode({ ...ALL_ITEMS[item.itemId || item.id], ...item }).toUpperCase()})</option>`).join('')}
+                  </select>
+                  <select id="mammon-exchange-target" aria-label="Arma de destino" style="min-width:150px; flex:1; background:#111827; color:#e5e7eb; border:1px solid #6b7280; border-radius:4px; padding:4px;">
+                    ${exchangeableWeapons.map(item => `<option value="${escapeHTML(item.id)}">${escapeHTML(item.name)} (${getItemGradeCode(item).toUpperCase()})</option>`).join('')}
+                  </select>
+                </div>
+              ` : srv.id === 'unseal_armor' ? `
+                <select id="mammon-unseal-armor" aria-label="Armadura A ou S para deselamento" style="margin-top:8px; background:#111827; color:#e5e7eb; border:1px solid #6b7280; border-radius:4px; padding:4px;">
+                  ${playerUnsealableArmor.map(item => `<option value="${escapeHTML(item.uid)}">${escapeHTML(item.name || item.itemId)} (${getItemGradeCode({ ...ALL_ITEMS[item.itemId || item.id], ...item }).toUpperCase()})</option>`).join('')}
+                </select>
+              ` : srv.id === 'sa_infusion' ? `
+                <select id="mammon-sa-choice" aria-label="Soul Crystal" style="margin-top:8px; background:#111827; color:#e5e7eb; border:1px solid #6b7280; border-radius:4px; padding:4px;">
+                  <option value="focus">Focus</option><option value="haste">Haste</option><option value="acumen">Acumen</option>
+                </select>
+              ` : ''}
             </div>
           `).join('')}
         </div>
@@ -11310,6 +11396,7 @@ export function renderColosseumTab(container, state) {
   const colState = ColosseumService.ensureState(state);
   const activeDuel = colState.activeDuel;
   const activeSurvival = colState.activeSurvival;
+  const hasActiveChallenge = Boolean(activeDuel || activeSurvival);
 
   container.innerHTML = `
     <div class="colosseum-container" style="display:flex; flex-direction:column; gap:14px;">
@@ -11332,8 +11419,9 @@ export function renderColosseumTab(container, state) {
         <div style="background:linear-gradient(135deg, rgba(40,15,15,0.95), rgba(20,5,5,0.98)); border:2px solid #ef4444; border-radius:10px; padding:16px;">
           <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
             <div>
-              <h3 style="margin:0; color:#fca5a5; font-family:'Cinzel',serif; font-size:18px;">⚔️ Duelo 1v1: ${activeDuel.opponentName}</h3>
-              <div style="font-size:12px; color:#f87171;">${activeDuel.opponentTitle} | Aposta: ${(activeDuel.bet * 2).toLocaleString()}g em jogo!</div>
+              <h3 style="margin:0; color:#fca5a5; font-family:'Cinzel',serif; font-size:18px;">⚔️ Duelo 1v1: ${escapeHTML(activeDuel.opponentName)}</h3>
+              <div style="font-size:12px; color:#f87171;">${escapeHTML(activeDuel.opponentTitle)} | Aposta: ${(activeDuel.bet * 2).toLocaleString()}g em jogo!</div>
+              <div style="font-size:12px; color:#cbd5e1; margin-top:4px;">Seu HP: ${Number(activeDuel.playerHp || 0).toLocaleString()} / ${Number(activeDuel.playerMaxHp || 0).toLocaleString()}</div>
             </div>
             <button
               onclick="window.executeDuelTurnAction()"
@@ -11358,6 +11446,7 @@ export function renderColosseumTab(container, state) {
             <div>
               <h3 style="margin:0; color:#fde047; font-family:'Cinzel',serif; font-size:18px;">🔥 Onda ${activeSurvival.waveIndex + 1}/10: ${activeSurvival.waveData.name}</h3>
               <div style="font-size:12px; color:#fbbf24;">Badges Acumulados no Desafio: +${activeSurvival.totalBadgesAccumulated} 🎖️</div>
+            <div style="font-size:12px; color:#cbd5e1; margin-top:4px;">Seu HP: ${Number(activeSurvival.playerHp || 0).toLocaleString()} / ${Number(activeSurvival.playerMaxHp || 0).toLocaleString()}</div>
             </div>
             <button
               onclick="window.executeSurvivalTurnAction()"
@@ -11389,6 +11478,7 @@ export function renderColosseumTab(container, state) {
                 </div>
                 <button
                   onclick="window.startColosseumDuelAction('${tier.id}')"
+                  ${hasActiveChallenge ? 'disabled title="Conclua o desafio atual antes de iniciar outro."' : ''}
                   style="padding:6px 14px; font-size:11px; font-weight:bold; background:#b91c1c; border:1px solid #ef4444; color:#fff; border-radius:6px; cursor:pointer;"
                 >
                   Desafiar
@@ -11405,6 +11495,7 @@ export function renderColosseumTab(container, state) {
             <p style="font-size:12px; color:#9ca3af; margin:0 0 12px 0;">Enfrente 10 ondas consecutivas de gladiadores e chefes do coliseu sem descanso para conquistar glória e Badges!</p>
             <button
               onclick="window.startColosseumSurvivalAction()"
+              ${hasActiveChallenge ? 'disabled title="Conclua o desafio atual antes de iniciar outro."' : ''}
               style="width:100%; padding:10px; font-size:13px; font-weight:bold; background:#d97706; border:1px solid #f59e0b; color:#fff; border-radius:8px; cursor:pointer;"
             >
               🔥 Iniciar Desafio das 10 Ondas

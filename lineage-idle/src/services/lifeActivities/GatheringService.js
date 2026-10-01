@@ -11,6 +11,7 @@ import {
 import { addToInventory } from '../InventoryService.js';
 import { LifeActivityCore } from './LifeActivityCore.js';
 import { RewardEngine } from './RewardEngine.js';
+import { hasRoomForStackRewards } from './RewardCapacity.js';
 import { resolveCanonicalResourceId } from './ResourceDictionary.js';
 
 export const GatheringService = {
@@ -79,6 +80,10 @@ export const GatheringService = {
     const gState = this.getGatheringState(state);
     const zone = GATHERING_ZONES[zoneId];
     if (!zone) return false;
+    if (gState.isGathering) {
+      if (callbacks.log) callbacks.log('⚠️ Termine a colheita atual antes de trocar de clareira.', 'warning');
+      return false;
+    }
 
     const playerLvl = Number(state?.level) || 1;
     if (playerLvl < zone.minLevel) {
@@ -121,10 +126,11 @@ export const GatheringService = {
 
   buyPouch(state, pouchId, qty = 1, callbacks = {}) {
     const pouch = POUCHES_CATALOG[pouchId];
-    if (!pouch) return false;
+    if (!pouch || !Number.isSafeInteger(qty) || qty <= 0) return false;
 
-    const count = Math.max(1, Math.floor(qty));
+    const count = qty;
     const totalCost = pouch.buyPrice * count;
+    if (!Number.isSafeInteger(totalCost) || totalCost < 0) return false;
 
     if ((state.gold || 0) < totalCost) {
       if (callbacks.log) callbacks.log(`⚠️ Ouro insuficiente! Requer ${totalCost.toLocaleString()} Adena para comprar ${count}x ${pouch.name}.`, 'warning');
@@ -150,6 +156,7 @@ export const GatheringService = {
     if (!sickle) return false;
 
     const gState = this.getGatheringState(state);
+    if (gState.isGathering) return false;
     if (gState.sickleDurability[sickleId] !== undefined) {
       if (callbacks.log) callbacks.log(`⚠️ Você já adquiriu a ${sickle.name}!`, 'warning');
       return false;
@@ -180,6 +187,7 @@ export const GatheringService = {
     if (!sickle) return false;
 
     const gState = this.getGatheringState(state);
+    if (gState.isGathering) return false;
     if (gState.sickleDurability[sickleId] === undefined && sickleId !== 'sickle_none') {
       if (callbacks.log) callbacks.log('⚠️ Você não possui esta foice em sua coleção!', 'warning');
       return false;
@@ -195,6 +203,7 @@ export const GatheringService = {
 
   repairSickle(state, sickleId, callbacks = {}) {
     const gState = this.getGatheringState(state);
+    if (gState.isGathering) return false;
     const targetSickleId = sickleId || gState.sickle;
     const sickle = SICKLES_CATALOG[targetSickleId];
     if (!sickle) return false;
@@ -228,6 +237,7 @@ export const GatheringService = {
 
   selectTactic(state, tacticId, callbacks = {}) {
     const gState = this.getGatheringState(state);
+    if (gState.isGathering) return false;
     const tactic = GATHERING_TACTICS[tacticId] || GATHERING_TACTICS.standard;
     gState.selectedTactic = tactic.id;
     gState.activeTactic = tactic.id;
@@ -293,6 +303,10 @@ export const GatheringService = {
 
   skipNode(state, callbacks = {}) {
     const gState = this.getGatheringState(state);
+    if (gState.isGathering) {
+      if (callbacks.log) callbacks.log('⚠️ Termine a colheita atual antes de buscar outro broto.', 'warning');
+      return false;
+    }
     const node = this.pickNodeForZone(gState.activeZone, gState.activePouch);
     gState.targetedNodeId = node.id;
     gState.targetedNodePurity = 50 + Math.floor(Math.random() * 51);
@@ -301,6 +315,7 @@ export const GatheringService = {
     gState.targetedNodeSignal = BOTANICAL_SIGNALS[gState.targetedNodeHazard];
     gState.inspected = false;
     gState.isGathering = false;
+    gState.pendingHarvestReward = null;
     
     if (callbacks.log) callbacks.log(`⏭️ Você descarta o broto atual e busca um novo em ${GATHERING_ZONES[gState.activeZone].name}...`, 'system');
     if (callbacks.updateAllUI) callbacks.updateAllUI();
@@ -310,6 +325,10 @@ export const GatheringService = {
 
   startHarvest(state, tacticId = null, callbacks = {}) {
     const gState = this.getGatheringState(state);
+    if (gState.isGathering) {
+      if (callbacks.log) callbacks.log('⚠️ A colheita atual ainda está em andamento.', 'warning');
+      return { success: false, reason: 'already_gathering' };
+    }
     const activeSickleId = gState.sickle || 'sickle_none';
     const sickleDef = SICKLES_CATALOG[activeSickleId];
     const dur = gState.sickleDurability[activeSickleId] ?? 0;
@@ -361,6 +380,7 @@ export const GatheringService = {
     harvestDuration = Math.max(1200, Math.floor((harvestDuration * (tactic.timeMult || 1.0)) / pouchSpeedMult));
 
     gState.isGathering = true;
+    gState.pendingHarvestReward = null;
     gState.harvestStartTime = Date.now();
     gState.targetedNodeId = node.id;
     gState.harvestDuration = harvestDuration;
@@ -393,45 +413,29 @@ export const GatheringService = {
     if (!node) {
       gState.isGathering = false;
       gState.targetedNodeId = null;
+      gState.pendingHarvestReward = null;
       return false;
     }
 
     // Consome durabilidade
     const activeSickleId = gState.sickle || 'sickle_none';
     const sickleDef = SICKLES_CATALOG[activeSickleId];
-    if (gState.sickleDurability[activeSickleId] !== undefined) {
-      gState.sickleDurability[activeSickleId] = Math.max(0, gState.sickleDurability[activeSickleId] - 1);
-    }
-    const actState = LifeActivityCore.getActivityState(state, 'gathering');
-    actState.toolDurability = gState.sickleDurability[activeSickleId] ?? 0;
-
-    if (actState.toolDurability <= 0) {
-      gState.isGathering = false;
-      gState.targetedNodeId = null;
-      gState.autoGathering = false;
-      if (callbacks.log) callbacks.log(`💥 **FOICE CEGA!** Sua ${sickleDef?.name || 'foice'} perdeu completamente o corte. Amole-a para continuar.`, 'error');
-      if (callbacks.updateAllUI) callbacks.updateAllUI();
-      if (callbacks.save) callbacks.save();
-      return false;
-    }
 
     const tactic = GATHERING_TACTICS[gState.activeTactic] || GATHERING_TACTICS.standard;
     const sickleBonus = sickleDef?.qualityBonus || 0.0;
     
     let hazardPenalty = 0;
+    let thornDamage = 0;
+    let extraDurabilityCost = 0;
     if (gState.activeTactic !== 'delicate') {
       if (gState.targetedNodeHazard === 'thorn' && gState.activeTactic === 'cleave') {
-        const dmg = Math.floor((state.maxHp || 100) * 0.05);
-        state.hp = Math.max(1, (state.hp || 100) - dmg);
-        if (callbacks.log) callbacks.log(`🩸 Os espinhos afiados perfuraram sua pele! (${dmg} dano)`, 'error');
+        thornDamage = Math.floor((state.maxHp || 100) * 0.05);
       }
       if (gState.targetedNodeHazard === 'resin' && gState.activeTactic === 'cleave') {
-        gState.sickleDurability[activeSickleId] = Math.max(0, gState.sickleDurability[activeSickleId] - 1);
-        if (callbacks.log) callbacks.log(`⚠️ A seiva pegajosa grudou na foice! (-1 Durabilidade)`, 'warning');
+        extraDurabilityCost = 1;
       }
       if (gState.targetedNodeHazard === 'toxin') {
         hazardPenalty = 0.25;
-        if (callbacks.log) callbacks.log(`🤢 Esporos venenosos cobriram a planta, reduzindo sua pureza!`, 'warning');
       }
     }
 
@@ -443,7 +447,8 @@ export const GatheringService = {
 
     const qualityMod = sickleBonus + (tactic.qualityBonus || 0.0) + (nodePurity - 1.0);
 
-    const quality = RewardEngine.rollQuality(gState.skillLevel, qualityMod);
+    const pending = gState.pendingHarvestReward?.nodeId === node.id ? gState.pendingHarvestReward : null;
+    const quality = pending?.quality || RewardEngine.rollQuality(gState.skillLevel, qualityMod);
     const primaryMatRaw = node.yields.primary;
     const secMatRaw = node.yields.secondary;
 
@@ -451,10 +456,45 @@ export const GatheringService = {
     const secMat = secMatRaw ? resolveCanonicalResourceId(secMatRaw) : null;
 
     const basePrimaryQty = node.yields.primaryQty || 1;
-    const primaryQty = RewardEngine.calculateYield(basePrimaryQty, quality);
+    const primaryQty = pending?.primaryQty ?? RewardEngine.calculateYield(basePrimaryQty, quality);
 
     const baseSecQty = node.yields.secondaryQty || 0;
-    const secQty = baseSecQty > 0 ? RewardEngine.calculateYield(baseSecQty, quality) : 0;
+    const secQty = pending?.secQty ?? (baseSecQty > 0 ? RewardEngine.calculateYield(baseSecQty, quality) : 0);
+    const finalXp = pending?.finalXp ?? Math.round((node.xpReward || 8) * quality.mult);
+
+    const rewardDrops = [{ itemId: primaryMat, count: primaryQty }];
+    if (secMat && secQty > 0) rewardDrops.push({ itemId: secMat, count: secQty });
+    if (!hasRoomForStackRewards(state, rewardDrops)) {
+      const alreadyNotified = Boolean(pending?.inventoryFullNotified);
+      gState.pendingHarvestReward = { nodeId: node.id, quality, primaryQty, secQty, finalXp, inventoryFullNotified: true };
+      if (!alreadyNotified) {
+        if (callbacks.log) callbacks.log('⚠️ Mochila cheia! Libere espaço para concluir e receber esta colheita.', 'warning');
+        if (callbacks.updateAllUI) callbacks.updateAllUI();
+        if (callbacks.save) callbacks.save();
+      }
+      return false;
+    }
+
+    if (gState.sickleDurability[activeSickleId] !== undefined) {
+      gState.sickleDurability[activeSickleId] = Math.max(0, gState.sickleDurability[activeSickleId] - 1);
+    }
+    const actState = LifeActivityCore.getActivityState(state, 'gathering');
+    actState.toolDurability = gState.sickleDurability[activeSickleId] ?? 0;
+
+    if (thornDamage > 0) {
+      state.hp = Math.max(1, (state.hp || 100) - thornDamage);
+      if (callbacks.log) callbacks.log(`🩸 Os espinhos afiados perfuraram sua pele! (${thornDamage} dano)`, 'error');
+    }
+    if (extraDurabilityCost > 0) {
+      gState.sickleDurability[activeSickleId] = Math.max(0, gState.sickleDurability[activeSickleId] - extraDurabilityCost);
+      actState.toolDurability = gState.sickleDurability[activeSickleId];
+      if (callbacks.log) callbacks.log('⚠️ A seiva pegajosa grudou na foice! (-1 Durabilidade)', 'warning');
+    }
+    if (hazardPenalty > 0 && callbacks.log) {
+      callbacks.log('🤢 Esporos venenosos cobriram a planta, reduzindo sua pureza!', 'warning');
+    }
+
+    const sickleBroken = actState.toolDurability <= 0;
 
     addToInventory(state, primaryMat, primaryQty, node.rarity, false, callbacks, true);
     if (secMat && secQty > 0) {
@@ -467,12 +507,11 @@ export const GatheringService = {
     LifeActivityCore.recordCodexDiscovery(state, 'gathering', node.id);
 
     // XP
-    const xpBase = node.xpReward || 8;
-    const finalXp = Math.round(xpBase * quality.mult);
     LifeActivityCore.addXp(state, 'gathering', finalXp, callbacks);
 
     gState.isGathering = false;
     gState.targetedNodeId = null;
+    gState.pendingHarvestReward = null;
 
     if (callbacks.log) {
       const qualityPrefix = quality.tier === 'perfect' ? '🌸 **COLHEITA PERFEITA!**'
@@ -483,6 +522,11 @@ export const GatheringService = {
 
     if (callbacks.floatText) {
       callbacks.floatText(`+${primaryQty}x ${primaryMat.toUpperCase()}`, 'float-gold');
+    }
+
+    if (sickleBroken) {
+      gState.autoGathering = false;
+      if (callbacks.log) callbacks.log(`💥 **FOICE CEGA!** Sua ${sickleDef?.name || 'foice'} perdeu completamente o corte após esta colheita. Amole-a para continuar.`, 'error');
     }
 
     if (callbacks.updateAllUI) callbacks.updateAllUI();
@@ -545,7 +589,12 @@ export const GatheringService = {
 
     const activeSickleId = gState.sickle || 'sickle_none';
     let availableDur = gState.sickleDurability[activeSickleId] ?? 0;
-    if (availableDur <= 0) return null;
+    if (availableDur <= 0) {
+      gState.autoGathering = false;
+      gState.isGathering = false;
+      gState.targetedNodeId = null;
+      return null;
+    }
 
     const clampedMinutes = Math.min(480, Math.max(0, minutesOffline));
     if (clampedMinutes < 2) return null;
@@ -587,6 +636,15 @@ export const GatheringService = {
     }
 
     LifeActivityCore.addXp(state, 'gathering', totalXp, callbacks);
+
+    // Offline harvest accounting includes the saved in-progress cycle; clear it so the
+    // first online tick cannot pay that same node a second time.
+    gState.isGathering = false;
+    gState.targetedNodeId = null;
+    gState.inspected = false;
+    gState.pendingHarvestReward = null;
+    gState.lastAutoTick = Date.now();
+    if (gState.sickleDurability[activeSickleId] <= 0) gState.autoGathering = false;
 
     if (callbacks.log) {
       callbacks.log(`💤 **Relatório de Coleta Offline (${clampedMinutes}m):** Colheu ${actualHarvests} arbustos de flora em Aden! (+${totalXp} XP de Coleta)`, 'rarity-legendary');

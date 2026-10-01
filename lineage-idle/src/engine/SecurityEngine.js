@@ -9,7 +9,7 @@
 
 const SALT = 'aden_arena_sec_v2_salt_99812_secure';
 const MAX_LEVEL_CAP = 120;
-const MAX_OFFLINE_MINUTES = 720; // Limite máximo de 12 horas offline
+export const MAX_OFFLINE_MINUTES = 720; // Limite máximo de 12 horas offline
 
 /**
  * Gera um hash numérico rápido e determinístico baseado em string.

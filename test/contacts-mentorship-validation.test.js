@@ -72,4 +72,114 @@ describe('👥 Contatos, Amigos & Mentoria Integration Validation', () => {
     assert.strictEqual(guides.amigos, guides.referral, 'GUIDES_DATA.amigos must map to referral');
     assert.strictEqual(guides.referral.sections.length, 3, 'Must contain 3 comprehensive sections');
   });
+
+  it('6. Contact modal escapes untrusted friend, block and mentor names before HTML insertion', async () => {
+    const previousWindow = globalThis.window;
+    const previousDocument = globalThis.document;
+    const modal = {
+      style: {},
+      html: '',
+      classList: { add() {}, remove() {} },
+      querySelectorAll() { return []; },
+      querySelector() { return null; },
+      set innerHTML(value) { this.html = value; }
+    };
+    globalThis.document = {
+      getElementById(id) { return id === 'referral-modal' ? modal : null; },
+      querySelector() { return null; },
+      createElement() { return modal; },
+      body: { appendChild() {} }
+    };
+    globalThis.window = { location: { origin: 'https://example.invalid', pathname: '/' } };
+
+    try {
+      const { uiOpenReferralModal } = await import('../lineage-idle/src/ui/GameUI.js');
+      const state = {
+        name: 'DisposableHero', level: 10,
+        friends: [{ name: '<img src=x onerror=alert(1)>', level: 10, classTitle: '<svg onload=alert(2)>' }],
+        blocked: ['<script>alert(3)</script>'], referredBy: '<iframe src=evil>'
+      };
+      uiOpenReferralModal(state, 'friends');
+      assert.match(modal.html, /&lt;img src=x onerror=alert\(1\)&gt;/);
+      assert.match(modal.html, /&lt;svg onload=alert\(2\)&gt;/);
+      assert.doesNotMatch(modal.html, /<img src=x/);
+
+      uiOpenReferralModal(state, 'block');
+      assert.match(modal.html, /&lt;script&gt;alert\(3\)&lt;\/script&gt;/);
+      assert.doesNotMatch(modal.html, /<script>alert\(3\)/);
+
+      uiOpenReferralModal(state, 'mentorship');
+      assert.match(modal.html, /&lt;iframe src=evil&gt;/);
+      assert.doesNotMatch(modal.html, /<iframe src=evil>/);
+    } finally {
+      if (previousWindow === undefined) delete globalThis.window;
+      else globalThis.window = previousWindow;
+      if (previousDocument === undefined) delete globalThis.document;
+      else globalThis.document = previousDocument;
+    }
+  });
+
+  it('7. Block/unblock actions persist remotely before changing the local contact list', async () => {
+    const previousWindow = globalThis.window;
+    const previousDocument = globalThis.document;
+    const previousPrompt = globalThis.prompt;
+    const calls = [];
+    const addButton = { disabled: false };
+    const unblockButton = { dataset: { name: 'TargetDisposable' }, disabled: false };
+    const modal = {
+      style: {}, html: '', classList: { add() {}, remove() {} },
+      querySelector(selector) { return selector === '#btn-contact-add-block' ? addButton : null; },
+      querySelectorAll(selector) { return selector === '.btn-unblock-player' ? [unblockButton] : []; },
+      set innerHTML(value) { this.html = value; }
+    };
+    let allowBlock = true;
+    globalThis.document = {
+      getElementById(id) { return id === 'referral-modal' ? modal : null; },
+      querySelector() { return null; },
+      createElement() { return modal; },
+      body: { appendChild() {} }
+    };
+    globalThis.window = {
+      location: { origin: 'https://example.invalid', pathname: '/' },
+      FirebaseBridge: {
+        getCurrentUserId: () => 'disposable-owner',
+        async blockPlayer(...args) {
+          calls.push(['block', ...args]);
+          if (!allowBlock) throw new Error('offline');
+          return 'TargetDisposable';
+        },
+        async unblockPlayer(...args) { calls.push(['unblock', ...args]); return true; }
+      },
+      saveGameState() {},
+      showMarketToast() {}
+    };
+    globalThis.prompt = () => ' TargetDisposable ';
+
+    try {
+      const { uiOpenReferralModal } = await import('../lineage-idle/src/ui/GameUI.js');
+      const state = { name: 'OwnerDisposable', characterId: 'char_owner_disposable', level: 20, friends: [], blocked: [] };
+      uiOpenReferralModal(state, 'block');
+      await addButton.onclick();
+      assert.deepEqual(calls[0], ['block', 'char_owner_disposable', 'disposable-owner', 'TargetDisposable']);
+      assert.deepEqual(state.blocked, ['TargetDisposable']);
+
+      state.blocked = [];
+      allowBlock = false;
+      await addButton.onclick();
+      assert.deepEqual(state.blocked, [], 'Falha remota não cria bloqueio local falso');
+
+      state.blocked = ['TargetDisposable'];
+      uiOpenReferralModal(state, 'block');
+      await unblockButton.onclick();
+      assert.deepEqual(calls.at(-1), ['unblock', 'char_owner_disposable', 'TargetDisposable']);
+      assert.deepEqual(state.blocked, []);
+    } finally {
+      if (previousWindow === undefined) delete globalThis.window;
+      else globalThis.window = previousWindow;
+      if (previousDocument === undefined) delete globalThis.document;
+      else globalThis.document = previousDocument;
+      if (previousPrompt === undefined) delete globalThis.prompt;
+      else globalThis.prompt = previousPrompt;
+    }
+  });
 });

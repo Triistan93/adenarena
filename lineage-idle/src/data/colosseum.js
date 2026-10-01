@@ -77,12 +77,13 @@ export const COLOSSEUM_SHOP_CATALOG = [
     name: 'Gladiator Champion Circlet 👑',
     costBadges: 250,
     icon: '👑',
-    desc: 'Tiara do campeão supremo do coliseu (+100 P.Def, +100 M.Def e +5% Dano PvP).'
+    desc: 'Tiara do campeão supremo do Coliseu (+100 P.Def e +100 M.Def).'
   },
   {
     id: 'potion_heroic_cp',
     name: 'Grande Poção Heroica de CP (x20) 🧪',
     costBadges: 50,
+    quantity: 20,
     icon: '🧪',
     desc: 'Poções de combate de alta densidade que regeneram 2.000 CP instantaneamente.'
   },

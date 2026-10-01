@@ -14,6 +14,7 @@ import { getStats } from '../engine/StatsEngine.js';
 import { CombatPowerService } from './CombatPowerService.js';
 import { CP_WEIGHTS } from '../data/balance/cpBalance.js';
 import { getEquipmentProgressionGradeCode } from '../data/items/item_grade.js';
+import { addToInventory } from './InventoryService.js';
 import {
   isEquippableItem,
   getEquipmentType,
@@ -315,6 +316,9 @@ export function executeAtomicEnchant(state, targetUid, scrollUid, callbacks = {}
       crystalsAwarded = cInfo.base + currentEnchant * cInfo.mult;
       crystalId = cInfo.id;
 
+      const inventoryBeforeCrystalization = state.inventory.map(item => ({ ...item }));
+      const equipmentBeforeCrystalization = state.equipment ? { ...state.equipment } : null;
+
       // Se estava equipado, desequipa o item
       if (state.equipment) {
         for (const [sKey, eqUid] of Object.entries(state.equipment)) {
@@ -327,17 +331,12 @@ export function executeAtomicEnchant(state, targetUid, scrollUid, callbacks = {}
       // Remove item destruído
       state.inventory.splice(targetIndex, 1);
 
-      // Adiciona cristais ao inventário
-      let existingCrystal = state.inventory.find(i => i.itemId === crystalId && !i.equipped);
-      if (existingCrystal) {
-        existingCrystal.count = (existingCrystal.count || 1) + crystalsAwarded;
-      } else {
-        state.inventory.push({
-          uid: Date.now() + '_' + Math.random().toString(36).slice(2, 7),
-          itemId: crystalId,
-          count: crystalsAwarded,
-          equipped: false
-        });
+      // Usa o agrupador canônico para respeitar o limite de cada pilha.
+      const crystalsAdded = addToInventory(state, crystalId, crystalsAwarded, null, false, callbacks, true);
+      if (!crystalsAdded) {
+        state.inventory = inventoryBeforeCrystalization;
+        if (equipmentBeforeCrystalization) state.equipment = equipmentBeforeCrystalization;
+        return { ok: false, state: ENCHANT_STATES.INVALID, reason: 'Não foi possível guardar os cristais de encantamento.' };
       }
 
       if (callbacks.log) {

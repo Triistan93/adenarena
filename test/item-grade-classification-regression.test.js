@@ -1,7 +1,7 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 
-import { getItemGradeCode } from '../lineage-idle/src/data/items/item_grade.js';
+import { getItemGradeCode, matchesItemGradeFilter } from '../lineage-idle/src/data/items/item_grade.js';
 import { WEAPONS } from '../lineage-idle/src/data/items/weapons.js';
 import { ARMORS } from '../lineage-idle/src/data/items/armors.js';
 import { RINGS, NECKLACES, EARRINGS } from '../lineage-idle/src/data/items/jewels.js';
@@ -95,6 +95,13 @@ describe('Equipment grade classification from item identity', () => {
 
   it('keeps explicit Frost Lord equipment at its own grade', () => {
     assert.equal(getItemGradeCode(WEAPONS.weapon_frost_lord_bow), 'frostlord');
+  });
+
+  it('filters S grade and Frost Lord separately in the inventory grade selector', () => {
+    assert.equal(matchesItemGradeFilter(WEAPONS.draconic_bow, 's'), true);
+    assert.equal(matchesItemGradeFilter(WEAPONS.weapon_frost_lord_bow, 's'), false);
+    assert.equal(matchesItemGradeFilter(WEAPONS.weapon_frost_lord_bow, 'frostlord'), true);
+    assert.equal(matchesItemGradeFilter(WEAPONS.weapon_frost_lord_bow, 'all'), true);
   });
 
   it('classifies every unique weapon marked S Grade as S even when its icon reuses the special-art folder', () => {

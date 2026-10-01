@@ -12,6 +12,12 @@
 
 import { D } from '../core/GameConfig.js';
 import { getItemGradeCode, getEquipmentProgressionGradeCode } from '../data/items/item_grade.js';
+import { CardCodexService } from './CardCodexService.js';
+
+function canAffordAdena(state, cost) {
+  return Number.isSafeInteger(state?.gold) && state.gold >= 0
+    && Number.isSafeInteger(cost) && cost >= 0 && state.gold >= cost;
+}
 
 export const ELEMENT_DEFINITIONS = {
   fire: {
@@ -233,7 +239,7 @@ export function applyElementalInfusion(state, equipUid, elementKey = 'fire', cal
 
   // Custo em Adena
   const cost = gating.stoneCost;
-  if ((state.gold || 0) < cost) {
+  if (!canAffordAdena(state, cost)) {
     if (callbacks.log) callbacks.log(`Adena insuficiente! Requer ${cost.toLocaleString()} Adena para a infusão elemental.`, 'system');
     return false;
   }
@@ -280,7 +286,7 @@ export function removeElementalInfusion(state, equipUid, callbacks = {}) {
   if (!item || elementalAttribute.val <= 0) return false;
 
   const resetCost = 25000;
-  if ((state.gold || 0) < resetCost) {
+  if (!canAffordAdena(state, resetCost)) {
     if (callbacks.log) callbacks.log(`Adena insuficiente para purificação elemental. Requer ${resetCost.toLocaleString()} Adena.`, 'system');
     return false;
   }
@@ -334,7 +340,7 @@ export function applySoulCrystalToWeapon(state, weaponUid, color = 'red', saKey 
   }
 
   const adenaCost = gating.adenaCost;
-  if ((state.gold || 0) < adenaCost) {
+  if (!canAffordAdena(state, adenaCost)) {
     if (callbacks.log) callbacks.log(`Adena insuficiente! Requer ${adenaCost.toLocaleString()} Adena para engastar o Soul Crystal nesta arma.`, 'system');
     return false;
   }
@@ -410,7 +416,7 @@ export function removeSoulCrystalFromWeapon(state, weaponUid, callbacks = {}) {
   if (!item || !item.soulCrystal) return false;
 
   const cost = 20000;
-  if ((state.gold || 0) < cost) {
+  if (!canAffordAdena(state, cost)) {
     if (callbacks.log) callbacks.log(`Adena insuficiente! Requer ${cost.toLocaleString()} Adena para extrair o Soul Crystal.`, 'system');
     return false;
   }
@@ -445,9 +451,20 @@ export function calculatePlayerElementalDamage(state, monster, rawDamage = 100) 
 
   const elem1 = getItemElementalAttribute(wpn1);
   const elem2 = getItemElementalAttribute(wpn2);
+  const codexBonuses = CardCodexService.getCodexPassiveBonuses(state);
+  const socketBonuses = CardCodexService.getEquippedSocketBonuses(state);
+  const codexElementBonuses = Object.keys(ELEMENT_DEFINITIONS)
+    .map(element => ({
+      element,
+      damage: Math.max(0, Number(codexBonuses[`${element}Dmg`]) || 0) + Math.max(0, Number(socketBonuses[`${element}Dmg`]) || 0)
+    }))
+    .filter(entry => entry.damage > 0);
 
-  // Se nenhuma arma tiver elemento
-  if ((elem1.val <= 0 || elem1.element === 'none') && (elem2.val <= 0 || elem2.element === 'none')) {
+  const hasWeaponElement = (elem1.val > 0 && elem1.element !== 'none') || (elem2.val > 0 && elem2.element !== 'none');
+  // A carta de Codex com maior bônus elemental também fornece um dano elemental
+  // próprio; não somamos elementos de tipos diferentes no mesmo ataque.
+  const strongestCodexElement = codexElementBonuses.reduce((best, entry) => entry.damage > (best?.damage || 0) ? entry : best, null);
+  if (!hasWeaponElement && !strongestCodexElement) {
     return { finalDamage: rawDamage, multiplier: 1.0, element: 'none', bonusText: null };
   }
 
@@ -465,29 +482,37 @@ export function calculatePlayerElementalDamage(state, monster, rawDamage = 100) 
   } else if (elem2.val > 0 && elem2.element !== 'none') {
     activeElement = elem2.element;
     totalEffectiveVal += Math.floor(elem2.val * 0.75); // Secundária liderando o elemento
+  } else if (strongestCodexElement) {
+    activeElement = strongestCodexElement.element;
   }
 
-  if (totalEffectiveVal <= 0 || activeElement === 'none') {
+  if (activeElement === 'none') {
     return { finalDamage: rawDamage, multiplier: 1.0, element: 'none', bonusText: null };
   }
 
+  const codexElementDamage = codexElementBonuses
+    .filter(entry => entry.element === activeElement)
+    .reduce((total, entry) => total + entry.damage, 0);
+
   // Bônus base de poder elemental (até +40% no teto de 300)
-  let elemMult = 1.0 + ((Math.min(300, totalEffectiveVal) / 300) * 0.40);
+  let elemMult = totalEffectiveVal > 0 ? 1.0 + ((Math.min(300, totalEffectiveVal) / 300) * 0.40) : 1.0;
   let bonusText = null;
 
-  const monElem = monster?.element || (monster?.category === 'undead' || monster?.isUndead ? 'dark' : null);
+  const category = String(monster?.category || '').toLowerCase();
+  const monElem = monster?.element || (category === 'undead' || monster?.isUndead ? 'dark' : null);
   const defElem = ELEMENT_DEFINITIONS[activeElement];
 
-  if (monElem && defElem) {
+  if (defElem) {
+    // O bônus documentado de Sagrado também cobre demônios sem elemento explícito.
+    // Ele precisa preceder a oposição genérica (holy.opposed === dark), que seria +20%.
+    if (activeElement === 'holy' && (monElem === 'dark' || category === 'undead' || monster?.isUndead || category === 'demon' || monster?.isDemon)) {
+      elemMult += 0.30;
+      bonusText = '✨ EXPURGO SAGRADO (+30% vs MORTOS-VIVOS E DEMÔNIOS)!';
+    }
     // Vantagem de Oposição canônica L2 (+20%)
-    if (defElem.opposed === monElem) {
+    else if (monElem && defElem.opposed === monElem) {
       elemMult += 0.20;
       bonusText = `💥 OPOSIÇÃO ELEMENTAL (+20% ${activeElement.toUpperCase()} vs ${monElem.toUpperCase()})!`;
-    }
-    // Especial Sagrado vs Dark / Undead / Demônios (+30%)
-    else if (activeElement === 'holy' && (monElem === 'dark' || monster?.category === 'undead' || monster?.category === 'demon')) {
-      elemMult += 0.30;
-      bonusText = `✨ EXPURGO SAGRADO (+30% vs MORTOS-VIVOS)!`;
     }
     // Penalidade se atacar mesmo elemento (-20%)
     else if (activeElement === monElem) {
@@ -496,12 +521,26 @@ export function calculatePlayerElementalDamage(state, monster, rawDamage = 100) 
     }
   }
 
-  const finalDamage = Math.floor(rawDamage * elemMult);
+  let finalDamage = totalEffectiveVal > 0
+    ? Math.floor((rawDamage + codexElementDamage) * elemMult + 1e-9)
+    : rawDamage + Math.floor(codexElementDamage * elemMult + 1e-9);
+  const catalogResistance = Number(monster?.resist?.[activeElement]);
+  const resistanceMultiplier = Number.isFinite(catalogResistance) && catalogResistance >= 0
+    ? catalogResistance
+    : 1;
+  if (resistanceMultiplier !== 1) {
+    finalDamage = Math.floor(finalDamage * resistanceMultiplier);
+    const resistanceText = `🛡️ RESISTÊNCIA ${activeElement.toUpperCase()} (x${resistanceMultiplier})`;
+    bonusText = [bonusText, resistanceText].filter(Boolean).join(' ');
+  }
+
   return {
     finalDamage,
     multiplier: elemMult,
+    resistanceMultiplier,
     element: activeElement,
     effectiveVal: totalEffectiveVal,
+    codexElementDamage,
     bonusText
   };
 }
@@ -513,7 +552,8 @@ export function calculateArmorElementalMitigation(state, monster, incomingDamage
   if (!state.equipment) return incomingDamage;
 
   const inv = state.inventory || [];
-  const armorSlots = ['armor', 'chest', 'legs', 'helmet', 'gloves', 'boots', 'shield'];
+  const armorSlots = ['armor', 'chest', 'legs', 'head', 'helmet', 'gloves', 'boots', 'shield'];
+  const socketBonuses = CardCodexService.getEquippedSocketBonuses(state);
   
   // Agrega resistência elemental por elemento
   const elemResist = { fire: 0, water: 0, wind: 0, earth: 0, holy: 0, dark: 0 };
@@ -533,9 +573,15 @@ export function calculateArmorElementalMitigation(state, monster, incomingDamage
     }
   }
 
+  for (const element of Object.keys(elemResist)) {
+    elemResist[element] += Math.max(0, Number(socketBonuses[`${element}Resist`]) || 0);
+    totalResist += Math.max(0, Number(socketBonuses[`${element}Resist`]) || 0);
+  }
+
   if (totalResist <= 0) return incomingDamage;
 
-  const monElem = monster?.element || (monster?.category === 'undead' ? 'dark' : null);
+  const category = String(monster?.category || '').toLowerCase();
+  const monElem = monster?.element || (category === 'undead' || monster?.isUndead ? 'dark' : null);
   let mitigationPct = 0;
 
   if (monElem && elemResist[monElem] > 0) {

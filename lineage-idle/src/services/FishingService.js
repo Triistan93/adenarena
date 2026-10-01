@@ -6,6 +6,15 @@ import { LifeActivityCore } from './lifeActivities/LifeActivityCore.js';
 import { RewardEngine } from './lifeActivities/RewardEngine.js';
 import { resolveCanonicalResourceId } from './lifeActivities/ResourceDictionary.js';
 
+function grantOrQueueFishReward(state, fish, callbacks = {}) {
+  if (addToInventory(state, fish.id, 1, fish.rarity, false, callbacks, true)) return true;
+  const fState = state.fishing;
+  fState.pendingFishRewards = Array.isArray(fState.pendingFishRewards) ? fState.pendingFishRewards : [];
+  fState.pendingFishRewards.push({ fishId: fish.id, rarity: fish.rarity || 'common', count: 1 });
+  if (callbacks.log) callbacks.log(`⚠️ Mochila cheia! ${fish.name} foi preservado na fila de pesca para resgate.`, 'warning');
+  return false;
+}
+
 export const FishingService = {
   getFishingState(state) {
     // Sincroniza e garante LifeActivities canônico
@@ -29,7 +38,8 @@ export const FishingService = {
         rodDurability: {
           rod_none: 50
         },
-        baitInventory: {}
+        baitInventory: {},
+        pendingFishRewards: []
       };
     }
     // Garante que o jogador sempre possua ao menos a vara de bambu básica
@@ -48,7 +58,43 @@ export const FishingService = {
     if (!state.fishing.fishLog) {
       state.fishing.fishLog = {};
     }
+    if (!Array.isArray(state.fishing.pendingFishRewards)) state.fishing.pendingFishRewards = [];
+    this.syncRodDurability(state, state.fishing, state.fishing.rod);
     return state.fishing;
+  },
+
+  syncRodDurability(state, fState, rodId = fState?.rod || 'rod_none') {
+    if (!state || !fState || !RODS_CATALOG[rodId]) return null;
+    const activity = LifeActivityCore.getActivityState(state, 'fishing');
+    const rodDurability = Number(fState.rodDurability[rodId]) || 0;
+    const hasActivityDurability = activity.toolDurability !== undefined && activity.toolDurability !== null && Number.isFinite(Number(activity.toolDurability));
+    const activityDurability = hasActivityDurability ? Number(activity.toolDurability) : rodDurability;
+    const durability = activity.tool === rodId
+      ? Math.min(rodDurability, activityDurability)
+      : rodDurability;
+
+    fState.rodDurability[rodId] = durability;
+    activity.tool = rodId;
+    activity.toolDurability = durability;
+    activity.maxDurability = RODS_CATALOG[rodId].durability;
+    return activity;
+  },
+
+  consumeRodDurability(state, fState, callbacks = {}) {
+    const rodId = fState.rod || 'rod_none';
+    const activity = this.syncRodDurability(state, fState, rodId);
+    if (!activity || activity.toolDurability <= 0) return { broken: true, usable: false };
+
+    activity.toolDurability = Math.max(0, activity.toolDurability - 1);
+    fState.rodDurability[rodId] = activity.toolDurability;
+    if (activity.toolDurability <= 0) {
+      activity.isWorking = false;
+      activity.autoMode = false;
+      if (callbacks.log) callbacks.log(`💥 **VARA QUEBRADA!** Sua ${RODS_CATALOG[rodId].name} chegou a 0 de durabilidade. Repare-a antes da próxima pescaria.`, 'error');
+      if (callbacks.floatText) callbacks.floatText('💥 VARA QUEBROU!', 'float-damage');
+      return { broken: true, usable: true };
+    }
+    return { broken: false, usable: true, remaining: activity.toolDurability };
   },
 
   resolveZoneId(zoneId) {
@@ -67,6 +113,10 @@ export const FishingService = {
 
   selectZone(state, zoneId, callbacks = {}) {
     const fState = this.getFishingState(state);
+    if (fState.isFishing || fState.activeFight?.status === 'fighting') {
+      if (callbacks.log) callbacks.log('⚠️ Termine a pescaria atual antes de mudar de zona.', 'warning');
+      return false;
+    }
     const resolvedId = this.resolveZoneId(zoneId);
     const zone = FISHING_ZONES[resolvedId];
     if (!zone) return false;
@@ -91,6 +141,7 @@ export const FishingService = {
     if (!baitId) {
       fState.activeBait = null;
       if (callbacks.updateAllUI) callbacks.updateAllUI();
+      if (callbacks.save) callbacks.save();
       return true;
     }
 
@@ -104,15 +155,17 @@ export const FishingService = {
     const bait = BAIT_CATALOG[baitId];
     if (callbacks.log) callbacks.log(`🪱 Anzol iscado com **${bait ? bait.name : baitId}** (${available} restantes).`, 'system');
     if (callbacks.updateAllUI) callbacks.updateAllUI();
+    if (callbacks.save) callbacks.save();
     return true;
   },
 
   buyBait(state, baitId, quantity = 10, callbacks = {}) {
     const bait = BAIT_CATALOG[baitId];
-    if (!bait) return false;
+    if (!bait || !Number.isSafeInteger(quantity) || quantity <= 0) return false;
 
-    const count = Math.max(1, Math.floor(quantity));
+    const count = quantity;
     const totalCost = bait.buyPrice * count;
+    if (!Number.isSafeInteger(totalCost) || totalCost < 0) return false;
 
     if ((state.gold || 0) < totalCost) {
       if (callbacks.log) callbacks.log(`⚠️ Adena insuficiente! Custo para ${count}x ${bait.name}: ${totalCost.toLocaleString()} Adena.`, 'warning');
@@ -139,6 +192,7 @@ export const FishingService = {
     if (!rod) return false;
 
     const fState = this.getFishingState(state);
+    if (fState.isFishing || fState.activeFight?.status === 'fighting') return false;
     if (fState.rodDurability[rodId] !== undefined) {
       if (callbacks.log) callbacks.log(`⚠️ Você já possui a ${rod.name}!`, 'warning');
       return false;
@@ -157,6 +211,7 @@ export const FishingService = {
     state.gold -= rod.buyPrice;
     fState.rodDurability[rodId] = rod.durability;
     fState.rod = rodId;
+    this.syncRodDurability(state, fState, rodId);
 
     if (callbacks.log) callbacks.log(`🎣 Adquiriu e equipou **${rod.name}**!`, 'rarity-epic');
     if (callbacks.updateAllUI) callbacks.updateAllUI();
@@ -166,20 +221,24 @@ export const FishingService = {
 
   equipRod(state, rodId, callbacks = {}) {
     const fState = this.getFishingState(state);
+    if (fState.isFishing || fState.activeFight?.status === 'fighting') return false;
     if (fState.rodDurability[rodId] === undefined) {
       if (callbacks.log) callbacks.log(`⚠️ Você não possui esta vara de pescar em seu inventário.`, 'warning');
       return false;
     }
 
     fState.rod = rodId;
+    this.syncRodDurability(state, fState, rodId);
     const rod = RODS_CATALOG[rodId];
     if (callbacks.log) callbacks.log(`🎣 Equipou **${rod ? rod.name : rodId}**.`, 'system');
     if (callbacks.updateAllUI) callbacks.updateAllUI();
+    if (callbacks.save) callbacks.save();
     return true;
   },
 
   repairRod(state, rodId, callbacks = {}) {
     const fState = this.getFishingState(state);
+    if (fState.isFishing || fState.activeFight?.status === 'fighting') return false;
     const rod = RODS_CATALOG[rodId];
     if (!rod || fState.rodDurability[rodId] === undefined) return false;
 
@@ -200,6 +259,12 @@ export const FishingService = {
 
     state.gold -= totalRepairCost;
     fState.rodDurability[rodId] = rod.durability;
+    if (fState.rod === rodId) {
+      const activity = LifeActivityCore.getActivityState(state, 'fishing');
+      activity.tool = rodId;
+      activity.toolDurability = rod.durability;
+      activity.maxDurability = rod.durability;
+    }
 
     if (callbacks.log) callbacks.log(`🔨 Ferreiro restaurou a **${rod.name}** (+${missing} durabilidade) por ${totalRepairCost.toLocaleString()} Adena.`, 'gain');
     if (callbacks.updateAllUI) callbacks.updateAllUI();
@@ -217,6 +282,11 @@ export const FishingService = {
     }
     callbacks = callbacks || {};
 
+    if (fState.pendingFishRewards.length) {
+      if (callbacks.log) callbacks.log('Resgate os peixes preservados antes de lançar outra linha.', 'warning');
+      return { success: false, reason: 'pending_rewards' };
+    }
+
     if (fState.isFishing) {
       return { success: false, reason: 'already_fishing' };
     }
@@ -224,7 +294,7 @@ export const FishingService = {
     // Valida durabilidade da vara (regra estrita de quebra de ferramenta)
     const currentRodKey = fState.rod || 'rod_none';
     const currentDurability = fState.rodDurability[currentRodKey] ?? 0;
-    if (currentRodKey !== 'rod_none' && currentDurability <= 0) {
+    if (currentDurability <= 0) {
       if (callbacks.log) callbacks.log(`⚠️ Sua vara de pesca quebrou ou está com 0 de durabilidade! Conserte-a no ferreiro para lançar a linha.`, 'warning');
       return { success: false, reason: 'broken_tool' };
     }
@@ -261,10 +331,7 @@ export const FishingService = {
     // Consome 1 isca
     fState.baitInventory[fState.activeBait]--;
 
-    // Consome durabilidade da vara se equipada
-    if (currentDurability > 0) {
-      fState.rodDurability[currentRodKey]--;
-    }
+    this.consumeRodDurability(state, fState, callbacks);
 
     fState.isFishing = true;
     fState.castStartTime = Date.now();
@@ -273,6 +340,7 @@ export const FishingService = {
 
     if (callbacks.log) callbacks.log(`🌊 Linha lançada em **${zone.name}**... Aguarde a boia afundar!`, 'system');
     if (callbacks.updateAllUI) callbacks.updateAllUI();
+    if (callbacks.save) callbacks.save();
 
     return { success: true, castTime: castDuration };
   },
@@ -328,6 +396,7 @@ export const FishingService = {
       callbacks.log(`🌊🎣 **PEIXE FISGADO!** Um **${fishDef.name}** [${profile.name}] mordeu a isca! Equilibre a tensão e esgote a stamina!`, 'rarity-epic');
     }
     if (callbacks.updateAllUI) callbacks.updateAllUI();
+    if (callbacks.save) callbacks.save();
     return { success: true, fight: fState.activeFight };
   },
 
@@ -405,7 +474,6 @@ export const FishingService = {
       fState.activeFight = null;
       log('💥 **A LINHA ARREBENTOU!** A tensão passou do limite suportado. O peixe escapou com o anzol!', 'error');
       if (floatText) floatText('💥 LINHA ARREBENTOU!', 'float-damage');
-      LifeActivityCore.consumeDurability(state, 'fishing', callbacks);
       if (callbacks.updateAllUI) callbacks.updateAllUI();
       if (callbacks.save) callbacks.save();
       return { status: 'line_broken', message: 'A linha arrebentou!' };
@@ -432,6 +500,7 @@ export const FishingService = {
     }
 
     if (callbacks.updateAllUI) callbacks.updateAllUI();
+    if (callbacks.save) callbacks.save();
     return { status: 'fighting', message: actionMsg, fight };
   },
 
@@ -439,9 +508,6 @@ export const FishingService = {
     const log = callbacks.log || (() => {});
     const floatText = callbacks.floatText || (() => {});
     const fishDef = fight.fishDef;
-
-    // Consome durabilidade através do LifeActivityCore
-    LifeActivityCore.consumeDurability(state, 'fishing', callbacks);
 
     // Rola qualidade e tamanho via RewardEngine
     const quality = RewardEngine.rollQuality(fState.skillLevel);
@@ -462,8 +528,8 @@ export const FishingService = {
     fState.fishLog = fState.fishLog || {};
     fState.fishLog[fishDef.id] = (fState.fishLog[fishDef.id] || 0) + 1;
 
-    // Adiciona ao inventário
-    addToInventory(state, fishDef.id, 1, fishDef.rarity, false, callbacks, true);
+    // Captura confirmada; se a mochila estiver cheia, preserve o peixe para resgate.
+    grantOrQueueFishReward(state, fishDef, callbacks);
 
     // Registra no Codex
     LifeActivityCore.recordCodexDiscovery(state, 'fishing', fishDef.id);
@@ -514,6 +580,8 @@ export const FishingService = {
   processAutoFish(state, callbacks = {}) {
     const fState = this.getFishingState(state);
     if (!fState.autoFishing) return;
+    if (fState.pendingFishRewards.length) return;
+    const pendingCountBefore = fState.pendingFishRewards.length;
 
     const now = Date.now();
     const interval = FISHING_BALANCE.AUTO_FISH_INTERVAL_MS;
@@ -529,6 +597,11 @@ export const FishingService = {
     const rod = RODS_CATALOG[fState.rod] || RODS_CATALOG.rod_none;
 
     for (let t = 0; t < ticks; t++) {
+      const rodId = fState.rod || 'rod_none';
+      if ((fState.rodDurability[rodId] ?? 0) <= 0) {
+        fState.autoFishing = false;
+        break;
+      }
       // Checa se ainda há isca disponível
       if (!fState.activeBait || (fState.baitInventory[fState.activeBait] || 0) <= 0) {
         const nextBait = Object.keys(fState.baitInventory).find(b => (fState.baitInventory[b] || 0) > 0);
@@ -544,20 +617,13 @@ export const FishingService = {
       // Consome 1 isca
       fState.baitInventory[fState.activeBait]--;
 
-      // Consome durabilidade através do LifeActivityCore
-      const duraRes = LifeActivityCore.consumeDurability(state, 'fishing', callbacks);
-      if (duraRes.broken) {
-        fState.autoFishing = false;
-        break;
-      }
-
       const bait = BAIT_CATALOG[fState.activeBait] || null;
-      const isBrokenRod = (fState.rodDurability[fState.rod || 'rod_none'] || 0) <= 0;
-      const rodBonus = (rod.catchBonus - 1.0) * (isBrokenRod ? FISHING_BALANCE.BROKEN_ROD_CATCH_PENALTY : 1.0);
+      const rodBonus = rod.catchBonus - 1.0;
       const baitBonus = bait ? (bait.catchBonus - 1.0) : 0;
       const zoneDiffMod = -(zone.difficulty - 1) * 0.05;
 
       const catchProb = calculateCatchChance(fState.skillLevel, rodBonus, baitBonus, zoneDiffMod) * FISHING_BALANCE.AUTO_FISH_EFFICIENCY;
+      const durabilityResult = this.consumeRodDurability(state, fState, callbacks);
 
       if (Math.random() <= catchProb) {
         const rarity = rollFishRarity(fState.skillLevel, bait ? bait.rarityBoost : 0, true);
@@ -571,16 +637,25 @@ export const FishingService = {
         fState.fishLog[fishId] = (fState.fishLog[fishId] || 0) + 1;
         fState.skillXp += fish.xpReward;
 
-        addToInventory(state, fishId, 1, fish.rarity, false, callbacks, true);
+        if (!grantOrQueueFishReward(state, fish, callbacks)) {
+          fState.autoFishing = false;
+          break;
+        }
+      }
+      if (!durabilityResult.usable || durabilityResult.broken) {
+        fState.autoFishing = false;
+        break;
       }
     }
 
     this._checkLevelUp(state, fState, callbacks);
+    if (fState.pendingFishRewards.length > pendingCountBefore && callbacks.save) callbacks.save();
   },
 
   processOfflineFish(state, minutesOffline, callbacks = {}) {
     const fState = this.getFishingState(state);
     if (!fState.autoFishing) return { totalCaught: 0, xpGained: 0 };
+    if (fState.pendingFishRewards.length) return { totalCaught: 0, xpGained: 0, pendingRewards: fState.pendingFishRewards.length };
 
     const effectiveMinutes = Math.min(minutesOffline, FISHING_BALANCE.OFFLINE_MAX_MINUTES);
     if (effectiveMinutes <= 0) return { totalCaught: 0, xpGained: 0 };
@@ -589,6 +664,12 @@ export const FishingService = {
     const zone = FISHING_ZONES[zoneId] || FISHING_ZONES.zone_talking_island;
     const rod = RODS_CATALOG[fState.rod] || RODS_CATALOG.rod_none;
 
+    const rodId = fState.rod || 'rod_none';
+    const availableDurability = Math.max(0, Number(fState.rodDurability[rodId]) || 0);
+    if (availableDurability <= 0) {
+      fState.autoFishing = false;
+      return { totalCaught: 0, xpGained: 0 };
+    }
     const totalAvailableBait = Object.values(fState.baitInventory).reduce((sum, count) => sum + (count || 0), 0);
     if (totalAvailableBait <= 0) {
       fState.autoFishing = false;
@@ -598,7 +679,7 @@ export const FishingService = {
     // Calcula quantos arremessos foram possíveis
     const rodBonus = rod.catchBonus - 1.0;
     const maxCatchesByTime = Math.floor((effectiveMinutes * 60 * 1000) / FISHING_BALANCE.OFFLINE_FISH_INTERVAL_MS * FISHING_BALANCE.OFFLINE_EFFICIENCY);
-    const castsToSimulate = Math.min(totalAvailableBait, maxCatchesByTime);
+    const castsToSimulate = Math.min(totalAvailableBait, maxCatchesByTime, availableDurability);
 
     let caughtCount = 0;
     let totalXp = 0;
@@ -609,20 +690,13 @@ export const FishingService = {
       if (!baitKey) break;
       fState.baitInventory[baitKey]--;
 
-      // Consome durabilidade
-      const duraRes = LifeActivityCore.consumeDurability(state, 'fishing', callbacks);
-      if (duraRes.broken) {
-        fState.autoFishing = false;
-        break;
-      }
-
       const bait = BAIT_CATALOG[baitKey];
-      const isBrokenRod = (fState.rodDurability[fState.rod || 'rod_none'] || 0) <= 0;
-      const effRodBonus = rodBonus * (isBrokenRod ? FISHING_BALANCE.BROKEN_ROD_CATCH_PENALTY : 1.0);
+      const effRodBonus = rodBonus;
       const baitBonus = bait ? (bait.catchBonus - 1.0) : 0;
       const zoneDiffMod = -(zone.difficulty - 1) * 0.05;
 
       const prob = calculateCatchChance(fState.skillLevel, effRodBonus, baitBonus, zoneDiffMod) * FISHING_BALANCE.OFFLINE_EFFICIENCY;
+      const durabilityResult = this.consumeRodDurability(state, fState, callbacks);
 
       if (Math.random() <= prob) {
         const rarity = rollFishRarity(fState.skillLevel, bait ? bait.rarityBoost : 0, true);
@@ -638,7 +712,14 @@ export const FishingService = {
         totalXp += fish.xpReward;
         caughtCount++;
 
-        addToInventory(state, fishId, 1, fish.rarity, false, callbacks, true);
+        if (!grantOrQueueFishReward(state, fish, callbacks)) {
+          fState.autoFishing = false;
+          break;
+        }
+      }
+      if (!durabilityResult.usable || durabilityResult.broken) {
+        fState.autoFishing = false;
+        break;
       }
     }
 
@@ -654,6 +735,7 @@ export const FishingService = {
   exchangeFish(state, fishId, quantity = 5, callbacks = {}) {
     const fish = FISH_CATALOG[fishId];
     if (!fish) return { success: false, reason: 'invalid_fish' };
+    if (!Number.isSafeInteger(quantity) || quantity <= 0) return { success: false, reason: 'invalid_quantity' };
 
     const ownedCount = getInventoryCount(state, fishId);
     const reqRate = fish.exchangeRate || 5;
@@ -663,17 +745,21 @@ export const FishingService = {
       return { success: false, reason: 'insufficient_fish' };
     }
 
-    const countToExchange = Math.min(ownedCount, Math.max(reqRate, Math.floor(quantity / reqRate) * reqRate));
+    const countToExchange = Math.min(ownedCount, Math.floor(quantity / reqRate) * reqRate);
     const packages = Math.floor(countToExchange / reqRate);
 
-    if (packages <= 0) return { success: false };
+    if (packages <= 0) return { success: false, reason: 'insufficient_quantity' };
 
-    // Remove os peixes do inventário
-    removeFromInventoryByItemId(state, fishId, countToExchange);
-
-    // Adiciona o material de recompensa canônico
     const canonicalMatId = resolveCanonicalResourceId(fish.materialReward);
-    addToInventory(state, canonicalMatId, packages, 'common', false, callbacks, true);
+    const previewState = { ...state, inventory: structuredClone(Array.isArray(state.inventory) ? state.inventory : []) };
+    if (!removeFromInventoryByItemId(previewState, fishId, countToExchange)) {
+      return { success: false, reason: 'insufficient_fish' };
+    }
+    if (!addToInventory(previewState, canonicalMatId, packages, 'common', false, {}, true)) {
+      if (callbacks.log) callbacks.log('⚠️ Mochila cheia! Libere espaço antes de trocar seus peixes por materiais.', 'warning');
+      return { success: false, reason: 'inventory_full' };
+    }
+    state.inventory = previewState.inventory;
 
     if (callbacks.log) {
       callbacks.log(`📦 Entregou **${countToExchange}x ${fish.name}** e recebeu **${packages}x ${fish.materialName}** para sua Forja!`, 'rarity-legendary');
@@ -686,6 +772,26 @@ export const FishingService = {
     if (callbacks.save) callbacks.save();
 
     return { success: true, count: packages, materialName: fish.materialName };
+  },
+
+  claimPendingFishRewards(state, callbacks = {}) {
+    const fState = this.getFishingState(state);
+    if (!fState.pendingFishRewards.length) return false;
+    const nextState = { ...state, inventory: structuredClone(Array.isArray(state.inventory) ? state.inventory : []) };
+    for (const reward of fState.pendingFishRewards) {
+      const fish = FISH_CATALOG[reward.fishId];
+      if (!fish || !Number.isSafeInteger(reward.count) || reward.count <= 0 ||
+          !addToInventory(nextState, fish.id, reward.count, reward.rarity || fish.rarity, false, {}, true)) {
+        if (callbacks.log) callbacks.log('⚠️ Libere espaço na mochila antes de resgatar os peixes preservados.', 'warning');
+        return false;
+      }
+    }
+    state.inventory = nextState.inventory;
+    fState.pendingFishRewards = [];
+    if (callbacks.log) callbacks.log('🎣 Peixes preservados entregues à mochila.', 'loot');
+    if (callbacks.updateAllUI) callbacks.updateAllUI();
+    if (callbacks.save) callbacks.save();
+    return true;
   },
 
   getSkillProgress(state) {

@@ -19,7 +19,6 @@ export function renderRankingTab(container, state) {
 
   const playerCP = CombatPowerService.calculateCombatPower(state);
   const rankings = RankingService.getLeaderboards(state);
-  const playerProfile = RankingService.buildPublicProfile(state);
 
   let currentList = [];
   if (_activeTab === 'cp') currentList = rankings.cp || [];
@@ -30,8 +29,9 @@ export function renderRankingTab(container, state) {
   else if (_activeTab === 'castles') currentList = rankings.castles || [];
 
   // Garante que o jogador local esteja inserido no topo proporcional
-  const playerRankIndex = currentList.findIndex(p => p.charName === playerProfile.charName || (_activeTab === 'clans' && p.isCurrentPlayer));
-  const playerRankDisplay = playerRankIndex !== -1 ? `#${playerRankIndex + 1}` : '#12';
+  const rankCategory = _activeTab === 'level' ? 'cp' : _activeTab;
+  const authoritativeRank = RankingService.getAuthoritativePlayerRank(rankCategory);
+  const playerRankDisplay = authoritativeRank ? `#${authoritativeRank}` : '—';
 
   // Cooldown de Recompensa Diária de Ranking
   const now = Date.now();
@@ -117,7 +117,8 @@ export function renderRankingTab(container, state) {
           const isTop1 = rank === 1;
           const isTop3 = rank <= 3;
           const badgeColor = isTop1 ? '#fbbf24' : (rank === 2 ? '#94a3b8' : (rank === 3 ? '#b45309' : '#475569'));
-          const isSelf = p.charName === playerProfile.charName || p.isCurrentPlayer;
+          const currentUserId = typeof window !== 'undefined' && window.FirebaseBridge?.getCurrentUserId?.();
+          const isSelf = Boolean(currentUserId && (p.userId === currentUserId || p.id === currentUserId));
           const isVerified = p.isVerified || (p.level || 0) >= 20;
 
           // Se for aba de Clãs
