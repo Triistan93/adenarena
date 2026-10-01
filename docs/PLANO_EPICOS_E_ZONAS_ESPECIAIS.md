@@ -102,6 +102,8 @@ O índice do L2Wiki Essence consultado categoriza Queen Ant, Core, Orfen, Baium,
 
 ### Fase 6 — Integração, UX e liberação
 
+- [x] Integrar Fafurion’s Nest, Frost Lord’s Castle, Steel Citadel e Celestial Tower à central “Combate & Zonas”, junto das jornadas solo de Kamaloka e Pailaka; separar jornadas diárias dos desafios especiais e exibir faixa de nível, CP, encontros, agenda e recompensas.
+- [x] Reformular Song of Ice and Fire e Devil’s Legacy como jornadas Pailaka de três encontros, com mecânicas próprias nas lutas finais; aplicar também o limite superior de nível cadastrado para Kamaloka/Pailaka.
 - Apresentar calendário, requisitos, estado, grupo/instância, recompensas e aviso de PvP antes da entrada.
 - Cobrir acesso inválido, janela expirada, chefe morto, desconexão, derrota, vitória, reentrada e encerramento.
 - Validar save descartável, persistência/restart, concorrência de grupos, limites de recompensa, telemetria e UI pelo navegador autorizado.

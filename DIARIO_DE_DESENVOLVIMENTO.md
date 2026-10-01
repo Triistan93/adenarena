@@ -3804,6 +3804,12 @@ Iniciei a execução aprovada do plano: Antharas e Valakas deixaram de ser os bo
 
 Pesquisa complementar no L2Wiki Essence confirma Fafurion's Nest como uma Special Zone de evento com três fases, mudanças de arena, guardiões/adds e recompensas de participação. Acrescentei essa evidência ao plano para orientar a retirada de Fafurion de Emerald Grove. Isso é uma referência Essence; valores e agenda ainda exigem adaptação ao Aden Arena.
 
+### Central de Combate & Zonas — jornadas solo e desafios especiais (01/10/2026)
+
+Retomei após o commit `b254cad0`. A central antes aparecia como “Kamaloka & Pailaka” e misturava as seis atividades numa lista sem categorias. O botão e a janela agora se chamam “Instâncias & Desafios”, dentro do submenu Combate & Zonas, com grupos separados para jornadas diárias e desafios especiais. Cada ficha mostra faixa de nível, CP mínimo e atual, sequência de encontros, reset/janela, estado de acesso e recompensas.
+
+As duas Pailakas deixaram de ser lutas contra um único chefe genérico: Song of Ice and Fire e Devil’s Legacy agora encadeiam três encontros e fecham com fases próprias, incluindo dano periódico no combate final. O limite de nível máximo já cadastrado para as jornadas solo também é aplicado na entrada. Atualizei o plano épico para registrar a integração. Não rodei testes nem build nesta rodada.
+
 ### Fafurion e Lindvior em encontros especiais (01/10/2026, 11:35 BRT)
 
 Retirei Fafurion de Emerald Grove e Lindvior de Dragon Valley como bosses comuns. Ancient Emerald Dragon e Dragon Valley High Overlord passam a ocupar essas vagas como bosses regionais. Cadastrei Fafurion e Lindvior no `RAID_BOSSES`/`RAID_BOSS_BALANCE`, com requisitos de nível/CP, mecânicas de combate nomeadas e drops de capas já existentes no catálogo. O fluxo genérico de Raid mantém entrada por ticket, combate, loot e conclusão; a criação de itens não foi necessária. Ampliei `test/combat-zone-integrity.test.js` para garantir que Antharas, Valakas, Fafurion e Lindvior não apareçam como bosses de caça comum, e que os quatro mapas mantenham boss regional.

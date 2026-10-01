@@ -1,4 +1,4 @@
-// instances.js — Instâncias Solo Diárias: Kamaloka & Pailaka
+// instances.js — Jornadas Solo (Kamaloka/Pailaka) e Desafios Especiais
 export const SOLO_INSTANCES = {
   kamaloka_25: {
     id: 'kamaloka_25',
@@ -32,12 +32,24 @@ export const SOLO_INSTANCES = {
     icon: '🔥❄️',
     minimumCP: 6000,
     recommendedCP: 9000,
-    bossName: 'Gargoyle Lord & Fire Sprite King',
-    bossHp: 22000,
-    bossAtk: 350,
-    bossDef: 60,
-    bossMdef: 80,
-    desc: 'O templo esquecido onde elementos colidem. Derrote o Senhor dos Espíritos para libertar o templo.',
+    bossName: 'Rei dos Espíritos de Fogo → Guardião do Gelo → Lorde Gargoyle',
+    bossHp: 18000,
+    bossAtk: 430,
+    bossDef: 80,
+    bossMdef: 105,
+    desc: 'Uma aventura em três provas pelo Templo Esquecido: atravesse as câmaras elementais e derrote o guardião que mantém o conflito entre fogo e gelo.',
+    stages: [
+      { id: 'pailaka_fire_sprite_king', name: 'Rei dos Espíritos de Fogo', hp: 7200, atk: 350, def: 60, mdef: 80, skill: { name: 'Chama Errante', type: 'magical', effect: 'poison', mult: 1.25, cd: 5 } },
+      { id: 'pailaka_ice_guardian', name: 'Guardião do Gelo Eterno', hp: 10800, atk: 390, def: 70, mdef: 100, skill: { name: 'Prisão de Geada', type: 'magical', effect: 'root', mult: 1.3, cd: 5 } },
+      {
+        id: 'pailaka_gargoyle_lord', name: 'Lorde Gargoyle, Guardião do Templo', hp: 18000, atk: 430, def: 80, mdef: 105,
+        skill: { name: 'Ruptura Elemental', type: 'physical', effect: 'stun', mult: 1.4, cd: 6 },
+        phases: [
+          { name: 'Fogo e Gelo em Colisão', triggerHp: 0.6, atkMultiplier: 1.12, text: '🔥❄️ As duas câmaras elementais se abrem ao mesmo tempo.' },
+          { name: 'Coração do Templo', triggerHp: 0.3, atkMultiplier: 1.18, statusEffect: { name: 'Queimadura Elemental', durationMs: 4000, intervalMs: 1000, damagePercent: 0.015 }, text: '⚡ O núcleo do templo descarrega energia instável.' }
+        ]
+      }
+    ],
     rewards: {
       xp: 120000,
       gold: 60000,
@@ -78,12 +90,24 @@ export const SOLO_INSTANCES = {
     icon: '🐉⚡',
     minimumCP: 22000,
     recommendedCP: 32000,
-    bossName: 'Lesser Drake Lord (Lorde Dragão de Fogo)',
+    bossName: 'Sentinela Infernal → Drake Corrompido → Lesser Drake Lord',
     bossHp: 110000,
-    bossAtk: 980,
-    bossDef: 130,
-    bossMdef: 170,
-    desc: 'O covil profundo de Dragon Valley. O dragão menor despertou com poderes da fenda demoníaca.',
+    bossAtk: 1150,
+    bossDef: 150,
+    bossMdef: 185,
+    desc: 'Uma incursão em três encontros por Dragon Valley: rompa o selo demoníaco, sobreviva ao drake corrompido e impeça o despertar do lorde.',
+    stages: [
+      { id: 'pailaka_infernal_sentinel', name: 'Sentinela Infernal do Selo', hp: 42000, atk: 980, def: 130, mdef: 170, skill: { name: 'Marca da Fenda', type: 'magical', effect: 'poison', mult: 1.35, cd: 5 } },
+      { id: 'pailaka_corrupted_drake', name: 'Drake Corrompido', hp: 68000, atk: 1080, def: 140, mdef: 175, skill: { name: 'Garra da Herança Demoníaca', type: 'physical', effect: 'bleed', mult: 1.4, cd: 5 } },
+      {
+        id: 'pailaka_lesser_drake_lord', name: 'Lesser Drake Lord, Herdeiro do Fogo', hp: 110000, atk: 1150, def: 150, mdef: 185,
+        skill: { name: 'Sopro do Legado Demoníaco', type: 'magical', effect: 'poison', mult: 1.5, cd: 6 },
+        phases: [
+          { name: 'Asas em Chamas', triggerHp: 0.65, atkMultiplier: 1.12, text: '🐉 O drake abre as asas e incendeia o covil.' },
+          { name: 'Legado Desperto', triggerHp: 0.3, atkMultiplier: 1.2, statusEffect: { name: 'Cinzas Demoníacas', durationMs: 4000, intervalMs: 1000, damagePercent: 0.02 }, text: '🔥 O legado demoníaco consome a arena.' }
+        ]
+      }
+    ],
     rewards: {
       xp: 600000,
       gold: 250000,

@@ -1,4 +1,4 @@
-// InstanceService.js — Gerenciador de Kamaloka & Pailaka
+// InstanceService.js — Gerenciador de jornadas solo e desafios especiais
 import { SOLO_INSTANCES } from '../data/instances.js';
 import { startCombat } from '../engine/CombatEngine.js';
 
@@ -40,6 +40,9 @@ export const InstanceService = {
     if (pLvl < inst.minLvl) {
       return { ok: false, reason: `Nível insuficiente! Exige Nível ${inst.minLvl}+.` };
     }
+    if (inst.maxLvl && pLvl > inst.maxLvl) {
+      return { ok: false, reason: `Nível acima da faixa! Esta instância aceita até o Nível ${inst.maxLvl}.` };
+    }
 
     const combatPower = Number(state.stats?.combatPower ?? state.combatPower) || 0;
     if (inst.minimumCP && combatPower < inst.minimumCP) {
@@ -48,7 +51,7 @@ export const InstanceService = {
 
     const entries = inst.entryReset === 'weekly' ? this.getWeeklyEntries(state, now) : this.getDailyEntries(state);
     if (entries.completed[instanceId]) {
-      return { ok: false, reason: inst.entryReset === 'weekly' ? 'Torre Celestial já concluída nesta semana.' : 'Instância já concluída hoje! Retorne amanhã após o reset diário.' };
+      return { ok: false, reason: inst.entryReset === 'weekly' ? `${inst.name} já concluída nesta semana.` : 'Instância já concluída hoje! Retorne amanhã após o reset diário.' };
     }
 
     if (inst.eventWindow) {

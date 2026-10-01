@@ -1256,7 +1256,7 @@ export const IDLE_MARKUP = `
                 <span class="z-badge" style="background:rgba(212,167,68,0.15); color:#f5df93; border:1px solid rgba(212,167,68,0.3); padding:2px 8px; border-radius:4px; font-size:11px;">Mundo Aberto</span>
               </div>
               <button class="action-btn" onclick="window.openInstancesModal()" style="padding:6px 14px; font-size:11px; background:linear-gradient(135deg, #1e1b4b 0%, #312e81 100%); border:1px solid #818cf8; color:#e0e7ff; font-weight:bold; border-radius:6px; box-shadow:0 0 10px rgba(129,140,248,0.3); cursor:pointer; display:flex; align-items:center; gap:6px; transition:all 0.2s;" onmouseover="this.style.filter='brightness(1.15)'" onmouseout="this.style.filter='none'">
-                <span>🌀</span> <span>Menu Exclusivo: Kamaloka &amp; Pailaka</span>
+                <span>🌀</span> <span>Instâncias &amp; Desafios</span>
               </button>
             </div>
 
@@ -1715,20 +1715,20 @@ export const IDLE_MARKUP = `
       </div>
     </div>
 
-    <!-- Solo Instances (Kamaloka & Pailaka) Modal -->
+    <!-- Combat & Zones: Solo Instances and Special Challenges -->
     <div id="solo-instances-modal" class="modal">
-      <div class="modal-content" style="max-width: 720px; background: linear-gradient(180deg, #0e121e 0%, #060913 100%); border: 2px solid #6366f1; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.85); padding: 20px;">
+      <div class="modal-content" style="max-width: 920px; width: min(920px, calc(100vw - 28px)); background: linear-gradient(180deg, #0e121e 0%, #060913 100%); border: 2px solid #6366f1; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.85); padding: 20px;">
         <div class="modal-header" style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(99,102,241,0.3); padding-bottom:12px; margin-bottom:16px;">
           <h2 style="margin:0; font-family:'Cinzel',serif; color:#a5b4fc; font-size:18px; display:flex; align-items:center; gap:8px;">
-            <span>🌀 Fendas Dimensionais: Kamaloka &amp; Pailaka</span>
+            <span>⚔️ Combate &amp; Zonas — Instâncias</span>
           </h2>
           <button id="close-instances-modal-btn" class="modal-close-x" style="background:none; border:none; color:#94a3b8; font-size:18px; cursor:pointer;">✕</button>
         </div>
-        <p style="font-size:12px; color:#cbd5e1; margin-bottom:14px; line-height:1.4;">
-          Desafie chefes dimensionais em masmorras solo diárias. Cada fenda concede <strong>1 entrada diária gratuita</strong> com saltos acelerados de XP, grandes recompensas em Adena, SP e itens de grau garantidos!
+        <p style="font-size:12px; color:#cbd5e1; margin-bottom:14px; line-height:1.5;">
+          Escolha uma jornada solo diária em <strong>Kamaloka ou Pailaka</strong>, ou enfrente um dos quatro desafios especiais. Cada ficha mostra o nível e CP exigidos, a sequência de encontros, a janela de entrada e as recompensas.
         </p>
 
-        <div id="instances-list-container" style="display:flex; flex-direction:column; gap:10px; max-height:360px; overflow-y:auto; padding-right:4px;"></div>
+        <div id="instances-list-container" style="display:flex; flex-direction:column; gap:18px; max-height:min(68vh, 680px); overflow-y:auto; padding:2px 6px 4px 0;"></div>
       </div>
     </div>
 
@@ -2190,4 +2190,3 @@ export const IDLE_MARKUP = `
     </nav>
   </div>
 `;
-
