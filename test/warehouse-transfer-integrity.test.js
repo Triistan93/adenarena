@@ -65,6 +65,22 @@ describe('Baú privado — transferências de pilhas descartáveis', () => {
     assert.equal(state.warehouse[0].count, 991);
   }));
 
+  it('normaliza contagens legadas numéricas antes de combinar pilhas no depósito e saque', () => withGameData(() => {
+    const deposit = DEFAULT_STATE();
+    deposit.inventory = [{ uid: 'source', itemId: 'boss_summon_stone', count: 4 }];
+    deposit.warehouse = [{ uid: 'destination', itemId: 'boss_summon_stone', count: '990' }];
+    assert.equal(depositToWarehouse(deposit, 'source', 4), true);
+    assert.equal(deposit.warehouse[0].count, 994);
+    assert.equal(typeof deposit.warehouse[0].count, 'number');
+
+    const withdraw = DEFAULT_STATE();
+    withdraw.inventory = [{ uid: 'destination', itemId: 'boss_summon_stone', count: '990' }];
+    withdraw.warehouse = [{ uid: 'source', itemId: 'boss_summon_stone', count: 4 }];
+    assert.equal(withdrawFromWarehouse(withdraw, 'source', 4), true);
+    assert.equal(withdraw.inventory[0].count, 994);
+    assert.equal(typeof withdraw.inventory[0].count, 'number');
+  }));
+
   it('não deposita item cujo UID ainda esteja referenciado por um slot equipado', () => withGameData(() => {
     const state = DEFAULT_STATE();
     state.equipment.weapon = 'stale-equipped';

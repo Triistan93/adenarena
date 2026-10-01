@@ -3789,3 +3789,7 @@ Retomando a ordem das áreas, o serviço `AlchemyService` repetia a falha de com
 ### Checkpoint integrado antes do desligamento (01/10/2026, 05:52 BRT)
 
 A suíte completa passou com **1.296 testes, 140 grupos, zero falhas**; `npm run build` concluiu em 11,53 s. O build manteve o aviso já conhecido de bundles grandes (chunks de ~1,67 MB e ~2,65 MB); sem erro de compilação. As mudanças desta rodada limitam-se à validação segura da carteira na Alquimia, regressões descartáveis, plano e diário. `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` permanecem sem alterações. A tarefa de desligamento `AdenArena_Shutdown_20261001_0600` consta como Ready; próxima execução será conferida novamente antes das 06:00. A auditoria global continua parcial: estes resultados não aprovam as áreas ainda não exercitadas.
+
+### Baú privado — contagens legadas concatenavam ao transferir pilhas (01/10/2026, 05:59 BRT)
+
+Na sequência da auditoria do Baú, reproduzi que uma contagem legada armazenada como texto (`"990"`) era concatenada ao depositar/sacar quatro unidades (`"9904"`), corrompendo a quantidade da pilha. Normalizei a contagem numérica antes da soma nos dois sentidos e acrescentei regressão de serviço. `node --test test/warehouse-transfer-integrity.test.js`: **6/6**. A suíte completa e o build ainda não foram repetidos após esta alteração; auditoria do Baú permanece parcial.

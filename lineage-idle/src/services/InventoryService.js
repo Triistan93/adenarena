@@ -537,7 +537,7 @@ export function depositToWarehouse(state, uid, amount = 1, callbacks = {}) {
       if (existing) {
         const space = def.stack - (existing.count || 1);
         const add = Math.min(space, remaining);
-        existing.count = (existing.count || 1) + add;
+        existing.count = Number(existing.count || 1) + add;
         remaining -= add;
       } else {
         if (state.warehouse.length >= maxSlots) {
@@ -602,7 +602,7 @@ export function withdrawFromWarehouse(state, uid, amount = 1, callbacks = {}) {
       if (existing) {
         const space = def.stack - (existing.count || 1);
         const add = Math.min(space, remaining);
-        existing.count = (existing.count || 1) + add;
+        existing.count = Number(existing.count || 1) + add;
         remaining -= add;
       } else {
         if (state.inventory.length >= maxInvSlots) {
