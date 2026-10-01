@@ -14,6 +14,11 @@ import {
 } from '../data/economy/chaosBossBalance.js';
 import { chargeRandomCraft } from './CraftService.js';
 
+function canAffordAdena(state, cost) {
+  return Number.isSafeInteger(state?.gold) && state.gold >= 0
+    && Number.isSafeInteger(cost) && cost >= 0 && state.gold >= cost;
+}
+
 export function getItemDef(itemId) {
   if (!itemId) return null;
   const data = D();
@@ -206,7 +211,7 @@ export function dissolveItem(state, uid, callbacks = {}) {
   const updateAllUI = callbacks.updateAllUI || (() => {});
   const save = callbacks.save || (() => {});
 
-  if (!state.inventory || !Array.isArray(state.inventory)) return false;
+  if (!state.inventory || !Array.isArray(state.inventory) || !canAffordAdena(state, 0)) return false;
   const idx = state.inventory.findIndex(i => i.uid === uid);
   if (idx < 0) return false;
   const inv = state.inventory[idx];
@@ -231,7 +236,7 @@ export function dissolveItem(state, uid, callbacks = {}) {
   }
 
   const yieldData = getDissolveYield(inv, def);
-  if ((state.gold || 0) < yieldData.fee) {
+  if (!canAffordAdena(state, yieldData.fee)) {
     log(`⚠️ Adena insuficiente para o processo alquímico! Requer ${yieldData.fee.toLocaleString()}g.`, 'warning');
     return false;
   }
@@ -262,7 +267,7 @@ export function dissolveItemsByGrade(state, targetGrade = 'all', callbacks = {})
   const updateAllUI = callbacks.updateAllUI || (() => {});
   const save = callbacks.save || (() => {});
 
-  if (!state.inventory || !Array.isArray(state.inventory)) return 0;
+  if (!state.inventory || !Array.isArray(state.inventory) || !canAffordAdena(state, 0)) return 0;
   const equippedSet = new Set(Object.values(state.equipment || {}).filter(Boolean));
   const lockedSet = new Set(state.lockedItems || []);
   const EQUIP_SLOTS = ['weapon', 'armor', 'shield', 'helmet', 'gloves', 'boots', 'legs', 'ring', 'necklace', 'earring', 'belt', 'cloak', 'sigil'];
@@ -302,7 +307,7 @@ export function dissolveItemsByGrade(state, targetGrade = 'all', callbacks = {})
 
   for (const { inv, def, grade } of toDissolve) {
     const fee = ESSENCE_FEE_PER_GRADE[grade] || 50;
-    if ((state.gold || 0) < totalFee + fee) break;
+    if (!canAffordAdena(state, totalFee + fee)) break;
 
     totalFee += fee;
     const type = getEssenceTypeForItem(def);
@@ -364,7 +369,7 @@ export function craftElixir(state, recipeId, qty = 1, callbacks = {}) {
   }
   const totalGold = recipe.gold * count;
 
-  if ((state.gold || 0) < totalGold) {
+  if (!canAffordAdena(state, totalGold)) {
     log(`⚠️ Adena insuficiente! Requer ${totalGold.toLocaleString()}g.`, 'warning');
     return false;
   }

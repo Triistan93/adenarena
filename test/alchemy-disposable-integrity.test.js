@@ -14,6 +14,33 @@ import {
 import { renderAlchemyUI } from '../lineage-idle/src/ui/GameUI.js';
 
 describe('Alquimia — integridade com estado descartável', () => {
+  it('dissolução individual e em lote recusam carteira malformada sem consumir equipamento', () => {
+    const item = { uid: 'invalid-wallet-frost', itemId: 'weapon_frost_lord_sword', count: 1 };
+    const operations = [
+      { run: (state) => dissolveItem(state, item.uid), expected: false },
+      { run: (state) => dissolveItemsByGrade(state, 'frostlord'), expected: 0 },
+    ];
+    for (const operation of operations) {
+      const state = DEFAULT_STATE();
+      state.gold = 'invalid-wallet';
+      state.inventory = [{ ...item }];
+      const before = structuredClone(state);
+
+      assert.equal(operation.run(state), operation.expected);
+      assert.deepEqual(state, before);
+    }
+  });
+
+  it('crafting rejects a malformed Adena wallet before adding elixir effects or consuming essences', () => {
+    const state = DEFAULT_STATE();
+    state.gold = 'invalid-wallet';
+    state.essences = { fire: 100, earth: 100, wind: 100, water: 100 };
+    const before = structuredClone(state);
+
+    assert.equal(craftElixir(state, 'elixir_berserker', 1), false);
+    assert.deepEqual(state, before);
+  });
+
   it('não dissolve equipamento favorito nem quando o estado legado não está marcado como equipado', () => {
     const state = DEFAULT_STATE();
     state.gold = 100_000;

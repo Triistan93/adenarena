@@ -3781,3 +3781,11 @@ Estado de arquivos antes do commit:
 - ?? test/zone-map-rendering.test.js
 
 O checkpoint deve ser preservado no repositório; o escopo da auditoria integral continua aberto até a validação individual das 30 áreas documentadas em docs/PLANO_AUDITORIA_INTEGRAL_DAS_TELAS.md.
+
+### Alquimia — carteira inválida não dissolve nem fabrica (01/10/2026, 05:51 BRT)
+
+Retomando a ordem das áreas, o serviço `AlchemyService` repetia a falha de comparação: carteira textual podia dissolver equipamento ou fabricar elixir sem pagamento. Adicionei regressões para dissolução individual, em lote e elixir; as três falharam antes e agora preservam item, saldo, essências e efeitos. `canAffordAdena` valida saldo/custo antes da mutação. Teste dirigido `node --test test/alchemy-disposable-integrity.test.js`: **8/8**. A área segue parcial por navegação, demais receitas e inspeção visual.
+
+### Checkpoint integrado antes do desligamento (01/10/2026, 05:52 BRT)
+
+A suíte completa passou com **1.296 testes, 140 grupos, zero falhas**; `npm run build` concluiu em 11,53 s. O build manteve o aviso já conhecido de bundles grandes (chunks de ~1,67 MB e ~2,65 MB); sem erro de compilação. As mudanças desta rodada limitam-se à validação segura da carteira na Alquimia, regressões descartáveis, plano e diário. `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` permanecem sem alterações. A tarefa de desligamento `AdenArena_Shutdown_20261001_0600` consta como Ready; próxima execução será conferida novamente antes das 06:00. A auditoria global continua parcial: estes resultados não aprovam as áreas ainda não exercitadas.
