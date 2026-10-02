@@ -190,11 +190,11 @@ test('offline hunting preserves its exact report when full inventory blocks rewa
   let saves = 0;
   assert.equal(HuntingService.processOfflineHunting(state, 10, { save: () => saves++ }), null);
   assert.equal(saves, 1, 'pending offline report must be persisted');
-  assert.equal(state.hunting.knifeDurability.knife_none, 5);
   assert.equal(state.hunting.totalHunted, 0);
   const resumedState = JSON.parse(JSON.stringify(state));
   const pending = structuredClone(resumedState.hunting.pendingOfflineHunting);
   assert.ok(pending?.actualHunts > 0);
+  assert.equal(state.hunting.knifeDurability.knife_none, 5 - pending.attemptedHunts, 'offline attempts wear the knife even while rewards await inventory space');
 
   resumedState.inventory = [];
   const result = HuntingService.processOfflineHunting(resumedState, 0);
@@ -255,7 +255,7 @@ test('the production hunting screen renders zone, tracking, butchering, tool and
     setRoot(null);
   }
 
-  assert.match(container.innerHTML, /Zonas de Caça/);
+  assert.match(container.innerHTML, /Territórios de caça/);
   assert.match(container.innerHTML, /window\.selectHuntingZone/);
   assert.match(container.innerHTML, /window\.startHuntingTrack/);
   assert.match(container.innerHTML, /window\.repairHuntingKnife/);

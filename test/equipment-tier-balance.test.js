@@ -32,10 +32,10 @@ describe('Balance between S grade and Aden Arena endgame equipment', () => {
   it('Frost Lord weapons outperform every ordinary S weapon in final combat damage', () => {
     const uniqueItems = [...new Map(Object.values(ALL_ITEMS).map(item => [item.id, item])).values()];
     const sPhysicalAttack = uniqueItems
-      .filter(item => item.slot === 'weapon' && getItemGradeCode(item) === 's' && Number(item.atk) > 0)
+      .filter(item => item.slot === 'weapon' && !item.dragonWeapon && !item.craftTier && getItemGradeCode(item) === 's' && Number(item.atk) > 0)
       .map(item => statsWithItem(item.id, 'weapon').atk);
     const sMagicAttack = uniqueItems
-      .filter(item => item.slot === 'weapon' && getItemGradeCode(item) === 's' && Number(item.matk) > 0)
+      .filter(item => item.slot === 'weapon' && !item.dragonWeapon && !item.craftTier && getItemGradeCode(item) === 's' && Number(item.matk) > 0)
       .map(item => statsWithItem(item.id, 'weapon').matk);
     const strongestSPhysicalDamage = Math.max(...sPhysicalAttack.map(atk => calculatePhysicalDamage({ atk, def: 120, applyVariance: false })));
     const strongestSMagicDamage = Math.max(...sMagicAttack.map(matk => calculateMagicDamage({ matk, mdef: 120, applyVariance: false })));

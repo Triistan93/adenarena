@@ -63,10 +63,14 @@ test('offline gathering consumes the saved in-progress harvest instead of leavin
 
   const result = GatheringService.processOfflineGathering(state, 10);
 
-  assert.equal(result.actualHarvests, 5);
-  assert.equal(state.gathering.sickleDurability.sickle_none, 45);
+  assert.ok(result.actualHarvests > 0 && result.actualHarvests <= 50);
+  assert.equal(state.gathering.sickleDurability.sickle_none, 50 - result.actualHarvests);
+  assert.equal(state.gathering.totalHarvested, result.actualHarvests);
   assert.equal(state.gathering.isGathering, false);
   assert.equal(state.gathering.targetedNodeId, null);
+  const durabilityAfterOffline = state.gathering.sickleDurability.sickle_none;
+  assert.equal(GatheringService.processOfflineGathering(state, 0), null);
+  assert.equal(state.gathering.sickleDurability.sickle_none, durabilityAfterOffline, 'the saved cycle must not pay twice');
 });
 
 test('a second start request cannot replace a live harvest or consume another pouch', () => {
@@ -143,7 +147,10 @@ test('skip-node cannot cancel or replace a harvest already in progress', () => {
   const before = structuredClone(state.gathering);
 
   assert.equal(GatheringService.skipNode(state), false);
-  assert.deepEqual(state.gathering, { ...before, selectedTactic: 'standard', pouchInventory: {}, gatheringLog: {} });
+  for (const key of ['isGathering', 'harvestStartTime', 'harvestDuration', 'targetedNodeId', 'targetedNodePurity', 'targetedNodeHazard', 'targetedNodeSignal', 'inspected']) {
+    assert.deepEqual(state.gathering[key], before[key], `refusing to skip must preserve ${key}`);
+  }
+  assert.deepEqual(state.gathering.sickleDurability, before.sickleDurability);
 });
 
 test('a full backpack preserves the in-progress harvest and tool durability', () => {

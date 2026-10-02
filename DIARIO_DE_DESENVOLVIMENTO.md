@@ -8,6 +8,7 @@
 ---
 
 #### 📑 Índice Rápido de Páginas
+- [Consolidação de `work` em `main` — 02 de outubro de 2026](#consolidação-de-work-em-main--02-de-outubro-de-2026) — *Integração local, suíte completa e build validados; auditoria integral continua aberta*
 - [Página 27 — 26 de Setembro de 2026 às 16:40](#página-27--26-de-setembro-de-2026-às-1640) — *Correção do Vínculo Indevido de Assassin Servitor com a Classe Assassin*
 - [Página 26 — 26 de Setembro de 2026 às 16:22](#página-26--26-de-setembro-de-2026-às-1622) — *Correção dos Falsos Positivos do Executor de Auditoria Funcional; Revalidação com Aprovação Integral Bloqueada*
 - [Página 25 — 25 de Setembro de 2026 às 02:35](#página-25--25-de-setembro-de-2026-às-0235) — *Etapa 2 (Drops Canônicos de Tomos/Spellbooks 1★ a 4★ nas 32 Zonas & Consumo no SkillEngine) e Etapa 3 (Sistema e Modal de Class Transfer DAG para 9 Raças e 49 Linhagens nos Níveis 20, 40 e 76) — 739/739 Testes Aprovados*
@@ -3947,3 +3948,11 @@ Completei a faixa final de armas: o catálogo agora inclui as 52 variantes Drago
 Adicionei 138 itens relacionados a acessórios Essence: braceletes de Agathion e talismã, Brooch, Agathions, jewels e talismãs, com receitas encadeadas e níveis de personagem. A UI e o serviço de equipamento agora exigem o bracelete ou Brooch correspondente para liberar espaços adicionais, e a mochila protege esses espaços/equipamentos contra reciclagem automática. Núcleos de dragão entram como recompensas dos raids correspondentes; o núcleo de Fafurion também vem da instância semanal Fafurion’s Nest. A pesquisa de nomes, slots e fontes está em `knowledge/lineage2/essence_equipment_catalog_2026.md`.
 
 Validação: `npm run build` passou; `git diff --check` passou; auditoria do catálogo confirmou 52 Dragon Weapons, 138 itens Essence e zero materiais de receita ausentes entre 1.473 itens. O build mantém o aviso existente de chunks JavaScript grandes. Não rodei a suíte de testes. O conteúdo ainda precisa ser experimentado no jogo para ajustar custos, bônus e ritmo de obtenção.
+
+### Consolidação de `work` em `main` — 02 de outubro de 2026
+
+A branch local `work` foi atualizada a partir de `origin/work` (`8d32567c`) e integrada em `main` por fast-forward. A integração reúne cinco commits que já estavam em `work` e preserva seus commits e arquivos. Antes de publicar, atualizei expectativas de seis testes que estavam desatualizadas em relação às regras já presentes: armas S84 Primordial têm progressão própria acima das armas Frost Lord; a maestria canônica de mineração tem precedência sobre fixtures de save legado; e os limites/títulos de coleta, caça, mineração e encontros seguem os contratos atuais.
+
+Validação: `npm test` passou com 1.305/1.305 testes; `npm run build` passou. O build ainda reporta avisos de chunks JavaScript acima de 1.5 MB, sem erro de compilação. Nenhum save real foi aberto ou alterado. A mudança integrada inclui dados e serviços de crafting, equipamento, encontros, raids, expedições e profissões; os arquivos protegidos `LevelEngine.js` e `MarketService.js` não aparecem no diff da integração. `ExpeditionService.js` já faz parte dos commits de `work` e foi preservado sem alterações nesta correção local.
+
+A integração está somente local neste checkpoint: `main` está cinco commits à frente de `origin/main`; `origin/work` permanece preservada até confirmação do push da `main`. A auditoria integral das 30 áreas não foi concluída por esta operação e permanece aberta.

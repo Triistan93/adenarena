@@ -16,7 +16,7 @@ function createMiningState() {
     gold: 0,
     inventory: [],
     lifeActivities: {
-      mining: { level: 10, xp: 0, tool: 'pickaxe_none', toolDurability: 10, maxDurability: 50, isWorking: false, autoMode: false }
+      mining: { level: 10, xp: 0, progressionVersion: 1, tool: 'pickaxe_none', toolDurability: 10, maxDurability: 50, isWorking: false, autoMode: false }
     },
     mining: {
       skillLevel: 10,
@@ -141,12 +141,12 @@ test('mining yields reference known catalog materials and each zone has a node p
   }
 });
 
-test('all 24 configured mineral nodes execute through the real extraction and reward path', () => {
+test('every configured mineral node executes through the real extraction and reward path', () => {
   const allNodeIds = new Set();
   for (const zone of Object.values(MINING_ZONES)) {
     for (const nodeId of zone.availableNodes) allNodeIds.add(nodeId);
   }
-  assert.equal(allNodeIds.size, 24);
+  assert.equal(allNodeIds.size, Object.keys(MINERAL_NODES_CATALOG).length, 'every catalog node must be reachable from a mining zone');
 
   for (const nodeId of allNodeIds) {
     const state = createMiningState();
@@ -169,12 +169,23 @@ test('all 24 configured mineral nodes execute through the real extraction and re
 
 test('each mining zone enforces its level gate and accepts the exact minimum', () => {
   for (const zone of Object.values(MINING_ZONES)) {
-    const underLevel = createMiningState();
-    underLevel.level = zone.minLevel - 1;
-    assert.equal(MiningService.selectZone(underLevel, zone.id), false, `${zone.id} unlocked too early`);
+    if (zone.minLevel > 1) {
+      const underLevel = createMiningState();
+      underLevel.level = zone.minLevel - 1;
+      underLevel.mining.skillLevel = zone.minSkillLevel;
+      assert.equal(MiningService.selectZone(underLevel, zone.id), false, `${zone.id} unlocked below its character-level gate`);
+    }
+
+    if ((zone.minSkillLevel || 1) > 1) {
+      const underMastery = createMiningState();
+      underMastery.level = zone.minLevel;
+      underMastery.lifeActivities.mining.level = zone.minSkillLevel - 1;
+      assert.equal(MiningService.selectZone(underMastery, zone.id), false, `${zone.id} unlocked below its profession-mastery gate`);
+    }
 
     const eligible = createMiningState();
     eligible.level = zone.minLevel;
+    eligible.lifeActivities.mining.level = zone.minSkillLevel;
     assert.equal(MiningService.selectZone(eligible, zone.id), true, `${zone.id} rejected minimum level`);
     assert.equal(eligible.mining.activeZone, zone.id);
   }
@@ -216,7 +227,7 @@ test('the production mining screen renders zone, vein, tool, lamp and AFK action
     setRoot(null);
   }
 
-  assert.match(container.innerHTML, /Galerias & Jazidas Minerais de Aden/);
+  assert.match(container.innerHTML, /Galerias e jazidas/);
   assert.match(container.innerHTML, /window\.selectMiningZone/);
   assert.match(container.innerHTML, /window\.probeMiningVein/);
   assert.match(container.innerHTML, /window\.startMiningHarvest/);

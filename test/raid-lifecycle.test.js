@@ -86,7 +86,8 @@ test('raid cards disable entries blocked by an active raid or insufficient CP', 
     activeRaidId: 'queen_ant'
   });
 
-  assert.match(container.innerHTML, /Conclua o Raid atual antes de iniciar outro/);
+  assert.match(container.innerHTML, /Encontro em andamento/);
+  assert.match(container.innerHTML, /title="Conclua .* antes de iniciar outro encontro\."/);
   assert.doesNotMatch(container.innerHTML, /onclick="window\.startRaidBossAction\('core'\)"/);
 
   renderRaidsTab(container, {

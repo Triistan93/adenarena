@@ -89,7 +89,7 @@ test('every zone can be entered at its exact production level and minimum CP', (
       currentZone: 'talkingIsland',
       combatPower: required.minCp,
       stats: { combatPower: required.minCp },
-      isCombatActive: false,
+      isCombatActive: true,
       inventory: [],
       zoneKills: {}
     };
