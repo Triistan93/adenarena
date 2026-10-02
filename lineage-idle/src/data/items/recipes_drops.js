@@ -1278,7 +1278,11 @@ export function generateAllCraftingRecipes(allItemsParam = null) {
     const aType = getArmorType(id, def.name);
     const wType = getWeaponType(id, def.name);
 
-    if (def.craftTier === 'primordial') {
+    if (Array.isArray(def.craftMaterials) && def.craftMaterials.length > 0) {
+      craftLevel = Math.max(1, Math.min(10, Number(def.craftLevel) || 1));
+      baseGold = Math.max(0, Number(def.craftGold) || baseGold);
+      reqs = def.craftMaterials.map(material => ({ id: material.id, count: material.count }));
+    } else if (def.craftTier === 'primordial') {
       craftLevel = 10;
       baseGold = 125000;
       if (slot === 'weapon') {
@@ -1386,8 +1390,11 @@ export function generateAllCraftingRecipes(allItemsParam = null) {
       itemId: id,
       level: craftLevel * 10,
       craftLevel,
+      minPlayerLevel: Math.max(1, Number(def.req?.level) || 1),
       gold: baseGold,
-      reqs
+      reqs,
+      noCriticalCraft: !!def.noCriticalCraft,
+      fixedRarity: def.fixedCraftRarity || null
     };
     recipes[id] = recipeObj;
 

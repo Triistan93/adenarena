@@ -931,7 +931,7 @@ export function initTooltipEvents() {
 /* ═══════════════════════════════════════════════════════════════════════════
    3. INVENTORY & PAPERDOLL (6 LINHAS x 3 COLUNAS)
 ═══════════════════════════════════════════════════════════════════════════ */
-const GEAR_SLOTS = ['weapon', 'weapon2', 'shield', 'armor', 'helmet', 'gloves', 'legs', 'boots', 'cloak', 'belt', 'necklace', 'earring', 'ring', 'hair', 'hair2', 'agathion', 'talisman'];
+const GEAR_SLOTS = ['weapon', 'weapon2', 'shield', 'armor', 'helmet', 'gloves', 'legs', 'boots', 'cloak', 'belt', 'necklace', 'earring', 'ring', 'hair', 'hair2', 'agathion', 'talisman', 'jewel', 'brooch', 'agathion_bracelet', 'talisman_bracelet'];
 const CONSUMABLE_SLOTS = ['consumable', 'potion', 'scroll', 'food', 'powerup', 'crystal'];
 const MATERIAL_SLOTS = ['material', 'gem', 'ore', 'craft', 'crystal'];
 
@@ -2685,11 +2685,29 @@ export function updateEquipmentUI(state, callbacks = {}) {
   ensureInventoryStyles();
   migrateEquipmentSlots(state);
 
+  const getEquippedDefinition = (slot) => {
+    const uid = state.equipment?.[slot];
+    const equipped = uid && state.inventory?.find(item => item?.uid === uid);
+    return equipped ? (D()?.ALL_ITEMS?.[equipped.itemId] || equipped) : null;
+  };
+  const unlockedAccessorySlots = {
+    jewel: Math.max(0, Number(getEquippedDefinition('brooch')?.jewelSlots) || 0),
+    agathion: Math.max(0, Number(getEquippedDefinition('agathion_bracelet')?.agathionSlots) || 0),
+    talisman: Math.max(0, Number(getEquippedDefinition('talisman_bracelet')?.talismanSlots) || 0)
+  };
+
   for (const slot of ALL_EQUIP_SLOTS) {
     if (slot === 'armor') continue; // chest é o slot canônico do paperdoll
+    const numberedSlot = slot.match(/^(jewel|agathion|talisman)(\d+)$/);
+    if (numberedSlot && Number(numberedSlot[2]) > unlockedAccessorySlots[numberedSlot[1]] && !state.equipment[slot]) {
+      const lockedSlot = findEquipmentSlot(slot);
+      if (lockedSlot) lockedSlot.style.display = 'none';
+      continue;
+    }
     let slotEl = findEquipmentSlot(slot);
     if (!slotEl) slotEl = createEquipmentSlotDynamically(slot);
     if (!slotEl) continue;
+    slotEl.style.display = '';
 
     const uid = state.equipment[slot] || (slot === 'chest' ? state.equipment.armor : null);
     const item = uid ? (state.inventory || []).find(i => i.uid === uid) : null;
@@ -2760,7 +2778,9 @@ export function updateEquipmentUI(state, callbacks = {}) {
       slotEl.dataset.slot = slot;
       delete slotEl.dataset.uid;
 
-      slotEl.innerHTML = `<span class="equip-placeholder">${SLOT_ICONS[slot] || '📦'}</span>`;
+      const icon = SLOT_ICONS[slot]
+        || (slot.startsWith('jewel') ? '💎' : slot.startsWith('agathion') ? '🧚' : slot.startsWith('talisman') ? '🧿' : '📦');
+      slotEl.innerHTML = `<span class="equip-placeholder">${icon}</span>`;
 
       slotEl.onmouseenter = null;
       slotEl.onmouseleave = null;
@@ -6396,6 +6416,7 @@ export function openCraftModal(itemId, state, callbacks = {}) {
   let currentQty = 1;
   const gradeInfo = getItemGrade(def);
   const reqForgeLvl = r.craftLevel || (r.level ? getCraftLevelReq(r.level) : 1);
+  const reqPlayerLvl = r.minPlayerLevel || def.req?.level || 1;
   const statsSummary = buildShopStatsSummary(def);
 
   function renderModalContent() {
@@ -6438,7 +6459,7 @@ export function openCraftModal(itemId, state, callbacks = {}) {
             <h3 style="margin:0; font-family:'Cinzel',serif; color:#f3c669; font-size:18px;">${def.name}</h3>
             <span style="background:${gradeInfo.color}; color:#fff; font-size:11px; font-weight:bold; padding:2px 8px; border-radius:4px;">${gradeInfo.label}</span>
           </div>
-          <div style="font-size:12px; color:#aaa; margin-top:2px;">Requer Forja Lv.${reqForgeLvl} · Slot: ${def.slot || 'Geral'}</div>
+          <div style="font-size:12px; color:#aaa; margin-top:2px;">Requer Personagem Lv.${reqPlayerLvl} · Forja Lv.${reqForgeLvl} · Slot: ${def.slot || 'Geral'}</div>
         </div>
       </div>
 

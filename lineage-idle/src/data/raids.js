@@ -283,6 +283,7 @@ export const RAID_BOSSES = {
       { itemId: 'book_4star', name: 'Tomo Sagrado: 4★ (Lendário Divino)', chance: 0.25 },
       { itemId: 'jewel_earring_of_antharas', name: 'Earring of Antharas', chance: 0.25, isEpicJewel: true },
       { itemId: 'weapon_frost_lord_two_hand_sword', name: 'Frost Lord Greatsword (Tier 6 Apex)', chance: 0.25 },
+      { itemId: 'dragon_core_antharas', name: 'Núcleo de Pedra de Antharas', chance: 0.35 },
       { itemId: 'scroll_blessed_weapon', name: 'Blessed Scroll: Enchant Weapon', chance: 0.60 },
       { itemId: 'adena_coins', count: 100, name: '100x Aden Coins (AC)', chance: 0.50 }
     ]
@@ -325,6 +326,7 @@ export const RAID_BOSSES = {
       { itemId: 'jewel_ring_of_valakas', name: 'Ring of Valakas', chance: 0.25, isEpicJewel: true },
       { itemId: 'armor_valakas_cloack', name: 'Valakas Dragon Cloak', chance: 0.35 },
       { itemId: 'valakas_mask', name: 'Máscara Flamejante de Valakas', chance: 0.40 },
+      { itemId: 'dragon_core_valakas', name: 'Coração Flamejante de Valakas', chance: 0.35 },
       { itemId: 'scroll_blessed_weapon', name: 'Blessed Scroll: Enchant Weapon', chance: 0.75 },
       { itemId: 'adena_coins', count: 150, name: '150x Aden Coins (AC)', chance: 0.60 }
     ]
@@ -362,6 +364,7 @@ export const RAID_BOSSES = {
     ],
     drops: [
       { itemId: 'armor_lindvior_cloack', name: 'Lindvior Cloack', chance: 0.25 },
+      { itemId: 'dragon_core_lindvior', name: 'Núcleo Tempestuoso de Lindvior', chance: 0.40 },
       { itemId: 'scroll_blessed_weapon', name: 'Blessed Scroll: Enchant Weapon', chance: 0.45 },
       { itemId: 'adena_coins', count: 65, name: '65x Aden Coins (AC)', chance: 0.50 }
     ]
