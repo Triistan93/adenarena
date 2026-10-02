@@ -7,6 +7,7 @@ import { el, qs } from '../core/DomHelpers.js';
 import { FISHING_ZONES, FISH_CATALOG, RODS_CATALOG, BAIT_CATALOG, getFishingZonesList } from '../data/fishing.js';
 import { FishingService } from '../services/FishingService.js';
 import { getInventoryCount } from '../services/InventoryService.js';
+import { renderLifeActivityAtlas } from './LifeActivityAtlas.js';
 
 export function renderFishingUI(state) {
   if (!state) return;
@@ -33,50 +34,18 @@ export function renderFishingUI(state) {
 
   // --- ZONAS DE PESCA ---
   const zonesList = getFishingZonesList();
-  let zonesHtml = '';
-  for (const z of zonesList) {
-    const isUnlocked = playerLvl >= z.minLevel;
-    const isSelected = z.id === activeZoneId;
-    const reqBaitName = z.requiredBait ? (BAIT_CATALOG[z.requiredBait]?.name || z.requiredBait) : 'Qualquer Isca';
-
-    let diffStars = '⭐'.repeat(z.difficulty);
-
-    zonesHtml += `
-      <div 
-        onclick="${isUnlocked ? `window.selectFishingZone('${z.id}')` : ''}"
-        style="
-          flex: 1 1 200px;
-          min-width: 190px;
-          background: ${isSelected ? 'linear-gradient(180deg, rgba(30,58,138,0.5), rgba(15,23,42,0.85))' : 'rgba(15,20,32,0.7)'};
-          border: 1px solid ${isSelected ? '#60a5fa' : isUnlocked ? 'rgba(212,167,68,0.25)' : 'rgba(100,100,100,0.2)'};
-          border-radius: 8px;
-          padding: 10px;
-          cursor: ${isUnlocked ? 'pointer' : 'not-allowed'};
-          opacity: ${isUnlocked ? '1' : '0.55'};
-          position: relative;
-          transition: all 0.2s ease;
-          box-shadow: ${isSelected ? '0 0 12px rgba(96,165,250,0.3)' : 'none'};
-        "
-      >
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
-          <div style="font-family:'Cinzel',serif; font-weight:bold; font-size:12px; color:${isSelected ? '#93c5fd' : '#f5df93'};">
-            ${z.icon} ${z.name}
-          </div>
-          <span style="font-size:10px; color:#ffd700;">${diffStars}</span>
-        </div>
-        <div style="font-size:11px; color:#aaa; margin-bottom:6px; line-height:1.2;">
-          ${z.description}
-        </div>
-        <div style="display:flex; justify-content:space-between; align-items:center; font-size:10px; border-top:1px solid rgba(255,255,255,0.06); padding-top:4px;">
-          <span style="color:${isUnlocked ? '#34d399' : '#f87171'}; font-weight:bold;">
-            ${isUnlocked ? '✓ Liberado' : `🔒 Lv. ${z.minLevel}+`}
-          </span>
-          <span style="color:#cbd5e1;">🪱 ${reqBaitName}</span>
-        </div>
-        ${isSelected ? `<div style="position:absolute; top:-6px; right:-6px; background:#2563eb; color:#fff; font-size:9px; font-weight:bold; padding:1px 6px; border-radius:10px; border:1px solid #93c5fd;">ATIVO</div>` : ''}
-      </div>
-    `;
-  }
+  const zonesHtml = renderLifeActivityAtlas({
+    activityId: 'fishing', title: 'Rotas de pesca',
+    subtitle: 'Encontre cardumes nas costas, rios e lagos de Aden.',
+    zones: zonesList, activeZoneId, playerLevel: playerLvl, activityLevel: fState.skillLevel,
+    selectHandler: 'selectFishingZone', resourceLabel: 'Espécies aquáticas',
+    resourceNames: (activeZone.availableFish || []).map(id => FISH_CATALOG[id]?.name || id),
+    requirementLabel: 'Isca da região',
+    requirementValue: activeZone.requiredBait ? (BAIT_CATALOG[activeZone.requiredBait]?.name || activeZone.requiredBait) : 'Qualquer isca',
+    cycleLabel: 'Lançamento base', cycleValue: `${((activeZone.baseCatchTime || 4000) / 1000).toFixed(1)}s`,
+    mechanicSummary: 'Gerencie a tensão e o controle da linha; recolha para cansar o peixe e ceda linha para evitar a ruptura.',
+    accent: '#72cde6'
+  });
 
   // --- VARAS & REPARO ---
   let rodOptionsHtml = '';
@@ -487,6 +456,8 @@ export function renderFishingUI(state) {
         </div>
       ` : ''}
 
+      ${zonesHtml}
+
       <!-- Stage Interativo de Pesca -->
       <div style="
         background:radial-gradient(circle at center, rgba(30,58,138,0.3) 0%, rgba(10,15,30,0.95) 100%);
@@ -525,14 +496,6 @@ export function renderFishingUI(state) {
           <div style="display:flex; flex-wrap:wrap; gap:8px;">
             ${baitOptionsHtml}
           </div>
-        </div>
-      </div>
-
-      <!-- Seletor de Zonas -->
-      <div style="background:rgba(18,22,34,0.85); border:1px solid rgba(212,167,68,0.25); border-radius:10px; padding:12px; margin-bottom:16px;">
-        <h4 style="margin:0 0 8px 0; font-family:'Cinzel',serif; font-size:12px; color:#f4d58a;">🗺️ Zonas de Pesca de Aden</h4>
-        <div style="display:flex; flex-wrap:wrap; gap:8px;">
-          ${zonesHtml}
         </div>
       </div>
 

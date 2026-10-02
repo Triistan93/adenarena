@@ -52,7 +52,7 @@ export const FISHING_ZONES = {
     minLevel: 32,
     difficulty: 5,
     description: "Mar aberto com grande profundidade. Lar de peixes valiosos, carnívoros e ferozes.",
-    availableFish: ["fish_giran_dragonfish", "fish_swordfish", "fish_tuna", "fish_giran_manta", "fish_kraken_tentacle"],
+    availableFish: ["fish_giran_dragonfish", "fish_swordfish", "fish_tuna", "fish_giran_manta", "fish_kraken_tentacle", "fish_primordial_sturgeon"],
     requiredBait: "bait_golden",
     baseCatchTime: 5000
   },
@@ -68,6 +68,12 @@ export const FISHING_ZONES = {
     baseCatchTime: 6000
   }
 };
+
+// Progressão de zonas: acompanha marcos do personagem e da maestria do ofício.
+Object.values(FISHING_ZONES).forEach((zone, index) => {
+  zone.minLevel = [1, 20, 40, 60, 85, 120][index] || 120;
+  zone.minSkillLevel = [1, 5, 10, 15, 20, 25][index] || 25;
+});
 
 export function getFishingZonesList() {
   return Object.values(FISHING_ZONES);
@@ -264,6 +270,13 @@ export const FISH_CATALOG = {
     fightProfile: "burstRunner", baseStamina: 160,
     baseWeight: { min: 30.0, max: 80.0 }, xpReward: 300, sellPrice: 800,
     exchangeRate: 1, materialReward: "oriharukon_ore", materialName: "Minério de Oriharukon",
+    zones: ["zone_giran"]
+  },
+  fish_primordial_sturgeon: {
+    id: "fish_primordial_sturgeon", name: "Esturjão Primordial", icon: "🐉", rarity: "legendary",
+    fightProfile: "heavy", baseStamina: 220,
+    baseWeight: { min: 90.0, max: 220.0 }, xpReward: 700, sellPrice: 6500,
+    exchangeRate: 1, materialReward: "primordial_essence", materialName: "Essência Primordial",
     zones: ["zone_giran"]
   },
 

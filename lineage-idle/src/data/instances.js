@@ -180,7 +180,7 @@ export const SOLO_INSTANCES = {
         ]
       }
     ],
-    rewards: { xp: 3400000, gold: 2100000, sp: 26000, items: ['armor_fafurion_cloack', 'frost_crystal'], guaranteedRewardText: 'Manto de Fafurion + Cristal do Gelo Eterno' }
+    rewards: { xp: 3400000, gold: 2100000, sp: 26000, items: ['armor_fafurion_cloack', 'frost_crystal', 'dragon_core_fafurion'], guaranteedRewardText: 'Manto de Fafurion + Cristal do Gelo Eterno + Núcleo Abissal' }
   },
   steel_citadel: {
     id: 'steel_citadel',

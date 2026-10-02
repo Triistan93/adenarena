@@ -28,6 +28,9 @@ import { PREY_CATALOG } from '../hunting.js';
 import { BROOCHES, BROOCH_JEWELS } from './broochJewels.js';
 import { COLOSSEUM_ITEMS } from './colosseum_items.js';
 import { CASTLE_SHOP_ITEMS } from './castle_shop_items.js';
+import { PRIMORDIAL_EQUIPMENT } from './primordial_equipment.js';
+import { DRAGON_WEAPONS } from './dragon_weapons.js';
+import { ESSENCE_ACCESSORY_ITEMS } from './essence_accessories.js';
 
 // Normaliza recursos canônicos de Life Activities para o catálogo oficial ALL_ITEMS
 const CANONICAL_RESOURCE_ITEMS = {};
@@ -107,7 +110,10 @@ export const ALL_ITEMS = {
   ...BROOCHES,
   ...BROOCH_JEWELS,
   ...COLOSSEUM_ITEMS,
-  ...CASTLE_SHOP_ITEMS
+  ...CASTLE_SHOP_ITEMS,
+  ...PRIMORDIAL_EQUIPMENT,
+  ...DRAGON_WEAPONS,
+  ...ESSENCE_ACCESSORY_ITEMS
 };
 
 if (typeof window !== 'undefined') {

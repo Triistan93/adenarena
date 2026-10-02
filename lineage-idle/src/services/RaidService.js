@@ -12,6 +12,8 @@ import { RAID_BOSSES } from '../data/raids.js';
 import { MONSTERS } from '../data/monsters.js';
 import { stopCombat, startCombat } from '../engine/CombatEngine.js';
 import { StaggerEngine } from '../engine/StaggerEngine.js';
+import { D } from '../core/GameConfig.js';
+import { getMaxInventorySlots } from './InventoryService.js';
 
 const DAILY_FREE_TICKETS = 3;
 
@@ -60,8 +62,49 @@ export function getRaidStatus(state) {
     tickets: state.dailyRaidTickets ?? DAILY_FREE_TICKETS,
     maxTickets: DAILY_FREE_TICKETS,
     clears: state.dailyRaidClears || {},
-    totalKills: state.totalRaidKills || 0
+    totalKills: state.totalRaidKills || 0,
+    pendingRewards: Array.isArray(state.pendingRaidRewards) ? state.pendingRaidRewards : []
   };
+}
+
+function storeRaidDrop(state, reward) {
+  state.inventory = Array.isArray(state.inventory) ? state.inventory : [];
+  const itemDef = D()?.ALL_ITEMS?.[reward.itemId] || {};
+  const stackable = !!itemDef.stack || ['consumable', 'material', 'scroll', 'powerup', 'potion', 'food', 'quest'].includes(String(itemDef.slot || '').toLowerCase()) || ['consumable', 'material', 'scroll'].includes(String(itemDef.type || '').toLowerCase());
+  const count = Number.isSafeInteger(reward.count) && reward.count > 0 ? reward.count : 1;
+  if (stackable) {
+    const maxStack = Math.max(1, Math.floor(Number(itemDef.stack) || 99999));
+    const existing = state.inventory.find(item => item.itemId === reward.itemId && !item.equipped && Number(item.count ?? 1) < maxStack);
+    if (existing) {
+      existing.count = Math.max(1, Number(existing.count) || 1) + count;
+      return true;
+    }
+  }
+  if (state.inventory.length >= getMaxInventorySlots(state)) return false;
+  state.inventory.push({
+    uid: reward.uid || `raid_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+    itemId: reward.itemId,
+    enchant: 0,
+    count,
+    equipped: false
+  });
+  return true;
+}
+
+export function claimPendingRaidRewards(state, callbacks = {}) {
+  if (!state) return { success: false, claimed: 0, remaining: 0 };
+  state.pendingRaidRewards = Array.isArray(state.pendingRaidRewards) ? state.pendingRaidRewards : [];
+  let claimed = 0;
+  while (state.pendingRaidRewards.length > 0) {
+    const reward = state.pendingRaidRewards[0];
+    if (!storeRaidDrop(state, reward)) break;
+    state.pendingRaidRewards.shift();
+    claimed++;
+  }
+  if (claimed > 0) callbacks.log?.(`🎁 ${claimed} recompensa(s) de Raid resgatada(s) da mochila de prêmios.`, 'loot');
+  else if (state.pendingRaidRewards.length > 0) callbacks.log?.('Libere espaço na mochila para resgatar as recompensas de Raid.', 'warning');
+  if (claimed > 0) callbacks.onUpdate?.();
+  return { success: claimed > 0, claimed, remaining: state.pendingRaidRewards.length };
 }
 
 /**
@@ -75,7 +118,7 @@ export function canEnterRaid(state, raidId) {
   const boss = RAID_BOSSES[raidId];
   if (!boss) return { canEnter: false, reason: 'Chefe de Raid inexistente.' };
 
-  if (state.isRaidActive || state.activeRaidId || state.activeMonster?.isRaid) {
+  if (state.isRaidActive || state.activeRaidId || state.towerCombatActive || state.isSpecialInstanceActive || state.activeInstanceId || state.activeMonster?.isRaid || state.activeMonster?.isTower || state.activeMonster?.isInstanceBoss || state.activeMonster?.isWorldBoss || state.activeMonster?.isChaosBoss) {
     return { canEnter: false, reason: 'Conclua o Raid atual antes de iniciar outro.' };
   }
 
@@ -393,22 +436,28 @@ export function handleRaidVictory(state, raidId, callbacks = {}) {
             callbacks.log(`🪙 **DROP RARO:** Você recebeu **+${acAmount} Aden Coins (AC)**!`, 'rarity-legendary');
           }
         } else {
-          state.inventory = state.inventory || [];
-          const uid = `raid_${raidId}_${Date.now()}_${dropIndex++}_${Math.floor(Math.random() * 10000)}`;
-          state.inventory.push({
-            uid,
+          const reward = {
+            uid: `raid_${raidId}_${Date.now()}_${dropIndex++}_${Math.floor(Math.random() * 10000)}`,
             itemId: drop.itemId,
-            enchant: 0,
-            count: 1
-          });
-          droppedItems.push({ itemId: drop.itemId, name: drop.name, uid, isEpicJewel: drop.isEpicJewel });
+            name: drop.name,
+            count: 1,
+            isEpicJewel: drop.isEpicJewel
+          };
+          if (storeRaidDrop(state, reward)) {
+            droppedItems.push({ ...reward, pending: false });
+          } else {
+            state.pendingRaidRewards = Array.isArray(state.pendingRaidRewards) ? state.pendingRaidRewards : [];
+            state.pendingRaidRewards.push({ ...reward, pending: true });
+            droppedItems.push({ ...reward, pending: true });
+          }
+          const rewardPending = Boolean(droppedItems[droppedItems.length - 1]?.pending);
 
           if (drop.isEpicJewel) {
             if (callbacks.log) {
-              callbacks.log(`👑 **DROP LENDÁRIO DE CHEFE!** Você obteve **[${drop.name}]**!`, 'rarity-legendary');
+              callbacks.log(`👑 **DROP LENDÁRIO DE CHEFE!** ${rewardPending ? 'Recompensa guardada para resgate' : 'Você obteve'} **[${drop.name}]**!`, 'rarity-legendary');
             }
           } else if (callbacks.log) {
-            callbacks.log(`🎁 Drop de Raid: **${drop.name}** adicionado ao inventário!`, 'rarity-epic');
+            callbacks.log(`🎁 Drop de Raid: **${drop.name}** ${rewardPending ? 'guardado para resgate' : 'adicionado ao inventário'}!`, 'rarity-epic');
           }
         }
       }

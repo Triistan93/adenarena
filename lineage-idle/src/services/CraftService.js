@@ -42,6 +42,24 @@ export function getCraftLevelReq(recipeLevel) {
   return Math.max(1, Math.floor(recipeLevel / 10) + 1);
 }
 
+export function getRecipeForgeLevelRequirement(recipe) {
+  if (!recipe) return 1;
+  const explicitLevel = Number(recipe.craftLevel);
+  if (Number.isSafeInteger(explicitLevel) && explicitLevel > 0) return explicitLevel;
+  const recipeLevel = Number(recipe.level);
+  return Number.isFinite(recipeLevel) && recipeLevel > 0 ? getCraftLevelReq(recipeLevel) : 1;
+}
+
+function getPlayerForgeLevel(state) {
+  const level = Number(state?.accountForgeLevel ?? state?.craftLevel ?? 1);
+  return Number.isSafeInteger(level) && level > 0 ? level : 1;
+}
+
+function getRecipePlayerLevelRequirement(recipe) {
+  const level = Number(recipe?.minPlayerLevel);
+  return Number.isSafeInteger(level) && level > 0 ? level : 1;
+}
+
 /**
  * Retorna a definição da receita de craft pelo ID.
  * @param {string} recipeId
@@ -146,6 +164,10 @@ export function calculateMaxCraftableQty(state, recipeOrId) {
 export function canCraft(state, recipeId, qty = 1) {
   const count = Number(qty);
   if (!Number.isSafeInteger(count) || count <= 0) return false;
+  const recipe = getRecipeDef(recipeId);
+  if (!recipe
+    || getPlayerForgeLevel(state) < getRecipeForgeLevelRequirement(recipe)
+    || (Number(state?.level) || 1) < getRecipePlayerLevelRequirement(recipe)) return false;
   const maxPossible = calculateMaxCraftableQty(state, recipeId);
   return maxPossible >= count;
 }
@@ -161,6 +183,19 @@ export function craftItem(state, recipeId, qty = 1, callbacks = {}) {
   const recipe = getRecipeDef(recipeId);
   if (!recipe) {
     if (callbacks.log) callbacks.log('Receita de forja não encontrada.', 'system');
+    return false;
+  }
+
+  const requiredForgeLevel = getRecipeForgeLevelRequirement(recipe);
+  const playerForgeLevel = getPlayerForgeLevel(state);
+  if (playerForgeLevel < requiredForgeLevel) {
+    if (callbacks.log) callbacks.log(`🔒 Sua Forja está no nível ${playerForgeLevel}; esta receita requer nível ${requiredForgeLevel}.`, 'warning');
+    return false;
+  }
+  const requiredPlayerLevel = getRecipePlayerLevelRequirement(recipe);
+  const playerLevel = Number(state?.level) || 1;
+  if (playerLevel < requiredPlayerLevel) {
+    if (callbacks.log) callbacks.log(`🔒 Seu personagem está no nível ${playerLevel}; esta receita requer nível ${requiredPlayerLevel}.`, 'warning');
     return false;
   }
 
@@ -201,26 +236,30 @@ export function craftItem(state, recipeId, qty = 1, callbacks = {}) {
   // Cálculo de Critical Craft (Double Craft & Foundation)
   const isDwarf = workingState.race === 'dwarf' || workingState.class === 'artisan' || workingState.class === 'warsmith';
   const forgeLvl = workingState.accountForgeLevel || workingState.craftLevel || 1;
-  const doubleCraftChance = (isDwarf ? 0.15 : 0.05) + (forgeLvl * 0.005);
+  const allowCriticalCraft = !recipe.noCriticalCraft;
+  const doubleCraftChance = allowCriticalCraft ? (isDwarf ? 0.15 : 0.05) + (forgeLvl * 0.005) : 0;
   const isDouble = Math.random() < doubleCraftChance;
 
   const totalYield = (baseYieldPerUnit * countToCraft) * (isDouble ? 2 : 1);
 
   const pityBonus = (workingState.craftFoundationPity || 0) * 0.002;
-  const foundationChance = 0.06 + (isDwarf ? 0.04 : 0) + pityBonus;
+  const foundationChance = allowCriticalCraft ? 0.06 + (isDwarf ? 0.04 : 0) + pityBonus : 0;
   const isFoundation = !isConsumable && (Math.random() < foundationChance);
 
-  if (isFoundation) {
-    workingState.craftFoundationPity = 0;
-  } else {
-    workingState.craftFoundationPity = (workingState.craftFoundationPity || 0) + countToCraft;
+  if (allowCriticalCraft) {
+    if (isFoundation) {
+      workingState.craftFoundationPity = 0;
+    } else {
+      workingState.craftFoundationPity = (workingState.craftFoundationPity || 0) + countToCraft;
+    }
   }
 
   const rarityBoost = isDwarf ? 1 : 0;
   const rolledRarity = gData?.rollRarity ? gData.rollRarity(rarityBoost) : 'common';
+  const outputRarity = recipe.fixedRarity || rolledRarity;
 
   const targetItemId = recipe?.result || recipeId;
-  if (!addToInventory(workingState, targetItemId, totalYield, rolledRarity, isFoundation, callbacks, true)) {
+  if (!addToInventory(workingState, targetItemId, totalYield, outputRarity, isFoundation, callbacks, true)) {
     if (callbacks.log) callbacks.log('Mochila cheia; a forja não consumiu materiais nem Adena.', 'system');
     return false;
   }

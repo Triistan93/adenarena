@@ -4,6 +4,7 @@
  */
 
 import { el, qs } from '../core/DomHelpers.js';
+import { renderLifeActivityAtlas } from './LifeActivityAtlas.js';
 import {
   HUNTING_ZONES,
   PREY_CATALOG,
@@ -46,49 +47,20 @@ export function renderHuntingUI(state) {
   const speciesDiscovered = Object.keys(hState.huntingLog || {}).length;
   const totalSpecies = Object.keys(PREY_CATALOG).length;
 
-  // 1. ZONAS DE CAÇA
+  // 1. ATLAS DE TERRITÓRIOS DE CAÇA
   const zonesList = getHuntingZonesList();
-  let zonesHtml = '';
-  for (const z of zonesList) {
-    const isUnlocked = playerLvl >= z.minLevel;
-    const isSelected = z.id === activeZoneId;
-    const reqLureDef = z.requiredLure ? LURES_CATALOG[z.requiredLure] : null;
-
-    zonesHtml += `
-      <div 
-        onclick="${isUnlocked ? `window.selectHuntingZone('${z.id}')` : ''}"
-        style="
-          flex: 1 1 200px;
-          min-width: 190px;
-          background: ${isSelected ? 'linear-gradient(180deg, rgba(35,60,40,0.7), rgba(15,25,18,0.9))' : 'rgba(15,20,28,0.75)'};
-          border: 1px solid ${isSelected ? '#34d399' : isUnlocked ? 'rgba(212,167,68,0.25)' : 'rgba(100,100,100,0.2)'};
-          border-radius: 8px;
-          padding: 10px;
-          cursor: ${isUnlocked ? 'pointer' : 'not-allowed'};
-          opacity: ${isUnlocked ? '1' : '0.55'};
-          position: relative;
-          transition: all 0.2s ease;
-          box-shadow: ${isSelected ? '0 0 12px rgba(52,211,153,0.3)' : 'none'};
-        "
-      >
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
-          <strong style="font-family:'Cinzel',serif; font-size:13px; color:${isSelected ? '#6ee7b7' : isUnlocked ? '#f4d58a' : '#888'};">
-            ${z.icon} ${z.name}
-          </strong>
-          <span style="font-size:10px; color:${isUnlocked ? '#ffd877' : '#ef4444'}; font-weight:bold;">
-            ${isUnlocked ? '★'.repeat(z.difficulty) : `🔒 Lv. ${z.minLevel}`}
-          </span>
-        </div>
-        <p style="font-size:11px; color:#94a3b8; margin:0 0 6px 0; line-height:1.3;">
-          ${z.description}
-        </p>
-        <div style="display:flex; justify-content:space-between; font-size:10px; color:#aaa;">
-          <span>Atrativo: <strong style="color:#cbd5e1;">${reqLureDef ? reqLureDef.name : 'Qualquer'}</strong></span>
-          <span style="color:#34d399; font-weight:bold;">${isSelected ? '● ACAMPAMENTO' : ''}</span>
-        </div>
-      </div>
-    `;
-  }
+  const zonesHtml = renderLifeActivityAtlas({
+    activityId: 'hunting', title: 'Territórios de caça',
+    subtitle: 'Leia o terreno e escolha onde rastrear sua próxima presa.',
+    zones: zonesList, activeZoneId, playerLevel: playerLvl, activityLevel: skillLvl,
+    selectHandler: 'selectHuntingZone', resourceLabel: 'Presas registradas',
+    resourceNames: (activeZone.availablePrey || []).map(id => PREY_CATALOG[id]?.name || id),
+    requirementLabel: 'Atrativo exigido',
+    requirementValue: activeZone.requiredLure ? (LURES_CATALOG[activeZone.requiredLure]?.name || activeZone.requiredLure) : 'Nenhum',
+    cycleLabel: 'Rastreio base', cycleValue: `${((activeZone.baseTrackTime || 4000) / 1000).toFixed(1)}s`,
+    mechanicSummary: 'Leia a direção do vento e o nível de alerta; escolha entre furtividade, emboscada, pressa ou atrativo antes de abordar a presa.',
+    accent: '#8acb95'
+  });
 
   // 2. FACAS DE ESFOLAR
   let knivesHtml = '';
@@ -358,6 +330,7 @@ export function renderHuntingUI(state) {
   // AUTO-HUNT (AFK)
   const isAfkUnlocked = skillLvl >= 5;
   const isAfkActive = hState.autoHunting;
+  const pendingOfflineReward = hState.pendingOfflineHunting;
 
   container.innerHTML = `
     <div style="padding:16px; font-family:sans-serif; color:#fff;">
@@ -396,15 +369,14 @@ export function renderHuntingUI(state) {
         </div>
       </div>
 
-      <!-- Zonas de Caça -->
-      <div style="margin-bottom:20px;">
-        <h4 style="margin:0 0 8px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:15px; display:flex; align-items:center; gap:6px;">
-          🧭 Ermos & Acampamentos de Caça de Aden
-        </h4>
-        <div style="display:flex; gap:10px; flex-wrap:wrap;">
-          ${zonesHtml}
+      ${zonesHtml}
+
+      ${pendingOfflineReward ? `
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px;padding:10px 12px;border:1px solid #6ee7b7;border-radius:8px;background:rgba(6,78,59,.25);color:#a7f3d0;">
+          <span>🎒 Relatório preservado: ${pendingOfflineReward.actualHunts} abates · ${Math.max(0, (pendingOfflineReward.attemptedHunts || 0) - pendingOfflineReward.actualHunts)} fugas · ${pendingOfflineReward.criticalHunts || 0} críticos · ${Object.entries(pendingOfflineReward.matsGained || {}).map(([id, qty]) => `${qty}× ${id.replaceAll('_', ' ')}`).join(' · ') || 'sem materiais neste lote'}</span>
+          <button onclick="window.claimPendingOfflineHuntingRewards()" style="padding:6px 11px;border:1px solid #6ee7b7;border-radius:6px;color:#022c22;background:#6ee7b7;font-weight:bold;cursor:pointer;">Resgatar lote</button>
         </div>
-      </div>
+      ` : ''}
 
       <!-- Layout 2 Colunas: Ação & Ferramental -->
       <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-bottom:20px;">

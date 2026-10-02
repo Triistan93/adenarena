@@ -54,6 +54,36 @@ function isCompatibleEquipSlot(itemSlot, targetSlot) {
   return slotFamilies.some(family => family.includes(canonical) && family.includes(targetSlot)) || canonical === targetSlot;
 }
 
+function getEquippedItemDef(state, equipmentSlot) {
+  const uid = state?.equipment?.[equipmentSlot];
+  if (!uid) return null;
+  const equippedItem = state.inventory?.find(item => item?.uid === uid);
+  return equippedItem ? (D()?.ALL_ITEMS?.[equippedItem.itemId] || equippedItem) : null;
+}
+
+function validateAccessorySlotUnlock(state, itemDef, targetSlot, callbacks = {}) {
+  const rules = [
+    { itemSlot: 'agathion', pattern: /^agathion(\d+)$/, unlockSlot: 'agathion_bracelet', property: 'agathionSlots', label: 'Agathion Bracelet' },
+    { itemSlot: 'jewel', pattern: /^jewel(\d+)$/, unlockSlot: 'brooch', property: 'jewelSlots', label: 'Brooch' },
+    { itemSlot: 'talisman', pattern: /^talisman(\d+)$/, unlockSlot: 'talisman_bracelet', property: 'talismanSlots', label: 'Talisman Bracelet' }
+  ];
+  const rule = rules.find(candidate => candidate.itemSlot === itemDef?.slot);
+  if (!rule) return true;
+
+  const unlockItem = getEquippedItemDef(state, rule.unlockSlot);
+  const capacity = Math.max(0, Math.floor(Number(unlockItem?.[rule.property]) || 0));
+  const index = Number(targetSlot.match(rule.pattern)?.[1]) || 0;
+  if (!capacity) {
+    callbacks.log?.(`🔒 Equipe um ${rule.label} para liberar espaços de ${rule.itemSlot === 'jewel' ? 'jewels' : rule.itemSlot === 'talisman' ? 'talismãs' : 'Agathions'}.`, 'warning');
+    return false;
+  }
+  if (!index || index > capacity) {
+    callbacks.log?.(`🔒 Este ${rule.label} libera ${capacity} espaços; o espaço ${index || '?'} ainda não está disponível.`, 'warning');
+    return false;
+  }
+  return true;
+}
+
 export function migrateEquipmentSlots(state) {
   if (!state?.equipment) return;
   if (!('chest' in state.equipment) && state.equipment.armor) {
@@ -117,6 +147,7 @@ export function equipItem(state, uid, targetSlotOrCallbacks = null, maybeCallbac
     if (callbacks.log) callbacks.log(`${def.name} não pode ser equipado.`, 'system');
     return;
   }
+  if (!validateAccessorySlotUnlock(state, def, targetSlot, callbacks)) return;
 
   // Se o item já estava equipado em outro slot (ex: weapon2 trocando para weapon), limpa o slot anterior
   for (const slotKey of ALL_EQUIP_SLOTS) {

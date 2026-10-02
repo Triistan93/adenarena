@@ -931,7 +931,7 @@ export function initTooltipEvents() {
 /* ═══════════════════════════════════════════════════════════════════════════
    3. INVENTORY & PAPERDOLL (6 LINHAS x 3 COLUNAS)
 ═══════════════════════════════════════════════════════════════════════════ */
-const GEAR_SLOTS = ['weapon', 'weapon2', 'shield', 'armor', 'helmet', 'gloves', 'legs', 'boots', 'cloak', 'belt', 'necklace', 'earring', 'ring', 'hair', 'hair2', 'agathion', 'talisman'];
+const GEAR_SLOTS = ['weapon', 'weapon2', 'shield', 'armor', 'helmet', 'gloves', 'legs', 'boots', 'cloak', 'belt', 'necklace', 'earring', 'ring', 'hair', 'hair2', 'agathion', 'talisman', 'jewel', 'brooch', 'agathion_bracelet', 'talisman_bracelet'];
 const CONSUMABLE_SLOTS = ['consumable', 'potion', 'scroll', 'food', 'powerup', 'crystal'];
 const MATERIAL_SLOTS = ['material', 'gem', 'ore', 'craft', 'crystal'];
 
@@ -2685,11 +2685,29 @@ export function updateEquipmentUI(state, callbacks = {}) {
   ensureInventoryStyles();
   migrateEquipmentSlots(state);
 
+  const getEquippedDefinition = (slot) => {
+    const uid = state.equipment?.[slot];
+    const equipped = uid && state.inventory?.find(item => item?.uid === uid);
+    return equipped ? (D()?.ALL_ITEMS?.[equipped.itemId] || equipped) : null;
+  };
+  const unlockedAccessorySlots = {
+    jewel: Math.max(0, Number(getEquippedDefinition('brooch')?.jewelSlots) || 0),
+    agathion: Math.max(0, Number(getEquippedDefinition('agathion_bracelet')?.agathionSlots) || 0),
+    talisman: Math.max(0, Number(getEquippedDefinition('talisman_bracelet')?.talismanSlots) || 0)
+  };
+
   for (const slot of ALL_EQUIP_SLOTS) {
     if (slot === 'armor') continue; // chest é o slot canônico do paperdoll
+    const numberedSlot = slot.match(/^(jewel|agathion|talisman)(\d+)$/);
+    if (numberedSlot && Number(numberedSlot[2]) > unlockedAccessorySlots[numberedSlot[1]] && !state.equipment[slot]) {
+      const lockedSlot = findEquipmentSlot(slot);
+      if (lockedSlot) lockedSlot.style.display = 'none';
+      continue;
+    }
     let slotEl = findEquipmentSlot(slot);
     if (!slotEl) slotEl = createEquipmentSlotDynamically(slot);
     if (!slotEl) continue;
+    slotEl.style.display = '';
 
     const uid = state.equipment[slot] || (slot === 'chest' ? state.equipment.armor : null);
     const item = uid ? (state.inventory || []).find(i => i.uid === uid) : null;
@@ -2760,7 +2778,9 @@ export function updateEquipmentUI(state, callbacks = {}) {
       slotEl.dataset.slot = slot;
       delete slotEl.dataset.uid;
 
-      slotEl.innerHTML = `<span class="equip-placeholder">${SLOT_ICONS[slot] || '📦'}</span>`;
+      const icon = SLOT_ICONS[slot]
+        || (slot.startsWith('jewel') ? '💎' : slot.startsWith('agathion') ? '🧚' : slot.startsWith('talisman') ? '🧿' : '📦');
+      slotEl.innerHTML = `<span class="equip-placeholder">${icon}</span>`;
 
       slotEl.onmouseenter = null;
       slotEl.onmouseleave = null;
@@ -6396,6 +6416,7 @@ export function openCraftModal(itemId, state, callbacks = {}) {
   let currentQty = 1;
   const gradeInfo = getItemGrade(def);
   const reqForgeLvl = r.craftLevel || (r.level ? getCraftLevelReq(r.level) : 1);
+  const reqPlayerLvl = r.minPlayerLevel || def.req?.level || 1;
   const statsSummary = buildShopStatsSummary(def);
 
   function renderModalContent() {
@@ -6438,7 +6459,7 @@ export function openCraftModal(itemId, state, callbacks = {}) {
             <h3 style="margin:0; font-family:'Cinzel',serif; color:#f3c669; font-size:18px;">${def.name}</h3>
             <span style="background:${gradeInfo.color}; color:#fff; font-size:11px; font-weight:bold; padding:2px 8px; border-radius:4px;">${gradeInfo.label}</span>
           </div>
-          <div style="font-size:12px; color:#aaa; margin-top:2px;">Requer Forja Lv.${reqForgeLvl} · Slot: ${def.slot || 'Geral'}</div>
+          <div style="font-size:12px; color:#aaa; margin-top:2px;">Requer Personagem Lv.${reqPlayerLvl} · Forja Lv.${reqForgeLvl} · Slot: ${def.slot || 'Geral'}</div>
         </div>
       </div>
 
@@ -6985,6 +7006,13 @@ export function renderExpeditionsUI(state) {
   const playerCastles = state.castles || {};
   const ownedCrops = state.manorCrops || {};
   const currentLvl = state.level || 1;
+  const destinationEntries = Object.entries(dests);
+  const expeditionMapPoints = [
+    [20, 29], [26, 68], [52, 43], [63, 19], [68, 73], [86, 41]
+  ];
+  const selectedDestinationId = destinationEntries.some(([id]) => id === window._selectedExpeditionDestination)
+    ? window._selectedExpeditionDestination
+    : (destinationEntries.find(([, def]) => currentLvl >= (def.minLevel || 15))?.[0] || destinationEntries[0]?.[0]);
 
   // Estado dos Mercenários
   const mState = MercenaryService.getMercenariesState(state);
@@ -7138,7 +7166,36 @@ export function renderExpeditionsUI(state) {
   }
 
   // 3. EXPEDIÇÕES ESTRATÉGICAS
-  let expHtml = '';
+  const activeCount = activeExpeditions.length;
+  let expHtml = `
+    <style>
+      .expedition-atlas{position:relative;overflow:hidden;height:min(56vw,760px);min-height:440px;border:1px solid rgba(199,167,97,.72);border-radius:18px;background:linear-gradient(180deg,rgba(8,14,17,.22),transparent 24%,transparent 75%,rgba(8,14,17,.2)),url('/images/aden-expedition-map.webp') center 48%/cover no-repeat,#172026;box-shadow:inset 0 0 70px rgba(0,0,0,.28),0 16px 40px rgba(0,0,0,.38);margin-bottom:16px}
+      .expedition-atlas:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,15,18,.58),transparent 19%,transparent 76%,rgba(8,15,18,.24));pointer-events:none}
+      .expedition-atlas:after{content:"";position:absolute;inset:0;border-radius:inherit;box-shadow:inset 0 0 46px rgba(24,16,9,.3);pointer-events:none}
+      .expedition-map-node{position:absolute;z-index:2;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:4px;border:0;background:transparent;color:#e8e5d7;cursor:pointer;min-width:80px;padding:3px;text-shadow:0 2px 6px #000}
+      .expedition-map-node .node-mark{width:43px;height:43px;border-radius:50%;display:grid;place-items:center;font-size:19px;background:radial-gradient(circle at 36% 27%,#49675e,#192d31 70%);border:1px solid rgba(224,197,132,.68);box-shadow:0 0 0 5px rgba(12,22,25,.48),0 0 22px rgba(98,174,147,.28);transition:transform .18s,box-shadow .18s}
+      .expedition-map-node:hover .node-mark,.expedition-map-node.is-selected .node-mark{transform:scale(1.12);border-color:#f3d58a;box-shadow:0 0 0 5px rgba(12,22,25,.5),0 0 28px rgba(231,190,103,.72)}
+      .expedition-map-node.is-locked{filter:saturate(.3);opacity:.68}.expedition-map-node.is-active .node-mark{border-color:#55d6ac;box-shadow:0 0 0 5px rgba(12,22,25,.5),0 0 24px rgba(52,211,153,.7)}
+      .expedition-map-node .node-name{font:600 10px/1.15 'Cinzel',serif;max-width:112px;color:#f2e8ca}
+      .expedition-location{scroll-margin-top:24px;transition:border-color .2s,box-shadow .2s}
+      @media(max-width:680px){.expedition-atlas{height:460px;min-height:460px;background-position:center;background-size:auto 100%}.expedition-map-node{min-width:60px}.expedition-map-node .node-mark{width:35px;height:35px;font-size:16px}.expedition-map-node .node-name{font-size:8px;max-width:78px}}
+    </style>
+    <div class="expedition-atlas">
+      <div style="position:relative;z-index:2;display:flex;justify-content:space-between;gap:12px;align-items:flex-start;padding:18px 20px 0;">
+        <div><div style="font:700 10px 'Cinzel',serif;letter-spacing:2px;color:#78c2a1;text-transform:uppercase;">Atlas de Aden · Fronteiras conhecidas</div><div style="font:600 17px 'Cinzel',serif;color:#f1dfad;margin-top:4px;">Rotas de expedição</div></div>
+        <div style="font-size:10px;color:#b8c4b8;text-align:right;">${activeCount} marcha${activeCount === 1 ? '' : 's'} ativa${activeCount === 1 ? '' : 's'}<br/><span style="color:#72d6ae;">● ${destinationEntries.filter(([, def]) => currentLvl >= (def.minLevel || 15)).length} regiões acessíveis</span></div>
+      </div>
+      ${destinationEntries.map(([id, def], idx) => {
+        const [x, y] = expeditionMapPoints[idx % expeditionMapPoints.length];
+        const active = activeExpeditions.find(exp => exp.destId === id);
+        const unlocked = currentLvl >= (def.minLevel || 15);
+        const ready = active && now >= active.startTime + active.duration;
+        const badge = active ? (ready ? '✦ SAQUE PRONTO' : '● EM MARCHA') : (!unlocked ? `🔒 NV. ${def.minLevel}` : `NV. ${def.minLevel}+`);
+        return `<button class="expedition-map-node ${id === selectedDestinationId ? 'is-selected' : ''} ${!unlocked ? 'is-locked' : ''} ${active ? 'is-active' : ''}" style="left:${x}%;top:${y}%;" onclick="window.selectExpeditionDestination('${id}')" aria-label="${escapeHTML(def.name)}"><span class="node-mark">${active ? (ready ? '✦' : '⚑') : (!unlocked ? '🔒' : ['⌂','✧','⚒','☾','♨','♜'][idx % 6])}</span><span class="node-name">${escapeHTML(def.name)}</span><span style="font-size:8px;color:${ready ? '#79edbd' : active ? '#f2cf79' : '#b7c3b4'};">${badge}</span></button>`;
+      }).join('')}
+      <div style="position:absolute;z-index:2;bottom:10px;left:16px;font:9px 'Cinzel',serif;letter-spacing:1px;color:rgba(211,211,188,.48);">CRÔNICAS DE ADEN · CARTOGRAFIA DA GUILDA</div>
+    </div>
+  `;
   for (const [dId, dDef] of Object.entries(dests)) {
     const active = activeExpeditions.find(e => e.destId === dId);
     let statusBtn = '';
@@ -7343,7 +7400,7 @@ export function renderExpeditionsUI(state) {
     }
 
     expHtml += `
-      <div style="background:rgba(18,22,34,0.85); border:1px solid rgba(212,167,68,0.3); border-radius:10px; padding:14px; margin-bottom:12px; box-shadow:0 2px 10px rgba(0,0,0,0.4);">
+      <div id="expedition-location-${dId}" class="expedition-location" style="display:${dId === selectedDestinationId || active ? 'block' : 'none'}; background:linear-gradient(120deg,rgba(22,31,39,.97),rgba(15,21,29,.94)); border:1px solid ${dId === selectedDestinationId ? 'rgba(104,197,157,.62)' : 'rgba(212,167,68,0.22)'}; border-radius:12px; padding:16px; margin-bottom:12px; box-shadow:${dId === selectedDestinationId ? '0 0 22px rgba(69,163,128,.12)' : '0 2px 10px rgba(0,0,0,0.3)'};">
         <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px; flex-wrap:wrap;">
           <div style="flex:1; min-width:220px;">
             <div style="display:flex; align-items:center; gap:8px;">
@@ -7469,10 +7526,10 @@ export function renderExpeditionsUI(state) {
       <!-- Header Banner -->
       <div style="background:linear-gradient(180deg, rgba(20,26,42,0.95), rgba(10,14,24,0.95)); border:1px solid rgba(212,167,68,0.4); border-radius:12px; padding:16px; margin-bottom:18px; box-shadow:0 4px 20px rgba(0,0,0,0.5);">
         <h3 style="margin:0; font-family:'Cinzel',serif; color:#f4d58a; font-size:20px; display:flex; align-items:center; gap:8px;">
-          🏰 Salão dos Mercenários & Expedições de Aden
+          🧭 Expedições de Aden · Atlas da Guilda
         </h3>
         <p style="margin:4px 0 0 0; font-size:12px; color:#aaa;">
-          Contrate mercenários especializados na Taverna, treine seu esquadrão e envie-os em expedições estratégicas com sinergias táticas!
+          Trace uma rota, monte a vanguarda e escolha como a guilda enfrentará os perigos de cada fronteira.
         </p>
       </div>
 
@@ -7480,7 +7537,7 @@ export function renderExpeditionsUI(state) {
       <div style="margin-bottom:22px;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
           <h4 style="margin:0; font-family:'Cinzel',serif; color:#f4d58a; font-size:15px; display:flex; align-items:center; gap:6px;">
-            🍺 Taverna dos Mercenários (Contratos Disponíveis)
+          🍺 Taverna dos Mercenários · Contratos disponíveis
           </h4>
           <button
             onclick="window.refreshMercenaryTavern()"
@@ -7497,7 +7554,7 @@ export function renderExpeditionsUI(state) {
       <!-- 2. Quartel dos Mercenários -->
       <div style="margin-bottom:22px;">
         <h4 style="margin:0 0 10px 0; font-family:'Cinzel',serif; color:#6ee7b7; font-size:15px; display:flex; align-items:center; gap:6px;">
-          🛡️ Seu Quartel de Mercenários (${mState.owned.length}/12)
+          🛡️ Quartel da Guilda · Mercenários (${mState.owned.length}/12)
         </h4>
         ${rosterHtml}
       </div>
@@ -7505,7 +7562,7 @@ export function renderExpeditionsUI(state) {
       <!-- 3. Expedições Estratégicas -->
       <div style="margin-bottom:22px;">
         <h4 style="margin:0 0 10px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:15px; display:flex; align-items:center; gap:6px;">
-          🧭 Missões de Expedição Estratégicas
+          🗺️ Mapa de Aden & Ordens de Marcha
         </h4>
         ${expHtml}
       </div>
@@ -9859,7 +9916,12 @@ export function renderRaidsTab(container, state) {
   const cardsHtml = Object.entries(raidBosses).map(([id, boss]) => {
     const isLocked = currentHeroLvl < (boss.reqLvl || 1);
     const inCombat = state.isRaidActive && state.activeRaidId === id;
-    const anotherRaidActive = Boolean(state.isRaidActive && state.activeRaidId !== id);
+    const anotherRaidActive = Boolean((state.isRaidActive || state.activeRaidId) && !inCombat);
+    const otherSpecialEncounterActive = Boolean(
+      state.towerCombatActive || state.isSpecialInstanceActive || state.activeInstanceId ||
+      state.activeMonster?.isTower || state.activeMonster?.isInstanceBoss ||
+      state.activeMonster?.isWorldBoss || state.activeMonster?.isChaosBoss
+    );
     const playerCombatPower = Number(state.stats?.combatPower || state.combatPower) || 0;
     const insufficientCombatPower = Boolean(boss.minimumCP && playerCombatPower < boss.minimumCP);
     const timesCleared = status.clears[id] || 0;
@@ -9876,8 +9938,9 @@ export function renderRaidsTab(container, state) {
     let actionBtnHtml = '';
     if (inCombat) {
       actionBtnHtml = `<button disabled style="width:100%; padding:10px; font-weight:bold; font-size:12px; background:linear-gradient(180deg,#16a34a,#15803d); border:1px solid #4ade80; color:#fff; border-radius:6px; cursor:default; animation:pulse 1.5s infinite;">⚔️ EM COMBATE ATIVO</button>`;
-    } else if (anotherRaidActive) {
-      actionBtnHtml = `<button disabled title="Conclua o Raid atual antes de iniciar outro." style="width:100%; padding:10px; font-weight:bold; font-size:12px; background:#27272a; border:1px solid #3f3f46; color:#a1a1aa; border-radius:6px; cursor:not-allowed;">⚔️ Outro Raid em andamento</button>`;
+    } else if (anotherRaidActive || otherSpecialEncounterActive) {
+      const activeEncounterLabel = state.activeMonster?.name || (otherSpecialEncounterActive ? 'encontro especial' : 'Raid');
+      actionBtnHtml = `<button disabled title="Conclua ${escapeHTML(activeEncounterLabel)} antes de iniciar outro encontro." style="width:100%; padding:10px; font-weight:bold; font-size:12px; background:#27272a; border:1px solid #3f3f46; color:#a1a1aa; border-radius:6px; cursor:not-allowed;">⚔️ Encontro em andamento</button>`;
     } else if (isLocked) {
       actionBtnHtml = `<button disabled style="width:100%; padding:10px; font-weight:bold; font-size:12px; background:#27272a; border:1px solid #3f3f46; color:#71717a; border-radius:6px; cursor:not-allowed;">🔒 Bloqueado (Requer Lv. ${boss.reqLvl})</button>`;
     } else if (insufficientCombatPower) {
@@ -9994,6 +10057,13 @@ export function renderRaidsTab(container, state) {
           </div>
         </div>
       </div>
+
+      ${(status.pendingRewards || []).length > 0 ? `
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; background:rgba(120,53,15,0.35); border:1px solid rgba(251,191,36,0.55); border-radius:9px; padding:12px 14px; margin-bottom:14px;">
+          <div style="font-size:12px; color:#fde68a;">🎁 ${status.pendingRewards.length} recompensa(s) de Raid aguardam espaço na mochila.</div>
+          <button onclick="window.claimPendingRaidRewardsAction()" style="padding:7px 12px; border:1px solid #fbbf24; border-radius:6px; background:#92400e; color:#fff7ed; font-weight:bold; cursor:pointer;">Resgatar recompensas</button>
+        </div>
+      ` : ''}
 
       ${currentHeroLvl < 30 ? `
         <div style="background:linear-gradient(135deg, rgba(35,25,12,0.95), rgba(20,15,5,0.98)); border:1px solid #eab308; border-radius:10px; padding:14px 18px; margin-bottom:16px; display:flex; align-items:center; gap:14px; box-shadow:0 4px 15px rgba(0,0,0,0.4);">

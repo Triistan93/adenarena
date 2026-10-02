@@ -52,7 +52,7 @@ export const MINING_ZONES = {
     minLevel: 38,
     difficulty: 5,
     description: 'Poços gelados de alta profundidade. O frio extremo cristalizou veios dourados de Oriharukon sob o permafrost.',
-    availableNodes: ['node_oriharukon_frozen_vein', 'node_ancient_mithril_cluster', 'node_iron_bedrock', 'node_dense_mineral_mass'],
+    availableNodes: ['node_oriharukon_frozen_vein', 'node_ancient_mithril_cluster', 'node_iron_bedrock', 'node_dense_mineral_mass', 'node_primordial_geode'],
     requiredLamp: 'lamp_alchemical',
     baseMineTime: 5400
   },
@@ -68,6 +68,12 @@ export const MINING_ZONES = {
     baseMineTime: 6200
   }
 };
+
+// Progressão de zonas: acompanha marcos do personagem e da maestria do ofício.
+Object.values(MINING_ZONES).forEach((zone, index) => {
+  zone.minLevel = [1, 20, 40, 60, 85, 120][index] || 120;
+  zone.minSkillLevel = [1, 5, 10, 15, 20, 25][index] || 25;
+});
 
 export function getMiningZonesList() {
   return Object.values(MINING_ZONES);
@@ -275,8 +281,14 @@ export const MINERAL_NODES_CATALOG = {
   node_primordial_bedrock: {
     id: 'node_primordial_bedrock', name: 'Rocha Matriz Primordial', icon: '👑', rarity: 'legendary',
     desc: 'Matriz mineral lendária que envolve adamantite e cristais de oriárukon.',
-    yields: { primary: 'adamantite', primaryQty: 4, secondary: 'oriharukon_ore', secondaryQty: 5 },
+    yields: { primary: 'adamantite', primaryQty: 4, secondary: 'primordial_essence', secondaryQty: 1 },
     baseTime: 6800, xpReward: 340, zones: ['zone_forge_of_gods']
+  },
+  node_primordial_geode: {
+    id: 'node_primordial_geode', name: 'Geodo de Essência Primordial', icon: '💠', rarity: 'legendary',
+    desc: 'Geodo glacial com uma essência intacta, preservada desde a formação das montanhas de Schuttgart.',
+    yields: { primary: 'primordial_essence', primaryQty: 1, secondary: 'oriharukon_ore', secondaryQty: 2 },
+    baseTime: 7000, xpReward: 360, zones: ['zone_iron_stronghold']
   }
 };
 

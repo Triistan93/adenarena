@@ -4,6 +4,7 @@
  */
 
 import { el, qs } from '../core/DomHelpers.js';
+import { renderLifeActivityAtlas } from './LifeActivityAtlas.js';
 import {
   GATHERING_ZONES,
   FLORA_NODES_CATALOG,
@@ -48,49 +49,20 @@ export function renderGatheringUI(state) {
   const speciesDiscovered = Object.keys(gState.gatheringLog || {}).length;
   const totalSpecies = Object.keys(FLORA_NODES_CATALOG).length;
 
-  // 1. ZONAS DE COLETA
+  // 1. ATLAS DE TERRITÓRIOS DE COLETA
   const zonesList = getGatheringZonesList();
-  let zonesHtml = '';
-  for (const z of zonesList) {
-    const isUnlocked = playerLvl >= z.minLevel;
-    const isSelected = z.id === activeZoneId;
-    const reqPouchDef = z.requiredPouch ? POUCHES_CATALOG[z.requiredPouch] : null;
-
-    zonesHtml += `
-      <div 
-        onclick="${isUnlocked ? `window.selectGatheringZone('${z.id}')` : ''}"
-        style="
-          flex: 1 1 190px;
-          min-width: 180px;
-          background: ${isSelected ? 'linear-gradient(180deg, rgba(20,55,35,0.75), rgba(10,25,18,0.9))' : 'rgba(15,22,28,0.75)'};
-          border: 1px solid ${isSelected ? '#34d399' : isUnlocked ? 'rgba(212,167,68,0.25)' : 'rgba(100,100,100,0.2)'};
-          border-radius: 8px;
-          padding: 10px;
-          cursor: ${isUnlocked ? 'pointer' : 'not-allowed'};
-          opacity: ${isUnlocked ? '1' : '0.55'};
-          position: relative;
-          transition: all 0.2s ease;
-          box-shadow: ${isSelected ? '0 0 12px rgba(52,211,153,0.3)' : 'none'};
-        "
-      >
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
-          <strong style="font-family:'Cinzel',serif; font-size:13px; color:${isSelected ? '#6ee7b7' : isUnlocked ? '#f4d58a' : '#888'};">
-            ${z.icon} ${z.name}
-          </strong>
-          <span style="font-size:10px; color:${isUnlocked ? '#ffd877' : '#ef4444'}; font-weight:bold;">
-            ${isUnlocked ? '★'.repeat(z.difficulty) : `🔒 Lv. ${z.minLevel}`}
-          </span>
-        </div>
-        <p style="font-size:11px; color:#94a3b8; margin:0 0 6px 0; line-height:1.3;">
-          ${z.description}
-        </p>
-        <div style="display:flex; justify-content:space-between; font-size:10px; color:#aaa;">
-          <span>Cesto: <strong style="color:#cbd5e1;">${reqPouchDef ? reqPouchDef.name : 'Qualquer'}</strong></span>
-          <span style="color:#34d399; font-weight:bold;">${isSelected ? '● ATUAL' : ''}</span>
-        </div>
-      </div>
-    `;
-  }
+  const zonesHtml = renderLifeActivityAtlas({
+    activityId: 'gathering', title: 'Clareiras de coleta',
+    subtitle: 'Explore os biomas e identifique plantas e fibras da região.',
+    zones: zonesList, activeZoneId, playerLevel: playerLvl, activityLevel: skillLvl,
+    selectHandler: 'selectGatheringZone', resourceLabel: 'Flora catalogada',
+    resourceNames: (activeZone.availableNodes || []).map(id => FLORA_NODES_CATALOG[id]?.name || id),
+    requirementLabel: 'Cesto recomendado',
+    requirementValue: activeZone.requiredPouch ? (POUCHES_CATALOG[activeZone.requiredPouch]?.name || activeZone.requiredPouch) : 'Nenhum',
+    cycleLabel: 'Colheita base', cycleValue: `${((activeZone.baseGatherTime || 4000) / 1000).toFixed(1)}s`,
+    mechanicSummary: 'Examine cada broto antes da poda: pureza e perigo afetam a decisão de colheita e o rendimento final.',
+    accent: '#71d3a0'
+  });
 
   // 2. FOICES DE PODA
   let sicklesHtml = '';
@@ -288,6 +260,7 @@ export function renderGatheringUI(state) {
 
   const isAfkUnlocked = skillLvl >= 5;
   const isAfkActive = gState.autoGathering;
+  const pendingOfflineReward = gState.pendingOfflineGatheringReward;
 
   container.innerHTML = `
     <div style="padding:16px; font-family:sans-serif; color:#fff;">
@@ -326,15 +299,14 @@ export function renderGatheringUI(state) {
         </div>
       </div>
 
-      <!-- Zonas de Coleta -->
-      <div style="margin-bottom:20px;">
-        <h4 style="margin:0 0 8px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:15px; display:flex; align-items:center; gap:6px;">
-          🧭 Bosques & Clareiras de Aden
-        </h4>
-        <div style="display:flex; gap:10px; flex-wrap:wrap;">
-          ${zonesHtml}
+      ${zonesHtml}
+
+      ${pendingOfflineReward ? `
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px;padding:10px 12px;border:1px solid #6ee7b7;border-radius:8px;background:rgba(6,78,59,.25);color:#a7f3d0;">
+          <span>🎒 Lote offline preservado: ${pendingOfflineReward.actualHarvests} colheitas · ${Object.entries(pendingOfflineReward.matsGained || {}).map(([id, qty]) => `${qty}× ${id.replaceAll('_', ' ')}`).join(' · ')}</span>
+          <button onclick="window.claimPendingOfflineGatheringRewards()" style="padding:6px 11px;border:1px solid #6ee7b7;border-radius:6px;color:#022c22;background:#6ee7b7;font-weight:bold;cursor:pointer;">Resgatar lote</button>
         </div>
-      </div>
+      ` : ''}
 
       <!-- Layout 2 Colunas: Ação & Ferramental -->
       <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-bottom:20px;">

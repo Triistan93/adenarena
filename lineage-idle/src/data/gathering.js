@@ -52,7 +52,7 @@ export const GATHERING_ZONES = {
     minLevel: 36,
     difficulty: 5,
     description: 'Campinas etéreas banhadas pela luz da Deusa Einhasad. Flores sagradas que destilam éter vegetal e enria botânica.',
-    availableNodes: ['node_einhasad_bloom', 'node_enria_spore', 'node_celestial_brier', 'node_golden_branch'],
+    availableNodes: ['node_einhasad_bloom', 'node_enria_spore', 'node_celestial_brier', 'node_golden_branch', 'node_primordial_bloom'],
     requiredPouch: 'pouch_alchemical',
     baseGatherTime: 5000
   },
@@ -68,6 +68,12 @@ export const GATHERING_ZONES = {
     baseGatherTime: 5800
   }
 };
+
+// Progressão de zonas: acompanha marcos do personagem e da maestria do ofício.
+Object.values(GATHERING_ZONES).forEach((zone, index) => {
+  zone.minLevel = [1, 20, 40, 60, 85, 120][index] || 120;
+  zone.minSkillLevel = [1, 5, 10, 15, 20, 25][index] || 25;
+});
 
 export function getGatheringZonesList() {
   return Object.values(GATHERING_ZONES);
@@ -241,8 +247,14 @@ export const FLORA_NODES_CATALOG = {
   node_adamantine_bark: {
     id: 'node_adamantine_bark', name: 'Casca Mineralizada de Adamantite', icon: '⚡', rarity: 'legendary',
     desc: 'Casca vegetal enriquecida com veios de minério cósmico.',
-    yields: { primary: 'enria', primaryQty: 3, secondary: 'compressed_wood', secondaryQty: 4 },
+    yields: { primary: 'enria', primaryQty: 3, secondary: 'primordial_essence', secondaryQty: 1 },
     baseTime: 6200, xpReward: 300, zones: ['zone_goddard_valley']
+  },
+  node_primordial_bloom: {
+    id: 'node_primordial_bloom', name: 'Flor do Coração Primordial', icon: '🌺', rarity: 'legendary',
+    desc: 'Flor rara do planalto sagrado que concentra a essência ancestral usada nos equipamentos S84.',
+    yields: { primary: 'primordial_essence', primaryQty: 1, secondary: 'enria', secondaryQty: 2 },
+    baseTime: 6800, xpReward: 360, zones: ['zone_aden_plateau']
   }
 };
 

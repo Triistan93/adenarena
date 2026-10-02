@@ -52,7 +52,7 @@ export const HUNTING_ZONES = {
     minLevel: 32,
     difficulty: 5,
     description: 'Florestas de pinheiros cobertas de gelo eterno. Feras albas com peles espessas e dentes afiados.',
-    availablePrey: ['prey_frost_tiger', 'prey_cave_bear', 'prey_snow_wolf', 'prey_tundra_mammoth'],
+    availablePrey: ['prey_frost_tiger', 'prey_cave_bear', 'prey_snow_wolf', 'prey_tundra_mammoth', 'prey_primordial_wyvern'],
     requiredLure: 'lure_blood',
     baseTrackTime: 5000
   },
@@ -68,6 +68,12 @@ export const HUNTING_ZONES = {
     baseTrackTime: 6000
   }
 };
+
+// Progressão de zonas: acompanha marcos do personagem e da maestria do ofício.
+Object.values(HUNTING_ZONES).forEach((zone, index) => {
+  zone.minLevel = [1, 20, 40, 60, 85, 120][index] || 120;
+  zone.minSkillLevel = [1, 5, 10, 15, 20, 25][index] || 25;
+});
 
 export function getHuntingZonesList() {
   return Object.values(HUNTING_ZONES);
@@ -88,7 +94,7 @@ export const APPROACH_TACTICS = {
     id: 'ambush',
     name: 'Emboscada nas Sombras',
     icon: '🎯',
-    desc: 'Espera paciente. Reduz alerta em 20, golpe crítico se alerta < 40.',
+    desc: 'Espera paciente. Reduz alerta em 20; causa golpe crítico com +50% de materiais se o alerta ficar abaixo de 40.',
     timeMult: 1.3,
     qualityBonus: 0.0,
     durabilityCost: 1,
@@ -270,6 +276,13 @@ export const PREY_CATALOG = {
     weightRange: '2000-4500 kg', xpReward: 250, sellPrice: 3500,
     skinYield: { primary: 'crafted_leather', primaryQty: 10, secondary: 'durable_metal_plate', secondaryQty: 3 },
     exchangeRate: 1, exchangeReward: 'durable_metal_plate', exchangeRewardName: 'Placa de Metal Durável x2',
+    zones: ['zone_oren_snowlands']
+  },
+  prey_primordial_wyvern: {
+    id: 'prey_primordial_wyvern', name: 'Wyvern Primordial de Oren', icon: '🐲', rarity: 'legendary', behavior: 'aggressive',
+    weightRange: '900-1600 kg', xpReward: 520, sellPrice: 9000,
+    skinYield: { primary: 'primordial_essence', primaryQty: 1, secondary: 'crafted_leather', secondaryQty: 8 },
+    exchangeRate: 1, exchangeReward: 'primordial_essence', exchangeRewardName: 'Essência Primordial',
     zones: ['zone_oren_snowlands']
   },
   prey_mountain_chimera: {

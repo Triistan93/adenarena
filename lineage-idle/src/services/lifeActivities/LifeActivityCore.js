@@ -56,6 +56,9 @@ export const LIFE_ACTIVITY_LEVEL_TABLE = {
   40: 1155000   // Maestria Máxima Season 1
 };
 
+export const LIFE_ACTIVITY_MAX_LEVELS = { fishing: 30, hunting: 30, gathering: 40, mining: 40 };
+export const LIFE_ACTIVITY_RARITY_LEVELS = { common: 1, uncommon: 5, rare: 10, epic: 15, legendary: 25 };
+
 export const TOOL_DURABILITY_BY_GRADE = {
   none: 50,
   nograde: 50,
@@ -67,6 +70,49 @@ export const TOOL_DURABILITY_BY_GRADE = {
 };
 
 export const LifeActivityCore = {
+  getMinimumSkillForRarity(rarity) {
+    return LIFE_ACTIVITY_RARITY_LEVELS[rarity] || 1;
+  },
+
+  isZoneAvailable(state, zone, skillLevel) {
+    return !!zone && (Number(state?.level) || 1) >= (zone.minLevel || 1) &&
+      (Number(skillLevel) || 1) >= (zone.minSkillLevel || 1);
+  },
+
+  /** Migra a maestria local antiga para o estado canônico sem perder nível ou fração de XP. */
+  syncProfessionProgress(state, activityType, legacyState, legacyXpMode = 'cumulative') {
+    const act = this.getActivityState(state, activityType);
+    const cap = LIFE_ACTIVITY_MAX_LEVELS[activityType] || 40;
+    if (!act.progressionVersion) {
+      const oldLevel = Math.max(1, Math.min(cap, Number(legacyState?.skillLevel) || 1));
+      const canonicalLevel = Math.max(1, Math.min(cap, Number(act.level) || 1));
+      let fraction = 0;
+      if (legacyXpMode === 'remainder') {
+        const needed = 50 * oldLevel * oldLevel;
+        fraction = needed > 0 ? (Number(legacyState?.skillXp) || 0) / needed : 0;
+      } else if (legacyXpMode === 'quadratic-cumulative') {
+        const current = oldLevel === 1 ? 0 : 50 * oldLevel * oldLevel;
+        const next = 50 * (oldLevel + 1) * (oldLevel + 1);
+        fraction = next > current ? ((Number(legacyState?.skillXp) || 0) - current) / (next - current) : 0;
+      } else {
+        const current = LIFE_ACTIVITY_LEVEL_TABLE[oldLevel] || 0;
+        const next = LIFE_ACTIVITY_LEVEL_TABLE[Math.min(oldLevel + 1, 40)] || current;
+        fraction = next > current ? ((Number(legacyState?.skillXp) || 0) - current) / (next - current) : 0;
+      }
+      const legacyXp = (LIFE_ACTIVITY_LEVEL_TABLE[oldLevel] || 0) + Math.max(0, Math.min(0.9999, fraction)) *
+        ((LIFE_ACTIVITY_LEVEL_TABLE[Math.min(oldLevel + 1, 40)] || LIFE_ACTIVITY_LEVEL_TABLE[40]) - (LIFE_ACTIVITY_LEVEL_TABLE[oldLevel] || 0));
+      const canonicalXp = Number(act.xp) || 0;
+      act.level = Math.max(canonicalLevel, oldLevel);
+      act.xp = Math.max(canonicalXp, legacyXp, LIFE_ACTIVITY_LEVEL_TABLE[act.level] || 0);
+      act.progressionVersion = 1;
+    }
+    act.level = Math.min(cap, Math.max(1, Number(act.level) || 1));
+    act.xp = Math.max(LIFE_ACTIVITY_LEVEL_TABLE[act.level] || 0, Number(act.xp) || 0);
+    legacyState.skillLevel = act.level;
+    legacyState.skillXp = act.xp;
+    return act;
+  },
+
   /**
    * Garante e retorna a estrutura de estado canônica para a atividade informada.
    */
@@ -158,14 +204,14 @@ export const LifeActivityCore = {
   addXp(state, activityType, amount, callbacks = {}) {
     const actState = this.getActivityState(state, activityType);
     const log = callbacks.log || (() => {});
-    const maxLevel = 40; // Season 1 Cap
+    const maxLevel = LIFE_ACTIVITY_MAX_LEVELS[activityType] || 40;
 
     if (actState.level >= maxLevel) {
-      actState.xp = LIFE_ACTIVITY_LEVEL_TABLE[maxLevel];
+      actState.xp = LIFE_ACTIVITY_LEVEL_TABLE[maxLevel] || LIFE_ACTIVITY_LEVEL_TABLE[40];
       return { levelUp: false, level: maxLevel };
     }
 
-    actState.xp = (actState.xp || 0) + amount;
+    actState.xp = (actState.xp || 0) + Math.max(0, Number(amount) || 0);
     let didLevelUp = false;
 
     while (actState.level < maxLevel) {
@@ -181,6 +227,11 @@ export const LifeActivityCore = {
     }
 
     if (didLevelUp && callbacks.updateUI) callbacks.updateUI();
+    const legacyState = state[activityType];
+    if (legacyState) {
+      legacyState.skillLevel = actState.level;
+      legacyState.skillXp = actState.xp;
+    }
     return { levelUp: didLevelUp, level: actState.level };
   },
 

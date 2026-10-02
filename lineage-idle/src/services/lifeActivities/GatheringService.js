@@ -42,7 +42,8 @@ export const GatheringService = {
         sickleDurability: {
           sickle_none: 50
         },
-        pouchInventory: {}
+        pouchInventory: {},
+        pendingOfflineGatheringReward: null
       };
     }
 
@@ -68,12 +69,19 @@ export const GatheringService = {
       state.gathering.activeZone = 'zone_gludio_fields';
     }
 
+    LifeActivityCore.syncProfessionProgress(state, 'gathering', state.gathering);
+    const activeZone = GATHERING_ZONES[state.gathering.activeZone];
+    if (!state.gathering.isGathering && !state.gathering.pendingOfflineGatheringReward && !LifeActivityCore.isZoneAvailable(state, activeZone, state.gathering.skillLevel)) {
+      state.gathering.activeZone = Object.values(GATHERING_ZONES).find(zone => LifeActivityCore.isZoneAvailable(state, zone, state.gathering.skillLevel))?.id || 'zone_gludio_fields';
+    }
+
     return state.gathering;
   },
 
   getAvailableZones(state) {
     const playerLvl = Number(state?.level) || 1;
-    return Object.values(GATHERING_ZONES).filter(zone => playerLvl >= zone.minLevel);
+    const skill = this.getGatheringState(state).skillLevel;
+    return Object.values(GATHERING_ZONES).filter(zone => LifeActivityCore.isZoneAvailable({ level: playerLvl }, zone, skill));
   },
 
   selectZone(state, zoneId, callbacks = {}) {
@@ -86,8 +94,8 @@ export const GatheringService = {
     }
 
     const playerLvl = Number(state?.level) || 1;
-    if (playerLvl < zone.minLevel) {
-      if (callbacks.log) callbacks.log(`⚠️ Nível insuficiente para colher em ${zone.name}! Requer Nível ${zone.minLevel}.`, 'warning');
+    if (!LifeActivityCore.isZoneAvailable({ level: playerLvl }, zone, gState.skillLevel)) {
+      if (callbacks.log) callbacks.log(`⚠️ ${zone.name} exige personagem nível ${zone.minLevel} e maestria de Coleta nível ${zone.minSkillLevel || 1}.`, 'warning');
       return false;
     }
 
@@ -247,9 +255,9 @@ export const GatheringService = {
     return true;
   },
 
-  pickNodeForZone(zoneId, activePouchId) {
+  pickNodeForZone(zoneId, activePouchId, skillLevel = 1) {
     const zone = GATHERING_ZONES[zoneId] || GATHERING_ZONES.zone_gludio_fields;
-    const nodes = zone.availableNodes.map(id => FLORA_NODES_CATALOG[id]).filter(Boolean);
+    const nodes = zone.availableNodes.map(id => FLORA_NODES_CATALOG[id]).filter(node => node && skillLevel >= LifeActivityCore.getMinimumSkillForRarity(node.rarity));
     if (nodes.length === 0) return FLORA_NODES_CATALOG.node_wild_branch;
 
     const pouch = activePouchId ? POUCHES_CATALOG[activePouchId] : null;
@@ -307,7 +315,7 @@ export const GatheringService = {
       if (callbacks.log) callbacks.log('⚠️ Termine a colheita atual antes de buscar outro broto.', 'warning');
       return false;
     }
-    const node = this.pickNodeForZone(gState.activeZone, gState.activePouch);
+    const node = this.pickNodeForZone(gState.activeZone, gState.activePouch, gState.skillLevel);
     gState.targetedNodeId = node.id;
     gState.targetedNodePurity = 50 + Math.floor(Math.random() * 51);
     const hazards = Object.keys(BOTANICAL_HAZARDS);
@@ -325,6 +333,12 @@ export const GatheringService = {
 
   startHarvest(state, tacticId = null, callbacks = {}) {
     const gState = this.getGatheringState(state);
+    const activeZone = GATHERING_ZONES[gState.activeZone];
+    if (!LifeActivityCore.isZoneAvailable(state, activeZone, gState.skillLevel)) return { success: false, reason: 'zone_locked' };
+    if (gState.pendingOfflineGatheringReward) {
+      if (callbacks.log) callbacks.log('🎒 Resgate o lote offline de coleta antes de iniciar outra colheita.', 'warning');
+      return { success: false, reason: 'pending_rewards' };
+    }
     if (gState.isGathering) {
       if (callbacks.log) callbacks.log('⚠️ A colheita atual ainda está em andamento.', 'warning');
       return { success: false, reason: 'already_gathering' };
@@ -365,7 +379,7 @@ export const GatheringService = {
     if (gState.targetedNodeId && !gState.isGathering) {
         node = FLORA_NODES_CATALOG[gState.targetedNodeId];
     } else {
-        node = this.pickNodeForZone(gState.activeZone, gState.activePouch);
+        node = this.pickNodeForZone(gState.activeZone, gState.activePouch, gState.skillLevel);
         gState.targetedNodeId = node.id;
         gState.targetedNodePurity = 50 + Math.floor(Math.random() * 51);
         const hazards = Object.keys(BOTANICAL_HAZARDS);
@@ -374,7 +388,7 @@ export const GatheringService = {
         gState.inspected = false;
     }
 
-    if (!node) node = this.pickNodeForZone(gState.activeZone, gState.activePouch);
+    if (!node) node = this.pickNodeForZone(gState.activeZone, gState.activePouch, gState.skillLevel);
 
     let harvestDuration = node.baseTime || zone.baseGatherTime || 3200;
     harvestDuration = Math.max(1200, Math.floor((harvestDuration * (tactic.timeMult || 1.0)) / pouchSpeedMult));
@@ -536,6 +550,10 @@ export const GatheringService = {
 
   toggleAutoGathering(state, callbacks = {}) {
     const gState = this.getGatheringState(state);
+    if (gState.pendingOfflineGatheringReward) {
+      if (callbacks.log) callbacks.log('🎒 Resgate o lote offline de coleta antes de retomar o modo AFK.', 'warning');
+      return false;
+    }
     if (gState.skillLevel < 5) {
       if (callbacks.log) callbacks.log('⚠️ A Coleta Automática (AFK) é desbloqueada no Nível 5 de Coleta!', 'warning');
       return false;
@@ -585,10 +603,34 @@ export const GatheringService = {
 
   processOfflineGathering(state, minutesOffline = 0, callbacks = {}) {
     const gState = this.getGatheringState(state);
+    if (gState.pendingOfflineGatheringReward) return this.claimOfflineGatheringReward(state, callbacks);
     if (!gState.autoGathering) return null;
 
+    if (gState.pendingHarvestReward) {
+      if (gState.isGathering && FLORA_NODES_CATALOG[gState.pendingHarvestReward.nodeId]) {
+        const pending = gState.pendingHarvestReward;
+        if (this.finishHarvest(state, callbacks)) {
+          return {
+            actualHarvests: 1,
+            matsGained: {
+              [resolveCanonicalResourceId(FLORA_NODES_CATALOG[pending.nodeId].yields.primary)]: pending.primaryQty,
+              ...(FLORA_NODES_CATALOG[pending.nodeId].yields.secondary && pending.secQty > 0
+                ? { [resolveCanonicalResourceId(FLORA_NODES_CATALOG[pending.nodeId].yields.secondary)]: pending.secQty }
+                : {})
+            },
+            totalXp: pending.finalXp,
+            claimedPendingReward: true
+          };
+        }
+      }
+
+      // Keep the exact saved yield. Do not roll offline replacements or clear a
+      // reward that is still waiting for inventory capacity.
+      return { actualHarvests: 0, matsGained: {}, totalXp: 0, pendingReward: true };
+    }
+
     const activeSickleId = gState.sickle || 'sickle_none';
-    let availableDur = gState.sickleDurability[activeSickleId] ?? 0;
+    const availableDur = gState.sickleDurability[activeSickleId] ?? 0;
     if (availableDur <= 0) {
       gState.autoGathering = false;
       gState.isGathering = false;
@@ -599,43 +641,65 @@ export const GatheringService = {
     const clampedMinutes = Math.min(480, Math.max(0, minutesOffline));
     if (clampedMinutes < 2) return null;
 
-    // 1 colheita a cada 30 segundos com 25% de eficiência
-    const totalPotential = Math.floor((clampedMinutes * 60) / 30 * 0.25);
-    const actualHarvests = Math.min(availableDur, Math.max(1, totalPotential));
+    const zoneId = gState.activeZone || 'zone_gludio_fields';
+    const zone = GATHERING_ZONES[zoneId] || GATHERING_ZONES.zone_gludio_fields;
+    const sickle = SICKLES_CATALOG[activeSickleId] || SICKLES_CATALOG.sickle_none;
+    const tactic = GATHERING_TACTICS[gState.selectedTactic] || GATHERING_TACTICS.standard;
+    let durabilitySpent = 0;
+    let timeSpent = 0;
+    let actualHarvests = 0;
+    let totalXp = 0;
+    const matsGained = {};
+    const discoveries = {};
+    const offlineTimeBudget = clampedMinutes * 60 * 1000 * 0.25;
+
+    while (durabilitySpent < availableDur) {
+      const pouchId = gState.activePouch;
+      const pouchStock = pouchId ? (gState.pouchInventory[pouchId] || 0) : 0;
+      if (pouchId && pouchStock <= 0) gState.activePouch = null;
+      const usablePouchId = pouchStock > 0 ? pouchId : null;
+      const pouch = usablePouchId ? POUCHES_CATALOG[usablePouchId] : null;
+      const node = this.pickNodeForZone(zoneId, usablePouchId, gState.skillLevel);
+      const duration = Math.max(1200, Math.floor(
+        ((node.baseTime || zone.baseGatherTime || 3200) * (tactic.timeMult || 1)) / (pouch?.speedBoost || 1)
+      ));
+      if (timeSpent + duration > offlineTimeBudget) break;
+
+      if (usablePouchId) gState.pouchInventory[usablePouchId] = Math.max(0, pouchStock - 1);
+      timeSpent += duration;
+      actualHarvests++;
+
+      const hazards = Object.keys(BOTANICAL_HAZARDS);
+      const hazard = hazards[Math.floor(Math.random() * hazards.length)];
+      const purity = 0.5 + Math.floor(Math.random() * 51) / 100;
+      const ignoresHazards = tactic.id === 'delicate';
+      const hazardPenalty = !ignoresHazards && hazard === 'toxin' ? 0.25 : 0;
+      const qualityMod = (sickle.qualityBonus || 0) + (tactic.qualityBonus || 0) + (Math.max(0, Math.min(1, purity - hazardPenalty)) - 1);
+      const quality = RewardEngine.rollQuality(gState.skillLevel, qualityMod);
+      const primaryMat = resolveCanonicalResourceId(node.yields.primary);
+      const primaryQty = RewardEngine.calculateYield(node.yields.primaryQty || 1, quality);
+      matsGained[primaryMat] = (matsGained[primaryMat] || 0) + primaryQty;
+      if (node.yields.secondary && (node.yields.secondaryQty || 0) > 0) {
+        const secondaryMat = resolveCanonicalResourceId(node.yields.secondary);
+        const secondaryQty = RewardEngine.calculateYield(node.yields.secondaryQty, quality);
+        matsGained[secondaryMat] = (matsGained[secondaryMat] || 0) + secondaryQty;
+      }
+      totalXp += Math.round((node.xpReward || 8) * quality.mult);
+      discoveries[node.id] = (discoveries[node.id] || 0) + 1;
+
+      if (!ignoresHazards && tactic.id === 'cleave' && hazard === 'thorn') {
+        const hpLoss = Math.floor((Number(state.maxHp) || 100) * 0.05);
+        state.hp = Math.max(1, (Number(state.hp) || 100) - hpLoss);
+      }
+      durabilitySpent += 1 + (!ignoresHazards && tactic.id === 'cleave' && hazard === 'resin' ? 1 : 0);
+      if (durabilitySpent >= availableDur) break;
+    }
 
     if (actualHarvests <= 0) return null;
 
-    gState.sickleDurability[activeSickleId] -= actualHarvests;
+    gState.sickleDurability[activeSickleId] = Math.max(0, availableDur - durabilitySpent);
     const actState = LifeActivityCore.getActivityState(state, 'gathering');
     actState.toolDurability = gState.sickleDurability[activeSickleId];
-
-    const zoneId = gState.activeZone || 'zone_gludio_fields';
-    let totalXp = 0;
-    const matsGained = {};
-
-    for (let i = 0; i < actualHarvests; i++) {
-      const node = this.pickNodeForZone(zoneId, null);
-      gState.gatheringLog[node.id] = (gState.gatheringLog[node.id] || 0) + 1;
-      gState.totalHarvested = (gState.totalHarvested || 0) + 1;
-      totalXp += node.xpReward || 8;
-
-      const pMat = resolveCanonicalResourceId(node.yields.primary);
-      const pQty = node.yields.primaryQty || 1;
-      matsGained[pMat] = (matsGained[pMat] || 0) + pQty;
-
-      const sMatRaw = node.yields.secondary;
-      const sQty = node.yields.secondaryQty || 0;
-      if (sMatRaw && sQty > 0) {
-        const sMat = resolveCanonicalResourceId(sMatRaw);
-        matsGained[sMat] = (matsGained[sMat] || 0) + sQty;
-      }
-    }
-
-    for (const [matId, qty] of Object.entries(matsGained)) {
-      addToInventory(state, matId, qty, 'common', false, callbacks, true);
-    }
-
-    LifeActivityCore.addXp(state, 'gathering', totalXp, callbacks);
 
     // Offline harvest accounting includes the saved in-progress cycle; clear it so the
     // first online tick cannot pay that same node a second time.
@@ -643,14 +707,49 @@ export const GatheringService = {
     gState.targetedNodeId = null;
     gState.inspected = false;
     gState.pendingHarvestReward = null;
+    gState.pendingOfflineGatheringReward = {
+      actualHarvests, matsGained, totalXp, discoveries,
+      sickleId: activeSickleId, resumeAutoGathering: true,
+      inventoryFullNotified: false, clampedMinutes
+    };
+    gState.autoGathering = false;
     gState.lastAutoTick = Date.now();
-    if (gState.sickleDurability[activeSickleId] <= 0) gState.autoGathering = false;
+    if (callbacks.save) callbacks.save();
+    return this.claimOfflineGatheringReward(state, callbacks);
+  },
 
-    if (callbacks.log) {
-      callbacks.log(`💤 **Relatório de Coleta Offline (${clampedMinutes}m):** Colheu ${actualHarvests} arbustos de flora em Aden! (+${totalXp} XP de Coleta)`, 'rarity-legendary');
+  claimOfflineGatheringReward(state, callbacks = {}) {
+    const gState = this.getGatheringState(state);
+    const pending = gState.pendingOfflineGatheringReward;
+    if (!pending) return { success: false, reason: 'no_pending_rewards' };
+
+    const rewardState = { ...state, inventory: (state.inventory || []).map(item => ({ ...item })) };
+    for (const [itemId, count] of Object.entries(pending.matsGained || {})) {
+      if (!addToInventory(rewardState, itemId, count, 'common', false, {}, true)) {
+        if (!pending.inventoryFullNotified && callbacks.log) {
+          callbacks.log('🎒 Mochila cheia: libere espaço para resgatar as ervas e madeiras da coleta offline.', 'warning');
+        }
+        pending.inventoryFullNotified = true;
+        if (callbacks.updateAllUI) callbacks.updateAllUI();
+        if (callbacks.save) callbacks.save();
+        return { success: false, reason: 'inventory_full', pendingRewards: pending };
+      }
     }
 
-    return { actualHarvests, matsGained, totalXp };
+    state.inventory = rewardState.inventory;
+    for (const [nodeId, count] of Object.entries(pending.discoveries || {})) {
+      gState.gatheringLog[nodeId] = (gState.gatheringLog[nodeId] || 0) + count;
+      LifeActivityCore.recordCodexDiscovery(state, 'gathering', nodeId);
+    }
+    gState.totalHarvested = (gState.totalHarvested || 0) + (pending.actualHarvests || 0);
+    LifeActivityCore.addXp(state, 'gathering', pending.totalXp || 0, callbacks);
+    gState.pendingOfflineGatheringReward = null;
+    gState.autoGathering = Boolean(pending.resumeAutoGathering && gState.sickle === pending.sickleId && (Number(gState.sickleDurability[pending.sickleId]) || 0) > 0);
+
+    if (callbacks.log) callbacks.log(`💤 **Relatório de Coleta Offline (${pending.clampedMinutes}m):** Colheu ${pending.actualHarvests} recursos em Aden! (+${pending.totalXp} XP de Coleta)`, 'rarity-legendary');
+    if (callbacks.updateAllUI) callbacks.updateAllUI();
+    if (callbacks.save) callbacks.save();
+    return { success: true, actualHarvests: pending.actualHarvests, matsGained: pending.matsGained, totalXp: pending.totalXp };
   },
 
   startGathering(state, tacticId = null, callbacks = {}) {

@@ -79,7 +79,7 @@ export function isEligibleForAutoRecycle(item, def, state) {
     'consumable', 'material', 'scroll', 'powerup', 'potion',
     'food', 'spellbook', 'talisman', 'pendant', 'coin',
     'quest', 'quest_item', 'recipe', 'key', 'box', 'container', 'essence',
-    'agathion', 'cloak', 'hair', 'hair2', 'doll'
+    'agathion', 'agathion_bracelet', 'talisman_bracelet', 'brooch', 'jewel', 'cloak', 'hair', 'hair2', 'doll'
   ];
   if (NEVER_RECYCLE_SLOTS.includes(slot) || NEVER_RECYCLE_SLOTS.includes(type)) return false;
   if (def.stack || def.isQuestItem || item.isProtected) return false;
@@ -93,7 +93,7 @@ export function isEligibleForAutoRecycle(item, def, state) {
   if (item.equipped) return false;
 
   // 4. Deve ser um equipamento desequipável genuíno
-  const GEAR_SLOTS = ['weapon', 'shield', 'armor', 'helmet', 'gloves', 'legs', 'boots', 'necklace', 'earring', 'ring', 'belt'];
+  const GEAR_SLOTS = ['weapon', 'shield', 'armor', 'helmet', 'gloves', 'legs', 'boots', 'necklace', 'earring', 'ring', 'belt', 'agathion', 'agathion_bracelet', 'talisman', 'talisman_bracelet', 'brooch', 'jewel'];
   if (!GEAR_SLOTS.includes(slot)) return false;
 
   // 5. Verificação de Grau (Grade)
@@ -377,7 +377,7 @@ export function addToInventory(state, itemId, amount = 1, rarity = null, foundat
     return true;
   }
 
-  const GEAR_SLOTS = ['weapon', 'shield', 'armor', 'helmet', 'gloves', 'legs', 'boots', 'cloak', 'belt', 'necklace', 'earring', 'ring', 'hair', 'hair2', 'agathion', 'talisman'];
+  const GEAR_SLOTS = ['weapon', 'shield', 'armor', 'helmet', 'gloves', 'legs', 'boots', 'cloak', 'belt', 'necklace', 'earring', 'ring', 'hair', 'hair2', 'agathion', 'talisman', 'jewel', 'brooch', 'agathion_bracelet', 'talisman_bracelet'];
   const defSlot = String(def.slot || '').toLowerCase();
   const isGear = GEAR_SLOTS.includes(defSlot);
 
