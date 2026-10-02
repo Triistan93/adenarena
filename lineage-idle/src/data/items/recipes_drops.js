@@ -1278,7 +1278,35 @@ export function generateAllCraftingRecipes(allItemsParam = null) {
     const aType = getArmorType(id, def.name);
     const wType = getWeaponType(id, def.name);
 
-    if (slot === 'weapon') {
+    if (def.craftTier === 'primordial') {
+      craftLevel = 10;
+      baseGold = 125000;
+      if (slot === 'weapon') {
+        reqs = [
+          { id: 'oriharukon_ore', count: 100 }, { id: 'adamantite', count: 50 },
+          { id: 'compressed_wood', count: 20 }, { id: 'enria', count: 12 },
+          { id: 'crystal_gold_s', count: 20 }, { id: 'primordial_essence', count: 3 },
+          { id: 'mold_lubricant', count: 4 }, { id: 'steel_ingot', count: 5 }
+        ];
+      } else if (['armor', 'helmet', 'boots', 'gloves', 'legs', 'shield'].includes(slot)) {
+        reqs = [
+          { id: 'oriharukon_ore', count: 80 }, { id: 'adamantite', count: 45 },
+          { id: 'durable_metal_plate', count: 25 }, { id: 'crafted_leather', count: 30 },
+          { id: 'enria', count: 12 }, { id: 'crystal_gold_s', count: 18 },
+          { id: 'primordial_essence', count: 3 }, { id: 'mold_glue', count: 8 },
+          { id: 'steel_ingot', count: 5 }
+        ];
+        if (aType === 'robe') reqs.push({ id: 'silver_thread', count: 16 });
+        else if (aType === 'light') reqs.push({ id: 'braided_hemp', count: 16 });
+        else reqs.push({ id: 'metallic_fiber', count: 16 });
+      } else {
+        reqs = [
+          { id: 'silver_nugget', count: 50 }, { id: 'silver_mold', count: 8 },
+          { id: 'crystal_gold_s', count: 14 }, { id: 'primordial_essence', count: 3 },
+          { id: 'mold_lubricant', count: 3 }, { id: 'steel_ingot', count: 4 }
+        ];
+      }
+    } else if (slot === 'weapon') {
       if (level < 20) reqs = [{ id: 'iron_ore', count: 10 }, { id: 'suede', count: 5 }];
       else if (level < 40) reqs = [{ id: 'iron_ore', count: 25 }, { id: 'steel', count: 10 }, { id: 'compressed_wood', count: 4 }];
       else if (level < 52) reqs = [{ id: 'steel', count: 30 }, { id: 'coarse_bone_powder', count: 15 }, { id: 'compressed_wood', count: 8 }, { id: 'varnish_of_purity', count: 4 }];

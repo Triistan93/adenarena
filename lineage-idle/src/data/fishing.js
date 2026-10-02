@@ -52,7 +52,7 @@ export const FISHING_ZONES = {
     minLevel: 32,
     difficulty: 5,
     description: "Mar aberto com grande profundidade. Lar de peixes valiosos, carnívoros e ferozes.",
-    availableFish: ["fish_giran_dragonfish", "fish_swordfish", "fish_tuna", "fish_giran_manta", "fish_kraken_tentacle"],
+    availableFish: ["fish_giran_dragonfish", "fish_swordfish", "fish_tuna", "fish_giran_manta", "fish_kraken_tentacle", "fish_primordial_sturgeon"],
     requiredBait: "bait_golden",
     baseCatchTime: 5000
   },
@@ -270,6 +270,13 @@ export const FISH_CATALOG = {
     fightProfile: "burstRunner", baseStamina: 160,
     baseWeight: { min: 30.0, max: 80.0 }, xpReward: 300, sellPrice: 800,
     exchangeRate: 1, materialReward: "oriharukon_ore", materialName: "Minério de Oriharukon",
+    zones: ["zone_giran"]
+  },
+  fish_primordial_sturgeon: {
+    id: "fish_primordial_sturgeon", name: "Esturjão Primordial", icon: "🐉", rarity: "legendary",
+    fightProfile: "heavy", baseStamina: 220,
+    baseWeight: { min: 90.0, max: 220.0 }, xpReward: 700, sellPrice: 6500,
+    exchangeRate: 1, materialReward: "primordial_essence", materialName: "Essência Primordial",
     zones: ["zone_giran"]
   },
 

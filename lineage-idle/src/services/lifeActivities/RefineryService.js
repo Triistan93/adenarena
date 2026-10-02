@@ -230,6 +230,67 @@ export const REFINERY_RECIPES = [
     output: { matId: 'pure_fish_oil', qty: 1 },
     adenaCost: 600,
     forgeExp: 14
+  },
+  {
+    id: 'refine_suede',
+    name: 'Camurça Básica',
+    desc: 'Couro leve lixado e amaciado para os primeiros equipamentos de Aden.',
+    category: 'leather',
+    icon: 'materials/suede.png',
+    inputs: [
+      { matId: 'leather', qty: 3 }
+    ],
+    output: { matId: 'suede', qty: 2 },
+    forgeLevel: 1,
+    adenaCost: 80,
+    forgeExp: 3
+  },
+  {
+    id: 'refine_mold_glue',
+    name: 'Cola para Moldes',
+    desc: 'Verniz espesso e fibras vegetais formam uma cola resistente ao calor da fundição.',
+    category: 'wood',
+    icon: 'materials/varnish.png',
+    inputs: [
+      { matId: 'varnish', qty: 4 },
+      { matId: 'cord', qty: 2 }
+    ],
+    output: { matId: 'mold_glue', qty: 1 },
+    forgeLevel: 4,
+    adenaCost: 450,
+    forgeExp: 10
+  },
+  {
+    id: 'refine_mold_lubricant',
+    name: 'Lubrificante para Moldes',
+    desc: 'Óleo puro de peixe e cola alquímica produzem um lubrificante para moldes de grau superior.',
+    category: 'alchemy',
+    icon: 'materials/varnish.png',
+    inputs: [
+      { matId: 'pure_fish_oil', qty: 1 },
+      { matId: 'mold_glue', qty: 2 },
+      { matId: 'varnish', qty: 3 }
+    ],
+    output: { matId: 'mold_lubricant', qty: 1 },
+    forgeLevel: 6,
+    adenaCost: 900,
+    forgeExp: 18
+  },
+  {
+    id: 'refine_steel_ingot',
+    name: 'Lingote de Aço Nobre',
+    desc: 'Aço temperado, mithril e um molde de prata formam uma liga densa de acabamento S84.',
+    category: 'metal',
+    icon: 'materials/steel_ingot.png',
+    inputs: [
+      { matId: 'steel', qty: 5 },
+      { matId: 'mithril_ore', qty: 3 },
+      { matId: 'silver_mold', qty: 1 }
+    ],
+    output: { matId: 'steel_ingot', qty: 1 },
+    forgeLevel: 8,
+    adenaCost: 1800,
+    forgeExp: 24
   }
 ];
 
@@ -261,6 +322,7 @@ export const RefineryService = {
   calculateMaxRefinements(state, recipeId) {
     const recipe = this.getRecipeById(recipeId);
     if (!recipe) return 0;
+    if ((Number(state.accountForgeLevel ?? state.craftLevel) || 1) < (recipe.forgeLevel || 1)) return 0;
 
     let maxByMats = Infinity;
     for (const inp of recipe.inputs) {
@@ -284,6 +346,12 @@ export const RefineryService = {
     if (!recipe) {
       if (callbacks.log) callbacks.log('⚠️ Receita de refino desconhecida.', 'warning');
       return { success: false, reason: 'invalid_recipe' };
+    }
+
+    const forgeLevel = Number(state.accountForgeLevel ?? state.craftLevel) || 1;
+    if (forgeLevel < (recipe.forgeLevel || 1)) {
+      if (callbacks.log) callbacks.log(`🔒 Esta receita exige nível ${recipe.forgeLevel} de Forja (atual: ${forgeLevel}).`, 'warning');
+      return { success: false, reason: 'forge_level' };
     }
 
     const count = Math.max(1, Math.floor(times));

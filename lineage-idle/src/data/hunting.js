@@ -52,7 +52,7 @@ export const HUNTING_ZONES = {
     minLevel: 32,
     difficulty: 5,
     description: 'Florestas de pinheiros cobertas de gelo eterno. Feras albas com peles espessas e dentes afiados.',
-    availablePrey: ['prey_frost_tiger', 'prey_cave_bear', 'prey_snow_wolf', 'prey_tundra_mammoth'],
+    availablePrey: ['prey_frost_tiger', 'prey_cave_bear', 'prey_snow_wolf', 'prey_tundra_mammoth', 'prey_primordial_wyvern'],
     requiredLure: 'lure_blood',
     baseTrackTime: 5000
   },
@@ -276,6 +276,13 @@ export const PREY_CATALOG = {
     weightRange: '2000-4500 kg', xpReward: 250, sellPrice: 3500,
     skinYield: { primary: 'crafted_leather', primaryQty: 10, secondary: 'durable_metal_plate', secondaryQty: 3 },
     exchangeRate: 1, exchangeReward: 'durable_metal_plate', exchangeRewardName: 'Placa de Metal Durável x2',
+    zones: ['zone_oren_snowlands']
+  },
+  prey_primordial_wyvern: {
+    id: 'prey_primordial_wyvern', name: 'Wyvern Primordial de Oren', icon: '🐲', rarity: 'legendary', behavior: 'aggressive',
+    weightRange: '900-1600 kg', xpReward: 520, sellPrice: 9000,
+    skinYield: { primary: 'primordial_essence', primaryQty: 1, secondary: 'crafted_leather', secondaryQty: 8 },
+    exchangeRate: 1, exchangeReward: 'primordial_essence', exchangeRewardName: 'Essência Primordial',
     zones: ['zone_oren_snowlands']
   },
   prey_mountain_chimera: {

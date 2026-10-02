@@ -103,6 +103,15 @@ export const CANONICAL_RESOURCES = {
     price: 420,
     desc: 'Seiva refinada que permite separar ligas raras de moldes de alta temperatura.'
   },
+  primordial_essence: {
+    itemId: 'primordial_essence',
+    name: 'Essência Primordial',
+    category: RESOURCE_CATEGORIES.SPECIAL_COMPONENT,
+    grade: 's',
+    icon: 'materials/crystal_gold_s.png',
+    price: 12000,
+    desc: 'Núcleo de força ancestral extraído de recursos raros de Aden. Componente dos equipamentos S84 Primordiais.'
+  },
 
   // ─── MATÉRIAS-PRIMAS BRUTAS: MINERAÇÃO (RAW MINERAL) ───
   iron_ore: {

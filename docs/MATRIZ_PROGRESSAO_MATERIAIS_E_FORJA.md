@@ -77,3 +77,45 @@ O mapa de zonas foi lido dos catálogos de cada profissão e os resultados cruza
 Aplicada a curva acima nos catálogos de Pesca, Caça, Coleta e Mineração. `LifeActivityCore` agora limita XP pelo cap de cada profissão (30 para Pesca/Caça e 40 para Coleta/Mineração), consolida as quatro progressões e migra saves preservando nível e progresso percentual. Pesca automática/offline e Caça concedem XP ao estado canônico; campos locais permanecem sincronizados para compatibilidade. Os alvos elegíveis respeitam a maestria também durante AFK/offline. O serviço de Craft valida nível de Forja.
 
 Verificação desta entrega: `node --check` nos quatro serviços, core e quatro telas, além de `git diff --check`; não rodei testes nem build.
+
+## Cadeia concluída — equipamento e materiais (02/10/2026)
+
+### Equipamento fabricável por faixa
+
+| Nível para equipar | Grau/conjunto | Materiais de profissão que entram na cadeia |
+|---:|---|---|
+| 1–19 | No-Grade | Minério de ferro da Mineração + couro da Caça refinado em camurça. |
+| 20–39 | D-Grade | Minério/aço da Mineração, madeira comprimida/cordão da Coleta e couro da Caça; a Pesca pode fornecer insumos auxiliares. |
+| 40–51 | C-Grade | Aço, pó de osso, madeira comprimida, verniz e fibras; Caça/Pesca passam a abastecer ingredientes complementares. |
+| 52–61 | B-Grade | Mithril, aço, placa durável e tecidos; Mineração, Coleta e Caça dão rotas diretas, com Pesca para insumos. |
+| 62–75 | A-Grade | Oriharukon, adamantite, enria e materiais têxteis/couro avançado. |
+| 76–84 | S / Frost Lord | Equipamentos S e armas Frost Lord existentes; continuam combinando drops de PvE e materiais de atividade. |
+| **85–120** | **S84 Primordial** | **31 equipamentos craftáveis: 13 armas, três armaduras principais (heavy/light/robe), capacetes, botas, luvas, calças, escudo, capa e sigilo.** Requerem nível de Forja 10, Cristal S, Essência Primordial e insumos de metal, madeira, curtume e pesca/refino. Permanecem equipáveis durante toda a faixa 85–120, conforme o contrato de progressão. |
+
+O personagem precisa atingir o nível indicado para **equipar** cada peça. Craft continua dependendo do nível de Forja e dos materiais; assim, um jogador pode fabricar antecipadamente e guardar o item até cumprir o nível de uso.
+
+### Fontes da Essência Primordial
+
+A Essência é um material lendário que pode vir de qualquer um dos quatro ofícios no marco de personagem 85, desde que a maestria alcance 25:
+
+| Ofício | Fonte | Região aberta em |
+|---|---|---:|
+| Coleta | Flor do Coração Primordial | 85 — Planalto Sagrado de Aden |
+| Mineração | Geodo de Essência Primordial | 85 — Fosso Glacial de Schuttgart |
+| Caça | Wyvern Primordial de Oren | 85 — Terras Nevadas de Oren |
+| Pesca | Esturjão Primordial | 85 — Costa de Giran |
+
+As quatro rotas evitam exigir que o jogador treine uma profissão específica para obter esse componente. As zonas de nível120 mantêm rotas de maior risco/recompensa e fornecem a mesma família de materiais avançados.
+
+### Materiais avançados e receitas de refino
+
+- `mold_glue`: obtida na Coleta ou refinada de verniz + cordão (Forja 4). Consumida nas armaduras Primordiais.
+- `mold_lubricant`: obtido na Coleta ou refinado de óleo puro de peixe + cola + verniz (Forja 6). Consumido em armas/capas/sigilos Primordiais.
+- `steel_ingot`: obtido na troca de peixes ou refinado de aço + mithril + molde de prata (Forja 8). Consumido nas peças Primordiais.
+- `suede`: o couro obtido na Caça agora pode ser refinado em camurça (Forja 1), completando a rota de material necessária para equipamento No-Grade.
+
+As receitas Primordiais requerem Forja 10. Todas as entradas foram verificadas no catálogo; a geração atual contém 31 equipamentos únicos Primordiais, 1.060 chaves de receita (incluindo aliases) e nenhum insumo de receita sem definição em `ALL_ITEMS`.
+
+### Verificação e limites
+
+As quatro rotas da Essência, os consumidores dos três materiais antes sem uso e a existência de todos os ingredientes foram conferidos por leitura dos catálogos e geração de receitas. `node --check` nos módulos alterados e `git diff --check` passaram. Não rodei testes nem build. As quantidades/custos desta primeira versão criam sinks e requisitos de progressão; a taxa real de obtenção por hora e o poder das peças ainda precisam de ajuste após teste jogável.
