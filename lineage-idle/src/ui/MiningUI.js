@@ -4,6 +4,7 @@
  */
 
 import { el, qs } from '../core/DomHelpers.js';
+import { renderLifeActivityAtlas } from './LifeActivityAtlas.js';
 import {
   MINING_ZONES,
   MINERAL_NODES_CATALOG,
@@ -48,49 +49,20 @@ export function renderMiningUI(state) {
   const speciesDiscovered = Object.keys(mState.miningLog || {}).length;
   const totalSpecies = Object.keys(MINERAL_NODES_CATALOG).length;
 
-  // 1. ZONAS DE MINERAÇÃO
+  // 1. ATLAS DE VEIOS E GALERIAS
   const zonesList = getMiningZonesList();
-  let zonesHtml = '';
-  for (const z of zonesList) {
-    const isUnlocked = playerLvl >= z.minLevel;
-    const isSelected = z.id === activeZoneId;
-    const reqLampDef = z.requiredLamp ? LAMPS_CATALOG[z.requiredLamp] : null;
-
-    zonesHtml += `
-      <div 
-        onclick="${isUnlocked ? `window.selectMiningZone('${z.id}')` : ''}"
-        style="
-          flex: 1 1 190px;
-          min-width: 180px;
-          background: ${isSelected ? 'linear-gradient(180deg, rgba(60,40,20,0.75), rgba(25,15,10,0.9))' : 'rgba(25,20,18,0.75)'};
-          border: 1px solid ${isSelected ? '#f59e0b' : isUnlocked ? 'rgba(212,167,68,0.25)' : 'rgba(100,100,100,0.2)'};
-          border-radius: 8px;
-          padding: 10px;
-          cursor: ${isUnlocked ? 'pointer' : 'not-allowed'};
-          opacity: ${isUnlocked ? '1' : '0.55'};
-          position: relative;
-          transition: all 0.2s ease;
-          box-shadow: ${isSelected ? '0 0 12px rgba(245,158,11,0.3)' : 'none'};
-        "
-      >
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
-          <strong style="font-family:'Cinzel',serif; font-size:13px; color:${isSelected ? '#fbbf24' : isUnlocked ? '#f4d58a' : '#888'};">
-            ${z.icon} ${z.name}
-          </strong>
-          <span style="font-size:10px; color:${isUnlocked ? '#ffd877' : '#ef4444'}; font-weight:bold;">
-            ${isUnlocked ? '★'.repeat(z.difficulty) : `🔒 Lv. ${z.minLevel}`}
-          </span>
-        </div>
-        <p style="font-size:11px; color:#94a3b8; margin:0 0 6px 0; line-height:1.3;">
-          ${z.description}
-        </p>
-        <div style="display:flex; justify-content:space-between; font-size:10px; color:#aaa;">
-          <span>Lanterna: <strong style="color:#cbd5e1;">${reqLampDef ? reqLampDef.name : 'Qualquer'}</strong></span>
-          <span style="color:#f59e0b; font-weight:bold;">${isSelected ? '● ATUAL' : ''}</span>
-        </div>
-      </div>
-    `;
-  }
+  const zonesHtml = renderLifeActivityAtlas({
+    activityId: 'mining', title: 'Galerias e jazidas',
+    subtitle: 'Localize veios minerais, leia o risco e prepare a escavação.',
+    zones: zonesList, activeZoneId, playerLevel: playerLvl, activityLevel: skillLvl,
+    selectHandler: 'selectMiningZone', resourceLabel: 'Veios catalogados',
+    resourceNames: (activeZone.availableNodes || []).map(id => MINERAL_NODES_CATALOG[id]?.name || id),
+    requirementLabel: 'Lanterna recomendada',
+    requirementValue: activeZone.requiredLamp ? (LAMPS_CATALOG[activeZone.requiredLamp]?.name || activeZone.requiredLamp) : 'Nenhuma',
+    cycleLabel: 'Escavação base', cycleValue: `${((activeZone.baseMineTime || 4000) / 1000).toFixed(1)}s`,
+    mechanicSummary: 'Prospecte antes de extrair: identifique bolsas de gás, falhas sísmicas e cristais densos; ajuste a técnica ao risco.',
+    accent: '#efb45f'
+  });
 
   // 2. PICARETAS
   let pickaxesHtml = '';
@@ -316,6 +288,7 @@ export function renderMiningUI(state) {
 
   const isAfkUnlocked = skillLvl >= 5;
   const isAfkActive = mState.autoMining;
+  const pendingOfflineReward = mState.pendingOfflineMiningReward;
 
   container.innerHTML = `
     <div style="padding:16px; font-family:sans-serif; color:#fff;">
@@ -354,15 +327,14 @@ export function renderMiningUI(state) {
         </div>
       </div>
 
-      <!-- Zonas de Mineração -->
-      <div style="margin-bottom:20px;">
-        <h4 style="margin:0 0 8px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:15px; display:flex; align-items:center; gap:6px;">
-          🧭 Galerias & Jazidas Minerais de Aden
-        </h4>
-        <div style="display:flex; gap:10px; flex-wrap:wrap;">
-          ${zonesHtml}
+      ${pendingOfflineReward ? `
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px;padding:10px 12px;border:1px solid #fbbf24;border-radius:8px;background:rgba(120,53,15,.24);color:#fde68a;">
+          <span>🎒 Saque offline preservado: ${pendingOfflineReward.actualMines} veios · ${Object.entries(pendingOfflineReward.matsGained || {}).map(([id, qty]) => `${qty}× ${id.replaceAll('_', ' ')}`).join(' · ')}</span>
+          <button onclick="window.claimPendingOfflineMiningRewards()" style="padding:6px 11px;border:1px solid #fbbf24;border-radius:6px;color:#1c1917;background:#fbbf24;font-weight:bold;cursor:pointer;">Resgatar saque</button>
         </div>
-      </div>
+      ` : ''}
+
+      ${zonesHtml}
 
       <!-- Layout 2 Colunas: Ação & Ferramental -->
       <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-bottom:20px;">

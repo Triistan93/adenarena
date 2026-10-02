@@ -69,6 +69,12 @@ export const FISHING_ZONES = {
   }
 };
 
+// Progressão de zonas: acompanha marcos do personagem e da maestria do ofício.
+Object.values(FISHING_ZONES).forEach((zone, index) => {
+  zone.minLevel = [1, 20, 40, 60, 85, 120][index] || 120;
+  zone.minSkillLevel = [1, 5, 10, 15, 20, 25][index] || 25;
+});
+
 export function getFishingZonesList() {
   return Object.values(FISHING_ZONES);
 }

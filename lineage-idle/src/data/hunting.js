@@ -69,6 +69,12 @@ export const HUNTING_ZONES = {
   }
 };
 
+// Progressão de zonas: acompanha marcos do personagem e da maestria do ofício.
+Object.values(HUNTING_ZONES).forEach((zone, index) => {
+  zone.minLevel = [1, 20, 40, 60, 85, 120][index] || 120;
+  zone.minSkillLevel = [1, 5, 10, 15, 20, 25][index] || 25;
+});
+
 export function getHuntingZonesList() {
   return Object.values(HUNTING_ZONES);
 }
@@ -88,7 +94,7 @@ export const APPROACH_TACTICS = {
     id: 'ambush',
     name: 'Emboscada nas Sombras',
     icon: '🎯',
-    desc: 'Espera paciente. Reduz alerta em 20, golpe crítico se alerta < 40.',
+    desc: 'Espera paciente. Reduz alerta em 20; causa golpe crítico com +50% de materiais se o alerta ficar abaixo de 40.',
     timeMult: 1.3,
     qualityBonus: 0.0,
     durabilityCost: 1,

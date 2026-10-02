@@ -72,12 +72,19 @@ export const MiningService = {
       state.mining.veinProbed = false;
     }
 
+    LifeActivityCore.syncProfessionProgress(state, 'mining', state.mining);
+    const activeZone = MINING_ZONES[state.mining.activeZone];
+    if (!state.mining.isMining && !state.mining.pendingOfflineMiningReward && !LifeActivityCore.isZoneAvailable(state, activeZone, state.mining.skillLevel)) {
+      state.mining.activeZone = Object.values(MINING_ZONES).find(zone => LifeActivityCore.isZoneAvailable(state, zone, state.mining.skillLevel))?.id || 'zone_abandoned_coal';
+    }
+
     return state.mining;
   },
 
   getAvailableZones(state) {
     const playerLvl = Number(state?.level) || 1;
-    return Object.values(MINING_ZONES).filter(zone => playerLvl >= zone.minLevel);
+    const skill = this.getMiningState(state).skillLevel;
+    return Object.values(MINING_ZONES).filter(zone => LifeActivityCore.isZoneAvailable({ level: playerLvl }, zone, skill));
   },
 
   probeVein(state, callbacks = {}) {
@@ -138,8 +145,8 @@ export const MiningService = {
     if (!zone) return false;
 
     const playerLvl = Number(state?.level) || 1;
-    if (playerLvl < zone.minLevel) {
-      if (callbacks.log) callbacks.log(`⚠️ Nível insuficiente para descer nas galerias de ${zone.name}! Requer Nível ${zone.minLevel}.`, 'warning');
+    if (!LifeActivityCore.isZoneAvailable({ level: playerLvl }, zone, mState.skillLevel)) {
+      if (callbacks.log) callbacks.log(`⚠️ ${zone.name} exige personagem nível ${zone.minLevel} e maestria de Mineração nível ${zone.minSkillLevel || 1}.`, 'warning');
       return false;
     }
 
@@ -240,7 +247,7 @@ export const MiningService = {
     if (!pick) return false;
 
     const mState = this.getMiningState(state);
-    if (mState.isMining) return false;
+    if (mState.isMining || mState.pendingOfflineMiningReward) return false;
     if (mState.pickaxeDurability[pickaxeId] === undefined && pickaxeId !== 'pickaxe_none') {
       if (callbacks.log) callbacks.log('⚠️ Você não possui esta picareta em sua coleção!', 'warning');
       return false;
@@ -304,9 +311,9 @@ export const MiningService = {
     return true;
   },
 
-  pickNodeForZone(zoneId, activeLampId) {
+  pickNodeForZone(zoneId, activeLampId, skillLevel = 1) {
     const zone = MINING_ZONES[zoneId] || MINING_ZONES.zone_abandoned_coal;
-    const nodes = zone.availableNodes.map(id => MINERAL_NODES_CATALOG[id]).filter(Boolean);
+    const nodes = zone.availableNodes.map(id => MINERAL_NODES_CATALOG[id]).filter(node => node && skillLevel >= LifeActivityCore.getMinimumSkillForRarity(node.rarity));
     if (nodes.length === 0) return MINERAL_NODES_CATALOG.node_coal_deposit;
 
     const lamp = activeLampId ? LAMPS_CATALOG[activeLampId] : null;
@@ -348,6 +355,12 @@ export const MiningService = {
 
   startMining(state, tacticId = null, callbacks = {}) {
     const mState = this.getMiningState(state);
+    const activeZone = MINING_ZONES[mState.activeZone];
+    if (!LifeActivityCore.isZoneAvailable(state, activeZone, mState.skillLevel)) return { success: false, reason: 'zone_locked' };
+    if (mState.pendingOfflineMiningReward) {
+      if (callbacks.log) callbacks.log('🎒 Resgate o resultado da extração offline antes de iniciar outro veio.', 'warning');
+      return { success: false, reason: 'pending_rewards' };
+    }
     if (mState.isMining) return { success: false, reason: 'already_mining' };
     const activePickaxeId = mState.pickaxe || 'pickaxe_none';
     const pickDef = PICKAXES_CATALOG[activePickaxeId];
@@ -380,7 +393,7 @@ export const MiningService = {
     }
 
     const zone = MINING_ZONES[mState.activeZone] || MINING_ZONES.zone_abandoned_coal;
-    const node = this.pickNodeForZone(mState.activeZone, mState.activeLamp);
+    const node = this.pickNodeForZone(mState.activeZone, mState.activeLamp, mState.skillLevel);
 
     let mineDuration = node.baseTime || zone.baseMineTime || 3300;
     mineDuration = Math.max(1200, Math.floor((mineDuration * (tactic.timeMult || 1.0)) / lampSpeedMult));
@@ -541,6 +554,10 @@ export const MiningService = {
 
   toggleAutoMining(state, callbacks = {}) {
     const mState = this.getMiningState(state);
+    if (mState.pendingOfflineMiningReward && !mState.autoMining) {
+      if (callbacks.log) callbacks.log('🎒 Resgate o resultado da mineração offline antes de retomar a atividade.', 'warning');
+      return false;
+    }
     if (mState.skillLevel < 5) {
       if (callbacks.log) callbacks.log('⚠️ A Mineração Automática (AFK) é desbloqueada no Nível 5 de Mineração!', 'warning');
       return false;
@@ -590,6 +607,19 @@ export const MiningService = {
 
   processOfflineMining(state, minutesOffline = 0, callbacks = {}) {
     const mState = this.getMiningState(state);
+    if (mState.pendingOfflineMiningReward) return this.claimOfflineMiningReward(state, callbacks);
+    // Finish a vein whose result was already rolled before simulating a new offline batch.
+    // Keep the pending roll authoritative so a full bag cannot reroll or discard it.
+    if (mState.pendingMineReward) {
+      if (!mState.isMining || !mState.targetedNodeId) {
+        return { success: false, reason: 'pending_mine_state_incomplete', pendingReward: mState.pendingMineReward };
+      }
+      const pendingNodeId = mState.pendingMineReward.nodeId;
+      mState.mineStartTime = Date.now() - (mState.mineDuration || 0);
+      return this.finishMining(state, callbacks)
+        ? { actualMines: 1, claimedPendingReward: true, nodeId: pendingNodeId }
+        : { actualMines: 0, pendingReward: true, nodeId: pendingNodeId };
+    }
     if (!mState.autoMining) return null;
 
     const activePickaxeId = mState.pickaxe || 'pickaxe_none';
@@ -602,60 +632,144 @@ export const MiningService = {
     const clampedMinutes = Math.min(480, Math.max(0, minutesOffline));
     if (clampedMinutes < 2) return null;
 
-    // 1 extração a cada 30 segundos com 25% de eficiência
-    const totalPotential = Math.floor((clampedMinutes * 60) / 30 * 0.25);
-    const actualMines = Math.min(availableDur, Math.max(1, totalPotential));
+    const zoneId = mState.activeZone || 'zone_abandoned_coal';
+    const zone = MINING_ZONES[zoneId] || MINING_ZONES.zone_abandoned_coal;
+    const activePickaxe = PICKAXES_CATALOG[activePickaxeId] || PICKAXES_CATALOG.pickaxe_none;
+    const tactic = MINING_TACTICS[mState.selectedTactic] || MINING_TACTICS.standard;
+    const offlineTimeBudget = clampedMinutes * 60 * 1000 * 0.25;
+    let timeSpent = 0;
+    let actualMines = 0;
+    let durabilitySpent = 0;
+    let totalXp = 0;
+    const matsGained = {};
+    const discoveries = {};
+    let hazard = mState.veinHazard || 'none';
+
+    // Simula 25% do tempo real, preservando as regras do veio ativo,
+    // incluindo qualidade, gasto da lanterna, riscos e estabilidade da galeria.
+    while (durabilitySpent < availableDur) {
+      const lampId = mState.activeLamp;
+      const lampStock = lampId ? (mState.lampInventory[lampId] || 0) : 0;
+      if (lampId && lampStock <= 0) mState.activeLamp = null;
+      const usableLampId = lampStock > 0 ? lampId : null;
+      const lamp = usableLampId ? LAMPS_CATALOG[usableLampId] : null;
+      const node = this.pickNodeForZone(zoneId, usableLampId, mState.skillLevel);
+      const duration = Math.max(1200, Math.floor(
+        ((node.baseTime || zone.baseMineTime || 3300) * (tactic.timeMult || 1)) / (lamp?.speedBoost || 1)
+      ));
+      if (timeSpent + duration > offlineTimeBudget) break;
+
+      if (usableLampId) mState.lampInventory[usableLampId] = Math.max(0, lampStock - 1);
+      timeSpent += duration;
+      actualMines++;
+      discoveries[node.id] = (discoveries[node.id] || 0) + 1;
+
+      const stabilityLoss = (tactic.stabilityLoss || 12) * (hazard === 'seismic_fault' ? 2 : 1);
+      const stabilityAfter = Math.max(0, (Number(mState.galleryStability) || 0) - stabilityLoss);
+      const gasExplosion = hazard === 'gas_pocket' && tactic.id === 'heavy';
+      const quality = RewardEngine.rollQuality(mState.skillLevel, (activePickaxe.qualityBonus || 0) + (tactic.qualityBonus || 0));
+      totalXp += Math.round((node.xpReward || 8) * quality.mult);
+      const primaryMat = resolveCanonicalResourceId(node.yields.primary);
+      let basePrimaryQty = node.yields.primaryQty || 1;
+      let baseSecondaryQty = node.yields.secondaryQty || 0;
+      if (hazard === 'dense_crystal' && tactic.id === 'precision') {
+        basePrimaryQty *= 2;
+        baseSecondaryQty *= 2;
+      }
+      if (stabilityAfter <= 15) {
+        basePrimaryQty = Math.max(1, Math.floor(basePrimaryQty * 0.5));
+        baseSecondaryQty = Math.floor(baseSecondaryQty * 0.5);
+      }
+      const primaryQty = RewardEngine.calculateYield(basePrimaryQty, quality);
+      matsGained[primaryMat] = (matsGained[primaryMat] || 0) + primaryQty;
+
+      if (node.yields.secondary && baseSecondaryQty > 0) {
+        const secondaryMat = resolveCanonicalResourceId(node.yields.secondary);
+        const secondaryQty = RewardEngine.calculateYield(baseSecondaryQty, quality);
+        matsGained[secondaryMat] = (matsGained[secondaryMat] || 0) + secondaryQty;
+      }
+
+      if (gasExplosion) {
+        const maxHp = Number(state.maxHp) || Number(state.hp) || 1;
+        state.hp = Math.max(1, (Number(state.hp) || maxHp) - Math.floor(maxHp * 0.10));
+      }
+      mState.galleryStability = stabilityAfter;
+      durabilitySpent += 1 + (gasExplosion ? 2 : 0);
+      const hazards = ['none', 'none', 'none', 'gas_pocket', 'seismic_fault', 'dense_crystal'];
+      hazard = hazards[Math.floor(Math.random() * hazards.length)];
+    }
 
     if (actualMines <= 0) return null;
 
-    // O pagamento offline substitui, em vez de duplicar, o veio que estava salvo em andamento.
+    // O pagamento offline substitui apenas um veio sem resultado pendente; o resultado
+    // já concluído acima sempre é resolvido antes de uma nova simulação.
     mState.isMining = false;
     mState.targetedNodeId = null;
     mState.mineStartTime = 0;
-    mState.pendingMineReward = null;
 
-    mState.pickaxeDurability[activePickaxeId] -= actualMines;
+    mState.pickaxeDurability[activePickaxeId] = Math.max(0, availableDur - durabilitySpent);
     const actState = LifeActivityCore.getActivityState(state, 'mining');
     actState.toolDurability = mState.pickaxeDurability[activePickaxeId];
+    mState.veinHazard = hazard;
+    mState.veinProbed = false;
 
-    const zoneId = mState.activeZone || 'zone_abandoned_coal';
-    let totalXp = 0;
-    const matsGained = {};
-
-    for (let i = 0; i < actualMines; i++) {
-      const node = this.pickNodeForZone(zoneId, null);
-      mState.miningLog[node.id] = (mState.miningLog[node.id] || 0) + 1;
-      mState.totalMined = (mState.totalMined || 0) + 1;
-      totalXp += node.xpReward || 8;
-
-      const pMat = resolveCanonicalResourceId(node.yields.primary);
-      const pQty = node.yields.primaryQty || 1;
-      matsGained[pMat] = (matsGained[pMat] || 0) + pQty;
-
-      const sMatRaw = node.yields.secondary;
-      const sQty = node.yields.secondaryQty || 0;
-      if (sMatRaw && sQty > 0) {
-        const sMat = resolveCanonicalResourceId(sMatRaw);
-        matsGained[sMat] = (matsGained[sMat] || 0) + sQty;
-      }
-    }
-
-    for (const [matId, qty] of Object.entries(matsGained)) {
-      addToInventory(state, matId, qty, 'common', false, callbacks, true);
-    }
-
-    LifeActivityCore.addXp(state, 'mining', totalXp, callbacks);
+    mState.pendingOfflineMiningReward = {
+      actualMines, matsGained, totalXp, discoveries,
+      pickaxeId: activePickaxeId, resumeAutoMining: true,
+      inventoryFullNotified: false
+    };
+    mState.autoMining = false;
     mState.lastAutoTick = Date.now();
-    if (mState.pickaxeDurability[activePickaxeId] <= 0) mState.autoMining = false;
+    if (callbacks.log) callbacks.log(`💤 A extração offline preservou ${actualMines} veio(s) para resgate.`, 'system');
+    if (callbacks.updateAllUI) callbacks.updateAllUI();
+    if (callbacks.save) callbacks.save();
+    return this.claimOfflineMiningReward(state, callbacks);
+  },
+
+  claimOfflineMiningReward(state, callbacks = {}) {
+    const mState = this.getMiningState(state);
+    const pending = mState.pendingOfflineMiningReward;
+    if (!pending) return { success: false, reason: 'no_pending_rewards' };
+
+    const rewards = Object.entries(pending.matsGained || {}).map(([itemId, count]) => ({ itemId, count }));
+    const inventoryPreview = {
+      ...state,
+      inventory: (state.inventory || []).map(item => ({ ...item }))
+    };
+    const inventoryFits = rewards.every(reward =>
+      addToInventory(inventoryPreview, reward.itemId, reward.count, 'common', false, {}, true)
+    );
+    if (!inventoryFits) {
+      if (!pending.inventoryFullNotified && callbacks.log) {
+        callbacks.log('🎒 Mochila cheia: libere espaço para resgatar os minérios da extração offline.', 'warning');
+      }
+      pending.inventoryFullNotified = true;
+      if (callbacks.updateAllUI) callbacks.updateAllUI();
+      if (callbacks.save) callbacks.save();
+      return { success: false, reason: 'inventory_full', pendingRewards: pending };
+    }
+
+    state.inventory = inventoryPreview.inventory;
+
+    for (const [nodeId, count] of Object.entries(pending.discoveries || {})) {
+      mState.miningLog[nodeId] = (mState.miningLog[nodeId] || 0) + count;
+      LifeActivityCore.recordCodexDiscovery(state, 'mining', nodeId);
+    }
+    mState.totalMined = (mState.totalMined || 0) + (pending.actualMines || 0);
+    LifeActivityCore.addXp(state, 'mining', pending.totalXp || 0, callbacks);
+    mState.pendingOfflineMiningReward = null;
+    const remainingDurability = Number(mState.pickaxeDurability[pending.pickaxeId]) || 0;
+    mState.autoMining = Boolean(pending.resumeAutoMining && mState.pickaxe === pending.pickaxeId && remainingDurability > 0);
+    mState.lastAutoTick = Date.now();
 
     if (callbacks.log) {
-      callbacks.log(`💤 **Relatório de Mineração Offline (${clampedMinutes}m):** Extraiu ${actualMines} veios minerais em Aden! (+${totalXp} XP de Mineração)`, 'rarity-legendary');
+      callbacks.log(`💤 **Relatório de Mineração Offline:** Extraiu ${pending.actualMines} veios minerais em Aden! (+${pending.totalXp} XP de Mineração)`, 'rarity-legendary');
     }
 
     if (callbacks.updateAllUI) callbacks.updateAllUI();
     if (callbacks.save) callbacks.save();
 
-    return { actualMines, matsGained, totalXp };
+    return { success: true, actualMines: pending.actualMines, matsGained: pending.matsGained, totalXp: pending.totalXp };
   },
 
   startHarvest(state, tacticId = null, callbacks = {}) {

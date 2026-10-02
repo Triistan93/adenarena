@@ -42,6 +42,19 @@ export function getCraftLevelReq(recipeLevel) {
   return Math.max(1, Math.floor(recipeLevel / 10) + 1);
 }
 
+export function getRecipeForgeLevelRequirement(recipe) {
+  if (!recipe) return 1;
+  const explicitLevel = Number(recipe.craftLevel);
+  if (Number.isSafeInteger(explicitLevel) && explicitLevel > 0) return explicitLevel;
+  const recipeLevel = Number(recipe.level);
+  return Number.isFinite(recipeLevel) && recipeLevel > 0 ? getCraftLevelReq(recipeLevel) : 1;
+}
+
+function getPlayerForgeLevel(state) {
+  const level = Number(state?.accountForgeLevel ?? state?.craftLevel ?? 1);
+  return Number.isSafeInteger(level) && level > 0 ? level : 1;
+}
+
 /**
  * Retorna a definição da receita de craft pelo ID.
  * @param {string} recipeId
@@ -146,6 +159,8 @@ export function calculateMaxCraftableQty(state, recipeOrId) {
 export function canCraft(state, recipeId, qty = 1) {
   const count = Number(qty);
   if (!Number.isSafeInteger(count) || count <= 0) return false;
+  const recipe = getRecipeDef(recipeId);
+  if (!recipe || getPlayerForgeLevel(state) < getRecipeForgeLevelRequirement(recipe)) return false;
   const maxPossible = calculateMaxCraftableQty(state, recipeId);
   return maxPossible >= count;
 }
@@ -161,6 +176,13 @@ export function craftItem(state, recipeId, qty = 1, callbacks = {}) {
   const recipe = getRecipeDef(recipeId);
   if (!recipe) {
     if (callbacks.log) callbacks.log('Receita de forja não encontrada.', 'system');
+    return false;
+  }
+
+  const requiredForgeLevel = getRecipeForgeLevelRequirement(recipe);
+  const playerForgeLevel = getPlayerForgeLevel(state);
+  if (playerForgeLevel < requiredForgeLevel) {
+    if (callbacks.log) callbacks.log(`🔒 Sua Forja está no nível ${playerForgeLevel}; esta receita requer nível ${requiredForgeLevel}.`, 'warning');
     return false;
   }
 

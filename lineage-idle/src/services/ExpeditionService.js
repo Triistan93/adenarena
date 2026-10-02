@@ -3,6 +3,7 @@ import { addToInventory } from './InventoryService.js';
 import { MercenaryService } from './MercenaryService.js';
 import { MERCENARY_SPECIALIZATIONS, MERCENARY_TRAITS, calculateMercenaryPower } from '../data/mercenaries.js';
 import { EXPEDITION_DESTINATIONS, RISK_DIRECTIVES, EXPEDITION_DILEMMAS } from '../data/expeditions.js';
+import { checkExpeditionDilemmaEligibility } from './ExpeditionDilemmaPolicy.js';
 
 export { EXPEDITION_DESTINATIONS, RISK_DIRECTIVES, EXPEDITION_DILEMMAS };
 
@@ -225,33 +226,27 @@ export const ExpeditionService = {
       return { success: false, reason: 'in_progress' };
     }
 
-    // Ensure exp.claimed is set to true atomically before distributing rewards to prevent double-claim race conditions
-    exp.claimed = true;
-    exp.claimedAt = now;
-
-    if (!Array.isArray(state.claimedExpeditionIds)) {
-      state.claimedExpeditionIds = [];
-    }
-    if (!state.claimedExpeditionIds.includes(expeditionId)) {
-      state.claimedExpeditionIds.push(expeditionId);
-    }
-
     // Multiplicadores da Diretriz
     const directive = exp.directive || 'balanced';
     const directiveDef = RISK_DIRECTIVES[directive] || RISK_DIRECTIVES.balanced;
     const lootMult = directiveDef.lootMult || 0;
+    const inventoryRewards = [];
     
     // 1. Saque de Ouro
     const baseGold = Math.floor(dest.minGold + Math.random() * (dest.maxGold - dest.minGold));
     const goldBonusPct = (exp.synergies?.goldBonusPct || 0) + lootMult;
-    const goldEarned = Math.max(0, Math.floor(baseGold * (1 + goldBonusPct)));
-    state.gold = (state.gold || 0) + goldEarned;
+    let goldEarned = Math.max(0, Math.floor(baseGold * (1 + goldBonusPct)));
+    const squadPower = Number(exp.synergies?.totalSquadPower) || 0;
+    const hazardRisk = Math.max(0, Math.min(0.8,
+      0.08 + (Number(directiveDef.hazardDamage) || 0) - (Number(exp.synergies?.hazardMitigation) || 0) - Math.min(0.2, squadPower / 1000)
+    ));
+    const hazardStruck = hazardRisk > 0 && Math.random() < hazardRisk;
+    if (hazardStruck) goldEarned = Math.floor(goldEarned * 0.85);
 
     // 2. Cacos Astrais
     let shards = dest.shards || 3;
     const shardBonusPct = (exp.synergies?.extraShardsPct || 0) + lootMult;
     shards = Math.max(1, Math.floor(shards * (1 + shardBonusPct)));
-    state.astralShards = (state.astralShards || 0) + shards;
 
     // 3. Materiais Canônicos da Tabela do Destino
     const materialsRewarded = [];
@@ -267,7 +262,7 @@ export const ExpeditionService = {
           qty = Math.floor(qty * (1 + lootMult));
         }
         if (qty > 0) {
-          addToInventory(state, m.matId, qty, 'common', false, callbacks, true);
+          inventoryRewards.push({ itemId: m.matId, qty, rarity: 'common' });
           materialsRewarded.push({ matId: m.matId, qty });
         }
       }
@@ -277,7 +272,7 @@ export const ExpeditionService = {
     if (dest.scrollReward) {
       const scrollQty = 1 + (lootMult > 0 && Math.random() < lootMult ? 1 : 0);
       if (scrollQty > 0) {
-        addToInventory(state, dest.scrollReward, scrollQty, 'uncommon', false, callbacks, true);
+        inventoryRewards.push({ itemId: dest.scrollReward, qty: scrollQty, rarity: 'uncommon' });
       }
     }
 
@@ -293,7 +288,32 @@ export const ExpeditionService = {
       } else {
         bonusScrollId = 'scroll_of_enchant_weapon';
       }
-      addToInventory(state, bonusScrollId, 2, 'rare', false, callbacks, true);
+      inventoryRewards.push({ itemId: bonusScrollId, qty: 2, rarity: 'rare' });
+    }
+
+    // Preflight all drops on a copy so a full backpack never consumes the claim.
+    const inventoryPreview = {
+      ...state,
+      inventory: (state.inventory || []).map(item => ({ ...item }))
+    };
+    const inventoryFits = inventoryRewards.every(reward =>
+      addToInventory(inventoryPreview, reward.itemId, reward.qty, reward.rarity, false, {}, true)
+    );
+    if (!inventoryFits) {
+      if (callbacks.log) callbacks.log('🎒 Mochila cheia: libere espaço para coletar o saque da expedição.', 'warning');
+      return { success: false, reason: 'inventory_full' };
+    }
+
+    // Claim only after every item can be delivered; this keeps retry safe.
+    exp.claimed = true;
+    exp.claimedAt = now;
+    if (!Array.isArray(state.claimedExpeditionIds)) state.claimedExpeditionIds = [];
+    if (!state.claimedExpeditionIds.includes(expeditionId)) state.claimedExpeditionIds.push(expeditionId);
+
+    state.gold = (Number(state.gold) || 0) + goldEarned;
+    state.astralShards = (Number(state.astralShards) || 0) + shards;
+    for (const reward of inventoryRewards) {
+      addToInventory(state, reward.itemId, reward.qty, reward.rarity, false, callbacks, true);
     }
 
     // 6. Distribuição de XP e Lealdade para os mercenários do esquadrão
@@ -317,6 +337,7 @@ export const ExpeditionService = {
 
     if (callbacks.log) {
       let msg = `🎁 **Expedição a ${dest.name} concluída com êxito!** Saque: +${goldEarned.toLocaleString()} Adena, +${shards} Cacos Astrais`;
+      if (hazardStruck) msg += ` (uma ameaça de marcha reduziu o ouro; risco ${Math.round(hazardRisk * 100)}%)`;
       if (materialsRewarded.length > 0) {
         msg += ` e recursos vitais coletados`;
       }
@@ -352,8 +373,14 @@ export const ExpeditionService = {
     const option = dilemma.options[optionKey];
     if (!option) return false;
 
-    // TODO: Verify requirements (squad specs/traits or directive) here if needed.
-    // Assuming UI handles disabling invalid options.
+    const squad = (Array.isArray(activeExp.squad) ? activeExp.squad : [])
+      .map(uid => MercenaryService.getMercenaryByUid(state, uid))
+      .filter(Boolean);
+    const eligibility = checkExpeditionDilemmaEligibility(activeExp, option, squad);
+    if (!eligibility.eligible) {
+      if (callbacks.log) callbacks.log(`⚠️ ${eligibility.reason}`, 'warning');
+      return false;
+    }
 
     activeExp.dilemmaResolved = true;
 

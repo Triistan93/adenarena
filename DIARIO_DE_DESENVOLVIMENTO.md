@@ -3857,3 +3857,75 @@ Também comparei os gates do serviço com os cartões do painel. Durante Torre, 
 ### Checkpoint antes do push (01/10/2026, 18:05 BRT)
 
 Consolidei nesta página as alterações pendentes de ciclo de vida das instâncias especiais, navegação dos submenus, controles de combate e auditoria de Coliseu/Raids. Inclui retorno seguro de instâncias, exclusão mútua de encontros, correções dos limites de auto-poção, escolha e custo de ressurreição, contagem de Soulshots por grau compatível, preservação de pausa ao trocar de zona, pausa do combate normal durante o Coliseu, fila resgatável de drops de Raid quando a mochila enche e estados de bloqueio coerentes na UI. `git diff --check` passou. Não rodei testes nem build nesta rodada; a auditoria de telas e a validação visual continuam em andamento.
+
+### Auditoria em sequência — Expedições e Coleta (02/10/2026)
+
+Na revisão do painel de Expedições, confirmei que o claim marca o envio como coletado antes de inserir os materiais, pergaminhos e prêmio de baú; o retorno de `addToInventory` não é conferido. Mochila cheia pode, portanto, descartar esses itens. `ExpeditionService.js` permanece protegido contra edição conforme a decisão já registrada; não o alterei e mantive a área parcial.
+
+Segui para Coleta conforme a fila. `processOfflineGathering` ignorava `pendingHarvestReward`, rerrolava uma colheita e limpava o rendimento salvo, com possibilidade de perda quando a mochila continuava cheia. Agora tenta finalizar primeiro o rendimento já salvo; se faltar espaço, mantém o mesmo nó, quantidades e XP pendentes e não gera substituto. Não rodei testes/build nem inspeção visual nesta retomada.
+
+### Expedições — atlas interativo e recompensa segura (02/10/2026)
+
+Por solicitação do usuário, redesenhei o topo das Expedições como um atlas navegável: rotas visuais, locais selecionáveis, estados de região bloqueada/aberta e expedições ativas. Selecionar um local revela sua ordem de marcha com esquadrão, sinergias, diretriz e recompensas. Taverna, quartel, castelos e manor permanecem acessíveis na página.
+
+A autorização explícita do usuário removeu a proteção anterior de arquivos. Corrigi o claim para simular a inserção de todos os itens em uma cópia do inventário antes de conceder moeda/cacos ou marcar o envio como concluído. Se faltar espaço, o claim permanece disponível. O resultado de perigo agora considera risco da diretriz, mitigação e poder da equipe; ações de dilema também validam requisitos no próprio serviço. Não rodei testes/build nem inspeção visual; a área segue parcial e a próxima etapa da fila continua sendo Pesca após revisar este fluxo.
+
+### Atlas de Expedições — mapa personalizado (02/10/2026)
+
+Gerei uma ilustração cartográfica original em vista superior, com pergaminho sobre mesa, litoral, florestas, ruínas, catacumbas, minas, necrópole, ravina vulcânica e santuário. Integrei o arquivo otimizado `public/images/aden-expedition-map.webp` como fundo do atlas e reposicionei os pontos interativos sobre as regiões correspondentes; títulos, nomes e status continuam como elementos de interface legíveis. A imagem usa referências visuais de MMORPGs de fantasia clássicos sem reproduzir uma captura ou mapa oficial de Lineage II.
+
+### Gathering — atlas comum e revisão das mecânicas (02/10/2026)
+
+Pesca, Caça Silvestre, Coleta e Mineração agora reutilizam o atlas de Aden da tela de Expedições, cada qual com seis pontos correspondentes às suas zonas. A ficha selecionada mostra os recursos/espécies disponíveis, isca ou atrativo exigido/recomendado, ferramenta de região e tempo-base do ciclo. Também explicita a decisão principal de cada atividade: controle de tensão da linha; vento, alerta e abordagem da presa; inspeção de pureza/perigo botânico; prospecção e risco de galeria. A seleção segue ligada aos serviços existentes, preservando seus gates e o estado ativo.
+
+Na revisão do caminho offline da Mineração, confirmei que rendimentos eram aplicados diretamente com `addToInventory` ignorado; com mochila cheia, veios, XP e durabilidade avançavam sem entregar os minérios. Agora o lote é guardado com descobertas e XP pendentes, a mineração AFK pausa, a UI oferece resgate e a entrega é pré-validada numa cópia do inventário antes de aplicar recompensa, catálogo e XP. Iniciar mineração/AFK fica bloqueado até resgatar o lote. A regra de claim ativo já preservava lotes, então isto alinha o retorno offline ao restante do ciclo. Não rodei testes/build; `node --check` nos módulos alterados e `git diff --check` passaram. A auditoria continua parcial: revisar balanço de risco/rendimento offline e executar os cenários de claim/retomada antes de fechar Pesca/Mineração.
+
+### Gathering — balanceamento AFK/offline (02/10/2026)
+
+Comparei o caminho online e offline de Pesca e Caça. A Pesca aplicava `OFFLINE_EFFICIENCY` na quantidade de arremessos e novamente na chance de captura, enquanto o AFK online usa sua própria eficiência. Isso levava o offline a cerca de 4% do volume AFK; agora a taxa de 25% reduz os arremessos uma vez, e cada um usa a chance AFK normal. A seleção de isca também segue o AFK: preserva a escolha até acabar e não substitui a isca obrigatória de uma zona por outra.
+
+A Caça AFK repetia tentativas inválidas quando faltava o atrativo obrigatório. Agora para e informa o requisito. A caça offline validava antes qualquer atrativo de zona, ignorava o estoque usado e sorteava presas sem considerar o atrativo selecionado; agora respeita o requisito da zona, limita as tentativas ao atrativo disponível e consome o estoque correspondente ao pacote gerado. Coleta e Mineração usam seus cestos/lamparinas como bônus opcionais, não como gates, então não os converti em requisitos obrigatórios. Ainda falta comparar numericamente ciclos, consumíveis, risco, XP e valor por minuto nas quatro profissões antes de ajustar os parâmetros globais. Não rodei testes/build; farei apenas validação estática nesta etapa conforme as instruções atuais.
+
+Como linha de base, calculei XP/min teórico com média simples dos alvos e seus tempos catalogados, antes de bônus de qualidade, tática ou consumível. A faixa inicial→final é 152→2.705 em Coleta, 142→2.815 em Mineração e 210→3.500 em Caça. São multiplicadores de aproximadamente 18–20x no topo. Isso não é uma taxa efetiva: as zonas ponderam raridade, e os serviços offline atualmente usam ciclos aproximados e XP sem qualidade. Mantive os valores por enquanto, pois falta cruzá-los com os limiares de XP por nível e o valor de venda/custo dos materiais; reduzir XP só pelo indicador médio poderia atrasar os desbloqueios de zona sem corrigir a economia.
+
+### Mineração — taxa offline e bônus de ferramenta (02/10/2026)
+
+O comentário dizia “25% de eficiência”, mas a fórmula gerava uma extração a cada 120 segundos independentemente dos ciclos reais de 3,2–6,2 segundos. Com isso, ferramentas de alta durabilidade mal aproveitavam o offline de oito horas. A simulação agora usa 25% do tempo transcorrido dividido pela duração real dos veios, limitada pela durabilidade da picareta. Cada tentativa usa a tática ativa, aplica qualidade por picareta/tática, escolhe a raridade com a lanterna e consome uma unidade do combustível; o pacote continua guardado para claim transacional. Não alterei o cálculo online. A simulação offline ainda não rola gás, falha sísmica, cristal denso nem desgaste/estabilidade correspondentes; esses riscos ficam pendentes, sem alegar paridade completa. Não rodei testes/build; falta validação estática final desta alteração.
+
+### Coleta, Mineração e Caça — paridade offline (02/10/2026)
+
+Continuei sem interromper a fila. Coleta agora também mede 25% do tempo de ciclos reais por planta, aplica a tática, raridade/velocidade/consumo do cesto, bônus de foice, qualidade, pureza e hazards. Dano dos espinhos e desgaste extra por seiva acompanham as regras manuais. O resultado consolidado passa por pré-validação transacional; mochila cheia preserva lote, XP e catálogo até resgate. Adicionei o painel e a ação de resgate na tela.
+
+Na Mineração, completei os riscos da simulação offline: falha sísmica dobra perda de estabilidade; cristal denso com precisão dobra os materiais; estabilidade baixa corta rendimento; gás com golpe demolidor causa dano e desgaste extra. As rolagens e estados são mantidos entre tentativas do mesmo pacote.
+
+Na Caça, o offline agora calcula ciclos pelo tempo da presa e pela tática, aplica rapidez/raridade/consumo do atrativo, qualidade da faca, direção do vento e alerta; presas podem escapar com gasto da faca. O pacote pendente tem claim visível e a AFK só retoma depois do claim se ainda houver ferramenta e atrativo exigido. A estimativa de 25% agora se refere ao tempo efetivo do ciclo em todos os três serviços, em vez de um relógio genérico de 30s multiplicado novamente por 25%. Ainda falta verificar numericamente valor de materiais/minuto, XP por limiar, aparição de crítico da emboscada e inspeção visual. Não rodei testes/build; vou fechar primeiro revisão estática e `git diff --check`.
+
+### Reentrada offline segura — Mineração e Caça (02/10/2026)
+
+Fechei duas arestas de persistência encontradas na revisão: `processOfflineMining` agora tenta concluir a recompensa de veio já calculada antes de simular novas extrações; `processOfflineHunting` faz o mesmo para uma presa já esfolada pelo AFK. Se a mochila continuar cheia, os serviços preservam exatamente o lote e não o substituem por novas rolagens. A alteração anterior da tática de emboscada também foi reconciliada com o catálogo: alerta abaixo de 40 concede crítico de +50% de materiais no descarne manual, AFK e offline.
+
+Validação desta rodada: `node --check` nos quatro serviços de atividades, quatro telas e `main.js`; `git diff --check` passou. Não rodei testes ou build, conforme a instrução vigente. A comparação numérica anterior usa preço nominal do catálogo como proxy, não receita real de venda; XP e valor/minuto ainda precisam ser confrontados com desbloqueios, custos de consumíveis e duração efetiva antes de alterar números de balanceamento.
+
+### Progressão dos quatro ofícios — diferença de curvas identificada (02/10/2026)
+
+Ao cruzar XP com os gates, confirmei que os quatro ofícios não compartilham o mesmo significado para `skillXp`: Pesca compara XP cumulativa com `50 × nível²` e chega ao limiar do nível 30 em 42.050; Caça soma requisitos quadráticos por nível e desconta cada requisito, totalizando 427.750 XP até o nível 30; Coleta e Mineração compartilham `LIFE_ACTIVITY_LEVEL_TABLE`, com 1.155.000 XP cumulativa para o nível 40. Portanto, os indicadores de XP/minuto já anotados não bastam para comparar o tempo de desbloqueio entre profissões.
+
+Não alterei a curva nesta revisão: uma normalização direta mudaria níveis ou XP restante em saves existentes e mexeria nos gates de zonas/ferramentas. Próximo passo de balanceamento é definir uma curva-alvo por marcos de desbloqueio, então converter cada save para conservar o nível e a fração de progresso no nível atual antes de substituir fórmulas. Os XP/minuto anteriores usam médias teóricas e preço nominal de catálogo como proxy; ainda não representam vendas, custos, disponibilidade de consumíveis nem bônus ativos.
+
+### Progressão integrada de materiais e receitas (02/10/2026)
+
+Segui a orientação de comparar um personagem inicial com o cap120. Confirmei um descompasso de gate: os quatro territórios iniciais declaram nível15, embora serviços novos apontem para eles por padrão; os métodos que iniciam atividades não revalidam o nível e deixam o cadeado apenas na seleção/UI. Também confirmei que todas as zonas estão abertas no nível40, enquanto não há novos materiais entre os níveis41–120. As zonas não exigem maestria de ofício para sortear nós/alvos avançados; a maestria melhora qualidade e gates de ferramentas.
+
+Cruzei os materiais com 998 chaves de receita gerada e 16 receitas de refino. Duas saídas da Coleta (`mold_glue`, `mold_lubricant`) não existem nem em `ALL_ITEMS` nem no dicionário de recursos; `steel_ingot`, obtido pela troca de peixe, não tem consumidor em receita/refino. O catálogo de equipamento chega ao requisito de personagem90, deixando a faixa91–120 sem itens de equipamento correspondentes. Registrei a matriz atual e uma curva proposta para simulação em `docs/MATRIZ_PROGRESSAO_MATERIAIS_E_FORJA.md`: territórios nos níveis 1/20/40/60/85/120 e gates de maestria 1/5/10/15/20/25, com acesso inicial comum e região final no cap120.
+
+Como salvaguarda adjacente, a tela já verificava o nível de Forja, mas `canCraft` e `craftItem` aceitavam receita acima do nível no serviço. Agora ambos validam o requisito no motor de crafting. A progressão de materiais/zonas ainda não foi alterada: deixei a proposta explícita para balizar a próxima alteração, sem distribuir os novos gates de forma implícita pelos serviços. Validação estática: `node --check` no `CraftService.js` e `git diff --check`; sem testes/build.
+
+Na mesma revisão, encontrei uma dependência anterior aos gates de maestria: a UI de Coleta/Mineração prioriza o nível canônico em `lifeActivities`, mas os serviços consultam também os campos locais `skillLevel`; em Pesca a captura manual soma XP no nível canônico enquanto a pesca automática mantém uma progressão local; Caça tem outra curva local. Não vou colocar requisitos por maestria sobre essas fontes divergentes. O próximo passo técnico é consolidar/migrar os níveis dos quatro ofícios, depois distribuir a tabela de materiais em personagem + maestria + Forja.
+
+### Progressão de materiais e maestria aplicada (02/10/2026)
+
+Apliquei a primeira curva para a progressão completa até o cap120. Coleta, Mineração, Caça e Pesca agora abrem suas seis regiões nos níveis de personagem 1/20/40/60/85/120; a maestria exigida sobe em 1/5/10/15/20/25. O mapa mostra personagem + profissão e os mesmos requisitos são validados ao selecionar zona e iniciar atividades. Os sorteios de nós, presas e peixes limitam raridade pela maestria (comum 1, incomum 5, raro 10, épico 15, lendário 25), inclusive em simulação AFK/offline.
+
+Unifiquei XP dos quatro ofícios em `lifeActivities`, mantendo os caps existentes (30 em Pesca/Caça, 40 em Coleta/Mineração) e espelhando nível/XP nos campos legados usados pelas telas. Saves antigos migram sem reduzir nível e conservam a fração de progresso do nível atual; estados ociosos com região agora bloqueada voltam à zona mais alta acessível, sem apagar recompensas pendentes. `mold_glue` e `mold_lubricant` ganharam definições canônicas. A validação do nível de Forja continua aplicada também no serviço.
+
+Não alterei quantidades, preços ou XP de materiais, pois ainda falta comparar tempos/custos de cada profissão com PvE por faixa. A matriz em `docs/MATRIZ_PROGRESSAO_MATERIAIS_E_FORJA.md` registra as regras aplicadas e mantém como pendências a ausência de equipamento de nível91–120 e a confirmação de receitas consumidoras para os três componentes avançados. Validação estática: `node --check` nos serviços/core/telas alterados e `git diff --check`; não rodei testes/build.

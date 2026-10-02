@@ -5,8 +5,7 @@ import {
   KNIVES_CATALOG,
   LURES_CATALOG,
   APPROACH_TACTICS,
-  WIND_DIRECTIONS,
-  getHuntingXpForLevel
+  WIND_DIRECTIONS
 } from '../data/hunting.js';
 import { addToInventory } from './InventoryService.js';
 import { LifeActivityCore } from './lifeActivities/LifeActivityCore.js';
@@ -67,6 +66,12 @@ export const HuntingService = {
       state.hunting.activeZone = 'zone_talking_forest';
     }
 
+    LifeActivityCore.syncProfessionProgress(state, 'hunting', state.hunting, 'remainder');
+    const activeZone = HUNTING_ZONES[state.hunting.activeZone];
+    if (!state.hunting.isHunting && !state.hunting.awaitingButchering && !state.hunting.pendingOfflineHunting && !LifeActivityCore.isZoneAvailable(state, activeZone, state.hunting.skillLevel)) {
+      state.hunting.activeZone = Object.values(HUNTING_ZONES).find(zone => LifeActivityCore.isZoneAvailable(state, zone, state.hunting.skillLevel))?.id || 'zone_talking_forest';
+    }
+
     return state.hunting;
   },
 
@@ -84,7 +89,8 @@ export const HuntingService = {
 
   getAvailableZones(state) {
     const playerLvl = Number(state?.level) || 1;
-    return Object.values(HUNTING_ZONES).filter(zone => playerLvl >= zone.minLevel);
+    const skill = this.getHuntingState(state).skillLevel;
+    return Object.values(HUNTING_ZONES).filter(zone => LifeActivityCore.isZoneAvailable({ level: playerLvl }, zone, skill));
   },
 
   selectZone(state, zoneId, callbacks = {}) {
@@ -94,8 +100,8 @@ export const HuntingService = {
     if (!zone) return false;
 
     const playerLvl = Number(state?.level) || 1;
-    if (playerLvl < zone.minLevel) {
-      if (callbacks.log) callbacks.log(`⚠️ Nível insuficiente para adentrar em ${zone.name}! Requer Nível ${zone.minLevel}.`, 'warning');
+    if (!LifeActivityCore.isZoneAvailable({ level: playerLvl }, zone, hState.skillLevel)) {
+      if (callbacks.log) callbacks.log(`⚠️ ${zone.name} exige personagem nível ${zone.minLevel} e maestria de Caça nível ${zone.minSkillLevel || 1}.`, 'warning');
       return false;
     }
 
@@ -240,9 +246,9 @@ export const HuntingService = {
     return true;
   },
 
-  pickPreyForZone(zoneId, activeLureId) {
+  pickPreyForZone(zoneId, activeLureId, skillLevel = 1) {
     const zone = HUNTING_ZONES[zoneId] || HUNTING_ZONES.zone_talking_forest;
-    const preys = zone.availablePrey.map(id => PREY_CATALOG[id]).filter(Boolean);
+    const preys = zone.availablePrey.map(id => PREY_CATALOG[id]).filter(prey => prey && skillLevel >= LifeActivityCore.getMinimumSkillForRarity(prey.rarity));
     if (preys.length === 0) return PREY_CATALOG.prey_hare;
 
     const lure = activeLureId ? LURES_CATALOG[activeLureId] : null;
@@ -286,6 +292,8 @@ export const HuntingService = {
 
   startTracking(state, tacticOrPreyId = null, callbacks = {}) {
     const hState = this.getHuntingState(state);
+    const activeZone = HUNTING_ZONES[hState.activeZone];
+    if (!LifeActivityCore.isZoneAvailable(state, activeZone, hState.skillLevel)) return { success: false, reason: 'zone_locked' };
     if (hState.isHunting || hState.awaitingButchering) {
       return { success: false, reason: hState.isHunting ? 'already_hunting' : 'butchering_pending' };
     }
@@ -329,7 +337,7 @@ export const HuntingService = {
       }
     }
 
-    const prey = this.pickPreyForZone(hState.activeZone, hState.activeLure);
+    const prey = this.pickPreyForZone(hState.activeZone, hState.activeLure, hState.skillLevel);
 
     // Wind and Alert logic
     const winds = Object.keys(WIND_DIRECTIONS);
@@ -408,13 +416,14 @@ export const HuntingService = {
     const tactic = APPROACH_TACTICS[hState.activeTactic] || APPROACH_TACTICS.ambush;
     const knifeBonus = knifeDef?.perfectSkinBonus || 0.0;
     const qualityMod = knifeBonus + (tactic.qualityBonus || 0.0);
+    const critical = tactic.id === 'ambush' && hState.alertLevel < 40;
 
     if (!hState.autoHunting) {
       hState.awaitingButchering = true;
-      hState.slainPreyData = { preyId: prey.id, qualityMod, tactic: tactic.id };
+      hState.slainPreyData = { preyId: prey.id, qualityMod, tactic: tactic.id, critical };
       hState.isHunting = false;
       hState.trackedPreyId = null;
-      if (callbacks.log) callbacks.log(`🐾 Presa abatida! Aguardando decisão de descarne...`, 'system');
+      if (callbacks.log) callbacks.log(`🐾 ${critical ? '🔥 Golpe crítico (+50% materiais)! ' : ''}Presa abatida! Aguardando decisão de descarne...`, 'system');
       if (callbacks.updateAllUI) callbacks.updateAllUI();
       if (callbacks.save) callbacks.save();
       return true;
@@ -422,13 +431,14 @@ export const HuntingService = {
 
     // Lógica AFK (Balanced Yield). Keep the exact roll while the player frees bag space.
     let pending = hState.pendingAutoSkinning;
+    let quality;
     if (!pending) {
-      const quality = RewardEngine.rollQuality(hState.skillLevel, qualityMod);
+      quality = RewardEngine.rollQuality(hState.skillLevel, qualityMod);
       const primaryMat = resolveCanonicalResourceId(prey.skinYield.primary);
       const secondaryMat = prey.skinYield.secondary ? resolveCanonicalResourceId(prey.skinYield.secondary) : null;
-      const primaryQty = RewardEngine.calculateYield(prey.skinYield.primaryQty || 1, quality);
+      const primaryQty = RewardEngine.calculateYield(prey.skinYield.primaryQty || 1, quality, critical ? 1.5 : 1);
       const secondaryQty = (prey.skinYield.secondaryQty || 0) > 0
-        ? RewardEngine.calculateYield(prey.skinYield.secondaryQty, quality)
+        ? RewardEngine.calculateYield(prey.skinYield.secondaryQty, quality, critical ? 1.5 : 1)
         : 0;
       pending = {
         preyId: prey.id,
@@ -436,10 +446,12 @@ export const HuntingService = {
         qualityTier: quality.tier,
         qualityName: quality.name,
         qualityMult: quality.mult,
+        critical,
         finalXp: Math.round((prey.xpReward || 10) * quality.mult)
       };
       hState.pendingAutoSkinning = pending;
     }
+    if (!quality) quality = { tier: pending.qualityTier, name: pending.qualityName, mult: pending.qualityMult };
 
     const rewardState = { ...state, inventory: structuredClone(Array.isArray(state.inventory) ? state.inventory : []) };
     for (const reward of pending.rewards) {
@@ -487,7 +499,7 @@ export const HuntingService = {
       const qualityPrefix = quality.tier === 'perfect' ? '🌟 **ESFOLAÇÃO PERFEITA!**'
         : quality.tier === 'excellent' ? '✨ **ESFOLAÇÃO EXCELENTE!**'
         : '✓ Esfolação concluída:';
-      callbacks.log(`🐾 ${qualityPrefix} Abateu **${prey.name}** [${quality.name}]! Obteve +${primaryQty}x ${primaryMat.toUpperCase()}${secMat && secQty > 0 ? ` e +${secQty}x ${secMat.toUpperCase()}` : ''}! (+${finalXp} XP de Caça)`, 'loot');
+      callbacks.log(`🐾 ${pending.critical ? '🔥 **GOLPE CRÍTICO!** ' : ''}${qualityPrefix} Abateu **${prey.name}** [${quality.name}]! Obteve +${primaryQty}x ${primaryMat.toUpperCase()}${secMat && secQty > 0 ? ` e +${secQty}x ${secMat.toUpperCase()}` : ''}! (+${finalXp} XP de Caça)`, 'loot');
     }
 
     if (callbacks.floatText) {
@@ -504,7 +516,7 @@ export const HuntingService = {
     if (!['pelt', 'trophy'].includes(choice) || !hState.awaitingButchering || !hState.slainPreyData) return false;
 
     const activeKnifeId = hState.knife || 'knife_none';
-    const { preyId, qualityMod } = hState.slainPreyData;
+    const { preyId, qualityMod, critical } = hState.slainPreyData;
     const prey = PREY_CATALOG[preyId];
     if (!prey) return false;
 
@@ -527,11 +539,12 @@ export const HuntingService = {
       }
 
       const primaryMat = resolveCanonicalResourceId(primaryMatRaw);
-      const primaryQty = RewardEngine.calculateYield(basePrimaryQty, quality);
+      const criticalMultiplier = critical ? 1.5 : 1;
+      const primaryQty = RewardEngine.calculateYield(basePrimaryQty, quality, criticalMultiplier);
       rewards.push({ itemId: primaryMat, count: primaryQty });
       if (secMatRaw && baseSecQty > 0) {
         const secMat = resolveCanonicalResourceId(secMatRaw);
-        rewards.push({ itemId: secMat, count: RewardEngine.calculateYield(baseSecQty, quality) });
+        rewards.push({ itemId: secMat, count: RewardEngine.calculateYield(baseSecQty, quality, criticalMultiplier) });
       }
       pending = {
         choice,
@@ -539,6 +552,7 @@ export const HuntingService = {
         qualityTier: quality.tier,
         qualityName: quality.name,
         qualityMult: quality.mult,
+        critical: Boolean(critical),
         finalXp: Math.round((prey.xpReward || 10) * quality.mult)
       };
       hState.slainPreyData.pendingButchering = pending;
@@ -572,7 +586,7 @@ export const HuntingService = {
     hState.slainPreyData = null;
 
     if (callbacks.log) {
-      callbacks.log(`🔪 Descarne (${choice === 'pelt' ? 'Foco em Peles' : 'Foco em Ossos'}): Recompensas entregues! (+${finalXp} XP)`, 'loot');
+      callbacks.log(`🔪 Descarne${pending.critical ? ' crítico (+50% materiais)' : ''} (${choice === 'pelt' ? 'Foco em Peles' : 'Foco em Ossos'}): Recompensas entregues! (+${finalXp} XP)`, 'loot');
     }
     if (callbacks.floatText) {
       for (const reward of pending.rewards) callbacks.floatText(`+${reward.count}x ${reward.itemId.toUpperCase()}`, 'float-gold');
@@ -584,29 +598,20 @@ export const HuntingService = {
 
   addHuntingXp(state, xpAmount, callbacks = {}) {
     const hState = this.getHuntingState(state);
-    hState.skillXp = (hState.skillXp || 0) + xpAmount;
-    let leveledUp = false;
-
-    while (hState.skillLevel < 30) {
-      const needed = getHuntingXpForLevel(hState.skillLevel);
-      if (hState.skillXp >= needed) {
-        hState.skillXp -= needed;
-        hState.skillLevel += 1;
-        leveledUp = true;
-      } else {
-        break;
-      }
-    }
-
-    if (leveledUp && callbacks.log) {
-      callbacks.log(`🎉 **Sua Maestria de Caça subiu para o Nível ${hState.skillLevel}!** Novas presas e ferramentas desbloqueadas.`, 'rarity-legendary');
-    }
-
-    return leveledUp;
+    const before = hState.skillLevel;
+    LifeActivityCore.addXp(state, 'hunting', xpAmount, callbacks);
+    hState.skillLevel = LifeActivityCore.getActivityState(state, 'hunting').level;
+    hState.skillXp = LifeActivityCore.getActivityState(state, 'hunting').xp;
+    if (hState.skillLevel > before && callbacks.log) callbacks.log(`🎉 **Sua Maestria de Caça subiu para o Nível ${hState.skillLevel}!** Novas presas e ferramentas desbloqueadas.`, 'rarity-legendary');
+    return hState.skillLevel > before;
   },
 
   toggleAutoHunting(state, callbacks = {}) {
     const hState = this.getHuntingState(state);
+    if (hState.pendingOfflineHunting) {
+      if (callbacks.log) callbacks.log('🎒 Resgate o relatório de caça offline antes de retomar o modo AFK.', 'warning');
+      return false;
+    }
     if (!hState.autoHunting && (hState.isHunting || hState.awaitingButchering)) return false;
     if (hState.skillLevel < 5) {
       if (callbacks.log) callbacks.log('⚠️ O Modo de Caça Automática (AFK) é desbloqueado no Nível 5 de Caça!', 'warning');
@@ -647,7 +652,12 @@ export const HuntingService = {
 
     const now = Date.now();
     if (!hState.isHunting) {
-      this.startTracking(state, null, callbacks);
+      const result = this.startTracking(state, null, callbacks);
+      if (result?.reason === 'required_lure') {
+        hState.autoHunting = false;
+        if (callbacks.updateAllUI) callbacks.updateAllUI();
+        if (callbacks.save) callbacks.save();
+      }
     } else {
       const elapsed = now - (hState.trackStartTime || now);
       const needed = hState.trackDuration || 3000;
@@ -659,49 +669,137 @@ export const HuntingService = {
 
   processOfflineHunting(state, minutesOffline = 0, callbacks = {}) {
     const hState = this.getHuntingState(state);
-    if (!hState.autoHunting) return null;
+    // A completed AFK skinning with a full backpack already has a rolled reward.
+    // Retry that exact package before creating any new offline attempts.
+    if (hState.pendingAutoSkinning) {
+      if (!hState.isHunting || !hState.trackedPreyId) {
+        return { success: false, reason: 'pending_skinning_state_incomplete', pendingReward: hState.pendingAutoSkinning };
+      }
+      const pendingPreyId = hState.pendingAutoSkinning.preyId;
+      hState.trackStartTime = Date.now() - (hState.trackDuration || 0);
+      const claimed = this.finishSkinning(state, callbacks);
+      return claimed
+        ? { actualHunts: 1, claimedPendingReward: true, preyId: pendingPreyId }
+        : { actualHunts: 0, pendingReward: true, preyId: pendingPreyId };
+    }
+    if (!hState.autoHunting && !hState.pendingOfflineHunting) return null;
 
-    const activeKnifeId = hState.knife || 'knife_none';
-    let availableDur = hState.knifeDurability[activeKnifeId] ?? 0;
-    if (availableDur <= 0) {
+    const activeKnifeId = hState.pendingOfflineHunting?.knifeId || hState.knife || 'knife_none';
+    const availableDur = hState.knifeDurability[activeKnifeId] ?? 0;
+    if (availableDur <= 0 && !hState.pendingOfflineHunting) {
       hState.autoHunting = false;
       return null;
     }
-    if (hState.awaitingButchering) return null;
+    if (hState.awaitingButchering && !hState.pendingOfflineHunting) return null;
 
     const clampedMinutes = Math.min(480, Math.max(0, minutesOffline));
     if (!hState.pendingOfflineHunting) {
       if (clampedMinutes < 2) return null;
-      // Em modo offline: 1 abate a cada 30 segundos com eficiência de 25%
-      const totalPotentialHunts = Math.floor((clampedMinutes * 60) / 30 * 0.25);
-      const actualHunts = Math.min(availableDur, Math.max(1, totalPotentialHunts));
-      if (actualHunts <= 0) return null;
-
       const zoneId = hState.activeZone || 'zone_talking_forest';
+      const zone = HUNTING_ZONES[zoneId] || HUNTING_ZONES.zone_talking_forest;
+      const requiredLure = zone.requiredLure;
+      if (requiredLure && (hState.activeLure !== requiredLure || (hState.lureInventory[requiredLure] || 0) <= 0)) {
+        hState.autoHunting = false;
+        if (callbacks.log) callbacks.log(`⚠️ ${zone.name} exige ${LURES_CATALOG[requiredLure]?.name || 'um atrativo específico'}; a Caça Automática foi interrompida.`, 'warning');
+        if (callbacks.updateAllUI) callbacks.updateAllUI();
+        if (callbacks.save) callbacks.save();
+        return null;
+      }
+
+      const knife = KNIVES_CATALOG[activeKnifeId] || KNIVES_CATALOG.knife_none;
+      const tactic = APPROACH_TACTICS[hState.selectedTactic] || APPROACH_TACTICS.ambush;
+      let durabilitySpent = 0;
+      let timeSpent = 0;
+      let actualHunts = 0;
+      let criticalHunts = 0;
+      const timeBudget = clampedMinutes * 60 * 1000 * 0.25;
       const preyCounts = {};
       let totalXp = 0;
       const matsGained = {};
-      for (let i = 0; i < actualHunts; i++) {
-        const prey = this.pickPreyForZone(zoneId, null);
+
+      while (durabilitySpent < availableDur) {
+        const lureId = hState.activeLure;
+        const lureStock = lureId ? (hState.lureInventory[lureId] || 0) : 0;
+        if (requiredLure && (lureId !== requiredLure || lureStock <= 0)) break;
+        if (tactic.id === 'lure' && (!lureId || lureStock <= 0)) break;
+        if (lureId && lureStock <= 0) hState.activeLure = null;
+
+        const usableLureId = lureStock > 0 ? lureId : null;
+        const lure = usableLureId ? LURES_CATALOG[usableLureId] : null;
+        const prey = this.pickPreyForZone(zoneId, usableLureId, hState.skillLevel);
+        const duration = Math.max(1200, Math.floor(
+          ((prey.baseTrackTime || zone.baseTrackTime || 3000) * (tactic.timeMult || 1)) / (lure?.speedBoost || 1)
+        ));
+        if (timeSpent + duration > timeBudget) break;
+
+        if (usableLureId) hState.lureInventory[usableLureId] = Math.max(0, lureStock - 1);
+        timeSpent += duration;
+        durabilitySpent++;
+
+        const winds = Object.keys(WIND_DIRECTIONS);
+        const wind = winds[Math.floor(Math.random() * winds.length)];
+        let alert = 15 + (zone.difficulty * 3) + Math.floor(Math.random() * 11);
+        if (tactic.id === 'lure') {
+          alert = Math.max(0, alert - 35);
+        } else {
+          alert = Math.max(0, Math.min(100, alert + ((tactic.alertChange || 0) * (WIND_DIRECTIONS[wind]?.alertMult || 1))));
+        }
+        hState.windDirection = tactic.id === 'lure' ? 'headwind' : wind;
+        hState.alertLevel = alert;
+        hState.trackedPreyId = prey.id;
+
+        // Alerta máxima faz a presa escapar e ainda gasta a faca.
+        if (alert >= 100) continue;
+
+        const quality = RewardEngine.rollQuality(hState.skillLevel, (knife.perfectSkinBonus || 0) + (tactic.qualityBonus || 0));
+        const critical = tactic.id === 'ambush' && alert < 40;
+        if (critical) criticalHunts++;
+        const yieldMultiplier = critical ? 1.5 : 1;
+        actualHunts++;
         preyCounts[prey.id] = (preyCounts[prey.id] || 0) + 1;
-        totalXp += prey.xpReward || 8;
-        const pMat = resolveCanonicalResourceId(prey.skinYield.primary);
-        matsGained[pMat] = (matsGained[pMat] || 0) + (prey.skinYield.primaryQty || 1);
-        const sMatRaw = prey.skinYield.secondary;
-        const sQty = prey.skinYield.secondaryQty || 0;
-        if (sMatRaw && sQty > 0) {
-          const sMat = resolveCanonicalResourceId(sMatRaw);
-          matsGained[sMat] = (matsGained[sMat] || 0) + sQty;
+        totalXp += Math.round((prey.xpReward || 8) * quality.mult);
+        const primaryMat = resolveCanonicalResourceId(prey.skinYield.primary);
+        const primaryQty = RewardEngine.calculateYield(prey.skinYield.primaryQty || 1, quality, yieldMultiplier);
+        matsGained[primaryMat] = (matsGained[primaryMat] || 0) + primaryQty;
+        if (prey.skinYield.secondary && (prey.skinYield.secondaryQty || 0) > 0) {
+          const secondaryMat = resolveCanonicalResourceId(prey.skinYield.secondary);
+          const secondaryQty = RewardEngine.calculateYield(prey.skinYield.secondaryQty, quality, yieldMultiplier);
+          matsGained[secondaryMat] = (matsGained[secondaryMat] || 0) + secondaryQty;
         }
       }
-      hState.pendingOfflineHunting = { actualHunts, preyCounts, matsGained, totalXp, clampedMinutes };
+      if (durabilitySpent <= 0) {
+        hState.autoHunting = false;
+        if (callbacks.log) callbacks.log('⚠️ A tática de caça escolhida exige um atrativo disponível; a Caça Automática foi interrompida.', 'warning');
+        if (callbacks.updateAllUI) callbacks.updateAllUI();
+        if (callbacks.save) callbacks.save();
+        return null;
+      }
+
+      hState.knifeDurability[activeKnifeId] = Math.max(0, availableDur - durabilitySpent);
+      const actState = LifeActivityCore.getActivityState(state, 'hunting');
+      actState.tool = activeKnifeId;
+      actState.toolDurability = hState.knifeDurability[activeKnifeId];
+      actState.maxDurability = knife.durabilityMax || actState.maxDurability;
+      const hasRequiredLureForNextCycle = !requiredLure || (hState.activeLure === requiredLure && (hState.lureInventory[requiredLure] || 0) > 0);
+      const hasTacticLureForNextCycle = tactic.id !== 'lure' || (hState.activeLure && (hState.lureInventory[hState.activeLure] || 0) > 0);
+      hState.pendingOfflineHunting = {
+        actualHunts, attemptedHunts: durabilitySpent, criticalHunts, preyCounts, matsGained, totalXp, clampedMinutes,
+        knifeId: activeKnifeId,
+        resumeAutoHunting: Boolean(hState.knifeDurability[activeKnifeId] > 0 && hasRequiredLureForNextCycle && hasTacticLureForNextCycle),
+        inventoryFullNotified: false
+      };
+      hState.autoHunting = false;
+      hState.isHunting = false;
+      hState.trackedPreyId = null;
+      hState.trackStartTime = 0;
     }
 
     const pending = hState.pendingOfflineHunting;
     const rewardState = { ...state, inventory: structuredClone(Array.isArray(state.inventory) ? state.inventory : []) };
     for (const [matId, qty] of Object.entries(pending.matsGained)) {
       if (!addToInventory(rewardState, matId, qty, 'common', false, {}, true)) {
-        if (callbacks.log) callbacks.log('⚠️ Mochila cheia! O relatório da caça offline foi preservado; libere espaço para resgatar os materiais.', 'warning');
+        if (!pending.inventoryFullNotified && callbacks.log) callbacks.log('⚠️ Mochila cheia! O relatório da caça offline foi preservado; libere espaço para resgatar os materiais.', 'warning');
+        pending.inventoryFullNotified = true;
         if (callbacks.updateAllUI) callbacks.updateAllUI();
         if (callbacks.save) callbacks.save();
         return null;
@@ -709,11 +807,11 @@ export const HuntingService = {
     }
 
     state.inventory = rewardState.inventory;
-    hState.knifeDurability[activeKnifeId] = Math.max(0, availableDur - pending.actualHunts);
+    const rewardKnifeId = pending.knifeId || activeKnifeId;
     const actState = LifeActivityCore.getActivityState(state, 'hunting');
-    actState.tool = activeKnifeId;
-    actState.toolDurability = hState.knifeDurability[activeKnifeId];
-    actState.maxDurability = KNIVES_CATALOG[activeKnifeId]?.durabilityMax || actState.maxDurability;
+    actState.tool = rewardKnifeId;
+    actState.toolDurability = hState.knifeDurability[rewardKnifeId] ?? 0;
+    actState.maxDurability = KNIVES_CATALOG[rewardKnifeId]?.durabilityMax || actState.maxDurability;
     hState.isHunting = false;
     hState.trackedPreyId = null;
     hState.trackStartTime = 0;
@@ -725,12 +823,13 @@ export const HuntingService = {
     const actualHunts = pending.actualHunts;
     const matsGained = pending.matsGained;
     const totalXp = pending.totalXp;
+    const escapedHunts = Math.max(0, (pending.attemptedHunts || 0) - actualHunts);
     this.addHuntingXp(state, totalXp, callbacks);
     hState.lastAutoTick = Date.now();
-    if (hState.knifeDurability[activeKnifeId] <= 0) hState.autoHunting = false;
+    hState.autoHunting = Boolean(pending.resumeAutoHunting && hState.knife === rewardKnifeId && (Number(hState.knifeDurability[rewardKnifeId]) || 0) > 0);
 
     if (callbacks.log) {
-      callbacks.log(`💤 **Relatório de Caça Offline (${pending.clampedMinutes}m):** Abateu ${actualHunts} presas nos ermos de Aden! (+${totalXp} XP de Caça)`, 'rarity-legendary');
+      callbacks.log(`💤 **Relatório de Caça Offline (${pending.clampedMinutes}m):** Abateu ${actualHunts} presas${escapedHunts ? `; ${escapedHunts} escaparam` : ''}${pending.criticalHunts ? `; ${pending.criticalHunts} golpes críticos (+50% materiais)` : ''}! (+${totalXp} XP de Caça)`, 'rarity-legendary');
     }
 
     if (callbacks.updateAllUI) callbacks.updateAllUI();

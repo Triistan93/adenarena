@@ -9990,6 +9990,7 @@ export function init() {
     window.skinHuntingPrey = () => HuntingService.finishSkinning(state, { log, updateAllUI, save, floatText });
     window.executeFieldButchering = (choice) => HuntingService.executeFieldButchering(state, choice, { log, updateAllUI, save, floatText });
     window.toggleAutoHunting = () => HuntingService.toggleAutoHunting(state, { log, updateAllUI, save, floatText });
+    window.claimPendingOfflineHuntingRewards = () => HuntingService.processOfflineHunting(state, 0, { log, updateAllUI, save, floatText });
     window.exchangeHuntingPelts = (pId, qty) => HuntingService.exchangePelts(state, pId, qty, { log, updateAllUI, save, floatText });
     window.HuntingService = HuntingService;
 
@@ -10005,6 +10006,7 @@ export function init() {
     window.inspectGatheringNode = () => GatheringService.inspectNode(state, { log, updateAllUI, save, floatText });
     window.skipGatheringNode = () => GatheringService.skipNode(state, { log, updateAllUI, save, floatText });
     window.toggleAutoGathering = () => GatheringService.toggleAutoGathering(state, { log, updateAllUI, save, floatText });
+    window.claimPendingOfflineGatheringRewards = () => GatheringService.claimOfflineGatheringReward(state, { log, updateAllUI, save, floatText });
     window.exchangeGatheringHerbs = (hId, qty) => (typeof GatheringService.exchangeHerbs === 'function' ? GatheringService.exchangeHerbs(state, hId, qty, { log, updateAllUI, save, floatText }) : false);
     window.GatheringService = GatheringService;
 
@@ -10017,6 +10019,7 @@ export function init() {
     window.selectMiningTactic = (tId) => MiningService.selectTactic(state, tId, { log, updateAllUI, save });
     window.startMiningHarvest = (nId) => MiningService.startMining(state, nId, { log, updateAllUI, save });
     window.finishMiningHarvest = () => MiningService.finishMining(state, { log, updateAllUI, save, floatText });
+    window.claimPendingOfflineMiningRewards = () => MiningService.claimOfflineMiningReward(state, { log, updateAllUI, save, floatText });
     window.probeMiningVein = () => MiningService.probeVein(state, { log, updateAllUI, save });
     window.shoreUpMiningGallery = () => MiningService.shoreUpGallery(state, { log, updateAllUI, save });
     window.toggleAutoMining = () => MiningService.toggleAutoMining(state, { log, updateAllUI, save, floatText });
@@ -10042,6 +10045,11 @@ export function init() {
         squad.push(mercUid);
       }
       updateAllUI();
+    };
+    window.selectExpeditionDestination = (destId) => {
+      window._selectedExpeditionDestination = destId;
+      updateAllUI();
+      document.getElementById(`expedition-location-${destId}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     };
     window.startStrategicExpedition = (destId) => {
       const squad = (window._expeditionSquadSelections && window._expeditionSquadSelections[destId]) || [];

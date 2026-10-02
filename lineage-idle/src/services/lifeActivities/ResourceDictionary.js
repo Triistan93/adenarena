@@ -85,6 +85,24 @@ export const CANONICAL_RESOURCES = {
     price: 80,
     desc: 'Tábuas selecionadas e comprimidas por mestres botânicos. Matéria-prima para cabos de armas de alto impacto.'
   },
+  mold_glue: {
+    itemId: 'mold_glue',
+    name: 'Cola para Moldes',
+    category: RESOURCE_CATEGORIES.SPECIAL_COMPONENT,
+    grade: 'b',
+    icon: 'materials/varnish.png',
+    price: 240,
+    desc: 'Resina botânica espessa que fixa areia e argila em moldes de fundição.'
+  },
+  mold_lubricant: {
+    itemId: 'mold_lubricant',
+    name: 'Lubrificante para Moldes',
+    category: RESOURCE_CATEGORIES.SPECIAL_COMPONENT,
+    grade: 'a',
+    icon: 'materials/varnish.png',
+    price: 420,
+    desc: 'Seiva refinada que permite separar ligas raras de moldes de alta temperatura.'
+  },
 
   // ─── MATÉRIAS-PRIMAS BRUTAS: MINERAÇÃO (RAW MINERAL) ───
   iron_ore: {

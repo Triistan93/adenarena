@@ -1,8 +1,8 @@
 // FishingService.js — Motor Central de Pesca de Aden (Lineage II Style)
-import { FISHING_ZONES, FISH_CATALOG, RODS_CATALOG, BAIT_CATALOG, FIGHT_PROFILES, getFishingXpForLevel } from '../data/fishing.js';
+import { FISHING_ZONES, FISH_CATALOG, RODS_CATALOG, BAIT_CATALOG, FIGHT_PROFILES } from '../data/fishing.js';
 import { FISHING_BALANCE, calculateCatchChance, rollFishRarity, calculateFishValue } from '../data/economy/fishingBalance.js';
 import { addToInventory, removeFromInventoryByItemId, getInventoryCount } from './InventoryService.js';
-import { LifeActivityCore } from './lifeActivities/LifeActivityCore.js';
+import { LifeActivityCore, LIFE_ACTIVITY_LEVEL_TABLE } from './lifeActivities/LifeActivityCore.js';
 import { RewardEngine } from './lifeActivities/RewardEngine.js';
 import { resolveCanonicalResourceId } from './lifeActivities/ResourceDictionary.js';
 
@@ -13,6 +13,19 @@ function grantOrQueueFishReward(state, fish, callbacks = {}) {
   fState.pendingFishRewards.push({ fishId: fish.id, rarity: fish.rarity || 'common', count: 1 });
   if (callbacks.log) callbacks.log(`⚠️ Mochila cheia! ${fish.name} foi preservado na fila de pesca para resgate.`, 'warning');
   return false;
+}
+
+function getNextAutoBait(fState, zone) {
+  if (zone.requiredBait) {
+    return fState.activeBait === zone.requiredBait && (fState.baitInventory[zone.requiredBait] || 0) > 0
+      ? zone.requiredBait
+      : null;
+  }
+
+  if (fState.activeBait && (fState.baitInventory[fState.activeBait] || 0) > 0) return fState.activeBait;
+  const nextBait = Object.keys(fState.baitInventory).find(baitId => (fState.baitInventory[baitId] || 0) > 0);
+  if (nextBait) fState.activeBait = nextBait;
+  return nextBait || null;
 }
 
 export const FishingService = {
@@ -59,6 +72,11 @@ export const FishingService = {
       state.fishing.fishLog = {};
     }
     if (!Array.isArray(state.fishing.pendingFishRewards)) state.fishing.pendingFishRewards = [];
+    LifeActivityCore.syncProfessionProgress(state, 'fishing', state.fishing, 'quadratic-cumulative');
+    const activeZone = FISHING_ZONES[state.fishing.activeZone];
+    if (!state.fishing.isFishing && state.fishing.activeFight?.status !== 'fighting' && !state.fishing.pendingFishRewards.length && !LifeActivityCore.isZoneAvailable(state, activeZone, state.fishing.skillLevel)) {
+      state.fishing.activeZone = Object.values(FISHING_ZONES).find(zone => LifeActivityCore.isZoneAvailable(state, zone, state.fishing.skillLevel))?.id || 'zone_talking_island';
+    }
     this.syncRodDurability(state, state.fishing, state.fishing.rod);
     return state.fishing;
   },
@@ -108,7 +126,8 @@ export const FishingService = {
 
   getAvailableZones(state) {
     const playerLvl = Number(state?.level) || 1;
-    return Object.values(FISHING_ZONES).filter(zone => playerLvl >= zone.minLevel);
+    const skill = this.getFishingState(state).skillLevel;
+    return Object.values(FISHING_ZONES).filter(zone => LifeActivityCore.isZoneAvailable({ level: playerLvl }, zone, skill));
   },
 
   selectZone(state, zoneId, callbacks = {}) {
@@ -122,8 +141,8 @@ export const FishingService = {
     if (!zone) return false;
 
     const playerLvl = Number(state?.level) || 1;
-    if (playerLvl < zone.minLevel) {
-      if (callbacks.log) callbacks.log(`⚠️ Nível insuficiente para navegar até ${zone.name}! Requer Nível ${zone.minLevel}.`, 'warning');
+    if (!LifeActivityCore.isZoneAvailable({ level: playerLvl }, zone, fState.skillLevel)) {
+      if (callbacks.log) callbacks.log(`⚠️ ${zone.name} exige personagem nível ${zone.minLevel} e maestria de Pesca nível ${zone.minSkillLevel || 1}.`, 'warning');
       return false;
     }
 
@@ -277,8 +296,10 @@ export const FishingService = {
     const fState = this.getFishingState(state);
     if (typeof zoneIdOrCallback === 'string') {
       const resolved = this.resolveZoneId(zoneIdOrCallback);
-      fState.activeZone = resolved || zoneIdOrCallback;
       callbacks = maybeCallbacks || {};
+      const targetZone = FISHING_ZONES[resolved];
+      if (!LifeActivityCore.isZoneAvailable(state, targetZone, fState.skillLevel)) return { success: false, reason: 'zone_locked' };
+      fState.activeZone = resolved;
     }
     callbacks = callbacks || {};
 
@@ -305,6 +326,7 @@ export const FishingService = {
       if (callbacks.log) callbacks.log(`⚠️ Selecione uma zona de pesca primeiro.`, 'warning');
       return { success: false, reason: 'no_zone' };
     }
+    if (!LifeActivityCore.isZoneAvailable(state, zone, fState.skillLevel)) return { success: false, reason: 'zone_locked' };
 
     // Checa isca necessária
     if (zone.requiredBait) {
@@ -370,8 +392,9 @@ export const FishingService = {
     const baitRarityBoost = bait ? bait.rarityBoost : 0;
     const rolledRarity = rollFishRarity(fState.skillLevel, baitRarityBoost, false);
 
-    let candidateFishIds = zone.availableFish.filter(fId => FISH_CATALOG[fId]?.rarity === rolledRarity);
-    if (candidateFishIds.length === 0) candidateFishIds = zone.availableFish;
+    const eligibleFishIds = zone.availableFish.filter(id => FISH_CATALOG[id] && fState.skillLevel >= LifeActivityCore.getMinimumSkillForRarity(FISH_CATALOG[id].rarity));
+    let candidateFishIds = eligibleFishIds.filter(fId => FISH_CATALOG[fId]?.rarity === rolledRarity);
+    if (candidateFishIds.length === 0) candidateFishIds = eligibleFishIds;
 
     const chosenFishId = candidateFishIds[Math.floor(Math.random() * candidateFishIds.length)];
     const fishDef = FISH_CATALOG[chosenFishId] || FISH_CATALOG.fish_carp;
@@ -557,6 +580,8 @@ export const FishingService = {
   toggleAutoFish(state, callbacks = {}) {
     const fState = this.getFishingState(state);
 
+    if (!fState.autoFishing && !LifeActivityCore.isZoneAvailable(state, FISHING_ZONES[fState.activeZone], fState.skillLevel)) return false;
+
     if (fState.skillLevel < FISHING_BALANCE.AUTO_FISH_UNLOCK_LEVEL) {
       if (callbacks.log) callbacks.log(`🔒 Pesca Automática requer Nível de Pesca ${FISHING_BALANCE.AUTO_FISH_UNLOCK_LEVEL}+! Continue pescando manualmente para aprimorar sua técnica.`, 'warning');
       return false;
@@ -596,28 +621,30 @@ export const FishingService = {
     const zone = FISHING_ZONES[zoneId] || FISHING_ZONES.zone_talking_island;
     const rod = RODS_CATALOG[fState.rod] || RODS_CATALOG.rod_none;
 
+    let totalXp = 0;
     for (let t = 0; t < ticks; t++) {
       const rodId = fState.rod || 'rod_none';
       if ((fState.rodDurability[rodId] ?? 0) <= 0) {
         fState.autoFishing = false;
         break;
       }
-      // Checa se ainda há isca disponível
-      if (!fState.activeBait || (fState.baitInventory[fState.activeBait] || 0) <= 0) {
-        const nextBait = Object.keys(fState.baitInventory).find(b => (fState.baitInventory[b] || 0) > 0);
-        if (nextBait) {
-          fState.activeBait = nextBait;
-        } else {
-          fState.autoFishing = false;
-          if (callbacks.log) callbacks.log(`⚠️ Suas iscas acabaram! A Pesca Automática foi interrompida.`, 'warning');
-          break;
-        }
+      // Mantém a isca equipada; zonas com isca exigida param quando ela acaba.
+      const baitId = getNextAutoBait(fState, zone);
+      if (!baitId) {
+        fState.autoFishing = false;
+        if (callbacks.log) callbacks.log(
+          zone.requiredBait
+            ? `⚠️ A zona exige ${BAIT_CATALOG[zone.requiredBait]?.name || 'uma isca específica'}; a Pesca Automática foi interrompida.`
+            : '⚠️ Suas iscas acabaram! A Pesca Automática foi interrompida.',
+          'warning'
+        );
+        break;
       }
 
       // Consome 1 isca
-      fState.baitInventory[fState.activeBait]--;
+      fState.baitInventory[baitId]--;
 
-      const bait = BAIT_CATALOG[fState.activeBait] || null;
+      const bait = BAIT_CATALOG[baitId] || null;
       const rodBonus = rod.catchBonus - 1.0;
       const baitBonus = bait ? (bait.catchBonus - 1.0) : 0;
       const zoneDiffMod = -(zone.difficulty - 1) * 0.05;
@@ -627,15 +654,16 @@ export const FishingService = {
 
       if (Math.random() <= catchProb) {
         const rarity = rollFishRarity(fState.skillLevel, bait ? bait.rarityBoost : 0, true);
-        let candidates = zone.availableFish.filter(id => FISH_CATALOG[id]?.rarity === rarity);
-        if (candidates.length === 0) candidates = zone.availableFish;
+        const eligibleFishIds = zone.availableFish.filter(id => FISH_CATALOG[id] && fState.skillLevel >= LifeActivityCore.getMinimumSkillForRarity(FISH_CATALOG[id].rarity));
+        let candidates = eligibleFishIds.filter(id => FISH_CATALOG[id]?.rarity === rarity);
+        if (candidates.length === 0) candidates = eligibleFishIds;
 
         const fishId = candidates[Math.floor(Math.random() * candidates.length)];
         const fish = FISH_CATALOG[fishId] || FISH_CATALOG.fish_carp;
 
         fState.totalCaught = (fState.totalCaught || 0) + 1;
         fState.fishLog[fishId] = (fState.fishLog[fishId] || 0) + 1;
-        fState.skillXp += fish.xpReward;
+        totalXp += fish.xpReward;
 
         if (!grantOrQueueFishReward(state, fish, callbacks)) {
           fState.autoFishing = false;
@@ -648,7 +676,8 @@ export const FishingService = {
       }
     }
 
-    this._checkLevelUp(state, fState, callbacks);
+    if (totalXp) LifeActivityCore.addXp(state, 'fishing', totalXp, callbacks);
+    this._syncLegacyFishingProgress(state, fState);
     if (fState.pendingFishRewards.length > pendingCountBefore && callbacks.save) callbacks.save();
   },
 
@@ -670,7 +699,9 @@ export const FishingService = {
       fState.autoFishing = false;
       return { totalCaught: 0, xpGained: 0 };
     }
-    const totalAvailableBait = Object.values(fState.baitInventory).reduce((sum, count) => sum + (count || 0), 0);
+    const totalAvailableBait = zone.requiredBait
+      ? (fState.activeBait === zone.requiredBait ? (fState.baitInventory[zone.requiredBait] || 0) : 0)
+      : Object.values(fState.baitInventory).reduce((sum, count) => sum + (count || 0), 0);
     if (totalAvailableBait <= 0) {
       fState.autoFishing = false;
       return { totalCaught: 0, xpGained: 0 };
@@ -678,16 +709,21 @@ export const FishingService = {
 
     // Calcula quantos arremessos foram possíveis
     const rodBonus = rod.catchBonus - 1.0;
-    const maxCatchesByTime = Math.floor((effectiveMinutes * 60 * 1000) / FISHING_BALANCE.OFFLINE_FISH_INTERVAL_MS * FISHING_BALANCE.OFFLINE_EFFICIENCY);
+    // A eficiência reduz a quantidade de arremessos, não a chance de cada arremesso.
+    // Assim o caminho offline entrega aproximadamente 25% do volume do AFK online.
+    const maxCatchesByTime = Math.floor((effectiveMinutes * 60 * 1000) / FISHING_BALANCE.AUTO_FISH_INTERVAL_MS * FISHING_BALANCE.OFFLINE_EFFICIENCY);
     const castsToSimulate = Math.min(totalAvailableBait, maxCatchesByTime, availableDurability);
 
     let caughtCount = 0;
     let totalXp = 0;
 
     for (let c = 0; c < castsToSimulate; c++) {
-      // Consome isca sequencialmente
-      const baitKey = Object.keys(fState.baitInventory).find(k => (fState.baitInventory[k] || 0) > 0);
-      if (!baitKey) break;
+      // Usa a mesma seleção do AFK online e respeita a isca exigida pela zona.
+      const baitKey = getNextAutoBait(fState, zone);
+      if (!baitKey) {
+        fState.autoFishing = false;
+        break;
+      }
       fState.baitInventory[baitKey]--;
 
       const bait = BAIT_CATALOG[baitKey];
@@ -695,20 +731,20 @@ export const FishingService = {
       const baitBonus = bait ? (bait.catchBonus - 1.0) : 0;
       const zoneDiffMod = -(zone.difficulty - 1) * 0.05;
 
-      const prob = calculateCatchChance(fState.skillLevel, effRodBonus, baitBonus, zoneDiffMod) * FISHING_BALANCE.OFFLINE_EFFICIENCY;
+      const prob = calculateCatchChance(fState.skillLevel, effRodBonus, baitBonus, zoneDiffMod) * FISHING_BALANCE.AUTO_FISH_EFFICIENCY;
       const durabilityResult = this.consumeRodDurability(state, fState, callbacks);
 
       if (Math.random() <= prob) {
         const rarity = rollFishRarity(fState.skillLevel, bait ? bait.rarityBoost : 0, true);
-        let candidates = zone.availableFish.filter(id => FISH_CATALOG[id]?.rarity === rarity);
-        if (candidates.length === 0) candidates = zone.availableFish;
+        const eligibleFishIds = zone.availableFish.filter(id => FISH_CATALOG[id] && fState.skillLevel >= LifeActivityCore.getMinimumSkillForRarity(FISH_CATALOG[id].rarity));
+        let candidates = eligibleFishIds.filter(id => FISH_CATALOG[id]?.rarity === rarity);
+        if (candidates.length === 0) candidates = eligibleFishIds;
 
         const fishId = candidates[Math.floor(Math.random() * candidates.length)];
         const fish = FISH_CATALOG[fishId] || FISH_CATALOG.fish_carp;
 
         fState.totalCaught = (fState.totalCaught || 0) + 1;
         fState.fishLog[fishId] = (fState.fishLog[fishId] || 0) + 1;
-        fState.skillXp += fish.xpReward;
         totalXp += fish.xpReward;
         caughtCount++;
 
@@ -723,7 +759,8 @@ export const FishingService = {
       }
     }
 
-    this._checkLevelUp(state, fState, callbacks);
+    if (totalXp) LifeActivityCore.addXp(state, 'fishing', totalXp, callbacks);
+    this._syncLegacyFishingProgress(state, fState);
     fState.lastAutoTick = Date.now();
 
     return {
@@ -796,13 +833,16 @@ export const FishingService = {
 
   getSkillProgress(state) {
     const fState = this.getFishingState(state);
-    const nextXp = getFishingXpForLevel(fState.skillLevel + 1);
+    const nextXp = LIFE_ACTIVITY_LEVEL_TABLE[fState.skillLevel + 1] || LIFE_ACTIVITY_LEVEL_TABLE[fState.skillLevel];
     const currXp = fState.skillXp || 0;
-    const percent = nextXp > 0 ? Math.min(100, Math.floor((currXp / nextXp) * 100)) : 100;
+    const currThreshold = LIFE_ACTIVITY_LEVEL_TABLE[fState.skillLevel] || 0;
+    const xpIntoLevel = Math.max(0, currXp - currThreshold);
+    const xpForLevel = Math.max(0, nextXp - currThreshold);
+    const percent = xpForLevel > 0 ? Math.min(100, Math.floor((xpIntoLevel / xpForLevel) * 100)) : 100;
     return {
       level: fState.skillLevel,
-      xp: currXp,
-      nextXp,
+      xp: xpIntoLevel,
+      nextXp: xpForLevel,
       percent
     };
   },
@@ -819,23 +859,15 @@ export const FishingService = {
   },
 
   _checkLevelUp(state, fState, callbacks = {}) {
-    let leveledUp = false;
-    let nextXp = getFishingXpForLevel(fState.skillLevel + 1);
+    const before = fState.skillLevel;
+    LifeActivityCore.addXp(state, 'fishing', 0, callbacks);
+    this._syncLegacyFishingProgress(state, fState);
+    return fState.skillLevel > before;
+  },
 
-    while (fState.skillLevel < FISHING_BALANCE.MAX_FISHING_LEVEL && fState.skillXp >= nextXp) {
-      fState.skillLevel++;
-      leveledUp = true;
-
-      if (callbacks.log) {
-        callbacks.log(`🎉 **NÍVEL DE PESCA AUMENTOU!** Você alcançou o Nível **${fState.skillLevel}** em Pesca de Aden!`, 'rarity-legendary');
-      }
-      if (callbacks.floatText) {
-        callbacks.floatText(`Pesca Nv. ${fState.skillLevel}!`, 'float-crit');
-      }
-
-      nextXp = getFishingXpForLevel(fState.skillLevel + 1);
-    }
-
-    return leveledUp;
+  _syncLegacyFishingProgress(state, fState) {
+    const act = LifeActivityCore.getActivityState(state, 'fishing');
+    fState.skillLevel = act.level;
+    fState.skillXp = act.xp;
   }
 };
