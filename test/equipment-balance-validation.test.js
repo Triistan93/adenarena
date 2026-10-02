@@ -121,9 +121,13 @@ describe('MASTER GAME BALANCE — EQUIPMENT ECOSYSTEM & CONTENT INTEGRITY AUDIT'
     assert.equal(NORMAL_MONSTER_TTK.HARD_LIMIT, 15, 'Normal monster TTK hard limit must be 15s');
   });
 
-  test('2.8. Solo Instances: All 4 instances have valid CP gates and stats', () => {
+  test('2.8. Solo Instances: All 8 canonical instances have valid CP gates and stats', () => {
     const instances = Object.values(SOLO_INSTANCES);
-    assert.equal(instances.length, 4, 'Must have exactly 4 solo instances');
+    const expectedIds = [
+      'kamaloka_25', 'pailaka_36', 'kamaloka_49', 'pailaka_58',
+      'frost_lords_castle', 'fafurion_nest', 'steel_citadel', 'celestial_tower_event'
+    ];
+    assert.deepEqual(instances.map(instance => instance.id).sort(), expectedIds.sort(), 'Solo instance catalog must match the 8 reviewed canonical IDs');
 
     for (const inst of instances) {
       assert.ok(inst.minimumCP > 0, `Instance ${inst.id} must have positive minimumCP`);
