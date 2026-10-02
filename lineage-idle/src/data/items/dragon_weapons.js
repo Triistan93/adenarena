@@ -40,8 +40,8 @@ function getDragonWeaponName(dragon, archetype, dragonIndex) {
   return `${dragon.name} ${form}`;
 }
 
-function getDragonWeaponIcon(dragon, archetype) {
-  if (!archetype.dragonIconType) return archetype.source;
+function getDragonWeaponIcon(dragon, archetype, sourceIcon) {
+  if (!archetype.dragonIconType) return sourceIcon || null;
   const dragonKey = dragon.key === 'antharas' ? 'antaras' : dragon.key;
   return `https://l2wiki.com/upload/images/icon/dragon_wp_${dragonKey}_${archetype.dragonIconType}_i00.png`;
 }
@@ -71,7 +71,7 @@ for (let dragonIndex = 0; dragonIndex < DRAGONS.length; dragonIndex += 1) {
       ...elementalBonus,
       id,
       name: getDragonWeaponName(dragon, archetype, dragonIndex),
-      icon: getDragonWeaponIcon(dragon, archetype),
+      icon: getDragonWeaponIcon(dragon, archetype, source.icon),
       slot: 'weapon',
       tier: 7,
       grade: 's',
