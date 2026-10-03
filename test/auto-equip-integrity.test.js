@@ -17,7 +17,8 @@ import assert from 'node:assert';
 import {
   generateAutoEquipProposal,
   commitAutoEquipProposal,
-  calculateEquipmentRecommendationScore
+  calculateEquipmentRecommendationScore,
+  hasPositiveEquipmentGain
 } from '../lineage-idle/src/services/EquipmentService.js';
 import {
   getItemCategory,
@@ -122,6 +123,8 @@ describe('P0-AE: Auto-Equip Pipeline & Candidate Safety Validation', () => {
   it('2.5 commitAutoEquipProposal aplica atômica e definitivamente o loadout sem vazamento de estado', () => {
     const state = createMockState();
     const proposal = generateAutoEquipProposal(state);
+    assert.equal(hasPositiveEquipmentGain(proposal), true,
+      'o badge deve indicar uma proposta com ganho real de atributos');
 
     const commitResult = commitAutoEquipProposal(state, proposal);
     assert.strictEqual(commitResult.success, true);
@@ -142,5 +145,7 @@ describe('P0-AE: Auto-Equip Pipeline & Candidate Safety Validation', () => {
     const stats = getStats(state);
     assert.ok(stats.atk > 0);
     assert.ok(stats.def > 0);
+    assert.equal(hasPositiveEquipmentGain(generateAutoEquipProposal(state)), false,
+      'o badge deve desaparecer depois que o loadout foi aplicado');
   });
 });

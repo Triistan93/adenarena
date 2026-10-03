@@ -176,6 +176,15 @@ export function canCraftRecipe(state, id, qty = 1) {
   return canCraft(state, id, qty);
 }
 
+export function hasCraftableRecipe(state) {
+  const recipesData = D()?.CRAFTING_RECIPES || CRAFTING_RECIPES;
+  const recipes = Array.isArray(recipesData) ? recipesData : Object.values(recipesData || {});
+  return recipes.some(recipe => {
+    const recipeId = recipe?.id || recipe?.itemId;
+    return Boolean(recipeId && canCraft(state, recipeId, 1));
+  });
+}
+
 /**
  * Executa a criação de um item ou lote de itens com suporte a Critical Craft (Double / Foundation).
  */
@@ -266,6 +275,7 @@ export function craftItem(state, recipeId, qty = 1, callbacks = {}) {
 
   // Commit only after costs and output are all valid on the disposable working state.
   Object.assign(state, workingState);
+  callbacks.onCraftSuccess?.(countToCraft);
 
   // Mensagens e Notificações de Sucesso
   const displayName = itemDef?.name || recipeId;
@@ -781,6 +791,24 @@ export function applyLifeStone(state, weaponUid, grade = 'top', callbacks = {}) 
     return false;
   }
 
+  const fees = { common: 25000, mid: 50000, high: 100000, top: 250000 };
+  const fee = fees[grade] || 100000;
+  if (!canAffordAdena(state, fee)) {
+    if (callbacks.log) callbacks.log(`Adena insuficiente! Requer ${fee.toLocaleString()} Adena para o ritual de Augmentation.`, 'system');
+    return false;
+  }
+
+  const stoneCandidates = [`lifestone_${grade}`, `life_stone_${grade}`];
+  const stoneItem = (state.inventory || []).find(i => stoneCandidates.includes(i.itemId || i.id) && (i.count || 1) >= 1);
+  if (!stoneItem) {
+    if (callbacks.log) callbacks.log(`Você não possui uma Life Stone (${grade.toUpperCase()}) no inventário!`, 'system');
+    return false;
+  }
+
+  // Dedução atômica de insumos
+  state.gold -= fee;
+  removeFromInventoryByItemId(state, stoneItem.itemId || stoneItem.id, 1);
+
   const mult = grade === 'top' ? 3 : grade === 'high' ? 2 : 1;
   const atkBonus = Math.floor((15 + Math.random() * 25) * mult);
   const critBonus = Math.floor((5 + Math.random() * 15) * mult);
@@ -815,6 +843,13 @@ export function removeAugment(state, weaponUid, callbacks = {}) {
   const item = (state.inventory || []).find(i => i.uid === weaponUid || i.id === weaponUid);
   if (!item || !item.augmentation) return false;
 
+  const cleanseFee = 25000;
+  if (!canAffordAdena(state, cleanseFee)) {
+    if (callbacks.log) callbacks.log(`Adena insuficiente! Requer ${cleanseFee.toLocaleString()} Adena para purificar a arma.`, 'system');
+    return false;
+  }
+
+  state.gold -= cleanseFee;
   item.augmentation = null;
   if (callbacks.log) callbacks.log('Augmentation removido com sucesso.', 'system');
 

@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-03T15:30:44.540Z",
+  "timestamp": "2026-10-03T20:19:06.396Z",
   "totalScenarios": 4,
   "passedScenarios": 4,
   "failedScenarios": 0,
@@ -8,7 +8,7 @@
   "scenarios": [
     {
       "id": "STAGE1-SCENARIO-01",
-      "title": "Criação do Personagem &amp; Combate Pausado no Boot",
+      "title": "Estado inicial do personagem &amp; combate pausado no boot",
       "status": "PASS",
       "observed": "Zone=talkingIsland, isCombatActive=false, weaponEquipped=true",
       "details": {
@@ -21,15 +21,20 @@
     },
     {
       "id": "STAGE1-SCENARIO-02",
-      "title": "Início de Combate com Consentimento &amp; Concessão de Vitória",
+      "title": "Combate autorizado &amp; recompensa pelo handler de produção",
       "status": "PASS",
-      "observed": "Monster=Island Werewolf Leader, XP gained=+75, Gold gained=+30, MonstersKilled=1",
+      "observed": "Defeated=Armored Goblin, XP=true, Adena=true, Kills=true, Drop=true",
       "details": {
-        "monsterName": "Island Werewolf Leader",
-        "monsterHp": 550,
-        "xpReward": 75,
-        "goldReward": 30,
-        "combatStoppedCleanly": true
+        "defeatedMonster": "Armored Goblin",
+        "defeatedMonsterMaxHp": 240,
+        "xpGained": true,
+        "goldGained": true,
+        "killRecorded": true,
+        "dropReceived": true,
+        "combatStoppedCleanly": true,
+        "combatStarted": true,
+        "handlerStateShared": true,
+        "nextMonster": "Armored Goblin"
       }
     },
     {
@@ -38,7 +43,7 @@
       "status": "PASS",
       "observed": "Equipped=true, P.Atk=68, CP=181, UnequippedCleanly=true",
       "details": {
-        "itemUid": "1791041444540_e25qpu",
+        "itemUid": "1791058746396_1qmet1",
         "equipped": true,
         "pAtk": 68,
         "pDef": 20,
@@ -60,5 +65,6 @@
         ]
       }
     }
-  ]
+  ],
+  "testScope": "Runtime smoke dos módulos reais com estado descartável; não valida visualmente a aplicação completa e não usa Firebase."
 }

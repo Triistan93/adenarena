@@ -7,6 +7,7 @@
 
 import { CanonicalClassGraph } from '../data/classes/CanonicalClassGraph.js';
 import { SeasonAvailabilityService } from '../services/SeasonAvailabilityService.js';
+import { getCurrentSeasonId } from '../core/SeasonConfig.js';
 import { resolveCanonicalClassId, resolveCanonicalDagClassId } from '../data/classes/class_aliases.js';
 import { CLASS_SAVE_MIGRATION_MAP } from '../services/ClassSaveMigrationMap.js';
 import { RACES } from '../data/races.js';
@@ -102,7 +103,7 @@ export class ClassProgressionEngine {
 
     const effectiveSeason = (season !== null && season !== undefined)
       ? season
-      : (playerLevel >= 76 ? 3 : SeasonAvailabilityService.CURRENT_SEASON);
+      : getCurrentSeasonId();
 
     const successors = CanonicalClassGraph.getSuccessors(currentNode.id);
 

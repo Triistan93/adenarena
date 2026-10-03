@@ -7,17 +7,37 @@ import { CASTLES, CASTLE_SHOP_CATALOG } from '../data/castles.js';
 import { addToInventory } from './InventoryService.js';
 
 export class ClanService {
+  static hasClan(state) {
+    return Boolean(
+      state?.clan &&
+      typeof state.clan.name === 'string' &&
+      state.clan.name.trim().length >= 3 &&
+      Number.isSafeInteger(state.clan.level) &&
+      state.clan.level >= 1
+    );
+  }
+
   /**
    * Retorna o estado do Clã do jogador e seus atributos agregados.
    */
   static getClanStatus(state) {
-    if (!state.clan) {
-      state.clan = {
-        name: 'Os Guardiões de Aden',
-        level: 1,
-        castles: [],
-        lastTaxTimestamp: Date.now(),
-        accumulatedTaxes: {}
+    if (!this.hasClan(state)) {
+      return {
+        clan: null,
+        levelData: null,
+        nextLevelData: null,
+        activeSkills: [],
+        bonusStats: {
+          pAtkBonusPercent: 0,
+          pDefBonusPercent: 0,
+          mAtkBonusPercent: 0,
+          mDefBonusPercent: 0,
+          hpBonusPercent: 0,
+          cpBonusPercent: 0,
+          regenBonusPercent: 0,
+          speedBonus: 0
+        },
+        ownedCastles: []
       };
     }
 
@@ -79,6 +99,10 @@ export class ClanService {
    */
   static upgradeClan(state, callbacks = {}) {
     const { log = console.log, onUpdate = () => {} } = callbacks;
+    if (!this.hasClan(state)) {
+      log('Você precisa pertencer a um clã para contribuir com sua evolução.', 'error');
+      return { success: false, reason: 'no_clan' };
+    }
     const status = this.getClanStatus(state);
 
     if (!status.nextLevelData) {
@@ -364,6 +388,10 @@ export class ClanService {
    */
   static donateToClan(state, adenaAmt = 0, spAmt = 0, callbacks = {}) {
     const { log = console.log, onUpdate = () => {}, floatText = () => {} } = callbacks;
+    if (!this.hasClan(state)) {
+      log('Você precisa pertencer a um clã para fazer uma contribuição.', 'error');
+      return { success: false, reason: 'no_clan' };
+    }
     if (!Number.isSafeInteger(adenaAmt) || !Number.isSafeInteger(spAmt) || adenaAmt < 0 || spAmt < 0 || (adenaAmt === 0 && spAmt === 0)) {
       log('Informe uma quantidade inteira e positiva de Adena e/ou SP para doar.', 'error');
       return { success: false, reason: 'invalid_amount' };
@@ -401,6 +429,16 @@ export class ClanService {
     const buff = CLAN_HALL_BUFFS[buffId];
     if (!buff) return { success: false, reason: 'invalid_buff' };
 
+    if (!this.hasClan(state)) {
+      log('Você precisa pertencer a um clã com Clan Hall para usar suas bênçãos.', 'error');
+      return { success: false, reason: 'no_clan' };
+    }
+
+    if ((state.clan.hall?.level || 0) < 1) {
+      log('Seu clã ainda não possui um Clan Hall ativo.', 'error');
+      return { success: false, reason: 'hall_unavailable' };
+    }
+
     if ((state.gold || 0) < buff.costAdena) {
       log(`Adena insuficiente para ativar ${buff.name} (${buff.costAdena.toLocaleString()} Adena).`, 'error');
       return { success: false, reason: 'gold_low' };
@@ -421,22 +459,103 @@ export class ClanService {
   }
 
   /**
-   * Retorna os membros do Clã (incluindo o jogador e veteranos simulados).
+   * Retorna o progresso dos contratos coletivos de clã para a temporada ativa.
+   */
+  static getClanContractsProgress(state) {
+    if (!this.hasClan(state)) return [];
+    state.clan.contracts = state.clan.contracts || {
+      monster_hunt: { current: 0, completed: false },
+      treasury_donation: { current: 0, completed: false },
+      expedition_conquest: { current: 0, completed: false }
+    };
+    const definitions = [
+      {
+        id: 'monster_hunt',
+        name: 'Frente de Batalha de Aden',
+        desc: 'Elimine monstros nas zonas do reino para abastecer a guarnição do clã.',
+        target: 200,
+        rewardDesc: '+10% EXP de Caça por 24h & +500 Reputação',
+        rewardStats: { xpBoost: 0.10 }
+      },
+      {
+        id: 'treasury_donation',
+        name: 'Provisões do Estandarte',
+        desc: 'Contribua com Adena no tesouro imperial para reforçar o clã.',
+        target: 100000,
+        rewardDesc: '+10% Drop de Adena por 24h & +500 Reputação',
+        rewardStats: { goldBoost: 0.10 }
+      },
+      {
+        id: 'expedition_conquest',
+        name: 'Reconhecimento de Fronteira',
+        desc: 'Conclua expedições cartográficas para expandir a influência da casa.',
+        target: 10,
+        rewardDesc: '+500 Reputação & Bênção do Estandarte',
+        rewardStats: { pAtkPercent: 0.05, pDefPercent: 0.05 }
+      }
+    ];
+
+    return definitions.map(def => {
+      const prog = state.clan.contracts[def.id] || { current: 0, completed: false };
+      return {
+        ...def,
+        current: prog.current,
+        completed: prog.completed,
+        percent: Math.min(100, Math.floor(((prog.current || 0) / def.target) * 100))
+      };
+    });
+  }
+
+  /**
+   * Registra contribuição para um objetivo coletivo de clã e concede a bênção ao atingir a meta.
+   */
+  static progressClanContract(state, contractId, amount = 1, callbacks = {}) {
+    const { log = console.log, onUpdate = () => {} } = callbacks;
+    if (!this.hasClan(state)) {
+      return { success: false, reason: 'no_clan' };
+    }
+    const contracts = this.getClanContractsProgress(state);
+    const targetContract = contracts.find(c => c.id === contractId);
+    if (!targetContract) {
+      return { success: false, reason: 'invalid_contract' };
+    }
+    state.clan.contracts = state.clan.contracts || {};
+    const prog = state.clan.contracts[contractId] || { current: 0, completed: false };
+    if (prog.completed) {
+      return { success: false, reason: 'already_completed' };
+    }
+
+    const added = Math.max(1, Math.floor(Number(amount) || 1));
+    prog.current = Math.min(targetContract.target, (prog.current || 0) + added);
+
+    if (prog.current >= targetContract.target) {
+      prog.completed = true;
+      state.clan.reputation = (state.clan.reputation || 0) + 500;
+      state.buffs = state.buffs || {};
+      state.buffs['clan_contract_' + contractId] = {
+        until: Date.now() + 86400000,
+        amount: 1,
+        name: `Estandarte: ${targetContract.name}`
+      };
+      state.clan.contracts[contractId] = prog;
+      log(`🚩 **[Objetivo de Clã Concluído!]** ${targetContract.name} atingiu a meta! Bênção do Estandarte ativa por 24h (+500 Reputação).`, 'rarity-legendary');
+      onUpdate();
+      return { success: true, completed: true, contract: targetContract };
+    }
+
+    state.clan.contracts[contractId] = prog;
+    onUpdate();
+    return { success: true, completed: false, current: prog.current, target: targetContract.target };
+  }
+
+  /**
+   * Retorna somente membros persistidos no save. A lista social canônica virá do serviço online.
    */
   static getClanRoster(state) {
-    const clan = (state && state.clan) ? state.clan : { name: 'Os Guardiões de Aden', level: 1, reputation: 100 };
-    const pName = state?.name || 'Tristan';
-    const pLvl = state?.level || 1;
-    const pClass = state?.className || state?.class || 'Guerreiro';
-
-    return [
-      { name: pName, rank: '👑 Líder do Clã', level: pLvl, className: pClass, contribution: (clan.donationsAdena || 0) + (clan.donationsSp || 0) * 10, isPlayer: true },
-      { name: 'SirGalahad', rank: '⚔️ General', level: Math.max(40, pLvl + 2), className: 'Paladin', contribution: 350000, isPlayer: false },
-      { name: 'ElenaMoonsong', rank: '🔮 Feiticeira Real', level: Math.max(38, pLvl + 1), className: 'Spellsinger', contribution: 280000, isPlayer: false },
-      { name: 'KaelenShadow', rank: '🗡️ Assassino Sênior', level: Math.max(35, pLvl), className: 'Abyss Walker', contribution: 210000, isPlayer: false },
-      { name: 'ThorgarIron', rank: '🛡️ Mestre Artesão', level: Math.max(32, pLvl - 2), className: 'Bounty Hunter', contribution: 190000, isPlayer: false },
-      { name: 'LyraSunwhisper', rank: '✨ Sacerdotisa', level: Math.max(30, pLvl - 3), className: 'Bishop', contribution: 150000, isPlayer: false }
-    ];
+    if (!this.hasClan(state) || !Array.isArray(state.clan.members)) return [];
+    return state.clan.members.filter(member =>
+      member && typeof member.name === 'string' && member.name.trim().length > 0
+    );
   }
 }
 

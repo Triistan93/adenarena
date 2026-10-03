@@ -11,8 +11,54 @@ import { removeFromInventory } from '../services/InventoryService.js';
 import {
   isSkillAvailableForCharacter,
   getSkillVisibility,
-  getStarterSkillsForClass
+  getStarterSkillsForClass,
+  getVisibleSkillsForCharacter
 } from '../services/SkillEligibility.js';
+
+export function canLearnSkill(state, skillId) {
+  if (!state || typeof state !== 'object') return false;
+  const echoDefs = typeof window !== 'undefined' ? window.EchoData?.SKILL_DEFS_ECHO : null;
+  const def = echoDefs?.[skillId] || D()?.SKILL_DEFS?.[skillId];
+  if (!def || def.disabled) return false;
+
+  const currentRank = Number(state.skills?.[skillId]) || 0;
+  const maxRank = Number(def.max || def.maxLevel) || 5;
+  if (currentRank >= maxRank || !isSkillAvailableForCharacter(state, def)) return false;
+
+  const rankRequiredLevel = Array.isArray(def.levelRequirements)
+    ? (def.levelRequirements[currentRank] ?? def.reqLvl ?? 1)
+    : (def.reqLvl || 1);
+  if ((Number(state.level) || 1) < rankRequiredLevel) return false;
+
+  const cost = getSkillCost(skillId, currentRank, state);
+  if ((Number(state.sp) || 0) < cost) return false;
+
+  const reqs = (typeof window !== 'undefined' && window.EchoData?.SKILL_REQS_ECHO?.[skillId])
+    || D()?.SKILL_REQS?.[skillId];
+  if (reqs && !Object.entries(reqs).every(([requiredSkill, rank]) =>
+    requiredSkill === 'level' || requiredSkill === 'sp' || requiredSkill === 'reqLvl'
+    || (Number(state.skills?.[requiredSkill]) || 0) >= rank
+  )) return false;
+
+  const requiredBookId = getRequiredBookId(def);
+  if (requiredBookId && currentRank === 0) {
+    const alternateBookId = requiredBookId.startsWith('book_')
+      ? requiredBookId.replace('book_', 'spellbook_')
+      : requiredBookId.replace('spellbook_', 'book_');
+    const book = state.inventory?.find(item =>
+      (item.itemId === requiredBookId || item.itemId === alternateBookId) && (item.count ?? 1) > 0
+    );
+    if (!book) return false;
+  }
+
+  return true;
+}
+
+export function hasLearnableSkill(state) {
+  if (!state) return false;
+  const visible = getVisibleSkillsForCharacter(state);
+  return visible.visibleList.some(({ skillId }) => canLearnSkill(state, skillId));
+}
 
 /**
  * Retorna a skill inicial base correspondente à classe/arquétipo do jogador.

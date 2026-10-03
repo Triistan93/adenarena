@@ -8,6 +8,46 @@
 import { D } from '../core/GameConfig.js';
 import { QUEST_DEFS, BATTLE_PASS_TIERS, DAILY_COMPLETION_BONUS } from '../data/quests.js';
 import { addToInventory } from './InventoryService.js';
+import { isFeatureUnlocked } from '../core/SeasonConfig.js';
+
+export function getAvailableDailyQuests(state) {
+  const level = Number(state?.level) || 1;
+  return (QUEST_DEFS.daily || []).filter(quest =>
+    (!quest.unlockLevel || quest.unlockLevel <= level) &&
+    (!quest.requiredFeature || isFeatureUnlocked(quest.requiredFeature))
+  );
+}
+
+export function hasClaimableQuests(state) {
+  if (!state) return false;
+
+  const battlePass = state.battlePass;
+  if (battlePass && typeof battlePass === 'object') {
+    const passXp = Number(battlePass.xp) || 0;
+    const claimedFree = Array.isArray(battlePass.claimedFree) ? battlePass.claimedFree : [];
+    const claimedPremium = Array.isArray(battlePass.claimedPremium) ? battlePass.claimedPremium : [];
+    const hasClaimablePassReward = BATTLE_PASS_TIERS.some(tier =>
+      passXp >= tier.reqXp && (
+        !claimedFree.includes(tier.level) ||
+        (Boolean(battlePass.unlockedPremium) && !claimedPremium.includes(tier.level))
+      )
+    );
+    if (hasClaimablePassReward) return true;
+  }
+
+  if (!state.quests) return false;
+  const quests = [...getAvailableDailyQuests(state), ...(QUEST_DEFS.weekly || [])];
+  const hasClaimableQuest = quests.some(quest =>
+    !state.quests.claimed?.includes(quest.id) &&
+    (Number(state.quests.progress?.[quest.id]) || 0) >= quest.target
+  );
+  if (hasClaimableQuest) return true;
+
+  const dailyQuests = getAvailableDailyQuests(state);
+  return !state.quests.dailyBonusClaimed && dailyQuests.length > 0 &&
+    Array.isArray(state.quests.claimed) &&
+    dailyQuests.every(quest => state.quests.claimed.includes(quest.id));
+}
 
 /**
  * Reseta o progresso das missões diárias (24h) e semanais (7 dias).
@@ -53,7 +93,10 @@ export function checkQuestResets(state) {
 export function triggerQuestEvent(state, type, amount = 1) {
   if (!Number.isSafeInteger(amount) || amount <= 0) return;
   checkQuestResets(state);
-  const allQuests = [...(QUEST_DEFS.daily || []), ...(QUEST_DEFS.weekly || [])];
+  const allQuests = [
+    ...getAvailableDailyQuests(state),
+    ...(QUEST_DEFS.weekly || [])
+  ];
   for (const q of allQuests) {
     if (q.type === type) {
       const current = Number(state.quests.progress[q.id]) || 0;
@@ -73,7 +116,10 @@ export function claimQuestReward(state, questId, callbacks = {}) {
   checkQuestResets(state);
   if (Array.isArray(state.quests.claimed) && state.quests.claimed.includes(questId)) return false;
 
-  const allQuests = [...(QUEST_DEFS.daily || []), ...(QUEST_DEFS.weekly || [])];
+  const allQuests = [
+    ...getAvailableDailyQuests(state),
+    ...(QUEST_DEFS.weekly || [])
+  ];
   const qDef = allQuests.find(q => q.id === questId);
   if (!qDef) return false;
 
@@ -110,8 +156,7 @@ export function claimDailyBonusChest(state, callbacks = {}) {
   checkQuestResets(state);
   if (state.quests.dailyBonusClaimed) return false;
 
-  const currentLevel = state.level || 1;
-  const availableQuests = (QUEST_DEFS.daily || []).filter(q => !q.unlockLevel || q.unlockLevel <= currentLevel);
+  const availableQuests = getAvailableDailyQuests(state);
   const allCompleted = availableQuests.length > 0 && availableQuests.every(q => Array.isArray(state.quests.claimed) && state.quests.claimed.includes(q.id));
   if (!allCompleted) return false;
 

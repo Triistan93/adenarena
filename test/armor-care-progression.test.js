@@ -6,7 +6,7 @@ await import('../lineage-idle/data/echo-adapter.js');
 
 const { DEFAULT_STATE } = await import('../lineage-idle/src/core/StateManager.js');
 const { getVisibleSkillsForCharacter } = await import('../lineage-idle/src/services/SkillEligibility.js');
-const { spendSP } = await import('../lineage-idle/src/engine/SkillEngine.js');
+const { spendSP, canLearnSkill, hasLearnableSkill } = await import('../lineage-idle/src/engine/SkillEngine.js');
 const { removeFromInventory } = await import('../lineage-idle/src/services/InventoryService.js');
 const { CANONICAL_CLASS_REGISTRY_V2 } = await import('../lineage-idle/src/data/classes/CanonicalClassRegistryV2.js');
 
@@ -45,4 +45,30 @@ test('Armor Care is assigned to both Templar trees and rank 2 is level-gated at 
     assert.equal(state.skills.armor_care, 2);
     assert.equal(spendSP(state, 'armor_care', callbacksFor(state)), false, `${classId} cannot exceed rank 2`);
   }
+});
+
+test('Skill tab badge excludes a rank that has SP but is still level-locked', () => {
+  const state = DEFAULT_STATE();
+  state.class = 'evaTemplar';
+  state.race = 'elf';
+  state.level = 76;
+  state.sp = 500_000;
+  state.inventory = [{ uid: 'armor-care-book', itemId: 'book_3star', count: 1 }];
+  assert.equal(spendSP(state, 'armor_care'), true);
+
+  const visible = getVisibleSkillsForCharacter(state).visibleList;
+  for (const { skillId, skillDef } of visible) {
+    state.skills[skillId] = Number(skillDef.max || skillDef.maxLevel) || 5;
+  }
+  state.skills.armor_care = 1;
+
+  state.level = 83;
+  assert.equal(canLearnSkill(state, 'armor_care'), false);
+  assert.equal(hasLearnableSkill(state), false,
+    'não deve haver badge se a única habilidade restante está bloqueada até Lv. 84');
+
+  state.level = 84;
+  assert.equal(canLearnSkill(state, 'armor_care'), true);
+  assert.equal(hasLearnableSkill(state), true,
+    'o badge deve aparecer assim que o próximo rank realmente puder ser aprendido');
 });

@@ -2,11 +2,13 @@ import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 
 import {
+  applyLifeStone,
   calculateMaxCraftableQty,
   chargeRandomCraftWithAdena,
   compoundBeltsWithDuplicates,
   polishMasterwork,
   refreshRandomCraftSlots,
+  removeAugment,
   unsealItem,
   upgradeDyeSymbol,
 } from '../lineage-idle/src/services/CraftService.js';
@@ -43,6 +45,19 @@ describe('Forja — pagamentos exigem carteira Adena válida', () => {
         run: state => refreshRandomCraftSlots(state),
         state: { randomCraft: { points: 0, charge: 0, slots: [{ id: 'keep' }] } },
         assertUnchanged: state => assert.deepEqual(state.randomCraft.slots, [{ id: 'keep' }]),
+      },
+      {
+        run: state => applyLifeStone(state, 'wpn-aug', 'top'),
+        state: { inventory: [{ uid: 'wpn-aug', slot: 'weapon' }, { uid: 'ls', itemId: 'lifestone_top', count: 1 }] },
+        assertUnchanged: state => {
+          assert.equal(state.inventory[0].augmentation, undefined);
+          assert.equal(state.inventory[1].count, 1);
+        },
+      },
+      {
+        run: state => removeAugment(state, 'wpn-cleanse'),
+        state: { inventory: [{ uid: 'wpn-cleanse', slot: 'weapon', augmentation: { grade: 'top' } }] },
+        assertUnchanged: state => assert.ok(state.inventory[0].augmentation),
       },
     ];
 

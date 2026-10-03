@@ -6,6 +6,7 @@
  */
 
 import { CanonicalClassGraph } from '../data/classes/CanonicalClassGraph.js';
+import { getCurrentSeasonId } from '../core/SeasonConfig.js';
 
 export class SeasonAvailabilityService {
   static CURRENT_SEASON = 1;
@@ -17,15 +18,18 @@ export class SeasonAvailabilityService {
    * @param {number} [season=1]
    * @returns {{ available: boolean, reason: string|null, minLevel: number }}
    */
-  static getClassAvailability(classId, season = SeasonAvailabilityService.CURRENT_SEASON) {
+  static getClassAvailability(classId, season = null) {
     const node = CanonicalClassGraph.getClassNode(classId);
     if (!node) {
       return { available: false, reason: 'unknown_class', minLevel: 1 };
     }
 
-    // Season 1: Stages 0, 1, and 2 are fully playable (Levels 1 to 40)
-    // Stage 3 (Lv 76+ 3rd Class) is canonical, but gated for Season 1
-    if (season === 1) {
+    const effectiveSeason = (season !== null && season !== undefined)
+      ? Number(season)
+      : getCurrentSeasonId();
+
+    // Seasons 1 and 2 stop before the level-76 third class; Season 3 releases it.
+    if (effectiveSeason < 3) {
       if (node.stage >= 3 || node.minLevel >= 76) {
         return {
           available: false,

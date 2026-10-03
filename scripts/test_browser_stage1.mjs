@@ -1,18 +1,21 @@
 /**
- * test_browser_stage1.mjs — Homologação da Etapa 1 no Navegador Real (Edge Headless via CDP)
+ * test_browser_stage1.mjs — Smoke de runtime da Etapa 1 no Edge Headless
  *
- * Executa no contexto do navegador Chromium/Edge real a jornada inicial completa:
- *   1. Criação do personagem e chegada na tela com combate rigorosamente pausado
- *   2. Início do combate por consentimento explícito, spawn de monstro e primeira vitória
- *   3. Drop na mochila, equipamento de item e recálculo dinâmico de atributos
- *   4. Gating da 1ª Transferência de Classe no Nível 20 nas linhagens canônicas
+ * Executa módulos reais do jogo no runtime do Edge, com perfil e estado descartáveis.
+ * Não carrega a interface completa, Firebase, nem qualquer save do usuário.
+ *   1. Estado inicial de personagem com combate pausado
+ *   2. Combate autorizado e recompensa pelo handler de produção
+ *   3. Equipamento e recálculo dinâmico de atributos
+ *   4. Elegibilidade da 1ª Transferência pelo motor de progressão
  */
 
 import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
+import os from 'node:os';
 import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { createServer as createViteServer } from 'vite';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -26,7 +29,7 @@ function generateHtml() {
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8">
-  <title>Aden Arena — Validação de Navegador: Etapa 1 (Jornada Inicial)</title>
+  <title>Aden Arena — Runtime Smoke: Etapa 1</title>
   <style>
     body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #06080f; color: #d0d7de; padding: 24px; }
     h1 { color: #f0883e; font-size: 22px; border-bottom: 1px solid #21262d; padding-bottom: 8px; margin-bottom: 16px; }
@@ -45,7 +48,8 @@ function generateHtml() {
   </style>
 </head>
 <body>
-  <h1>Aden Arena — Homologação da Etapa 1 no Navegador Real (Edge)</h1>
+  <h1>Aden Arena — Runtime Smoke da Etapa 1 (Edge)</h1>
+  <p>Harness técnico com módulos reais e dados descartáveis. Não representa validação visual da aplicação completa.</p>
   <div id="scenarios-container"></div>
   <div id="summary-panel">
     <h2 style="color: #58a6ff; font-size: 16px; margin-top: 0;">Relatório de Homologação da Jornada Inicial</h2>
@@ -55,6 +59,7 @@ function generateHtml() {
   <script type="module">
     const scenarios = [];
     const consoleErrors = [];
+    let gameMainForCleanup = null;
 
     window.addEventListener('error', (e) => {
       consoleErrors.push({ message: e.message, filename: e.filename, lineno: e.lineno });
@@ -67,9 +72,14 @@ function generateHtml() {
       const { getStats } = await import('/lineage-idle/src/engine/StatsEngine.js');
       const { ALL_ITEMS } = await import('/lineage-idle/src/data/items/index.js');
       const { addToInventory } = await import('/lineage-idle/src/services/InventoryService.js');
-      const { CanonicalClassGraph } = await import('/lineage-idle/src/data/classes/CanonicalClassGraph.js');
+      const { ClassProgressionEngine } = await import('/lineage-idle/src/engine/ClassProgressionEngine.js');
 
-      window.GameData = { ALL_ITEMS };
+      window.__serverSeason = 1;
+      window.GameData = {
+        ALL_ITEMS,
+        ZONE_GOLD_MULT: {},
+        rollDrop: () => [{ id: 'bone_breastplate', itemId: 'bone_breastplate', rarity: 'common', isEquipment: true, amount: 1 }]
+      };
 
       // ──────────────────────────────────────────────────────────────────────────
       // CENÁRIO 1: Criação e Chegada com Combate Pausado (Consentimento Obrigatório)
@@ -85,7 +95,7 @@ function generateHtml() {
 
         scenarios.push({
           id: 'STAGE1-SCENARIO-01',
-          title: 'Criação do Personagem & Combate Pausado no Boot',
+          title: 'Estado inicial do personagem & combate pausado no boot',
           status: pass ? 'PASS' : 'FAIL',
           observed: 'Zone=' + state.zone + ', isCombatActive=' + state.isCombatActive + ', weaponEquipped=' + hasWeapon,
           details: {
@@ -113,39 +123,56 @@ function generateHtml() {
         };
 
         // Jogador autoriza o combate
-        startCombat(state, callbacks);
-        const combatStarted = state.isCombatActive === true;
-        const monsterSpawned = !!state.activeMonster && state.activeMonster.hp > 0;
+        // Use the real main-module state bridge after boot. Vite's direct test imports can
+        // be a distinct ESM instance from main.js, so replacing their snapshot is insufficient.
+        gameMainForCleanup = await import('/lineage-idle/main.js');
+        gameMainForCleanup.init();
+        window.state = state;
+        const gameState = window.getRawState();
+        const attackMonster = gameMainForCleanup.attackMonster;
+        startCombat(gameState, callbacks);
+        const combatStarted = gameState.isCombatActive === true;
+        const monsterSpawned = !!gameState.activeMonster && gameState.activeMonster.hp > 0;
 
-        // Vitória do herói
-        const initialXp = state.xp;
-        const initialGold = state.gold;
-        const monster = state.activeMonster;
-        const mXp = monster.xp || 25;
-        const mGold = monster.gold ? monster.gold[0] : 10;
+        // Força somente o HP do inimigo para encurtar o cenário; a vitória e a recompensa
+        // devem passar pelo handler real do jogo, não por mutação direta de XP/Adena.
+        gameState.activeMonster.hp = 1;
+        gameState.activeMonster.maxHp = 1;
+        const initialXp = gameState.xp;
+        const initialGold = gameState.gold;
+        const initialKills = gameState.stats?.monstersKilled || 0;
+        const defeatedMonster = gameState.activeMonster;
+        const defeatedMonsterName = defeatedMonster.name;
+        const defeatedMonsterMaxHp = defeatedMonster._maxHp || defeatedMonster.maxHp || defeatedMonster.hp;
+        const handlerStateShared = typeof window.getRawState === 'function' && window.getRawState() === gameState;
+        attackMonster();
+        const rewardedState = window.getRawState();
+        const xpGained = rewardedState.xp > initialXp;
+        const goldGained = rewardedState.gold > initialGold;
+        const killRecorded = (rewardedState.stats?.monstersKilled || 0) === initialKills + 1;
+        const dropReceived = rewardedState.inventory.some(item => item.itemId === 'bone_breastplate');
 
-        monster.hp = 0;
-        state.xp += mXp;
-        state.gold += mGold;
-        state.stats = state.stats || {};
-        state.stats.monstersKilled = (state.stats.monstersKilled || 0) + 1;
+        stopCombat(rewardedState);
+        const combatPausedAfter = rewardedState.isCombatActive === false;
 
-        stopCombat(state);
-        const combatPausedAfter = state.isCombatActive === false;
-
-        const pass = combatStarted && monsterSpawned && (state.xp > initialXp) && (state.gold > initialGold) && combatPausedAfter;
+        const pass = combatStarted && monsterSpawned && handlerStateShared && xpGained && goldGained && killRecorded && dropReceived && combatPausedAfter;
 
         scenarios.push({
           id: 'STAGE1-SCENARIO-02',
-          title: 'Início de Combate com Consentimento & Concessão de Vitória',
+          title: 'Combate autorizado & recompensa pelo handler de produção',
           status: pass ? 'PASS' : 'FAIL',
-          observed: 'Monster=' + monster.name + ', XP gained=+' + mXp + ', Gold gained=+' + mGold + ', MonstersKilled=' + state.stats.monstersKilled,
+          observed: 'Defeated=' + defeatedMonsterName + ', XP=' + xpGained + ', Adena=' + goldGained + ', Kills=' + killRecorded + ', Drop=' + dropReceived,
           details: {
-            monsterName: monster.name,
-            monsterHp: monster._maxHp || monster.hp,
-            xpReward: mXp,
-            goldReward: mGold,
-            combatStoppedCleanly: combatPausedAfter
+            defeatedMonster: defeatedMonsterName,
+            defeatedMonsterMaxHp,
+            xpGained,
+            goldGained,
+            killRecorded,
+            dropReceived,
+            combatStoppedCleanly: combatPausedAfter,
+            combatStarted,
+            handlerStateShared,
+            nextMonster: gameState.activeMonster?.name || null
           }
         });
       }
@@ -201,16 +228,19 @@ function generateHtml() {
         const state = DEFAULT_STATE();
         applyStarterKit(state, 'human', 'fighter', 'ClassTransferHero', 'M');
 
-        // Nível 19: Bloqueado
+        // Verifica a elegibilidade real do DAG e da temporada, não somente o nível numérico.
+        state.class = 'fighter';
+        state.character = { ...(state.character || {}), classId: 'fighter' };
+        state.race = 'human';
         state.level = 19;
-        const canAdvanceAt19 = state.level >= 20;
+        const canAdvanceAt19 = ClassProgressionEngine.getAvailablePromotions('fighter', state.level, 'human').length > 0;
 
-        // Nível 20: Desbloqueado com opções canônicas no DAG
+        // Nível 20: desbloqueado com destinos canônicos compatíveis
         state.level = 20;
-        const canAdvanceAt20 = state.level >= 20;
-        const children = CanonicalClassGraph.getSuccessors('fighter');
-        const childrenIds = children.map(c => c.id);
-        const hasOptions = children.length >= 2;
+        const promotions = ClassProgressionEngine.getAvailablePromotions('fighter', state.level, 'human');
+        const canAdvanceAt20 = promotions.length > 0;
+        const childrenIds = promotions.map(promotion => promotion.id);
+        const hasOptions = childrenIds.length >= 2;
 
         const pass = !canAdvanceAt19 && canAdvanceAt20 && hasOptions;
 
@@ -229,6 +259,14 @@ function generateHtml() {
 
     } catch (err) {
       consoleErrors.push({ message: err.message, stack: err.stack });
+    }
+
+    // init() installs the game's clock, autosave, and UI intervals. Stop them before
+    // Chromium's virtual-time dump so the smoke page can finish deterministically.
+    try {
+      gameMainForCleanup?.destroy();
+    } catch (err) {
+      consoleErrors.push({ message: 'Game cleanup failed: ' + err.message, stack: err.stack });
     }
 
     // ──────────────────────────────────────────────────────────────────────────
@@ -274,6 +312,7 @@ function generateHtml() {
 </html>`;
 }
 
+let vite;
 const server = http.createServer((req, res) => {
   const parsedUrl = new URL(req.url, `http://localhost:${PORT}`);
   let pathname = parsedUrl.pathname;
@@ -284,26 +323,20 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  // Serve static JS files from the repository root
-  const filePath = path.join(ROOT_DIR, pathname.replace(/^\//, ''));
-  if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
-    const ext = path.extname(filePath).toLowerCase();
-    const mimeTypes = {
-      '.js': 'application/javascript; charset=utf-8',
-      '.mjs': 'application/javascript; charset=utf-8',
-      '.ts': 'application/javascript; charset=utf-8',
-      '.json': 'application/json; charset=utf-8',
-      '.css': 'text/css; charset=utf-8',
-      '.png': 'image/png',
-      '.webp': 'image/webp'
-    };
-    res.writeHead(200, { 'Content-Type': mimeTypes[ext] || 'application/octet-stream' });
-    fs.createReadStream(filePath).pipe(res);
-  } else {
+  vite.middlewares(req, res, () => {
     res.writeHead(404);
     res.end('Not found: ' + pathname);
-  }
+  });
 });
+
+vite = await createViteServer({
+  configFile: path.join(ROOT_DIR, 'vite.config.ts'),
+  root: ROOT_DIR,
+  server: { middlewareMode: true, hmr: false },
+  appType: 'custom'
+});
+
+const isolatedProfile = fs.mkdtempSync(path.join(os.tmpdir(), 'adenarena-edge-stage1-'));
 
 server.listen(PORT, () => {
   console.log(`[Browser Stage 1 Server] Listening on http://localhost:${PORT}`);
@@ -312,8 +345,11 @@ server.listen(PORT, () => {
   const edgeArgs = [
     '--headless=new',
     '--disable-gpu',
+    '--no-first-run',
+    '--no-default-browser-check',
     '--dump-dom',
     '--window-size=1280,1800',
+    '--user-data-dir=' + isolatedProfile,
     '--screenshot=' + screenshotPath,
     '--virtual-time-budget=5000',
     `http://localhost:${PORT}/`
@@ -328,16 +364,16 @@ server.listen(PORT, () => {
   child.stdout.on('data', d => { stdout += d.toString(); });
   child.stderr.on('data', d => { stderr += d.toString(); });
 
-  child.on('close', code => {
-    server.close();
+  child.on('close', async code => {
     console.log(`[Browser Stage 1] Edge exited with code ${code}`);
+    let exitCode = code === 0 ? 0 : 1;
 
     const match = stdout.match(/<pre id="stage1-report-json">([\s\S]*?)<\/pre>/);
     if (match) {
       try {
         const report = JSON.parse(match[1]);
         console.log('========================================================');
-        console.log('REAL BROWSER (EDGE) ETAPA 1 HOMOLOGATION REPORT:');
+        console.log('REAL BROWSER (EDGE) ETAPA 1 RUNTIME SMOKE REPORT:');
         console.log(`Scenarios: ${report.passedScenarios}/${report.totalScenarios} PASSED`);
         console.log(`Console Errors: ${report.totalConsoleErrors}`);
         console.log('========================================================');
@@ -350,22 +386,30 @@ server.listen(PORT, () => {
           console.error('Console errors:', report.consoleErrors);
         }
 
-        fs.writeFileSync('scripts/edge_stage1_homologation_report.json', JSON.stringify(report, null, 2), 'utf-8');
+        fs.writeFileSync('scripts/edge_stage1_homologation_report.json', JSON.stringify({
+          ...report,
+          testScope: 'Runtime smoke dos módulos reais com estado descartável; não valida visualmente a aplicação completa e não usa Firebase.'
+        }, null, 2), 'utf-8');
 
         if (report.failedScenarios === 0 && report.totalConsoleErrors === 0) {
-          console.log('SUCCESS: All Stage 1 gameplay scenarios passed in real Microsoft Edge!');
-          process.exit(0);
+          console.log('SUCCESS: All Stage 1 runtime smoke scenarios passed in real Microsoft Edge!');
+          exitCode = 0;
         } else {
           console.error(`FAILURE: ${report.failedScenarios} scenarios failed or ${report.totalConsoleErrors} console errors.`);
-          process.exit(1);
+          exitCode = 1;
         }
       } catch (err) {
         console.error('Error parsing report JSON:', err);
-        process.exit(1);
+        exitCode = 1;
       }
     } else {
       console.log('Stdout length:', stdout.length, 'Stderr:', stderr);
-      process.exit(1);
+      exitCode = 1;
     }
+
+    await new Promise(resolve => server.close(resolve));
+    await vite.close();
+    fs.rmSync(isolatedProfile, { recursive: true, force: true });
+    process.exit(exitCode);
   });
 });

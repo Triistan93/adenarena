@@ -1832,7 +1832,9 @@ const STATIC_CRAFTING_RECIPES = {
 let _allRecipesGenerated = false;
 function ensureAllRecipesGenerated() {
   if (_allRecipesGenerated) return;
-  const allItems = (typeof window !== 'undefined' && (window.GameData?.ALL_ITEMS || window.ALL_ITEMS)) || {};
+  const allItems = (typeof window !== 'undefined' && (window.GameData?.ALL_ITEMS || window.ALL_ITEMS))
+    || (typeof globalThis !== 'undefined' && (globalThis.GameData?.ALL_ITEMS || globalThis.ALL_ITEMS))
+    || {};
   if (Object.keys(allItems).length > 0) {
     const generated = generateAllCraftingRecipes(allItems);
     for (const [k, v] of Object.entries(generated)) {

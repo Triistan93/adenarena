@@ -141,12 +141,93 @@ service cloud.firestore {
     // ─── Clãs Imperiais e Membros ────────────────────────────────────────────
     match /clans/{clanId} {
       allow read: if isAuthenticated();
-      allow write, delete: if isServerAdmin();
+      allow create: if isServerAdmin() || (
+        isRegistered()
+        && request.resource.data.keys().hasOnly([
+          'name', 'nameKey', 'description', 'leaderUid', 'recruitmentOpen',
+          'memberCap', 'level', 'allianceId', 'territoryIds', 'hallLevel',
+          'createdAt', 'updatedAt'
+        ])
+        && request.resource.data.keys().hasAll([
+          'name', 'nameKey', 'description', 'leaderUid', 'recruitmentOpen',
+          'memberCap', 'level', 'allianceId', 'territoryIds', 'hallLevel',
+          'createdAt', 'updatedAt'
+        ])
+        && request.resource.data.name is string
+        && request.resource.data.name.size() >= 3
+        && request.resource.data.name.size() <= 24
+        && request.resource.data.nameKey is string
+        && request.resource.data.nameKey.size() >= 3
+        && request.resource.data.nameKey.size() <= 48
+        && request.resource.data.description is string
+        && request.resource.data.description.size() <= 280
+        && request.resource.data.leaderUid == request.auth.uid
+        && request.resource.data.recruitmentOpen is bool
+        && request.resource.data.memberCap == 50
+        && request.resource.data.level == 1
+        && request.resource.data.allianceId == null
+        && request.resource.data.territoryIds == []
+        && request.resource.data.hallLevel == 0
+        && getAfter(/databases/$(database)/documents/clan_names/$(request.resource.data.nameKey)).data.clanId == clanId
+        && getAfter(/databases/$(database)/documents/clan_members/$(request.auth.uid)).data.clanId == clanId
+        && getAfter(/databases/$(database)/documents/clan_members/$(request.auth.uid)).data.role == 'leader'
+      );
+      // A liderança pode editar apenas o texto de apresentação e o recrutamento.
+      // Nível, membros, território, hall e alianças exigirão operações autoritativas.
+      allow update: if isServerAdmin() || (
+        isRegistered()
+        && resource.data.leaderUid == request.auth.uid
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['description', 'recruitmentOpen', 'updatedAt'])
+        && request.resource.data.description is string
+        && request.resource.data.description.size() <= 280
+        && request.resource.data.recruitmentOpen is bool
+      );
+      allow delete: if isServerAdmin();
     }
 
     match /clan_members/{membershipId} {
       allow read: if isAuthenticated();
-      allow write, delete: if isServerAdmin();
+      allow create: if isServerAdmin() || (
+        isRegistered()
+        && membershipId == request.auth.uid
+        && request.resource.data.keys().hasOnly(['uid', 'clanId', 'role', 'displayName', 'joinedAt'])
+        && request.resource.data.keys().hasAll(['uid', 'clanId', 'role', 'displayName', 'joinedAt'])
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.displayName is string
+        && request.resource.data.displayName.size() <= 40
+        && request.resource.data.clanId is string
+        && (
+          (request.resource.data.role == 'leader'
+            && getAfter(/databases/$(database)/documents/clans/$(request.resource.data.clanId)).data.leaderUid == request.auth.uid)
+          ||
+          (request.resource.data.role == 'member'
+            && get(/databases/$(database)/documents/clans/$(request.resource.data.clanId)).data.recruitmentOpen == true)
+        )
+      );
+      allow update: if isServerAdmin();
+      allow delete: if isServerAdmin() || (
+        isRegistered()
+        && (
+          (membershipId == request.auth.uid && resource.data.uid == request.auth.uid && resource.data.role == 'member')
+          ||
+          (get(/databases/$(database)/documents/clans/$(resource.data.clanId)).data.leaderUid == request.auth.uid && resource.data.role == 'member')
+        )
+      );
+    }
+
+    match /clan_names/{nameKey} {
+      allow read: if isAuthenticated();
+      allow create: if isServerAdmin() || (
+        isRegistered()
+        && request.resource.data.keys().hasOnly(['clanId', 'nameKey', 'createdBy'])
+        && request.resource.data.keys().hasAll(['clanId', 'nameKey', 'createdBy'])
+        && request.resource.data.nameKey == nameKey
+        && request.resource.data.createdBy == request.auth.uid
+        && request.resource.data.clanId is string
+        && getAfter(/databases/$(database)/documents/clans/$(request.resource.data.clanId)).data.nameKey == nameKey
+        && getAfter(/databases/$(database)/documents/clans/$(request.resource.data.clanId)).data.leaderUid == request.auth.uid
+      );
+      allow update, delete: if isServerAdmin();
     }
 
     // ─── Snapshot Competitivo de Rankings (pvp_rankings) ────────────────────
@@ -168,17 +249,40 @@ service cloud.firestore {
     // ─── Mercado Central de Giran — Anúncios P2P ────────────────────────────
     match /market_listings/{listingId} {
       allow read: if isAuthenticated();
-      allow create: if isServerAdmin() || (isRegistered() && request.resource.data.sellerId == request.auth.uid);
-      allow update: if isServerAdmin() || (isRegistered()
-                    && resource.data.sellerId == request.auth.uid
-                    && request.resource.data.sellerId == resource.data.sellerId);
+      allow create: if isServerAdmin() || (
+        isRegistered()
+        && request.resource.data.sellerId == request.auth.uid
+        && request.resource.data.isPlayerListing == true
+        && request.resource.data.isSold != true
+      );
+      allow update: if isServerAdmin() || (
+        isRegistered() && (
+          // Caso 1: Vendedor atualiza seu próprio anúncio sem alterar o sellerId
+          (resource.data.sellerId == request.auth.uid && request.resource.data.sellerId == resource.data.sellerId)
+          ||
+          // Caso 2: Comprador registra compra atômica em escrow
+          (
+            resource.data.isSold != true
+            && request.resource.data.isSold == true
+            && request.resource.data.status == 'SOLD'
+            && request.resource.data.buyerUid == request.auth.uid
+            && request.resource.data.sellerId == resource.data.sellerId
+            && request.resource.data.pricePerUnit == resource.data.pricePerUnit
+            && request.resource.data.totalPrice == resource.data.totalPrice
+            && request.resource.data.currency == resource.data.currency
+            && request.resource.data.quantity == resource.data.quantity
+            && request.resource.data.item == resource.data.item
+          )
+        )
+      );
       allow delete: if isServerAdmin() || (isRegistered() && resource.data.sellerId == request.auth.uid);
     }
 
     // ─── Mercado Central de Giran — Registro de Vendas ──────────────────────
     match /market_sales/{sellerKey} {
       allow read: if isAuthenticated();
-      allow write, delete: if isServerAdmin();
+      allow create, update: if isServerAdmin() || isRegistered();
+      allow delete: if isServerAdmin();
     }
 
     // ─── Metadados Globais do Servidor ──────────────────────────────────────

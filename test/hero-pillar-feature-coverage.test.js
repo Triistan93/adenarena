@@ -134,23 +134,31 @@ describe('Hero Pillar Deep Validation — Suite 4: Exhaustive Feature Coverage M
   });
 
   it('5. Exhaustive Daily Quests & Grand Chest Proof: Validates all 5 daily quests and Grand Chest completion', () => {
-    const state = DEFAULT_STATE();
-    state.gold = 0;
-    state.sp = 0;
+    const previousWindow = globalThis.window;
+    globalThis.window = { __serverSeason: 2 };
+    try {
+      const state = DEFAULT_STATE();
+      state.level = 40;
+      state.gold = 0;
+      state.sp = 0;
 
-    assert.strictEqual(QUEST_DEFS.daily.length, 5, 'Must have exactly 5 daily quests');
+      assert.strictEqual(QUEST_DEFS.daily.length, 5, 'Must have exactly 5 daily quests');
 
-    for (const q of QUEST_DEFS.daily) {
-      triggerQuestEvent(state, q.type, q.target);
-      const claimed = claimQuestReward(state, q.id);
-      assert.strictEqual(claimed, true, `Quest ${q.id} must be claimable`);
-      assert.ok(state.quests.claimed.includes(q.id));
+      for (const q of QUEST_DEFS.daily) {
+        triggerQuestEvent(state, q.type, q.target);
+        const claimed = claimQuestReward(state, q.id);
+        assert.strictEqual(claimed, true, `Quest ${q.id} must be claimable`);
+        assert.ok(state.quests.claimed.includes(q.id));
+      }
+
+      // Grand Chest must now be claimable
+      const grandClaimed = claimDailyBonusChest(state);
+      assert.strictEqual(grandClaimed, true, 'Grand Daily Chest must unlock when all available quests are claimed');
+      assert.strictEqual(state.quests.dailyBonusClaimed, true);
+    } finally {
+      if (previousWindow === undefined) delete globalThis.window;
+      else globalThis.window = previousWindow;
     }
-
-    // Grand Chest must now be claimable
-    const grandClaimed = claimDailyBonusChest(state);
-    assert.strictEqual(grandClaimed, true, 'Grand Daily Chest must unlock when 5/5 quests are claimed');
-    assert.strictEqual(state.quests.dailyBonusClaimed, true);
   });
 
   it('6. Exhaustive Battle Pass Proof: Validates all 10 tiers Free and Premium paths', () => {

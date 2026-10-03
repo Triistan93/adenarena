@@ -93,3 +93,11 @@ test('Lineage Integration Suite: 49 Canonical Lineages Full Promotion Lifecycle'
     }
   });
 });
+
+test('Season 2 keeps the level-76 third-class advancement gated until Season 3', () => {
+  const seasonTwo = SeasonAvailabilityService.getClassAvailability('duelist', 2);
+  const seasonThree = SeasonAvailabilityService.getClassAvailability('duelist', 3);
+
+  assert.deepEqual(seasonTwo, { available: false, reason: 'season_gate_lv76', minLevel: 76 });
+  assert.equal(seasonThree.available, true);
+});

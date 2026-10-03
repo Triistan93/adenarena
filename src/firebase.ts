@@ -32,6 +32,7 @@ import {
   connectFirestoreEmulator
 } from 'firebase/firestore';
 import { connectFirebaseEmulators } from './firebaseEmulators.js';
+import { createCloudSaveQueue } from './idle/CloudSaveQueue.js';
 
 // @ts-ignore
 import { CombatPowerService } from '../lineage-idle/src/services/CombatPowerService.js';
@@ -85,6 +86,8 @@ connectFirebaseEmulators({
   enabled: useLocalFirebaseEmulators,
   auth,
   db,
+  firestoreHost: firebaseEnv.VITE_FIREBASE_FIRESTORE_EMULATOR_HOST || '127.0.0.1',
+  firestorePort: Number(firebaseEnv.VITE_FIREBASE_FIRESTORE_EMULATOR_PORT || 8080),
   connectAuthEmulator,
   connectFirestoreEmulator,
 });
@@ -203,36 +206,7 @@ export function computeAuthoritativeRankingCP(
  * Rate Limiter de Saves — impede chamadas repetidas ao Firestore dentro de 30 s.
  * Enfileira sempre o último estado para que nenhum progresso seja perdido.
  */
-const _saveThrottle: Map<string, { lastSaveAt: number; pendingTimer: ReturnType<typeof setTimeout> | null }> = new Map();
-const SAVE_THROTTLE_MS = 30_000;
-
-function scheduleSave(
-  userId: string,
-  saveFn: () => Promise<boolean>,
-): void {
-  const now = Date.now();
-  let entry = _saveThrottle.get(userId);
-
-  if (!entry) {
-    entry = { lastSaveAt: 0, pendingTimer: null };
-    _saveThrottle.set(userId, entry);
-  }
-
-  // Cancela qualquer save pendente (será substituído por este, mais recente)
-  if (entry.pendingTimer !== null) {
-    clearTimeout(entry.pendingTimer);
-    entry.pendingTimer = null;
-  }
-
-  const elapsed = now - entry.lastSaveAt;
-  const delay   = elapsed >= SAVE_THROTTLE_MS ? 0 : SAVE_THROTTLE_MS - elapsed;
-
-  entry.pendingTimer = setTimeout(async () => {
-    entry!.lastSaveAt  = Date.now();
-    entry!.pendingTimer = null;
-    await saveFn();
-  }, delay);
-}
+const cloudSaveQueue = createCloudSaveQueue();
 
 export async function savePlayerStateToCloud(userId: string, stateData: any, immediate = false) {
   if (!userId) return false;
@@ -428,17 +402,11 @@ export async function savePlayerStateToCloud(userId: string, stateData: any, imm
   };
 
   if (immediate) {
-    return await executeSave();
+    return await cloudSaveQueue.scheduleImmediate(userId, executeSave);
   }
 
   // ── Rate Limiting: evita flood de saves periódicos ao Firestore ──────────
-  return new Promise<boolean>((resolve) => {
-    scheduleSave(userId, async () => {
-      const res = await executeSave();
-      resolve(res);
-      return res;
-    });
-  });
+  return cloudSaveQueue.schedule(userId, executeSave);
 }
 
 /**

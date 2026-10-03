@@ -13,6 +13,9 @@ dist.zip
 Thumbs.db
 *.swp
 *.swo
+*-debug.log
+firebase-debug.log
+firestore-debug.log
 
 # ── Local env / secrets ───────────────────────────────────────
 .env

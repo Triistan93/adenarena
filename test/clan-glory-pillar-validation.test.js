@@ -6,6 +6,17 @@ import { CLAN_LEVEL_DATA, CLAN_SKILLS } from '../lineage-idle/src/data/clan.js';
 import { CASTLES } from '../lineage-idle/src/data/castles.js';
 import { DEFAULT_STATE } from '../lineage-idle/src/core/StateManager.js';
 
+function attachTestClan(state, level = 1, hallLevel = 0) {
+  state.clan = {
+    ...state.clan,
+    id: 'test-clan',
+    name: 'Clã de Teste',
+    level,
+    hall: { level: hallLevel },
+    members: [{ uid: 'test-owner', name: state.name, role: 'leader' }]
+  };
+}
+
 describe('Glory Pillar — Subtab 1: Clan & Castles (Clã & Castelos)', () => {
   it('1. Clan Creation & Status: Creates clan and calculates base status', () => {
     const state = DEFAULT_STATE();
@@ -22,6 +33,7 @@ describe('Glory Pillar — Subtab 1: Clan & Castles (Clã & Castelos)', () => {
   it('2. Clan Level Progression: Upgrades clan from Level 1 to 5 with requirements', () => {
     const state = DEFAULT_STATE();
     state.clan.level = 1;
+    attachTestClan(state, 1);
     state.level = 80;
     state.gold = 100000000;
     state.sp = 50000000;
@@ -41,7 +53,7 @@ describe('Glory Pillar — Subtab 1: Clan & Castles (Clã & Castelos)', () => {
 
   it('3. Clan Skills & Passive Bonuses: Unlocks cumulative clan buffs per level', () => {
     const state = DEFAULT_STATE();
-    state.clan.level = 5;
+    attachTestClan(state, 5);
 
     const status = ClanService.getClanStatus(state);
     assert.ok(status.activeSkills.length >= 4, 'Lv.5 clan should have unlocked multiple clan skills');
@@ -53,7 +65,7 @@ describe('Glory Pillar — Subtab 1: Clan & Castles (Clã & Castelos)', () => {
   it('4. Castle Siege & Victory: Declares siege, executes combat turns, and claims ownership', () => {
     const state = DEFAULT_STATE();
     state.level = 75;
-    state.clan.level = 5;
+    attachTestClan(state, 5);
     state.hp = 5000;
     state.maxHp = 5000;
     state.stats = { atk: 2500, def: 1800, combatPower: 75000 };
@@ -76,6 +88,7 @@ describe('Glory Pillar — Subtab 1: Clan & Castles (Clã & Castelos)', () => {
 
   it('5. Castle Tax Revenue & Claiming: Accumulates taxes and claims to player treasury', () => {
     const state = DEFAULT_STATE();
+    attachTestClan(state, 5);
     state.clan.castles = ['giran'];
     state.clan.lastTaxTimestamp = Date.now() - (3600 * 1000 * 2); // 2 hours ago
     state.gold = 10000;
@@ -94,7 +107,7 @@ describe('Glory Pillar — Subtab 1: Clan & Castles (Clã & Castelos)', () => {
   it('6. Clan Hall Buffs Activation: Applies clan hall buffs and persists', () => {
     const state = DEFAULT_STATE();
     state.gold = 500000;
-    state.clan.level = 3;
+    attachTestClan(state, 3, 1);
 
     const res = ClanService.activateClanHallBuff(state, 'paagrio_protection');
     assert.equal(res.success, true);

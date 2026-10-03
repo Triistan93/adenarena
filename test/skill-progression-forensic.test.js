@@ -411,11 +411,19 @@ test('Forensic 13: Same short runtime ID + different race resolves to distinct c
 // ---------------------------------------------------------------------------
 // 9. Full Evolution Pipeline & Save/Load JSON Persistence (Hotfix Requirement 10 & 5)
 // ---------------------------------------------------------------------------
-test('Forensic 14: Full Progression Lifecycle & Save/Load JSON Persistence (Lv20 -> Lv40 -> Lv76)', () => {
+test('Forensic 14: Full Progression Lifecycle & Save/Load JSON Persistence (Lv20 -> Lv40 -> Lv76)', (t) => {
+  const previousWindow = globalThis.window;
+  globalThis.window = { ...(previousWindow || {}), __serverSeason: 3 };
+  t.after(() => {
+    if (previousWindow === undefined) delete globalThis.window;
+    else globalThis.window = previousWindow;
+  });
+
   const character = {
     class: 'mage',
     race: 'human',
     level: 20,
+    serverSeason: 3,
     sp: 200,
     skills: { wind_strike: 1, flame_strike: 1 },
     legacyPassives: {}

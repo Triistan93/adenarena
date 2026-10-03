@@ -5,7 +5,7 @@ import { generateAutoEquipProposal, commitAutoEquipProposal } from '../lineage-i
 import { executeAtomicEnchant, getEnchantPreview } from '../lineage-idle/src/services/EnchantmentService.js';
 import { WeaponResonanceService, RESONANCE_STATES } from '../lineage-idle/src/services/WeaponResonanceService.js';
 import { parseEnchantScroll } from '../lineage-idle/src/services/ItemClassificationService.js';
-import { getCraftLevelReq } from '../lineage-idle/src/services/CraftService.js';
+import { canCraftRecipe, craftItem, getCraftLevelReq, getRecipeDef } from '../lineage-idle/src/services/CraftService.js';
 import { getStats } from '../lineage-idle/src/engine/StatsEngine.js';
 import { CombatPowerService } from '../lineage-idle/src/services/CombatPowerService.js';
 
@@ -199,23 +199,48 @@ describe('MASTER UX: Player Journey, Equipment, Enchantment, Resonance & Auto-Eq
   });
 
   it('Jornada 5: Forja Imperial e Crafting estão acessíveis desde o Nível 1 sem bloqueio artificial', () => {
-    // Jogador Lv.1 quer forjar itens iniciais
+    // Jogador Lv.1 forja uma receita real usando o catálogo e os requisitos canônicos.
     const levelReqLevel1Recipe = getCraftLevelReq(1);
     assert.strictEqual(levelReqLevel1Recipe, 1, 'Receitas básicas de rank 1 devem requerer Lv. 1');
 
     const levelReqLevel10Recipe = getCraftLevelReq(10);
     assert.strictEqual(levelReqLevel10Recipe, 2, 'Receitas de rank 10 requerem Lv. 2');
 
-    // Jogador Lv.1 com materiais pode craftar
+    const recipe = getRecipeDef('weapon_composition_bow');
+    assert.ok(recipe, 'A receita inicial de Composition Bow deve existir no catálogo');
+    assert.strictEqual(recipe.level, 1, 'A receita escolhida deve ser rank 1');
+
+    // Jogador Lv.1 com materiais e Adena suficientes pode iniciar e concluir o craft.
     const playerState = {
       level: 1,
       class: 'fighter',
+      craftLevel: 1,
+      gold: recipe.gold,
       inventory: [
         { uid: 'mat_iron', itemId: 'iron_ore', count: 10 },
-        { uid: 'mat_stem', itemId: 'stem', count: 5 }
+        { uid: 'mat_suede', itemId: 'suede', count: 5 }
       ]
     };
 
-    assert.ok(playerState.level >= levelReqLevel1Recipe, 'Jogador Lv. 1 tem nível suficiente para forjar itens iniciais');
+    assert.strictEqual(canCraftRecipe(playerState, recipe.id), true, 'O serviço deve aceitar a receita rank 1 com requisitos completos');
+    assert.strictEqual(craftItem(playerState, recipe.id), true, 'O serviço deve concluir o craft inicial');
+    assert.strictEqual(playerState.gold, 0, 'O craft deve cobrar o custo canônico de Adena');
+    assert.ok(!playerState.inventory.some(item => item.itemId === 'iron_ore' || item.itemId === 'suede'), 'O craft deve consumir os materiais exigidos');
+    const craftedItemId = recipe.result || recipe.itemId || recipe.id;
+    assert.ok(playerState.inventory.some(item => item.itemId === craftedItemId), 'O item da receita deve entrar no inventário');
+
+    const missingAdenaState = {
+      level: 1,
+      craftLevel: 1,
+      gold: recipe.gold - 1,
+      inventory: [
+        { uid: 'mat_iron', itemId: 'iron_ore', count: 10 },
+        { uid: 'mat_suede', itemId: 'suede', count: 5 }
+      ]
+    };
+    assert.strictEqual(canCraftRecipe(missingAdenaState, recipe.id), false, 'O serviço deve negar a receita quando faltar Adena');
+    assert.strictEqual(craftItem(missingAdenaState, recipe.id), false, 'A tentativa sem Adena deve ser bloqueada');
+    assert.strictEqual(missingAdenaState.inventory.length, 2, 'A tentativa negada não pode consumir materiais');
+    assert.strictEqual(missingAdenaState.gold, recipe.gold - 1, 'A tentativa negada não pode alterar o saldo');
   });
 });

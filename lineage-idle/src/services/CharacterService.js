@@ -15,6 +15,7 @@ import { HISTORICAL_CLASS_MAP } from '../data/elemental/HistoricalClasses.js';
 import { CLASS_IDENTITIES } from '../data/elemental/ClassIdentity.js';
 import { CANONICAL_CLASS_REGISTRY } from '../data/classes/CanonicalClassRegistry.js';
 import { CanonicalClassGraph } from '../data/classes/CanonicalClassGraph.js';
+import { getCurrentSeasonId } from '../core/SeasonConfig.js';
 import { ClassProgressionEngine } from '../engine/ClassProgressionEngine.js';
 import EventBus from '../core/EventBus.js';
 
@@ -269,7 +270,16 @@ export function checkClassAdvancement(state, callbacks = {}) {
     canAdvance = true;
     advTitle = '⚔️ 2ª Troca de Classe Disponível!';
     advSub = `Atingiu o Nível ${state.level}! Escolha a sua Classe Épica de Especialista.`;
-  } else if (state.level >= 76 && currentStage === 2) {
+  } else if (
+    state.level >= 76 &&
+    currentStage === 2 &&
+    ClassProgressionEngine.getAvailablePromotions(
+      currentClassId,
+      state.level,
+      state.race || state.character?.race,
+      getCurrentSeasonId()
+    ).length > 0
+  ) {
     canAdvance = true;
     advTitle = '👑 3ª Troca de Classe Disponível (3rd Job)!';
     advSub = `Atingiu o Nível ${state.level}! Torne-se um Mestre Sagrado da 3ª Transferência e alcance o poder dos Noblesses!`;
@@ -391,6 +401,22 @@ export function promoteClass(state, newClassId, selectedBuffIds = null, callback
     return false;
   }
 
+  // The modal is presentation only: revalidate the canonical DAG, level and active season here.
+  if (!callbacks.allowAdminOverride && targetNode) {
+    const activeSeason = getCurrentSeasonId();
+    const eligibility = ClassProgressionEngine.canPromote(
+      currentClass,
+      targetNode.id,
+      Number(state.level) || 1,
+      currentRace,
+      activeSeason
+    );
+    if (!eligibility.canPromote) {
+      if (callbacks.log) callbacks.log(`🔒 Transferência indisponível: ${eligibility.reason}`, 'warning');
+      return false;
+    }
+  }
+
   const eligibleAdvancements = canAdvance(currentClass, state.level, currentRace).concat(canAdvance(canonCurrent, state.level, currentRace));
   if (eligibleAdvancements.length > 0 && !callbacks.allowAdminOverride) {
     const isLevelEligible = eligibleAdvancements.some(e => 
@@ -420,17 +446,6 @@ export function promoteClass(state, newClassId, selectedBuffIds = null, callback
   state.base = { atk: 0, def: 0, eva: 0, matk: 0, mdef: 0 };
   for (const k of ['atk', 'def', 'eva', 'matk', 'mdef']) {
     state.base[k] = (race?.stats?.[k] || 0) + (newClassDef.base?.[k] || newClassDef.baseStats?.[k] || 0);
-  }
-
-  try {
-    const recalculatedStats = getStats(state);
-    state.stats = state.stats || {};
-    state.maxHp = recalculatedStats.maxHp;
-    state.maxMp = recalculatedStats.maxMp;
-    state.hp = Math.min(state.hp || state.maxHp, state.maxHp);
-    state.mp = Math.min(state.mp || state.maxMp, state.maxMp);
-  } catch (e) {
-    console.warn('[CharacterService] Erro ao recalcular status pós-promoção:', e);
   }
 
   let totalRefunded = 0;
@@ -541,6 +556,20 @@ export function promoteClass(state, newClassId, selectedBuffIds = null, callback
       state.skills[sid] = 1;
     }
   }
+
+  // Recalcula depois de substituir as habilidades: passivas iniciais da nova classe
+  // podem alterar os limites de HP/MP, então calcular antes deixava o save defasado.
+  try {
+    const recalculatedStats = getStats(state);
+    state.stats = state.stats || {};
+    state.maxHp = recalculatedStats.maxHp;
+    state.maxMp = recalculatedStats.maxMp;
+    state.hp = Math.min(state.hp || state.maxHp, state.maxHp);
+    state.mp = Math.min(state.mp || state.maxMp, state.maxMp);
+  } catch (e) {
+    console.warn('[CharacterService] Erro ao recalcular status pós-promoção:', e);
+  }
+
   if (!state.selectedSkill || !state.skills[state.selectedSkill]) {
     state.selectedSkill = starterSkills[0] || Object.keys(state.skills)[0] || null;
   }

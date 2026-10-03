@@ -48,6 +48,7 @@ import { OlympiadService } from '../services/OlympiadService.js';
 import { CLAN_LEVEL_DATA, CLAN_SKILLS } from '../data/clan.js';
 import { CASTLES, CASTLE_SHOP_CATALOG } from '../data/castles.js';
 import { ClanService, CLAN_HALL_BUFFS } from '../services/ClanService.js';
+import { ClanSocialService } from '../services/ClanSocialService.js';
 import { ENCHANT_ROUTES, getEnchantLevelData, ENCHANT_ITEMS } from '../data/skill_enchant.js';
 import { SkillEnchantService } from '../services/SkillEnchantService.js';
 import { LIFE_STONES, ITEM_SKILLS } from '../data/augmentation.js';
@@ -97,6 +98,22 @@ export function getRoot() {
 export function findElement(id) {
   const root = getRoot();
   return root?.querySelector?.('#' + id) || (typeof document !== 'undefined' ? document.getElementById?.(id) : null);
+}
+
+function clickTabButton(root, tabId) {
+  const buttons = root?.querySelectorAll?.('.tab-btn[data-tab]') || [];
+  const button = Array.from(buttons).find(candidate => candidate.dataset?.tab === tabId);
+  if (!button) return false;
+  button.click();
+  return true;
+}
+
+export function createCharacterUICallbacks({ root = getRoot(), updateAllUI, save } = {}) {
+  return {
+    updateAllUI,
+    save,
+    switchTab: (tabId) => clickTabButton(root, tabId)
+  };
 }
 
 export function escapeHTML(value) {
@@ -2919,6 +2936,7 @@ function ensureMonsterStructure() {
 
 export function renderStageHero(state) {
   if (!state) return;
+  const root = getRoot();
   const structure = ensureHeroStructure();
   if (!structure?.card) return;
 
@@ -3103,7 +3121,7 @@ export function renderStageMonster(state) {
   }
 }
 
-export function updateCharacterUI(state) {
+export function updateCharacterUI(state, callbacks = {}) {
   if (!state) return;
   const root = getRoot();
 
@@ -3134,7 +3152,7 @@ export function updateCharacterUI(state) {
   // NextActionAdvisor no topo da ficha do personagem
   const advisorChar = root.querySelector('#next-action-advisor-char');
   if (advisorChar) {
-    NextActionAdvisor.render(state, advisorChar);
+    NextActionAdvisor.render(state, advisorChar, callbacks);
   }
 
   const raceText = root.querySelector('#race-text');
@@ -10440,13 +10458,161 @@ export function renderOlympiadTab(container, state) {
 ═══════════════════════════════════════════════════════════════════════════ */
 export function renderClanTab(container, state) {
   if (!container || !state) return;
-  const root = getRoot();
-  const activeSubTab = window._activeClanSubTab || 'skills';
-
-  // Atualizar geração passiva de impostos
-  ClanService.updateTaxesTick(state);
   const clanStatus = ClanService.getClanStatus(state);
   const clan = clanStatus.clan;
+
+  const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, char => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  })[char]);
+  const portalState = typeof window !== 'undefined'
+    ? (window._clanPortalData ||= { loaded: false, loading: false, clans: [], myClan: null, error: '', notice: '' })
+    : { loaded: false, loading: false, clans: [], myClan: null, error: '', notice: '' };
+  const refreshPortal = async () => {
+    if (portalState.loading) return;
+    portalState.loading = true;
+    portalState.error = '';
+    try {
+      portalState.myClan = await ClanSocialService.getMyClan();
+      portalState.clans = portalState.myClan ? [] : await ClanSocialService.listRecruitingClans();
+      portalState.loaded = true;
+    } catch (error) {
+      portalState.error = error?.message || 'Não foi possível carregar os clãs agora.';
+      portalState.loaded = true;
+    } finally {
+      portalState.loading = false;
+      if (typeof window !== 'undefined') window._clanPortalRefresh?.();
+    }
+  };
+  if (typeof window !== 'undefined') window._clanPortalRefresh = () => renderClanTab(container, state);
+  if (!portalState.loaded && !portalState.loading) void refreshPortal();
+
+  const myOnlineClan = portalState.myClan;
+  if (myOnlineClan) {
+    const members = Array.isArray(myOnlineClan.members) ? myOnlineClan.members : [];
+    const memberRows = members.map(member => `
+      <li class="clan-portal__member"><span class="clan-portal__member-sigil">${member.role === 'leader' ? '♛' : '⚔'}</span>
+        <span>${escapeHtml(member.displayName || 'Aventureiro')}</span><small>${member.role === 'leader' ? 'LÍDER' : 'MEMBRO'}</small></li>
+    `).join('');
+    container.innerHTML = `
+      <main class="clan-portal" aria-labelledby="clan-portal-title">
+        <header class="clan-portal__hero">
+          <div class="clan-portal__eyebrow">CRÔNICAS DE ADEN · CASAS DO REINO</div>
+          <div class="clan-portal__hero-row"><div><h2 id="clan-portal-title">${escapeHtml(myOnlineClan.name)}</h2>
+            <p>${escapeHtml(myOnlineClan.description || 'Um estandarte. Muitos destinos.')}</p></div><span class="clan-portal__sigil" aria-hidden="true">♜</span></div>
+          <div class="clan-portal__status"><i></i> CLÃ ONLINE <span>•</span> ${members.length} integrante${members.length === 1 ? '' : 's'}</div>
+        </header>
+        <section class="clan-portal__member-layout">
+          <article class="clan-portal__panel"><div class="clan-portal__panel-heading"><div><span>CASA DO REINO</span><h3>Irmandade</h3></div><b>NÍVEL ${Number(myOnlineClan.level) || 1}</b></div>
+            <ul class="clan-portal__roster">${memberRows || '<li class="clan-portal__muted">Nenhum membro listado.</li>'}</ul>
+            ${myOnlineClan.myRole === 'leader' ? '<p class="clan-portal__muted">Liderança: convites e gestão de cargos serão habilitados na próxima fase.</p>' : '<button class="clan-portal__secondary" data-clan-action="leave">Sair do clã</button>'}
+          </article>
+          <section class="clan-portal__systems" aria-label="Domínios do clã">
+            <article><span>01 · DIPLOMACIA</span><h3>Aliança</h3><p>${myOnlineClan.allianceId ? 'Aliança vinculada.' : 'Sem aliança firmada.'}</p></article>
+            <article><span>02 · DOMÍNIO</span><h3>Territórios</h3><p>${Array.isArray(myOnlineClan.territoryIds) && myOnlineClan.territoryIds.length ? `${myOnlineClan.territoryIds.length} território(s)` : 'Nenhum território sob domínio.'}</p></article>
+            <article><span>03 · SEDE</span><h3>Clan Hall</h3><p>Nível ${Number(myOnlineClan.hallLevel) || 0} · desenvolvimento coletivo.</p></article>
+            <article><span>04 · RECRUTAMENTO</span><h3>${myOnlineClan.recruitmentOpen ? 'Aberto' : 'Fechado'}</h3><p>Entrada de novos membros controlada pelo clã.</p></article>
+          </section>
+        </section>
+        ${portalState.notice ? `<p class="clan-portal__notice" role="status">${escapeHtml(portalState.notice)}</p>` : ''}
+      </main>`;
+    const leaveButton = container.querySelector('[data-clan-action="leave"]');
+    if (leaveButton) leaveButton.onclick = async () => {
+      leaveButton.disabled = true;
+      try {
+        await ClanSocialService.leaveClan();
+        portalState.notice = 'Você saiu do clã.';
+        portalState.loaded = false;
+      } catch (error) { portalState.error = error?.message || 'Não foi possível sair do clã.'; }
+      if (typeof window !== 'undefined') window._clanPortalRefresh?.();
+    };
+    return;
+  }
+
+  if (!clan || !myOnlineClan) {
+    const hasLegacyClan = Boolean(clan);
+    const recruitingCards = portalState.clans.map(item => `
+      <article class="clan-portal__directory-card"><div><h3>${escapeHtml(item.name)}</h3><p>${escapeHtml(item.description || 'Este clã ainda não publicou uma apresentação.')}</p></div>
+        <span>NÍVEL ${Number(item.level) || 1}</span><button data-clan-join="${escapeHtml(item.id)}">Solicitar entrada</button></article>
+    `).join('');
+    container.innerHTML = `
+      <main class="clan-portal clan-portal--unaffiliated" aria-labelledby="clan-portal-title">
+        <header class="clan-portal__hero">
+          <div class="clan-portal__eyebrow">CRÔNICAS DE ADEN · CASAS DO REINO</div>
+          <div class="clan-portal__hero-row">
+            <div>
+              <h2 id="clan-portal-title">Clãs &amp; Alianças</h2>
+              <p>Seu legado começa com um juramento — e cresce com os aliados que o mantêm.</p>
+            </div>
+            <span class="clan-portal__sigil" aria-hidden="true">♜</span>
+          </div>
+          <div class="clan-portal__status"><i></i> ${hasLegacyClan ? 'DADOS LOCAIS ANTIGOS' : 'SEM CLÃ'} <span>•</span> ${hasLegacyClan ? 'Este vínculo não foi sincronizado com o reino online' : 'Nenhum vínculo online foi encontrado'}</div>
+        </header>
+        <section class="clan-portal__empty" aria-label="Estado do personagem">
+          <div class="clan-portal__empty-mark" aria-hidden="true">⚔</div>
+          <div>
+            <h3>${hasLegacyClan ? 'Seu antigo clã ainda não existe no reino online' : 'Escolha onde sua bandeira será erguida'}</h3>
+            <p>${hasLegacyClan ? 'O save contém dados do sistema legado, mas eles não representam um clã compartilhado. Para evitar membros e conquistas fictícias, entre em um clã online ou funde um novo.' : 'Crie uma casa para reunir aliados ou entre em um clã que esteja recrutando. A associação é compartilhada pela conta, não simulada no save local.'}</p>
+          </div>
+        </section>
+        <section class="clan-portal__actions" aria-label="Ações de clã">
+          <form class="clan-portal__create-form" id="clan-create-form">
+            <label>Fundar um clã<input name="name" minlength="3" maxlength="24" placeholder="Nome do clã" required></label>
+            <label>Apresentação<input name="description" maxlength="280" placeholder="O que une sua irmandade?"></label>
+            <label class="clan-portal__recruiting"><input name="recruiting" type="checkbox" checked> Aceitar novos membros</label>
+            <button type="submit">Erguer estandarte</button>
+          </form>
+          <div class="clan-portal__directory"><div class="clan-portal__directory-heading"><div><span>REINO DE ADEN</span><h3>Clãs recrutando</h3></div><button type="button" data-clan-refresh>↻ Atualizar</button></div>
+            ${!portalState.loaded || portalState.loading ? '<p class="clan-portal__muted">Consultando o reino…</p>' : (recruitingCards || '<p class="clan-portal__muted">Nenhum clã recrutando apareceu ainda.</p>')}
+          </div>
+        </section>
+        ${portalState.error ? `<p class="clan-portal__error" role="alert">${escapeHtml(portalState.error)}</p>` : ''}
+        ${portalState.notice ? `<p class="clan-portal__notice" role="status">${escapeHtml(portalState.notice)}</p>` : ''}
+        <section class="clan-portal__systems" aria-label="Sistemas de clã">
+          <article><span>01 · COMUNIDADE</span><h3>Clã &amp; membros</h3><p>Roster e cargos sem personagens simulados.</p></article>
+          <article><span>02 · DIPLOMACIA</span><h3>Alianças</h3><p>Laços entre clãs com liderança e convites.</p></article>
+          <article><span>03 · DOMÍNIO</span><h3>Territórios</h3><p>Controle coletivo com disputa e histórico.</p></article>
+          <article><span>04 · SEDE</span><h3>Clan Hall</h3><p>Uma sede pertencente ao clã e seus membros.</p></article>
+        </section>
+        <footer class="clan-portal__footnote">A criação e o ingresso usam identidade autenticada. Progressão, alianças, territórios e Clan Hall ainda não concedem bônus nesta fase.</footer>
+      </main>
+    `;
+    const form = container.querySelector('#clan-create-form');
+    if (form) form.onsubmit = async event => {
+      event.preventDefault();
+      const values = new FormData(form);
+      const submit = form.querySelector('button[type="submit"]');
+      if (submit) submit.disabled = true;
+      try {
+        await ClanSocialService.createClan({ name: values.get('name'), description: values.get('description'), recruiting: values.get('recruiting') === 'on', displayName: state.name });
+        portalState.notice = 'Clã fundado. Seu estandarte já aparece no reino.';
+        portalState.loaded = false;
+        await refreshPortal();
+      } catch (error) { portalState.error = error?.message || 'Não foi possível fundar o clã.'; }
+      if (submit) submit.disabled = false;
+      if (typeof window !== 'undefined') window._clanPortalRefresh?.();
+    };
+    container.querySelector('[data-clan-refresh]')?.addEventListener('click', () => {
+      portalState.loaded = false;
+      void refreshPortal();
+    });
+    container.querySelectorAll('[data-clan-join]').forEach(button => button.addEventListener('click', async () => {
+      button.disabled = true;
+      try {
+        await ClanSocialService.joinClan(button.dataset.clanJoin, state.name);
+        portalState.notice = 'Você agora faz parte do clã.';
+        portalState.loaded = false;
+        await refreshPortal();
+      } catch (error) { portalState.error = error?.message || 'Não foi possível entrar no clã.'; }
+      if (typeof window !== 'undefined') window._clanPortalRefresh?.();
+    }));
+    return;
+  }
+
+  const root = getRoot();
+  const activeSubTab = (typeof window !== 'undefined' && window._activeClanSubTab) || 'skills';
+
+  // Atualizar geração periódica somente sobre um território do clã existente.
+  ClanService.updateTaxesTick(state);
   const lvlData = clanStatus.levelData;
   const nextLvl = clanStatus.nextLevelData;
 

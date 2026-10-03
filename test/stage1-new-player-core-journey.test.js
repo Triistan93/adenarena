@@ -7,6 +7,7 @@ import { equipItem, unequipItem } from '../lineage-idle/src/services/EquipmentSe
 import { getStats } from '../lineage-idle/src/engine/StatsEngine.js';
 import { ALL_ITEMS } from '../lineage-idle/src/data/items/index.js';
 import { addToInventory } from '../lineage-idle/src/services/InventoryService.js';
+import { NextActionAdvisor } from '../lineage-idle/src/services/NextActionAdvisor.js';
 
 // Inicializa GameData no escopo de teste para resolver itens em D()
 globalThis.GameData = { ALL_ITEMS };
@@ -38,9 +39,38 @@ test('Etapa 1 — Passo 1: Novo personagem é criado com combate pausado e kit i
   const equippedWeapon = state.inventory.find(i => i.uid === weaponUid);
   assert.ok(equippedWeapon, 'Arma equipada deve existir no inventário');
   assert.equal(equippedWeapon.equipped, true, 'Item equipado deve ter flag equipped: true');
+
+  const firstGoal = NextActionAdvisor.getAdvice(state);
+  assert.equal(firstGoal.category, 'MILESTONE', 'o novo jogador deve receber um objetivo inicial acionável');
+  assert.equal(firstGoal.actionType, 'NAVIGATE', 'o primeiro objetivo deve ter uma ação de navegação');
+  assert.equal(firstGoal.actionTab, 'zones', 'o primeiro objetivo deve levar às zonas de caça disponíveis');
+  assert.match(firstGoal.targetName, /1ª Troca de Classe/, 'o objetivo deve explicar o próximo marco de progressão');
 });
 
-test('Etapa 1 — Passo 2: Combate iniciado com consentimento, spawn de monstro e concessão de vitória/recompensa', () => {
+test('Etapa 1 — onboarding de mago concede equipamento e consumíveis mágicos corretos', () => {
+  const state = DEFAULT_STATE();
+  applyStarterKit(state, 'human', 'mage', 'AventureiraArcana', 'F');
+
+  assert.equal(state.race, 'human');
+  assert.equal(state.class, 'mage');
+  assert.equal(state.level, 1);
+  assert.equal(state.zone, 'talkingIsland');
+  assert.equal(state.isCombatActive, false);
+
+  const equippedWeapon = state.inventory.find(item => item.uid === state.equipment.weapon);
+  const equippedArmor = state.inventory.find(item => item.uid === state.equipment.armor);
+  assert.equal(equippedWeapon?.itemId, 'weapon_crucifix_of_blessing_magicblunt');
+  assert.equal(equippedArmor?.itemId, 'armor_devotion_armor_robe');
+  assert.equal(equippedWeapon?.equipped, true);
+  assert.equal(equippedArmor?.equipped, true);
+  assert.ok(state.inventory.some(item => item.itemId === 'spiritshot_ng' && item.count >= 500),
+    'o kit mágico deve incluir Spiritshots No-Grade');
+  assert.ok(state.inventory.some(item => item.itemId === 'mp_potion_s' && item.count > 0),
+    'o kit mágico deve incluir poções de mana');
+  assert.ok(state.maxHp > 0 && state.maxMp > 0, 'o novo mago deve iniciar com vida e mana calculadas');
+});
+
+test('Etapa 1 — Passo 2: Combate só começa após consentimento e gera um monstro válido', () => {
   const state = DEFAULT_STATE();
   applyStarterKit(state, 'human', 'fighter', 'ConsentFighter', 'M');
 
@@ -58,26 +88,6 @@ test('Etapa 1 — Passo 2: Combate iniciado com consentimento, spawn de monstro 
   assert.ok(state.activeMonster, 'Monstro deve ser spawnado na zona');
   assert.ok(state.activeMonster.hp > 0, 'Monstro deve possuir HP');
   assert.equal(state.activeMonster.isTower || false, false, 'Não deve ser monstro de torre');
-
-  const monster = state.activeMonster;
-  const initialXp = state.xp;
-  const initialGold = state.gold;
-
-  // Simulação de combate: herói golpeia monstro até a derrota
-  monster.hp = 0;
-
-  // Concessão de recompensa canônica ao derrotar monstro inicial
-  const monsterXp = monster.xp || 20;
-  const monsterGold = Math.floor(Math.random() * (monster.gold[1] - monster.gold[0] + 1)) + monster.gold[0];
-
-  state.xp += monsterXp;
-  state.gold += monsterGold;
-  state.stats = state.stats || {};
-  state.stats.monstersKilled = (state.stats.monstersKilled || 0) + 1;
-
-  assert.ok(state.xp > initialXp, 'XP deve ser creditada ao derrotar monstro');
-  assert.ok(state.gold > initialGold, 'Adena deve ser creditada ao derrotar monstro');
-  assert.equal(state.stats.monstersKilled, 1, 'Contador de abates deve incrementar');
 
   stopCombat(state);
   assert.equal(state.isCombatActive, false, 'stopCombat deve pausar o ciclo de combate');

@@ -187,6 +187,7 @@ export function processAutoRecycleItem(item, def, state, callbacks = {}) {
     }
 
     const matName = gData?.ALL_ITEMS?.[matId]?.name || matId;
+    callbacks.onRecycleSuccess?.(1);
     if (callbacks.log) {
       callbacks.log(`🔨 [Auto-Recycle AFK] ${def.name} desmanchado em +${matAmount}x ${matName}`, 'loot');
     }

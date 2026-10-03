@@ -9,9 +9,12 @@
 
 import { D } from '../core/GameConfig.js';
 import { CombatPowerService } from './CombatPowerService.js';
-import { generateAutoEquipProposal, commitAutoEquipProposal } from './EquipmentService.js';
+import { generateAutoEquipProposal, hasPositiveEquipmentGain, commitAutoEquipProposal } from './EquipmentService.js';
 import { parseEnchantScroll, isItemCompatibleWithScroll, isEquippableItem } from './ItemClassificationService.js';
 import { getEnchantSuccessChance, getSafeEnchantLimit } from './EnchantmentService.js';
+import { canCraftRecipe } from './CraftService.js';
+import { getSeasonMaxLevel, isFeatureUnlocked } from '../core/SeasonConfig.js';
+import { ClassProgressionEngine } from '../engine/ClassProgressionEngine.js';
 
 export const ADVISOR_PRIORITIES = {
   AUTO_EQUIP: 1,
@@ -51,7 +54,7 @@ export class NextActionAdvisor {
     // 1. PRIORIDADE 1 & 2: AUTO-EQUIP & UPGRADE DE EQUIPAMENTOS
     try {
       const proposal = generateAutoEquipProposal(state);
-      if (proposal && proposal.changes && proposal.changes.length > 0 && proposal.deltas?.cpDelta > 0) {
+      if (hasPositiveEquipmentGain(proposal)) {
         const hasReplacement = proposal.changes.some(c => c.currentUid && c.proposedUid && c.currentUid !== c.proposedUid);
         if (hasReplacement) {
           return {
@@ -157,7 +160,8 @@ export class NextActionAdvisor {
           }
         }
 
-        if (hasAll) {
+        const recipeId = rec.id || rec.itemId || targetDef.id;
+        if (hasAll && canCraftRecipe(state, recipeId, 1)) {
           return {
             priority: ADVISOR_PRIORITIES.FORGE,
             category: 'FORGE',
@@ -179,27 +183,125 @@ export class NextActionAdvisor {
 
     // 4. PRIORIDADE 5: POWER MILESTONE & DESBLOQUEIO DE CONTEÚDO
     const level = Number(state.level) || 1;
+
+    // Transferências já disponíveis devem aparecer antes de metas futuras/caps;
+    // o jogador pode precisar concluir mais de uma no mesmo nível (ex.: Lv. 40).
+    try {
+      const availablePromotions = ClassProgressionEngine.getAvailablePromotions(
+        state.character?.classId || state.class,
+        level,
+        state.race
+      );
+      if (availablePromotions.length > 0) {
+        const nextPromotion = availablePromotions[0];
+        const stageLabel = nextPromotion.stage === 1
+          ? '1ª Troca de Classe'
+          : nextPromotion.stage === 2
+            ? '2ª Troca de Classe'
+            : '3ª Troca de Classe';
+        const choices = availablePromotions.map(promotion => promotion.name).join(', ');
+        return {
+          priority: ADVISOR_PRIORITIES.MILESTONE,
+          category: 'CLASS_ADVANCEMENT',
+          title: `⚔️ ${stageLabel} Disponível`,
+          description: `Você já pode evoluir sua classe${choices ? ` para: ${choices}` : ''}. Abra a ficha do Herói para escolher sua linhagem.`,
+          actionText: '⚔️ Escolher Evolução',
+          actionTab: 'character',
+          actionType: 'CLASS_TRANSFER',
+          currentCp,
+          targetName: stageLabel,
+          icon: '⚔️',
+          badge: 'Classe disponível'
+        };
+      }
+    } catch (e) {
+      console.warn('Advisor class advancement check error:', e);
+    }
+
     let targetCp = 1500;
     let targetName = '1ª Transferência de Classe (Lv. 20)';
     let actionTab = 'zones';
+    let targetLevel = 20;
 
     if (level < 20) {
       targetCp = 1500;
       targetName = '1ª Troca de Classe & Armas D-Grade';
       actionTab = 'zones';
+      targetLevel = 20;
     } else if (level < 40) {
       targetCp = 6000;
       targetName = '2ª Troca de Classe & Armas C-Grade';
       actionTab = 'zones';
-    } else if (level < 76) {
+      targetLevel = 40;
+    } else if (level < 76 && !isFeatureUnlocked('tower')) {
       targetCp = 25000;
       targetName = '3ª Troca de Classe & Despertar Ancestral';
       actionTab = 'zones';
+      targetLevel = 76;
     } else {
+      if (!isFeatureUnlocked('tower')) {
+        return {
+          priority: ADVISOR_PRIORITIES.MILESTONE,
+          category: 'SEASON_LOCKED_CONTENT',
+          title: '🛡️ Próximo conteúdo ainda bloqueado',
+          description: 'A Torre da Insolência e as próximas evoluções pertencem a temporadas futuras. Seu progresso continua salvo; veja as missões disponíveis enquanto aguarda a liberação.',
+          actionText: '📜 Ver Missões Disponíveis',
+          actionTab: 'quests',
+          actionType: 'NAVIGATE',
+          currentCp,
+          targetName: 'Missões disponíveis',
+          icon: '🛡️',
+          badge: 'Temporada futura'
+        };
+      }
+
       const towerFloor = (state.tower?.highestFloor || 0) + 1;
+      if (towerFloor > 100) {
+        const raidsUnlocked = isFeatureUnlocked('raids');
+        return {
+          priority: ADVISOR_PRIORITIES.MILESTONE,
+          category: 'TOWER_COMPLETE',
+          title: '🏰 Torre da Insolência Conquistada',
+          description: raidsUnlocked
+            ? 'Você conquistou os 100 andares da Torre. As Raids e os Chefes de Aden aguardam sua próxima incursão.'
+            : 'Você conquistou os 100 andares da Torre. Continue pelas missões enquanto aguarda a liberação de novas incursões.',
+          actionText: raidsUnlocked ? '🐉 Explorar Raids' : '📜 Ver Missões',
+          actionTab: raidsUnlocked ? 'raids' : 'quests',
+          actionType: 'NAVIGATE',
+          currentCp,
+          targetName: raidsUnlocked ? 'Raids e Chefes de Aden' : 'Próximas missões',
+          icon: '🏰',
+          badge: 'Conteúdo concluído'
+        };
+      }
       targetCp = towerFloor * 850 + 20000;
       targetName = `Torre da Insolência: Andar ${towerFloor}`;
       actionTab = 'tower';
+    }
+
+    const levelCap = [
+      typeof window !== 'undefined' ? Number(window.globalServerCap) : 0,
+      Number(state.serverMaxLevel),
+      Number(state.serverCap),
+      Number(state.levelCap),
+      Number(getSeasonMaxLevel())
+    ].find(cap => Number.isFinite(cap) && cap > 0) || 40;
+
+    if (targetLevel > levelCap && level >= levelCap) {
+      return {
+        priority: ADVISOR_PRIORITIES.MILESTONE,
+        category: 'SEASON_CAP',
+        title: '🛡️ Limite da Temporada Alcançado',
+        description: `Você chegou ao limite atual do servidor (Lv. ${levelCap}). A próxima evolução de classe exige Lv. ${targetLevel}, acima desse limite; caçar mais XP não vai liberar o avanço. Veja as missões disponíveis enquanto aguarda a expansão do cap.`,
+        actionText: '📜 Ver Missões Disponíveis',
+        actionTab: 'quests',
+        actionType: 'NAVIGATE',
+        currentCp,
+        targetCp,
+        targetName,
+        icon: '🛡️',
+        badge: `Cap Lv. ${levelCap}`
+      };
     }
 
     const cpRemaining = Math.max(0, targetCp - currentCp);
@@ -212,7 +314,9 @@ export class NextActionAdvisor {
       description: cpRemaining > 0
         ? `Faltam ${cpRemaining.toLocaleString()} CP para atingir o marco de poder com segurança (${progressPct}% Concluído).`
         : `Você atingiu o Poder de Combate recomendado (${currentCp.toLocaleString()} CP)! Avance para o próximo desafio.`,
-      actionText: cpRemaining > 0 ? '⚔️ Caçar & Subir Nível' : '🏆 Desafiar Conteúdo',
+      actionText: actionTab === 'tower'
+        ? `🏰 Desafiar Andar ${(state.tower?.highestFloor || 0) + 1}`
+        : cpRemaining > 0 ? '⚔️ Caçar & Subir Nível' : '🏆 Desafiar Conteúdo',
       actionTab,
       actionType: 'NAVIGATE',
       currentCp,
@@ -283,7 +387,12 @@ export class NextActionAdvisor {
         if (advice.actionType === 'AUTO_EQUIP') {
           const proposal = advice.actionPayload || generateAutoEquipProposal(state);
           commitAutoEquipProposal(state, proposal, callbacks);
-          if (callbacks.updateAllUI) callbacks.updateAllUI();
+        } else if (advice.actionType === 'CLASS_TRANSFER') {
+          if (typeof window !== 'undefined' && typeof window.openClassTransferModal === 'function') {
+            window.openClassTransferModal();
+          } else if (callbacks.switchTab) {
+            callbacks.switchTab('character');
+          }
         } else if (advice.actionType === 'ENCHANT') {
           if (typeof window !== 'undefined' && typeof window.openEnchantFlowModal === 'function') {
             window.openEnchantFlowModal(advice.actionPayload?.targetUid, advice.actionPayload?.scrollUid, state, callbacks);
@@ -297,6 +406,10 @@ export class NextActionAdvisor {
             callbacks.switchTab(advice.actionTab);
           } else if (typeof window !== 'undefined' && typeof window.switchTab === 'function') {
             window.switchTab(advice.actionTab);
+          }
+          if (advice.actionTab === 'craft' && advice.actionPayload?.itemId &&
+              typeof window !== 'undefined' && typeof window.openCraftModal === 'function') {
+            window.openCraftModal(advice.actionPayload.itemId);
           }
         }
       };

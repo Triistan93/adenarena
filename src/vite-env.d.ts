@@ -4,6 +4,8 @@ interface ImportMetaEnv {
   readonly MODE: string;
   readonly BASE_URL: string;
   readonly VITE_FIREBASE_EMULATORS?: string;
+  readonly VITE_FIREBASE_FIRESTORE_EMULATOR_HOST?: string;
+  readonly VITE_FIREBASE_FIRESTORE_EMULATOR_PORT?: string;
   readonly VITE_FIREBASE_API_KEY?: string;
   readonly VITE_FIREBASE_AUTH_DOMAIN?: string;
   readonly VITE_FIREBASE_PROJECT_ID?: string;

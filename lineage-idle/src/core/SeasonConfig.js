@@ -21,7 +21,7 @@ export const SEASONS_DATA = {
     unlockedTabs: [
       "zones", "character", "inventory", "warehouse", "skills",
       "shop", "market", "craft", "alchemy", "astral", "quests", "rankings", "enchant", "dolls", "fishing",
-      "hunting", "expeditions", "gathering", "mining", "cosmetics"
+      "hunting", "expeditions", "gathering", "mining", "cosmetics", "codex"
     ],
     features: [
       "⚔️ Zonas de Caça Iniciais (Gludio, Dion, Giran)",

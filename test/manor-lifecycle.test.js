@@ -4,6 +4,7 @@ import { readFileSync } from 'node:fs';
 import { ManorService } from '../lineage-idle/src/services/ManorService.js';
 import { MANOR_SEEDS } from '../lineage-idle/src/data/manor.js';
 import { addToInventory } from '../lineage-idle/src/services/InventoryService.js';
+import { DEFAULT_STATE, getState, loadState, replaceStateSnapshot, saveState } from '../lineage-idle/src/core/StateManager.js';
 
 test('Manor purchases, active planting, level matching, harvest and exchange share one persisted state', (t) => {
   t.mock.method(Math, 'random', () => 0);
@@ -175,4 +176,53 @@ test('Manor state survives full JSON serialization and resumes active planting a
   assert.equal(harvest.success, true);
   assert.equal(resumed.manorData.seeds.red_cobol, 14);
   assert.ok(resumed.manorData.crops.red_cobol >= 9);
+});
+
+
+test('Manor seed and crop exchange survive a real StateManager save-load round trip', (t) => {
+  const entries = new Map();
+  const oldStorage = globalThis.localStorage;
+  globalThis.localStorage = {
+    getItem: key => entries.get(key) ?? null,
+    setItem: (key, value) => entries.set(key, String(value)),
+    removeItem: key => entries.delete(key)
+  };
+  t.after(() => {
+    if (oldStorage === undefined) delete globalThis.localStorage;
+    else globalThis.localStorage = oldStorage;
+  });
+
+  const state = getState();
+  Object.assign(state, DEFAULT_STATE(), { level: 15, gold: 100_000, inventory: [] });
+  t.mock.method(Math, 'random', () => 0);
+
+  assert.equal(ManorService.buySeeds(state, 'red_coda', 10).success, true);
+  assert.equal(state.gold, 98_000);
+  assert.equal(ManorService.selectSeed(state, 'red_coda').success, true);
+  for (let attempt = 0; attempt < 5; attempt += 1) {
+    assert.equal(ManorService.processHarvest(state, { level: 13 }).success, true);
+  }
+  assert.equal(state.manorData.crops.red_coda, 5);
+  assert.equal(saveState(), true);
+
+  replaceStateSnapshot(DEFAULT_STATE());
+  assert.equal(loadState(), true);
+  assert.equal(getState().gold, 98_000);
+  assert.equal(getState().manorData.seeds.red_coda, 5);
+  assert.equal(getState().manorData.crops.red_coda, 5);
+
+  const restored = getState();
+  const exchanged = ManorService.exchangeCrops(restored, 'red_coda', 1, {
+    addToInventory: (itemId, count) => addToInventory(restored, itemId, count)
+  });
+  assert.equal(exchanged.success, true);
+  assert.equal(exchanged.rewardItemId, 'varnish');
+  assert.equal(restored.manorData.crops.red_coda, 0);
+  assert.equal(restored.inventory.find(item => item.itemId === 'varnish')?.count, 1);
+  assert.equal(saveState(), true);
+
+  replaceStateSnapshot(DEFAULT_STATE());
+  assert.equal(loadState(), true);
+  assert.equal(getState().manorData.crops.red_coda, 0);
+  assert.equal(getState().inventory.find(item => item.itemId === 'varnish')?.count, 1);
 });

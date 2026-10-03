@@ -259,14 +259,14 @@ test('Etapa 3.2 — ClassProgressionEngine: 1ª Transferência (Lv 20), 2ª Tran
   assert.ok(optLv40.some(o => o.targetClass.id === 'warlord' && o.isEligible), 'Warrior no Lv 40 pode evoluir para Warlord');
 
   // 3ª Troca: Lv 76 (Gladiator -> Duelist)
-  const optLv76 = ClassProgressionEngine.getPromotionOptions('gladiator', 76, 'human');
+  const optLv76 = ClassProgressionEngine.getPromotionOptions('gladiator', 76, 'human', 3);
   assert.ok(optLv76.some(o => o.targetClass.id === 'duelist' && o.isEligible), 'Gladiator no Lv 76 pode evoluir para Duelist (3rd Transfer)');
 
   // canPromote verificação estrita
   assert.strictEqual(ClassProgressionEngine.canPromote('fighter', 'warrior', 20, 'human').canPromote, true);
   assert.strictEqual(ClassProgressionEngine.canPromote('fighter', 'gladiator', 20, 'human').canPromote, false, 'Não pode pular estágios');
   assert.strictEqual(ClassProgressionEngine.canPromote('warrior', 'gladiator', 40, 'human').canPromote, true);
-  assert.strictEqual(ClassProgressionEngine.canPromote('gladiator', 'duelist', 76, 'human').canPromote, true);
+  assert.strictEqual(ClassProgressionEngine.canPromote('gladiator', 'duelist', 76, 'human', 3).canPromote, true);
 });
 
 test('Etapa 3.3 — Cobertura completa de todas as 49 linhagens em todas as 9 raças até a 3ª Transferência', () => {
@@ -275,7 +275,7 @@ test('Etapa 3.3 — Cobertura completa de todas as 49 linhagens em todas as 9 ra
   assert.strictEqual(stage2Classes.length, 49, 'Devem existir exatamente 49 classes de 2ª transferência (Stage 2)');
 
   for (const s2 of stage2Classes) {
-    const promotions = ClassProgressionEngine.getPromotionOptions(s2.id, 76, s2.race);
+    const promotions = ClassProgressionEngine.getPromotionOptions(s2.id, 76, s2.race, 3);
     assert.ok(promotions.length > 0, `Classe Stage 2 [${s2.id}] (${s2.race}) deve ter opções de 3ª transferência no Lv 76`);
     const available3rd = promotions.find(p => p.isEligible && p.targetClass.stage === 3);
     assert.ok(available3rd, `Classe [${s2.id}] deve possuir sucessor de 3rd Job elegível`);
@@ -548,6 +548,48 @@ test('Etapa 3.6 — checkClassAdvancement reatividade, banner e suporte a state.
   // Banner e botão de status devem ter sido ocultados automaticamente pós-promoção
   assert.strictEqual(mockDom['stats-class-adv-btn'].style.display, 'none');
   assert.strictEqual(mockDom['class-advancement-banner'].style.display, 'none');
+});
+
+test('Etapa 1 — checkClassAdvancement não anuncia 3ª transferência bloqueada pela temporada', () => {
+  const previousSeason = window.__serverSeason;
+  const mockDom = {
+    'stats-class-adv-btn': { style: {}, textContent: '', onclick: null },
+    'class-advancement-banner': { style: {} },
+    'class-advancement-title': { textContent: '' },
+    'class-advancement-sub': { textContent: '' },
+    'class-advancement-btn': { onclick: null },
+    'skills-class-adv-banner': { style: {} },
+    'skills-class-adv-title': { textContent: '' },
+    'skills-class-adv-sub': { textContent: '' },
+    'skills-class-adv-btn': { onclick: null }
+  };
+  const callbacks = {
+    el: (id) => mockDom[id] || null,
+    openClassTransferModal: () => {}
+  };
+  const state = {
+    level: 76,
+    class: 'gladiator',
+    race: 'human',
+    character: { classId: 'gladiator', race: 'human' }
+  };
+
+  try {
+    window.__serverSeason = 1;
+    checkClassAdvancement(state, callbacks);
+    assert.strictEqual(mockDom['stats-class-adv-btn'].style.display, 'none', 'Temporada 1 não deve anunciar promoção bloqueada');
+    assert.strictEqual(mockDom['class-advancement-banner'].style.display, 'none');
+    assert.strictEqual(mockDom['skills-class-adv-banner'].style.display, 'none');
+
+    window.__serverSeason = 3;
+    checkClassAdvancement(state, callbacks);
+    assert.strictEqual(mockDom['stats-class-adv-btn'].style.display, 'block', 'Temporada 3 libera a promoção');
+    assert.strictEqual(mockDom['class-advancement-banner'].style.display, 'flex');
+    assert.match(mockDom['class-advancement-title'].textContent, /3ª Troca/);
+  } finally {
+    if (previousSeason === undefined) delete window.__serverSeason;
+    else window.__serverSeason = previousSeason;
+  }
 });
 
 test('Etapa 3.7 — ClassProgressionEngine: Opções inelegíveis retornam isEligible: false e motivos informativos', () => {

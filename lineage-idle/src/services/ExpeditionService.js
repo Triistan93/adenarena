@@ -1,7 +1,7 @@
 // ExpeditionService.js — Framework Universal de Expedições Estratégicas de Mercenários e Exploração 2.0
 import { addToInventory } from './InventoryService.js';
 import { MercenaryService } from './MercenaryService.js';
-import { MERCENARY_SPECIALIZATIONS, MERCENARY_TRAITS, calculateMercenaryPower } from '../data/mercenaries.js';
+import { MERCENARY_SPECIALIZATIONS, MERCENARY_TRAITS, calculateMercenaryPower, getMercenaryBondTier } from '../data/mercenaries.js';
 import { EXPEDITION_DESTINATIONS, RISK_DIRECTIVES, EXPEDITION_DILEMMAS } from '../data/expeditions.js';
 import { checkExpeditionDilemmaEligibility } from './ExpeditionDilemmaPolicy.js';
 
@@ -61,13 +61,21 @@ export const ExpeditionService = {
         synergies.activePerks.push(`${tr.icon} ${tr.name} (${tr.desc})`);
       }
 
-      // Lealdade (50 base, max 100)
-      const loyalty = merc.loyalty ?? 50;
-      if (loyalty >= 80) {
+      // Vínculo individual: a patente Juramentado libera materiais extras.
+      const trust = merc.trust ?? merc.loyalty ?? 50;
+      const bondTier = getMercenaryBondTier(trust);
+      if (trust >= 100) {
+        synergies.goldBonusPct += 0.10;
+        synergies.extraXpPct += 0.10;
+        synergies.extraMaterialChance += 0.05;
+        synergies.activePerks.push(`🤝 ${bondTier.name} (+10% Adena/EXP, +5% materiais)`);
+      } else if (trust >= 80) {
         synergies.goldBonusPct += 0.08;
         synergies.extraXpPct += 0.08;
-      } else if (loyalty >= 50) {
+        synergies.activePerks.push(`🤝 ${bondTier.name} (+8% Adena/EXP)`);
+      } else if (trust >= 50) {
         synergies.goldBonusPct += 0.03;
+        synergies.activePerks.push(`🤝 ${bondTier.name} (+3% Adena)`);
       }
 
       // Bônus se a especialização corresponder aos requisitos recomendados
@@ -316,7 +324,7 @@ export const ExpeditionService = {
       addToInventory(state, reward.itemId, reward.qty, reward.rarity, false, callbacks, true);
     }
 
-    // 6. Distribuição de XP e Lealdade para os mercenários do esquadrão
+    // 6. Distribuição de XP e vínculo para os mercenários do esquadrão
     const baseMercXp = Math.max(50, Math.floor((dest.duration / 60000) * 10));
     const xpBonusPct = exp.synergies?.extraXpPct || 0;
     const mercXpGained = Math.floor(baseMercXp * (1 + xpBonusPct));
@@ -327,7 +335,7 @@ export const ExpeditionService = {
         MercenaryService.addMercenaryXp(state, mercUid, mercXpGained, callbacks);
         const merc = MercenaryService.getMercenaryByUid(state, mercUid);
         if (merc && loyaltyBonus !== 0) {
-          merc.loyalty = Math.min(100, Math.max(0, (merc.loyalty || 50) + loyaltyBonus));
+          MercenaryService.addMercenaryTrust(state, mercUid, loyaltyBonus, callbacks);
         }
       }
     }

@@ -515,6 +515,14 @@ export function generateAutoEquipProposal(state) {
   };
 }
 
+export function hasPositiveEquipmentGain(proposal) {
+  if (!proposal?.changes?.length) return false;
+  return [
+    'cpDelta', 'atkDelta', 'matkDelta', 'defDelta', 'mdefDelta',
+    'hpDelta', 'mpDelta', 'critDelta', 'speedDelta'
+  ].some(key => Number(proposal.deltas?.[key]) > 0);
+}
+
 /**
  * Aplica atômica e definitivamente a proposta de Auto-Equip ao estado do jogo.
  * @param {Object} state

@@ -131,6 +131,7 @@ import {
   equipItem as serviceEquipItem,
   unequipItem as serviceUnequipItem,
   generateAutoEquipProposal,
+  hasPositiveEquipmentGain,
   commitAutoEquipProposal
 } from './src/services/EquipmentService.js';
 import * as EnchantmentService from './src/services/EnchantmentService.js';
@@ -150,8 +151,7 @@ import { ALL_EQUIP_SLOTS, CANONICAL_PAPERDOLL_20_SLOTS } from './src/core/GameCo
 import {
   getCraftLevelReq,
   getRecipeDef,
-  getRecipeMaterials,
-  calculateMaxCraftableQty,
+  hasCraftableRecipe as serviceHasCraftableRecipe,
   canCraft as serviceCanCraft,
   canCraftRecipe as serviceCanCraftRecipe,
   craftItem as serviceCraftItem,
@@ -204,6 +204,7 @@ import {
 
 import {
   getSkillCost,
+  hasLearnableSkill,
   spendSP as engineSpendSP,
   resetSP as engineResetSP,
   getStarterSkillForClass,
@@ -258,6 +259,8 @@ import {
   triggerQuestEvent as serviceTriggerQuestEvent,
   claimQuestReward as serviceClaimQuestReward,
   claimDailyBonusChest as serviceClaimDailyBonusChest,
+  getAvailableDailyQuests,
+  hasClaimableQuests as serviceHasClaimableQuests,
   unlockPremiumPass as serviceUnlockPremiumPass,
   claimPassReward as serviceClaimPassReward
 } from './src/services/QuestService.js';
@@ -301,6 +304,7 @@ import {
   openCraftModal as uiOpenCraftModal,
   closeCraftModal as uiCloseCraftModal,
   updateCharacterUI as uiUpdateCharacterUI,
+  createCharacterUICallbacks,
   updateImperialEconomyHeader,
   renderAlchemyUI as uiRenderAlchemyUI,
   renderAstralMasteryUI as uiRenderAstralMasteryUI,
@@ -368,7 +372,7 @@ import { SubclassCertificationService, EMERGENT_ABILITIES, MASTER_ABILITIES_BY_A
 import { CommunityCapService } from './src/services/CommunityCapService.js';
 import { ensureAppLayout, showMenuPanel, updateTabVisibilityByLevel, TAB_UNLOCK_LEVELS } from './src/ui/AppLayout.js';
 import { checkTabGuide, closeTabGuideModal, openTabGuideModal } from './src/ui/TutorialGuide.js';
-import { isFeatureUnlocked, getCurrentSeason, getSeasonForFeature } from './src/core/SeasonConfig.js';
+import { isFeatureUnlocked, getCurrentSeason, getCurrentSeasonId, getSeasonForFeature } from './src/core/SeasonConfig.js';
 import { renderSeasonLockedPanel, updateSeasonTabBadges } from './src/ui/SeasonUI.js';
 import { VFX, initializeVFX } from './vfx.js';
 import { globalVFXOrchestrator } from './src/vfx/VFXOrchestrator.js';
@@ -636,7 +640,7 @@ function openClassTransferModal(classInfo) {
     currentClassId,
     state.level,
     state.race || state.character?.race,
-    state.season || (state.level >= 76 ? 3 : null)
+    getCurrentSeasonId()
   );
   if (canonicalPromotions && canonicalPromotions.length > 0) {
     for (const opt of canonicalPromotions) {
@@ -987,7 +991,10 @@ EventBus.on('classTransferred', () => {
 // --------------------------- INVENTORY / SALVAGE (Sprint 3: Delegados) ---------------------------
 function getInventoryCount(itemId) { return serviceGetInventoryCount(state, itemId); }
 function addToInventory(itemId, amount = 1, rarity = null, foundation = false) {
-  return serviceAddToInventory(state, itemId, amount, rarity, foundation, { log });
+  return serviceAddToInventory(state, itemId, amount, rarity, foundation, {
+    log,
+    onRecycleSuccess: (count) => triggerQuestEvent('craft', count)
+  });
 }
 function removeFromInventory(uid, amount = 1) { return serviceRemoveFromInventory(state, uid, amount); }
 
@@ -1094,6 +1101,7 @@ function salvageItem(uid) {
   const amount = Math.max(1, Math.floor((reqLvl / 5 + 1) * rarityMult));
   state.inventory.splice(idx, 1);
   addToInventory(matId, amount);
+  triggerQuestEvent('craft', 1);
   log(`🔨 Desmontou ${def.name} em ${amount}x ${D().ALL_ITEMS[matId]?.name || matId}!`, 'loot');
   hideItemTooltip();
   updateAllUI(); save();
@@ -1246,6 +1254,7 @@ function salvageSelectedItems() {
     .join(', ');
 
   if (count > 0) {
+    triggerQuestEvent('craft', count);
     log(`🔨 Desmontou ${count} equipamento(s) e obteve: ${summaryStr || 'materiais'}!`, 'loot');
   } else {
     log('Nenhum equipamento válido selecionado para desmontar.', 'system');
@@ -1749,7 +1758,10 @@ export function sellItem(uid) {
 function canCraft(recipeId, qty = 1) { return serviceCanCraft(state, recipeId, qty); }
 function canCraftRecipe(id, qty = 1) { return serviceCanCraftRecipe(state, id, qty); }
 function craftItem(recipeId, qty = 1) {
-  return serviceCraftItem(state, recipeId, qty, { log, floatText, getItemDef, formatItemDisplayName: uiFormatItemDisplayName, updateAllUI, save });
+  return serviceCraftItem(state, recipeId, qty, {
+    log, floatText, getItemDef, formatItemDisplayName: uiFormatItemDisplayName, updateAllUI, save,
+    onCraftSuccess: (count) => triggerQuestEvent('craft', count)
+  });
 }
 
 
@@ -1924,6 +1936,7 @@ function updateStatsUI() {
   const stats = getStats();
   updateBar('hp-bar', state.hp, stats.maxHp); updateBar('mp-bar', state.mp, stats.maxMp);
   state.maxHp = stats.maxHp; state.maxMp = stats.maxMp;
+  renderStageHero();
   const xpForLevel = getXPForLevel(state.level);
   const baseXP = state.level <= 1 ? 0 : getTotalXP(state.level - 1);
   const curXP = Math.max(0, (state.xp || 0) - baseXP);
@@ -2172,7 +2185,11 @@ function updateEquipmentUI() {
   return uiUpdateEquipmentUI(state, { unequipItem });
 }
 function updateCharacterUI() {
-  return uiUpdateCharacterUI(state);
+  return uiUpdateCharacterUI(state, createCharacterUICallbacks({
+    root: ROOT || (typeof document !== 'undefined' ? document : null),
+    updateAllUI,
+    save
+  }));
 }
 
 
@@ -2425,7 +2442,7 @@ function updateShopUI() {
     buybackItem: (idx) => serviceBuybackItem(state, idx, { log, updateAllUI, save }),
     rerollMysticStock: (rollStockFn) => serviceRerollMysticStock(state, rollStockFn, { log, updateAllUI, save }),
     switchTab: (tabId) => {
-      const tabBtn = (ROOT || document).querySelector(`.menu-btn[data-tab="${tabId}"]`);
+      const tabBtn = (ROOT || document).querySelector(`.tab-btn[data-tab="${tabId}"]`);
       if (tabBtn) tabBtn.click();
     }
   });
@@ -3223,6 +3240,7 @@ function checkQuestProgress(type, count = 1) { triggerQuestEvent(type, count); }
 function triggerQuestEvent(type, amount = 1) {
   serviceTriggerQuestEvent(state, type, amount);
   safeUiUpdate('quests', updateQuestsUI);
+  safeUiUpdate('tab-badges', updateTabBadgesUI);
 }
 function claimQuestReward(questId) {
   return serviceClaimQuestReward(state, questId, { log, floatText, updateAllUI, save });
@@ -3250,13 +3268,16 @@ function updateQuestsUI() {
 
   if (dailyContainer) {
     let dailyClaimedCount = 0;
-    const currentLvl = state.level || 1;
-    const availableDaily = QUEST_DEFS.daily.filter(q => !q.unlockLevel || q.unlockLevel <= currentLvl);
+    const availableDaily = getAvailableDailyQuests(state);
+    const availableDailyIds = new Set(availableDaily.map(q => q.id));
     const allDailyDone = availableDaily.length > 0 && availableDaily.every(q => Array.isArray(state.quests.claimed) && state.quests.claimed.includes(q.id));
     const isDailyBonusClaimed = Boolean(state.quests.dailyBonusClaimed);
 
     const cardsHtml = QUEST_DEFS.daily.map(q => {
-      const isLocked = q.unlockLevel && currentLvl < q.unlockLevel;
+      const isLocked = !availableDailyIds.has(q.id);
+      const lockReason = q.requiredFeature && !isFeatureUnlocked(q.requiredFeature)
+        ? 'Conteúdo de temporada futura'
+        : `Requer Nível ${q.unlockLevel}`;
       const rewardsText = [];
       if (q.reward.gold) rewardsText.push(`💰 +${q.reward.gold.toLocaleString()}g`);
       if (q.reward.sp) rewardsText.push(`✦ +${q.reward.sp} SP`);
@@ -3270,14 +3291,14 @@ function updateQuestsUI() {
             <div class="quest-info-group">
               <span class="quest-icon">🔒</span>
               <div class="quest-details">
-                <span class="quest-name" style="color:#94a3b8;">${q.name} <span style="font-size:10px; color:#f87171; font-weight:bold;">(Requer Nível ${q.unlockLevel})</span></span>
+                <span class="quest-name" style="color:#94a3b8;">${q.name} <span style="font-size:10px; color:#f87171; font-weight:bold;">(${lockReason})</span></span>
                 <span class="quest-desc" style="color:#64748b;">${q.desc}</span>
                 <div class="quest-rewards-line" style="opacity:0.7;">${rewardsText.join(' · ')}</div>
               </div>
             </div>
             <div class="quest-action-group">
               <span class="quest-progress-num" style="color:#f87171;">Bloqueada</span>
-              <button class="claim-quest-btn" disabled style="opacity:0.4; cursor:not-allowed;">🔒 Nv. ${q.unlockLevel}</button>
+              <button class="claim-quest-btn" disabled style="opacity:0.4; cursor:not-allowed;">🔒 ${q.requiredFeature && !isFeatureUnlocked(q.requiredFeature) ? 'Temporada futura' : `Nv. ${q.unlockLevel}`}</button>
             </div>
           </div>
         `;
@@ -3460,6 +3481,7 @@ function renderBattlePassUI() {
       const isUnlocked = currentXp >= tier.reqXp;
       const freeClaimed = Array.isArray(state.battlePass.claimedFree) && state.battlePass.claimedFree.includes(tier.level);
       const premClaimed = Array.isArray(state.battlePass.claimedPremium) && state.battlePass.claimedPremium.includes(tier.level);
+      const premiumDisabled = premClaimed || (state.battlePass.unlockedPremium && !isUnlocked);
 
       const freeLabel = freeClaimed ? '✓' : (isUnlocked ? 'Reclamar' : 'Tranca');
       const premLabel = premClaimed ? '✓' : (isUnlocked && state.battlePass.unlockedPremium ? 'Reclamar' : (state.battlePass.unlockedPremium ? 'Tranca' : '👑 R$ 15'));
@@ -3478,7 +3500,7 @@ function renderBattlePassUI() {
           <div class="pass-reward-box premium">
             <span style="font-weight:bold;color:#fef08a;">👑 Premium</span><br/>
             <span>${premRewardStr}</span><br/>
-            <button class="inv-batch-btn gold-glow-btn" data-pass-prem="${tier.level}" ${premClaimed ? 'disabled' : ''} style="margin-top:4px;font-size:9px;">${premLabel}</button>
+          <button class="inv-batch-btn gold-glow-btn" data-pass-prem="${tier.level}" ${premiumDisabled ? 'disabled' : ''} style="margin-top:4px;font-size:9px;">${premLabel}</button>
           </div>
         </div>
       `;
@@ -3601,66 +3623,19 @@ function updateTowerUI() {
 }
 
 function hasEquipmentUpgradeAvailable() {
-  if (!state.inventory) return false;
-  for (const item of state.inventory) {
-    if (item.equipped) continue;
-    const def = D().ALL_ITEMS[item.itemId];
-    if (!def) continue;
-    const slot = resolveEquipSlot(def.slot);
-    if (!slot || !ALL_EQUIP_SLOTS.includes(slot)) continue;
-    const equippedUid = state.equipment[slot];
-    const equippedItem = equippedUid ? state.inventory.find(i => i.uid === equippedUid) : null;
-    const equippedDef = equippedItem ? D().ALL_ITEMS[equippedItem.itemId] : null;
-    const itemPower = (def.stats?.atk || 0) + (def.stats?.def || 0) + (def.stats?.matk || 0) + (def.stats?.mdef || 0);
-    const eqPower = equippedDef ? ((equippedDef.stats?.atk || 0) + (equippedDef.stats?.def || 0) + (equippedDef.stats?.matk || 0) + (equippedDef.stats?.mdef || 0)) : 0;
-    if (itemPower > eqPower) return true;
-  }
-  return false;
+  return hasPositiveEquipmentGain(generateAutoEquipProposal(state));
 }
 
 function hasSkillUpgradeAvailable() {
-  if (state.sp < 10) return false;
-  for (const [sId, def] of Object.entries(SKILL_DEFS)) {
-    if (!classSatisfies(state.class, def.classReq)) continue;
-    const lvl = state.skills[sId] || 0;
-    const maxLvl = def.max || 10;
-    if (lvl >= maxLvl) continue;
-    const cost = getSkillCost(sId, lvl);
-    if (state.sp >= cost) return true;
-  }
-  return false;
+  return hasLearnableSkill(state);
 }
 
 function hasCraftAvailable() {
-  const recipesData = D().CRAFTING_RECIPES;
-  if (!recipesData) return false;
-  const recipesList = Array.isArray(recipesData) ? recipesData : Object.values(recipesData);
-  for (const recipe of recipesList) {
-    if (!recipe) continue;
-    const mats = getRecipeMaterials(recipe);
-    if (mats.length === 0) continue;
-    let canCraftThis = true;
-    for (const { matId, qty } of mats) {
-      if (getInventoryCount(matId) < qty) {
-        canCraftThis = false;
-        break;
-      }
-    }
-    if (canCraftThis) return true;
-  }
-  return false;
+  return serviceHasCraftableRecipe(state);
 }
 
 function hasQuestsClaimable() {
-  if (!state.quests || !state.quests.progress) return false;
-  if (typeof QUEST_DEFS === 'undefined') return false;
-  const allQuests = [...(QUEST_DEFS.daily || []), ...(QUEST_DEFS.weekly || [])];
-  for (const qDef of allQuests) {
-    if (state.quests.claimed && state.quests.claimed.includes(qDef.id)) continue;
-    const current = state.quests.progress[qDef.id] || 0;
-    if (current >= qDef.target) return true;
-  }
-  return false;
+  return serviceHasClaimableQuests(state);
 }
 
 function updateTabBadgesUI() {
@@ -5337,7 +5312,12 @@ function processMonsterDefeat(monster, killingSkill = null) {
     log(`🛠️ CARGA DE CRAFT ACUMULADA! (Total: ${state.craftCharges})`, 'rarity-rare');
   }
 
-  const baseGold = monster.gold[0] + Math.random() * (monster.gold[1] - monster.gold[0]), jackpot = Math.random() < (monster.boss ? 0.08 : 0.015);
+  const monsterGoldRange = Array.isArray(monster.gold)
+    ? monster.gold
+    : [Number(monster.gold || monster.adena || 50), Number(monster.gold || monster.adena || 100)];
+  const minG = Number(monsterGoldRange[0]) || 0;
+  const maxG = Number(monsterGoldRange[1]) || minG;
+  const baseGold = minG + Math.random() * Math.max(0, maxG - minG), jackpot = Math.random() < (monster.boss ? 0.08 : 0.015);
   const goldMult = zoneMult * (1 + (stats.goldBoost || 0)) * (jackpot ? 10 : 1) * adenaRate * (liveOpsBonuses.goldMult || 1.0);
   let gold = Math.floor(baseGold * stats.loot * goldMult * gapMods.adenaMultiplier);
   if (gapMods.isGrey) gold = 0; // Monstro cinza: zero adena
@@ -11967,8 +11947,13 @@ export function init() {
           log('Adena insuficiente para gravar o símbolo (10.000 Adena necessária).', 'system');
           return;
         }
-        state.gold -= cost;
-        serviceApplyDyeSymbol(state, freeSlot, key, 1, { log, updateAllUI, save });
+
+        const _dyeOk = serviceApplyDyeSymbol(state, freeSlot, key, 1, { log, updateAllUI: () => {}, save: () => {} });
+        if (_dyeOk) {
+          state.gold -= cost;
+          if (updateAllUI) updateAllUI();
+          if (save) save();
+        }
       };
 
       window.upgradeDyeAction = (slotIdx) => {

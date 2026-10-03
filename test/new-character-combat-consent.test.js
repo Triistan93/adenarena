@@ -72,3 +72,56 @@ for (const combatActive of [false, true]) {
     assert.equal(values.get('lineageIdleSave_v2'), preserved, 'boot must not rewrite an existing save');
   });
 }
+
+test('bootstrap grava o estado local de forma síncrona ao sair da página', async (t) => {
+  const oldStorage = globalThis.localStorage;
+  const values = new Map();
+  globalThis.localStorage = {
+    getItem: key => values.get(key) ?? null,
+    setItem: (key, value) => values.set(key, String(value)),
+    removeItem: key => values.delete(key)
+  };
+  t.after(() => {
+    if (oldStorage === undefined) delete globalThis.localStorage;
+    else globalThis.localStorage = oldStorage;
+  });
+
+  const manager = await import(`../lineage-idle/src/core/StateManager.js?boot-pagehide-${Date.now()}`);
+  const listeners = [];
+  let cloudFlushes = 0;
+  const window = { saveCloudOnUnload() { cloudFlushes++; } };
+  const document = { visibilityState: 'visible' };
+  const bootSource = readFileSync(new URL('../lineage-idle/src/core/GameBootstrap.js', import.meta.url), 'utf8')
+    .replace(/^import .*;\r?$/gm, '')
+    .replace(/^export /gm, '');
+  const context = vm.createContext({
+    console: { log() {}, warn() {}, error(err) { throw err; } },
+    window,
+    document,
+    localStorage: globalThis.localStorage,
+    EventBus: { off() {}, on() {} },
+    setDomRoot() {}, setMainRoot() {}, bindEvents() {},
+    ...manager,
+    CommunityCapService: { init() {} },
+    updateAllUI() {},
+    shouldStartCombatAtStartup,
+    startCombat() {}, stopCombat() {},
+    _intervals: [],
+    setInterval() { return 1; }, setTimeout() { return 1; },
+    addTrackedListener(target, event, handler) { listeners.push({ target, event, handler }); },
+    cleanupTracked() {}, el() { return null; }
+  });
+
+  vm.runInContext(bootSource, context, { filename: 'GameBootstrap.js' });
+  await vm.runInContext('bootstrap(null)', context);
+  const state = manager.getState();
+  state.gold = 987654;
+
+  const pageHide = listeners.find(listener => listener.target === window && listener.event === 'pagehide');
+  assert.equal(typeof pageHide?.handler, 'function', 'bootstrap deve registrar o salvamento no evento pagehide');
+  pageHide.handler();
+
+  const savedState = JSON.parse(values.get('lineageIdleSave_v2'));
+  assert.equal(savedState.gold, 987654, 'a gravação local síncrona deve incluir as mudanças mais recentes');
+  assert.equal(cloudFlushes, 1, 'o encerramento também deve solicitar a sincronização cloud pendente');
+});
