@@ -3,6 +3,8 @@
 >
 > **Escopo confirmado:** o plano cobre exclusivamente o modo **Idle** (`src/idle/markup.ts` + `lineage-idle/`). Modos 2D e 3D foram removidos do escopo.
 
+> **Foco de lançamento:** este documento é um backlog histórico amplo, não a ordem de execução atual. O roteiro ativo, com uma etapa por vez e critérios de conclusão, está em [`docs/PLANO_DE_LANCAMENTO_ADEN_ARENA.md`](docs/PLANO_DE_LANCAMENTO_ADEN_ARENA.md). Não iniciar itens daqui sem que entrem na etapa ativa.
+
 ---
 
 ## 📌 Índice Executivo

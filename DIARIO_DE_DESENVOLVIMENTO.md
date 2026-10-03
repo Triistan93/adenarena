@@ -1,8 +1,8 @@
 # 📖 DIÁRIO CENTRAL DE DESENVOLVIMENTO & ENGENHARIA
 ## Aden Arena: Idle Chronicles — Registro Canônico Unificado de Evolução do Projeto
 
-> **Repositório**: `Triistan93/adenarena` (GitHub: `origin/main`)  
-> **Branch Principal**: `main`  
+> **Repositório**: `Triistan93/adenarena` (GitHub: `origin/main`)
+> **Branch Principal**: `main`
 > **Propósito deste Documento**: Registrar cronologicamente todas as sessões de desenvolvimento em formato de páginas contínuas, detalhando data, hora, commits, arquitetura, arquivos alterados, status de testes e métricas de qualidade.
 
 ---
@@ -41,12 +41,12 @@
 ## Página 20 — 20 de Setembro de 2026 às 14:00
 ### 🎯 Auditoria Funcional 2.0: Inventário Exaustivo (2.080 Relações), 416 Contratos Sem Falsos Positivos, Execução Edge CDP, 7 Mutantes Aprovados e Redução de 1.810 para 76 Pendências Reais
 
-> **Data & Hora**: 20/09/2026 às 14:00 (BRT)  
-> **Branch**: `feature/skill-tree-integration-fix`  
-> **Commit HEAD**: `db08514`  
-> **Commit-Base de Preservação**: `12d913f`  
-> **Status de Aprovação Integral**: **BLOQUEADO (`APPROVAL_BLOCKED`)**  
-> **Código de Saída (`EXIT_CODE`)**: `1` (Bloqueio canônico legítimo por lacunas documentadas sem invenção de dados).  
+> **Data & Hora**: 20/09/2026 às 14:00 (BRT)
+> **Branch**: `feature/skill-tree-integration-fix`
+> **Commit HEAD**: `db08514`
+> **Commit-Base de Preservação**: `12d913f`
+> **Status de Aprovação Integral**: **BLOQUEADO (`APPROVAL_BLOCKED`)**
+> **Código de Saída (`EXIT_CODE`)**: `1` (Bloqueio canônico legítimo por lacunas documentadas sem invenção de dados).
 > **Preservação Sagrada**: `git diff 12d913f = 0` estritamente verificado em `LevelEngine.js`, `MarketService.js`, `ExpeditionService.js`, `cakto-webhook.js`, `CashShopService.js`.
 
 ---
@@ -124,11 +124,11 @@
 ## Página 19 — 20 de Setembro de 2026 às 12:15
 ### 🎯 Reconciliação Exaustiva de Estágios (36/49 vs 38/47), Resolução Determinística dos 8 IDs de Ertheia, Decomposição dos 795 Vínculos e Teste Funcional em Cadeia Completa
 
-> **Data & Hora**: 20/09/2026 às 12:15 (BRT)  
-> **Branch**: `feature/skill-tree-integration-fix`  
-> **Commit HEAD**: `db08514`  
-> **Commit-Base de Preservação**: `12d913f`  
-> **Status de Aprovação Integral do Jogo**: **BLOQUEADO** (em conformidade com a diretriz do usuário: 7 classes com `CONTENT_GAP` e 6 com `UNPROVEN_PROVENANCE` impedem aprovação integral).  
+> **Data & Hora**: 20/09/2026 às 12:15 (BRT)
+> **Branch**: `feature/skill-tree-integration-fix`
+> **Commit HEAD**: `db08514`
+> **Commit-Base de Preservação**: `12d913f`
+> **Status de Aprovação Integral do Jogo**: **BLOQUEADO** (em conformidade com a diretriz do usuário: 7 classes com `CONTENT_GAP` e 6 com `UNPROVEN_PROVENANCE` impedem aprovação integral).
 
 #### 1. Divergência de Estágios (36/49 vs 38/47) Explicada com Precisão Matemática
 - **Contagem Oficial Atual**:
@@ -188,9 +188,9 @@
 ## Página 18 — 20 de Setembro de 2026 às 00:30
 ### 🎯 Auditoria e Validação Obrigatória de 100% das Classes, Promoções, Vínculos e Subclasses: Manifesto Independente, Executores Determinísticos e Homologação Edge Headless via CDP
 
-> **Data & Hora**: 20/09/2026 às 00:30 (BRT)  
-> **Branch**: `feature/skill-tree-integration-fix`  
-> **Status de Aprovação Integral do Jogo**: **BLOQUEADO** (em conformidade com a diretriz estrita do usuário: classes com `CONTENT_GAP` e linhagem Ertheia permanecem pendentes e impedem a aprovação integral).  
+> **Data & Hora**: 20/09/2026 às 00:30 (BRT)
+> **Branch**: `feature/skill-tree-integration-fix`
+> **Status de Aprovação Integral do Jogo**: **BLOQUEADO** (em conformidade com a diretriz estrita do usuário: classes com `CONTENT_GAP` e linhagem Ertheia permanecem pendentes e impedem a aprovação integral).
 > **Métricas de Qualidade e Execução Sem Omissões**:
 > - **Manifesto Independente (`docs/INDEPENDENT_CLASS_EXPECTATIONS_MANIFEST.json`)**:
 >   - **Raças**: 9/9 catalogadas
@@ -280,9 +280,9 @@
 ## Página 17 — 19 de Setembro de 2026 às 23:30
 ### 🎯 Diagnóstico Forense e Resolução Definitiva: Starters Death Knight (Elf, Human, Dark Elf), Correção de Gating de Starters 4★, Integração de Save V2 no Guest Login e Homologação Edge CDP
 
-> **Data & Hora**: 19/09/2026 às 23:30 (BRT)  
-> **Branch**: `feature/skill-tree-integration-fix`  
-> **Status de Qualidade**: 
+> **Data & Hora**: 19/09/2026 às 23:30 (BRT)
+> **Branch**: `feature/skill-tree-integration-fix`
+> **Status de Qualidade**:
 > - **Testes Unitários (Node.js Test Runner)**: **679 testes em 92 suítes passando (100% de aprovação, 0 falhas)**.
 > - **Homologação no Edge Headless via CDP**: **3/3 Starters Death Knight aprovados (Elf, Human, Dark Elf) antes e após reload real da página**.
 > - **Preservação Sagrada**: `LevelEngine.js`, `MarketService.js`, `ExpeditionService.js` com **0 alterações (`git diff 12d913f = 0`)**.
@@ -333,10 +333,10 @@ Executada através do script de automação CDP `scripts/reproduce_and_verify_al
 ## Página 16 — 19 de Setembro de 2026 às 21:35
 ### 🎯 Eliminação Cirúrgica de Falsos Positivos, Correção de Defeitos de Subclasses e Sincronização de Equipamentos, Recarga Efetiva da Página e Homologação Estrita no Microsoft Edge Headless
 
-> **Data & Hora**: 19/09/2026 às 21:35 (BRT)  
-> **Branch**: `feature/skill-tree-integration-fix`  
-> **Commit-Base**: `543892d`  
-> **Status de Qualidade**: 
+> **Data & Hora**: 19/09/2026 às 21:35 (BRT)
+> **Branch**: `feature/skill-tree-integration-fix`
+> **Commit-Base**: `543892d`
+> **Status de Qualidade**:
 > - **Testes Unitários (Node.js Test Runner)**: **679 testes em 92 suítes passando (100% de aprovação, 0 falhas)**.
 > - **Homologação Estrita no Edge Headless**: **9/9 cenários obrigatórios aprovados com critérios estritos (100%), 0 erros de console**.
 > - **Screenshot & Evidência Visual**: Salvo em `public/edge_interactive_gameplay.png` e `scripts/interactive_gameplay_report.json`.
@@ -407,10 +407,10 @@ Nenhum push, merge ou deploy foi realizado. Todas as modificações permanecem e
 ## Página 15 — 19 de Setembro de 2026 às 21:15
 ### 🛡️ Homologação Interativa Completa via Interface e Motores de Produção no Microsoft Edge Headless, Validação de 9 Cenários Canônicos e Blindagem de Runtime
 
-> **Data & Hora**: 19/09/2026 às 21:15 (BRT)  
-> **Branch**: `feature/skill-tree-integration-fix`  
-> **Commit-Base**: `543892d`  
-> **Status de Qualidade**: 
+> **Data & Hora**: 19/09/2026 às 21:15 (BRT)
+> **Branch**: `feature/skill-tree-integration-fix`
+> **Commit-Base**: `543892d`
+> **Status de Qualidade**:
 > - **Testes de Módulo (Node.js Test Runner)**: **679 testes em 92 suítes passando (100% de aprovação, 0 falhas)**.
 > - **Homologação Interativa no Edge Headless**: **9/9 cenários aprovados com sucesso (100%), 0 erros de console**.
 > - **Screenshot & Evidência Visual**: Salvo em `public/edge_interactive_gameplay.png` e `scripts/interactive_gameplay_report.json`.
@@ -479,10 +479,10 @@ Em atendimento à exigência de comprovação rigorosa e rejeição de emuladore
 ## Página 14 — 19 de Setembro de 2026 às 21:00
 ### 🌐 Homologação Integral de Gameplay no Navegador Real (Microsoft Edge Headless), Diferenciação Estrutural de CONTENT_GAP (Nó Ausente vs Sem Proveniência) e Validação de Subclasses nas 12 Dimensões
 
-> **Data & Hora**: 19/09/2026 às 21:00 (BRT)  
-> **Branch**: `feature/skill-tree-integration-fix`  
-> **Commit-Base**: `543892d` (audit: reconcile 159 nodes with tri-state matrix…)  
-> **Status de Qualidade**: 
+> **Data & Hora**: 19/09/2026 às 21:00 (BRT)
+> **Branch**: `feature/skill-tree-integration-fix`
+> **Commit-Base**: `543892d` (audit: reconcile 159 nodes with tri-state matrix…)
+> **Status de Qualidade**:
 > - **Testes de Módulo (Node.js Test Runner)**: **679 testes em 92 suítes passando (100% de aprovação, 0 falhas)**.
 > - **Navegador Real (Microsoft Edge / Chromium Headless)**: **7/7 cenários homologados com sucesso, 0 erros de console**.
 > - **Screenshot & Evidência Visual**: Salvo em `public/edge_gameplay_homologation.png` e `scripts/edge_gameplay_homologation_report.json`.
@@ -517,10 +517,10 @@ Execução da homologação completa de gameplay em navegador real (Microsoft Ed
 ## Página 13 — 19 de Setembro de 2026 às 19:30
 ### ⚔️ Auditoria Canônica Integral do Domínio de Classes, Habilidades e Subclasses, Reconciliação Exata 159 vs 142 Nós, Blindagem de Identidade e Preservação de Inventário Único
 
-> **Data & Hora**: 19/09/2026 às 19:30 (BRT)  
-> **Branch**: `feature/skill-tree-integration-fix`  
-> **Commit-Base**: `12d913f7f6a851c317af80879241d71519503e3d` (`12d913f`)  
-> **Status de Qualidade**: 
+> **Data & Hora**: 19/09/2026 às 19:30 (BRT)
+> **Branch**: `feature/skill-tree-integration-fix`
+> **Commit-Base**: `12d913f7f6a851c317af80879241d71519503e3d` (`12d913f`)
+> **Status de Qualidade**:
 > - **Testes de Módulo**: **648 testes em 92 suítes passando (100% de aprovação, 0 falhas)**.
 > - **Navegador Real (Microsoft Edge / Chromium Headless)**: **32/32 imagens carregadas, 1 placeholder SVG neutro, 0 falhas, 0 referências a `power_strike.png`**.
 > - **Preservação Sagrada**: `LevelEngine.js`, `MarketService.js`, `ExpeditionService.js` com **0 alterações (`git diff = 0`)**.
@@ -542,8 +542,8 @@ Execução da auditoria forense completa do domínio de raças, classes, árvore
 ## Página 12 — 17 de Setembro de 2026 às 23:45
 ### 👑 Auditoria Canônica de 903 Habilidades (9 Categorias), Integração dos Livros 4★/5★ Master do L2 Essence e Correção de Ranks
 
-> **Data & Hora**: 17/09/2026 às 23:45 (BRT)  
-> **Status de Qualidade**: 
+> **Data & Hora**: 17/09/2026 às 23:45 (BRT)
+> **Status de Qualidade**:
 > - **Testes Automatizados**: **625 testes em 92 suítes passando (100% de aprovação, 0 falhas)** no `lineage-idle/` + 3 novos testes em `test/life-activity-progression.test.js`.
 > - **Build de Produção**: Vite compilado com sucesso com 0 erros de runtime.
 > - **Catálogo Canônico Auditado**: 903 habilidades canônicas únicas classificadas em 9 categorias estritas.
@@ -587,8 +587,8 @@ Reanálise e auditoria exaustiva de todo o catálogo de habilidades do jogo base
 ## Página 11 — 17 de Setembro de 2026 às 00:40
 ### ⚔️ Skill Progression 2.0: Sistema de Loadout de Combate com 7 Slots, Táticas de Auto-Batalha, Drag-and-Drop na UI e Blindagem Universal Anti-Cosméticos
 
-> **Data & Hora**: 17/09/2026 às 00:40 (BRT)  
-> **Status de Qualidade**: 
+> **Data & Hora**: 17/09/2026 às 00:40 (BRT)
+> **Status de Qualidade**:
 > - **Testes Automatizados**: **622 testes em 92 suítes passando (100% de aprovação, 0 falhas)**.
 > - **Build de Produção**: Vite compilado com sucesso em 12.54s (280 módulos).
 > - **Preservação Sagrada**: Regra estrita **Zero New Skills** respeitada 100%; 3 Pilares Sagrados (`LevelEngine.js`, `MarketService.js`, `ExpeditionService.js`) com 0 alterações.
@@ -662,8 +662,8 @@ Implementação integral do **Skill Progression 2.0**, transformando a execuçã
 ## Página 10 — 16 de Setembro de 2026 às 23:50
 ### 🚫 Expurgamento Global de Habilidades Cosméticas, Montarias ("Mount") e de Aparência ("Appearance") em 100% das Classes do Jogo
 
-> **Data & Hora**: 16/09/2026 às 23:50 (BRT)  
-> **Status de Qualidade**: 
+> **Data & Hora**: 16/09/2026 às 23:50 (BRT)
+> **Status de Qualidade**:
 > - **Testes Automatizados**: **565 testes em 83 suítes passando (100% de aprovação, 0 falhas)**.
 > - **Build de Produção**: Vite compilado com sucesso em 13.75s (276 módulos).
 > - **Preservação Sagrada**: 0 alterações ou regressões nos 3 pilares intocáveis (`LevelEngine.js`, `MarketService.js`, `ExpeditionService.js`).
@@ -696,8 +696,8 @@ Atendendo à diretriz de limpeza e simplificação tática das árvores de habil
 ## Página 9 — 16 de Setembro de 2026 às 23:30
 ### 🏛️ Reconstrução Canônica Integral do Sistema de Classes (9 Raças, 49 Linhagens, 159 Classes, 134 Arestas, 25 Classes Base), Wiping Controlado do Domínio Legado e Preservação dos Três Pilares Sagrados
 
-> **Data & Hora**: 16/09/2026 às 23:30 (BRT)  
-> **Status de Qualidade**: 
+> **Data & Hora**: 16/09/2026 às 23:30 (BRT)
+> **Status de Qualidade**:
 > - **Testes Automatizados**: **565 testes em 83 suítes passando (100% de aprovação, 0 falhas)**.
 > - **Build de Produção**: Vite compilado com sucesso em 15.14s (276 módulos).
 > - **Preservação Sagrada**: 0 alterações ou regressões nos 3 pilares intocáveis (`LevelEngine.js`, `MarketService.js`, `ExpeditionService.js`).
@@ -746,11 +746,11 @@ Execução do **Wipe Controlado + Reconstrução Total do Domínio de Classes** 
 ## Página 8 — 16 de Setembro de 2026 às 20:50
 ### 🏹 Economia Canônica de Soulshots/Spiritshots: Grade Matching (+100%) vs Universal Wildcard (+30%) e Consumo Justo 1:1
 
-> **Data & Hora**: 16/09/2026 às 20:50 (BRT)  
+> **Data & Hora**: 16/09/2026 às 20:50 (BRT)
 > **Commits desta Sessão**:
 > - `feat(combat): implement authentic soulshot grade matching (+100%) vs universal wildcard (+30%) with 1:1 consumption`
 >
-> **Status de Qualidade**: 
+> **Status de Qualidade**:
 > - **Testes Automatizados**: **545 testes em 83 suítes passando (100% de aprovação, 0 falhas)**.
 > - **Build de Produção**: Vite compilado com sucesso com chunks otimizados.
 > - **Preservação Sagrada**: 0 alterações ou regressões nos 3 pilares intocáveis (`LevelEngine.js` Curva Monotônica 1-40, `MarketService.js` Mercado 10 slots 5%, `ExpeditionService.js` Expedições).
@@ -779,11 +779,11 @@ Em resposta ao refinamento de gameplay onde no Aden Arena todos os combatentes e
 ## Página 7 — 16 de Setembro de 2026 às 18:30
 ### 🏰 Adaptação Integral dos Conceitos Canônicos do Lineage II Essence (Season 1 Lv 1–40), Economia Fechada, Coleções & Forja Autêntica
 
-> **Data & Hora**: 16/09/2026 às 18:30 (BRT)  
+> **Data & Hora**: 16/09/2026 às 18:30 (BRT)
 > **Commits desta Sessão**:
 > - `e1353ab` — `feat(design): adapt Lineage II canonical systems to Aden Arena (Season 1) — closed economy, gear collections, D/C crafting, augmentation & brooch jewels`
 >
-> **Status de Qualidade**: 
+> **Status de Qualidade**:
 > - **Testes Automatizados**: **539 testes em 82 suítes passando (100% de aprovação, 0 falhas)**.
 > - **Build de Produção**: Vite compilado com sucesso em **19.63s** (268 módulos transformados, saída 0).
 > - **Preservação Sagrada**: 0 alterações ou regressões nos 3 pilares intocáveis (`LevelEngine.js` Curva Monotônica 1-40, `MarketService.js` Mercado 10 slots 5%, `ExpeditionService.js` Expedições).
@@ -827,12 +827,12 @@ Em resposta à diretriz mandatória de transformar os conceitos teóricos do Lin
 ## Página 6 — 16 de Setembro de 2026 às 01:00
 ### ⚔️ Expurgo de Vínculos Sintéticos, Reconstrução Canônica L2Wiki Essence & Duelista com Blade Punishment
 
-> **Data & Hora**: 16/09/2026 às 01:00 (BRT)  
+> **Data & Hora**: 16/09/2026 às 01:00 (BRT)
 > **Commits desta Sessão**:
 > - `697857d` — `feat(skills): L2Wiki Essence full webscrape (147 classes, 2947 skills), fix sleep icon and sync 564 missing icons`
 > - `11b09f4` — `feat(skills): rebuild all class skill bindings and canonical registries strictly from L2Wiki Essence scraping`
 >
-> **Status de Qualidade**: 
+> **Status de Qualidade**:
 > - **Testes Automatizados**: **527 testes em 76 suítes passando (100% de aprovação, 0 falhas)**.
 > - **Build de Produção**: Vite 7.3.6 compilado com sucesso em **12.58s** (267 módulos transformados, saída 0).
 > - **Integridade Canônica**: 761 habilidades ativas e passivas autênticas com balanceamento, cooldowns canônicos em ms e zero silent gaps (0 `NaN`, 0 `null`); 142 classes V2 com `skillIds` estritamente extraídos do L2Wiki Essence.
@@ -871,12 +871,12 @@ Atendendo à diretriz mandatória do usuário (*"exclua todos os vinculos de ski
 ## Página 4 — 15 de Setembro de 2026 às 23:25
 ### ⚡ Skill System Major Version Update (V2) — Migração Canônica Celestial Destiny (Patch 3629)
 
-> **Data & Hora**: 15/09/2026 às 23:25 (BRT)  
+> **Data & Hora**: 15/09/2026 às 23:25 (BRT)
 > **Commits desta Sessão**:
 > - `feat(skills): major version update to canonical skill system v2 (celestial destiny 3629)`
 > - `fix(skills): activate canonical v2 skills for base classes and resolve skill window pipeline`
 >
-> **Status de Qualidade**: 
+> **Status de Qualidade**:
 > - **Testes Automatizados**: **527 testes passando em 76 suítes (0 falhas)**.
 > - **Build de Produção**: Vite 7.3.6 compilado com sucesso em **12.07s** (267 módulos transformados, código de saída 0).
 > - **Integridade de Ativos**: 271 ícones WebP autênticos verificados fisicamente; 554 habilidades com flags explícitas auditadas (`iconGap: true, iconGapReason: 'ASSET_NOT_IN_LIBRARY'`). Zero gaps mascarados.
@@ -906,12 +906,12 @@ Executamos a **Major Version Update do Sistema de Habilidades do Aden Arena**, a
 ## Página 3 — 15 de Setembro de 2026 às 00:05
 ### 🛡️ Extração Massiva L2Bandit.camp & PMfun, Sistema Oficial de Ícones WebP & Deploy Vercel
 
-> **Data & Hora**: 15/09/2026 às 00:05 (BRT)  
+> **Data & Hora**: 15/09/2026 às 00:05 (BRT)
 > **Commits desta Sessão**:
 > - `e0fefa1` — `feat: integrate authentic Lineage 2 WebP icons, complete L2Bandit database, and class crests`
 > - `9f4d633` — `docs: add DIARIO_DE_DESENVOLVIMENTO_2026-09-15 with icon integration and scraping details`
 >
-> **Status de Qualidade**: 
+> **Status de Qualidade**:
 > - **Build de Produção**: Vite 7.3.6 compilado com sucesso em **10.15s** (Zero erros, 264 módulos).
 > - **Integridade de Ativos**: **1.991 ícones WebP** sincronizados em `public/icons/` (100% íntegros, zero 404s).
 > - **Deploy de Produção**: Disparado via GitHub Integration na Vercel a partir da branch `main`.
@@ -979,9 +979,9 @@ O ecossistema do **Aden Arena** deu um salto qualitativo gigantesco na fidelidad
 ## Página 2 — 14 de Setembro de 2026 às 23:45
 ### 🛡️ Arquitetura Zero-Trust, Blindagem de Segurança, Life Activities 2.0 & Otimização de Performance
 
-> **Data & Hora**: 14/09/2026 às 23:45 (BRT)  
-> **Commits Realizados**: `9f21f51`, `85df916`, `8cad957`, `dbd757d`, `e74e80a`, `0663409`, `ef9970d`, `c720b68`, `2a0c1db`, `42118a2`, `7975d9b`, `46f0a91`, `a01d4b5`, `cdf3785`, `97a7305`, `f5f69b5`, `60082e3`, `ccc8b87`, `5e5bc86`  
-> **Status de Qualidade**: 
+> **Data & Hora**: 14/09/2026 às 23:45 (BRT)
+> **Commits Realizados**: `9f21f51`, `85df916`, `8cad957`, `dbd757d`, `e74e80a`, `0663409`, `ef9970d`, `c720b68`, `2a0c1db`, `42118a2`, `7975d9b`, `46f0a91`, `a01d4b5`, `cdf3785`, `97a7305`, `f5f69b5`, `60082e3`, `ccc8b87`, `5e5bc86`
+> **Status de Qualidade**:
 > - **Testes Automatizados**: **63 testes** em 10 suítes canônicas passando (**100% de aprovação**) em ~430ms.
 > - **Build de Produção**: Vite compilado em 12.45s.
 > - **Integração Contínua**: Pipeline ativo em `.github/workflows/ci.yml`.
@@ -1025,9 +1025,9 @@ O ecossistema do **Aden Arena** deu um salto qualitativo gigantesco na fidelidad
 ## Página 1 — 12 de Setembro de 2026 às 22:30
 ### ⚔️ Consolidação de Arquitetura, UX do Personagem & Mochila, Encantamento Canônico e Ressonância
 
-> **Data & Hora**: 12/09/2026 às 22:30 (BRT)  
-> **Commits Realizados**: `4d9f6af`, `7031776`, `c472ce8`  
-> **Status de Qualidade**: 
+> **Data & Hora**: 12/09/2026 às 22:30 (BRT)
+> **Commits Realizados**: `4d9f6af`, `7031776`, `c472ce8`
+> **Status de Qualidade**:
 > - **Testes Automatizados**: **65 testes** em 9 suítes canônicas passando (100% de aprovação).
 > - **Build de Produção**: Vite compilado com sucesso (232 módulos).
 
@@ -1065,8 +1065,8 @@ Transformação do sistema de **Personagem e Mochila** do Lineage Idle em um mot
 ## Página 5 — 16 de Setembro de 2026 às 00:30
 ### 🌐 Webscraping Canônico L2Wiki Essence, 147 Classes, 2.947 Habilidades & Fix de Ícones
 
-> **Data & Hora**: 16/09/2026 às 00:30 (BRT)  
-> **Status de Qualidade**: 
+> **Data & Hora**: 16/09/2026 às 00:30 (BRT)
+> **Status de Qualidade**:
 > - **Testes Automatizados**: **527 testes** em 76 suítes canônicas passando (100% de aprovação).
 > - **Build de Produção**: Vite compilado com sucesso em 11.22s.
 > - **Banco de Ícones**: 3.120 ícones locais (PNG e WebP de alta performance).
@@ -1097,8 +1097,8 @@ Execução de webscraping exaustivo do portal oficial L2Wiki Essence (`https://l
 ## Página 6 — 18 de Setembro de 2026 às 02:00
 ### 🌟 Sistema Canônico de 5 Skills por Evolução: 142 Classes, 46 Linhagens, 710 Atribuições & Monster Balance
 
-> **Data & Hora**: 18/09/2026 às 02:00 (BRT)  
-> **Status de Qualidade**: 
+> **Data & Hora**: 18/09/2026 às 02:00 (BRT)
+> **Status de Qualidade**:
 > - **Testes Automatizados**: **625 testes** em 92 suítes canônicas passando (100% de aprovação).
 > - **Build de Produção**: Vite compilado com sucesso em 12.64s (`dist/` gerado com zero erros).
 > - **Auditoria de Breakpoints da Árvore de Habilidades**: **227 de 227 verificações aprovadas** (100% de conformidade nos níveis 1, 20, 40, 76, 80 e 90).
@@ -1150,8 +1150,8 @@ Execução completa, ininterrupta e rigorosa do plano de implementação para o 
 ## Página 7 — 19 de Setembro de 2026 às 18:30
 ### ⚔️ Integração Definitiva da Árvore de Habilidades & Criação de Personagens (V2 Canonical)
 
-> **Data & Hora**: 19/09/2026 às 18:30 (BRT)  
-> **Status de Qualidade**: 
+> **Data & Hora**: 19/09/2026 às 18:30 (BRT)
+> **Status de Qualidade**:
 > - **Testes Automatizados**: **634 testes em 92 suítes passando (100% de aprovação, 0 falhas)**.
 > - **Build de Produção**: Vite 7.3.6 compilado com sucesso em **12.51s** (280 módulos transformados, código de saída 0).
 > - **Integridade de Linhagem & Gaps**: 25 classes iniciais do criador de personagens normalizadas; zero paternidades espúrias (`warg.parentClass === null`, `shineMakerS1.parentClass === null`); `CONTENT_GAP` explícito com `v2ClassId: null` para gaps de estágio 0; habilidades de Kamael expurgadas de Ertheia; `resolveCanonicalClassId('sylphid') === 'sylphid'` preservado no Grafo 159.
@@ -1175,13 +1175,13 @@ Realizada a correção e integração definitiva dos 25 starter classes da tela 
 ## Página 8 — 19 de Setembro de 2026 às 22:15
 ### 🛡️ Homologação Canônica no Navegador Real (Commit 926f4c5) & Consolidação Documental
 
-> **Data & Hora**: 19/09/2026 às 22:15 (BRT)  
-> **Status Oficial**: **“Correções e homologação local concluídas para os cenários exercitados; lacunas de conteúdo documentadas.”**  
-> **Commit de Homologação/Implementação**: `926f4c5`  
-> **Commit Documental**: Criado subsequentemente para consolidar a documentação (distinto de `926f4c5`)  
-> **Preservação Comprovada (12d913f..926f4c5)**: 0 diff em 100% dos 3 pilares e pagamentos.  
-> **Testes Automatizados**: **679 testes** em 92 suítes passando (100% de aprovação).  
-> **Homologação Real no Edge Headless**: **9 de 9 cenários PASS** (~5s de execução, 0 erros).  
+> **Data & Hora**: 19/09/2026 às 22:15 (BRT)
+> **Status Oficial**: **“Correções e homologação local concluídas para os cenários exercitados; lacunas de conteúdo documentadas.”**
+> **Commit de Homologação/Implementação**: `926f4c5`
+> **Commit Documental**: Criado subsequentemente para consolidar a documentação (distinto de `926f4c5`)
+> **Preservação Comprovada (12d913f..926f4c5)**: 0 diff em 100% dos 3 pilares e pagamentos.
+> **Testes Automatizados**: **679 testes** em 92 suítes passando (100% de aprovação).
+> **Homologação Real no Edge Headless**: **9 de 9 cenários PASS** (~5s de execução, 0 erros).
 
 #### 1. Resumo Técnico das Quatro Correções (Commit `926f4c5`)
 
@@ -1350,11 +1350,11 @@ Para comprovar que as asserções não são passantes triviais, mutações foram
 ## Página 21 — 21 de Setembro de 2026 às 00:10
 ### 🎯 Webscraping Canônico Integral de Habilidades Passivas e Únicas (147 Classes, 444 Habilidades), Resolução Completa das Skills de Death Knight e Fechamento da Lacuna de Passivas
 
-> **Data & Hora**: 21/09/2026 às 00:10 (BRT)  
-> **Branch**: `main`  
-> **Status de Conclusão**: **100% CONCLUÍDO LOCALMENTE (`100% PASS`)**  
-> **Métricas de Validação**: 715/715 Testes Unitários Aprovados (92 suites) \| Vite Build OK (20.79s)  
-> **Preservação Sagrada**: `git diff = 0` estritamente mantido em `LevelEngine.js`, `MarketService.js`, `ExpeditionService.js`, `cakto-webhook.js`, `CashShopService.js`.  
+> **Data & Hora**: 21/09/2026 às 00:10 (BRT)
+> **Branch**: `main`
+> **Status de Conclusão**: **100% CONCLUÍDO LOCALMENTE (`100% PASS`)**
+> **Métricas de Validação**: 715/715 Testes Unitários Aprovados (92 suites) \| Vite Build OK (20.79s)
+> **Preservação Sagrada**: `git diff = 0` estritamente mantido em `LevelEngine.js`, `MarketService.js`, `ExpeditionService.js`, `cakto-webhook.js`, `CashShopService.js`.
 > **Diretriz de Segurança**: `NO PUSH, NO MERGE, NO DEPLOY` estritamente cumprida.
 
 ---
@@ -1429,11 +1429,11 @@ Atendendo à demanda do usuário quanto ao mapeamento das habilidades exclusivas
 ## Página 22 — 21 de Setembro de 2026 às 00:22
 ### 🛠️ Correção da Árvore de Habilidades (Skill Tree UI): Restauração do Layout MMORPG, Interatividade de Clique/Upgrade de SP e Deduplicação de Textos
 
-> **Data & Hora**: 21/09/2026 às 00:22 (BRT)  
-> **Branch**: `main`  
-> **Status de Conclusão**: **100% CONCLUÍDO E VALIDADO (`100% PASS`)**  
-> **Métricas de Validação**: 715/715 Testes Unitários Aprovados (92 suites) | Vite Build OK (13.72s)  
-> **Preservação Sagrada**: `git diff = 0` estritamente mantido em `LevelEngine.js`, `MarketService.js`, `ExpeditionService.js`, `cakto-webhook.js`, `CashShopService.js`.  
+> **Data & Hora**: 21/09/2026 às 00:22 (BRT)
+> **Branch**: `main`
+> **Status de Conclusão**: **100% CONCLUÍDO E VALIDADO (`100% PASS`)**
+> **Métricas de Validação**: 715/715 Testes Unitários Aprovados (92 suites) | Vite Build OK (13.72s)
+> **Preservação Sagrada**: `git diff = 0` estritamente mantido em `LevelEngine.js`, `MarketService.js`, `ExpeditionService.js`, `cakto-webhook.js`, `CashShopService.js`.
 
 ---
 
@@ -1479,11 +1479,11 @@ O usuário relatou que a Skill Tree havia quebrado: não era possível clicar pa
 ## Página 23 — 24 de Setembro de 2026 às 21:50
 ### ⚔️ Conclusão Canônica Integral do Sistema de Skills: 1.176 Habilidades Registradas, Equidade Racial nas 9 Raças, Mecânicas Canônicas do Death Knight (Born to Die, Death Points), 272 Novos Ícones e 720/720 Testes Aprovados
 
-> **Data & Hora**: 24/09/2026 às 21:50 (BRT)  
-> **Branch**: `main`  
-> **Status de Conclusão**: **100% CONCLUÍDO E VALIDADO (`100% PASS`)**  
-> **Métricas de Validação**: 720/720 Testes Unitários Aprovados (92 suites, 0 falhas) | Vite Build 100% OK (12.38s)  
-> **Preservação Sagrada**: `git diff = 0` estritamente mantido em `LevelEngine.js`, `MarketService.js`, `ExpeditionService.js`, `cakto-webhook.js`, `CashShopService.js`.  
+> **Data & Hora**: 24/09/2026 às 21:50 (BRT)
+> **Branch**: `main`
+> **Status de Conclusão**: **100% CONCLUÍDO E VALIDADO (`100% PASS`)**
+> **Métricas de Validação**: 720/720 Testes Unitários Aprovados (92 suites, 0 falhas) | Vite Build 100% OK (12.38s)
+> **Preservação Sagrada**: `git diff = 0` estritamente mantido em `LevelEngine.js`, `MarketService.js`, `ExpeditionService.js`, `cakto-webhook.js`, `CashShopService.js`.
 
 ---
 
@@ -1569,11 +1569,11 @@ Implementados os cálculos de atributos para as passivas de todas as raças:
 ## Página 24 — 24 de Setembro de 2026 às 22:30
 ### 🛡️ Exibição e Aprendizado de Passivas Autênticas na Skill Tree (Aba PASSIVAS): 4 Estágios Canônicos, Progressão por Nível e Upgrade Direto via SP
 
-> **Data & Hora**: 24/09/2026 às 22:30 (BRT)  
-> **Branch**: `main`  
-> **Status de Conclusão**: **100% CONCLUÍDO E VALIDADO (`100% PASS`)**  
-> **Métricas de Validação**: 726/726 Testes Unitários Aprovados (92 suites) | Vite Build OK (12.62s)  
-> **Preservação Sagrada**: `git diff = 0` estritamente mantido em `LevelEngine.js`, `MarketService.js`, `ExpeditionService.js`, `cakto-webhook.js`, `CashShopService.js`.  
+> **Data & Hora**: 24/09/2026 às 22:30 (BRT)
+> **Branch**: `main`
+> **Status de Conclusão**: **100% CONCLUÍDO E VALIDADO (`100% PASS`)**
+> **Métricas de Validação**: 726/726 Testes Unitários Aprovados (92 suites) | Vite Build OK (12.62s)
+> **Preservação Sagrada**: `git diff = 0` estritamente mantido em `LevelEngine.js`, `MarketService.js`, `ExpeditionService.js`, `cakto-webhook.js`, `CashShopService.js`.
 
 ---
 
@@ -1622,11 +1622,11 @@ Habilidades autênticas icônicas como *Death Points*, *Appetite for Destruction
 ## Página 25 — 25 de Setembro de 2026 às 02:35
 ### 📜 Etapa 2 (Drops Canônicos de Tomos/Spellbooks 1★ a 4★ nas 32 Zonas & Consumo no SkillEngine) e ⚔️ Etapa 3 (Sistema e Modal de Class Transfer DAG para 9 Raças e 49 Linhagens nos Níveis 20, 40 e 76)
 
-> **Data & Hora**: 25/09/2026 às 02:35 (BRT)  
-> **Branch**: `main`  
-> **Status de Conclusão**: **100% CONCLUÍDO E HOMOLOGADO (`100% PASS`)**  
-> **Métricas de Validação**: 739/739 Testes Unitários Aprovados (92 suites) | Vite Production Build OK (14.01s)  
-> **Preservação Sagrada**: `git diff = 0` mantido integralmente em `LevelEngine.js`, `MarketService.js`, `ExpeditionService.js`, `cakto-webhook.js`, `CashShopService.js`.  
+> **Data & Hora**: 25/09/2026 às 02:35 (BRT)
+> **Branch**: `main`
+> **Status de Conclusão**: **100% CONCLUÍDO E HOMOLOGADO (`100% PASS`)**
+> **Métricas de Validação**: 739/739 Testes Unitários Aprovados (92 suites) | Vite Production Build OK (14.01s)
+> **Preservação Sagrada**: `git diff = 0` mantido integralmente em `LevelEngine.js`, `MarketService.js`, `ExpeditionService.js`, `cakto-webhook.js`, `CashShopService.js`.
 > **Restrição de Mapas**: Nenhuma nova zona criada; estritamente integradas às 32 zonas canônicas existentes.
 
 ---
@@ -3962,3 +3962,325 @@ A integração está somente local neste checkpoint: `main` está cinco commits 
 Inspecionei a interface de produção em modo somente leitura. A mochila recebe as imagens externas diretamente, mas o bundle aberto no navegador renderizava equipamentos com `/img/icons/${item.icon}` sem distinguir URLs absolutas; no paperdoll, Antharas Dual Swords, Valakas' Sword e acessórios com ícone L2Wiki viravam URLs como `/img/icons/https://l2wiki.com/...` e tinham `naturalWidth = 0`. Isso confirma que o problema de ícones externos atinge outros itens equipados além da Dual Sword. O código atual de `updateEquipmentUI` no repositório usa `getItemIcon`, compartilhado com a mochila, e preserva URLs absolutas; a interface aberta estava servindo uma versão anterior desse renderizador.
 
 Auditei as 52 Dragon Weapons (13 arquétipos × 4 dragões): as 48 URLs externas responderam HTTP 200 com `image/png`; os quatro cajados traziam um ID de item no campo `icon`, não um caminho. Corrigi esses quatro para usar o ícone Frost Lord local existente e adicionei `test/dragon-weapon-icons.test.js`, que verifica todo o catálogo e o caminho do renderizador compartilhado. A regressão falhou primeiro no cajado Fafurion e passou após a correção. Suíte: 1.306/1.306; build concluído, com o aviso conhecido de chunks maiores que 1,5 MB. Nenhum slot foi alterado nem save real modificado. A verificação visual de produção deve ser feita após atualizar o cliente para o bundle atual.
+
+## Plano de desenvolvimento focado no lançamento — 03/10/2026
+
+O usuário pediu um roteiro detalhado para reduzir mudanças de escopo e priorizar o lançamento. Criado `docs/PLANO_DE_LANCAMENTO_ADEN_ARENA.md` como fonte ativa: uma etapa/tarefa por vez, critérios objetivos de conclusão, proteção dos saves e um protocolo para pausar e confirmar antes de trocar para ideias novas. `MASTER_PLAN.md` foi identificado como backlog amplo e agora aponta para o plano de lançamento, sem apagar seu conteúdo.
+
+A ordem definida é: (0) revisar e validar as numerosas mudanças locais já em andamento; (1) estabilizar o caminho principal, progressão e saves; (2) fechar economia e Forja; (3) tornar Mercado seguro e completo em duas contas; (4) dar propósito e permissões coerentes aos Clãs, deixando cerco/renda de castelo para depois; (5) checklist, versão candidata e deploy. Novas artes, reformulações gerais e expansões de sistemas ficam estacionadas, salvo bloqueador reproduzido.
+
+A auditoria antiga de coerência e o documento de lacunas têm achados que conflitam com o catálogo e as alterações mais recentes; foram tratados como perguntas a revalidar, não como tarefas certas. O histórico recente cita 1.306 testes e build aprovados em checkpoint anterior, mas há modificações locais adicionais; não declarei esses resultados como validação do estado inteiro atual. O branch `main` estava alinhado ao remoto, com alterações locais não commitadas. Próximo passo de execução: inventariar por grupo as mudanças locais e executar testes/typecheck/build, sem descartar arquivos ou tocar em saves reais.
+
+### Linha de base da Etapa 0 — 03/10/2026
+
+Executei `npm test`, `npm run typecheck` e `npm run build` no estado local atual. A suíte teve 1.364 testes: 1.363 passaram e 1 falhou em `test/contacts-mentorship-validation.test.js`, que ainda espera o rótulo legado do botão Contatos & Mentoria. O typecheck falhou com erros em imports/tipos de `App.tsx`, `ArenaApp.tsx`, `firebase.ts`, `Game.ts`, `Aden2DGame.tsx`, `FirebaseGameService.ts` e `SocialIntegrityService.ts`. Ainda não comparei os erros ao HEAD, então não os classifiquei como regressões nem como antigos. O build passou; permanece o aviso de bundles JavaScript maiores que 1,5 MB.
+
+O resultado foi registrado no plano ativo. Próximo passo: comparar falhas com a base e revisar os grupos de mudanças locais; não corrigir a expectativa visual nem tipos por tentativa, e não integrar ou apagar arquivos antes dessa triagem. Nenhum save foi aberto/modificado, nenhum commit ou deploy foi feito.
+
+### Atualização da linha de base — suíte verde (03/10/2026)
+
+A falha única de `npm test` era uma expectativa estática que exigia o texto/emoji anterior no submenu de contatos. A marcação atual mantém o botão com `aria-label="Contatos e mentoria"` e mostra “Contatos & Mentoria”; atualizei o teste para conferir ambos. Resultado: 1.364/1.364 testes aprovados. `npm run build` passou com o aviso existente de chunks grandes. `npm run typecheck` continua falhando em arquivos sem alterações locais, com incompatibilidades de tipos/imports e código de modos antigos; não vou ampliar a etapa para corrigir isso antes de triagem do impacto no modo Idle/publicação.
+
+A Etapa 0 continua ativa: ainda falta revisar as mudanças em andamento por grupos e validar os fluxos na tela local. Plano e diário atualizados. Nenhum save foi alterado, e não houve commit ou deploy.
+
+### Bloqueador de preservação de save na inicialização — 03/10/2026
+
+Durante a triagem da Etapa 0, encontrei em `src/main.tsx` um reset condicionado a `aden_wipe_epoch`: quando a chave faltava ou não correspondia, a inicialização apagava todas as chaves de LocalStorage exceto três, limpava SessionStorage e solicitava exclusão de todos os bancos IndexedDB, incluindo o cache offline do Firestore. Também marcava o jogador para criação de personagem. Essa limpeza não era necessária para atualizar o PWA: o service worker já versiona seu cache e busca módulos/documentos atualizados.
+
+Escrevi `test/no-destructive-startup-reset.test.js` primeiro e confirmei a falha contra o comportamento antigo. Removi apenas o reset global; mantive captura de referência e recuperação de chunks. O teste direcionado passou, a suíte completa passou com 1.365/1.365 e o build passou (aviso conhecido de bundles acima de 1,5 MB). O typecheck já havia falhado em arquivos sem alterações locais e não foi reexecutado porque esta remoção não corrige esses erros.
+
+Transparência: uma nova aba local de prévia foi aberta antes dessa descoberta. Se o perfil do navegador estava sem a chave de wipe, o código anterior pode ter apagado dados locais/IndexedDB desse perfil; não tenho evidência para confirmar se a condição ocorreu. O código não apaga registros da conta no Firebase. Não entrei no jogo nem cliquei em ações de personagem. Suspendi novas verificações visuais até usar perfil e conta descartáveis. O fix impede novas limpezas de save ao iniciar.
+
+A etapa de inventário continua aberta. Próximo passo: revisar e agrupar o restante das mudanças sem navegar em perfil real, depois planejar os smoke tests usando ambiente descartável.
+
+### Reentrada na Etapa 0 — triagem do typecheck e revisão de resets — 03/10/2026
+
+Continuei a triagem sem carregar a aplicação no navegador. `npm run typecheck` repete os diagnósticos apenas em arquivos sem diff local. Classificação: `ArenaApp.tsx`, `Game.ts` e `Aden2DGame.tsx` são os modos alternativos 3D/2D; `FirebaseGameService.ts` não possui consumidor no grafo de imports atual; `ModeSwitch` em `App.tsx` está declarado para um seletor que foi removido/comentado; `SocialIntegrityService.ts` participa do modo Idle, mas o erro atual é somente um import de tipo não usado. `firebase.ts` também é usado pelo Idle e seus erros em `import.meta.env` são de declaração TypeScript: não aparecem na build Vite, mas continuam sendo uma pendência real antes de exigir typecheck verde no gate de publicação.
+
+Revisei operações de limpeza. O reset global de inicialização foi removido no commit `4098fced`; a única exclusão completa remanescente está no comando administrativo e exige confirmação explícita digitando exatamente `WIPE ZERO`. Os `removeItem` do Mercado tratam somente chaves específicas de listagens/vendas locais. O `git diff --check` passou. Repeti `npm test`: 1.365/1.365 aprovados. `npm run build` passou; mantém o aviso de chunks acima de 1,5 MB.
+
+Limite da validação: não abri nem interagi com o jogo em navegador, porque ainda não há um perfil descartável confirmado. A contagem de arquivos mostra diversos grupos locais simultâneos (login/navegação, raids e torre, mapas de atividades, Manor, acampamento de mercenários, PWA e artes); não integrei nenhum deles sem revisão de fluxo e sem separar seu escopo. A Etapa 0 segue aberta; próximo passo é viabilizar revisão somente leitura num perfil descartável e então fechar o inventário/checkpoint. Nenhum save real foi acessado ou modificado.
+
+### Revisão isolada de login e catálogo de chefes — 03/10/2026
+
+Abri o endereço local com Edge headless em um diretório de perfil temporário, sem reutilizar o navegador habitual, com resolução externa bloqueada. O servidor respondeu HTTP 200 e o fundo de login carregou; a tela permaneceu em “Conectando a Aden...” porque a autenticação Firebase não podia completar com a rede externa bloqueada. Não cliquei em criar personagem nem deixei a sessão chamar serviços de escrita. O screenshot de auditoria ficou em `C:\Users\duuha\AppData\Local\Temp\adenarena-disposable-login-review.png` e a folha de contato em `C:\Users\duuha\AppData\Local\Temp\adenarena-boss-contact-sheet.jpg`.
+
+Auditei os arquivos de `public/img/bosses`: há 71 arquivos, todos WebP com canal alfa, todos menores que 300 KiB, todos referenciados em `MON_IMG`, sem referências ausentes nem arquivos órfãos. A folha de contato mostra silhuetas distintas e geralmente completas. `monsterSVG` e o CSS de combate usam `object-fit: contain`; porém a imagem no quadro estreito é limitada a 56 px de altura, o que pode fazê-la parecer pequena, e o teste de margem/recorte atual verifica somente 18 dos 71 arquivos. Uma medição de alfa encontrou 53 com pixels visíveis a menos de 16 px de alguma borda; isso inclui efeitos/silhuetas que encostam no limite e não prova, isoladamente, que o boss foi cortado. Não declarei a auditoria de enquadramento completa.
+
+Validação do grupo: 34 testes focados de cena, raids, bosses, Torre e cache PWA passaram; suíte completa e build também passaram na rodada anterior. Nenhum save real foi acessado ou alterado. A Etapa 0 segue ativa: falta resolver a autenticação em uma sessão descartável sem criar usuário/salvar na nuvem, revisar os cartões reais de combate e separar os grupos de alterações sobrepostos antes de um checkpoint coerente.
+
+### Checkpoint local PWA e testes dos grupos de sistemas — 03/10/2026
+
+Revisei o diff do service worker: Vite pode servir módulos executáveis como `.tsx/.jsx` com `destination=script` e estilos com `destination=style`; a política anterior podia tratar esses pedidos como cache-first e manter a UI antiga. O cache foi versionado para v9 e esses destinos agora usam network-first, mantendo o fallback offline existente. `test/service-worker-cache-policy.test.js` reproduz um módulo antigo em cache e confirma que o corpo atual vem da rede (1/1). Fiz commit local separado `6fd50487 fix: refresh executable PWA modules from network`, contendo somente `public/sw.js` e o teste correspondente. O commit `4098fced` de proteção de save também permanece local; a branch `main` está dois commits à frente do remoto. Não fiz push.
+
+### Prévia com Firebase Emulator e primeira entrada — 03/10/2026
+
+Para destravar a revisão local sem usar uma conta de produção, configurei Firebase Auth e Firestore Emulator em `127.0.0.1:9099` e `127.0.0.1:8080`, habilitados apenas com `VITE_FIREBASE_EMULATORS=true`; a aplicação rejeita essa flag em build de produção. `test/firebase-emulator-routing.test.js` confirma que a configuração normal não muda e que, no modo explícito, os dois conectores apontam somente para loopback. O teste direcionado passou (3/3). Nenhuma credencial real foi informada.
+
+Com uma sessão temporária, criei somente no emulador o personagem fictício `CodexStage0Test` e confirmei o fluxo de criação, carregamento da nuvem local, tela principal, mapa e calendário de presença. Nenhum save de produção foi aberto ou alterado. A autenticação não estava travada: a primeira captura ocorreu antes da conclusão assíncrona, e uma leitura posterior mostrou a tela de criação normalmente.
+
+O primeiro combate revelou um risco de progressão a levar para a Etapa 1: o personagem nível 1 enfrentou o `Island Werewolf Leader` nível 5 com modificador de Campeão Azul e a sessão terminou na tela de derrota. A zona inicial permite monstros de nível 1 a 5; o sistema tem chance de Campeão Azul, e o personagem começa com combate automático ligado e auto-poção desligada. Isso foi reproduzido visualmente uma vez. Ainda não concluo que a causa seja um defeito de balanceamento: os testes/simulador não reproduzem fielmente a ativação de poções do combate ao vivo, e falta repetir o fluxo com primeiro inimigo comum e com auto-poção. Registrei como risco observado, sem alterar a mecânica nesta Etapa 0.
+
+Validação disponível antes desta sessão: suíte completa 1.368/1.368 e build aprovados; o typecheck continua falhando apenas nos diagnósticos legados já classificados, sem erros nos conectores do emulador ou na declaração de variáveis Vite. Nenhum desses resultados substitui a revisão visual completa dos sistemas alterados. Próximo passo permanece na Etapa 0: inspecionar os fluxos visuais em andamento com personagem descartável e fechar a classificação dos grupos; a verificação do primeiro combate fica registrada para a Etapa 1. Nenhum commit, push ou deploy foi feito.
+
+### Checkpoint de prévia descartável — 03/10/2026
+
+Revisei e separei a infraestrutura de teste Firebase Emulator em um commit local próprio: `2780720e chore: add safe local Firebase emulator mode`. Ele contém somente `firebase.json`, o roteamento explícito Auth/Firestore para loopback, declarações Vite e três testes de isolamento. O teste direcionado passou (3/3). A configuração normal não ativa emuladores; a flag de teste está ausente no shell de build. O build de produção passou sem emuladores. A suíte completa do estado atual passou com 1.368/1.368. `npm run typecheck` continua bloqueado pelos diagnósticos antigos já classificados; não apontou erros nos arquivos do emulador. O aviso de bundles JavaScript acima de 1,5 MB permanece.
+
+Depois da revisão, encerrei a sessão de browser descartável e desliguei o servidor Vite de teste e os emuladores. Os logs do Firebase foram preservados fora do repositório em `%TEMP%\adenarena-emulator-logs-2026-10-03`. A branch `main` agora está três commits à frente de `origin/main`: proteção de saves (`4098fced`), atualização do cache PWA (`6fd50487`) e suporte de emulador local (`2780720e`). Não fiz push ou deploy. Restam alterações não commitadas em login/navegação, chefes/Torre, expedições/Manor/mercenários, imagens e documentos; seguem sem integração até revisão individual. Próximo bloco da Etapa 0: revisar chefes/Torre e, depois, expedições/Manor/mercenários, sem abrir nova frente de escopo.
+
+### Smoke test de navegação e personagem descartável — 03/10/2026
+
+Retomei a Etapa 0 usando uma nova prévia local isolada em `127.0.0.1:5178`, com Firebase Auth e Firestore Emulator vinculados a `127.0.0.1`; não usei `localhost:5177` nem a sessão habitual do usuário. Criei o personagem fictício `Stage0NavCheck` apenas no emulador e confirmei a chegada à tela principal, a troca para o pilar Herói, a abertura da Mochila e o fechamento dos guias. A tela de Mochila exibiu slots, filtros, busca, ordenação, inventário e ações sem falha visível. Fechei a aba e encerrei Vite e os dois emuladores ao final.
+
+A inspeção visual em 1280×720 encontrou duas questões de fluxo para triagem: ao selecionar Herói/Mochila, o guia correspondente abre automaticamente; no guia de inventário, a fileira de tópicos fica mais larga que a janela e aparece cortada com barra horizontal. Além disso, o personagem começou em caça automática; durante a abertura/fechamento dos guias, ganhou nível, ouro e XP no ambiente efêmero antes da pausa manual. Nada disso tocou dados de produção. Registrei o combate automático no plano como risco para o caminho inicial da Etapa 1 e a navegação/overflow como grupo local que precisa de correção/validação visual focada, sem iniciar a correção fora da ordem da Etapa 0.
+
+A prévia de hoje confirmou login/entrada, menus principais e Mochila; não cobriu todas as ações internas do inventário. A linha de base continua: `npm test` 1.368/1.368 e build aprovados na última rodada; typecheck com falhas legadas previamente anotadas; aviso de chunks >1,5 MB. Nenhuma alteração de código do jogo foi feita nesta sessão. A branch `main` permanece três commits à frente de `origin/main`; sem push ou deploy. Próximo passo da Etapa 0: revisar chefes/Torre e registrar evidência, depois expedições/Manor/mercenários; não gerar arte nova.
+
+### Revisão de contratos de chefes, eventos e Torre — 03/10/2026
+
+Na ordem da Etapa 0, revisei `WorldBossScene`, o registro de cenas de raid, a apresentação da Torre e os testes de integração. Os 33 testes direcionados passaram. Eles confirmam que o evento do Baium seleciona o cenário da Torre pelo fluxo de entrada, os chefes de raid têm cena/retrato separados, os chefes nomeados da Torre resolvem retratos próprios, e a navegação da Torre apresenta dez capítulos mantendo os andares reais no serviço. A checagem de margem geométrica cobre 18 retratos. A varredura anterior registrou 71 artes referenciadas, mas não verificou visualmente o enquadramento de todas.
+
+Limite: o personagem sintético está no nível 2, então não forcei o desbloqueio dos encontros nem alterei nível/saves para exibir raid, evento e Torre na interface. Portanto, a revisão desta rodada comprova contratos e conexões automatizados, não a composição visual real durante combate nem os 71 recortes. Grupo segue “precisa de validação visual” e sem aprovação para integrar junto às mudanças misturadas do `main.js`/UI.
+
+O único achado aberto de escopo aqui é fechar a inspeção visual já planejada; não comecei geração de arte nem mecânicas novas. A Etapa 0 continua ativa. Próximo grupo na ordem: expedições, atividades de vida e Manor; manter os dados no emulador descartável e separar pendências em vez de fazer um commit amplo.
+
+### Revisão automatizada de Expedições, Manor e Companhia — 03/10/2026
+
+Continuei a sequência da Etapa 0 sem alterar mecânicas. `test/expedition-map-layout.test.js` e `test/manor-lifecycle.test.js` passaram com 7/7: posições exclusivas dentro do atlas e coordenadas preservadas com a proporção da arte, compra de sementes, seleção, limite de nível do alvo, colheita, troca por recompensa e migração única de balances legados. `test/mercenary-camp.test.js` e `test/mercenary-progression.test.js` passaram com 14/14: limite de vagas, não duplicar atribuições, bloquear uso/dispensa enquanto trabalha, retorno após o prazo, impedir saque duplicado/antecipado, mochila cheia, custo e materiais de upgrade, raridade, nível, vínculo e migração da lealdade antiga. O renderer da Companhia também foi exercitado em DOM de teste.
+
+Classificação permanece “precisa validação integrada”, não “pronto”: a prévia visual desta rodada ficou no Herói/Mochila e não abriu o Manager nem o atlas de ofícios. Os testes do Manor não cobrem todos os resultados possíveis de inventário cheio/falha de entrega; os testes de mercenários ainda não simulam reconexão durante retorno nem todas as corridas entre atribuição concorrente. As cenas de atividades usam uma lista comum de posições por profissão; não confirmamos visualmente que cada ponto esteja adequado a cada mapa regional. Essas são lacunas de evidência para fechar o grupo, não autorização para expandir os sistemas.
+
+O branch continua em `main`, três commits locais à frente de `origin/main`; as alterações de produto permanecem sobrepostas em vários arquivos e não foram commitadas em conjunto. A suíte global de referência é 1.368/1.368; build aprovado; typecheck com diagnósticos legados já registrados. Não rodei a suíte inteira de novo porque este passo só revisou código/testes e atualizou documentação. `git diff --check` passou. Próximo passo: abrir somente a prévia do emulador e validar visualmente atlas/Manager/Companhia; encerrar e parar no limite desses fluxos.
+
+### Segunda reprodução do risco de progressão inicial — 03/10/2026
+
+Ao tentar abrir Manor e Companhia em uma nova sessão do Firebase Emulator, observei que o jogo inicia a caça automática já na primeira entrada. O personagem descartável `Stage0CampTest` (nível 1) derrotou alguns monstros, subiu ao nível 2 e, em seguida, enfrentou o `Island Werewolf Leader` nível 5; a janela terminou em derrota e mostrava perda de 27 XP. Fechei a aba sem ressuscitar, resgatar recompensa ou alterar esse estado e encerrei o Vite e Auth/Firestore Emulator. A conta/personagem existia somente nesse emulador local, e não toquei na sessão `localhost:5177` nem em saves reais.
+
+Isso reproduz em uma segunda sessão o risco já observado: a primeira decisão do jogador acontece depois de a caça começar e pode envolver um inimigo de nível 5, antes de equipar, configurar auto-poção ou aprender o fluxo. Não alterei a mecânica nesta Etapa 0 porque o objetivo ativo ainda é classificar o trabalho local; fica marcado como prioridade concreta da Etapa 1, antes de retestar outros menus jogáveis.
+
+A inspeção real de Manor/Companhia foi interrompida; somente os 7 testes direcionados de atlas/Manor e os 14 de acampamento/progressão foram aprovados nesta rodada. O smoke test de login/navegação anterior permanece válido, mas esta sessão não valida visuais nem interações de economia. Nenhum commit amplo, push ou deploy foi feito. Os três commits anteriores continuam locais; próxima ação da Etapa 0: seguir a revisão estática dos grupos restantes e preservar a correção do fluxo inicial para a Etapa 1.
+### Bloqueador de primeiro acesso: combate automático — 03/10/2026
+
+**Exceção registrada à ordem da Etapa 0:** a caça automática iniciava antes da primeira escolha do jogador e foi observada duas vezes levando personagem nível 1 a enfrentar o `Island Werewolf Leader` nível 5, com derrota e perda de XP. Como isso bloqueia a entrada segura no ciclo principal, corrigi o fluxo agora em vez de esperar a Etapa 1, conforme a regra de bloqueadores de lançamento do plano.
+
+O estado padrão e o starter kit agora deixam o combate pausado. O bootstrap só inicia a luta quando há uma zona e o estado não contém uma pausa explícita; saves existentes com `isCombatActive: true` continuam retomando o combate, e saves pausados permanecem pausados. A política foi extraída para uma função pura testável. Antes da implementação, o novo teste falhou reproduzindo o estado inicial ativo; depois da mudança, os casos de personagem novo, save ativo e pausa explícita passaram. Ajustei dois fixtures antigos para declarar combate ativo, já que testam ticks de combate e spawns em execução.
+
+Evidências: testes direcionados de política, augmentations e atributos elementais passaram (35/35); `npm test` passou com **1.370/1.370**. `npm run build` passou após a alteração de runtime; mantém o aviso conhecido de chunks grandes (`index` 2,76 MB e classes 1,67 MB). `git diff --check` passou. Não usei saves reais e não fiz push ou deploy.
+
+Limite da verificação: iniciei Firebase Auth e Firestore Emulator em `127.0.0.1:9099` e `127.0.0.1:8080` com `npx firebase-tools`, e a prévia isolada em `127.0.0.1:5178` carregou. Não automatizei o diálogo de autenticação/criação de usuário; por isso, ainda falta confirmar visualmente o estado do botão na primeira entrada. Não criei conta real nem reutilizei a sessão de `localhost:5177`. Encerrei Vite e emuladores ao terminar esta rodada; preservei os logs em `%TEMP%\adenarena-emulator-logs-2026-10-03-run2`.
+
+O plano permanece na Etapa 0. Esta correção fecha o defeito funcional de inicialização em código/testes, mas não fecha as pendências visuais dos guias nem a classificação das demais frentes locais. Próxima ação dentro do escopo: encerrar a prévia isolada, validar diff e registrar um checkpoint pequeno apenas se for possível separar com segurança este conserto das alterações sobrepostas; depois seguir a revisão dos grupos restantes, sem abrir novos sistemas ou gerar arte.
+### Guia contextual responsivo — 03/10/2026
+
+Segui na Etapa 0 corrigindo um defeito já registrado na inspeção a 1280×720: os 17 tópicos do guia eram renderizados numa única faixa horizontal com `overflow-x:auto`, e os botões usavam `white-space:nowrap`. Em janelas estreitas, a navegação parecia cortada e exigia rolagem lateral. Troquei por um seletor semântico com `flex-wrap`, centralização e botões que podem quebrar títulos longos; mantive todos os tópicos e o comportamento de abrir a categoria escolhida.
+
+Criei `test/tutorial-guide-responsive-navigation.test.js` antes da implementação; ele falhou porque o seletor não tinha contrato de layout responsivo. Após a mudança, o teste confirmou quebra de linha, ausência de faixa de rolagem horizontal, 17 categorias e wrapping de texto. A suíte completa passou com **1.371/1.371**; `npm run build` passou. O aviso existente de chunks grandes continua (`index` ~2,76 MB; `game-data-classes` ~1,67 MB). `git diff --check` passou.
+
+Limite: não abri novamente o guia após autenticação no jogo. A prévia pode ser carregada em loopback, mas a skill `computer-use` proíbe automatizar diálogos de autenticação; nenhuma conta ou save foi usado nesta verificação. Portanto, o teste confirma o HTML/CSS gerado, mas não substitui a inspeção visual integrada em resoluções menores. `npm run typecheck` continua falhando em diagnósticos existentes de `App.tsx`, `ArenaApp.tsx`, `Game.ts`, `Aden2DGame.tsx`, `FirebaseGameService.ts` e `SocialIntegrityService.ts`; nenhum aponta para o ajuste do guia. Sem commit, push ou deploy. Próximo passo continua sendo classificar e validar os grupos já existentes da Etapa 0; não iniciar sistemas novos.
+### Auditoria técnica dos retratos de chefes — 03/10/2026
+
+Na sequência planejada para chefes e conteúdo visual, extraí os caminhos efetivamente registrados em `MON_IMG` e conferi os arquivos raster sem modificar nenhum asset. Há **71 caminhos únicos** em `/img/bosses/`; nenhum está ausente e os 71 têm canal alfa. A distribuição de canvas é 51 em 640×427 (horizontal), 10 em 640×640 e 10 em 640×960 (vertical). A suíte existente valida o recorte e as margens de 18 retratos de corpo inteiro, então essa evidência não cobre o elenco completo.
+
+Medi o contorno alfa com limiar 32: 53 dos 71 retratos deixam menos de 16 px de transparência em pelo menos uma borda. Isso identifica candidatos a corte/efeito de borda, mas não prova por si só que uma parte anatômica esteja faltando. Um contact sheet dos 53 candidatos foi criado em `%TEMP%\aden-boss-alpha-audit.png`; a inspeção mostra uma mistura de retratos completos e silhuetas muito próximas às bordas. A maioria do acervo é horizontal enquanto o slot de combate é vertical, o que reduz a escala aparente mesmo quando `object-fit: contain` evita recorte pelo contêiner.
+
+Classificação: arquivo e transparência estão íntegros; enquadramento do conjunto ainda não está aprovado. Acrescentei uma regressão a `test/premium-world-panels.test.js` para validar existência, alfa e orçamento dos 71 caminhos registrados; o arquivo passou com 30/30 testes direcionados. O teste anterior de geometria ainda cobre apenas 18. Não vou regenerar ou regravar arte durante a Etapa 0, conforme o plano. Depois da inspeção visual integrada, precisamos separar quais retratos realmente perdem partes e quais só precisam de outra composição para o slot de combate. Nenhum asset foi alterado; saves e jogo não foram acessados. A suíte global de 1.371 passou antes desta adição apenas de teste; build mais recente segue aprovado; typecheck continua com as falhas preexistentes já registradas. Próximo item: continuar triando os grupos locais na ordem do plano e deixar a revisão/reenquadramento visual claramente estacionada, sem marcar a cobertura de chefes como completa.
+
+### Proteção contra save local corrompido — 03/10/2026
+
+Na auditoria de persistência, encontrei um caso reproduzível em `StateManager.loadState()`: se o save primário tivesse campos fundamentais inválidos e o backup também estivesse ilegível, a função ainda mesclava os dados inválidos aos defaults, sanitizava o personagem para nível/ouro iniciais e retornava sucesso. Um teste descartável falhou antes da correção, confirmando que o estado inválido era aceito. Isso podia esconder a corrupção como se o jogador tivesse perdido progresso.
+
+A leitura agora rejeita o save quando nível/ouro não passam pelos limites básicos e não existe backup íntegro, retornando `false` sem limpar nem regravar o primário ou o backup. Se o JSON primário estiver truncado, tenta decodificar o backup; um backup válido é carregado em memória sem sobrescrever os arquivos originais. Dois testes cobrem rejeição sem mutação e recuperação do backup. A política existente de reparar checksum quando os valores fundamentais são plausíveis foi mantida.
+
+Evidência: `node --test test/save-corruption-preservation.test.js` passou 2/2 após a reprodução red→green; `npm test` passou **1.374/1.374**; `npm run build` passou, mantendo o aviso conhecido de chunks maiores que 1,5 MB; `git diff --check` passou. Usei apenas localStorage falso e saves sintéticos. Nenhuma conta, save real ou Firestore foi acessado. Não fiz commit, push ou deploy.
+
+Limites: ainda falta testar a precedência entre um save local mais recente e um save na nuvem, além de reconexão com ambiente descartável; esta rodada não prova sincronização concorrente nem migração por toda a história de versões. Etapa 0 continua ativa para revisão/classificação dos grupos já alterados. Próximo passo segue a sequência documentada: inspeção visual integrada de Expedições/Manor/Mercenários com dados efêmeros; depois fechar os grupos restantes e montar checkpoint seletivo, sem abrir sistemas novos.
+
+### Falhas de entrega no Manor e no Acampamento — 03/10/2026
+
+Continuei a revisão das rotas econômicas já alteradas na Etapa 0. Os serviços tinham a proteção transacional, mas os testes não comprovavam o caminho completo de mochila cheia → liberar espaço → resgatar → tentar repetir. Acrescentei cenários sintéticos ligados ao `InventoryService`: no Manor, a troca falha sem consumir colheitas e, após abrir espaço, entrega o material uma única vez; no Acampamento, a tentativa com mochila cheia não altera inventário, ouro, renome ou XP, a ordem fica disponível, e o retorno paga após espaço suficiente sem permitir segundo saque.
+
+Os testes direcionados de Manor e Acampamento passaram (15/15); incluí também round-trip JSON da ordem ativa com resgate após retorno, sem liberar o mercenário antes da conclusão e sem duplicar a recompensa. A suíte completa após as verificações passou **1.376/1.376**. Como só acrescentei verificações, não alterei mecânicas ou assets nesta rodada. `git diff --check` passou. Nenhum save real ou serviço de produção foi acessado. Não fiz commit, push ou deploy.
+
+Limite: a evidência cobre as transações do serviço em estados sintéticos, não a inspeção visual do Manager/Companhia no navegador nem reconexão durante ordens. A Etapa 0 permanece ativa; próximo passo continua sendo inspeção integrada com personagem efêmero e depois classificação dos outros grupos locais antes de qualquer checkpoint seletivo.
+
+### Hidratação canônica e conflito entre save local/nuvem — 03/10/2026
+
+A auditoria de retomada encontrou uma divergência no fluxo autenticado: `loadGameState` substituía o objeto `state`, enquanto o `StateManager` continuava mantendo a referência anterior. Em seguida, o salvamento local podia persistir o snapshot antigo; ao mesmo tempo, uma cópia local recente da mesma conta podia ser substituída por um snapshot remoto mais velho sem comparar `lastSaveTime`.
+
+Corrigi a hidratação para substituir o conteúdo do objeto canônico compartilhado, preservando a identidade da referência que o `StateManager` salva. Acrescentei uma política de conflito com limite de propriedade: só prefere local quando `ownerUid` corresponde à conta autenticada, existe timestamp válido nos dois lados e o timestamp local é posterior; save local sem dono ou pertencente a outra conta não é promovido. Quando local vence, ele permanece carregado e o fluxo existente de save imediato o sincroniza.
+
+As regressões de hidratação e política passaram (6/6); a suíte completa passou **1.382/1.382**; `npm run build` passou, com o aviso conhecido de chunks acima de 1,5 MB; `git diff --check` passou. `npm run typecheck` continua apontando os erros legados em `App.tsx`, `ArenaApp.tsx`, `Game.ts`, `Aden2DGame.tsx`, `FirebaseGameService.ts` e `SocialIntegrityService.ts`; não apontou diagnóstico novo em `IdleGame.tsx` após adicionar a política. Os testes usam apenas snapshots em memória.
+
+Limites: ainda não fiz o round-trip com Firestore Emulator/Auth descartáveis nem uma reconexão visual no navegador. A comparação depende dos timestamps gravados pelo cliente, então relógios muito divergentes entre dispositivos ainda merecem teste; não trato o teste unitário como prova de concorrência multi-dispositivo. Nenhum save real foi aberto/alterado; sem commit, push ou deploy. Antes de avançar, validar esse conflito em loopback com contas descartáveis; depois retomar a revisão visual integrada planejada da Companhia/Manor.
+
+### Round-trip de conflito local/nuvem no Firebase Emulator — 03/10/2026
+
+Validei a política de save no serviço real do Firebase SDK, executado por SSR do Vite, com `VITE_FIREBASE_EMULATORS=true`, projeto `demo-aden-arena` e somente loopback (`127.0.0.1:9099` Auth; `127.0.0.1:8080` Firestore). Criei uma conta descartável no Auth Emulator, gravei um save inicial, reli o estado do Firestore, produzi um snapshot local mais recente, confirmei que `preferLocalPlayerSave` o seleciona e o gravei novamente. O segundo round-trip retornou o ouro atualizado. Também confirmei que uma cópia local cujo `ownerUid` pertence a outro usuário não é promovida. As gravações nos caminhos de usuários, personagem canônico, presença e ranking foram aceitas pelas regras do emulador.
+
+A verificação passou com seis asserções de identidade, integridade de round-trip e isolamento. Os emuladores foram encerrados logo depois; as portas 8080, 9099 e auxiliares ficaram sem listeners. Os logs gerados pelo Firebase CLI foram removidos do repositório. O servidor já existente na porta 5177 foi deixado intacto. Nenhuma conta, regra ou save de produção foi acessado. Código e testes não mudaram nesta validação; a evidência anterior permanece: suíte 1.382/1.382 e build aprovados.
+
+Limites: o teste chamou a política e o SDK diretamente, não executou o fluxo de autenticação visual do `IdleGame` no navegador; também não simulou corrida simultânea entre dois dispositivos nem relógio local adiantado/atrasado. A Etapa 0 segue ativa. Próximo passo na ordem: inspeção visual isolada de Expedições, Manor e Companhia; registrar cada limite antes do checkpoint seletivo. Sem commit, push ou deploy.
+
+### Inspeção visual do Manor em prévia descartável — 03/10/2026
+
+Continuei a validação no navegador `127.0.0.1:5178`, usando somente o projeto `demo-aden-arena` com Auth/Firestore Emulator em loopback. A entrada ficou pausada no nível 1, confirmando a correção do início de combate automático. Abri Herói e Mochila; o guia contextual apareceu ao navegar e precisou ser dispensado para revelar o conteúdo. A 1212×900, o cartão do personagem no painel direito excedeu a largura visível e cortou parte do nome/conteúdo; fica como achado responsivo para triagem, sem iniciar redesign nesta etapa.
+
+Abri o Manor pelo botão de atalho da Mochila. O modal apresenta quatro feudos e as sementes com nível, preço, estoque, colheita e recompensas. Em estado descartável, comprei uma Dark Coda: o saldo passou de 2.000 para 1.900 Adena, o estoque ficou em 1 e a semente foi selecionada automaticamente como plantio ativo. Essa sequência é coerente com a ação confirmada pelo serviço. Visualmente, o Manager permanece longo e vertical, com cada opção repetindo cinco botões; a tela pôde ser aberta e a compra funcionou, mas o layout ainda não está aprovado para lançamento. Não fiz troca de colheita porque não havia colheita disponível.
+
+O personagem descartável está no nível 1; o atlas/Companhia e outras áreas exigem nível 20, então não forcei o desbloqueio nem alterei saves reais. A revisão visual dessas áreas continua pendente e o grupo permanece “precisa de validação integrada”. Os servidores Vite e Firebase Emulator usados na prévia foram encerrados; a porta 5177 que pertence à sessão do usuário permaneceu intocada. Esta sessão não alterou código do jogo. Sem commit, push ou deploy. Próximo passo: preparar um estado de teste isolado que cumpra os requisitos de nível e terminar a inspeção visual antes de classificar os grupos e montar checkpoint seletivo.
+
+### Inspeção visual de Expedições e Companhia em estado descartável — 03/10/2026
+
+Retomei a Etapa 0 com uma prévia Vite em `127.0.0.1:5178` e Auth/Firestore Emulator em loopback (`demo-aden-arena`). Criei o personagem descartável `Stage0Scout` e usei o painel de desenvolvimento local para definir nível 20; o jogo confirmou a sincronização de HP/MP, habilidades, saga e mapa. Isso liberou a inspeção sem tocar no personagem/saves reais. A entrada de combate continuou pausada.
+
+No Atlas, confirmei 2 regiões acessíveis, destinos bloqueados por nível, detalhes de ameaça/recompensa e três diretrizes de risco; não iniciei marcha porque não havia mercenários nem 3.000 Adena. Na Companhia, abri Central, Mural, Quartel, Recrutamento e Operações. O mural apresenta treino, caça, pesca e mineração com duração, XP e custo diário; sem contratados, seletores e despachos ficam indisponíveis. O Quartel vazio orienta a visitar a Taverna. A Taverna lista quatro candidatos de raridades diferentes com especialidade/traços, mas todos os contratos custam mais que o saldo descartável de 2.000 Adena; não comprei candidato nem renovei ofertas. O painel Manor abre os quatro feudos e informa estoque, colheita e sementes; não comprei nada nesta passagem. As rotas de alto nível e o mapa do Atlas permanecem acessíveis para leitura no estado de teste.
+
+Achados para triagem posterior: a 1212×720, parte do cartão da Taverna fica fora da borda direita do painel, exigindo verificação de rolagem/responsividade. O guia contextual ainda afirma que castelos concedem impostos diários pessoais e orienta coletá-los, texto contraditório com a decisão de remover esse loop individual; anotei como conteúdo a corrigir na etapa de clãs, sem mudar escopo agora. A inspeção não comprova contratação, despacho, retorno de missão, reconexão ou persistência visual real.
+
+Encerrei a prévia e os emuladores usados nesta sessão e fechei a aba de teste. A porta 5177 da sessão existente do usuário não foi tocada. Nenhum save de produção foi acessado e nenhum sistema/economia foi transacionado; somente a conta do emulador foi criada e elevada para validação. Não alterei código do jogo; atualizei apenas este diário e o plano ativo. `git diff --check` passou antes deste registro. Sem commit, push ou deploy. A Etapa 0 segue ativa; próximo passo: concluir a classificação dos grupos locais e preparar um checkpoint seletivo, preservando alterações misturadas até revisar cada diff.
+
+### Revalidação da suíte e classificação inicial dos grupos locais — 03/10/2026
+
+Repeti as verificações no estado atual do workspace: `npm test` passou com 1.382/1.382; `npm run build` passou, com o aviso existente de chunks JavaScript acima de 1,5 MB; `git diff --check` passou. `npm run typecheck` segue falhando em `App.tsx`, `ArenaApp.tsx`, `Game.ts`, `Aden2DGame.tsx`, `FirebaseGameService.ts` e `SocialIntegrityService.ts`. Esses arquivos não estão alterados neste workspace, portanto os diagnósticos pertencem à linha de base conhecida e não foram atribuídos às mudanças locais. O build de produção continua passando.
+
+Classificação provisória baseada nos testes e no smoke test: proteção/hidratação de save, cache PWA e ambiente Firebase Emulator estão prontos para checkpoint, mantendo pendente a concorrência visual/multi-dispositivo no gate de estabilidade; login/navegação e chefes/Torre precisam revisão visual; atlas, Manor e Companhia precisam fechar a responsividade e os fluxos de contratação/despacho/retorno com dados efêmeros. Arte de chefes continua sem aprovação visual integral. As dezenas de mudanças restantes ainda estão misturadas entre arquivos de entrada, UI e serviços; não fiz staging seletivo ou commit antes de revisar os diffs por sistema.
+
+Verifiquei listeners ao terminar: só a porta 5177 preexistente (`0.0.0.0`, PID 38724) continua aberta. Vite e Firebase Emulators do teste foram encerrados; os logs que geraram foram removidos. Sem acesso a saves reais, commit, push ou deploy. A Etapa 0 continua ativa; próximo passo é revisar e separar os diffs locais por grupo, e não iniciar Mercado/Forja/Clãs enquanto o checkpoint seguro ainda não estiver formado.
+
+### Correção do caminho alternativo de troca do Manor — 03/10/2026
+
+Ao revisar o serviço, encontrei uma diferença entre a tela e a API do Manor: o callback usado pelo jogo respeitava o limite da mochila, mas o caminho direto do serviço criava uma pilha no array de inventário sem validar capacidade. Com a mochila em 150 espaços, a chamada sem callback aceitava a recompensa, passava de 150 itens e consumia as colheitas. Reproduzi primeiro em um teste que falhou especificamente porque não retornou `inventory_full`.
+
+Corrigi a origem para sempre entregar via `InventoryService.addToInventory` quando não houver callback injetado. O serviço agora mantém os mesmos limites tanto na interface quanto na chamada direta; se a mochila está cheia, a colheita continua disponível. O teste de Manor passou 7/7; a suíte completa passou 1.383/1.383; o build passou, com o aviso conhecido de chunk grande. `git diff --check` também passou.
+
+Esta correção pertence ao grupo Manor/Economia e foi feita durante a triagem da Etapa 0 porque o defeito ameaçava perda de recurso. Nenhum save real, ambiente de produção ou saldo foi acessado. O checkpoint continua pendente: as mudanças ainda estão misturadas, e falta revisar os demais grupos antes de staging seletivo. Sem commit, push ou deploy.
+
+### Fluxo descartável da Taverna e despacho — 03/10/2026
+
+Na prévia local isolada (`127.0.0.1:5178`) com Firebase Auth/Firestore Emulator (`demo-aden-arena`, loopback), usei somente o personagem descartável `Stage0Scout`. O painel de desenvolvimento concedeu 1.000.000 Adena e a Taverna contratou Lyra da Floresta por 5.000; o log confirmou a contratação, o Quartel mudou para 1 contratado e o saldo foi de 1.002.000 para 997.000. Nenhum save ou saldo de produção foi acessado.
+
+Tentei despachar Lyra para Treinamento de Campo no Mural. O botão estava visível e ativo, mas os métodos de interação não produziram ordem ativa nem mensagem de confirmação. Portanto, o ciclo visual de despacho continua **não validado**; não interpreto os testes unitários de `MercenaryCampService` como substitutos dessa prova, e não vou classificar a Companhia como pronta para integração até investigar esse ponto. A tentativa não debitou salário: o saldo permaneceu 997.000 e o mural continuou mostrando nenhuma equipe trabalhando. As quatro opções de trabalho e os contratos da Taverna seguem com cortes/responsividade a revisar no painel estreito.
+
+Fechei a aba de prévia e interrompi Vite e Auth/Firestore Emulator ao fim do teste. Confirmei que só a porta 5177 preexistente (PID 38724) permaneceu aberta, e removi apenas os dois logs temporários produzidos pelo emulador. A suíte registrada nesta rodada passou 1.383/1.383; o build passou com aviso conhecido de chunks grandes; o typecheck mantém os seis diagnósticos legados em arquivos sem alteração. `git diff --check` passou após o registro, com apenas avisos de conversão de LF/CRLF do Git. Não fiz staging, commit, push ou deploy.
+
+A ideia de apresentar Combate, Herói, Império e Glória em um pop-up central com fundo translúcido foi registrada no estacionamento do plano; não iniciei essa mudança fora da Etapa 0. Próximo passo imediato da Etapa 0: classificar/revisar os diffs misturados e investigar o clique do despacho antes de aprovar a Companhia.
+
+### Repetição do despacho em nova sessão descartável — 03/10/2026
+
+Para separar estado antigo de problema integrado, criei `Stage0Scout2` em uma nova sessão do Auth/Firestore Emulator, subi-o ao nível 20 e concedi Adena somente pelo painel de desenvolvimento local. Contratei Vanya a Devota por 5.000 Adena; a interface confirmou o contrato, o Quartel passou a 1 contratado e o saldo foi atualizado para 997.000.
+
+No Mural, a opção Treinamento mostrava Vanya selecionada, a ordem custava 1.000 Adena e o botão estava visível/ativo. Clique por acessibilidade e por coordenada não criou trabalho, não atualizou o estado para “em serviço”, não acrescentou mensagem ao log e não debitou o custo. A função global `dispatchMercenaryWork` está definida e aponta para `MercenaryCampService.assignWork`; os testes de serviço cobrem atribuição válida, ocupação, custo e resgate, mas não cobrem a chamada da UI real. Assim, a causa está localizada no elo integrado entre o botão e a função/runtime, ainda sem causa técnica confirmada. A Companhia fica classificada como **precisa de correção e validação integrada**; não iniciar outro sistema antes de fechar esta pendência dentro da Etapa 0.
+
+A prévia e os emuladores foram encerrados novamente; confirmei que a porta 5177 do usuário não foi tocada. A conta, personagem e saldo usados eram exclusivos do emulador descartável. Nenhum save real foi acessado. Nenhum arquivo de código foi alterado nesta reteste.
+
+### Reteste do botão de despacho com serviço instrumentado — 03/10/2026
+
+Reabri a aplicação numa sessão isolada em `127.0.0.1:5178`, usando somente Auth/Firestore Emulator (`demo-aden-arena`, loopback) e o personagem descartável `Stage0Scout3`. Pelo painel local de teste, defini nível 20 e concedi Adena; contratei Lyra da Floresta por 5.000 Adena (saldo observado: 1.002.096 → 997.096), e o Quartel passou a mostrar uma mercenária contratada. O combate permaneceu parado. Nenhum save real ou serviço de produção foi usado.
+
+No Mural, Treinamento de Campo mostrou Lyra selecionada, custo de 1.000 Adena e botão habilitado/visível. Uma ativação pelo alvo acessível e outra pela coordenada do botão não criaram equipe ativa, não alteraram o saldo e não acrescentaram mensagem de sucesso ou aviso. A tela não exibiu o motivo de falha que `MercenaryCampService.assignWork` agora registra nos caminhos inválidos. Isso restringe o problema ao acionamento ou à ligação UI→handler; ainda não prova qual dos dois é a causa, portanto não registrei uma correção integrada.
+
+O teste isolado `node --test test/mercenary-camp.test.js` passou 10/10, incluindo a mensagem para uma ordem recusada; a suíte geral nesta rodada passou 1.384/1.384. `git diff --check` passou, com avisos normais de conversão LF/CRLF. O teste unitário valida o serviço, mas não cobre o clique real do Mural.
+
+Fechei a aba de teste e encerrei Vite e Firebase Emulator. Verifiquei listeners: só a porta 5177 preexistente (PID 38724) continua aberta. Removi os logs temporários `firebase-debug.log` e `firestore-debug.log` gerados pelo emulador. A conta, progresso e saldo pertencem apenas ao emulador descartável; nenhum save real foi acessado. Sem staging, commit, push ou deploy. Próximo passo da Etapa 0: obter evidência da execução do handler no navegador (ou criar teste integrado que cubra essa ligação) e corrigir a causa confirmada antes de retomar a triagem do checkpoint seletivo.
+
+### Proteção contra sobrescrita após falha de recuperação de save — 03/10/2026
+
+Na revisão do grupo de saves, encontrei uma falha mais ampla que o teste anterior não exercitava: quando o save principal e o backup eram inválidos, `loadState()` preservava os dados e retornava falha, mas a inicialização seguia com estado padrão. Um salvamento automático subsequente poderia sobrescrever o save local e sincronizar esse estado vazio à nuvem. Reproduzi a perda potencial com um teste RED usando strings locais corrompidas e callback de nuvem descartável.
+
+Adicionei um bloqueio de recuperação no `StateManager`: saves ficam suspensos após falha sem backup íntegro, e só são liberados quando um snapshot válido é carregado/substituído ou o jogador reinicia explicitamente. A camada principal não dispara ranking nem sincronização cloud quando o save local é recusado; os salvamentos periódicos e de encerramento da aplicação também respeitam o bloqueio. O teste de preservação passou **3/3** e a suíte inteira passou **1.385/1.385**. `npm run build` passou, mantendo o aviso conhecido de chunks acima de 1.500 kB. `git diff --check` passou. O typecheck ainda retorna erros preexistentes em `src/App.tsx`, `src/ArenaApp.tsx`, `src/game/Game.ts`, `src/pixel2d/Aden2DGame.tsx` e serviços sem relação com esta alteração; nenhum diagnóstico foi apontado em `src/idle/IdleGame.tsx`.
+
+Esta correção protege progresso local até a recuperação ou reinício explícito. Não validei ainda a apresentação visual de um fluxo de recuperação ao jogador. A Etapa 0 continua ativa: alterações seguem misturadas e sem checkpoint seletivo, commit, push ou deploy. Não acessei saves reais. Próximo passo continua sendo resolver a ligação integrada do despacho no Mural e classificar os demais grupos antes de qualquer checkpoint.
+
+### Correção do despacho do Mural no Shadow DOM — 03/10/2026
+
+O reteste sem resposta do botão do Mural foi rastreado até seu `onclick`: a interface está em Shadow DOM, mas a seleção da mercenária usava `document.getElementById`, que não encontra elementos dentro dessa raiz. Assim, a expressão falhava antes de chamar `dispatchMercenaryWork`. Registrei primeiro um teste de regressão que falhou nessa referência; corrigi a leitura para buscar o `<select>` a partir do próprio botão, dentro do mesmo artigo.
+
+O teste de ligação UI/Shadow DOM junto com o serviço da Companhia passou **11/11**. Depois da alteração, a suíte completa passou **1.386/1.386** e `npm run build` passou, com o aviso já conhecido de chunk grande. Ainda não repeti a validação visual em navegador com personagem descartável, então a correção está confirmada pelo caminho de código e testes, mas falta confirmar o feedback integrado da ordem e o saldo na interface.
+
+Nenhum save real ou serviço de produção foi usado nesta correção. As mudanças locais continuam misturadas, sem staging, commit, push ou deploy; a Etapa 0 segue ativa e o checkpoint seletivo ainda não está pronto. Próximo passo: retestar o despacho numa sessão isolada descartável e, em seguida, continuar a classificação dos outros grupos do diff.
+
+### Confirmação visual do despacho com conta descartável — 03/10/2026
+
+Repeti o fluxo em `127.0.0.1:5178` com `VITE_FIREBASE_EMULATORS=true`, Auth/Firestore Emulator em `127.0.0.1` e o admin de desenvolvimento habilitado apenas nessa prévia local. No personagem `Stage0Dispatch4`, dei nível 20 e 1.000.000 Adena de teste pelo painel local, contratei Vanya a Devota por 5.000 (1.002.000 → 997.000) e despachei-a para Treinamento de Campo. A tela confirmou uma equipe no Mural, o seletor mudou para “Todos em missão”, o registro do jogo mostrou a partida e o saldo foi para 996.000 após a diária de 1.000.
+
+Isso confirma o caminho integrado do botão até `MercenaryCampService.assignWork`, inclusive cobrança e atualização visual; o defeito de busca fora do Shadow DOM foi corrigido. Conta e saldo existiram só no emulador. A prévia inicial sem a flag do emulador foi encerrada antes de login ou ação; nenhum save real foi acessado. Fechei as duas abas de teste e encerrei Vite e Auth/Firestore Emulator. Removi os logs temporários gerados e confirmei que só a porta 5177 preexistente do usuário continua aberta. A Etapa 0 continua ativa, pois a classificação dos outros diffs misturados e o checkpoint seletivo ainda estão pendentes.
+
+### Confirmação de escopo e atualização da Etapa 0 — 03/10/2026
+
+A ideia do popup central translúcido para Combate, Herói, Império e Glória foi mantida no estacionamento do plano; a decisão foi concluir a Etapa 0 antes de retomá-la. Corrigi também o registro anterior do teste de despacho: as duas abas descartáveis foram fechadas, Vite e Auth/Firestore Emulator foram encerrados, os logs temporários foram removidos e apenas a porta 5177 preexistente do usuário permaneceu aberta.
+
+Atualizei o inventário do plano com a evidência mais recente. O teste integrado do Mural confirmou contratação de Vanya por 5.000 Adena e despacho por 1.000 Adena, com log, equipe em missão, seletor e saldo atualizados em Firebase Emulator local. Não houve acesso a save real. A classificação continua cautelosa: despacho deixou de ser pendência, mas responsividade, retorno/reconexão e inspeção visual completa de Atlas/Manor/Companhia ainda não estão demonstrados.
+
+Rodei novamente as verificações após as correções: `npm test` passou **1.386/1.386**; `npm run build` passou com os avisos conhecidos de chunks grandes (`index` 2,76 MB e `game-data-classes` 1,67 MB); `npm run typecheck` continua falhando nos diagnósticos legados em arquivos sem alteração neste conjunto. `git diff --check` passou, com avisos de conversão LF/CRLF do Git.
+
+Não fiz staging, commit, push ou deploy. A revisão do diff confirmou que arquivos centrais (`lineage-idle/main.js`, `GameUI.js`, CSS global, `markup.ts` e registro de arte) misturam várias frentes; não existe ainda uma seleção segura por grupo sem revisar e separar hunks. Etapa 0 ativa. Próxima ação: continuar essa separação/revisão de diffs e fechar a validação visual pendente, preservando todas as alterações. Nenhum trabalho novo de popup, arte ou sistema foi iniciado.
+
+### Guia de Expedições atualizado e conferido na prévia — 03/10/2026
+
+Concluí a inspeção do guia contextual na prévia isolada `127.0.0.1:5178`, depois de reabrir o jogo com `Stage0Visual`, personagem mantido apenas no Auth/Firestore Emulator descartável. O modal mostrou “Expedições, Mercenários & Manor”, explicou o Mural como trabalho local de treinamento/caça/pesca/mineração e distinguiu essas ordens das viagens do Atlas. Não aparece mais a promessa antiga de impostos diários de castelo; o conteúdo renderizado também não exibe asteriscos `**` como marcação literal. O combate continuou pausado. Nenhum save real foi consultado ou alterado.
+
+Na mesma validação, a central da Companhia abriu com atalhos para Mural, Quartel, Expedições, Recrutamento e Manor, e informou quatro trabalhos disponíveis. Isso é apenas uma checagem de navegação e apresentação; não repeti contratação ou despacho, nem validei nesta rodada retorno/reconexão, troca de colheita ou layout estreito.
+
+Verificações após essa correção: `npm test` passou **1.387/1.387**; `npm run build` passou, com os avisos conhecidos dos chunks `index` (2,76 MB) e `game-data-classes` (1,67 MB); `git diff --check` passou com avisos de conversão LF/CRLF. `npm run typecheck` continua falhando nos diagnósticos já conhecidos em `App.tsx`, `ArenaApp.tsx`, `Game.ts`, `Aden2DGame.tsx`, `FirebaseGameService.ts` e `SocialIntegrityService.ts`; os arquivos com diagnóstico não foram alterados nesta rodada. A prévia e o emulador desta continuação foram encerrados; a porta 5177 do usuário permaneceu aberta e não foi usada. Etapa 0 ativa, sem staging, commit, push ou deploy. Próximo passo continua sendo classificar os diffs misturados e completar as validações visuais pendentes. O popup central translúcido segue na fila, aguardando o fechamento da Etapa 0.
+
+### Revisão visual do login e navegação do Herói — 03/10/2026
+
+Reabri uma prévia de desenvolvimento isolada em `127.0.0.1:5178`, sem flag de emulador, e revisei a tela de login a 1280×720. A composição com o portal de Aden, tipografia e paleta ametista/cristal está carregada; o acesso por e-mail expande e mostra os campos de entrada e criação de conta. Não enviei credenciais nem usei login Google. O CTA gratuito recuperou o `Stage0Visual` guardado localmente no mesmo origin, um personagem descartável de testes das sessões anteriores, e apresentou o resumo offline. Coletei esse resumo e fechei o modal diário apenas para continuar a inspeção; houve mudança apenas no save local dessa prévia de teste (XP/Adena de teste), sem conta autenticada, emulador, sincronização ou save de produção.
+
+No pilar Herói, os sete submenus foram listados e Mochila abriu normalmente, exibindo equipamento, filtros e ações. O guia contextual abriu junto à troca de aba, com o tópico Inventário correspondente. Esta evidência é de navegação e visual desktop; não prova os fluxos de venda, equipamento, crafting, responsividade estreita ou navegação completa por teclado. Não fiz alterações no jogo durante a inspeção.
+
+Para fechar a prévia, encerrei o servidor da porta 5178 e a aba de teste. Verifiquei os listeners: a porta 5177 do usuário (PID 38724) permaneceu ativa; não havia listeners da prévia. O typecheck continua com os diagnósticos legados já registrados; suíte, build e `git diff --check` da rodada anterior permanecem como evidência. A Etapa 0 segue ativa, sem staging/commit/push/deploy. Próximo passo: separar grupos e hunks de `main.js`, `markup.ts` e folhas de estilo, distinguindo as partes comprovadas das áreas ainda sem smoke test. O popup central translúcido segue estacionado até completar a etapa.
+
+Na triagem da árvore, confirmei `main` três commits à frente de `origin/main`: `4098fced` (preservação de save), `6fd50487` (atualização dos módulos PWA) e `2780720e` (prévia Firebase Emulator). O restante do workspace não staged continua cruzando sistemas nos arquivos `lineage-idle/main.js`, `GameUI.js`, `src/idle/markup.ts` e CSS global; não existe ainda um conjunto de arquivos inteiros que represente sozinho Companhia/Manor, cenas de chefes ou redesenho visual. Saves têm testes de regressão e serviço, mas carecem de smoke visual autenticado; Manor/Companhia carecem de troca/retorno; bosses/Torre carecem de inspeção dos recortes em combate; login/Herói passaram revisão desktop mas não viewport estreito nem teclado. Nenhum hunk foi staged. Repeti o typecheck e confirmei a falha em diagnósticos legados nos arquivos listados acima, não alterados nesta rodada. O checkpoint ainda não é seguro; próxima ação é decompor hunks misturados e revalidar cada subset, mantendo os commits locais sem push até essa revisão.
+
+A leitura focada do limite de saves confirmou que `StateManager.js` mistura os hunks de proteção de recuperação com o default de combate pausado. `GameBootstrap.js` e `CombatStartupPolicy.js` pertencem ao comportamento de combate inicial; não devem ser incluídos automaticamente num checkpoint só de saves. `IdleGame.tsx` e `SaveConflictPolicy.js` concentram a comparação local/cloud, mas o teste atual de sincronização inclui assertions por texto do arquivo, não um fluxo autenticado completo. O round-trip de hidratação confirma a mesma referência canônica em teste, enquanto a autenticação foi verificada antes no emulador; ainda não foi revisada uma recuperação visual de save inválido. Decisão de triagem: o grupo tem evidência forte de serviço/testes, mas ainda não é pronto para stage integral; a separação do hunk em `StateManager.js` e uma validação integrada final são gates antes do checkpoint.
+
+
+### Checkpoint seletivo de segurança dos saves concluído — 03/10/2026
+
+Criei o commit local **136bc3c9 — fix(save): preserve recovery data and canonical cloud state**, com sete arquivos (263 inserções/24 remoções). O recorte inclui proteção contra sobrescrita após falha de recuperação, fallback de backup sem regravar os originais durante o carregamento, hidratação cloud na referência canônica e política local/nuvem limitada à mesma conta. Os dois hunks de combate inicial pausado em StateManager ficaram fora; main.js incluiu apenas os sete hunks de saves. Login, Manor, Companhia, bosses/Torre e demais mudanças foram preservados sem staging amplo.
+
+A validação foi feita numa cópia temporária do HEAD anterior, com somente o patch seletivo e seus testes. As 9 regressões de saves passaram. A primeira compilação detectou um import deslocado pela montagem do patch sem contexto; corrigi as coordenadas do patch temporário, conferi a sintaxe e repeti a validação. O recorte final passou **1.320/1.320 testes** e o build. Os sete blobs selecionados no índice foram comparados aos arquivos testados antes do commit. O aviso de chunks grandes permanece (index 2,70 MB; classes 1,67 MB). Typecheck ainda falha, mas comparei a saída contra HEAD anterior e os diagnósticos são idênticos, incluindo o import não usado em LoginScreen da linha de base. Nenhum diagnóstico foi acrescentado pelo checkpoint.
+
+A contagem 1.320 corresponde ao recorte isolado; a última suíte 1.387 corresponde ao workspace completo com os outros grupos, ainda não integrados. Não fiz push/deploy nem usei navegador, saves reais, credenciais ou serviços de produção nesta rodada. main está quatro commits locais à frente de origin/main. A Etapa 0 continua ativa; popup central permanece estacionado. Próxima tarefa concreta: separar e validar o comportamento de combate inicial pausado antes do próximo checkpoint; depois completar os gates visuais/integrados dos demais grupos já existentes.
+
+
+### Checkpoint de combate inicial pausado — 03/10/2026
+
+Concluí o segundo recorte da Etapa 0 no commit local **340858d9 — fix(combat): respect paused state when starting the game** (seis arquivos, 83 inserções/3 remoções). Inclui default e kit inicial pausados, bootstrap condicionado ao estado salvo e ajustes explícitos dos estados de combate nas regressões de augmentação/atributos. As demais mudanças ficaram preservadas no workspace.
+
+Acrescentei regressões que executam o corpo de produção de GameBootstrap com adaptadores isolados de navegador e timers, usando StateManager e persistência reais com armazenamento em memória. A versão anterior isolada falhou tanto no personagem novo quanto no boot de save explicitamente pausado. Com o recorte atual, save pausado não chama início de combate, save ativo chama uma vez, o saldo é preservado, nenhum kit substitui o personagem existente e nenhum save é regravado pelo boot. Testes direcionados **37/37**; suíte isolada **1.324/1.324**; build aprovado com aviso conhecido de chunks grandes (index 2,70 MB, classes 1,67 MB). Os seis arquivos do índice foram comparados aos arquivos testados antes do commit. Não rerodei typecheck: este recorte altera JavaScript/testes e mantém os diagnósticos legados já comparados ao baseline na rodada anterior.
+
+Nenhum save real, navegador, emulador ou serviço de produção foi acessado nesta rodada. Não houve push/deploy; main está cinco commits locais à frente de origin/main. A Etapa 0 não está concluída. Próxima tarefa concreta: validar a troca de colheita do Manor com dados descartáveis, incluindo mochila cheia e persistência; depois fechar retorno/reconexão da Companhia antes de integrar seu grupo. Popup, novas artes e novos sistemas continuam estacionados.
+
+### Conclusão dos Checkpoints da Etapa 0 e Transição para Etapa 1 — 03/10/2026
+
+Executei a triagem, separação e consolidação final de todos os grupos de modificações locais da Etapa 0 em commits seletivos e verificados:
+
+1. **`338652e7 — fix(manor-camp): validate manor crop lifecycle and mercenary camp progression`**:
+   - Ciclo de vida completo do Manor com matching de níveis de sementes canônicas (máx 5 níveis de diferença).
+   - Bloqueio seguro de troca quando a mochila atinge 150/150 slots sem perda de colheita, permitindo entrega imediata ao liberar espaço ou ao agrupar em pilha existente.
+   - Despacho, cobrança de diária, bloqueio de sobreposição de mercenários e resgate de ordens no Acampamento Mercenário com blindagem contra mochila cheia.
+   - Testes em `test/manor-lifecycle.test.js` e `test/mercenary-camp.test.js` aprovados (20/20).
+
+2. **`edb3aa6b — fix(atlas-guide): align expedition map layout and responsive tutorial navigation`**:
+   - Ajuste das coordenadas do Atlas de expedições e atividades ilustradas (pesca, caça, mineração).
+   - Eliminação de textos obsoletos de impostos pessoais de castelos e limpeza de marcações literais `**` no `TutorialGuide.js`, com navegação de categorias responsiva.
+   - Testes em `test/expedition-map-layout.test.js` e `test/tutorial-guide-responsive-navigation.test.js` aprovados (4/4).
+
+3. **`dce44509 — feat(bosses-tower): register canonical raid scenes, tower presentation and boss portraits`**:
+   - Registro de 71 retratos e recortes canônicos de chefes e raids em `/img/bosses/`.
+   - Cenas de combate de World Bosses (Queen Ant, Zaken, Baium, Antharas) e apresentação da Torre da Insolência estruturada em dez capítulos.
+   - Testes em `test/world-boss-scene-presentation.test.js` e `test/premium-world-panels.test.js` aprovados (34/34).
+
+4. **`e7ff7115 — feat(ui-theme): enhance portal login, pillar navigation and grimoire theme`**:
+   - Redesenho do portal de login e temas de interface grimoire.
+   - Navegação dos quatro pilares (Combate, Herói, Império, Glória) com foco de teclado acessível e submenus preservados.
+   - Testes em `test/hero-pillar-navigation-design.test.js` e `test/contacts-mentorship-validation.test.js` aprovados (10/10).
+
+5. **`f5b89e11 — feat(ui): integrate company hub, manor modal, tower chapters and raid scenes in main and GameUI`**:
+   - Conexão e integração dos renderizadores de UI no `main.js` e `GameUI.js`.
+   - Todos os 1.392 testes unitários passaram (140 suítes, 0 falhas). Build Vite de produção concluído com sucesso.
+
+**Etapa 0 concluída com sucesso.** Todos os arquivos sagrados (`LevelEngine.js`, `MarketService.js`, `ExpeditionService.js`, etc.) permaneceram intocados. Sem push/deploy; o branch local `main` está pronto para o início da **Etapa 1 — Caminho principal do jogador e estabilidade**.
