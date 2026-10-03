@@ -2303,7 +2303,7 @@ function getItemIcon(defOrId) {
   const itemId = typeof defOrId === 'string' ? defOrId : (def?.id || defOrId.itemId || '');
   if (HEIRLOOM_ICON_MAP_MAIN[itemId] || HEIRLOOM_ICON_MAP_MAIN[def?.id]) {
     const iconUrl = getAssetUrl(`img/icons/${HEIRLOOM_ICON_MAP_MAIN[itemId] || HEIRLOOM_ICON_MAP_MAIN[def?.id]}`);
-    return `<img src="${iconUrl}" alt="${def?.name || ''}" class="item-icon-img" onerror="this.style.display='none';if(this.nextElementSibling)this.nextElementSibling.style.display='inline-block';" style="width:28px; height:28px; object-fit:contain; vertical-align:middle;" /><span class="item-icon-fallback" style="display:none; font-size:18px;">${emoji}</span>`;
+    return `<img src="${iconUrl}" alt="${def?.name || ''}" class="item-icon-img" onerror="if(!this.dataset.triedLocal && this.src.includes('l2wiki.com')){this.dataset.triedLocal='1';this.src='/img/icons/l2wiki/' + this.src.split('/').pop();}else{this.style.display='none';if(this.nextElementSibling)this.nextElementSibling.style.display='inline-block';}" style="width:28px; height:28px; object-fit:contain; vertical-align:middle;" /><span class="item-icon-fallback" style="display:none; font-size:18px;">${emoji}</span>`;
   }
 
   let iconPath = def?.icon || '';
@@ -2316,6 +2316,10 @@ function getItemIcon(defOrId) {
     iconPath = iconIndex[itemId] || iconIndex['armor_' + itemId] || iconIndex['jewel_' + itemId] || iconIndex['weapon_' + itemId] || iconIndex[String(itemId).replace(/^(armor_|jewel_|weapon_|shield_|wepoan_)/, '')] || '';
   }
   if (!iconPath || isEmojiIconMain(iconPath)) return `<span class="item-icon-fallback" style="font-size:18px;">${emoji}</span>`;
+
+  if (iconPath.startsWith('http://') || iconPath.startsWith('https://') || iconPath.startsWith('data:')) {
+    return `<img src="${iconPath}" alt="${def?.name || ''}" class="item-icon-img" onerror="if(!this.dataset.triedLocal && this.src.includes('l2wiki.com')){this.dataset.triedLocal='1';this.src='/img/icons/l2wiki/' + this.src.split('/').pop();}else{this.style.display='none';if(this.nextElementSibling)this.nextElementSibling.style.display='inline-block';}" style="width:28px; height:28px; object-fit:contain; vertical-align:middle;" /><span class="item-icon-fallback" style="display:none; font-size:18px;">${emoji}</span>`;
+  }
 
   let p = String(iconPath).replace(/\\/g, '/').replace(/^\//, '');
   if (!p.endsWith('.png') && !p.endsWith('.jpg') && !p.endsWith('.webp') && !p.endsWith('.svg')) p += '.png';

@@ -369,7 +369,7 @@ export function getItemIcon(defOrId) {
     return `<span class="inventory-item-emoji" style="display:inline-block; font-size:16px; line-height:1; vertical-align:middle;">${emoji}</span>`;
   }
 
-  return `<img src="${iconUrl}" alt="${def?.name || ''}" class="inventory-item-image" onerror="this.style.display='none';if(this.nextElementSibling)this.nextElementSibling.style.display='inline-block';" style="width:24px; height:24px; object-fit:contain; vertical-align:middle; pointer-events:none;" /><span class="inventory-item-emoji" style="display:none; font-size:16px;">${emoji}</span>`;
+  return `<img src="${iconUrl}" alt="${def?.name || ''}" class="inventory-item-image" onerror="if(!this.dataset.triedLocal && this.src.includes('l2wiki.com')){this.dataset.triedLocal='1';this.src='/img/icons/l2wiki/' + this.src.split('/').pop();}else{this.style.display='none';if(this.nextElementSibling)this.nextElementSibling.style.display='inline-block';}" style="width:24px; height:24px; object-fit:contain; vertical-align:middle; pointer-events:none;" /><span class="inventory-item-emoji" style="display:none; font-size:16px;">${emoji}</span>`;
 }
 
 export function formatItemDisplayName(item, def) {
