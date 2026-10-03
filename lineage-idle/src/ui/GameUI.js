@@ -75,8 +75,14 @@ import { MonsterAIEngine, ARCHETYPE_INFO, HUNTING_DIFFICULTIES } from '../engine
 import { heroSVG, monsterSVG, MON_IMG } from '../../art.js';
 import { AFFIX_MAP } from '../../data/affixes.js';
 import { MercenaryService } from '../services/MercenaryService.js';
-import { MERCENARY_RARITIES, MERCENARY_SPECIALIZATIONS, MERCENARY_TRAITS, calculateMercenaryPower, getMercenaryXpForLevel } from '../data/mercenaries.js';
+import { MercenaryCampService } from '../services/MercenaryCampService.js';
+import { MERCENARY_CAMP_WORK } from '../data/mercenaryCamp.js';
+import { MERCENARY_RARITIES, MERCENARY_SPECIALIZATIONS, MERCENARY_TRAITS, calculateMercenaryPower, getMercenaryXpForLevel, getMercenaryBondTier } from '../data/mercenaries.js';
+import { MANOR_PROVINCES, MANOR_SEEDS } from '../data/manor.js';
 import { EXPEDITION_DESTINATIONS, EXPEDITION_DILEMMAS, ExpeditionService } from '../services/ExpeditionService.js';
+import { EXPEDITION_MAP_POSITIONS } from './ExpeditionMapLayout.js';
+import { getRaidScene } from './RaidSceneRegistry.js';
+import { resolveWorldBossScene } from './WorldBossScene.js';
 import { checkExpeditionDilemmaEligibility } from '../services/ExpeditionDilemmaPolicy.js';
 import { renderForgeRefinery, setRefineryCategory } from './RefineryUI.js';
 
@@ -3091,7 +3097,7 @@ export function renderStageMonster(state) {
   }
 
   if (structure.sprite && typeof monsterSVG === 'function') {
-    const mId = m.id || m.monsterId || m.key || m.name || 'goblin';
+    const mId = m.visualId || m.id || m.monsterId || m.key || m.name || 'goblin';
     const opts = { crown: !!(m.isBoss || m.boss) };
     structure.sprite.innerHTML = monsterSVG(mId, opts);
   }
@@ -3541,6 +3547,7 @@ export function updateCharacterUI(state) {
 export function updateZoneUI(state, callbacks = {}) {
   const currentZoneKey = state?.zone || state?.currentZone || 'talkingIsland';
   const zDef = ZONES ? ZONES[currentZoneKey] : null;
+  const worldBossScene = resolveWorldBossScene(state, ZONE_BACKGROUNDS);
 
   const zoneNameEl = findElement('zone-name');
   if (zoneNameEl && zDef) {
@@ -3548,12 +3555,14 @@ export function updateZoneUI(state, callbacks = {}) {
   }
 
   const stageZoneEl = findElement('stage-zone');
-  if (stageZoneEl && zDef) {
-    stageZoneEl.textContent = zDef.name.toUpperCase() + (zDef.town ? ' · TOWN' : '');
+  if (stageZoneEl && (worldBossScene || zDef)) {
+    stageZoneEl.textContent = worldBossScene
+      ? `⚡ ${state.activeMonster.name} · COVIL GLOBAL`.toUpperCase()
+      : zDef.name.toUpperCase() + (zDef.town ? ' · TOWN' : '');
   }
 
   const stageEl = findElement('stage');
-  if (stageEl && currentZoneKey) {
+  if (stageEl && currentZoneKey && !worldBossScene) {
     const bgUrl = (ZONE_BACKGROUNDS && ZONE_BACKGROUNDS[currentZoneKey]) || zDef?.background;
     if (bgUrl) {
       stageEl.style.backgroundImage = `url('${getAssetUrl(bgUrl)}')`;
@@ -6989,7 +6998,7 @@ export function renderAstralMasteryUI(state) {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   20. EXPEDITIONS, CASTLES & MANOR UI RENDERER
+   20. EXPEDITIONS, MERCENARIES & MANOR UI RENDERER
 ═══════════════════════════════════════════════════════════════════════════ */
 export function renderExpeditionsUI(state) {
   if (!state) return;
@@ -6999,23 +7008,20 @@ export function renderExpeditionsUI(state) {
 
   const now = Date.now();
   const dests = (typeof window !== 'undefined' && window.EXPEDITION_DESTINATIONS) ? window.EXPEDITION_DESTINATIONS : EXPEDITION_DESTINATIONS;
-  const castles = (typeof window !== 'undefined' && window.CASTLES_DEFS) ? window.CASTLES_DEFS : {};
-  const seeds = (typeof window !== 'undefined' && window.MANOR_SEEDS) ? window.MANOR_SEEDS : {};
-
   const activeExpeditions = state.expeditions || [];
-  const playerCastles = state.castles || {};
-  const ownedCrops = state.manorCrops || {};
+  const manorState = state.manorData || {};
+  const activeManorSeed = MANOR_SEEDS[manorState.activeSeedId];
+  const ownedSeedCount = Object.values(manorState.seeds || {}).reduce((sum, count) => sum + (Number(count) || 0), 0);
+  const storedCropCount = Object.values(manorState.crops || {}).reduce((sum, count) => sum + (Number(count) || 0), 0);
   const currentLvl = state.level || 1;
   const destinationEntries = Object.entries(dests);
-  const expeditionMapPoints = [
-    [20, 29], [26, 68], [52, 43], [63, 19], [68, 73], [86, 41]
-  ];
   const selectedDestinationId = destinationEntries.some(([id]) => id === window._selectedExpeditionDestination)
     ? window._selectedExpeditionDestination
     : (destinationEntries.find(([, def]) => currentLvl >= (def.minLevel || 15))?.[0] || destinationEntries[0]?.[0]);
 
   // Estado dos Mercenários
   const mState = MercenaryService.getMercenariesState(state);
+  const campState = MercenaryCampService.getCampState(state);
   if (mState.tavernPool.length === 0) {
     MercenaryService.refreshTavern(state);
   }
@@ -7108,7 +7114,9 @@ export function renderExpeditionsUI(state) {
       const specDef = MERCENARY_SPECIALIZATIONS[merc.spec] || { name: merc.spec, icon: '⚔️' };
       const mercPower = calculateMercenaryPower(merc);
       const neededXp = getMercenaryXpForLevel(merc.level || 1);
-      const xpPct = Math.min(100, Math.floor(((merc.xp || 0) / neededXp) * 100));
+      const xpPct = neededXp > 0 ? Math.min(100, Math.floor(((merc.xp || 0) / neededXp) * 100)) : 100;
+      const trust = merc.trust ?? merc.loyalty ?? 50;
+      const bondTier = getMercenaryBondTier(trust);
 
       rosterHtml += `
         <div style="
@@ -7121,8 +7129,8 @@ export function renderExpeditionsUI(state) {
           position: relative;
         ">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
-            <span style="font-size:9px; background:${rarityDef.bgBadge}; color:${rarityDef.color}; padding:1px 5px; border-radius:3px; font-weight:bold;">
-              Nv. ${merc.level || 1}
+            <span style="font-size:9px; background:${rarityDef.bgBadge}; color:${rarityDef.color}; border:1px solid ${rarityDef.border}; padding:1px 5px; border-radius:3px; font-weight:bold;">
+              ${rarityDef.name.toUpperCase()} · NV. ${merc.level || 1}
             </span>
             <span style="font-size:10px; color:${isBusy ? '#fbbf24' : '#34d399'}; font-weight:bold;">
               ${isBusy ? '🧭 EM MARCHA' : '✓ PRONTO'}
@@ -7140,8 +7148,8 @@ export function renderExpeditionsUI(state) {
             <div style="width:${xpPct}%; height:100%; background:#3b82f6;"></div>
           </div>
           <div style="display:flex; justify-content:space-between; align-items:center; font-size:9px; margin:3px 0;">
-            <span style="color:${(merc.loyalty ?? 50) >= 80 ? '#34d399' : ((merc.loyalty ?? 50) >= 50 ? '#60a5fa' : '#f87171')}; font-weight:bold;">
-              🤝 Lealdade: ${merc.loyalty ?? 50}%
+            <span style="color:${trust >= 80 ? '#34d399' : (trust >= 50 ? '#60a5fa' : '#f87171')}; font-weight:bold;">
+              🤝 ${bondTier.name} · Vínculo ${trust}/100
             </span>
             ${merc.trait && MERCENARY_TRAITS[merc.trait] ? `
               <span style="color:${MERCENARY_TRAITS[merc.trait].color};" title="${MERCENARY_TRAITS[merc.trait].desc}">
@@ -7149,8 +7157,14 @@ export function renderExpeditionsUI(state) {
               </span>
             ` : ''}
           </div>
+          <div title="${bondTier.desc}" style="width:100%; height:4px; background:rgba(0,0,0,0.6); border-radius:2px; overflow:hidden; margin:4px 0 2px;">
+            <div style="width:${bondTier.progressPct}%; height:100%; background:linear-gradient(90deg,#38bdf8,#c084fc);"></div>
+          </div>
+          <div style="font-size:8px; color:#94a3b8; margin-bottom:4px;">
+            ${bondTier.nextAt === null ? 'Vínculo máximo · bônus de materiais desbloqueado' : `Próximo vínculo: ${bondTier.nextName} em ${bondTier.nextAt}`}
+          </div>
           <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
-            <span style="font-size:9px; color:#888;">XP: ${merc.xp || 0}/${neededXp}</span>
+            <span style="font-size:9px; color:#888;">${neededXp > 0 ? `XP: ${merc.xp || 0}/${neededXp}` : 'Nível máximo'}</span>
             <button
               onclick="window.dismissMercenary('${merc.uid}')"
               ${isBusy ? 'disabled' : ''}
@@ -7165,20 +7179,62 @@ export function renderExpeditionsUI(state) {
     rosterHtml += `</div>`;
   }
 
+  const availableWorkers = mState.owned.filter(merc => !MercenaryService.isMercenaryBusy(state, merc.uid));
+  const campUpgrade = MercenaryCampService.getNextUpgrade(state);
+  const campUpgradeAffordable = campUpgrade && campState.renown >= campUpgrade.renown && (Number(state.gold) || 0) >= campUpgrade.gold && campUpgrade.materials.every(req =>
+    (state.inventory || []).filter(item => item.itemId === req.itemId && !item.equipped).reduce((sum, item) => sum + (Number(item.count) || 1), 0) >= req.count
+  );
+  const workOrdersHtml = Object.values(MERCENARY_CAMP_WORK).map(activity => {
+    const options = availableWorkers.map(merc => `<option value="${merc.uid}">${merc.name} · Nv. ${merc.level || 1}</option>`).join('');
+    return `
+      <article style="flex:1 1 210px;min-width:190px;background:rgba(10,17,22,.78);border:1px solid rgba(184,151,88,.26);border-radius:9px;padding:11px;">
+        <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:22px;">${activity.icon}</span><strong style="font:700 12px 'Cinzel',serif;color:#f2d998;">${activity.name}</strong></div>
+        <p style="font-size:10px;color:#aeb8bd;min-height:30px;margin:7px 0;">${activity.description}</p>
+        <div style="font-size:9px;color:#8fd5bd;margin-bottom:8px;">⏱ ${Math.round(activity.durationMs / 60000)} min · 🎖 +${activity.mercenaryXp} XP · 💰 diária ${activity.wage.toLocaleString()}</div>
+        <select id="camp-worker-${activity.id}" style="width:100%;padding:6px;border-radius:5px;background:#111923;color:#e5e7eb;border:1px solid #45515a;margin-bottom:7px;" ${availableWorkers.length ? '' : 'disabled'}>${options || '<option value="">Todos em missão</option>'}</select>
+        <button onclick="window.dispatchMercenaryWork('${activity.id}', this.parentElement.querySelector('select').value)" ${availableWorkers.length && (Number(state.gold) || 0) >= activity.wage && campState.assignments.length < campState.level ? '' : 'disabled'} style="width:100%;padding:7px;border-radius:5px;border:1px solid rgba(212,167,68,.48);background:rgba(132,94,34,.22);color:#ffe6a0;font-weight:bold;cursor:pointer;">Despachar equipe</button>
+      </article>`;
+  }).join('');
+  const campAssignmentsHtml = campState.assignments.map(order => {
+    const activity = MERCENARY_CAMP_WORK[order.activityId] || {};
+    const merc = mState.owned.find(item => item.uid === order.mercenaryUid);
+    const progress = Math.max(0, Math.min(100, Math.floor(((now - order.startTime) / order.durationMs) * 100)));
+    const isReady = progress >= 100;
+    return `<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:9px 11px;background:rgba(5,12,17,.68);border:1px solid rgba(151,190,173,.18);border-radius:7px;margin-top:7px;">
+      <span style="font-size:20px;">${activity.icon || '📜'}</span><div style="flex:1;min-width:190px;"><strong style="color:#e7d7a7;font-size:11px;">${merc?.name || 'Mercenário'} · ${activity.name || 'Ordem'}</strong><div style="font-size:9px;color:#98a5aa;">${order.contentName}</div><div style="height:4px;background:#151d23;border-radius:4px;margin-top:5px;"><div style="width:${progress}%;height:100%;background:${isReady ? '#52d6a0' : '#c99a48'};border-radius:4px;"></div></div></div>
+      <span style="font-size:10px;color:${isReady ? '#7de0b0' : '#d6c28e'};">${isReady ? 'Retorno no acampamento' : `${Math.max(1, Math.ceil((order.startTime + order.durationMs - now) / 60000))} min restantes`}</span>
+      ${isReady ? `<button onclick="window.claimMercenaryWork('${order.id}')" style="padding:6px 10px;border-radius:5px;border:1px solid #5bd69e;background:rgba(16,185,129,.16);color:#adf5cf;font-weight:bold;cursor:pointer;">Resgatar</button>` : ''}
+    </div>`;
+  }).join('');
+  const campHtml = `
+    <section style="position:relative;overflow:hidden;margin-bottom:22px;padding:16px;border:1px solid rgba(199,167,97,.55);border-radius:13px;background:radial-gradient(ellipse at 85% 0%,rgba(132,73,35,.2),transparent 35%),linear-gradient(140deg,rgba(18,28,30,.97),rgba(13,17,23,.96));box-shadow:0 12px 30px rgba(0,0,0,.28);">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;border-bottom:1px solid rgba(199,167,97,.22);padding-bottom:11px;margin-bottom:11px;">
+        <div><div style="font:700 17px 'Cinzel',serif;color:#f2d998;">🏕️ Acampamento da Companhia</div><div style="font-size:10px;color:#aeb9b9;margin-top:4px;">Mural de ordens · alojamento · pátio de treinamento · expedições</div></div>
+        <div style="text-align:right;"><strong style="font:700 13px 'Cinzel',serif;color:#8fe0b8;">Nível ${campState.level} · ${campState.assignments.length}/${campState.level} equipes</strong><div style="font-size:10px;color:#e1c982;margin-top:3px;">Prestígio da Companhia: ${campState.renown}</div><div style="font-size:9px;color:#aab4b5;margin-top:2px;">Ordens concluídas liberam melhorias e novas equipes.</div></div>
+      </div>
+      <div style="font:700 12px 'Cinzel',serif;color:#d7c28b;margin:0 0 8px;">📜 Mural de contratos e trabalhos</div>
+      <div style="display:flex;gap:9px;flex-wrap:wrap;">${workOrdersHtml}</div>
+      ${campAssignmentsHtml || '<div style="padding:10px;color:#879397;font-size:10px;text-align:center;">Nenhuma equipe está trabalhando. Escolha uma ordem no mural para começar.</div>'}
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-top:10px;padding-top:9px;border-top:1px solid rgba(199,167,97,.18);">
+        <span style="font-size:10px;color:#aeb9b9;">Caça, pesca e mineração geram recursos reais; treinamento concede XP. Expedições longas continuam no mapa abaixo.</span>
+        ${campUpgrade ? `<button onclick="window.upgradeMercenaryCamp()" ${campUpgradeAffordable ? '' : 'disabled'} title="Materiais: ${campUpgrade.materials.map(req => `${req.count} ${ALL_ITEMS[req.itemId]?.name || req.itemId}`).join(', ')}" style="padding:7px 11px;border-radius:5px;border:1px solid ${campUpgradeAffordable ? '#c99a48' : '#45484a'};background:${campUpgradeAffordable ? 'rgba(132,94,34,.22)' : 'rgba(40,40,40,.35)'};color:${campUpgradeAffordable ? '#ffe6a0' : '#737b7d'};font-weight:bold;cursor:${campUpgradeAffordable ? 'pointer' : 'not-allowed'};">⛺ Melhorar Nv. ${campUpgrade.level} · Prestígio ${campState.renown}/${campUpgrade.renown} · ${campUpgrade.gold.toLocaleString()} Adena · ${campUpgrade.materials.map(req => `${req.count} ${ALL_ITEMS[req.itemId]?.name || req.itemId}`).join(' + ')}</button>` : '<strong style="font-size:10px;color:#8fe0b8;">Acampamento no nível máximo</strong>'}
+      </div>
+    </section>`;
+
   // 3. EXPEDIÇÕES ESTRATÉGICAS
   const activeCount = activeExpeditions.length;
   let expHtml = `
     <style>
-      .expedition-atlas{position:relative;overflow:hidden;height:min(56vw,760px);min-height:440px;border:1px solid rgba(199,167,97,.72);border-radius:18px;background:linear-gradient(180deg,rgba(8,14,17,.22),transparent 24%,transparent 75%,rgba(8,14,17,.2)),url('/images/aden-expedition-map.webp') center 48%/cover no-repeat,#172026;box-shadow:inset 0 0 70px rgba(0,0,0,.28),0 16px 40px rgba(0,0,0,.38);margin-bottom:16px}
+      .expedition-atlas{position:relative;overflow:hidden;aspect-ratio:3/2;height:auto;min-height:0;border:1px solid rgba(199,167,97,.72);border-radius:18px;background:linear-gradient(180deg,rgba(8,14,17,.22),transparent 24%,transparent 75%,rgba(8,14,17,.2)),url('/images/aden-expedition-map.webp') center/100% 100% no-repeat,#172026;box-shadow:inset 0 0 70px rgba(0,0,0,.28),0 16px 40px rgba(0,0,0,.38);margin-bottom:16px}
       .expedition-atlas:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,15,18,.58),transparent 19%,transparent 76%,rgba(8,15,18,.24));pointer-events:none}
       .expedition-atlas:after{content:"";position:absolute;inset:0;border-radius:inherit;box-shadow:inset 0 0 46px rgba(24,16,9,.3);pointer-events:none}
-      .expedition-map-node{position:absolute;z-index:2;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:4px;border:0;background:transparent;color:#e8e5d7;cursor:pointer;min-width:80px;padding:3px;text-shadow:0 2px 6px #000}
+      .expedition-map-node{position:absolute;z-index:2;transform:translate(-50%,-24px);display:flex;flex-direction:column;align-items:center;gap:4px;border:0;background:transparent;color:#e8e5d7;cursor:pointer;min-width:80px;padding:3px;text-shadow:0 2px 6px #000}
       .expedition-map-node .node-mark{width:43px;height:43px;border-radius:50%;display:grid;place-items:center;font-size:19px;background:radial-gradient(circle at 36% 27%,#49675e,#192d31 70%);border:1px solid rgba(224,197,132,.68);box-shadow:0 0 0 5px rgba(12,22,25,.48),0 0 22px rgba(98,174,147,.28);transition:transform .18s,box-shadow .18s}
       .expedition-map-node:hover .node-mark,.expedition-map-node.is-selected .node-mark{transform:scale(1.12);border-color:#f3d58a;box-shadow:0 0 0 5px rgba(12,22,25,.5),0 0 28px rgba(231,190,103,.72)}
       .expedition-map-node.is-locked{filter:saturate(.3);opacity:.68}.expedition-map-node.is-active .node-mark{border-color:#55d6ac;box-shadow:0 0 0 5px rgba(12,22,25,.5),0 0 24px rgba(52,211,153,.7)}
       .expedition-map-node .node-name{font:600 10px/1.15 'Cinzel',serif;max-width:112px;color:#f2e8ca}
       .expedition-location{scroll-margin-top:24px;transition:border-color .2s,box-shadow .2s}
-      @media(max-width:680px){.expedition-atlas{height:460px;min-height:460px;background-position:center;background-size:auto 100%}.expedition-map-node{min-width:60px}.expedition-map-node .node-mark{width:35px;height:35px;font-size:16px}.expedition-map-node .node-name{font-size:8px;max-width:78px}}
+      @media(max-width:680px){.expedition-atlas{aspect-ratio:3/2;height:auto;min-height:0;background-position:center;background-size:100% 100%}.expedition-map-node{min-width:60px;transform:translate(-50%,-20px)}.expedition-map-node .node-mark{width:35px;height:35px;font-size:16px}.expedition-map-node .node-name{font-size:8px;max-width:78px}}
     </style>
     <div class="expedition-atlas">
       <div style="position:relative;z-index:2;display:flex;justify-content:space-between;gap:12px;align-items:flex-start;padding:18px 20px 0;">
@@ -7186,7 +7242,7 @@ export function renderExpeditionsUI(state) {
         <div style="font-size:10px;color:#b8c4b8;text-align:right;">${activeCount} marcha${activeCount === 1 ? '' : 's'} ativa${activeCount === 1 ? '' : 's'}<br/><span style="color:#72d6ae;">● ${destinationEntries.filter(([, def]) => currentLvl >= (def.minLevel || 15)).length} regiões acessíveis</span></div>
       </div>
       ${destinationEntries.map(([id, def], idx) => {
-        const [x, y] = expeditionMapPoints[idx % expeditionMapPoints.length];
+        const { x, y } = EXPEDITION_MAP_POSITIONS[id] || { x: 50, y: 50 };
         const active = activeExpeditions.find(exp => exp.destId === id);
         const unlocked = currentLvl >= (def.minLevel || 15);
         const ready = active && now >= active.startTime + active.duration;
@@ -7430,158 +7486,70 @@ export function renderExpeditionsUI(state) {
     `;
   }
 
-  // 4. CASTELOS DE ADEN
-  let castlesHtml = '';
-  for (const [cId, cDef] of Object.entries(castles)) {
-    const cData = playerCastles[cId];
-    const isConquered = !!cData?.conquered;
+  // The detailed seed market lives in the Manor Manager modal. Keep a useful status card here.
+  const manorHtml = `
+    <div style="background:linear-gradient(120deg,rgba(18,34,27,.92),rgba(14,22,28,.94));border:1px solid rgba(110,231,183,.25);border-radius:12px;padding:14px;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;">
+      <div><div style="font:700 14px 'Cinzel',serif;color:#b9f6c6;">🌱 Manor de Aden · Sementes e Mercado de Colheita</div><div style="font-size:10px;color:#aab4bf;margin-top:5px;">${activeManorSeed ? `Plantio ativo: ${escapeHTML(activeManorSeed.name)} · ${Number(manorState.seeds?.[activeManorSeed.id]) || 0} sementes restantes` : 'Selecione uma semente, cace criaturas no nível adequado e colha materiais para fabricação.'}</div><div style="font-size:10px;color:#8de0b4;margin-top:4px;">${ownedSeedCount} sementes no armazém · ${storedCropCount} colheitas prontas · Feudos: ${Object.keys(MANOR_PROVINCES).length}</div></div>
+      <button onclick="window.openManorModal()" style="padding:9px 14px;border:1px solid rgba(134,239,172,.6);border-radius:7px;background:linear-gradient(180deg,rgba(34,197,94,.28),rgba(21,128,61,.2));color:#d1fae5;font-weight:bold;cursor:pointer;">Abrir Manor Manager</button>
+    </div>
+  `;
 
-    let actionBtn = '';
-    if (isConquered) {
-      const lastClaim = cData.lastTaxClaim || now;
-      const hoursPassed = (now - lastClaim) / 3600000;
-      const canClaim = hoursPassed >= 1;
-      const accumGold = Math.floor(Math.min(24, hoursPassed) * cDef.taxPerHour);
-
-      actionBtn = `
-        <button
-          onclick="window.claimCastleTaxes('${cId}')"
-          ${!canClaim ? 'disabled' : ''}
-          style="padding:8px 14px; font-weight:bold; font-size:11px; background:${canClaim ? 'linear-gradient(180deg,#fbbf24,#b45309)' : 'rgba(60,50,40,0.5)'}; border:1px solid ${canClaim ? '#fde047' : 'rgba(100,80,60,0.3)'}; color:${canClaim ? '#000' : '#777'}; border-radius:6px; cursor:${canClaim ? 'pointer' : 'not-allowed'};"
-        >
-          🪙 IMPOSTOS (+${accumGold.toLocaleString()}g)
-        </button>
-      `;
-    } else {
-      const canChallenge = currentLvl >= cDef.reqLevel;
-      actionBtn = `
-        <button
-          onclick="window.conquerCastle('${cId}')"
-          ${!canChallenge ? 'disabled' : ''}
-          style="padding:8px 14px; font-family:'Cinzel',serif; font-weight:bold; font-size:11px; background:${canChallenge ? 'linear-gradient(180deg,#ef4444,#991b1b)' : 'rgba(60,50,40,0.5)'}; border:1px solid ${canChallenge ? '#fca5a5' : 'rgba(100,80,60,0.3)'}; color:${canChallenge ? '#fff' : '#777'}; border-radius:6px; cursor:${canChallenge ? 'pointer' : 'not-allowed'};"
-        >
-          ${canChallenge ? '⚔️ DOMINAR' : `🔒 Lv. ${cDef.reqLevel}+`}
-        </button>
-      `;
-    }
-
-    castlesHtml += `
-      <div style="background:rgba(18,22,34,0.85); border:1px solid ${isConquered ? 'rgba(52,211,153,0.5)' : 'rgba(212,167,68,0.2)'}; border-radius:10px; padding:12px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; gap:12px;">
-        <div>
-          <div style="display:flex; align-items:center; gap:8px;">
-            <h4 style="margin:0; font-family:'Cinzel',serif; color:${isConquered ? '#34d399' : '#f4d58a'}; font-size:14px;">🏰 ${cDef.name}</h4>
-            <span style="font-size:10px; background:rgba(0,0,0,0.5); padding:1px 6px; border-radius:4px; color:${isConquered ? '#34d399' : '#fca5a5'}; font-weight:bold;">${isConquered ? '✓ SEU DOMÍNIO' : 'GUARDA INIMIGA'}</span>
-          </div>
-          <p style="margin:2px 0 0 0; font-size:11px; color:#aaa;">${cDef.desc}</p>
-        </div>
-        ${actionBtn}
-      </div>
-    `;
-  }
-
-  // 5. MANOR FARMING
-  let manorHtml = '';
-  for (const [sId, sDef] of Object.entries(seeds)) {
-    const cropsCount = ownedCrops[sId] || 0;
-    const canExchange1 = cropsCount >= sDef.ratio1;
-    const canExchange2 = cropsCount >= sDef.ratio2;
-
-    manorHtml += `
-      <div style="background:rgba(18,22,34,0.85); border:1px solid rgba(212,167,68,0.25); border-radius:10px; padding:12px; margin-bottom:8px;">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-          <div>
-            <h4 style="margin:0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px;">🌾 ${sDef.name} (Lv. ${sDef.level})</h4>
-            <div style="font-size:11px; color:#aaa;">Colheita Acumulada: <strong style="color:#34d399;">${cropsCount}x Crops</strong></div>
-          </div>
-          <button
-            onclick="window.buyManorSeed('${sId}', 10)"
-            style="padding:6px 12px; font-weight:bold; font-size:11px; background:rgba(212,167,68,0.2); border:1px solid rgba(212,167,68,0.4); color:#ffd877; border-radius:6px; cursor:pointer;"
-          >
-            🛒 Comprar 10x Sementes (${(sDef.price * 10).toLocaleString()}g)
-          </button>
-        </div>
-
-        <div style="display:flex; gap:8px; flex-wrap:wrap;">
-          <button
-            onclick="window.exchangeManorCrop('${sId}', 1)"
-            ${!canExchange1 ? 'disabled' : ''}
-            style="flex:1; padding:6px; font-size:11px; font-weight:bold; background:${canExchange1 ? 'rgba(52,211,153,0.2)' : 'rgba(50,50,50,0.3)'}; border:1px solid ${canExchange1 ? '#34d399' : '#555'}; color:${canExchange1 ? '#6ee7b7' : '#777'}; border-radius:6px; cursor:${canExchange1 ? 'pointer' : 'not-allowed'};"
-          >
-            🔄 Trocar ${sDef.ratio1}x Crops ➔ +1 ${sDef.reward1.toUpperCase()}
-          </button>
-          <button
-            onclick="window.exchangeManorCrop('${sId}', 2)"
-            ${!canExchange2 ? 'disabled' : ''}
-            style="flex:1; padding:6px; font-size:11px; font-weight:bold; background:${canExchange2 ? 'rgba(168,85,247,0.2)' : 'rgba(50,50,50,0.3)'}; border:1px solid ${canExchange2 ? '#a855f7' : '#555'}; color:${canExchange2 ? '#d8b4fe' : '#777'}; border-radius:6px; cursor:${canExchange2 ? 'pointer' : 'not-allowed'};"
-          >
-            🔄 Trocar ${sDef.ratio2}x Crops ➔ +1 ${sDef.reward2.toUpperCase()}
-          </button>
-        </div>
-      </div>
-    `;
-  }
+  const hubViews = [
+    { id: 'overview', icon: '✦', label: 'Central', badge: null },
+    { id: 'board', icon: '📜', label: 'Mural', badge: campState.assignments.length || null },
+    { id: 'roster', icon: '🛡️', label: 'Quartel', badge: mState.owned.length || null },
+    { id: 'recruit', icon: '🍺', label: 'Recrutamento', badge: mState.tavernPool.length || null },
+    { id: 'operations', icon: '🗺️', label: 'Expedições', badge: activeCount || null },
+    { id: 'manor', icon: '🌱', label: 'Manor', badge: null }
+  ];
+  const requestedHubView = typeof window !== 'undefined' ? window._mercenaryHubView : null;
+  const activeHubView = hubViews.some(view => view.id === requestedHubView) ? requestedHubView : 'overview';
+  const tabNavHtml = hubViews.map(view => {
+    const selected = activeHubView === view.id;
+    return `<button id="mercenary-tab-${view.id}" role="tab" aria-selected="${selected}" aria-controls="mercenary-panel-${view.id}" onclick="window.setMercenaryHubView('${view.id}')" class="mercenary-hub-tab ${selected ? 'is-active' : ''}">
+      <span>${view.icon}</span><span>${view.label}</span>${view.badge ? `<small>${view.badge}</small>` : ''}
+    </button>`;
+  }).join('');
+  const makeHubPanel = (viewId, content) => `<section id="mercenary-panel-${viewId}" data-hub-panel="${viewId}" role="tabpanel" aria-labelledby="mercenary-tab-${viewId}" style="display:${activeHubView === viewId ? 'block' : 'none'};" ${activeHubView === viewId ? '' : 'hidden'}>${content}</section>`;
+  const overviewHtml = `
+    <section class="mercenary-command-hero">
+      <div><div class="mercenary-eyebrow">COMPANHIA DE ADEN · CENTRAL DE OPERAÇÕES</div><h2>O próximo passo da guilda começa aqui.</h2><p>Organize a equipe, escolha uma ordem e acompanhe o retorno sem perder o fio da campanha.</p></div>
+      <div class="mercenary-command-rank"><span>ACAMPAMENTO</span><strong>NÍVEL ${campState.level}</strong><small>Prestígio ${campState.renown} · ${campState.assignments.length}/${campState.level} equipes em serviço</small></div>
+    </section>
+    <div class="mercenary-overview-grid">
+      <button onclick="window.setMercenaryHubView('board')"><span>📜</span><strong>Mural de ordens</strong><small>Treine, cace, pesque ou extraia minério.</small><b>${campState.assignments.length ? `${campState.assignments.length} equipe(s) em serviço` : '4 trabalhos disponíveis'}</b></button>
+      <button onclick="window.setMercenaryHubView('roster')"><span>🛡️</span><strong>Seu quartel</strong><small>Veja raridade, nível, vínculo e disponibilidade.</small><b>${availableWorkers.length} prontos · ${mState.owned.length} contratados</b></button>
+      <button onclick="window.setMercenaryHubView('operations')"><span>🗺️</span><strong>Expedições</strong><small>Planeje jornadas de maior risco e recompensa.</small><b>${activeCount} expedição(ões) em andamento</b></button>
+      <button onclick="window.setMercenaryHubView('recruit')"><span>🍺</span><strong>Contratar reforços</strong><small>Conheça as ofertas atuais da Taverna.</small><b>${mState.tavernPool.length} contrato(s) no mural</b></button>
+    </div>
+    <div class="mercenary-overview-footer"><span>🏕️ O acampamento guarda as ordens menores; o atlas conduz as grandes aventuras.</span><button onclick="window.setMercenaryHubView('manor')">Abrir Manor <span>→</span></button></div>
+  `;
+  const tavernPanelHtml = `<div class="mercenary-section-heading"><div><div class="mercenary-eyebrow">REFORÇOS E NOVOS TALENTOS</div><h2>Taverna de Aden</h2><p>Compare raridade, especialização e traço antes de contratar.</p></div><button onclick="window.refreshMercenaryTavern()" class="mercenary-secondary-action">↻ Renovar · 10.000 Adena</button></div><div class="mercenary-candidate-grid">${tavernHtml}</div>`;
+  const rosterPanelHtml = `<div class="mercenary-section-heading"><div><div class="mercenary-eyebrow">GESTÃO DA COMPANHIA</div><h2>Quartel · ${mState.owned.length}/12</h2><p>Consulte progresso individual e escolha quem segue para cada trabalho.</p></div><span class="mercenary-roster-count">${availableWorkers.length} disponíveis agora</span></div>${rosterHtml}`;
+  const operationsPanelHtml = `<div class="mercenary-section-heading"><div><div class="mercenary-eyebrow">JORNADAS DE LONGO ALCANCE</div><h2>Atlas de Aden</h2><p>Selecione um destino, monte a vanguarda e defina a diretriz da missão.</p></div></div>${expHtml}`;
+  const manorPanelHtml = `<div class="mercenary-section-heading"><div><div class="mercenary-eyebrow">GESTÃO DE PROPRIEDADE</div><h2>Manor & Mercado de Colheita</h2><p>Cuide das sementes, colheitas e trocas da Companhia.</p></div></div>${manorHtml}`;
 
   container.innerHTML = `
-    <div style="padding:16px; font-family:sans-serif; color:#fff;">
-      <!-- Header Banner -->
-      <div style="background:linear-gradient(180deg, rgba(20,26,42,0.95), rgba(10,14,24,0.95)); border:1px solid rgba(212,167,68,0.4); border-radius:12px; padding:16px; margin-bottom:18px; box-shadow:0 4px 20px rgba(0,0,0,0.5);">
-        <h3 style="margin:0; font-family:'Cinzel',serif; color:#f4d58a; font-size:20px; display:flex; align-items:center; gap:8px;">
-          🧭 Expedições de Aden · Atlas da Guilda
-        </h3>
-        <p style="margin:4px 0 0 0; font-size:12px; color:#aaa;">
-          Trace uma rota, monte a vanguarda e escolha como a guilda enfrentará os perigos de cada fronteira.
-        </p>
-      </div>
-
-      <!-- 1. Taverna de Mercenários -->
-      <div style="margin-bottom:22px;">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-          <h4 style="margin:0; font-family:'Cinzel',serif; color:#f4d58a; font-size:15px; display:flex; align-items:center; gap:6px;">
-          🍺 Taverna dos Mercenários · Contratos disponíveis
-          </h4>
-          <button
-            onclick="window.refreshMercenaryTavern()"
-            style="padding:5px 12px; font-size:11px; font-weight:bold; background:rgba(212,167,68,0.15); border:1px solid rgba(212,167,68,0.4); color:#ffd877; border-radius:6px; cursor:pointer;"
-          >
-            🔄 Renovar Contratos (10.000g)
-          </button>
-        </div>
-        <div style="display:flex; gap:10px; flex-wrap:wrap;">
-          ${tavernHtml}
-        </div>
-      </div>
-
-      <!-- 2. Quartel dos Mercenários -->
-      <div style="margin-bottom:22px;">
-        <h4 style="margin:0 0 10px 0; font-family:'Cinzel',serif; color:#6ee7b7; font-size:15px; display:flex; align-items:center; gap:6px;">
-          🛡️ Quartel da Guilda · Mercenários (${mState.owned.length}/12)
-        </h4>
-        ${rosterHtml}
-      </div>
-
-      <!-- 3. Expedições Estratégicas -->
-      <div style="margin-bottom:22px;">
-        <h4 style="margin:0 0 10px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:15px; display:flex; align-items:center; gap:6px;">
-          🗺️ Mapa de Aden & Ordens de Marcha
-        </h4>
-        ${expHtml}
-      </div>
-
-      <!-- 4. Domínio dos Castelos -->
-      <div style="margin-bottom:22px;">
-        <h4 style="margin:0 0 10px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:15px;">
-          🏰 Domínio dos Castelos de Aden (Impostos Passivos)
-        </h4>
-        ${castlesHtml}
-      </div>
-
-      <!-- 5. Manor Farming -->
-      <div>
-        <h4 style="margin:0 0 10px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:15px;">
-          🌾 Manor Manager & Mercado de Colheita
-        </h4>
-        ${manorHtml}
-      </div>
+    <div class="mercenary-hub">
+      <style>
+        .mercenary-hub{--mh-gold:#d6b66f;--mh-mint:#78c9aa;color:#e7e6df;font-family:Inter,'Segoe UI',sans-serif;padding:clamp(10px,2vw,20px);max-width:1180px;margin:0 auto}
+        .mercenary-hub *{box-sizing:border-box}.mercenary-hub button{font:inherit}.mercenary-hub button:focus-visible,.mercenary-hub select:focus-visible{outline:2px solid #83d9b8;outline-offset:2px}
+        .mercenary-hub-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}.mercenary-hub-top h1{font:700 clamp(17px,2.2vw,23px) 'Cinzel',Georgia,serif;color:#f2d998;letter-spacing:.035em;margin:0}.mercenary-hub-top p{font-size:11px;color:#9ca7aa;margin:4px 0 0}.mercenary-live-status{font-size:10px;color:#a9d6c4;border:1px solid rgba(120,201,170,.24);border-radius:999px;padding:6px 10px;white-space:nowrap;background:rgba(57,117,95,.11)}
+        .mercenary-hub-tabs{display:flex;gap:5px;overflow-x:auto;scrollbar-width:thin;padding:5px;margin:0 0 14px;border-bottom:1px solid rgba(197,169,105,.22);background:rgba(8,12,17,.52);border-radius:10px 10px 0 0}.mercenary-hub-tab{display:flex;align-items:center;justify-content:center;gap:7px;flex:1 0 auto;min-height:40px;padding:7px 12px;color:#aeb8bc;border:1px solid transparent;border-radius:7px;background:transparent;cursor:pointer;transition:background .16s ease,color .16s ease,border-color .16s ease}.mercenary-hub-tab:hover{background:rgba(255,255,255,.045);color:#eee}.mercenary-hub-tab.is-active{color:#ffe5a2;background:linear-gradient(180deg,rgba(171,132,54,.23),rgba(89,67,31,.16));border-color:rgba(214,182,111,.45);box-shadow:inset 0 -2px #caa44f}.mercenary-hub-tab small{font-size:9px;min-width:17px;text-align:center;border-radius:10px;padding:2px 5px;color:#d1fae5;background:rgba(16,132,94,.28)}.mercenary-hub-panel{animation:mercenary-panel-in .18s ease-out}@keyframes mercenary-panel-in{from{opacity:.72;transform:translateY(3px)}to{opacity:1;transform:translateY(0)}}
+        .mercenary-command-hero{display:flex;justify-content:space-between;align-items:center;gap:16px;min-height:145px;padding:clamp(17px,3vw,30px);border:1px solid rgba(214,182,111,.35);border-radius:12px;background:radial-gradient(ellipse at 82% 15%,rgba(139,87,43,.28),transparent 36%),linear-gradient(105deg,rgba(18,30,31,.96),rgba(15,19,26,.98));box-shadow:0 10px 28px rgba(0,0,0,.22)}.mercenary-command-hero h2{font:700 clamp(17px,2.2vw,24px) 'Cinzel',Georgia,serif;color:#f3e5bf;margin:7px 0}.mercenary-command-hero p{color:#aeb8b8;font-size:11px;max-width:480px;line-height:1.55;margin:0}.mercenary-eyebrow{font-size:9px;letter-spacing:.14em;color:#88cbb0;font-weight:700}.mercenary-command-rank{min-width:180px;padding:13px 15px;border-left:1px solid rgba(214,182,111,.32);text-align:right}.mercenary-command-rank span,.mercenary-command-rank small{display:block;font-size:9px;color:#a7b0ad}.mercenary-command-rank strong{display:block;font:700 22px 'Cinzel',Georgia,serif;color:#ead08e;margin:3px 0}.mercenary-overview-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:12px 0}.mercenary-overview-grid button{display:grid;grid-template-columns:38px 1fr;grid-template-rows:auto auto auto;column-gap:10px;align-items:center;text-align:left;padding:13px;border:1px solid rgba(162,170,164,.16);border-radius:9px;background:linear-gradient(135deg,rgba(21,29,34,.96),rgba(13,18,25,.96));color:#e9e5d9;cursor:pointer;transition:transform .16s,border-color .16s,background .16s}.mercenary-overview-grid button:hover{transform:translateY(-2px);border-color:rgba(214,182,111,.5);background:linear-gradient(135deg,rgba(30,42,43,.98),rgba(15,22,29,.98))}.mercenary-overview-grid button>span{grid-row:1/4;font-size:23px;text-align:center}.mercenary-overview-grid strong{font:700 11px 'Cinzel',Georgia,serif;color:#e8d6a8}.mercenary-overview-grid small{font-size:9px;color:#98a4a7;margin-top:3px}.mercenary-overview-grid b{font-size:9px;color:#82c8ab;margin-top:7px}.mercenary-overview-footer{display:flex;justify-content:space-between;gap:8px;align-items:center;border-top:1px solid rgba(197,169,105,.18);padding:11px 2px;color:#97a1a3;font-size:9px}.mercenary-overview-footer button,.mercenary-secondary-action{border:1px solid rgba(214,182,111,.38);border-radius:6px;background:rgba(133,102,46,.14);color:#e6ce90;padding:7px 10px;cursor:pointer}.mercenary-section-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:4px 0 13px}.mercenary-section-heading h2{font:700 17px 'Cinzel',Georgia,serif;color:#ead8ad;margin:4px 0}.mercenary-section-heading p{font-size:10px;color:#9ca6a8;margin:0}.mercenary-candidate-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(220px,100%),1fr));gap:10px}.mercenary-roster-count{font-size:10px;color:#a7e1c7;border:1px solid rgba(120,201,170,.2);background:rgba(55,117,92,.12);padding:7px 10px;border-radius:6px;white-space:nowrap}
+        @media(max-width:620px){.mercenary-hub-tabs{margin-left:-3px;margin-right:-3px}.mercenary-hub-tab{padding:7px 9px;font-size:10px}.mercenary-command-hero{align-items:flex-start;flex-direction:column}.mercenary-command-rank{border-left:0;border-top:1px solid rgba(214,182,111,.25);padding:9px 0 0;text-align:left;width:100%}.mercenary-overview-grid{grid-template-columns:1fr}.mercenary-overview-footer{align-items:flex-start;flex-direction:column}.mercenary-section-heading{align-items:flex-start;flex-direction:column}}
+        @media(prefers-reduced-motion:reduce){.mercenary-hub *, .mercenary-hub *:before,.mercenary-hub *:after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+      </style>
+      <header class="mercenary-hub-top"><div><h1>Companhia de Aden</h1><p>Acampamento, ordens e jornadas dos seus mercenários</p></div><span class="mercenary-live-status">● ${mState.owned.length} contratados · ${activeCount} expedições</span></header>
+      <nav class="mercenary-hub-tabs" role="tablist" aria-label="Áreas da Companhia">${tabNavHtml}</nav>
+      <main class="mercenary-hub-content">
+        ${makeHubPanel('overview', overviewHtml)}
+        ${makeHubPanel('board', campHtml)}
+        ${makeHubPanel('roster', rosterPanelHtml)}
+        ${makeHubPanel('recruit', tavernPanelHtml)}
+        ${makeHubPanel('operations', operationsPanelHtml)}
+        ${makeHubPanel('manor', manorPanelHtml)}
+      </main>
     </div>
   `;
 }
@@ -9965,6 +9933,7 @@ export function renderRaidsTab(container, state) {
         ⚡ ${m.name}
       </span>
     `).join('');
+    const scene = getRaidScene(id);
 
     const dropsPreviewHtml = (boss.drops || []).map(d => {
       const isEpic = d.isEpicJewel;
@@ -9981,22 +9950,14 @@ export function renderRaidsTab(container, state) {
     }).join('');
 
     return `
-      <div style="background:linear-gradient(145deg, rgba(24,18,14,0.95), rgba(12,9,7,0.98)); border:1px solid ${inCombat ? '#22c55e' : (isLocked ? 'rgba(80,60,40,0.3)' : 'rgba(212,175,55,0.4)')}; border-radius:10px; padding:14px; display:flex; flex-direction:column; justify-content:space-between; box-shadow:0 4px 15px rgba(0,0,0,0.6); position:relative;">
+      <article class="raid-lair-card ${inCombat ? 'is-in-combat' : ''} ${isLocked ? 'is-locked' : ''}">
+        <div class="raid-lair-scene" style="background-image:linear-gradient(90deg,rgba(5,8,13,.93),rgba(5,8,13,.5) 55%,rgba(5,8,13,.12)),url('${scene?.background || '/img/Maps/blackcitaddel.jpg'}');">
+          <img class="raid-lair-portrait" src="${scene?.portrait || '/img/mon_core.jpg'}" alt="${escapeHTML(boss.name)}" loading="lazy" onerror="this.hidden=true">
+          <div class="raid-lair-copy"><span class="raid-lair-location">${escapeHTML(scene?.location || 'Covil de Raid')}</span><strong>${escapeHTML(boss.name)}</strong><span>Lv. ${boss.lvl} · Requer Nv. ${boss.reqLvl}</span></div>
+          <span class="raid-difficulty" style="--raid-difficulty:${diffColor}">${diffBadge}</span>
+        </div>
         <div>
           <!-- Header do Card -->
-          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
-            <div>
-              <div style="font-family:'Cinzel',serif; font-size:15px; font-weight:bold; color:#fef08a;">${boss.name}</div>
-              <div style="font-size:11px; color:#94a3b8; font-style:italic;">${boss.title || 'Chefe de Raid'}</div>
-            </div>
-            <div style="display:flex; flex-direction:column; align-items:flex-end; gap:2px;">
-              <span style="background:rgba(0,0,0,0.6); border:1px solid ${diffColor}; color:${diffColor}; font-size:10px; font-weight:bold; padding:2px 8px; border-radius:10px;">
-                ${diffBadge}
-              </span>
-              <span style="font-size:10px; color:#cbd5e1;">Req. Lv. ${boss.reqLvl}</span>
-            </div>
-          </div>
-
           <!-- Status do Boss -->
           <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; background:rgba(0,0,0,0.35); border:1px solid rgba(255,255,255,0.06); border-radius:6px; padding:8px; margin-bottom:8px; font-size:11px;">
             <div>❤️ HP: <strong style="color:#ef4444;">${boss.hp.toLocaleString()}</strong></div>
@@ -10028,7 +9989,7 @@ export function renderRaidsTab(container, state) {
           </div>
           ${actionBtnHtml}
         </div>
-      </div>
+      </article>
     `;
   }).join('');
 
@@ -10078,7 +10039,7 @@ export function renderRaidsTab(container, state) {
       ` : ''}
 
       <!-- Grid de Bosses -->
-      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(290px, 1fr)); gap:14px;">
+      <div class="raid-lair-grid">
         ${cardsHtml}
       </div>
     </div>
@@ -11471,7 +11432,7 @@ export function renderColosseumTab(container, state) {
   container.innerHTML = `
     <div class="colosseum-container" style="display:flex; flex-direction:column; gap:14px;">
       <!-- Header Banner -->
-      <div style="background:linear-gradient(135deg, rgba(30,15,10,0.95), rgba(15,8,5,0.98)); border:1px solid rgba(239,68,68,0.4); border-radius:10px; padding:16px; box-shadow:0 6px 20px rgba(0,0,0,0.6);">
+      <div class="colosseum-arena-hero" style="background:linear-gradient(135deg, rgba(30,15,10,0.95), rgba(15,8,5,0.98)); border:1px solid rgba(239,68,68,0.4); border-radius:10px; padding:16px; box-shadow:0 6px 20px rgba(0,0,0,0.6);">
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
           <div>
             <h2 style="margin:0; font-family:'Cinzel',serif; color:#fca5a5; font-size:20px; display:flex; align-items:center; gap:8px;">

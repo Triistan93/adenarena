@@ -34,7 +34,7 @@ import { PET_CATALOG }                                                        fr
 import { PetService }                                                         from './src/services/PetService.js';
 import { SOLO_INSTANCES }                                                     from './src/data/instances.js';
 import { InstanceService }                                                    from './src/services/InstanceService.js';
-import { MANOR_PROVINCES }                                                    from './src/data/manor.js';
+import { MANOR_PROVINCES, MANOR_SEEDS }                                       from './src/data/manor.js';
 import { ManorService }                                                       from './src/services/ManorService.js';
 import { FishingService }                                                     from './src/services/FishingService.js';
 import { HuntingService }                                                     from './src/services/HuntingService.js';
@@ -42,6 +42,7 @@ import { GatheringService }                                                   fr
 import { restoreCharacterCp }                                                 from './src/services/ConsumableService.js';
 import { MiningService }                                                      from './src/services/lifeActivities/MiningService.js';
 import { MercenaryService }                                                   from './src/services/MercenaryService.js';
+import { MercenaryCampService }                                                from './src/services/MercenaryCampService.js';
 import { MERCENARY_RARITIES, MERCENARY_SPECIALIZATIONS, MERCENARY_TRAITS }           from './src/data/mercenaries.js';
 import { ExpeditionService, EXPEDITION_DESTINATIONS as CANONICAL_EXPEDITION_DESTINATIONS, EXPEDITION_DILEMMAS, RISK_DIRECTIVES } from './src/services/ExpeditionService.js';
 import { getExpeditionDilemmaActionEligibility } from './src/services/ExpeditionDilemmaPolicy.js';
@@ -271,6 +272,7 @@ import {
   getTowerFloorMinimumCP,
   getTowerFloorRecommendedCP
 } from './src/services/TowerService.js';
+import { renderTowerJourney } from './src/ui/TowerPresentation.js';
 
 import {
   startRaidBoss as serviceStartRaidBoss,
@@ -357,6 +359,7 @@ import { MarketService } from './src/services/MarketService.js';
 import { CosmeticService } from './src/services/CosmeticService.js';
 import { AchievementService } from './src/services/AchievementService.js';
 import { WorldBossService } from './src/services/WorldBossService.js';
+import { resolveWorldBossScene } from './src/ui/WorldBossScene.js';
 import { SynthesisService } from './src/services/SynthesisService.js';
 import { ElementalService } from './src/services/ElementalService.js';
 import { StarterJourneyService } from './src/services/StarterJourneyService.js';
@@ -3593,20 +3596,7 @@ function updateTowerUI() {
 
   const grid = el('tower-floors-grid');
   if (grid) {
-    let html = '';
-    for (let f = 1; f <= 100; f++) {
-      const isCleared = f <= highest;
-      const isCurrent = f === nextFloor;
-      const isBoss = f % 10 === 0;
-
-      let cls = 'tower-floor-pill';
-      if (isCleared) cls += ' cleared';
-      else if (isCurrent) cls += ' current';
-      if (isBoss) cls += ' boss-floor';
-
-      html += `<div class="${cls}"><span>${isBoss ? '👑' : '🏰'} Andar ${f}</span><span style="font-size:9px;opacity:0.8;">${isCleared ? '✓ Cleared' : (isCurrent ? '★ Desafio' : `Nv.${getTowerFloorDef(f).reqLvl}`)}</span></div>`;
-    }
-    grid.innerHTML = html;
+    grid.innerHTML = renderTowerJourney(highest, getTowerFloorDef);
   }
 }
 
@@ -4574,8 +4564,9 @@ let activeBgLayer = 'a';
 
 function updateZoneBackground() {
   const isRaid = state.isRaidActive && state.target && RAID_BOSSES[state.target];
-  const currentKey = isRaid ? state.target : (state.zone || 'talkingIsland');
-  const bgPath = ZONE_BACKGROUNDS[currentKey] || '/img/' + currentKey + '.png';
+  const worldBossScene = resolveWorldBossScene(state, ZONE_BACKGROUNDS);
+  const currentKey = worldBossScene ? state.activeMonster.bg : (isRaid ? state.target : (state.zone || 'talkingIsland'));
+  const bgPath = worldBossScene?.background || ZONE_BACKGROUNDS[currentKey] || '/img/' + currentKey + '.png';
 
   const logEl = el('log');
   const stageZone = el('stage-zone');
@@ -4583,6 +4574,12 @@ function updateZoneBackground() {
   const bgA = el('stage-bg-a');
   const bgB = el('stage-bg-b');
   const stageEl = el('stage');
+
+  if (stageEl) {
+    stageEl.classList.toggle('is-world-boss', Boolean(worldBossScene));
+    if (worldBossScene) stageEl.dataset.worldBossId = worldBossScene.id;
+    else delete stageEl.dataset.worldBossId;
+  }
 
   if (bgPath !== currentBgPath) {
     currentBgPath = bgPath;
@@ -4611,7 +4608,9 @@ function updateZoneBackground() {
   }
 
   let name = '';
-  if (isRaid) {
+  if (worldBossScene) {
+    name = `⚡ ${state.activeMonster.name} · COVIL GLOBAL`;
+  } else if (isRaid) {
     name = RAID_BOSSES[state.target].name;
   } else if (state.zone && ZONES[state.zone]) {
     name = ZONES[state.zone].name;
@@ -9272,23 +9271,6 @@ function reincarnateHero() {
 }
 
 // --------------------------- EXPEDITIONS & MANOR SYSTEM ---------------------------
-const MANOR_SEEDS = {
-  dark_coda: { id: 'dark_coda', name: 'Dark Coda Seed', level: 10, price: 100, reward1: 'stem', reward2: 'braided_hemp', ratio1: 5, ratio2: 2 },
-  red_coda: { id: 'red_coda', name: 'Red Coda Seed', level: 13, price: 200, reward1: 'varnish', reward2: 'cokes', ratio1: 5, ratio2: 2 },
-  chilly_coda: { id: 'chilly_coda', name: 'Chilly Coda Seed', level: 16, price: 350, reward1: 'suede', reward2: 'oriharukon_ore', ratio1: 5, ratio2: 2 },
-  blue_coda: { id: 'blue_coda', name: 'Blue Coda Seed', level: 19, price: 500, reward1: 'animal_skin', reward2: 'crafted_leather', ratio1: 5, ratio2: 2 },
-  red_cobol: { id: 'red_cobol', name: 'Red Cobol Seed', level: 31, price: 1000, reward1: 'charcoal', reward2: 'enria', ratio1: 10, ratio2: 2 },
-  chilly_cobol: { id: 'chilly_cobol', name: 'Chilly Cobol Seed', level: 34, price: 1500, reward1: 'animal_bone', reward2: 'steel', ratio1: 10, ratio2: 3 },
-  twin_codran: { id: 'twin_codran', name: 'Twin Codran Seed', level: 58, price: 3000, reward1: 'charcoal', reward2: 'mold_lubricant', ratio1: 15, ratio2: 3 },
-  king_coba: { id: 'king_coba', name: 'King Coba Seed', level: 85, price: 10000, reward1: 'metallic_thread', reward2: 'durable_metal_plate', ratio1: 20, ratio2: 5 }
-};
-
-const CASTLES_DEFS = {
-  dion: { id: 'dion', name: 'Castelo de Dion', reqLevel: 30, taxPerHour: 5000, desc: '+5.000 Adena por hora', enemyName: 'Guarda de Dion (Lv. 30)' },
-  giran: { id: 'giran', name: 'Castelo de Giran', reqLevel: 50, taxPerHour: 15000, desc: '+15.000 Adena por hora & 5% Desconto na Loja', enemyName: 'Guarda de Giran (Lv. 50)' },
-  goddard: { id: 'goddard', name: 'Castelo de Goddard', reqLevel: 70, taxPerHour: 35000, desc: '+35.000 Adena por hora & +5% XP Bônus', enemyName: 'Guarda de Goddard (Lv. 70)' },
-  aden: { id: 'aden', name: 'Castelo Imperial de Aden', reqLevel: 85, taxPerHour: 75000, desc: '+75.000 Adena por hora & +10% Dano Geral', enemyName: 'Guarda Imperial de Aden (Lv. 85)' }
-};
 
 const EXPEDITION_DESTINATIONS = {
   branded: { id: 'branded', name: 'Catacumbas de Branded', duration: 3600000, cost: 5000, minGold: 20000, maxGold: 30000, desc: 'Expedição rápida (1 hora) com saque de ouro e pergaminhos' },
@@ -9298,114 +9280,28 @@ const EXPEDITION_DESTINATIONS = {
 };
 
 function buyManorSeed(seedId, qty = 1) {
-  const seed = MANOR_SEEDS[seedId];
-  if (!seed) return false;
-  const count = Math.max(1, Math.floor(qty));
-  const totalCost = seed.price * count;
+  const result = ManorService.buySeeds(state, seedId, qty, { log, updateAllUI, save });
+  if (result.success) window.renderManorModalUI?.();
+  return result;
+}
 
-  if ((state.gold || 0) < totalCost) {
-    log(`⚠️ Ouro insuficiente! Requer ${totalCost.toLocaleString()}g.`, 'warning');
-    return false;
-  }
-
-  state.gold -= totalCost;
-  if (!state.manorSeeds) state.manorSeeds = {};
-  state.manorSeeds[seedId] = (state.manorSeeds[seedId] || 0) + count;
-
-  log(`🌾 Comprou ${count}x Semente ${seed.name}!`, 'loot');
-  updateAllUI();
-  save();
-  return true;
+function selectManorSeed(seedId) {
+  const result = ManorService.selectSeed(state, seedId, { log, updateAllUI, save });
+  if (result.success) window.renderManorModalUI?.();
+  return result;
 }
 
 function exchangeManorCrop(seedId, rewardOption = 1) {
-  const seed = MANOR_SEEDS[seedId];
-  if (!seed) return false;
-
-  const ownedCrops = state.manorCrops ? (state.manorCrops[seedId] || 0) : 0;
-  if (ownedCrops <= 0) {
-    log(`⚠️ Você não possui Colheita de ${seed.name} para entregar!`, 'warning');
-    return false;
-  }
-
-  const matKey = rewardOption === 2 ? seed.reward2 : seed.reward1;
-  const ratio = rewardOption === 2 ? seed.ratio2 : seed.ratio1;
-  const matAmount = Math.max(1, Math.floor(ownedCrops / ratio));
-
-  if (matAmount < 1) {
-    log(`⚠️ Colheita insuficiente! Requer pelo menos ${ratio}x colheitas para trocar por 1 material.`, 'warning');
-    return false;
-  }
-
-  const cropsUsed = matAmount * ratio;
-  state.manorCrops[seedId] -= cropsUsed;
-
-  addToInventory(matKey, matAmount);
-  log(`🌾 Entregou ${cropsUsed}x Colheita no Manor Manager e recebeu +${matAmount}x ${matKey.toUpperCase()}!`, 'rarity-legendary');
-
-  updateAllUI();
-  save();
-  return true;
-}
-
-function conquerCastle(castleId) {
-  const castle = CASTLES_DEFS[castleId];
-  if (!castle) return false;
-
-  if (!state.castles) state.castles = {};
-  if (state.castles[castleId]?.conquered) {
-    log(`⚠️ Você já domina o ${castle.name}!`, 'warning');
-    return false;
-  }
-
-  const playerLvl = state.level || 1;
-  if (playerLvl < castle.reqLevel) {
-    log(`⚠️ Nível insuficiente para desafiar o ${castle.name}! Requer Nível ${castle.reqLevel}.`, 'warning');
-    return false;
-  }
-
-  state.castles[castleId] = {
-    conquered: true,
-    lastTaxClaim: Date.now()
-  };
-
-  log(`🏰 CONQUISTOU O ${castle.name.toUpperCase()}! Bônus ativado: ${castle.desc}.`, 'rarity-legendary');
-  floatText(`DOMINOU ${castle.name.toUpperCase()}`, 'float-gold');
-
-  updateAllUI();
-  save();
-  return true;
-}
-
-function claimCastleTaxes(castleId) {
-  const castle = CASTLES_DEFS[castleId];
-  if (!castle) return false;
-
-  const data = state.castles ? state.castles[castleId] : null;
-  if (!data || !data.conquered) {
-    log(`⚠️ Você não domina o ${castle.name}!`, 'warning');
-    return false;
-  }
-
-  const now = Date.now();
-  const hoursPassed = (now - (data.lastTaxClaim || now)) / 3600000;
-  if (hoursPassed < 1) {
-    const minsLeft = Math.ceil((1 - hoursPassed) * 60);
-    log(`⚠️ Aguarde mais ${minsLeft} minutos para recolher os impostos de ${castle.name}.`, 'warning');
-    return false;
-  }
-
-  const hoursToClaim = Math.min(24, Math.floor(hoursPassed));
-  const adenaEarned = hoursToClaim * castle.taxPerHour;
-
-  data.lastTaxClaim = now;
-  state.gold = (state.gold || 0) + adenaEarned;
-
-  log(`💰 Coletou ${adenaEarned.toLocaleString()} Adena em impostos de ${castle.name} (${hoursToClaim}h)!`, 'rarity-legendary');
-
-  updateAllUI();
-  save();
-  return true;
+  const result = ManorService.exchangeCrops(state, seedId, rewardOption, {
+    log,
+    floatText,
+    updateAllUI,
+    save,
+    // Keep the project's inventory-capacity and item catalog rules in the actual reward path.
+    addToInventory: (itemId, count) => addToInventory(itemId, count)
+  });
+  if (result.success) window.renderManorModalUI?.();
+  return result;
 }
 
 function startExpedition(destId) {
@@ -9954,12 +9850,11 @@ export function init() {
     window.ASTRAL_NODES = ASTRAL_NODES;
     window.buyManorSeed = buyManorSeed;
     window.exchangeManorCrop = exchangeManorCrop;
-    window.conquerCastle = conquerCastle;
-    window.claimCastleTaxes = claimCastleTaxes;
+    window.selectManorSeed = selectManorSeed;
     window.startExpedition = (destId) => (typeof window.startStrategicExpedition === 'function' ? window.startStrategicExpedition(destId) : ExpeditionService.startExpedition(state, destId, [], { log, updateAllUI, save, floatText }));
     window.claimExpeditionReward = (expId) => ExpeditionService.claimReward(state, expId, { log, updateAllUI, save, floatText });
     window.MANOR_SEEDS = MANOR_SEEDS;
-    window.CASTLES_DEFS = CASTLES_DEFS;
+    window.MANOR_PROVINCES = MANOR_PROVINCES;
     window.EXPEDITION_DESTINATIONS = CANONICAL_EXPEDITION_DESTINATIONS;
     window.selectFishingZone = (zId) => FishingService.selectZone(state, zId, { log, updateAllUI, save });
     window.selectFishingBait = (bId) => FishingService.selectBait(state, bId, { log, updateAllUI, save });
@@ -10082,6 +9977,14 @@ export function init() {
       return ExpeditionService.resolveDilemma(state, destId, optionKey, { log, updateAllUI, save, floatText });
     };
     window.MercenaryService = MercenaryService;
+    window.dispatchMercenaryWork = (activityId, mercUid) => MercenaryCampService.assignWork(state, activityId, mercUid, { log, updateAllUI, save });
+    window.claimMercenaryWork = (assignmentId) => MercenaryCampService.claimWork(state, assignmentId, { log, updateAllUI, save, floatText });
+    window.upgradeMercenaryCamp = () => MercenaryCampService.upgradeCamp(state, { log, updateAllUI, save });
+    window.MercenaryCampService = MercenaryCampService;
+    window.setMercenaryHubView = (view) => {
+      window._mercenaryHubView = view;
+      updateAllUI();
+    };
     window.ExpeditionService = ExpeditionService;
     window.setForgeSubTab = (tabKey) => {
       window._forgeSubTab = tabKey;
@@ -10585,67 +10488,60 @@ export function init() {
       if (!listContainer) return;
 
       const mState = ManorService.getManorState(state);
-      listContainer.innerHTML = '';
-
-      Object.values(MANOR_PROVINCES).forEach(prov => {
-        const seedCount = mState.seeds[prov.seed.id] || 0;
-        const cropCount = mState.crops[prov.seed.cropId] || 0;
-        const canExchange = cropCount >= prov.seed.exchangeRate;
-        const isActive = mState.activeProvince === prov.id;
-
-        const card = mkEl('div');
-        card.style.cssText = `
-          background: rgba(0,0,0,0.6);
-          border: 1px solid ${isActive ? 'var(--border-gilt)' : 'rgba(255,255,255,0.1)'};
-          border-radius: 8px;
-          padding: 12px 14px;
-          display: flex;
-          flex-direction: column;
-          gap: 8px;
-        `;
-
-        card.innerHTML = `
-          <div style="display:flex; justify-content:space-between; align-items:center;">
-            <div style="display:flex; align-items:center; gap:8px;">
-              <span style="font-size:24px;">${prov.icon}</span>
-              <div>
-                <div style="font-family:'Cinzel',serif; font-weight:bold; color:#ffd877; font-size:14px;">${prov.name}</div>
-                <div style="font-size:11px; color:#94a3b8;">Zona Recomendada: Lv. ${prov.minLvl} - ${prov.maxLvl}</div>
+      const activeSeed = MANOR_SEEDS[mState.activeSeedId];
+      listContainer.innerHTML = Object.values(MANOR_PROVINCES).map(prov => {
+        const seedCards = prov.seedIds.map(seedId => {
+          const seed = MANOR_SEEDS[seedId];
+          const ownedSeeds = Number(mState.seeds[seedId]) || 0;
+          const crops = Number(mState.crops[seedId]) || 0;
+          const active = mState.activeSeedId === seedId;
+          const cropDisplay = `${seed.ratio1}× → ${seed.reward1.replaceAll('_', ' ')} · ${seed.ratio2}× → ${seed.reward2.replaceAll('_', ' ')}`;
+          return `
+            <article style="background:${active ? 'rgba(34,197,94,.13)' : 'rgba(0,0,0,.38)'};border:1px solid ${active ? 'rgba(134,239,172,.7)' : 'rgba(255,255,255,.1)'};border-radius:9px;padding:12px;display:grid;gap:9px;">
+              <div style="display:flex;justify-content:space-between;gap:10px;align-items:start;flex-wrap:wrap;">
+                <div><strong style="color:#f5df93;font-family:'Cinzel',serif;">🌱 ${seed.name}</strong><div style="font-size:10px;color:#9ca3af;margin-top:3px;">Semente Lv. ${seed.level} · ${seed.price.toLocaleString()} Adena · Estoque ${ownedSeeds} · Colheita ${crops}</div></div>
+                ${active ? '<span style="font-size:9px;color:#86efac;font-weight:bold;">PLANTIO ATIVO</span>' : ''}
               </div>
-            </div>
-            <div style="display:flex; align-items:center; gap:6px;">
-              <span style="font-size:11px; color:#cbd5e1;">Sementes Ativas: <strong style="color:#fde047;">${seedCount}x</strong> · Colheitas: <strong style="color:#86efac;">${cropCount}x</strong></span>
-            </div>
-          </div>
-          <div style="background:rgba(212,167,68,0.1); padding:8px 10px; border-radius:6px; font-size:11px; color:#cbd5e1; display:flex; justify-content:space-between; align-items:center;">
-            <div>
-              🌱 <strong>${prov.seed.name}</strong> (${prov.seed.cost}g cada)<br>
-              📦 Troca no Castelo: <strong>${prov.seed.exchangeRate}x Colheitas $\rightarrow$ 1x ${prov.seed.rewardItemName}</strong>
-            </div>
-            <div style="display:flex; gap:6px;">
-              <button class="action-btn" style="padding:6px 10px; font-size:11px;" onclick="window.buyManorSeedsAction('${prov.id}', 20)">
-                🌱 Comprar 20x (${(prov.seed.cost * 20).toLocaleString()}g)
-              </button>
-              <button class="action-btn ${canExchange ? 'action-btn--primary' : ''}" style="padding:6px 10px; font-size:11px; font-weight:bold;" ${!canExchange ? 'disabled' : ''} onclick="window.exchangeManorCropsAction('${prov.id}')">
-                📦 Entregar Colheita
-              </button>
-            </div>
-          </div>
+              <div style="font-size:10px;color:#aab4bf;">Troca no mercado: ${cropDisplay}</div>
+              <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                <button class="action-btn" style="padding:6px 9px;font-size:10px;" onclick="window.buyManorSeed('${seedId}', 1)">Comprar 1</button>
+                <button class="action-btn" style="padding:6px 9px;font-size:10px;" onclick="window.buyManorSeed('${seedId}', 5)">Comprar 5 · ${(seed.price * 5).toLocaleString()}a</button>
+                <button class="action-btn" style="padding:6px 9px;font-size:10px;" onclick="window.selectManorSeed('${seedId}')" ${ownedSeeds <= 0 && !active ? 'disabled' : ''}>${active ? 'Selecionada' : 'Ativar plantio'}</button>
+                <button class="action-btn ${crops >= seed.ratio1 ? 'action-btn--primary' : ''}" style="padding:6px 9px;font-size:10px;" onclick="window.exchangeManorCrop('${seedId}', 1)" ${crops < seed.ratio1 ? 'disabled' : ''}>Trocar comum (${seed.ratio1}×)</button>
+                <button class="action-btn ${crops >= seed.ratio2 ? 'action-btn--primary' : ''}" style="padding:6px 9px;font-size:10px;" onclick="window.exchangeManorCrop('${seedId}', 2)" ${crops < seed.ratio2 ? 'disabled' : ''}>Trocar refinada (${seed.ratio2}×)</button>
+              </div>
+            </article>
+          `;
+        }).join('');
+        const isActiveProvince = mState.activeProvince === prov.id;
+        return `
+          <section style="background:rgba(0,0,0,.24);border:1px solid ${isActiveProvince ? 'rgba(134,239,172,.42)' : 'rgba(255,255,255,.08)'};border-radius:11px;padding:12px;display:grid;gap:9px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;"><strong style="color:#b9f6c6;font:700 13px 'Cinzel',serif;">${prov.icon} ${prov.name}</strong><span style="font-size:10px;color:#93a3a1;">Alvos recomendados Lv. ${prov.minLvl}–${prov.maxLvl}${isActiveProvince ? ' · região selecionada' : ''}</span></div>
+            ${seedCards}
+          </section>
         `;
-        listContainer.appendChild(card);
-      });
+      }).join('');
+      const status = el('manor-planting-status');
+      if (status) status.innerHTML = activeSeed
+        ? `Plantio ativo: <strong>${activeSeed.name}</strong>. Derrote monstros próximos do nível da semente (diferença máxima de 5 níveis) para tentar colher. Suas sementes: ${Number(mState.seeds[activeSeed.id]) || 0}.`
+        : 'Escolha uma semente e ative o plantio. As tentativas acontecem ao derrotar monstros no nível adequado.';
     }
 
     window.openManorModal = openManorModal;
     window.closeManorModal = closeManorModal;
     window.renderManorModalUI = renderManorModalUI;
-    window.buyManorSeedsAction = (provId, count = 20) => {
-      const res = ManorService.buySeeds(state, provId, count, { log, updateAllUI, save });
+    window.buyManorSeedsAction = (seedId, count = 20) => {
+      const res = ManorService.buySeeds(state, seedId, count, { log, updateAllUI, save });
       if (res.success) renderManorModalUI();
       return res;
     };
-    window.exchangeManorCropsAction = (provId) => {
-      const res = ManorService.exchangeCrops(state, provId, { log, floatText, updateAllUI, save });
+    window.exchangeManorCropsAction = (seedId, option = 1) => {
+      const res = ManorService.exchangeCrops(state, seedId, option, { log, floatText, updateAllUI, save, addToInventory });
+      if (res.success) renderManorModalUI();
+      return res;
+    };
+    window.selectManorSeedAction = (seedId) => {
+      const res = ManorService.selectSeed(state, seedId, { log, updateAllUI, save });
       if (res.success) renderManorModalUI();
       return res;
     };
