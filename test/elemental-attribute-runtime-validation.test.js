@@ -109,6 +109,7 @@ describe('Elemental attributes through production services', () => {
     const state = DEFAULT_STATE();
     state.level = 80;
     state.zone = 'underworldGate';
+    state.isCombatActive = true;
     const originalRandom = Math.random;
     try {
       Math.random = () => 0.999;

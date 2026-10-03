@@ -12,6 +12,7 @@ function stateWithAugmentation(classId, itemSkill) {
   state.race = 'human';
   state.class = classId;
   state.level = 80;
+  state.isCombatActive = true;
   state.inventory = [{
     uid: 'augmented-weapon', itemId: 'runtime_test_weapon', slot: 'weapon', atk: 100,
     augmentation: { itemSkill }

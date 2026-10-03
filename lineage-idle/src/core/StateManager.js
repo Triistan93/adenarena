@@ -68,7 +68,7 @@ export const DEFAULT_STATE = () => ({
   craftPoints: 0, craftCharges: 0, randomCraftWheel: [],
   subclasses: [], activeSubclassIndex: null, certifications: {}, mainClassData: null,
   craftLevel: 1, craftXp: 0, shopTab: 'gear', selectedSkill: null, filter: 'all',
-  craftTab: 'recipes', zoneTab: 'map', soulshotActive: false, isCombatActive: true, combatSpeed: 1,
+  craftTab: 'recipes', zoneTab: 'map', soulshotActive: false, isCombatActive: false, combatSpeed: 1,
   totalPlaytime: 0, buffs: {}, _cds: {}, gameMode: 'idle', privilegeLevel: 0,
   autoSellRarity: 'off',
   autoRecycle: {
@@ -734,7 +734,7 @@ export function applyStarterKit(state, race, classId, charName = null, gender = 
   state.sp = 50;
   state.gold = Math.max(state.gold || 0, 2000);
   state.zone = 'talkingIsland';
-  state.isCombatActive = true;
+  state.isCombatActive = false;
 
   // Limpa inventário e equipamentos para um começo sem sobras
   state.inventory = [];

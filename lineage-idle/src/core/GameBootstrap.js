@@ -18,6 +18,7 @@ import { getStats, getClass } from '../engine/StatsEngine.js';
 import { startCombat, stopCombat } from '../engine/CombatEngine.js';
 import { updateAllUI } from '../ui/index.js';
 import { CommunityCapService } from '../services/CommunityCapService.js';
+import { shouldStartCombatAtStartup } from './CombatStartupPolicy.js';
 
 let isBootstrapped = false;
 
@@ -89,7 +90,7 @@ export async function bootstrap(shadowRoot) {
     updateAllUI(state);
 
     // 5. Inicia o combate se houver uma zona selecionada
-    if (state.zone) {
+    if (shouldStartCombatAtStartup(state)) {
       startCombat(state);
     }
 
