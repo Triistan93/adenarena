@@ -6,7 +6,8 @@ import {
   MERCENARY_TRAITS,
   getMercenaryXpForLevel,
   calculateMercenaryPower,
-  rollMercenaryTrait
+  rollMercenaryTrait,
+  getMercenaryBondTier
 } from '../data/mercenaries.js';
 
 const TAVERN_REFRESH_INTERVAL_MS = 6 * 60 * 60 * 1000; // 6 horas
@@ -28,10 +29,17 @@ export const MercenaryService = {
     if (!Array.isArray(state.mercenaries.tavernPool)) {
       state.mercenaries.tavernPool = [];
     }
+    state.mercenaries.owned = state.mercenaries.owned.filter(Boolean);
+    for (const merc of state.mercenaries.owned) {
+      const trust = Math.max(0, Math.min(100, Math.floor(Number(merc.trust ?? merc.loyalty ?? 50) || 0)));
+      merc.trust = trust;
+      merc.loyalty = trust;
+    }
     return state.mercenaries;
   },
 
   isMercenaryBusy(state, mercUid) {
+    if (state.mercenaries?.camp?.assignments?.some(order => order.mercenaryUid === mercUid)) return true;
     if (!state.expeditions || !Array.isArray(state.expeditions)) return false;
     return state.expeditions.some(exp => {
       if (exp.claimed) return false;
@@ -92,6 +100,7 @@ export const MercenaryService = {
         level: 1,
         xp: 0,
         trait: rollMercenaryTrait(),
+        trust: 50,
         loyalty: 50,
         hireCost: rarityDef.hireCostBase
       });
@@ -220,20 +229,27 @@ export const MercenaryService = {
       callbacks.log(`⭐ **${merc.name} subiu para o Nível ${merc.level}!** Poder em expedições ampliado para ${calculateMercenaryPower(merc)}!`, 'rarity-legendary');
     }
 
-    // Concede +2 de lealdade por expedição concluída com sucesso
-    this.addMercenaryLoyalty(state, mercUid, 2, callbacks);
+    // Concede +2 de vínculo por expedição concluída com sucesso.
+    this.addMercenaryTrust(state, mercUid, 2, callbacks);
 
-    return { leveledUp, oldLevel, newLevel: merc.level, loyalty: merc.loyalty };
+    return { leveledUp, oldLevel, newLevel: merc.level, trust: merc.trust, loyalty: merc.loyalty };
+  },
+
+  addMercenaryTrust(state, mercUid, amount = 1, callbacks = {}) {
+    const merc = this.getMercenaryByUid(state, mercUid);
+    if (!merc) return 50;
+    const oldTrust = merc.trust ?? merc.loyalty ?? 50;
+    merc.trust = Math.max(0, Math.min(100, oldTrust + Math.floor(Number(amount) || 0)));
+    merc.loyalty = merc.trust; // Compatibilidade com saves e chamadas antigas.
+    const oldTier = getMercenaryBondTier(oldTrust);
+    const newTier = getMercenaryBondTier(merc.trust);
+    if (newTier.id !== oldTier.id && callbacks.log) {
+      callbacks.log(`🤝 **${merc.name} agora é ${newTier.name} da guilda!** ${newTier.desc}`, 'rarity-legendary');
+    }
+    return merc.trust;
   },
 
   addMercenaryLoyalty(state, mercUid, amount = 1, callbacks = {}) {
-    const merc = this.getMercenaryByUid(state, mercUid);
-    if (!merc) return 50;
-    const oldLoyalty = merc.loyalty ?? 50;
-    merc.loyalty = Math.max(0, Math.min(100, oldLoyalty + amount));
-    if (merc.loyalty >= 80 && oldLoyalty < 80 && callbacks.log) {
-      callbacks.log(`🤝 **${merc.name} atingiu Lealdade Fanática (Nv. ${merc.loyalty})!** Eficiência máxima e menor custo!`, 'rarity-legendary');
-    }
-    return merc.loyalty;
+    return this.addMercenaryTrust(state, mercUid, amount, callbacks);
   }
 };

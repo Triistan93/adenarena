@@ -53,6 +53,25 @@ export const MERCENARY_RARITIES = {
   }
 };
 
+export const MERCENARY_BOND_TIERS = [
+  { min: 0, max: 19, id: 'wary', name: 'Desconfiado', desc: 'O mercenário ainda não confia na guilda.' },
+  { min: 20, max: 49, id: 'known', name: 'Conhecido', desc: 'Já conhece a guilda e cumpre o contrato.' },
+  { min: 50, max: 79, id: 'companion', name: 'Companheiro', desc: '+3% de Adena nas expedições.' },
+  { min: 80, max: 99, id: 'trusted', name: 'Confiável', desc: '+8% de Adena e EXP de mercenário.' },
+  { min: 100, max: 100, id: 'sworn', name: 'Juramentado', desc: '+10% de Adena e EXP, +5% de chance de materiais extras.' }
+];
+
+export function getMercenaryBondTier(value = 50) {
+  const trust = Math.max(0, Math.min(100, Math.floor(Number(value) || 0)));
+  const index = MERCENARY_BOND_TIERS.findIndex(tier => trust <= tier.max);
+  const tier = MERCENARY_BOND_TIERS[Math.max(0, index)];
+  if (trust >= 100) return { ...tier, progressPct: 100, nextAt: null };
+
+  const nextTier = MERCENARY_BOND_TIERS[index + 1];
+  const progressPct = Math.floor(((trust - tier.min) / (nextTier.min - tier.min)) * 100);
+  return { ...tier, progressPct, nextAt: nextTier.min, nextName: nextTier.name };
+}
+
 export const MERCENARY_TRAITS = {
   veteran: {
     id: 'veteran',
@@ -378,7 +397,7 @@ export const MERCENARY_TEMPLATES = [
 
 export function getMercenaryXpForLevel(level) {
   const lvl = Math.max(1, Math.min(20, Math.floor(level)));
-  if (lvl >= 20) return 9999999;
+  if (lvl >= 20) return 0;
   return lvl * lvl * 80;
 }
 
@@ -390,10 +409,10 @@ export function calculateMercenaryPower(merc) {
   let power = (base + (lvl - 1) * 15) * (rarityDef.powerMult || 1.0);
 
   // Bônus de Lealdade (0-100)
-  const loyalty = merc.loyalty ?? 50;
-  if (loyalty >= 80) power *= 1.10;
-  else if (loyalty >= 50) power *= 1.05;
-  else if (loyalty < 20) power *= 0.90; // desmotivado
+  const trust = merc.trust ?? merc.loyalty ?? 50;
+  if (trust >= 80) power *= 1.10;
+  else if (trust >= 50) power *= 1.05;
+  else if (trust < 20) power *= 0.90; // desmotivado
 
   // Bônus de Traço
   if (merc.trait && MERCENARY_TRAITS[merc.trait]?.powerBonusPct) {
