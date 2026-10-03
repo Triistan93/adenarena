@@ -336,25 +336,25 @@ export const GUIDES_DATA = {
 
   expeditions: {
     id: 'expeditions',
-    title: '🏰 Expedições, Manor & Castelos de Aden',
-    subtitle: 'Plante sementes no Manor, conquiste Castelos e envie Expedições de Mercenários.',
+    title: '🧭 Expedições, Mercenários & Manor',
+    subtitle: 'Organize sua companhia, envie expedições e plante sementes durante a caça.',
     icon: '🏰',
     color: '#8b5cf6',
     sections: [
       {
         heading: '🌱 Sistema de Manor (Sementes & Colheita)',
-        text: 'Compre Sementes do Manor, plante em zonas de caça e colha frutos ao derrotar monstros. Troque sua colheita na cidade por materiais raros de criação.',
+        text: 'Compre sementes nos feudos, ative uma variedade adequada ao seu alvo e derrote monstros próximos do nível dela para tentar colher. Troque a colheita por materiais de fabricação no Manor Manager.',
         tip: 'O Manor é uma das formas mais baratas de conseguir minérios e tecidos raros!'
       },
       {
-        heading: '👑 Castelos (Gludio, Giran, Aden)',
-        text: 'Desafie os guardiões dos Castelos de Gludio, Giran e Aden. Conquistar um castelo garante **Impostos Diários em Adena** coletados de todo o servidor!',
-        tip: 'Colete seus impostos diariamente no painel do Castelo!'
+        heading: '📜 Mural de ordens da Companhia',
+        text: 'Recrute mercenários na Taverna e envie equipes para treinamento, caça, pesca ou mineração. Acompanhe o tempo, o custo e o retorno de cada trabalho no Mural.',
+        tip: 'Confira o nível, a especialidade e a confiança dos mercenários antes de montar a equipe.'
       },
       {
-        heading: '⛵ Expedições de Mercenários',
-        text: 'Envie esquadrões de mercenários em missões temporizadas (1h, 4h, 8h). Eles retornarão com caixas de suprimentos, receitas e Adena.',
-        tip: 'Mantenha suas expedições sempre rodando em segundo plano!'
+        heading: '🗺️ Expedições da Companhia',
+        text: 'Monte um esquadrão e escolha uma rota no Atlas. O risco, o tempo e as recompensas dependem da região e da equipe enviada.',
+        tip: 'Ordens do Mural e expedições são atividades diferentes: use o Mural para trabalhos locais e o Atlas para viagens.'
       }
     ]
   },
@@ -602,12 +602,12 @@ export function openTabGuideModal(guideKey) {
       </h4>
       ${s.customHtml ? s.customHtml : `
         <p style="margin: 0; font-size: 12px; color: #ddd; line-height: 1.6; whitespace: pre-line;">
-          ${(s.text || '').replace(/\n/g, '<br/>')}
+          ${(s.text || '').replace(/\*\*/g, '').replace(/\n/g, '<br/>')}
         </p>
       `}
       ${s.tip ? `
         <div style="margin-top: 8px; font-size: 11px; color: #34d399; background: rgba(52, 211, 153, 0.1); border-left: 3px solid #34d399; padding: 6px 10px; border-radius: 0 6px 6px 0;">
-          💡 <strong>Dica Estratégica:</strong> ${s.tip}
+          💡 <strong>Dica Estratégica:</strong> ${(s.tip || '').replace(/\*\*/g, '')}
         </div>
       ` : ''}
     </div>
@@ -633,7 +633,7 @@ export function openTabGuideModal(guideKey) {
       </div>
 
       <!-- Category Selector Tabs -->
-      <div style="padding: 8px 16px; background: rgba(0, 0, 0, 0.4); border-bottom: 1px solid rgba(212, 167, 68, 0.25); display: flex; gap: 6px; overflow-x: auto; scrollbar-width: thin;">
+      <nav class="tutorial-guide-category-tabs" aria-label="Categorias do guia" style="padding: 8px 16px; background: rgba(0, 0, 0, 0.4); border-bottom: 1px solid rgba(212, 167, 68, 0.25); display: flex; flex-wrap: wrap; justify-content: center; gap: 6px;">
         ${[
           'zones', 'character', 'inventory', 'resonance', 'skills', 'craft',
           'raids', 'colosseum', 'clan', 'alchemy', 'astral',
@@ -644,12 +644,12 @@ export function openTabGuideModal(guideKey) {
           const isSel = (k === (data.id || guideKey));
           const shortTitle = (k === 'resonance') ? 'Ressonâncias' : g.title.split('&')[0].split('(')[0].replace(/[^\w\sÀ-ú]/g, '').trim();
           return `
-            <button onclick="window.openTabGuideModal('${k}')" style="padding: 4px 10px; font-size: 11px; font-family: 'Cinzel', serif; font-weight: bold; border-radius: 12px; white-space: nowrap; cursor: pointer; transition: all 0.2s; border: 1px solid ${isSel ? (g.color || '#d4a744') : 'rgba(255,255,255,0.15)'}; background: ${isSel ? 'rgba(212, 167, 68, 0.25)' : 'rgba(20,24,36,0.6)'}; color: ${isSel ? (g.color || '#f4d58a') : '#aaa'};">
+            <button onclick="window.openTabGuideModal('${k}')" style="flex: 1 1 108px; min-width: 0; min-height: 30px; padding: 5px 8px; font-size: 11px; line-height: 1.25; text-align: center; font-family: 'Cinzel', serif; font-weight: bold; border-radius: 12px; white-space: normal; overflow-wrap: anywhere; cursor: pointer; transition: all 0.2s; border: 1px solid ${isSel ? (g.color || '#d4a744') : 'rgba(255,255,255,0.15)'}; background: ${isSel ? 'rgba(212, 167, 68, 0.25)' : 'rgba(20,24,36,0.6)'}; color: ${isSel ? (g.color || '#f4d58a') : '#aaa'};">
               ${g.icon} ${shortTitle}
             </button>
           `;
         }).join('')}
-      </div>
+      </nav>
 
       <!-- Body Content -->
       <div style="padding: 16px 20px; overflow-y: auto; flex: 1;">
