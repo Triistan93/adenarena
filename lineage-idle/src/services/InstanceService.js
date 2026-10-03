@@ -159,6 +159,7 @@ export const InstanceService = {
       xp: Math.floor(inst.rewards.xp / inst.stages.length),
       gold: [Math.floor(inst.rewards.gold / (inst.stages.length * 1.1)), Math.ceil(inst.rewards.gold / inst.stages.length)],
       boss: true, isInstanceBoss: true, instanceId: inst.id, instanceStage: stageIndex,
+      visualId: stage.id === 'glakias' && isAlternate ? 'glakiasDreadful' : stage.id,
       skill: isAlternate ? (stage.alternateSkill || stage.skill) : stage.skill,
       phases: stage.phases,
       _stunnedUntil: 0

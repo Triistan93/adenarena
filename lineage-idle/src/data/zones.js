@@ -116,5 +116,6 @@ export const ZONE_BACKGROUNDS = {
   baium:          '/img/Maps/baium.jpg',
   antharas:       '/img/Maps/antharaslair.jpg',
   valakas:        '/img/Maps/forgeofgods.jpg',
+  valakas_volcano:'/img/Maps/forgeofgods.jpg',
   barakiel:       '/img/Maps/valleyofsaints.jpg'
 };

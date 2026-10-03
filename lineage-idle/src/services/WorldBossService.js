@@ -30,7 +30,7 @@ export const WORLD_BOSS_CATALOG = {
     goldReward: 500000,
     adenCoinsReward: 25,
     icon: 'gradespecial/jewels/jewel_ring_queen_ant.png',
-    bg: 'dungeon_wastelands',
+    bg: 'queen_ant',
     lore: 'A rainha das formigas gigantes emergiu dos abismos dos Ermos de Gludio. Seus feromônios ácidos corroem as armaduras mais resistentes.',
     drops: [
       { itemId: 'jewel_ring_queen_ant', name: 'Ring of Queen Ant', chance: 0.35, isEpicJewel: true },
@@ -56,7 +56,7 @@ export const WORLD_BOSS_CATALOG = {
     goldReward: 1200000,
     adenCoinsReward: 35,
     icon: 'gradespecial/jewels/jewel_earring_zaken.png',
-    bg: 'pirates_ship',
+    bg: 'zaken',
     lore: 'Amaldiçoado pela eternidade em seu galeão fantasma, Zaken drena a força vital de todos os mortais que ousam pisar em seus conveses.',
     drops: [
       { itemId: 'jewel_earring_zaken', name: 'Zaken\'s Earring', chance: 0.35, isEpicJewel: true },
@@ -82,7 +82,7 @@ export const WORLD_BOSS_CATALOG = {
     goldReward: 2500000,
     adenCoinsReward: 50,
     icon: 'gradespecial/jewels/jewel_ring_baium.png',
-    bg: 'tower_peak',
+    bg: 'baium',
     lore: 'O imperador que desafiou os deuses ao erguer a Torre da Insolência. Seus punhos trovejantes e raios arcanos pulverizam exércitos inteiros.',
     drops: [
       { itemId: 'jewel_ring_baium', name: 'Ring of Baium', chance: 0.35, isEpicJewel: true },
@@ -108,7 +108,7 @@ export const WORLD_BOSS_CATALOG = {
     goldReward: 6000000,
     adenCoinsReward: 75,
     icon: 'gradespecial/jewels/jewel_earring_antharas.png',
-    bg: 'antharas_lair',
+    bg: 'antharas',
     lore: 'Cria colossal da Deusa Shilen. Quando Antharas desperta de seu sono milenar em Giran, a própria terra estremece e rochas colossais caem dos céus.',
     drops: [
       { itemId: 'jewel_earring_antharas', name: 'Earring of Antharas', chance: 0.35, isEpicJewel: true },
