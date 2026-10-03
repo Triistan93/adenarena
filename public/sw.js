@@ -3,7 +3,7 @@
  * Caching inteligente com prioridade de rede para scripts, HTML e dados atualizados
  */
 
-const CACHE_NAME = 'aden-arena-cache-v8';
+const CACHE_NAME = 'aden-arena-cache-v9';
 const STATIC_ASSETS = [
   '/manifest.webmanifest',
   '/icon-192.png',
@@ -35,8 +35,11 @@ self.addEventListener('fetch', (event) => {
 
   const url = new URL(event.request.url);
 
-  // Network-first para HTML, Scripts JS, CSS, Manifest e API para nunca servir código desatualizado
+  // Vite serves source modules as .tsx/.jsx requests with destination=script.
+  // Keep every executable module network-first; cache-first can pin an old login/game UI.
   const isCodeOrDoc = event.request.mode === 'navigate' || 
+                      event.request.destination === 'script' ||
+                      event.request.destination === 'style' ||
                       url.pathname.endsWith('.html') || 
                       url.pathname.endsWith('.js') || 
                       url.pathname.endsWith('.css') || 
