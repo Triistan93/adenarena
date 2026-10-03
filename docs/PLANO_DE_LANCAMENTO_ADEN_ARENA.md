@@ -57,7 +57,7 @@ Esses grupos misturam mudanças em `lineage-idle/main.js`, `lineage-idle/src/ui/
 
 ### Etapa 1 — Caminho principal do jogador e estabilidade
 
-- [ ] Testar do login até o primeiro combate, primeira recompensa, equipamento e próxima meta.
+- [x] Testar do login até o primeiro combate, primeira recompensa, equipamento e próxima meta (Validado via `test/stage1-new-player-core-journey.test.js`: criação segura em Talking Island com combate pausado, acionamento por consentimento, vitória com concessão de EXP/Adena, drop e equipamento na mochila com recálculo dinâmico de atributos).
 - [ ] Confirmar progressão e desbloqueios nas transferências de classe e nas faixas de nível anunciadas para a temporada.
 - [ ] Validar save local/nuvem, retomada, reconexão e migração de save antigo sem perda de personagem, itens ou progresso.
 - [ ] Remover bloqueios, objetivos impossíveis, ações sem resposta e conteúdo anunciado que ainda não possui fluxo funcional.
@@ -147,8 +147,8 @@ As ideias continuam registradas; estacionar significa proteger o foco e não per
 ## Estado atual
 
 **Etapa ativa:** 1 — Caminho principal do jogador e estabilidade.
-**Tarefa ativa:** Testar do login até o primeiro combate, primeira recompensa, equipamento e próxima meta.
-**Próximo passo:** Verificar o fluxo do jogador novo: criação de personagem, chegada à tela principal com combate pausado, seleção de zona inicial, início do combate com consentimento, drop de itens/moeda e equipamento na mochila.
+**Tarefa ativa:** Confirmar progressão e desbloqueios nas transferências de classe e nas faixas de nível anunciadas para a temporada.
+**Próximo passo:** Validar a 1ª Transferência de Classe no nível 20 nas 49 linhagens (diálogo de escolha no DAG canônico, recálculo de stats, atualização imediata da árvore de habilidades e persistência).
 
 **Checkpoints concluídos da Etapa 0 (03/10/2026):**
 - `136bc3c9`: `fix(save): preserve recovery data and canonical cloud state` (segurança de saves, fallback e hidratação canônica).

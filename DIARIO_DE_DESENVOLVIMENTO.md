@@ -4284,3 +4284,34 @@ Executei a triagem, separação e consolidação final de todos os grupos de mod
    - Todos os 1.392 testes unitários passaram (140 suítes, 0 falhas). Build Vite de produção concluído com sucesso.
 
 **Etapa 0 concluída com sucesso.** Todos os arquivos sagrados (`LevelEngine.js`, `MarketService.js`, `ExpeditionService.js`, etc.) permaneceram intocados. Sem push/deploy; o branch local `main` está pronto para o início da **Etapa 1 — Caminho principal do jogador e estabilidade**.
+
+### Etapa 1 — Validação da Jornada Inicial do Jogador (Login, Combate com Consentimento e Equipamento) — 03/10/2026
+
+Iniciei oficialmente os trabalhos da **Etapa 1 — Caminho principal do jogador e estabilidade**, executando a tarefa ativa: **Testar do login até o primeiro combate, primeira recompensa, equipamento e próxima meta**.
+
+Dividi a tarefa em três passos verificáveis e criei a suíte de testes de integração `test/stage1-new-player-core-journey.test.js`:
+
+1. **Passo 1 — Criação e Inicialização com Consentimento:**
+   - Personagem novo inicializado via `applyStarterKit` na zona segura canônica (`talkingIsland`).
+   - Combate estritamente pausado na inicialização (`isCombatActive === false`, `combatActive === false`, sem monstro ativo pré-gerado).
+   - Mochila inicial abastecida com itens básicos No-Grade e arma inicial equipada com flag `equipped: true`.
+
+2. **Passo 2 — Início de Combate com Consentimento e Primeira Vitória:**
+   - O combate só inicia quando o jogador executa a ação consciente (`startCombat`).
+   - Spawn correto do primeiro monstro da zona com HP e atributos canônicos.
+   - Simulação de golpe e derrota do monstro, com acionamento do ciclo de recompensas: concessão comprovada de primeira EXP, Adena e incremento do contador de abates (`monstersKilled = 1`).
+   - Pausa segura imediata via `stopCombat`.
+
+3. **Passo 3 — Drop, Mochila, Equipamento e Recálculo de Atributos:**
+   - Drop de equipamento comum (`knight_sword`) recebido no inventário via `addToInventory` respeitando o limite de 150 slots.
+   - Equipamento da arma através de `equipItem`, validando a sincronização da flag `equipped` e do slot `state.equipment.weapon`.
+   - Recálculo dinâmico de atributos em tempo real via `StatsEngine.getStats(state)` comprovando atualização de ataque físico (`atk > 0`), defesa física (`def > 0`) e Poder de Combate (`combatPower > 0`).
+   - Desequipamento limpo via `unequipItem`, liberando o slot e marcando `equipped: false`.
+
+**Métricas e Verificações de Qualidade:**
+- **Testes automatizados:** `npm test` executou com aprovação integral de **1.395/1.395 testes** (140 suítes, 0 falhas).
+- **Build de produção:** `npm run build` concluiu com sucesso em 43.13s.
+- **Git & Formatação:** `git diff --check` passou sem apontamentos.
+- **Segurança Operacional:** Porta local 5177 do usuário seguiu intocada; nenhum save de produção foi afetado; arquivos sagrados preservados; zero push e zero deploy.
+
+**Próxima tarefa:** Validar a progressão de nível e a 1ª Transferência de Classe no nível 20 em todas as 49 linhagens canônicas.
