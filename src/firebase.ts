@@ -7,6 +7,7 @@ import {
   signInWithPopup, 
   signInAnonymously,
   signOut, 
+  connectAuthEmulator,
   onAuthStateChanged,
   type User
 } from 'firebase/auth';
@@ -27,8 +28,10 @@ import {
   limit, 
   where,
   documentId,
-  writeBatch
+  writeBatch,
+  connectFirestoreEmulator
 } from 'firebase/firestore';
+import { connectFirebaseEmulators } from './firebaseEmulators.js';
 
 // @ts-ignore
 import { CombatPowerService } from '../lineage-idle/src/services/CombatPowerService.js';
@@ -72,6 +75,19 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
 export const db = getFirestore(app);
+
+const firebaseEnv = import.meta.env || {};
+const useLocalFirebaseEmulators = firebaseEnv.VITE_FIREBASE_EMULATORS === 'true';
+if (firebaseEnv.PROD && useLocalFirebaseEmulators) {
+  throw new Error('Firebase emulators cannot be enabled in a production build.');
+}
+connectFirebaseEmulators({
+  enabled: useLocalFirebaseEmulators,
+  auth,
+  db,
+  connectAuthEmulator,
+  connectFirestoreEmulator,
+});
 
 // Autenticação anônima automática para jogadores convidados
 if (typeof window !== 'undefined') {
