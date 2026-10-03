@@ -17,7 +17,9 @@ describe('👥 Contatos, Amigos & Mentoria Integration Validation', () => {
     assert.ok(content.includes('<span>Contatos</span>'), 'Top button must display Contatos text');
     assert.ok(content.includes('window.openContactsModal'), 'Top button must call window.openContactsModal');
     assert.ok(content.includes('id="pillar-contacts-btn"'), 'Pillar 4 must have a contacts button');
-    assert.ok(content.includes('👥 Contatos &amp; Mentoria'), 'Pillar 4 button must be labeled Contatos & Mentoria');
+    const pillarContactsButton = content.match(/<button[^>]*id="pillar-contacts-btn"[\s\S]*?<\/button>/)?.[0] || '';
+    assert.ok(pillarContactsButton.includes('aria-label="Contatos e mentoria"'), 'Pillar 4 button must have an accessible contacts label');
+    assert.ok(pillarContactsButton.includes('Contatos &amp; Mentoria'), 'Pillar 4 button must visibly say Contatos & Mentoria');
     assert.ok(content.includes('id="referral-modal" class="modal"'), 'referral-modal must exist in markup.ts as a modal');
   });
 

@@ -547,6 +547,43 @@ select:focus-visible {
   opacity: 1;
 }
 
+/* Global boss encounters receive a dedicated atmospheric layer while preserving combat readability. */
+.stage-event-aura {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.45s ease;
+  background:
+    radial-gradient(ellipse at 73% 30%, rgba(255, 229, 150, 0.34), transparent 22%),
+    radial-gradient(ellipse at 78% 48%, rgba(255, 196, 75, 0.18), transparent 42%),
+    linear-gradient(110deg, transparent 35%, rgba(255, 244, 195, 0.10) 48%, transparent 60%);
+  background-size: auto, auto, 240% 100%;
+  animation: worldBossAuraDrift 7s ease-in-out infinite alternate;
+}
+.stage.is-world-boss .stage-event-aura { opacity: 1; }
+.stage.is-world-boss { box-shadow: inset 0 0 0 2px rgba(244, 197, 91, 0.62), inset 0 -48px 72px rgba(24, 14, 4, 0.72), 0 0 30px rgba(244, 197, 91, 0.30); }
+.stage.is-world-boss[data-world-boss-id="queen_ant_world"] .stage-event-aura {
+  background: radial-gradient(ellipse at 76% 48%, rgba(149, 255, 97, 0.28), transparent 32%), linear-gradient(120deg, transparent 55%, rgba(94, 220, 81, 0.11), transparent 78%);
+}
+.stage.is-world-boss[data-world-boss-id="zaken_world"] .stage-event-aura {
+  background: radial-gradient(ellipse at 78% 50%, rgba(91, 179, 255, 0.30), transparent 35%), linear-gradient(180deg, rgba(81, 157, 255, 0.10), transparent 65%);
+}
+.stage.is-world-boss[data-world-boss-id="antharas_world"] .stage-event-aura {
+  background: radial-gradient(ellipse at 78% 55%, rgba(161, 105, 75, 0.35), transparent 38%), linear-gradient(180deg, rgba(115, 75, 60, 0.12), transparent 65%);
+}
+.stage.is-world-boss[data-world-boss-id="valakas_world"] .stage-event-aura {
+  background: radial-gradient(ellipse at 78% 52%, rgba(255, 73, 34, 0.34), transparent 36%), linear-gradient(110deg, transparent 42%, rgba(255, 133, 38, 0.13), transparent 70%);
+}
+@keyframes worldBossAuraDrift {
+  from { background-position: center, center, 100% 0; }
+  to { background-position: center, center, 0 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .stage-event-aura { animation: none; }
+}
+
 /* Rarity Rim-Light Outer Glow for Inventory Slots */
 .inv-slot.rarity-rare {
   border-color: rgba(59, 130, 246, 0.7) !important;
@@ -4826,22 +4863,30 @@ select:focus-visible {
 
 /* ============ TOWER OF INSOLENCE STYLES ============ */
 .tower-header-frame {
+  position: relative;
+  min-height: 172px;
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  padding: 10px 14px;
-  background: linear-gradient(180deg, rgba(40, 15, 20, 0.9), rgba(20, 5, 10, 0.95));
+  align-items: flex-end;
+  gap: 14px;
+  padding: 18px 20px;
+  background-image: linear-gradient(90deg,rgba(12,8,14,.96),rgba(12,8,14,.74) 57%,rgba(12,8,14,.35)),url('/img/Maps/baium.jpg');
+  background-size: cover;
+  background-position: center 43%;
   border: 1px solid rgba(225, 29, 72, 0.4);
   border-radius: 6px;
   margin-bottom: 12px;
 }
+.tower-title-group{display:flex;align-items:center;gap:11px;max-width:70%;text-shadow:0 2px 9px #000}
+.tower-window-icon{font-size:34px;filter:drop-shadow(0 2px 8px rgba(0,0,0,.8))}
 .tower-window-title {
   font-family: "Cinzel", serif;
-  font-size: 13px;
+  font-size: clamp(17px,2vw,23px);
   font-weight: 700;
-  color: #fecdd3;
-  letter-spacing: 0.1em;
+  color: #fff0c4;
+  letter-spacing: 0.06em;
 }
+.tower-reset-info{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap}
 .tower-banner-container {
   background: linear-gradient(135deg, rgba(30, 10, 20, 0.9), rgba(15, 5, 10, 0.95));
   border: 1px solid rgba(244, 63, 94, 0.4);
@@ -4877,12 +4922,23 @@ select:focus-visible {
 }
 .tower-floors-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(75px, 1fr));
-  gap: 6px;
-  max-height: 280px;
-  overflow-y: auto;
-  padding-right: 4px;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 190px), 1fr));
+  gap: 10px;
+  max-height: none;
+  overflow: visible;
+  padding-right: 0;
 }
+.tower-chapter-card{min-width:0;padding:12px;border:1px solid rgba(245,158,11,.22);border-radius:9px;background:linear-gradient(145deg,rgba(20,19,28,.96),rgba(10,12,19,.96));box-shadow:inset 0 1px rgba(255,255,255,.04);transition:border-color .18s,transform .18s}
+.tower-chapter-card.is-active{border-color:rgba(251,113,133,.62);background:linear-gradient(145deg,rgba(54,19,32,.94),rgba(16,12,20,.97));box-shadow:0 0 20px rgba(190,24,93,.12)}
+.tower-chapter-card.is-complete{border-color:rgba(52,211,153,.4)}
+.tower-chapter-heading{display:flex;justify-content:space-between;align-items:center;gap:8px;color:#a9a9b8;font:600 10px 'Cinzel',serif;letter-spacing:.06em}
+.tower-chapter-heading strong{color:#f6d98b;font-size:13px}
+.tower-chapter-progress{height:5px;margin:11px 0 7px;border-radius:9px;background:rgba(255,255,255,.08);overflow:hidden}
+.tower-chapter-progress span{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#be123c,#fbbf24);transition:width .3s}
+.tower-chapter-card.is-complete .tower-chapter-progress span{background:linear-gradient(90deg,#059669,#6ee7b7)}
+.tower-chapter-status{font-size:10px;color:#d7d6df}
+.tower-chapter-boss{display:grid;gap:4px;margin-top:10px;padding-top:8px;border-top:1px solid rgba(255,255,255,.07);font-size:9px;color:#a9a9b8}
+.tower-chapter-boss strong{overflow:hidden;color:#f2e4ca;font:600 10px/1.25 'IBM Plex Sans',sans-serif;text-overflow:ellipsis;white-space:nowrap}
 .tower-floor-pill {
   display: flex;
   flex-direction: column;
@@ -4910,6 +4966,25 @@ select:focus-visible {
 .tower-floor-pill.boss-floor {
   border-color: #f59e0b;
 }
+
+/* Cinématique de raid : chaque encounter gets its own lair and boss portrait. */
+.raid-lair-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px;align-items:stretch}
+.raid-lair-card{min-width:0;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;border:1px solid rgba(212,175,55,.34);border-radius:12px;background:linear-gradient(145deg,rgba(24,20,22,.98),rgba(10,10,14,.99));box-shadow:0 8px 26px rgba(0,0,0,.42);transition:transform .2s,border-color .2s,box-shadow .2s}
+.raid-lair-card:hover{transform:translateY(-2px);border-color:rgba(245,205,113,.7);box-shadow:0 14px 32px rgba(0,0,0,.5)}
+.raid-lair-card.is-in-combat{border-color:#22c55e;box-shadow:0 0 24px rgba(34,197,94,.2)}
+.raid-lair-card.is-locked{filter:saturate(.62)}
+.raid-lair-scene{position:relative;isolation:isolate;min-height:174px;overflow:hidden;background-position:center;background-size:cover;border-bottom:1px solid rgba(255,255,255,.1)}
+.raid-lair-scene:after{content:"";position:absolute;z-index:-1;inset:0;background:linear-gradient(0deg,rgba(7,8,13,.76),transparent 62%),radial-gradient(ellipse at 75% 62%,rgba(255,255,255,.1),transparent 52%)}
+.raid-lair-portrait{position:absolute;right:3%;bottom:-16%;width:49%;height:116%;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 5px 18px rgba(0,0,0,.75));mask-image:linear-gradient(90deg,transparent,#000 18%);}
+.raid-lair-copy{position:absolute;z-index:1;left:15px;right:44%;bottom:17px;display:grid;gap:5px;text-shadow:0 2px 8px #000}
+.raid-lair-copy strong{color:#fff0c4;font:700 clamp(15px,1.2vw,19px)/1.1 'Cinzel',serif}
+.raid-lair-copy>span:last-child{font-size:10px;color:#e5e7eb}
+.raid-lair-location{font:700 9px 'Cinzel',serif;letter-spacing:.12em;text-transform:uppercase;color:#efc875}
+.raid-difficulty{position:absolute;z-index:2;top:10px;left:10px;max-width:calc(100% - 20px);padding:4px 8px;border:1px solid var(--raid-difficulty);border-radius:20px;background:rgba(5,7,11,.75);color:var(--raid-difficulty);font-size:9px;font-weight:700}
+.raid-lair-card>div:nth-child(2){padding:12px 13px 13px}
+.colosseum-arena-hero{position:relative;min-height:172px;display:flex;align-items:flex-end;overflow:hidden;background-image:linear-gradient(90deg,rgba(10,8,10,.92),rgba(10,8,10,.7) 58%,rgba(10,8,10,.38)),url('/images/castle-bg.jpg')!important;background-position:center 42%;background-size:cover;box-shadow:inset 0 -60px 60px rgba(0,0,0,.35),0 6px 20px rgba(0,0,0,.6)!important}
+.colosseum-arena-hero>div{width:100%;align-items:flex-end!important;text-shadow:0 2px 8px #000}
+@media(max-width:640px){.raid-lair-scene{min-height:158px}.raid-lair-copy{right:38%;left:12px}.raid-lair-portrait{right:-5%;width:53%}.tower-chapter-card{padding:10px}.tower-header-frame{min-height:194px;align-items:flex-end;padding:14px;flex-wrap:wrap}.tower-title-group{max-width:100%}.tower-window-icon{font-size:27px}.tower-reset-info{justify-content:flex-start}.colosseum-arena-hero{min-height:194px}}
 /* =========================================================
    GAME ASSETS & CHARACTER RENDERING
    ========================================================= */

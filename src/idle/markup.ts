@@ -201,6 +201,7 @@ export const IDLE_MARKUP = `
         <div class="stage" id="stage" data-state="idle">
           <div class="stage-bg stage-bg-a" id="stage-bg-a"></div>
           <div class="stage-bg stage-bg-b" id="stage-bg-b"></div>
+          <div class="stage-event-aura" aria-hidden="true"></div>
           <div class="stage-header-bar">
             <div class="stage-zone" id="stage-zone">—</div>
             <div class="combat-controls-bar">
@@ -316,49 +317,111 @@ export const IDLE_MARKUP = `
           </div>
 
           <!-- Pillar 1 Subtabs: Combate -->
-          <div class="pillar-subtabs-strip active" id="pillar-strip-combat">
-            <button class="tab-btn active subtab-pill-btn" data-tab="zones">⚔ Combate &amp; Zonas</button>
-            <button class="tab-btn subtab-pill-btn" data-tab="raids">🐉 Raids &amp; Bosses</button>
-            <button class="tab-btn subtab-pill-btn" data-tab="tower">🏰 Torre da Insolência</button>
-            <button class="tab-btn subtab-pill-btn" data-tab="colosseum">⚔ Coliseu PvP</button>
-            <button class="tab-btn subtab-pill-btn" data-tab="expeditions">🏰 Expedições</button>
-            <button class="tab-btn subtab-pill-btn" data-tab="fishing">🎣 Pesca</button>
-            <button class="tab-btn subtab-pill-btn" data-tab="hunting">🐾 Caça Silvestre</button>
-            <button class="tab-btn subtab-pill-btn" data-tab="gathering">🌿 Coleta</button>
-            <button class="tab-btn subtab-pill-btn" data-tab="mining">⛏️ Mineração</button>
+          <div class="pillar-subtabs-strip active pillar-subtabs-strip--combat" id="pillar-strip-combat">
+            <div class="hero-subnav-heading">
+              <div class="hero-subnav-signet" aria-hidden="true"><span>⚔</span></div>
+              <div class="hero-subnav-intro">
+                <span class="hero-subnav-eyebrow">CRÔNICAS DE ADEN <i>·</i> CAMPO DE BATALHA</span>
+                <strong>Provas de Combate</strong>
+                <span>Encontros, arenas e fronteiras à espera de um campeão.</span>
+              </div>
+              <div class="hero-subnav-stats"><span>CAPÍTULO</span><strong>II</strong><span>DE ADEN</span></div>
+            </div>
+            <div class="hero-subnav-rule" aria-hidden="true"><span>JORNADAS</span></div>
+            <div class="hero-subnav-grid" role="group" aria-label="Jornadas de combate">
+              <button class="tab-btn active subtab-pill-btn hero-subtab-card" data-tab="zones" aria-label="Combate e zonas"><span class="hero-subtab-index" aria-hidden="true">01</span><span class="hero-subtab-icon" aria-hidden="true">⚔</span><span class="hero-subtab-copy"><span class="hero-subtab-title">Combate &amp; Zonas</span><span class="hero-subtab-meta">Campos e criaturas</span></span></button>
+              <button class="tab-btn subtab-pill-btn hero-subtab-card" data-tab="raids" aria-label="Raids e bosses"><span class="hero-subtab-index" aria-hidden="true">02</span><span class="hero-subtab-icon" aria-hidden="true">♜</span><span class="hero-subtab-copy"><span class="hero-subtab-title">Raids &amp; Bosses</span><span class="hero-subtab-meta">Caçadas lendárias</span></span></button>
+              <button class="tab-btn subtab-pill-btn hero-subtab-card" data-tab="tower" aria-label="Torre da Insolência"><span class="hero-subtab-index" aria-hidden="true">03</span><span class="hero-subtab-icon" aria-hidden="true">♙</span><span class="hero-subtab-copy"><span class="hero-subtab-title">Torre da Insolência</span><span class="hero-subtab-meta">Provação em andares</span></span></button>
+              <button class="tab-btn subtab-pill-btn hero-subtab-card" data-tab="colosseum" aria-label="Coliseu PvP"><span class="hero-subtab-index" aria-hidden="true">04</span><span class="hero-subtab-icon" aria-hidden="true">⚔</span><span class="hero-subtab-copy"><span class="hero-subtab-title">Coliseu PvP</span><span class="hero-subtab-meta">Duelo entre campeões</span></span></button>
+              <button class="tab-btn subtab-pill-btn hero-subtab-card" data-tab="expeditions" aria-label="Expedições"><span class="hero-subtab-index" aria-hidden="true">05</span><span class="hero-subtab-icon" aria-hidden="true">⚑</span><span class="hero-subtab-copy"><span class="hero-subtab-title">Expedições</span><span class="hero-subtab-meta">Rotas e vanguardas</span></span></button>
+              <button class="tab-btn subtab-pill-btn hero-subtab-card" data-tab="fishing" aria-label="Pesca"><span class="hero-subtab-index" aria-hidden="true">06</span><span class="hero-subtab-icon" aria-hidden="true">⌁</span><span class="hero-subtab-copy"><span class="hero-subtab-title">Pesca</span><span class="hero-subtab-meta">Águas e recursos</span></span></button>
+              <button class="tab-btn subtab-pill-btn hero-subtab-card" data-tab="hunting" aria-label="Caça silvestre"><span class="hero-subtab-index" aria-hidden="true">07</span><span class="hero-subtab-icon" aria-hidden="true">♧</span><span class="hero-subtab-copy"><span class="hero-subtab-title">Caça Silvestre</span><span class="hero-subtab-meta">Rastreio e provisões</span></span></button>
+              <button class="tab-btn subtab-pill-btn hero-subtab-card" data-tab="gathering" aria-label="Coleta"><span class="hero-subtab-index" aria-hidden="true">08</span><span class="hero-subtab-icon" aria-hidden="true">❋</span><span class="hero-subtab-copy"><span class="hero-subtab-title">Coleta</span><span class="hero-subtab-meta">Recursos naturais</span></span></button>
+              <button class="tab-btn subtab-pill-btn hero-subtab-card" data-tab="mining" aria-label="Mineração"><span class="hero-subtab-index" aria-hidden="true">09</span><span class="hero-subtab-icon" aria-hidden="true">⌖</span><span class="hero-subtab-copy"><span class="hero-subtab-title">Mineração</span><span class="hero-subtab-meta">Veios e minérios</span></span></button>
+            </div>
           </div>
 
           <!-- Pillar 2 Subtabs: Herói -->
-          <div class="pillar-subtabs-strip collapsed" id="pillar-strip-character" style="display:none;">
-            <button class="tab-btn subtab-pill-btn" data-tab="character">🛡 Personagem</button>
-            <button class="tab-btn subtab-pill-btn" data-tab="inventory">🎒 Mochila <span id="tab-badge-inventory" class="tab-badge" style="display:none">!</span></button>
-            <button class="tab-btn subtab-pill-btn" data-tab="skills">✦ Habilidades <span id="tab-badge-skills" class="tab-badge" style="display:none">!</span></button>
-            <button class="tab-btn subtab-pill-btn" data-tab="astral">★ Maestria</button>
-            <button class="tab-btn subtab-pill-btn" data-tab="dolls">🧸 Dolls &amp; Pets</button>
-            <button class="tab-btn subtab-pill-btn" data-tab="cosmetics">✨ Cosméticos</button>
-            <button class="tab-btn subtab-pill-btn" data-tab="quests">🎯 Missões <span id="tab-badge-quests" class="tab-badge" style="display:none">!</span></button>
+          <div class="pillar-subtabs-strip collapsed pillar-subtabs-strip--hero" id="pillar-strip-character" style="display:none;">
+            <div class="hero-subnav-heading">
+              <div class="hero-subnav-signet" aria-hidden="true"><span>AA</span></div>
+              <div class="hero-subnav-intro">
+                <span class="hero-subnav-eyebrow">CRÔNICAS DE ADEN <i>·</i> REGISTRO I</span>
+                <strong>Legado do Herói</strong>
+                <span>A linhagem, os feitos e o destino que você escreve.</span>
+              </div>
+              <div class="hero-subnav-stats"><span>CAPÍTULO</span><strong>I</strong><span>DE ADEN</span></div>
+            </div>
+            <div class="hero-subnav-rule" aria-hidden="true"><span>DISCIPLINAS</span></div>
+            <div class="hero-subnav-grid" role="group" aria-label="Disciplinas do herói">
+              <button class="tab-btn subtab-pill-btn hero-subtab-card" data-tab="character" aria-label="Personagem">
+                <span class="hero-subtab-index" aria-hidden="true">01</span><span class="hero-subtab-icon" aria-hidden="true">♙</span><span class="hero-subtab-copy"><span class="hero-subtab-title">Personagem</span><span class="hero-subtab-meta">Ficha e atributos</span></span>
+              </button>
+              <button class="tab-btn subtab-pill-btn hero-subtab-card" data-tab="inventory" aria-label="Mochila">
+                <span class="hero-subtab-index" aria-hidden="true">02</span><span class="hero-subtab-icon" aria-hidden="true">◇</span><span class="hero-subtab-copy"><span class="hero-subtab-title">Mochila</span><span class="hero-subtab-meta">Itens e equipamento</span></span><span id="tab-badge-inventory" class="tab-badge" style="display:none">!</span>
+              </button>
+              <button class="tab-btn subtab-pill-btn hero-subtab-card" data-tab="skills" aria-label="Habilidades">
+                <span class="hero-subtab-index" aria-hidden="true">03</span><span class="hero-subtab-icon" aria-hidden="true">✧</span><span class="hero-subtab-copy"><span class="hero-subtab-title">Habilidades</span><span class="hero-subtab-meta">Técnicas e rotações</span></span><span id="tab-badge-skills" class="tab-badge" style="display:none">!</span>
+              </button>
+              <button class="tab-btn subtab-pill-btn hero-subtab-card" data-tab="astral" aria-label="Maestria">
+                <span class="hero-subtab-index" aria-hidden="true">04</span><span class="hero-subtab-icon" aria-hidden="true">☼</span><span class="hero-subtab-copy"><span class="hero-subtab-title">Maestria</span><span class="hero-subtab-meta">Constelações e bônus</span></span>
+              </button>
+              <button class="tab-btn subtab-pill-btn hero-subtab-card" data-tab="dolls" aria-label="Dolls e mascotes">
+                <span class="hero-subtab-index" aria-hidden="true">05</span><span class="hero-subtab-icon" aria-hidden="true">♧</span><span class="hero-subtab-copy"><span class="hero-subtab-title">Dolls &amp; Pets</span><span class="hero-subtab-meta">Coleção e invocações</span></span>
+              </button>
+              <button class="tab-btn subtab-pill-btn hero-subtab-card" data-tab="cosmetics" aria-label="Cosméticos">
+                <span class="hero-subtab-index" aria-hidden="true">06</span><span class="hero-subtab-icon" aria-hidden="true">❖</span><span class="hero-subtab-copy"><span class="hero-subtab-title">Cosméticos</span><span class="hero-subtab-meta">Auras e aparências</span></span>
+              </button>
+              <button class="tab-btn subtab-pill-btn hero-subtab-card" data-tab="quests" aria-label="Missões">
+                <span class="hero-subtab-index" aria-hidden="true">07</span><span class="hero-subtab-icon" aria-hidden="true">⚑</span><span class="hero-subtab-copy"><span class="hero-subtab-title">Missões</span><span class="hero-subtab-meta">Jornada e objetivos</span></span><span id="tab-badge-quests" class="tab-badge" style="display:none">!</span>
+              </button>
+            </div>
           </div>
 
           <!-- Pillar 3 Subtabs: Império & Economia -->
-          <div class="pillar-subtabs-strip collapsed" id="pillar-strip-economy" style="display:none;">
-            <button class="tab-btn subtab-pill-btn" data-tab="market" data-min-level="1" style="border-color:#ffd700; color:#fde047; font-weight:bold;">🏛 Mercado Giran (P2P)</button>
-            <button class="tab-btn subtab-pill-btn" data-tab="shop" data-min-level="1">⚜ Mercador</button>
-            <button class="tab-btn subtab-pill-btn" data-tab="craft" data-min-level="10">⚒ Forja Imperial <span id="tab-badge-craft" class="tab-badge" style="display:none">!</span></button>
-            <button class="tab-btn subtab-pill-btn" data-tab="warehouse" data-min-level="15">📦 Baú Privado</button>
-            <button class="tab-btn subtab-pill-btn" data-tab="magiclamp" data-min-level="20">🪔 Lâmpada Mágica</button>
-            <button class="tab-btn subtab-pill-btn" data-tab="alchemy" data-min-level="40">🧪 Alquimia</button>
+          <div class="pillar-subtabs-strip collapsed pillar-subtabs-strip--economy" id="pillar-strip-economy" style="display:none;">
+            <div class="hero-subnav-heading">
+              <div class="hero-subnav-signet" aria-hidden="true"><span>♜</span></div>
+              <div class="hero-subnav-intro">
+                <span class="hero-subnav-eyebrow">CRÔNICAS DE ADEN <i>·</i> CASA IMPERIAL</span>
+                <strong>Riquezas &amp; Ofícios</strong>
+                <span>O comércio e a arte que sustentam seu império.</span>
+              </div>
+              <div class="hero-subnav-stats"><span>CAPÍTULO</span><strong>III</strong><span>DE ADEN</span></div>
+            </div>
+            <div class="hero-subnav-rule" aria-hidden="true"><span>OFÍCIOS</span></div>
+            <div class="hero-subnav-grid" role="group" aria-label="Ofícios do império">
+              <button class="tab-btn subtab-pill-btn hero-subtab-card" data-tab="market" data-min-level="1" aria-label="Mercado Giran"><span class="hero-subtab-index" aria-hidden="true">01</span><span class="hero-subtab-icon" aria-hidden="true">◇</span><span class="hero-subtab-copy"><span class="hero-subtab-title">Mercado Giran</span><span class="hero-subtab-meta">Trocas entre jogadores</span></span></button>
+              <button class="tab-btn subtab-pill-btn hero-subtab-card" data-tab="shop" data-min-level="1" aria-label="Mercador"><span class="hero-subtab-index" aria-hidden="true">02</span><span class="hero-subtab-icon" aria-hidden="true">⚜</span><span class="hero-subtab-copy"><span class="hero-subtab-title">Mercador</span><span class="hero-subtab-meta">Suprimentos de Aden</span></span></button>
+              <button class="tab-btn subtab-pill-btn hero-subtab-card" data-tab="craft" data-min-level="10" aria-label="Forja Imperial"><span class="hero-subtab-index" aria-hidden="true">03</span><span class="hero-subtab-icon" aria-hidden="true">⚒</span><span class="hero-subtab-copy"><span class="hero-subtab-title">Forja Imperial</span><span class="hero-subtab-meta">Criação e aprimoramento</span></span><span id="tab-badge-craft" class="tab-badge" style="display:none">!</span></button>
+              <button class="tab-btn subtab-pill-btn hero-subtab-card" data-tab="warehouse" data-min-level="15" aria-label="Baú privado"><span class="hero-subtab-index" aria-hidden="true">04</span><span class="hero-subtab-icon" aria-hidden="true">▣</span><span class="hero-subtab-copy"><span class="hero-subtab-title">Baú Privado</span><span class="hero-subtab-meta">Reservas do herói</span></span></button>
+              <button class="tab-btn subtab-pill-btn hero-subtab-card" data-tab="magiclamp" data-min-level="20" aria-label="Lâmpada mágica"><span class="hero-subtab-index" aria-hidden="true">05</span><span class="hero-subtab-icon" aria-hidden="true">✧</span><span class="hero-subtab-copy"><span class="hero-subtab-title">Lâmpada Mágica</span><span class="hero-subtab-meta">Recompensas de jornada</span></span></button>
+              <button class="tab-btn subtab-pill-btn hero-subtab-card" data-tab="alchemy" data-min-level="40" aria-label="Alquimia"><span class="hero-subtab-index" aria-hidden="true">06</span><span class="hero-subtab-icon" aria-hidden="true">⚗</span><span class="hero-subtab-copy"><span class="hero-subtab-title">Alquimia</span><span class="hero-subtab-meta">Elixires e transmutação</span></span></button>
+            </div>
           </div>
 
           <!-- Pillar 4 Subtabs: Glória & Sociedade -->
-          <div class="pillar-subtabs-strip collapsed" id="pillar-strip-glory" style="display:none;">
-            <button class="tab-btn subtab-pill-btn" data-tab="clan">🛡 Clã &amp; Castelos</button>
-            <button class="tab-btn subtab-pill-btn" data-tab="olympiad">🏆 Olimpíadas</button>
-            <button class="tab-btn subtab-pill-btn" data-tab="rankings">🏆 Rankings Mundiais</button>
-            <button class="tab-btn subtab-pill-btn" data-tab="sevensigns">🏛 Sete Selos</button>
-            <button class="tab-btn subtab-pill-btn" data-tab="fortress">⚔ Fortalezas</button>
-            <button class="tab-btn subtab-pill-btn" data-tab="enchant">✦ Encantamento</button>
-            <button class="tab-btn subtab-pill-btn" data-tab="codex">📜 Codex</button>
-            <button class="tab-btn subtab-pill-btn" id="pillar-contacts-btn" onclick="window.openContactsModal ? window.openContactsModal() : (window.openReferralModal && window.openReferralModal())" style="border-color:rgba(52,211,153,0.4); color:#6ee7b7; font-weight:bold;">👥 Contatos &amp; Mentoria</button>
+          <div class="pillar-subtabs-strip collapsed pillar-subtabs-strip--glory" id="pillar-strip-glory" style="display:none;">
+            <div class="hero-subnav-heading">
+              <div class="hero-subnav-signet" aria-hidden="true"><span>✦</span></div>
+              <div class="hero-subnav-intro">
+                <span class="hero-subnav-eyebrow">CRÔNICAS DE ADEN <i>·</i> SALÃO DOS CAMPEÕES</span>
+                <strong>Honra &amp; Legado</strong>
+                <span>Laços, disputas e feitos gravados na história.</span>
+              </div>
+              <div class="hero-subnav-stats"><span>CAPÍTULO</span><strong>IV</strong><span>DE ADEN</span></div>
+            </div>
+            <div class="hero-subnav-rule" aria-hidden="true"><span>LEGADOS</span></div>
+            <div class="hero-subnav-grid" role="group" aria-label="Legados de Aden">
+              <button class="tab-btn subtab-pill-btn hero-subtab-card" data-tab="clan" aria-label="Clã e castelos"><span class="hero-subtab-index" aria-hidden="true">01</span><span class="hero-subtab-icon" aria-hidden="true">♜</span><span class="hero-subtab-copy"><span class="hero-subtab-title">Clã &amp; Castelos</span><span class="hero-subtab-meta">Alianças e domínio</span></span></button>
+              <button class="tab-btn subtab-pill-btn hero-subtab-card" data-tab="olympiad" aria-label="Olimpíadas"><span class="hero-subtab-index" aria-hidden="true">02</span><span class="hero-subtab-icon" aria-hidden="true">♛</span><span class="hero-subtab-copy"><span class="hero-subtab-title">Olimpíadas</span><span class="hero-subtab-meta">Duelo por glória</span></span></button>
+              <button class="tab-btn subtab-pill-btn hero-subtab-card" data-tab="rankings" aria-label="Rankings mundiais"><span class="hero-subtab-index" aria-hidden="true">03</span><span class="hero-subtab-icon" aria-hidden="true">⌑</span><span class="hero-subtab-copy"><span class="hero-subtab-title">Rankings Mundiais</span><span class="hero-subtab-meta">Os nomes de destaque</span></span></button>
+              <button class="tab-btn subtab-pill-btn hero-subtab-card" data-tab="sevensigns" aria-label="Sete Selos"><span class="hero-subtab-index" aria-hidden="true">04</span><span class="hero-subtab-icon" aria-hidden="true">◈</span><span class="hero-subtab-copy"><span class="hero-subtab-title">Sete Selos</span><span class="hero-subtab-meta">O destino de Aden</span></span></button>
+              <button class="tab-btn subtab-pill-btn hero-subtab-card" data-tab="fortress" aria-label="Fortalezas"><span class="hero-subtab-index" aria-hidden="true">05</span><span class="hero-subtab-icon" aria-hidden="true">♖</span><span class="hero-subtab-copy"><span class="hero-subtab-title">Fortalezas</span><span class="hero-subtab-meta">Postos de guilda</span></span></button>
+              <button class="tab-btn subtab-pill-btn hero-subtab-card" data-tab="enchant" aria-label="Encantamento"><span class="hero-subtab-index" aria-hidden="true">06</span><span class="hero-subtab-icon" aria-hidden="true">✧</span><span class="hero-subtab-copy"><span class="hero-subtab-title">Encantamento</span><span class="hero-subtab-meta">Poder além dos limites</span></span></button>
+              <button class="tab-btn subtab-pill-btn hero-subtab-card" data-tab="codex" aria-label="Codex"><span class="hero-subtab-index" aria-hidden="true">07</span><span class="hero-subtab-icon" aria-hidden="true">▤</span><span class="hero-subtab-copy"><span class="hero-subtab-title">Codex</span><span class="hero-subtab-meta">Crônicas e descobertas</span></span></button>
+              <button class="tab-btn subtab-pill-btn hero-subtab-card hero-subtab-action" id="pillar-contacts-btn" aria-label="Contatos e mentoria" onclick="window.openContactsModal ? window.openContactsModal() : (window.openReferralModal && window.openReferralModal())"><span class="hero-subtab-index" aria-hidden="true">08</span><span class="hero-subtab-icon" aria-hidden="true">♧</span><span class="hero-subtab-copy"><span class="hero-subtab-title">Contatos &amp; Mentoria</span><span class="hero-subtab-meta">Aliados e comunidade</span></span></button>
+            </div>
           </div>
 
           <!-- Imperial Economy Resource Ribbon (Contextual HUD for Economy Pillar) -->
@@ -1420,7 +1483,7 @@ export const IDLE_MARKUP = `
 
             <!-- Floors Map Grid (1 to 100) -->
             <div class="pane-section" style="margin-top: 10px;">
-              <h3>🏰 Progresso da Escalada (1 a 100 Andares)</h3>
+              <h3>🗺️ A escalada em dez capítulos</h3>
               <div id="tower-floors-grid" class="tower-floors-grid" style="margin-top:10px;"></div>
             </div>
           </div>
@@ -1734,18 +1797,19 @@ export const IDLE_MARKUP = `
 
     <!-- Manor Manager Modal -->
     <div id="manor-manager-modal" class="modal">
-      <div class="modal-content" style="max-width: 680px; background: linear-gradient(180deg, #101c13 0%, #07100a 100%); border: 2px solid #22c55e; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.85); padding: 20px;">
+      <div class="modal-content" style="max-width: 820px; background: linear-gradient(180deg, #101c13 0%, #07100a 100%); border: 2px solid #22c55e; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.85); padding: 20px;">
         <div class="modal-header" style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(34,197,94,0.3); padding-bottom:12px; margin-bottom:16px;">
           <h2 style="margin:0; font-family:'Cinzel',serif; color:#86efac; font-size:18px; display:flex; align-items:center; gap:8px;">
             <span>🌾 Administrador de Manor &amp; Colheita Agrícola</span>
           </h2>
           <button id="close-manor-modal-btn" class="modal-close-x" style="background:none; border:none; color:#94a3b8; font-size:18px; cursor:pointer;">✕</button>
         </div>
-        <p style="font-size:12px; color:#cbd5e1; margin-bottom:14px; line-height:1.4;">
-          Compre sementes nas províncias de Aden (Gludio, Dion, Giran). Ao caçar monstros na região, seu herói semeará e colherá colheitas agrícolas para trocar por <strong>Materiais Raros de Forja (Enria, Mithril Alloy, Varnish of Purity)</strong> no Castelo!
+        <p style="font-size:12px; color:#cbd5e1; margin-bottom:10px; line-height:1.5;">
+          Escolha um feudo e uma semente adequada ao nível dos monstros. Ative o plantio, cace alvos próximos do nível da semente e leve as colheitas ao mercado para trocar por materiais de fabricação. Diferenças de nível maiores reduzem a chance de sucesso.
         </p>
+        <div id="manor-planting-status" style="font-size:11px;color:#b9f6c6;background:rgba(34,197,94,.09);border:1px solid rgba(134,239,172,.22);border-radius:8px;padding:9px 11px;margin-bottom:12px;line-height:1.4;"></div>
 
-        <div id="manor-provinces-list" style="display:flex; flex-direction:column; gap:12px; max-height:360px; overflow-y:auto; padding-right:4px;"></div>
+        <div id="manor-provinces-list" style="display:flex; flex-direction:column; gap:12px; max-height:min(58vh,560px); overflow-y:auto; padding-right:4px;"></div>
       </div>
     </div>
 

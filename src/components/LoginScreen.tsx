@@ -9,7 +9,6 @@ import {
   onAuthStateChanged, 
   loadPlayerStateFromCloud, 
   savePlayerStateToCloud, 
-  deletePlayerStateFromCloud,
   reserveCharacterNameAndCreate,
   type User 
 } from '../firebase';
@@ -130,13 +129,14 @@ function EmberCanvas() {
           e.maxAlpha = Math.random() * 0.65 + 0.25;
         }
 
-        ctx.fillStyle = `rgba(245, 165, 35, ${e.alpha})`;
+        const crystalLight = e.size > 1.5 ? '126, 211, 211' : '178, 151, 224';
+        ctx.fillStyle = `rgba(${crystalLight}, ${e.alpha})`;
         ctx.beginPath();
         ctx.arc(e.x, e.y, e.size, 0, Math.PI * 2);
         ctx.fill();
 
         if (e.size > 1.4) {
-          ctx.fillStyle = `rgba(255, 230, 140, ${e.alpha * 0.8})`;
+          ctx.fillStyle = `rgba(218, 244, 236, ${e.alpha * 0.8})`;
           ctx.beginPath();
           ctx.arc(e.x, e.y, e.size * 0.5, 0, Math.PI * 2);
           ctx.fill();
@@ -464,64 +464,70 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
   const highestFloor = cloudState?.tower?.highestFloor || 0;
 
   return (
-    <div className="min-h-screen flex items-center justify-center relative overflow-hidden select-none p-3 sm:p-4 bg-[#07090e]">
-      {/* Imagem de Fundo (Castelo de Aden com Tratamento de Vinheta e Luz Fria) */}
+    <div className="login-screen-root relative select-none">
+      {/* Cenário cinematográfico do reino */}
       <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat scale-105"
+        className="login-scene-backdrop absolute inset-0"
         style={{
           backgroundImage: `url('/images/castle-bg.jpg')`,
         }}
       />
-      
-      {/* Overlay Escuro com Vinheta de Obsidiana e Névoa Fria */}
-      <div className="absolute inset-0 bg-gradient-to-t from-[#06080d] via-[#090d16]/75 to-[#06080d]/90" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_20%,_rgba(4,6,10,0.85)_100%)]" />
+      <div className="login-scene-veil absolute inset-0" />
+      <div className="login-scene-vignette absolute inset-0" />
 
-      {/* Motor de Brasas e Fuligem de Alta Performance */}
       <EmberCanvas />
 
-      {/* Container Principal do Monólito */}
-      <div className="relative z-10 w-full max-w-md my-auto">
-        {/* Monólito de Obsidiana */}
-        <div className="obsidian-monolith overflow-hidden">
-          {/* Cabeçalho Decorativo de Bronze Forjado */}
-          <div className="bg-gradient-to-b from-[#1c2230] to-[#10141d] p-4 text-center relative border-b border-[#c5a059]/30">
-            <div className="relative z-10">
-              <div className="text-[#c5a059] text-[10px] sm:text-xs font-bold tracking-[0.28em] mb-1 uppercase font-serif">
-                ✦ CHRONICLES OF ADEN · TEMPORADA 1 ✦
-              </div>
-              <h1 className="text-3xl sm:text-4xl font-black text-[#f5df93] drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)] tracking-wider" style={{ fontFamily: 'Cinzel, serif' }}>
-                ADEN ARENA
-              </h1>
-              <div className="text-[#c5a059] text-xs sm:text-sm font-black tracking-[0.25em] uppercase font-serif mt-0.5">
-                IDLE CHRONICLES
-              </div>
-              <div className="text-[#94a3b8] text-[10px] sm:text-[11px] mt-1 font-sans">
-                Aventura Épica no Universo Clássico de Aden
-              </div>
+      <main className="login-screen-layout relative z-10">
+        <aside className="login-brand-story" aria-label="Aden Arena">
+          <div className="login-brand-season"><span /> CHRONICLES OF ADEN <span /> TEMPORADA I</div>
+          <div className="login-brand-lockup">
+            <div className="login-brand-seal" aria-hidden="true"><span>AA</span></div>
+            <div className="login-brand-wordmark">
+              <h1>ADEN<br /><span>ARENA</span></h1>
+              <p>IDLE CHRONICLES</p>
+            </div>
+          </div>
+          <div className="login-brand-rule"><span /></div>
+          <p className="login-brand-lede">Um reino antigo.<br /><em>Uma crônica escrita por você.</em></p>
+          <p className="login-brand-copy">Forje seu caminho entre linhagens, fortalezas e lendas que despertam a cada batalha.</p>
 
-              {/* Badges de Destaque */}
-              <div className="mt-3 flex flex-wrap items-center justify-center gap-1.5 text-[10px]">
-                <span className="bg-[#0b0e14]/90 border border-[#c5a059]/40 text-[#f5df93] px-2.5 py-0.5 rounded font-semibold shadow-sm font-serif">
-                  ⚡ 100% Navegador
-                </span>
-                <span className="bg-[#0b0e14]/90 border border-[#c5a059]/40 text-[#f5df93] px-2.5 py-0.5 rounded font-semibold shadow-sm font-serif">
-                  🛡️ 20+ Classes & Forja
-                </span>
-                <span className="bg-[#0b0e14]/90 border border-[#c5a059]/40 text-[#f5df93] px-2.5 py-0.5 rounded font-semibold shadow-sm font-serif">
-                  🌙 Caça Offline
-                </span>
-              </div>
+          <div className="login-feature-list" aria-label="Recursos do jogo">
+            <div className="login-feature-item">
+              <span className="login-feature-index">01</span>
+              <span><strong>Seu mundo persiste</strong><small>Progresso salvo enquanto você joga — e também quando parte.</small></span>
+            </div>
+            <div className="login-feature-item">
+              <span className="login-feature-index">02</span>
+              <span><strong>Escolha sua linhagem</strong><small>Classes, evoluções e caminhos próprios para cada herói.</small></span>
+            </div>
+            <div className="login-feature-item">
+              <span className="login-feature-index">03</span>
+              <span><strong>Conquiste Aden</strong><small>Caçadas, forja, expedições e chefes de mundo.</small></span>
             </div>
           </div>
 
+          <div className="login-world-status">
+            <span className="login-world-status__dot" />
+            <span>CRÔNICAS ATIVAS</span>
+            <span className="login-world-status__separator">/</span>
+            <span>ACESSO PELO NAVEGADOR</span>
+          </div>
+        </aside>
+
+        <section className="login-auth-column" aria-label="Acesso ao jogo">
+          <div className="login-auth-overline">
+            <span>{user ? 'CONTINUE SUA JORNADA' : 'PORTAL DE ACESSO'}</span>
+            <span className="login-auth-overline__secure"><i /> CONEXÃO SEGURA</span>
+          </div>
+          <div className="obsidian-monolith login-auth-card overflow-hidden">
+
           {/* Conteúdo Central */}
-          <div className="p-4 sm:p-6 bg-gradient-to-b from-[#0e121a]/95 via-[#0a0d13]/98 to-[#07090e]">
+          <div className="login-auth-content p-4 sm:p-6">
             {user ? (
               /* ESTADO 1: LOGADO - HERO CAMEO NOBRE */
               <div className="space-y-4">
                 <div className="text-center">
-                  <div className="inline-block p-1 rounded-full bg-[#c5a059]/10 border border-[#c5a059]/30 text-[#f5df93] text-xs px-3 font-serif">
+                  <div className="login-welcome-badge inline-block p-1 rounded-full bg-[#c5a059]/10 border border-[#c5a059]/30 text-[#f5df93] text-xs px-3 font-serif">
                     👑 BEM-VINDO DE VOLTA
                   </div>
                   <p className="text-xs text-[#94a3b8] font-mono truncate mt-1">
@@ -530,7 +536,7 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
                 </div>
 
                 {/* Vitrine do Herói com Cameo Heráldico Nobre */}
-                <div className="bg-[#0d1017] border border-[#c5a059]/30 rounded-xl p-3.5 shadow-[inset_0_2px_8px_rgba(0,0,0,0.8)] flex items-center gap-3.5 text-left">
+                <div className="login-hero-card bg-[#0d1017] border border-[#c5a059]/30 rounded-xl p-3.5 shadow-[inset_0_2px_8px_rgba(0,0,0,0.8)] flex items-center gap-3.5 text-left">
                   {/* Cameo Oval/Circular */}
                   <div className="heraldic-cameo">
                     <div className="heraldic-cameo-inner">
@@ -587,7 +593,7 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
                 {/* Botão de Entrar Forjado em Ouro */}
                 <button
                   onClick={handleStartLoggedGame}
-                  className="w-full forged-gold-btn py-3.5 px-6 rounded-lg font-black text-sm tracking-wider uppercase flex items-center justify-center gap-2"
+                  className="login-primary-cta w-full forged-gold-btn py-3.5 px-6 rounded-lg font-black text-sm tracking-wider uppercase flex items-center justify-center gap-2"
                 >
                   <span>⚔️ ENTRAR NO JOGO ▶</span>
                 </button>
@@ -600,7 +606,7 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
                         setShowCreation(true);
                       }
                     }}
-                    className="flex-1 bg-[#1a1710] hover:bg-[#2a2416] text-[#e8c870] hover:text-[#fde047] font-semibold py-2 px-3 rounded-lg text-xs border border-[#c5a059]/30 transition-all cursor-pointer font-serif flex items-center justify-center gap-1.5"
+                    className="login-secondary-action flex-1 bg-[#1a1710] hover:bg-[#2a2416] text-[#e8c870] hover:text-[#fde047] font-semibold py-2 px-3 rounded-lg text-xs border border-[#c5a059]/30 transition-all cursor-pointer font-serif flex items-center justify-center gap-1.5"
                     title="Escolha uma nova raça e classe criando um novo herói"
                   >
                     <span>✨</span>
@@ -609,7 +615,7 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
 
                   <button
                     onClick={handleLogout}
-                    className="flex-1 bg-[#121620] hover:bg-[#1a202d] text-[#94a3b8] hover:text-[#ece4d3] font-semibold py-2 px-3 rounded-lg text-xs border border-white/5 transition-all cursor-pointer font-serif"
+                    className="login-secondary-action flex-1 bg-[#121620] hover:bg-[#1a202d] text-[#94a3b8] hover:text-[#ece4d3] font-semibold py-2 px-3 rounded-lg text-xs border border-white/5 transition-all cursor-pointer font-serif"
                   >
                     Trocar de Conta
                   </button>
@@ -621,7 +627,7 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
                     href="https://discord.gg/R7rwB5uCc"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full bg-[#5865F2]/20 hover:bg-[#5865F2]/30 border border-[#5865F2]/40 text-[#c7d2fe] hover:text-white font-semibold py-2 px-4 rounded-lg flex items-center justify-center gap-2 text-xs transition-all cursor-pointer text-decoration-none"
+                    className="login-community-link w-full bg-[#5865F2]/20 hover:bg-[#5865F2]/30 border border-[#5865F2]/40 text-[#c7d2fe] hover:text-white font-semibold py-2 px-4 rounded-lg flex items-center justify-center gap-2 text-xs transition-all cursor-pointer text-decoration-none"
                   >
                     <span>💬</span>
                     <span>Comunidade no Discord Oficial</span>
@@ -632,10 +638,10 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
               /* ESTADO 2: NÃO LOGADO (ZERO ATRITO COM FORGED GOLD BTN) */
               <div className="space-y-4">
                 {/* CTA PRIMÁRIO: ZERO ATRITO (JOGAR AGORA GRÁTIS) */}
-                <div className="bg-[#121722]/80 border border-[#c5a059]/40 rounded-xl p-3.5 sm:p-4 text-center shadow-[inset_0_2px_12px_rgba(0,0,0,0.6)] relative overflow-hidden">
+                <div className="login-guest-entry bg-[#121722]/80 border border-[#c5a059]/40 rounded-xl p-3.5 sm:p-4 text-center shadow-[inset_0_2px_12px_rgba(0,0,0,0.6)] relative overflow-hidden">
                   <button
                     onClick={handlePlayGuest}
-                    className="w-full forged-gold-btn py-3.5 px-6 rounded-lg font-black text-base sm:text-lg tracking-wider uppercase flex items-center justify-center gap-2"
+                    className="login-primary-cta w-full forged-gold-btn py-3.5 px-6 rounded-lg font-black text-base sm:text-lg tracking-wider uppercase flex items-center justify-center gap-2"
                   >
                     <span>⚔️ JOGAR AGORA GRÁTIS ▶</span>
                   </button>
@@ -657,7 +663,7 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
                 <button
                   onClick={handleGoogleLogin}
                   disabled={loading}
-                  className="w-full bg-[#141924] hover:bg-[#1c2333] text-[#e2e8f0] font-semibold py-2.5 px-4 rounded-lg border border-[#c5a059]/30 hover:border-[#c5a059]/60 flex items-center justify-center gap-2.5 text-xs transition-all duration-200 cursor-pointer shadow-md"
+                    className="login-google-action w-full bg-[#141924] hover:bg-[#1c2333] text-[#e2e8f0] font-semibold py-2.5 px-4 rounded-lg border border-[#c5a059]/30 hover:border-[#c5a059]/60 flex items-center justify-center gap-2.5 text-xs transition-all duration-200 cursor-pointer shadow-md"
                 >
                   <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24">
                     <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
@@ -766,7 +772,7 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
                     href="https://discord.gg/R7rwB5uCc"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full bg-[#5865F2]/20 hover:bg-[#5865F2]/30 border border-[#5865F2]/40 text-[#c7d2fe] hover:text-white font-semibold py-2 px-4 rounded-lg flex items-center justify-center gap-2 text-xs transition-all cursor-pointer text-decoration-none"
+                    className="login-community-link w-full bg-[#5865F2]/20 hover:bg-[#5865F2]/30 border border-[#5865F2]/40 text-[#c7d2fe] hover:text-white font-semibold py-2 px-4 rounded-lg flex items-center justify-center gap-2 text-xs transition-all cursor-pointer text-decoration-none"
                   >
                     <span>💬</span>
                     <span>Comunidade no Discord Oficial</span>
@@ -777,34 +783,13 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
           </div>
 
           {/* Pedestal Arquitetônico com Runas Entalhadas */}
-          <div className="runic-pedestal py-2.5 px-4 text-center">
-            <div className="flex items-center justify-center gap-2 sm:gap-3 text-xs opacity-85 select-none overflow-x-hidden">
-              <span className="runic-glyph">ᚠ</span>
-              <span className="text-[#8a6d3b]/50 text-[10px]">·</span>
-              <span className="runic-glyph">ᚱ</span>
-              <span className="text-[#8a6d3b]/50 text-[10px]">·</span>
-              <span className="runic-glyph">ᚦ</span>
-              <span className="text-[#8a6d3b]/50 text-[10px]">·</span>
-              <span className="runic-glyph">ᚨ</span>
-              <span className="text-[#8a6d3b]/50 text-[10px]">·</span>
-              <span className="runic-glyph">ᚲ</span>
-              <span className="text-[#8a6d3b]/50 text-[10px]">·</span>
-              <span className="runic-glyph">ᚷ</span>
-              <span className="text-[#8a6d3b]/50 text-[10px]">·</span>
-              <span className="runic-glyph">ᚹ</span>
-              <span className="text-[#8a6d3b]/50 text-[10px]">·</span>
-              <span className="runic-glyph">ᚺ</span>
-              <span className="text-[#8a6d3b]/50 text-[10px]">·</span>
-              <span className="runic-glyph">ᚾ</span>
-              <span className="text-[#8a6d3b]/50 text-[10px]">·</span>
-              <span className="runic-glyph">ᛁ</span>
-            </div>
-            <div className="text-[#64748b] text-[9px] mt-1 font-serif">
-              © 2026 Aden Arena: Idle Chronicles · Aventura Clássica
-            </div>
+          <div className="login-auth-footer">
+            <span>ADEN ARENA <i /> IDLE CHRONICLES</span>
+            <span>© 2026 · TEMPORADA I</span>
           </div>
         </div>
-      </div>
+        </section>
+      </main>
     </div>
   );
 }

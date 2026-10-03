@@ -483,7 +483,7 @@ export const MON_IMG = {
   "goblinMage": "/img/mon_goblinmage.jpg",
   "talkingIslandWerewolf": "/img/mon_islandwerewolfleader.jpg",
   "islandWerewolfLeader": "/img/mon_islandwerewolfleader.jpg",
-  "goblinKing": "/img/mon_goblinking.jpg",
+  "goblinKing": "/img/bosses/goblinKing.webp",
 
   // Elven Forest
   "wolf": "/img/mon_wolf.jpg",
@@ -494,7 +494,7 @@ export const MON_IMG = {
   "sporeFungus": "/img/mon_sporefungus.jpg",
   "kabooOrcFighter": "/img/mon_kabooorcchampion.jpg",
   "kabooOrcChampion": "/img/mon_kabooorcchampion.jpg",
-  "deathTrent": "/img/mon_deathtreant.jpg",
+  "deathTrent": "/img/bosses/deathTrent.webp",
   "deathTreant": "/img/mon_deathtreant.jpg",
 
   // Dark Forest
@@ -502,12 +502,11 @@ export const MON_IMG = {
   "caveSpider": "/img/mon_spider.jpg",
   "swampWalker": "/img/mon_swampwalker.jpg",
   "swampBeast": "/img/mon_swampbeast.jpg",
-  "swampAbomination": "/img/mon_swampbeast.jpg",
   "lesserDarkHorror": "/img/mon_lesserdarkhorror.jpg",
   "marshStalker": "/img/mon_marshstalker.jpg",
   "shadowFangWolf": "/img/mon_shadownfangdirewolf.jpg",
   "shadowFangDireWolf": "/img/mon_shadownfangdirewolf.jpg",
-  "darkForestMatriarch": "/img/mon_darkforestmatriarch.jpg",
+  "darkForestMatriarch": "/img/bosses/darkForestMatriarch.webp",
 
   // Orc Village
   "orc": "/img/mon_orcwarrior.jpg",
@@ -516,7 +515,7 @@ export const MON_IMG = {
   "kashaBear": "/img/mon_kashabear.jpg",
   "kashaOrcArcher": "/img/mon_kashaorcarcher.jpg",
   "kashaOrcBerserker": "/img/mon_kashaorcberserker.jpg",
-  "kashaOrcOverlord": "/img/mon_kashaorcoverlord.jpg",
+  "kashaOrcOverlord": "/img/bosses/kashaOrcOverlord.webp",
 
   // Dwarven Mine
   "kobold": "/img/mon_koboldminer.jpg",
@@ -527,7 +526,7 @@ export const MON_IMG = {
   "mineCaveBat": "/img/mon_mithrilcavebat.jpg",
   "mithrilCaveBat": "/img/mon_mithrilcavebat.jpg",
   "mithrilGolem": "/img/mon_mithrilgolem.jpg",
-  "dwarvenEarthLord": "/img/mon_dwarvenmineguardian.jpg",
+  "dwarvenEarthLord": "/img/bosses/dwarvenEarthLord.webp",
   "dwarvenMineGuardian": "/img/mon_dwarvenmineguardian.jpg",
 
   // Kamael Lair
@@ -537,7 +536,7 @@ export const MON_IMG = {
   "spitefulSoulGhost": "/img/mon_spitefulsoulghost.jpg",
   "crimsonWarder": "/img/mon_crimsonwarder.jpg",
   "kamaelInfiltrator": "/img/mon_kamaelinfiltrator.jpg",
-  "darkInquisitorKamael": "/img/mon_kamaelinquisitor.jpg",
+  "darkInquisitorKamael": "/img/bosses/darkInquisitorKamael.webp",
   "kamaelInquisitor": "/img/mon_kamaelinquisitor.jpg",
 
   // Ruined Outpost
@@ -546,7 +545,7 @@ export const MON_IMG = {
   "outpostMarksman": "/img/mon_outpostmarksman.jpg",
   "ruinedDeserter": "/img/mon_ruineddeserter.jpg",
   "shadowMercenary": "/img/mon_shadowmercenary.jpg",
-  "outpostFallenCaptain": "/img/mon_outpostfallencaptain.jpg",
+  "outpostFallenCaptain": "/img/bosses/outpostFallenCaptain.webp",
 
   // Howling Moor
   "direWolf": "/img/mon_mountaindirewolf.jpg",
@@ -554,7 +553,7 @@ export const MON_IMG = {
   "crimsonBabyDragon": "/img/mon_crimsonbabydragon.jpg",
   "ancientSatyr": "/img/mon_ancientsatyr.jpg",
   "satyrWarlord": "/img/mon_satyrwarlord.jpg",
-  "alphaWolf": "/img/mon_alphawolf.jpg",
+  "alphaWolf": "/img/bosses/alphaWolf.webp",
 
   // Giran Outskirts
   "skeleton": "/img/mon_skeleton.jpg",
@@ -562,7 +561,7 @@ export const MON_IMG = {
   "deathRider": "/img/mon_deathrider.jpg",
   "giranGargoyle": "/img/mon_girangargoyle.jpg",
   "giranGladiator": "/img/mon_girangladiator.jpg",
-  "minotaurKnight": "/img/mon_minotaurknight.jpg",
+  "minotaurKnight": "/img/bosses/minotaurKnight.webp",
 
   // Orcen Ruins
   "orcenRuinsOrc": "/img/mon_orcenruinsorc.jpg",
@@ -570,7 +569,7 @@ export const MON_IMG = {
   "ruinShamanOrc": "/img/mon_ruinshamanorc.jpg",
   "tombLooterOrc": "/img/mon_tomblooterorc.jpg",
   "ancientOrcExecutioner": "/img/mon_ancientorcexecutioner.jpg",
-  "orcenOverlord": "/img/mon_orcenoverlord.jpg",
+  "orcenOverlord": "/img/bosses/orcenOverlord.webp",
 
   // Forsaken Crypt
   "darkMage": "/img/mon_darkmage.jpg",
@@ -579,7 +578,7 @@ export const MON_IMG = {
   "furiousSoul": "/img/mon_furioussoul.jpg",
   "cryptVampire": "/img/mon_cryptvampire.jpg",
   "devilBone": "/img/mon_devilbone.jpg",
-  "cryptLord": "/img/mon_cryptlord.jpg",
+  "cryptLord": "/img/bosses/cryptLord.webp",
 
   // Black Citadel
   "deathKnight": "/img/mon_deathknight.jpg",
@@ -587,7 +586,7 @@ export const MON_IMG = {
   "citadelDarkPriest": "/img/mon_citadeldarkpriest.jpg",
   "blackDragonWhelp": "/img/mon_blackdragonwhelp.jpg",
   "blackDragon": "/img/mon_blackdragon.jpg",
-  "flamingDemonLord": "/img/mon_flamingdemonlord.jpg",
+  "flamingDemonLord": "/img/bosses/flamingDemonLord.webp",
 
   // Gludio Castle
   "knight": "/img/mon_knight.jpg",
@@ -596,7 +595,7 @@ export const MON_IMG = {
   "gludioRoyalArcher": "/img/mon_gludioroyalarcher.jpg",
   "gludioSorcerer": "/img/mon_gludiosorcerer.jpg",
   "gludioShieldMaster": "/img/mon_gludioshieldmaster.jpg",
-  "gludioCommander": "/img/mon_gludiocommander.jpg",
+  "gludioCommander": "/img/bosses/gludioCommander.webp",
 
   // Wolf Mountain
   "mountainWolf": "/img/mon_mountainwolf.jpg",
@@ -604,7 +603,7 @@ export const MON_IMG = {
   "frostStalkerWolf": "/img/mon_froststalkerwolf.jpg",
   "mountainSnowBear": "/img/mon_mountainsnowbear.jpg",
   "frostFangBehemoth": "/img/mon_frostfangbehemoth.jpg",
-  "mountainAlphaWolf": "/img/mon_mountainalphawolf.jpg",
+  "mountainAlphaWolf": "/img/bosses/mountainAlphaWolf.webp",
   "snowWolf": "/img/mon_snowwolf.jpg",
 
   // Rift of the Void
@@ -613,17 +612,17 @@ export const MON_IMG = {
   "voidStalker": "/img/mon_voidstalker.jpg",
   "beholder": "/img/mon_beholder.jpg",
   "voidArchonEntity": "/img/mon_voidarchonentity.jpg",
-  "voidDragonLord": "/img/mon_voiddragonlord.jpg",
+  "voidDragonLord": "/img/bosses/voidDragonLord.webp",
 
   // Emerald Grove
   "emeraldSnake": "/img/mon_emeraldsnake.jpg",
   "emeraldDrake": "/img/mon_emeralddrake.jpg",
   "jadeGolem": "/img/mon_jadegolem.jpg",
   "groveSpiritMage": "/img/mon_grovespiritmage.jpg",
-  "emeraldDragon": "/img/mon_ancienteemeralddragon.jpg",
+  "emeraldDragon": "/img/bosses/emeraldDragon.webp",
   "ancientEmeraldDragon": "/img/mon_ancienteemeralddragon.jpg",
-  "fafurion": "/img/mon_fafurionwatersovereign.jpg",
-  "fafurionWaterSovereign": "/img/mon_fafurionwatersovereign.jpg",
+  "fafurion": "/img/bosses/fafurion.webp",
+  "fafurionWaterSovereign": "/img/bosses/fafurion.webp",
 
   // Gates of the Underworld
   "blazingWerewolf": "/img/mon_blazingwerewolf.jpg",
@@ -632,7 +631,7 @@ export const MON_IMG = {
   "lavaFiend": "/img/mon_lavafiend.jpg",
   "flameOverlordDemon": "/img/mon_underworldflameoverlord.jpg",
   "underworldFlameOverlord": "/img/mon_underworldflameoverlord.jpg",
-  "cerberus": "/img/mon_cerberus.jpg",
+  "cerberus": "/img/bosses/cerberus.webp",
 
   // Valley of Saints
   "saintEye": "/img/mon_beholder.jpg",
@@ -640,7 +639,7 @@ export const MON_IMG = {
   "splendorLight": "/img/mon_furioussoul.jpg",
   "celestialArchon": "/img/mon_darkmage.jpg",
   "divineSeraphim": "/img/mon_deathknight.jpg",
-  "splendorKnight": "/img/mon_knight.jpg",
+  "splendorKnight": "/img/bosses/splendorKnight.webp",
 
   // Swamp of Screams
   "swampStrikers": "/img/mon_swampwalker.jpg",
@@ -648,7 +647,7 @@ export const MON_IMG = {
   "screamingSouls": "/img/mon_furioussoul.jpg",
   "stakatoWarrior": "/img/mon_swampwalker.jpg",
   "stakatoQueenBrood": "/img/mon_swampbeast.jpg",
-  "swampAbomination": "/img/mon_swampbeast.jpg",
+  "swampAbomination": "/img/bosses/swampAbomination.webp",
 
   // Aden City
   "royalKnight": "/img/mon_knight.jpg",
@@ -656,15 +655,43 @@ export const MON_IMG = {
   "adenCrossbowman": "/img/mon_outpostmarksman.jpg",
   "adenPaladin": "/img/mon_knight.jpg",
   "adenHighJusticiar": "/img/mon_gludiocommander.jpg",
-  "adenCommander": "/img/mon_gludiocommander.jpg",
+  "adenCommander": "/img/bosses/adenCommander.webp",
 
   // Dragon Valley
   "dragon": "/img/mon_blackdragon.jpg",
   "dragonKnight": "/img/mon_knight.jpg",
   "frostKnight": "/img/mon_cursedknight.jpg",
   "frostLordDragon": "/img/mon_blackdragon.jpg",
-  "dragonValleyOverlord": "/img/mon_blackdragon.jpg",
-  "lindvior": "/img/mon_voiddragonlord.jpg",
+  "glakias": "/img/bosses/glakias.webp",
+  "glakiasDreadful": "/img/bosses/glakias-dreadful.webp",
+  "ferion": "/img/bosses/ferion.webp",
+  "ferion_praetorian": "/img/bosses/ferion_praetorian.webp",
+  "beleth": "/img/bosses/beleth.webp",
+  "demon_prince": "/img/bosses/demon_prince.webp",
+  "ranku": "/img/bosses/ranku.webp",
+  "darion": "/img/bosses/darion.webp",
+  "epidos": "/img/bosses/epidos.webp",
+  "reggiesys": "/img/bosses/reggiesys.webp",
+  "tiron": "/img/bosses/tiron.webp",
+  "pailaka_fire_sprite_king": "/img/bosses/pailaka_fire_sprite_king.webp",
+  "pailaka_ice_guardian": "/img/bosses/pailaka_ice_guardian.webp",
+  "pailaka_gargoyle_lord": "/img/bosses/pailaka_gargoyle_lord.webp",
+  "pailaka_infernal_sentinel": "/img/bosses/pailaka_infernal_sentinel.webp",
+  "pailaka_corrupted_drake": "/img/bosses/pailaka_corrupted_drake.webp",
+  "pailaka_lesser_drake_lord": "/img/bosses/pailaka_lesser_drake_lord.webp",
+  "necro_sacrifice_boss": "/img/bosses/necro_sacrifice_boss.webp",
+  "necro_pilgrim_boss": "/img/bosses/necro_pilgrim_boss.webp",
+  "necro_worship_boss": "/img/bosses/necro_worship_boss.webp",
+  "necro_patriot_boss": "/img/bosses/necro_patriot_boss.webp",
+  "necro_ascetic_boss": "/img/bosses/necro_ascetic_boss.webp",
+  "necro_martyr_boss": "/img/bosses/necro_martyr_boss.webp",
+  "necro_apostle_boss": "/img/bosses/necro_apostle_boss.webp",
+  "necro_disciple_boss": "/img/bosses/necro_disciple_boss.webp",
+  "kamaloka_25": "/img/bosses/kamaloka_25.webp",
+  "kamaloka_49": "/img/bosses/kamaloka_49.webp",
+  "guarding_stone": "/img/bosses/guarding_stone.webp",
+  "dragonValleyOverlord": "/img/bosses/dragonValleyOverlord.webp",
+  "lindvior": "/img/bosses/lindvior.webp",
 
   // Imperial Tomb
   "tombGuardian": "/img/mon_deathknight.jpg",
@@ -672,34 +699,50 @@ export const MON_IMG = {
   "undeadKnight": "/img/mon_skeleton.jpg",
   "imperialGhostMage": "/img/mon_darkmage.jpg",
   "lichLord": "/img/mon_darkmage.jpg",
-  "deathKing": "/img/mon_deathknight.jpg",
+  "deathKing": "/img/bosses/deathKing.webp",
 
   // Antharas' Lair
   "caveDrake": "/img/mon_ancienteemeralddragon.jpg",
   "magmaBeast": "/img/mon_lavafiend.jpg",
   "earthDrake": "/img/mon_ancienteemeralddragon.jpg",
   "caveWyrmBehemoth": "/img/mon_antharas.jpg",
-  "antharasBehemoth": "/img/mon_antharas.jpg",
-  "antharas": "/img/mon_antharas.jpg",
+  "antharasBehemoth": "/img/bosses/antharasBehemoth.webp",
+  "antharas": "/img/bosses/antharas.webp",
 
   // Forge of the Gods
   "valakasMinion": "/img/mon_crimsonbabydragon.jpg",
   "lavaGolem": "/img/mon_lavafiend.jpg",
   "flameArchon": "/img/mon_underworldflameoverlord.jpg",
   "flameGiantDragon": "/img/mon_valakas.jpg",
-  "vulcanLord": "/img/mon_valakas.jpg",
-  "valakas": "/img/mon_valakas.jpg",
+  "vulcanLord": "/img/bosses/vulcanLord.webp",
+  "valakas": "/img/bosses/valakas.webp",
 
   // Epic Raid Bosses
-  "queenAnt": "/img/mon_queenant.jpg",
-  "queen_ant": "/img/mon_queenant.jpg",
-  "core": "/img/mon_core.jpg",
-  "orfen": "/img/mon_orfen.jpg",
-  "zaken": "/img/mon_zaken.jpg",
-  "baium": "/img/mon_baium.jpg",
-  "frintezza": "/img/mon_frintezza.jpg",
+  "queenAnt": "/img/bosses/queen-ant.webp",
+  "queen_ant": "/img/bosses/queen-ant.webp",
+  "queen_ant_world": "/img/bosses/queen-ant.webp",
+  "core": "/img/bosses/core.webp",
+  "orfen": "/img/bosses/orfen.webp",
+  "zaken": "/img/bosses/zaken.webp",
+  "zaken_world": "/img/bosses/zaken.webp",
+  "baium": "/img/bosses/baium.webp",
+  "baium_world": "/img/bosses/baium.webp",
+  "antharas_world": "/img/bosses/antharas.webp",
+  "valakas_world": "/img/bosses/valakas.webp",
+  // Tower of Insolence floor bosses (created at runtime by TowerService).
+  "tower_floor_10": "/img/bosses/tower_hallate.webp",
+  "tower_floor_20": "/img/bosses/tower_kernea.webp",
+  "tower_floor_30": "/img/bosses/tower_varan.webp",
+  "tower_floor_40": "/img/bosses/tower_kavatan.webp",
+  "tower_floor_50": "/img/bosses/baium.webp",
+  "tower_floor_60": "/img/bosses/tower_galaxia.webp",
+  "tower_floor_70": "/img/bosses/tower_shielhead.webp",
+  "tower_floor_80": "/img/bosses/tower_golkonda.webp",
+  "tower_floor_90": "/img/bosses/tower_verdelet.webp",
+  "tower_floor_100": "/img/bosses/tower_arcanjo.webp",
+  "frintezza": "/img/bosses/frintezza.webp",
+  "barakiel": "/img/mon_barakiel.webp",
   "freya": "/img/mon_freya.jpg",
-  "beleth": "/img/mon_beleth.jpg",
   "demonKing": "/img/mon_demonking.jpg"
 };
 
