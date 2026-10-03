@@ -1,0 +1,64 @@
+{
+  "timestamp": "2026-10-03T15:30:44.540Z",
+  "totalScenarios": 4,
+  "passedScenarios": 4,
+  "failedScenarios": 0,
+  "totalConsoleErrors": 0,
+  "consoleErrors": [],
+  "scenarios": [
+    {
+      "id": "STAGE1-SCENARIO-01",
+      "title": "Criação do Personagem &amp; Combate Pausado no Boot",
+      "status": "PASS",
+      "observed": "Zone=talkingIsland, isCombatActive=false, weaponEquipped=true",
+      "details": {
+        "level": 1,
+        "xp": 0,
+        "zone": "talkingIsland",
+        "hp": "100/100",
+        "combatPaused": true
+      }
+    },
+    {
+      "id": "STAGE1-SCENARIO-02",
+      "title": "Início de Combate com Consentimento &amp; Concessão de Vitória",
+      "status": "PASS",
+      "observed": "Monster=Island Werewolf Leader, XP gained=+75, Gold gained=+30, MonstersKilled=1",
+      "details": {
+        "monsterName": "Island Werewolf Leader",
+        "monsterHp": 550,
+        "xpReward": 75,
+        "goldReward": 30,
+        "combatStoppedCleanly": true
+      }
+    },
+    {
+      "id": "STAGE1-SCENARIO-03",
+      "title": "Drop na Mochila, Equipar Item &amp; Recálculo de Atributos",
+      "status": "PASS",
+      "observed": "Equipped=true, P.Atk=68, CP=181, UnequippedCleanly=true",
+      "details": {
+        "itemUid": "1791041444540_e25qpu",
+        "equipped": true,
+        "pAtk": 68,
+        "pDef": 20,
+        "combatPower": 181
+      }
+    },
+    {
+      "id": "STAGE1-SCENARIO-04",
+      "title": "Gating Canônico da 1ª Transferência de Classe no Nível 20",
+      "status": "PASS",
+      "observed": "Lv19 Eligible=false, Lv20 Eligible=true, Options=warrior, knight, rogue",
+      "details": {
+        "classId": "fighter",
+        "eligibleAt20": true,
+        "availableClassPromotions": [
+          "warrior",
+          "knight",
+          "rogue"
+        ]
+      }
+    }
+  ]
+}

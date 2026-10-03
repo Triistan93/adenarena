@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-09-19T23:42:56.628Z",
-  "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36 Edg/153.0.0.0",
+  "timestamp": "2026-10-03T15:29:30.397Z",
+  "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/154.0.0.0 Safari/537.36 Edg/154.0.0.0",
   "totalScenarios": 7,
   "passedScenarios": 7,
   "failedScenarios": 0,
@@ -78,7 +78,7 @@
         {
           "id": "werewolf_0",
           "race": "human",
-          "desc": "Werewolf (CONTENT_GAP Tipo A: nó V2 ausente)",
+          "desc": "Warg (estágio 0 com skill comprovada)",
           "level": 1,
           "skillsCount": 1,
           "v2Status": "CONTENT_GAP",
@@ -88,21 +88,21 @@
         {
           "id": "shineMakerBase",
           "race": "dwarf",
-          "desc": "Shine Maker (CONTENT_GAP Tipo A: nó V2 ausente)",
+          "desc": "Shine Maker (raiz local fonte-verificada)",
           "level": 1,
-          "skillsCount": 0,
-          "v2Status": "CONTENT_GAP",
-          "gapType": "V2_NODE_ABSENT",
+          "skillsCount": 1,
+          "v2Status": "RESOLVED",
+          "gapType": null,
           "pass": true
         },
         {
           "id": "spirit_0",
           "race": "highelf",
-          "desc": "Spirit (CONTENT_GAP Tipo A: 2 skills parciais)",
+          "desc": "Element Weaver Initiate (nó inicial V2 com Fire Sphere e Ice Sphere)",
           "level": 1,
           "skillsCount": 1,
-          "v2Status": "CONTENT_GAP",
-          "gapType": "V2_NODE_ABSENT",
+          "v2Status": "RESOLVED",
+          "gapType": null,
           "pass": true
         },
         {
