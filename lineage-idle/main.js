@@ -376,8 +376,10 @@ import {
   getState,
   setState,
   setState as managerSetState,
+  replaceStateSnapshot as managerReplaceStateSnapshot,
   saveState as managerSaveState,
   loadState as managerLoadState,
+  isSaveRecoveryRequired as managerIsSaveRecoveryRequired,
   resetState as managerResetState,
   DEFAULT_STATE,
   applyStarterKit
@@ -483,17 +485,19 @@ let _saveTimeout = null;
 function save(immediate = false, forceCloud = false) {
   if (immediate) {
     if (_saveTimeout) { clearTimeout(_saveTimeout); _saveTimeout = null; }
-    managerSaveState(true, forceCloud);
+    const saved = managerSaveState(true, forceCloud);
+    if (saved === false) return false;
     try { RankingService.syncToCloud(state, true); } catch (e) {}
     if (typeof window !== 'undefined' && typeof window.saveCloudNow === 'function') {
       try { window.saveCloudNow(state, true); } catch (e) {}
     }
-    return;
+    return true;
   }
   if (_saveTimeout) return;
   _saveTimeout = setTimeout(() => {
     _saveTimeout = null;
-    managerSaveState(false, forceCloud);
+    const saved = managerSaveState(false, forceCloud);
+    if (saved === false) return;
     try { RankingService.syncToCloud(state, false); } catch (e) {}
     if (typeof window !== 'undefined' && typeof window.saveCloudNow === 'function') {
       try { window.saveCloudNow(state, false); } catch (e) {}
@@ -503,6 +507,9 @@ function save(immediate = false, forceCloud = false) {
 
 function load() {
   const loaded = managerLoadState();
+  if (!loaded && managerIsSaveRecoveryRequired()) {
+    log('⚠️ O save local e o backup precisam de recuperação. O progresso foi preservado e novos salvamentos estão pausados.', 'warning');
+  }
   if (loaded) {
     state = getState();
     if (state.level && state.level > 1) {
@@ -11767,7 +11774,7 @@ export function init() {
         ? cloudData.inventory.filter(item => item && item.itemId && (!hasItemsDict || allItems[item.itemId]))
         : [];
       
-      state = { ...def, ...cloudData };
+      state = managerReplaceStateSnapshot({ ...def, ...cloudData });
       state.gender = cloudData.gender || cloudData.charGender || cloudData.sex || def.gender || 'M';
       state.charName = cloudData.charName || cloudData.heroName || cloudData.playerName || cloudData.name || def.charName || 'Tristan';
       state.heroName = state.charName;

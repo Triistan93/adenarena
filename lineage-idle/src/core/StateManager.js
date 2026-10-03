@@ -236,6 +236,16 @@ export const DEFAULT_STATE = () => ({
 });
 
 let currentState = DEFAULT_STATE();
+let saveRecoveryRequired = false;
+
+function setSaveRecoveryRequired(required) {
+  saveRecoveryRequired = Boolean(required);
+  if (typeof window !== 'undefined') window.__saveRecoveryRequired = saveRecoveryRequired;
+}
+
+export function isSaveRecoveryRequired() {
+  return saveRecoveryRequired;
+}
 
 /**
  * Retorna a referência ao estado atual do jogo.
@@ -255,11 +265,29 @@ export function setState(partialState) {
 }
 
 /**
+ * Replaces a loaded snapshot while preserving the object shared with game systems.
+ * @param {Object} snapshot
+ * @returns {Object} Canonical state object
+ */
+export function replaceStateSnapshot(snapshot) {
+  if (!snapshot || typeof snapshot !== 'object' || Array.isArray(snapshot)) return currentState;
+  for (const key of Object.keys(currentState)) delete currentState[key];
+  Object.assign(currentState, snapshot);
+  setSaveRecoveryRequired(false);
+  return currentState;
+}
+
+/**
  * Salva o estado atual no localStorage com Checksum de integridade, Backup de segurança e Cloud Push.
  * @param {boolean} [manual=false] Se true, executa flash-save imediato cancelando throttling
  * @param {boolean} [forceCloud=false] Se true, dispara envio forçado imediato ao Firebase
  */
 export function saveState(manual = false, forceCloud = false) {
+  if (saveRecoveryRequired) {
+    console.error('[StateManager] Save bloqueado até que o progresso inválido seja recuperado ou o jogador escolha reiniciar.');
+    return false;
+  }
+
   currentState.lastSaveTime = Date.now();
   currentState._saveVersion = (Number(currentState._saveVersion) || 0) + 1;
   sanitizeGameState(currentState);
@@ -305,8 +333,10 @@ export function saveState(manual = false, forceCloud = false) {
     if (typeof window !== 'undefined' && typeof window.saveCloudNow === 'function') {
       window.saveCloudNow(data, manual || forceCloud);
     }
+    return true;
   } catch (err) {
     console.error('[StateManager] Erro ao salvar estado:', err);
+    return false;
   }
 }
 
@@ -316,42 +346,70 @@ export function saveState(manual = false, forceCloud = false) {
  */
 export function loadState() {
   let raw = localStorage.getItem(SAVE_KEY);
-  let isBackupRestore = false;
+  const backupRaw = localStorage.getItem(`${SAVE_KEY}_backup`);
 
   if (!raw) {
     // Tenta carregar do backup se o primário estiver ausente
-    raw = localStorage.getItem(`${SAVE_KEY}_backup`);
+    raw = backupRaw;
     if (!raw) {
-      currentState = DEFAULT_STATE();
+      setSaveRecoveryRequired(false);
       return false;
     }
-    isBackupRestore = true;
+  }
+
+  let data;
+  try {
+    data = JSON.parse(raw);
+  } catch (primaryParseError) {
+    if (!backupRaw || backupRaw === raw) {
+      console.error('[StateManager] Save local e backup indisponíveis:', primaryParseError);
+      setSaveRecoveryRequired(true);
+      return false;
+    }
+    try {
+      data = JSON.parse(backupRaw);
+      raw = backupRaw;
+    } catch (backupParseError) {
+      console.error('[StateManager] Save local e backup corrompidos:', backupParseError);
+      setSaveRecoveryRequired(true);
+      return false;
+    }
   }
 
   try {
-    let data = JSON.parse(raw);
 
     // Valida integridade e sanidade dos dados
     const check = validateStateIntegrity(data);
     if (!check.valid) {
       // Se os dados numéricos fundamentais existirem e forem válidos, preserva o save e atualiza o checksum
-      if (typeof data.level === 'number' && data.level >= 1 && typeof data.gold === 'number') {
+      const hasSafeCore = Number.isFinite(data.level) && data.level >= 1 && data.level <= 120
+        && Number.isFinite(data.gold) && data.gold >= 0;
+      if (hasSafeCore) {
         data._chk = generateStateChecksum(data);
         console.debug('[StateManager] Checksum de segurança sincronizado com os dados atuais.');
       } else {
         console.warn('[StateManager] Verificação de integridade:', check.reason);
-        const backupRaw = localStorage.getItem(`${SAVE_KEY}_backup`);
         if (backupRaw && backupRaw !== raw) {
           try {
             const backupData = JSON.parse(backupRaw);
             if (validateStateIntegrity(backupData).valid) {
               console.log('[StateManager] Restaurado com sucesso a partir do backup seguro.');
               data = backupData;
-              isBackupRestore = true;
+              raw = backupRaw;
+            } else {
+              console.error('[StateManager] Backup rejeitado por falha de integridade.');
+              setSaveRecoveryRequired(true);
+              return false;
             }
           } catch (bErr) {
             console.error('[StateManager] Backup também corrompido:', bErr);
+            setSaveRecoveryRequired(true);
+            return false;
           }
+        } else {
+          console.error('[StateManager] Save inválido e sem backup íntegro; dados locais foram preservados.');
+          setSaveRecoveryRequired(true);
+          return false;
         }
       }
     }
@@ -583,10 +641,6 @@ export function loadState() {
     currentState.selectedSkill = data.selectedSkill || null;
     currentState.startTime = Date.now();
 
-    if (isBackupRestore) {
-      saveState(false);
-    }
-
     // Canonical Class System Save Migration Cutover
     ClassSaveMigrator.migrateState(currentState);
 
@@ -610,9 +664,11 @@ export function loadState() {
     }
 
     EventBus.emit('state:loaded', currentState);
+    setSaveRecoveryRequired(false);
     return true;
   } catch (err) {
     console.error('[StateManager] Erro ao carregar estado:', err);
+    setSaveRecoveryRequired(true);
     return false;
   }
 }
@@ -623,6 +679,7 @@ export function loadState() {
 export function resetState() {
   localStorage.removeItem(SAVE_KEY);
   localStorage.removeItem(`${SAVE_KEY}_backup`);
+  setSaveRecoveryRequired(false);
   currentState = DEFAULT_STATE();
   EventBus.emit('state:reset', currentState);
 }

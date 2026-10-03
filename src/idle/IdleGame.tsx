@@ -52,6 +52,8 @@ import {
 } from "../firebase";
 import { PlayerRegistry } from "../services/PlayerRegistry";
 import { SocialIntegrityService } from "../services/SocialIntegrityService";
+// @ts-ignore -- pure JavaScript policy is covered by node:test regression tests.
+import { preferLocalPlayerSave } from "./SaveConflictPolicy";
 
 // Expondo FirebaseBridge para os serviços de Rankings, Matchmaking, Mercado Global P2P e Cloud Save
 if (typeof window !== "undefined") {
@@ -115,6 +117,7 @@ if (typeof window !== "undefined") {
 
   // Pipeline global de salvamento instantâneo em nuvem
   (window as any).saveCloudNow = async (stateData?: any, immediate: boolean = false) => {
+    if ((window as any).__saveRecoveryRequired === true) return false;
     const user = auth.currentUser;
     if (!user) return false;
     const data = stateData || ((typeof (window as any).getGameState === 'function') ? (window as any).getGameState() : null);
@@ -123,6 +126,7 @@ if (typeof window !== "undefined") {
   };
 
   (window as any).saveCloudOnUnload = () => {
+    if ((window as any).__saveRecoveryRequired === true) return false;
     const user = auth.currentUser;
     if (!user) return;
     const data = (typeof (window as any).getGameState === 'function') ? (window as any).getGameState() : null;
@@ -192,14 +196,26 @@ export default function IdleGame() {
           if (cloudState.role === 'admin' && !isAdmin) {
             cloudState.role = 'player';
           }
-          if (typeof (window as any).getGameState === 'function') {
-            const st = (window as any).getGameState();
-            if (st) {
-              st.privilegeLevel = priv;
+          const localState = typeof (window as any).getRawState === 'function'
+            ? (window as any).getRawState()
+            : null;
+          if (preferLocalPlayerSave({ localState, cloudState, userId: user?.uid })) {
+            localState.privilegeLevel = priv;
+            if (!isAdmin && localState.role === 'admin') localState.role = 'player';
+            console.info('[CloudSave] Mantendo save local mais recente da mesma conta e sincronizando-o.');
+            if (typeof (window as any).saveGameState === 'function') {
+              (window as any).saveGameState(true, true);
             }
-          }
-          if (typeof (window as any).loadGameState === 'function') {
-            (window as any).loadGameState(cloudState);
+          } else {
+            if (typeof (window as any).getGameState === 'function') {
+              const st = (window as any).getGameState();
+              if (st) {
+                st.privilegeLevel = priv;
+              }
+            }
+            if (typeof (window as any).loadGameState === 'function') {
+              (window as any).loadGameState(cloudState);
+            }
           }
         }
 
@@ -233,7 +249,7 @@ export default function IdleGame() {
 
     // Cloud Auto-Save loop periódico a cada 15 segundos
     const cloudSaveInterval = setInterval(() => {
-      if (auth.currentUser && typeof (window as any).saveCloudNow === 'function') {
+      if (!(window as any).__saveRecoveryRequired && auth.currentUser && typeof (window as any).saveCloudNow === 'function') {
         (window as any).saveCloudNow(undefined, false);
       }
     }, 15000);
