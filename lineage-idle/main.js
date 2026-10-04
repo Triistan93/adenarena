@@ -10359,7 +10359,7 @@ export function init() {
           accent: '#67e8f9'
         }
       ];
-      const playerCP = Number(state.stats?.combatPower ?? state.combatPower) || 0;
+      const playerCP = CombatPowerService?.resolveCombatPower ? CombatPowerService.resolveCombatPower(state) : (Number(state.stats?.combatPower ?? state.combatPower) || 0);
 
       sections.forEach(section => {
         if (!section.instances.length) return;

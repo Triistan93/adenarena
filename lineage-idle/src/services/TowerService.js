@@ -11,6 +11,7 @@ import { addToInventory } from './InventoryService.js';
 import { hasRoomForStackRewards } from './lifeActivities/RewardCapacity.js';
 import { triggerQuestEvent } from './QuestService.js';
 import { startCombat, stopCombat } from '../engine/CombatEngine.js';
+import { CombatPowerService } from './CombatPowerService.js';
 
 /**
  * Retorna as propriedades e estatísticas de um andar da Torre.
@@ -112,7 +113,7 @@ export function challengeTowerFloor(state, callbacks = {}) {
     return { success: false, reason: 'insufficient_level', requiredLevel: fDef.reqLvl };
   }
 
-  const combatPower = Number(callbacks.getCombatPower?.(state) ?? state.stats?.combatPower ?? state.combatPower) || 0;
+  const combatPower = Number(callbacks.getCombatPower?.(state) ?? CombatPowerService.resolveCombatPower(state)) || 0;
   const minimumCP = getTowerFloorMinimumCP(targetFloor);
   if (combatPower < minimumCP) {
     if (callbacks.log) callbacks.log(`⚠️ Poder de combate insuficiente! O Andar ${targetFloor} requer ${minimumCP.toLocaleString()} CP.`, 'warning');

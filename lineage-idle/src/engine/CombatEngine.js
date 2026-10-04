@@ -17,6 +17,7 @@ import { getZoneProgression } from '../data/balance/progressionBalance.js';
 import { combatEvents, CombatEventType, CombatEventFactory } from '../vfx/CombatEvent.js';
 import { ClassValidationService } from '../services/ClassValidationService.js';
 import { getShotGradeCode } from '../data/items/item_grade.js';
+import { CombatPowerService } from '../services/CombatPowerService.js';
 
 export { combatEvents, CombatEventType, CombatEventFactory };
 
@@ -64,7 +65,7 @@ export function getNearestTown(zoneId, state = null) {
   if (!zoneId || !ZONES[zoneId]) return 'talkingIsland';
 
   const playerLevel = (state && typeof state.level === 'number') ? state.level : 100;
-  const playerCp = (state && (state.stats?.combatPower || state.combatPower)) ? (state.stats?.combatPower || state.combatPower) : Infinity;
+  const playerCp = (state && (state.stats?.combatPower || state.combatPower)) ? (state.stats?.combatPower || state.combatPower) : (state ? CombatPowerService.resolveCombatPower(state) : Infinity);
 
   function isTownAccessible(tId) {
     if (!tId || !ZONES[tId] || !ZONES[tId].town) return false;
@@ -105,7 +106,7 @@ export function startCombat(state, callbacks = {}) {
 
   // Validação preventiva de CP Mínimo ao iniciar combate (ex: save carregado em zona onde não tem CP suficiente)
   const zoneProg = state.zone ? getZoneProgression(state.zone) : null;
-  const playerCp = state.stats?.combatPower || state.combatPower || 0;
+  const playerCp = CombatPowerService.resolveCombatPower(state);
   if (zoneProg && zoneProg.minCp && playerCp < zoneProg.minCp && state.zone !== 'talkingIsland') {
     const safeTown = getNearestTown(state.zone, state);
     if (callbacks.log) {
@@ -296,7 +297,7 @@ export function selectZone(state, zoneId, callbacks = {}) {
     return false;
   }
   const zoneProg = getZoneProgression(zoneId);
-  const playerCp = state.stats?.combatPower || state.combatPower || 0;
+  const playerCp = CombatPowerService.resolveCombatPower(state);
   if (zoneProg && zoneProg.minCp && playerCp < zoneProg.minCp && zoneId !== 'talkingIsland') {
     if (callbacks.log) callbacks.log(`🔒 Poder de Combate Insuficiente para ${zone.name}! Requer no mínimo ${zoneProg.minCp.toLocaleString()} CP (Seu CP: ${playerCp.toLocaleString()}).`, 'warning');
     if (callbacks.floatText) callbacks.floatText(`🔒 REQUER ${zoneProg.minCp.toLocaleString()} CP`, 'float-warning');

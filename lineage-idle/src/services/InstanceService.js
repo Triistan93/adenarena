@@ -2,6 +2,7 @@
 import { SOLO_INSTANCES } from '../data/instances.js';
 import { ZONES } from '../data/zones.js';
 import { startCombat, stopCombat } from '../engine/CombatEngine.js';
+import { CombatPowerService } from './CombatPowerService.js';
 
 export const InstanceService = {
   getDailyEntries(state) {
@@ -52,7 +53,7 @@ export const InstanceService = {
       return { ok: false, reason: `Nível acima da faixa! Esta instância aceita até o Nível ${inst.maxLvl}.` };
     }
 
-    const combatPower = Number(state.stats?.combatPower ?? state.combatPower) || 0;
+    const combatPower = CombatPowerService.resolveCombatPower(state);
     if (inst.minimumCP && combatPower < inst.minimumCP) {
       return { ok: false, reason: `Poder de Combate insuficiente! Mínimo: ${inst.minimumCP.toLocaleString('pt-BR')} CP.` };
     }

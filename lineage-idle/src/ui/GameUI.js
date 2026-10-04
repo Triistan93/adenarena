@@ -3175,6 +3175,9 @@ export function updateCharacterUI(state, callbacks = {}) {
   // 5. Poder de Combate (CP) Canônico & Detalhamento Auditado
   const detailedCp = CombatPowerService.calculateDetailedCombatPower(state);
   const cp = detailedCp.totalCp;
+  state.combatPower = cp;
+  if (!state.stats) state.stats = {};
+  state.stats.combatPower = cp;
   const cpTier = CombatPowerService.getCombatPowerTier(cp);
 
   const heroCpVal = root.querySelector('#hero-cp-val');
@@ -3661,7 +3664,7 @@ export function renderZoneMap(state, callbacks = {}) {
       const isCurrent = (state.zone || state.currentZone) === zId;
       const reqLvl = zDef.level ?? zDef.minLevel ?? zDef.reqLvl ?? 1;
       const zoneProg = getZoneProgression(zId);
-      const playerCp = state.stats?.combatPower || state.combatPower || 0;
+      const playerCp = CombatPowerService.resolveCombatPower(state);
       const isLvlLocked = (state.level || 1) < reqLvl;
       const isCpLocked = zId !== 'talkingIsland' && playerCp < (zoneProg?.minCp || 0);
       const isLocked = isLvlLocked || isCpLocked;
@@ -9909,7 +9912,7 @@ export function renderRaidsTab(container, state) {
       state.activeMonster?.isTower || state.activeMonster?.isInstanceBoss ||
       state.activeMonster?.isWorldBoss || state.activeMonster?.isChaosBoss
     );
-    const playerCombatPower = Number(state.stats?.combatPower || state.combatPower) || 0;
+    const playerCombatPower = CombatPowerService.resolveCombatPower(state);
     const insufficientCombatPower = Boolean(boss.minimumCP && playerCombatPower < boss.minimumCP);
     const timesCleared = status.clears[id] || 0;
     const hasTickets = (status.tickets || 0) > 0;

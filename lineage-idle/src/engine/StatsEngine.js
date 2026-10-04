@@ -1554,6 +1554,12 @@ export function getStats(state) {
   finalStats.maxMp += skillBuffMaxMpFlat;
   finalStats.maxCp = Math.floor(finalStats.maxHp * 0.60 * maxCpMultiplier + augmentationFlatCp + skillBuffMaxCpFlat);
   finalStats.combatPower = CombatPowerService.calculateCombatPower({ ...state, stats: finalStats });
+  if (state && typeof state === 'object') {
+    state.combatPower = finalStats.combatPower;
+    if (state.stats && typeof state.stats === 'object') {
+      state.stats.combatPower = finalStats.combatPower;
+    }
+  }
   return finalStats;
 }
 

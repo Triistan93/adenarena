@@ -30,6 +30,33 @@ export const CombatPowerService = {
   },
 
   /**
+   * Obtém o Poder de Combate atual do jogador de forma canônica e determinística.
+   * Se state.combatPower ou state.stats.combatPower já estiverem computados e válidos (> 0),
+   * retorna o valor em cache; caso contrário, computa em tempo real e sincroniza no state.
+   * @param {Object} state
+   * @returns {number}
+   */
+  resolveCombatPower(state) {
+    if (!state || typeof state !== 'object') return 0;
+    if (typeof state.stats?.combatPower === 'number' && state.stats.combatPower > 0) {
+      state.combatPower = state.stats.combatPower;
+      return state.stats.combatPower;
+    }
+    if (typeof state.combatPower === 'number' && state.combatPower > 0) {
+      if (state.stats && typeof state.stats === 'object') {
+        state.stats.combatPower = state.combatPower;
+      }
+      return state.combatPower;
+    }
+    const cp = this.calculateCombatPower(state);
+    state.combatPower = cp;
+    if (state.stats && typeof state.stats === 'object') {
+      state.stats.combatPower = cp;
+    }
+    return cp;
+  },
+
+  /**
    * Retorna o detalhamento completo canônico com todas as 15 componentes auditadas.
    * Invariante fundamental: totalCp === soma exata das componentes (com tolerância ±1 de arredondamento).
    * @param {Object} state - Estado do jogador

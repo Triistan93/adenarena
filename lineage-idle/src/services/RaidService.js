@@ -13,6 +13,7 @@ import { MONSTERS } from '../data/monsters.js';
 import { stopCombat, startCombat } from '../engine/CombatEngine.js';
 import { StaggerEngine } from '../engine/StaggerEngine.js';
 import { D } from '../core/GameConfig.js';
+import { CombatPowerService } from './CombatPowerService.js';
 import { getMaxInventorySlots } from './InventoryService.js';
 
 const DAILY_FREE_TICKETS = 3;
@@ -126,7 +127,7 @@ export function canEnterRaid(state, raidId) {
     return { canEnter: false, reason: `Nível ${boss.reqLvl} necessário para este Raid!` };
   }
 
-  const playerCP = state.stats?.combatPower || state.combatPower || 0;
+  const playerCP = CombatPowerService.resolveCombatPower(state);
   if (boss.minimumCP && playerCP < boss.minimumCP) {
     return {
       canEnter: false,

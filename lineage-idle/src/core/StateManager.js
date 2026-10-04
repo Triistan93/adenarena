@@ -16,6 +16,7 @@ import { ClassSaveMigrator } from '../services/ClassSaveMigrator.js';
 import { ClassValidationService } from '../services/ClassValidationService.js';
 import { CanonicalClassGraph } from '../data/classes/CanonicalClassGraph.js';
 import { autoEquipLoadout, EMPTY_LOADOUT } from '../services/SkillLoadoutService.js';
+import { CombatPowerService } from '../services/CombatPowerService.js';
 
 export const DEFAULT_STATE = () => ({
   characterId: null,
@@ -427,7 +428,7 @@ export function loadState() {
     // Sanitização preventiva de zona salva: impede que saves antigos ou dessincronizados deixem o jogador preso em zonas de alto CP
     if (currentState.zone && currentState.zone !== 'talkingIsland') {
       const zProg = getZoneProgression(currentState.zone);
-      const pCp = currentState.stats?.combatPower || currentState.combatPower || 0;
+      const pCp = CombatPowerService.resolveCombatPower(currentState);
       const pLvl = currentState.level || 1;
       if (zProg && ((zProg.level && pLvl < zProg.level) || (zProg.minCp && pCp > 0 && pCp < zProg.minCp))) {
         currentState.zone = 'talkingIsland';
