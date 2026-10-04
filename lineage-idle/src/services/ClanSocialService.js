@@ -10,6 +10,7 @@ import {
   serverTimestamp,
   where
 } from 'firebase/firestore';
+import { DEFAULT_CLAN_CREST_ID, getClanCrest } from '../data/clanCrests.js';
 
 const CLANS = 'clans';
 const MEMBERS = 'clan_members';
@@ -48,7 +49,7 @@ function cleanOptionalText(value, maxLength) {
 }
 
 export class ClanSocialService {
-  static async createClan({ name, description = '', recruiting = true, displayName = '' }) {
+  static async createClan({ name, description = '', recruiting = true, crestId = DEFAULT_CLAN_CREST_ID, displayName = '' }) {
     const user = requireRegisteredUser();
     const nameError = validateClanName(name);
     if (nameError) {
@@ -57,6 +58,7 @@ export class ClanSocialService {
       throw error;
     }
 
+    const cleanCrestId = getClanCrest(crestId).id;
     const nameKey = normalizeClanName(name);
     const clanRef = doc(collection(db, CLANS));
     const nameRef = doc(db, NAMES, nameKey);
@@ -83,6 +85,7 @@ export class ClanSocialService {
         name: cleanName,
         nameKey,
         description: cleanOptionalText(description, 280),
+        crestId: cleanCrestId,
         leaderUid: user.uid,
         recruitmentOpen: Boolean(recruiting),
         memberCap: 50,
@@ -103,7 +106,7 @@ export class ClanSocialService {
       });
     });
 
-    return { clanId: clanRef.id, name: cleanName };
+    return { clanId: clanRef.id, name: cleanName, crestId: cleanCrestId };
   }
 
   static async listRecruitingClans(maxItems = 24) {
@@ -114,7 +117,14 @@ export class ClanSocialService {
       where('recruitmentOpen', '==', true),
       limit(count)
     ));
-    return snapshot.docs.map(clanDoc => ({ id: clanDoc.id, ...clanDoc.data() }));
+    return snapshot.docs.map(clanDoc => {
+      const data = clanDoc.data();
+      return {
+        id: clanDoc.id,
+        ...data,
+        crestId: data.crestId || DEFAULT_CLAN_CREST_ID
+      };
+    });
   }
 
   static async joinClan(clanId, displayName = '') {
@@ -162,7 +172,7 @@ export class ClanSocialService {
     });
   }
 
-  static async updateClanSettings({ clanId, description, recruiting }) {
+  static async updateClanSettings({ clanId, description, recruiting, crestId }) {
     const user = requireRegisteredUser();
     const clanRef = doc(db, CLANS, String(clanId));
     await runTransaction(db, async transaction => {
@@ -177,11 +187,15 @@ export class ClanSocialService {
         error.code = 'clan/leader_permission_required';
         throw error;
       }
-      transaction.update(clanRef, {
+      const updateData = {
         description: cleanOptionalText(description, 280),
         recruitmentOpen: Boolean(recruiting),
         updatedAt: serverTimestamp()
-      });
+      };
+      if (crestId) {
+        updateData.crestId = getClanCrest(crestId).id;
+      }
+      transaction.update(clanRef, updateData);
     });
     return { success: true };
   }

@@ -353,7 +353,7 @@ export class ClanService {
   /**
    * Cria ou edita as informações do Clã (Nome, Lema, Brasão).
    */
-  static createOrEditClan(state, name, motto, callbacks = {}) {
+  static createOrEditClan(state, name, motto, callbacks = {}, crestId = 'crest_lion') {
     const { log = console.log, onUpdate = () => {}, floatText = () => {} } = callbacks;
     const cleanName = String(name || '').trim();
     if (!cleanName || cleanName.length < 3) {
@@ -376,6 +376,7 @@ export class ClanService {
     state.clan.reputation = state.clan.reputation || 100;
     state.clan.donationsAdena = state.clan.donationsAdena || 0;
     state.clan.donationsSp = state.clan.donationsSp || 0;
+    state.clan.crestId = crestId || state.clan.crestId || 'crest_lion';
 
     log(`🏰 Clã **[${cleanName}]** ${isNew ? 'fundado com sucesso' : 'atualizado'}! Lema: "${state.clan.motto}"`, 'rarity-legendary');
     floatText(`🏰 CLÃ FUNDADO!`, 'float-jackpot');

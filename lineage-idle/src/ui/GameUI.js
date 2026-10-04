@@ -49,6 +49,7 @@ import { CLAN_LEVEL_DATA, CLAN_SKILLS } from '../data/clan.js';
 import { CASTLES, CASTLE_SHOP_CATALOG } from '../data/castles.js';
 import { ClanService, CLAN_HALL_BUFFS } from '../services/ClanService.js';
 import { ClanSocialService } from '../services/ClanSocialService.js';
+import { CLAN_CRESTS, DEFAULT_CLAN_CREST_ID, getClanCrest, renderClanCrestHtml } from '../data/clanCrests.js';
 import { ENCHANT_ROUTES, getEnchantLevelData, ENCHANT_ITEMS } from '../data/skill_enchant.js';
 import { SkillEnchantService } from '../services/SkillEnchantService.js';
 import { LIFE_STONES, ITEM_SKILLS } from '../data/augmentation.js';
@@ -10556,7 +10557,9 @@ export function renderClanTab(container, state) {
     const recruitingCards = portalState.clans.map(item => `
       <article class="clan-portal__directory-card">
         <div class="clan-portal__directory-info">
-          <div class="clan-portal__directory-crest">♜</div>
+          <div class="clan-portal__directory-crest">
+            ${renderClanCrestHtml(item.crestId || DEFAULT_CLAN_CREST_ID, 'md')}
+          </div>
           <div class="clan-portal__directory-meta">
             <h4>${escapeHtml(item.name)}</h4>
             <p>${escapeHtml(item.description || 'Estandarte imperial erguido no reino de Aden.')}</p>
@@ -10572,6 +10575,21 @@ export function renderClanTab(container, state) {
       </article>
     `).join('');
 
+    const selectedCrestId = DEFAULT_CLAN_CREST_ID;
+    const defaultCrest = getClanCrest(selectedCrestId);
+    const crestItemsHtml = CLAN_CRESTS.map(c => `
+      <div
+        class="clan-portal__crest-item ${c.id === selectedCrestId ? 'is-selected' : ''}"
+        data-crest-select="${c.id}"
+        title="${escapeHtml(c.name)}: ${escapeHtml(c.desc)}"
+        role="radio"
+        aria-checked="${c.id === selectedCrestId ? 'true' : 'false'}"
+      >
+        ${renderClanCrestHtml(c.id, 'picker', true)}
+        <span style="font-size:9.5px; color:#cbd5e1; margin-top:2px; text-align:center; max-width:44px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-family:'Cinzel',serif;">${c.symbol}</span>
+      </div>
+    `).join('');
+
     container.innerHTML = `
       <main class="clan-portal" aria-labelledby="clan-portal-title">
         <!-- Hero Header -->
@@ -10585,7 +10603,7 @@ export function renderClanTab(container, state) {
               <p>Seu legado começa com um juramento — e cresce com os aliados que o mantêm sob o mesmo estandarte.</p>
             </div>
             <div class="clan-portal__sigil-wrap" aria-hidden="true">
-              <span class="clan-portal__sigil">♜</span>
+              ${renderClanCrestHtml('crest_crown', 'lg')}
             </div>
           </div>
           <div class="clan-portal__status-bar">
@@ -10639,6 +10657,31 @@ export function renderClanTab(container, state) {
               <div class="clan-portal__field">
                 <label for="clan-desc-input">Lema &amp; Apresentação</label>
                 <input class="clan-portal__input" id="clan-desc-input" name="description" maxlength="280" placeholder="O que une sua irmandade? Ex: Pela Glória de Aden!" value="${escapeHtml(hasLegacyClan ? (clan.motto || '') : '')}">
+              </div>
+              <div class="clan-portal__field">
+                <label>Estandarte &amp; Brasão da Casa</label>
+                <div class="clan-portal__crest-picker">
+                  <div class="clan-portal__crest-preview-card" id="clan-crest-preview">
+                    <div id="clan-crest-preview-badge">
+                      ${renderClanCrestHtml(selectedCrestId, 'md')}
+                    </div>
+                    <div class="clan-portal__crest-preview-meta">
+                      <div class="clan-portal__crest-preview-name" id="clan-crest-preview-name">${escapeHtml(defaultCrest.name)}</div>
+                      <div class="clan-portal__crest-preview-desc" id="clan-crest-preview-desc">${escapeHtml(defaultCrest.desc)}</div>
+                      <div class="clan-portal__crest-preview-clan-name">
+                        ✦ <span id="clan-crest-preview-text">${escapeHtml(hasLegacyClan ? clan.name : 'Novo Clã')}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="clan-portal__crest-picker-header">
+                    <span class="clan-portal__crest-picker-title">Escolha o brasão do clã</span>
+                    <span style="font-size:10px; color:#94a3b8;">16 insígnias autênticas</span>
+                  </div>
+                  <div class="clan-portal__crest-grid" role="radiogroup" aria-label="Seletor de Brasão">
+                    ${crestItemsHtml}
+                  </div>
+                  <input type="hidden" name="crestId" id="clan-crest-input" value="${escapeHtml(selectedCrestId)}">
+                </div>
               </div>
               <label class="clan-portal__toggle-wrap">
                 <input class="clan-portal__toggle-input" name="recruiting" type="checkbox" checked>
@@ -10732,43 +10775,118 @@ export function renderClanTab(container, state) {
     `;
 
     const form = container.querySelector('#clan-create-form');
-    if (form) form.onsubmit = async event => {
-      event.preventDefault();
-      const values = new FormData(form);
-      const submit = form.querySelector('button[type="submit"]');
-      if (submit) submit.disabled = true;
-      try {
+    if (form) {
+      // Atualização em tempo real do nome no preview do brasão
+      const nameInput = form.querySelector('#clan-name-input');
+      const previewText = form.querySelector('#clan-crest-preview-text');
+      if (nameInput && previewText) {
+        nameInput.addEventListener('input', () => {
+          previewText.textContent = nameInput.value.trim() || 'Novo Clã';
+        });
+      }
+
+      // Interatividade de seleção de brasão na grade
+      const crestInput = form.querySelector('#clan-crest-input');
+      const previewBadge = form.querySelector('#clan-crest-preview-badge');
+      const previewName = form.querySelector('#clan-crest-preview-name');
+      const previewDesc = form.querySelector('#clan-crest-preview-desc');
+      const crestItems = form.querySelectorAll('[data-crest-select]');
+
+      crestItems.forEach(item => {
+        item.addEventListener('click', () => {
+          const targetId = item.getAttribute('data-crest-select');
+          if (!targetId) return;
+          crestItems.forEach(i => {
+            i.classList.remove('is-selected');
+            i.setAttribute('aria-checked', 'false');
+          });
+          item.classList.add('is-selected');
+          item.setAttribute('aria-checked', 'true');
+          if (crestInput) crestInput.value = targetId;
+
+          const crestDef = getClanCrest(targetId);
+          if (previewBadge) previewBadge.innerHTML = renderClanCrestHtml(targetId, 'md');
+          if (previewName) previewName.textContent = crestDef.name;
+          if (previewDesc) previewDesc.textContent = crestDef.desc;
+        });
+      });
+
+      form.onsubmit = async event => {
+        event.preventDefault();
+        const values = new FormData(form);
+        const submit = form.querySelector('button[type="submit"]');
+        if (submit) submit.disabled = true;
         const name = values.get('name');
         const desc = values.get('description');
         const recruiting = values.get('recruiting') === 'on';
-        await ClanSocialService.createClan({
-          name,
-          description: desc,
-          recruiting,
-          displayName: state.name
-        });
-        state.clan = {
-          name,
-          level: 1,
-          motto: desc || 'Pela Glória e Honra de Aden!',
-          reputation: 100,
-          castles: [],
-          members: [{ uid: 'self', displayName: state.name || 'Líder', role: 'leader' }],
-          contracts: {},
-          accumulatedTaxes: {},
-          hall: { level: 1 },
-          myRole: 'leader'
-        };
-        portalState.notice = 'Clã fundado com sucesso! Seu estandarte já tremula no reino de Aden.';
-        portalState.loaded = false;
-        await refreshPortal();
-      } catch (error) {
-        portalState.error = error?.message || 'Não foi possível fundar o clã.';
-      } finally {
-        if (submit) submit.disabled = false;
-        if (typeof window !== 'undefined') window._clanPortalRefresh?.();
-      }
-    };
+        const crestId = values.get('crestId') || DEFAULT_CLAN_CREST_ID;
+
+        try {
+          await ClanSocialService.createClan({
+            name,
+            description: desc,
+            recruiting,
+            crestId,
+            displayName: state.name
+          });
+          state.clan = {
+            name,
+            crestId,
+            level: 1,
+            motto: desc || 'Pela Glória e Honra de Aden!',
+            reputation: 100,
+            castles: [],
+            members: [{ uid: 'self', displayName: state.name || 'Líder', role: 'leader' }],
+            contracts: {},
+            accumulatedTaxes: {},
+            hall: { level: 1 },
+            myRole: 'leader',
+            isOnlineSynced: true
+          };
+          portalState.notice = 'Clã fundado com sucesso! Seu estandarte já tremula no reino de Aden.';
+          portalState.error = '';
+          portalState.loaded = false;
+          if (typeof window !== 'undefined' && window.saveGame) {
+            try { window.saveGame(); } catch (e) {}
+          }
+          await refreshPortal();
+        } catch (error) {
+          const isPermissionOrAuth = 
+            error?.code === 'permission-denied' ||
+            error?.code === 'clan/registered_account_required' ||
+            String(error?.message || '').toLowerCase().includes('permission') ||
+            String(error?.message || '').toLowerCase().includes('insufficient permissions');
+
+          if (isPermissionOrAuth) {
+            state.clan = {
+              name,
+              crestId,
+              level: 1,
+              motto: desc || 'Pela Glória e Honra de Aden!',
+              reputation: 100,
+              castles: [],
+              members: [{ uid: 'self', displayName: state.name || 'Líder', role: 'leader' }],
+              contracts: {},
+              accumulatedTaxes: {},
+              hall: { level: 1 },
+              myRole: 'leader',
+              isOnlineSynced: false
+            };
+            portalState.notice = '✦ Clã fundado com sucesso no seu reino! (Aviso: para sincronizar seu estandarte com outros jogadores online, publique as regras do Firestore no console do Firebase).';
+            portalState.error = '';
+            if (typeof window !== 'undefined' && window.saveGame) {
+              try { window.saveGame(); } catch (e) {}
+            }
+            await refreshPortal();
+          } else {
+            portalState.error = error?.message || 'Não foi possível fundar o clã.';
+          }
+        } finally {
+          if (submit) submit.disabled = false;
+          if (typeof window !== 'undefined') window._clanPortalRefresh?.();
+        }
+      };
+    }
 
     container.querySelector('[data-clan-refresh]')?.addEventListener('click', () => {
       portalState.loaded = false;
@@ -10778,14 +10896,34 @@ export function renderClanTab(container, state) {
     container.querySelectorAll('[data-clan-join]').forEach(button => button.addEventListener('click', async () => {
       button.disabled = true;
       try {
-        await ClanSocialService.joinClan(button.dataset.clanJoin, state.name);
+        const clanId = button.dataset.clanJoin;
+        const targetClan = portalState.clans.find(c => c.id === clanId);
+        await ClanSocialService.joinClan(clanId, state.name);
+        state.clan = {
+          name: targetClan?.name || 'Clã de Aden',
+          crestId: targetClan?.crestId || DEFAULT_CLAN_CREST_ID,
+          level: Number(targetClan?.level) || 1,
+          motto: targetClan?.description || 'Pela Glória e Honra de Aden!',
+          reputation: 100,
+          castles: [],
+          members: [{ uid: 'self', displayName: state.name || 'Aventureiro', role: 'member' }],
+          contracts: {},
+          accumulatedTaxes: {},
+          hall: { level: 1 },
+          myRole: 'member',
+          isOnlineSynced: true
+        };
         portalState.notice = 'Você prestou juramento e agora faz parte do clã!';
         portalState.loaded = false;
+        if (typeof window !== 'undefined' && window.saveGame) {
+          try { window.saveGame(); } catch (e) {}
+        }
         await refreshPortal();
       } catch (error) {
         portalState.error = error?.message || 'Não foi possível entrar no clã.';
-      } finally {
         if (typeof window !== 'undefined') window._clanPortalRefresh?.();
+      } finally {
+        button.disabled = false;
       }
     }));
 
@@ -11189,7 +11327,7 @@ export function renderClanTab(container, state) {
             <p style="font-style:italic; color:#e2e8f0;">"${escapeHtml(activeClan.motto || 'Pela Glória e Honra de Aden!')}"</p>
           </div>
           <div class="clan-portal__sigil-wrap" aria-hidden="true">
-            <span class="clan-portal__sigil">♜</span>
+            ${renderClanCrestHtml(activeClan.crestId || DEFAULT_CLAN_CREST_ID, 'lg')}
           </div>
         </div>
         <div class="clan-portal__status-bar">

@@ -4112,16 +4112,124 @@
   min-width: 0;
 }
 .clan-portal__directory-crest {
-  width: 40px;
-  height: 40px;
-  border-radius: 8px;
-  background: linear-gradient(135deg, #1e293b, #090d14);
-  border: 1px solid rgba(215, 181, 109, .35);
-  display: grid;
-  place-items: center;
-  font-size: 20px;
-  color: var(--clan-gold-bright);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
+}
+
+/* ==========================================================================
+   Clan Crest & Heraldry Badge System
+   ========================================================================== */
+.clan-crest-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border-radius: 6px;
+  clip-path: polygon(0 0, 100% 0, 100% 80%, 50% 100%, 0 80%);
+  transition: all .2s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+  flex-shrink: 0;
+}
+.clan-crest-badge__inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding-bottom: 4px;
+}
+.clan-crest-badge--interactive {
+  cursor: pointer;
+}
+.clan-crest-badge--interactive:hover {
+  transform: translateY(-2px) scale(1.08);
+  filter: brightness(1.2);
+}
+
+/* Crest Selector Box in Clan Creation */
+.clan-portal__crest-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: rgba(8, 12, 18, 0.7);
+  border: 1px solid rgba(215, 181, 109, 0.25);
+  border-radius: 10px;
+  padding: 14px;
+}
+.clan-portal__crest-picker-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.clan-portal__crest-picker-title {
+  font: 700 12px/1.2 'Cinzel', Georgia, serif;
+  color: #fde047;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+.clan-portal__crest-preview-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 16px;
+  background: radial-gradient(circle at 20% 50%, rgba(215, 181, 109, 0.12) 0%, rgba(10, 15, 24, 0.8) 100%);
+  border: 1px solid rgba(215, 181, 109, 0.3);
+  border-radius: 8px;
+}
+.clan-portal__crest-preview-meta {
+  flex: 1;
+  min-width: 0;
+}
+.clan-portal__crest-preview-name {
+  font: 700 14px/1.2 'Cinzel', Georgia, serif;
+  color: #fff;
+  margin-bottom: 2px;
+}
+.clan-portal__crest-preview-desc {
+  font-size: 11px;
+  color: #94a3b8;
+  line-height: 1.35;
+}
+.clan-portal__crest-preview-clan-name {
+  display: inline-block;
+  margin-top: 6px;
+  padding: 3px 10px;
+  background: rgba(234, 179, 8, 0.15);
+  border: 1px solid rgba(234, 179, 8, 0.4);
+  border-radius: 4px;
+  font: 700 11px/1 'Cinzel', Georgia, serif;
+  color: #fef08a;
+  letter-spacing: .06em;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+}
+.clan-portal__crest-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(48px, 1fr));
+  gap: 8px;
+  padding: 4px 2px;
+}
+.clan-portal__crest-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 8px;
+  background: transparent;
+  border: 1.5px solid transparent;
+  transition: all .18s ease;
+}
+.clan-portal__crest-item:hover {
+  background: rgba(215, 181, 109, 0.15);
+  border-color: rgba(215, 181, 109, 0.4);
+}
+.clan-portal__crest-item.is-selected {
+  background: rgba(234, 179, 8, 0.2);
+  border-color: #fde047;
+  box-shadow: 0 0 14px rgba(253, 224, 71, 0.4);
+  transform: scale(1.05);
 }
 .clan-portal__directory-meta h4 {
   margin: 0 0 2px;

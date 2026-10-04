@@ -144,12 +144,12 @@ service cloud.firestore {
       allow create: if isServerAdmin() || (
         isRegistered()
         && request.resource.data.keys().hasOnly([
-          'name', 'nameKey', 'description', 'leaderUid', 'recruitmentOpen',
+          'name', 'nameKey', 'description', 'crestId', 'leaderUid', 'recruitmentOpen',
           'memberCap', 'level', 'allianceId', 'territoryIds', 'hallLevel',
           'createdAt', 'updatedAt'
         ])
         && request.resource.data.keys().hasAll([
-          'name', 'nameKey', 'description', 'leaderUid', 'recruitmentOpen',
+          'name', 'nameKey', 'description', 'crestId', 'leaderUid', 'recruitmentOpen',
           'memberCap', 'level', 'allianceId', 'territoryIds', 'hallLevel',
           'createdAt', 'updatedAt'
         ])
@@ -161,6 +161,8 @@ service cloud.firestore {
         && request.resource.data.nameKey.size() <= 48
         && request.resource.data.description is string
         && request.resource.data.description.size() <= 280
+        && request.resource.data.crestId is string
+        && request.resource.data.crestId.size() <= 40
         && request.resource.data.leaderUid == request.auth.uid
         && request.resource.data.recruitmentOpen is bool
         && request.resource.data.memberCap == 50
@@ -172,15 +174,16 @@ service cloud.firestore {
         && getAfter(/databases/$(database)/documents/clan_members/$(request.auth.uid)).data.clanId == clanId
         && getAfter(/databases/$(database)/documents/clan_members/$(request.auth.uid)).data.role == 'leader'
       );
-      // A liderança pode editar apenas o texto de apresentação e o recrutamento.
+      // A liderança pode editar apenas o texto de apresentação, recrutamento e brasão do clã.
       // Nível, membros, território, hall e alianças exigirão operações autoritativas.
       allow update: if isServerAdmin() || (
         isRegistered()
         && resource.data.leaderUid == request.auth.uid
-        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['description', 'recruitmentOpen', 'updatedAt'])
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['description', 'recruitmentOpen', 'crestId', 'updatedAt'])
         && request.resource.data.description is string
         && request.resource.data.description.size() <= 280
         && request.resource.data.recruitmentOpen is bool
+        && (!('crestId' in request.resource.data) || (request.resource.data.crestId is string && request.resource.data.crestId.size() <= 40))
       );
       allow delete: if isServerAdmin();
     }

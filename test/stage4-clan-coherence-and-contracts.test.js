@@ -153,8 +153,8 @@ describe('Etapa 4 — Clãs com um Propósito Coerente: Ciclo Social, Cargos, Pe
       assert.match(rules, /getAfter\(\/databases\/\$\(database\)\/documents\/clan_names\/\$\(request\.resource\.data\.nameKey\)\)\.data\.clanId == clanId/);
       assert.match(rules, /getAfter\(\/databases\/\$\(database\)\/documents\/clan_members\/\$\(request\.auth\.uid\)\)\.data\.role == 'leader'/);
 
-      // 2. Líder pode atualizar apenas apresentação e recrutamento
-      assert.match(rules, /affectedKeys\(\)\.hasOnly\(\['description', 'recruitmentOpen', 'updatedAt'\]\)/);
+      // 2. Líder pode atualizar apenas apresentação, recrutamento e brasão
+      assert.match(rules, /affectedKeys\(\)\.hasOnly\(\['description', 'recruitmentOpen', 'crestId', 'updatedAt'\]\)/);
 
       // 3. Regra de deleção de membro permite saída voluntária OU expulsão pelo líder do clã
       assert.match(rules, /get\(\/databases\/\$\(database\)\/documents\/clans\/\$\(resource\.data\.clanId\)\)\.data\.leaderUid == request\.auth\.uid/);
