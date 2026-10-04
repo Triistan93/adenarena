@@ -93,7 +93,7 @@ connectFirebaseEmulators({
 });
 
 // Autenticação anônima automática para jogadores convidados
-if (typeof window !== 'undefined') {
+if (typeof window !== 'undefined' && firebaseEnv.VITE_DISABLE_GUEST_AUTH !== 'true') {
   onAuthStateChanged(auth, (user) => {
     if (!user) {
       signInAnonymously(auth).catch(() => {});

@@ -10464,9 +10464,11 @@ export function renderClanTab(container, state) {
   const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, char => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
   })[char]);
+
   const portalState = typeof window !== 'undefined'
     ? (window._clanPortalData ||= { loaded: false, loading: false, clans: [], myClan: null, error: '', notice: '' })
     : { loaded: false, loading: false, clans: [], myClan: null, error: '', notice: '' };
+
   const refreshPortal = async () => {
     if (portalState.loading) return;
     portalState.loading = true;
@@ -10483,99 +10485,252 @@ export function renderClanTab(container, state) {
       if (typeof window !== 'undefined') window._clanPortalRefresh?.();
     }
   };
+
   if (typeof window !== 'undefined') window._clanPortalRefresh = () => renderClanTab(container, state);
   if (!portalState.loaded && !portalState.loading) void refreshPortal();
 
   const myOnlineClan = portalState.myClan;
+
+  // Sincronizar dados do clã online com o state local se vinculado
   if (myOnlineClan) {
-    const members = Array.isArray(myOnlineClan.members) ? myOnlineClan.members : [];
-    const memberRows = members.map(member => `
-      <li class="clan-portal__member"><span class="clan-portal__member-sigil">${member.role === 'leader' ? '♛' : '⚔'}</span>
-        <span>${escapeHtml(member.displayName || 'Aventureiro')}</span><small>${member.role === 'leader' ? 'LÍDER' : 'MEMBRO'}</small></li>
-    `).join('');
-    container.innerHTML = `
-      <main class="clan-portal" aria-labelledby="clan-portal-title">
-        <header class="clan-portal__hero">
-          <div class="clan-portal__eyebrow">CRÔNICAS DE ADEN · CASAS DO REINO</div>
-          <div class="clan-portal__hero-row"><div><h2 id="clan-portal-title">${escapeHtml(myOnlineClan.name)}</h2>
-            <p>${escapeHtml(myOnlineClan.description || 'Um estandarte. Muitos destinos.')}</p></div><span class="clan-portal__sigil" aria-hidden="true">♜</span></div>
-          <div class="clan-portal__status"><i></i> CLÃ ONLINE <span>•</span> ${members.length} integrante${members.length === 1 ? '' : 's'}</div>
-        </header>
-        <section class="clan-portal__member-layout">
-          <article class="clan-portal__panel"><div class="clan-portal__panel-heading"><div><span>CASA DO REINO</span><h3>Irmandade</h3></div><b>NÍVEL ${Number(myOnlineClan.level) || 1}</b></div>
-            <ul class="clan-portal__roster">${memberRows || '<li class="clan-portal__muted">Nenhum membro listado.</li>'}</ul>
-            ${myOnlineClan.myRole === 'leader' ? '<p class="clan-portal__muted">Liderança: convites e gestão de cargos serão habilitados na próxima fase.</p>' : '<button class="clan-portal__secondary" data-clan-action="leave">Sair do clã</button>'}
-          </article>
-          <section class="clan-portal__systems" aria-label="Domínios do clã">
-            <article><span>01 · DIPLOMACIA</span><h3>Aliança</h3><p>${myOnlineClan.allianceId ? 'Aliança vinculada.' : 'Sem aliança firmada.'}</p></article>
-            <article><span>02 · DOMÍNIO</span><h3>Territórios</h3><p>${Array.isArray(myOnlineClan.territoryIds) && myOnlineClan.territoryIds.length ? `${myOnlineClan.territoryIds.length} território(s)` : 'Nenhum território sob domínio.'}</p></article>
-            <article><span>03 · SEDE</span><h3>Clan Hall</h3><p>Nível ${Number(myOnlineClan.hallLevel) || 0} · desenvolvimento coletivo.</p></article>
-            <article><span>04 · RECRUTAMENTO</span><h3>${myOnlineClan.recruitmentOpen ? 'Aberto' : 'Fechado'}</h3><p>Entrada de novos membros controlada pelo clã.</p></article>
-          </section>
-        </section>
-        ${portalState.notice ? `<p class="clan-portal__notice" role="status">${escapeHtml(portalState.notice)}</p>` : ''}
-      </main>`;
-    const leaveButton = container.querySelector('[data-clan-action="leave"]');
-    if (leaveButton) leaveButton.onclick = async () => {
-      leaveButton.disabled = true;
-      try {
-        await ClanSocialService.leaveClan();
-        portalState.notice = 'Você saiu do clã.';
-        portalState.loaded = false;
-      } catch (error) { portalState.error = error?.message || 'Não foi possível sair do clã.'; }
-      if (typeof window !== 'undefined') window._clanPortalRefresh?.();
-    };
-    return;
+    if (!state.clan || state.clan.id !== myOnlineClan.id) {
+      state.clan = {
+        id: myOnlineClan.id,
+        name: myOnlineClan.name,
+        level: Number(myOnlineClan.level) || 1,
+        motto: myOnlineClan.description || 'Pela Glória e Honra de Aden!',
+        reputation: myOnlineClan.reputation || 100,
+        castles: Array.isArray(myOnlineClan.territoryIds) ? myOnlineClan.territoryIds : (state.clan?.castles || []),
+        members: Array.isArray(myOnlineClan.members) ? myOnlineClan.members : (state.clan?.members || []),
+        contracts: state.clan?.contracts || {},
+        accumulatedTaxes: state.clan?.accumulatedTaxes || {},
+        hall: { level: Number(myOnlineClan.hallLevel) || 1 },
+        myRole: myOnlineClan.myRole || 'member'
+      };
+    } else {
+      state.clan.myRole = myOnlineClan.myRole || state.clan.myRole || 'member';
+      if (myOnlineClan.members) state.clan.members = myOnlineClan.members;
+    }
   }
 
-  if (!clan || !myOnlineClan) {
-    const hasLegacyClan = Boolean(clan);
-    const recruitingCards = portalState.clans.map(item => `
-      <article class="clan-portal__directory-card"><div><h3>${escapeHtml(item.name)}</h3><p>${escapeHtml(item.description || 'Este clã ainda não publicou uma apresentação.')}</p></div>
-        <span>NÍVEL ${Number(item.level) || 1}</span><button data-clan-join="${escapeHtml(item.id)}">Solicitar entrada</button></article>
+  const hasLegacyClan = Boolean(clan) && !myOnlineClan && !clan?.id;
+  const isAffiliated = Boolean(myOnlineClan || (clan && clan.id && !hasLegacyClan));
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // 1. TELA DE JOGADOR SEM CLÃ (Recrutamento & Fundação de Casa)
+  // ═══════════════════════════════════════════════════════════════════════════
+  if (!isAffiliated) {
+    const collectiveContracts = ClanSocialService.getCollectiveContracts();
+    const contractIcons = {
+      monster_hunt: '⚔️',
+      treasury_donation: '🪙',
+      expedition_conquest: '🗺️'
+    };
+
+    const contractsPreviewHtml = collectiveContracts.map(c => `
+      <article class="clan-portal__contract-card">
+        <div>
+          <div class="clan-portal__contract-top">
+            <div class="clan-portal__contract-icon">${contractIcons[c.id] || '✦'}</div>
+            <div class="clan-portal__contract-title">
+              <h4>${escapeHtml(c.name)}</h4>
+              <p>${escapeHtml(c.desc)}</p>
+            </div>
+          </div>
+          <div class="clan-portal__contract-progress">
+            <div class="clan-portal__progress-labels">
+              <span>Meta Coletiva</span>
+              <strong>0 / ${c.target.toLocaleString()}</strong>
+            </div>
+            <div class="clan-portal__progress-bar">
+              <div class="clan-portal__progress-fill" style="width: 0%;"></div>
+            </div>
+          </div>
+        </div>
+        <div class="clan-portal__contract-reward">
+          🎁 Recompensa: <strong>${escapeHtml(c.rewardDesc)}</strong>
+        </div>
+      </article>
     `).join('');
+
+    const recruitingCards = portalState.clans.map(item => `
+      <article class="clan-portal__directory-card">
+        <div class="clan-portal__directory-info">
+          <div class="clan-portal__directory-crest">♜</div>
+          <div class="clan-portal__directory-meta">
+            <h4>${escapeHtml(item.name)}</h4>
+            <p>${escapeHtml(item.description || 'Estandarte imperial erguido no reino de Aden.')}</p>
+            <div class="clan-portal__directory-tags">
+              <span class="clan-portal__directory-tag">NÍVEL ${Number(item.level) || 1}</span>
+              <span class="clan-portal__directory-tag" style="color:#86efac; border-color:rgba(74,222,128,0.3); background:rgba(34,197,94,0.15);">Recrutamento Aberto</span>
+            </div>
+          </div>
+        </div>
+        <button class="clan-portal__cta-btn" style="min-height:36px; padding:6px 16px; font-size:11.5px;" data-clan-join="${escapeHtml(item.id)}">
+          ✦ Solicitar entrada
+        </button>
+      </article>
+    `).join('');
+
     container.innerHTML = `
-      <main class="clan-portal clan-portal--unaffiliated" aria-labelledby="clan-portal-title">
+      <main class="clan-portal" aria-labelledby="clan-portal-title">
+        <!-- Hero Header -->
         <header class="clan-portal__hero">
-          <div class="clan-portal__eyebrow">CRÔNICAS DE ADEN · CASAS DO REINO</div>
+          <div class="clan-portal__eyebrow">
+            <span>✦</span> CRÔNICAS DE ADEN · CASAS DO REINO <span>✦</span>
+          </div>
           <div class="clan-portal__hero-row">
             <div>
               <h2 id="clan-portal-title">Clãs &amp; Alianças</h2>
-              <p>Seu legado começa com um juramento — e cresce com os aliados que o mantêm.</p>
+              <p>Seu legado começa com um juramento — e cresce com os aliados que o mantêm sob o mesmo estandarte.</p>
             </div>
-            <span class="clan-portal__sigil" aria-hidden="true">♜</span>
+            <div class="clan-portal__sigil-wrap" aria-hidden="true">
+              <span class="clan-portal__sigil">♜</span>
+            </div>
           </div>
-          <div class="clan-portal__status"><i></i> ${hasLegacyClan ? 'DADOS LOCAIS ANTIGOS' : 'SEM CLÃ'} <span>•</span> ${hasLegacyClan ? 'Este vínculo não foi sincronizado com o reino online' : 'Nenhum vínculo online foi encontrado'}</div>
+          <div class="clan-portal__status-bar">
+            <div class="clan-portal__status">
+              <i></i> ${hasLegacyClan ? 'DADOS LOCAIS ANTIGOS' : 'SEM CLÃ'} <span>•</span> ${hasLegacyClan ? 'Este vínculo não foi sincronizado com o reino online (não representam um clã compartilhado)' : 'Nenhum vínculo online foi encontrado'}
+            </div>
+          </div>
         </header>
-        <section class="clan-portal__empty" aria-label="Estado do personagem">
-          <div class="clan-portal__empty-mark" aria-hidden="true">⚔</div>
-          <div>
-            <h3>${hasLegacyClan ? 'Seu antigo clã ainda não existe no reino online' : 'Escolha onde sua bandeira será erguida'}</h3>
-            <p>${hasLegacyClan ? 'O save contém dados do sistema legado, mas eles não representam um clã compartilhado. Para evitar membros e conquistas fictícias, entre em um clã online ou funde um novo.' : 'Crie uma casa para reunir aliados ou entre em um clã que esteja recrutando. A associação é compartilhada pela conta, não simulada no save local.'}</p>
+
+        ${hasLegacyClan ? `
+          <div class="clan-portal__notice" role="status">
+            <span style="font-size:18px;">📜</span>
+            <div>
+              <strong>Vínculo Local Detectado:</strong> O save contém dados de um clã antigo ("${escapeHtml(clan.name)}"), mas eles não representam um clã compartilhado no reino online. Para reunir aventureiros reais e evitar membros fictícios, funde seu clã online abaixo ou ingresse em uma casa existente.
+            </div>
           </div>
-        </section>
+        ` : ''}
+
+        ${portalState.error ? `
+          <div class="clan-portal__error" role="alert">
+            <span style="font-size:16px;">⚠️</span>
+            <span>${escapeHtml(portalState.error)}</span>
+          </div>
+        ` : ''}
+
+        ${portalState.notice ? `
+          <div class="clan-portal__notice" role="status">
+            <span style="font-size:16px;">✦</span>
+            <span>${escapeHtml(portalState.notice)}</span>
+          </div>
+        ` : ''}
+
+        <!-- Two-Column War Council Layout -->
         <section class="clan-portal__actions" aria-label="Ações de clã">
-          <form class="clan-portal__create-form" id="clan-create-form">
-            <label>Fundar um clã<input name="name" minlength="3" maxlength="24" placeholder="Nome do clã" required></label>
-            <label>Apresentação<input name="description" maxlength="280" placeholder="O que une sua irmandade?"></label>
-            <label class="clan-portal__recruiting"><input name="recruiting" type="checkbox" checked> Aceitar novos membros</label>
-            <button type="submit">Erguer estandarte</button>
-          </form>
-          <div class="clan-portal__directory"><div class="clan-portal__directory-heading"><div><span>REINO DE ADEN</span><h3>Clãs recrutando</h3></div><button type="button" data-clan-refresh>↻ Atualizar</button></div>
-            ${!portalState.loaded || portalState.loading ? '<p class="clan-portal__muted">Consultando o reino…</p>' : (recruitingCards || '<p class="clan-portal__muted">Nenhum clã recrutando apareceu ainda.</p>')}
+          <!-- Coluna 1: Fundar Casa de Guerra -->
+          <article class="clan-portal__create-card">
+            <div class="clan-portal__card-header">
+              <div>
+                <span>ESTANDARTE IMPERIAL</span>
+                <h3><span>✦</span> Fundar um clã</h3>
+              </div>
+            </div>
+            <p class="clan-portal__card-desc">
+              Inicie sua dinastia em Aden. Reúna irmãos de armas sob o mesmo estandarte para desbloquear contratos coletivos, tributos e guerras de cerco.
+            </p>
+            <form class="clan-portal__form" id="clan-create-form">
+              <div class="clan-portal__field">
+                <label for="clan-name-input">Nome do Clã</label>
+                <input class="clan-portal__input" id="clan-name-input" name="name" minlength="3" maxlength="24" placeholder="Ex: Cavaleiros da Alvorada" value="${escapeHtml(hasLegacyClan ? clan.name : '')}" required>
+              </div>
+              <div class="clan-portal__field">
+                <label for="clan-desc-input">Lema &amp; Apresentação</label>
+                <input class="clan-portal__input" id="clan-desc-input" name="description" maxlength="280" placeholder="O que une sua irmandade? Ex: Pela Glória de Aden!" value="${escapeHtml(hasLegacyClan ? (clan.motto || '') : '')}">
+              </div>
+              <label class="clan-portal__toggle-wrap">
+                <input class="clan-portal__toggle-input" name="recruiting" type="checkbox" checked>
+                <div class="clan-portal__toggle-label">
+                  <span class="clan-portal__toggle-title">Aceitar novos membros (Recrutamento Aberto)</span>
+                  <span class="clan-portal__toggle-sub">Permite que outros aventureiros ingressem diretamente na casa</span>
+                </div>
+              </label>
+              <button class="clan-portal__cta-btn" type="submit">
+                ⚔️ Erguer Estandarte
+              </button>
+            </form>
+          </article>
+
+          <!-- Coluna 2: Salão de Recrutamento -->
+          <article class="clan-portal__directory">
+            <div class="clan-portal__card-header">
+              <div>
+                <span>REINO DE ADEN</span>
+                <h3><span>♜</span> Clãs recrutando</h3>
+              </div>
+              <button type="button" class="clan-portal__secondary-btn" data-clan-refresh>
+                ↻ Atualizar
+              </button>
+            </div>
+            <div class="clan-portal__directory-list">
+              ${!portalState.loaded || portalState.loading ? `
+                <div class="clan-portal__empty-state">
+                  <div style="font-size:26px; animation: clanPulseEmber 1.5s infinite;">⏳</div>
+                  <div class="clan-portal__empty-title">Consultando o reino…</div>
+                  <div class="clan-portal__empty-text">Buscando os estandartes ativos nos territórios de Aden.</div>
+                </div>
+              ` : (recruitingCards || `
+                <div class="clan-portal__empty-state">
+                  <div class="clan-portal__empty-icon">🛡️</div>
+                  <div class="clan-portal__empty-title">Nenhum clã recrutando apareceu ainda</div>
+                  <div class="clan-portal__empty-text">Seja o primeiro soberano a erguer um estandarte imperial ou convide seus aliados para fundar uma nova casa de guerra!</div>
+                </div>
+              `)}
+            </div>
+          </article>
+        </section>
+
+        <!-- Seção: Contratos Coletivos de Temporada (Prévia) -->
+        <section class="clan-portal__contracts-section" aria-label="Contratos de clã">
+          <div class="clan-portal__section-header">
+            <span class="clan-portal__eyebrow">OBJETIVOS DE LANÇAMENTO · TEMPORADA 1</span>
+            <h3><span>✦</span> Contratos Coletivos de Temporada</h3>
+            <p>Metas semanais cumpridas por todos os integrantes da casa. Ao atingir o objetivo, todo o clã recebe bênçãos ativas de combate e tributos!</p>
+          </div>
+          <div class="clan-portal__contracts-grid">
+            ${contractsPreviewHtml}
           </div>
         </section>
-        ${portalState.error ? `<p class="clan-portal__error" role="alert">${escapeHtml(portalState.error)}</p>` : ''}
-        ${portalState.notice ? `<p class="clan-portal__notice" role="status">${escapeHtml(portalState.notice)}</p>` : ''}
-        <section class="clan-portal__systems" aria-label="Sistemas de clã">
-          <article><span>01 · COMUNIDADE</span><h3>Clã &amp; membros</h3><p>Roster e cargos sem personagens simulados.</p></article>
-          <article><span>02 · DIPLOMACIA</span><h3>Alianças</h3><p>Laços entre clãs com liderança e convites.</p></article>
-          <article><span>03 · DOMÍNIO</span><h3>Territórios</h3><p>Controle coletivo com disputa e histórico.</p></article>
-          <article><span>04 · SEDE</span><h3>Clan Hall</h3><p>Uma sede pertencente ao clã e seus membros.</p></article>
+
+        <!-- Seção: Os 4 Pilares do Poder de Clã -->
+        <section class="clan-portal__pillars-section" aria-label="Domínios do clã">
+          <div class="clan-portal__section-header">
+            <span class="clan-portal__eyebrow">DOMÍNIOS DO REINO</span>
+            <h3><span>👑</span> Os 4 Pilares do Poder de Clã</h3>
+            <p>Sistemas e privilégios concedidos aos guerreiros sob um mesmo estandarte em Aden.</p>
+          </div>
+          <div class="clan-portal__pillars-grid">
+            <article class="clan-portal__pillar-card">
+              <span>01 · COMUNIDADE</span>
+              <h4><span>👥</span> Clã &amp; membros</h4>
+              <p>Roster transparente, cargos e hierarquia sem personagens simulados.</p>
+            </article>
+            <article class="clan-portal__pillar-card">
+              <span>02 · DIPLOMACIA</span>
+              <h4><span>🕊️</span> Alianças</h4>
+              <p>Laços formais entre clãs amigos com liderança e pactos de não-agressão.</p>
+            </article>
+            <article class="clan-portal__pillar-card">
+              <span>03 · DOMÍNIO</span>
+              <h4><span>🏰</span> Territórios &amp; Castelos</h4>
+              <p>Controle coletivo dos 5 castelos de Aden com disputas de cerco e tributos.</p>
+            </article>
+            <article class="clan-portal__pillar-card">
+              <span>04 · SEDE</span>
+              <h4><span>🏛️</span> Clan Hall</h4>
+              <p>Sede privada pertencente ao clã para canalizar bênçãos místicas dos deuses.</p>
+            </article>
+          </div>
         </section>
-        <footer class="clan-portal__footnote">A criação e o ingresso usam identidade autenticada. Progressão, alianças, territórios e Clan Hall ainda não concedem bônus nesta fase.</footer>
+
+        <footer style="margin-top:24px; text-align:center; font-size:11px; color:#64748b; font-family:'Cinzel',serif;">
+          ✦ A criação e o ingresso utilizam identidade autenticada no reino de Aden. Seu vínculo é compartilhado e sincronizado entre todos os aventureiros.
+        </footer>
       </main>
     `;
+
     const form = container.querySelector('#clan-create-form');
     if (form) form.onsubmit = async event => {
       event.preventDefault();
@@ -10583,67 +10738,136 @@ export function renderClanTab(container, state) {
       const submit = form.querySelector('button[type="submit"]');
       if (submit) submit.disabled = true;
       try {
-        await ClanSocialService.createClan({ name: values.get('name'), description: values.get('description'), recruiting: values.get('recruiting') === 'on', displayName: state.name });
-        portalState.notice = 'Clã fundado. Seu estandarte já aparece no reino.';
+        const name = values.get('name');
+        const desc = values.get('description');
+        const recruiting = values.get('recruiting') === 'on';
+        await ClanSocialService.createClan({
+          name,
+          description: desc,
+          recruiting,
+          displayName: state.name
+        });
+        state.clan = {
+          name,
+          level: 1,
+          motto: desc || 'Pela Glória e Honra de Aden!',
+          reputation: 100,
+          castles: [],
+          members: [{ uid: 'self', displayName: state.name || 'Líder', role: 'leader' }],
+          contracts: {},
+          accumulatedTaxes: {},
+          hall: { level: 1 },
+          myRole: 'leader'
+        };
+        portalState.notice = 'Clã fundado com sucesso! Seu estandarte já tremula no reino de Aden.';
         portalState.loaded = false;
         await refreshPortal();
-      } catch (error) { portalState.error = error?.message || 'Não foi possível fundar o clã.'; }
-      if (submit) submit.disabled = false;
-      if (typeof window !== 'undefined') window._clanPortalRefresh?.();
+      } catch (error) {
+        portalState.error = error?.message || 'Não foi possível fundar o clã.';
+      } finally {
+        if (submit) submit.disabled = false;
+        if (typeof window !== 'undefined') window._clanPortalRefresh?.();
+      }
     };
+
     container.querySelector('[data-clan-refresh]')?.addEventListener('click', () => {
       portalState.loaded = false;
       void refreshPortal();
     });
+
     container.querySelectorAll('[data-clan-join]').forEach(button => button.addEventListener('click', async () => {
       button.disabled = true;
       try {
         await ClanSocialService.joinClan(button.dataset.clanJoin, state.name);
-        portalState.notice = 'Você agora faz parte do clã.';
+        portalState.notice = 'Você prestou juramento e agora faz parte do clã!';
         portalState.loaded = false;
         await refreshPortal();
-      } catch (error) { portalState.error = error?.message || 'Não foi possível entrar no clã.'; }
-      if (typeof window !== 'undefined') window._clanPortalRefresh?.();
+      } catch (error) {
+        portalState.error = error?.message || 'Não foi possível entrar no clã.';
+      } finally {
+        if (typeof window !== 'undefined') window._clanPortalRefresh?.();
+      }
     }));
+
     return;
   }
 
+  // ═══════════════════════════════════════════════════════════════════════════
+  // 2. TELA DE JOGADOR COM CLÃ ATIVO (Painel da Casa de Guerra & Domínios)
+  // ═══════════════════════════════════════════════════════════════════════════
+  const activeClan = clan || state.clan;
   const root = getRoot();
   const activeSubTab = (typeof window !== 'undefined' && window._activeClanSubTab) || 'skills';
 
-  // Atualizar geração periódica somente sobre um território do clã existente.
+  // Atualizar geração periódica de impostos do clã sobre castelos
   ClanService.updateTaxesTick(state);
-  const lvlData = clanStatus.levelData;
-  const nextLvl = clanStatus.nextLevelData;
+  const lvlData = clanStatus.levelData || CLAN_LEVEL_DATA[activeClan.level] || CLAN_LEVEL_DATA[1];
+  const nextLvl = clanStatus.nextLevelData || CLAN_LEVEL_DATA[(activeClan.level || 1) + 1] || null;
+  const members = Array.isArray(activeClan.members) ? activeClan.members : [];
+  const myRole = activeClan.myRole || (members.find(m => m.uid === 'self' || m.displayName === state.name)?.role) || 'member';
+
+  // Progresso dos Contratos Coletivos de Temporada
+  const contractsProgress = ClanService.getClanContractsProgress(state);
+  const contractIcons = {
+    monster_hunt: '⚔️',
+    treasury_donation: '🪙',
+    expedition_conquest: '🗺️'
+  };
+
+  const contractsHtml = contractsProgress.map(c => `
+    <article class="clan-portal__contract-card ${c.completed ? 'clan-portal__contract-card--completed' : ''}">
+      <div>
+        <div class="clan-portal__contract-top">
+          <div class="clan-portal__contract-icon">${contractIcons[c.id] || '✦'}</div>
+          <div class="clan-portal__contract-title">
+            <h4>${escapeHtml(c.name)}</h4>
+            <p>${escapeHtml(c.desc)}</p>
+          </div>
+        </div>
+        <div class="clan-portal__contract-progress">
+          <div class="clan-portal__progress-labels">
+            <span>Progresso da Casa</span>
+            <strong>${c.current.toLocaleString()} / ${c.target.toLocaleString()} (${c.percent}%)</strong>
+          </div>
+          <div class="clan-portal__progress-bar">
+            <div class="clan-portal__progress-fill ${c.completed ? 'clan-portal__progress-fill--completed' : ''}" style="width: ${c.percent}%;"></div>
+          </div>
+        </div>
+      </div>
+      <div class="clan-portal__contract-reward" style="${c.completed ? 'background:rgba(34,197,94,0.2); border-color:#4ade80; color:#bbf7d0;' : ''}">
+        ${c.completed ? '✓ CONCLUÍDO (BÊNÇÃO ATIVA 24H)' : `🎁 Recompensa: <strong>${escapeHtml(c.rewardDesc)}</strong>`}
+      </div>
+    </article>
+  `).join('');
 
   let subContentHtml = '';
 
   // 1. Sub-aba: Habilidades de Clã
   if (activeSubTab === 'skills') {
     const skillsHtml = Object.values(CLAN_SKILLS).map(sk => {
-      const isUnlocked = clan.level >= sk.levelReq;
+      const isUnlocked = (activeClan.level || 1) >= sk.levelReq;
       const statusBadge = isUnlocked
-        ? `<span style="color:#4ade80; font-size:11px; font-weight:bold;">✓ Ativa</span>`
+        ? `<span style="color:#4ade80; font-size:11px; font-weight:bold;">✓ Ativa na Casa</span>`
         : `<span style="color:#94a3b8; font-size:11px;">🔒 Requer Clã Lv. ${sk.levelReq}</span>`;
 
       return `
-        <div style="background:rgba(0,0,0,0.45); border:1px solid ${isUnlocked ? 'rgba(74,222,128,0.3)' : 'rgba(255,255,255,0.08)'}; border-radius:8px; padding:12px; display:flex; align-items:center; gap:12px;">
-          <div style="width:40px; height:40px; border-radius:6px; background:#18181b; border:1px solid ${isUnlocked ? '#4ade80' : '#3f3f46'}; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-            <img src="${getAssetUrl(sk.icon.startsWith('img/') || sk.icon.startsWith('assets/') || sk.icon.startsWith('/') ? sk.icon : 'img/icons/' + sk.icon)}" style="width:32px; height:32px; object-fit:contain; filter:${isUnlocked ? 'none' : 'grayscale(100%) opacity(0.5)'};" onerror="this.style.display='none'" />
+        <div style="background:rgba(6,9,14,0.7); border:1px solid ${isUnlocked ? 'rgba(74,222,128,0.35)' : 'rgba(215,181,109,0.15)'}; border-radius:10px; padding:14px; display:flex; align-items:center; gap:14px; box-shadow:0 4px 14px rgba(0,0,0,0.3);">
+          <div style="width:44px; height:44px; border-radius:8px; background:#121824; border:1px solid ${isUnlocked ? '#4ade80' : '#334155'}; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+            <img src="${getAssetUrl(sk.icon.startsWith('img/') || sk.icon.startsWith('assets/') || sk.icon.startsWith('/') ? sk.icon : 'img/icons/' + sk.icon)}" style="width:34px; height:34px; object-fit:contain; filter:${isUnlocked ? 'none' : 'grayscale(100%) opacity(0.4)'};" onerror="this.style.display='none'" />
           </div>
           <div style="flex:1;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2px;">
-              <span style="font-family:'Cinzel',serif; font-size:13px; font-weight:bold; color:${isUnlocked ? '#fef08a' : '#94a3b8'};">${sk.name}</span>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+              <span style="font-family:'Cinzel',serif; font-size:14px; font-weight:bold; color:${isUnlocked ? '#fef08a' : '#94a3b8'};">${sk.name}</span>
               ${statusBadge}
             </div>
-            <div style="font-size:11px; color:#cbd5e1; line-height:1.35;">${sk.desc}</div>
+            <div style="font-size:11.5px; color:#cbd5e1; line-height:1.4;">${sk.desc}</div>
           </div>
         </div>
       `;
     }).join('');
 
     subContentHtml = `
-      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:10px;">
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:12px;">
         ${skillsHtml}
       </div>
     `;
@@ -10651,18 +10875,18 @@ export function renderClanTab(container, state) {
   // 2. Sub-aba: Castelos & Tributos de Aden
   else if (activeSubTab === 'castles') {
     const castlesHtml = Object.values(CASTLES).map(c => {
-      const isOwned = clan.castles?.includes(c.id);
-      const accTax = clan.accumulatedTaxes?.[c.id] || 0;
+      const isOwned = (activeClan.castles || []).includes(c.id);
+      const accTax = activeClan.accumulatedTaxes?.[c.id] || 0;
 
       return `
-        <div style="background:rgba(0,0,0,0.45); border:1px solid ${isOwned ? 'rgba(234,179,8,0.5)' : 'rgba(255,255,255,0.08)'}; border-radius:8px; padding:14px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; gap:12px;">
+        <div style="background:rgba(6,9,14,0.7); border:1px solid ${isOwned ? 'rgba(234,179,8,0.5)' : 'rgba(215,181,109,0.18)'}; border-radius:10px; padding:16px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; gap:14px; box-shadow:0 4px 16px rgba(0,0,0,0.3);">
           <div style="flex:1;">
             <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
-              <span style="font-family:'Cinzel',serif; font-size:14px; font-weight:bold; color:${isOwned ? '#fde047' : '#e2e8f0'};">${c.name}</span>
+              <span style="font-family:'Cinzel',serif; font-size:15px; font-weight:bold; color:${isOwned ? '#fde047' : '#e2e8f0'};">${c.name}</span>
               ${isOwned ? '<span style="background:rgba(234,179,8,0.2); border:1px solid #eab308; color:#fde047; font-size:10.5px; padding:2px 8px; border-radius:10px; font-weight:bold;">👑 Sob Seu Comando</span>' : '<span style="color:#94a3b8; font-size:11px;">Sem Senhor / Neutro</span>'}
             </div>
-            <div style="font-size:11.5px; color:#cbd5e1; margin-bottom:6px;">${c.desc}</div>
-            <div style="font-size:11px; color:#94a3b8; display:flex; gap:14px; flex-wrap:wrap;">
+            <div style="font-size:11.5px; color:#cbd5e1; margin-bottom:8px;">${c.desc}</div>
+            <div style="font-size:11px; color:#94a3b8; display:flex; gap:16px; flex-wrap:wrap;">
               <span>📊 Taxa de Comércio: <strong style="color:#fde047;">${c.taxRatePercent}%</strong></span>
               <span>💰 Renda: <strong style="color:#a3e635;">${c.adenaPerMinute.toLocaleString()} Adena/min</strong></span>
               <span>⚔️ Nível Recomendado: <strong>Lv. ${c.reqCharLevel}+</strong></span>
@@ -10677,14 +10901,16 @@ export function renderClanTab(container, state) {
             ${isOwned ? `
               <button
                 onclick="window.claimCastleTaxesAction('${c.id}')"
-                style="padding:8px 16px; font-size:11px; font-weight:bold; background:linear-gradient(180deg,#16a34a,#15803d); border:1px solid #4ade80; color:#fff; border-radius:6px; cursor:pointer;"
+                class="clan-portal__cta-btn"
+                style="background:linear-gradient(180deg,#16a34a,#15803d); border-color:#4ade80; min-height:36px; padding:8px 16px; font-size:11px;"
               >
                 💰 Recolher Tributos
               </button>
             ` : `
               <button
                 onclick="window.startCastleSiegeAction('${c.id}')"
-                style="padding:8px 16px; font-size:11px; font-weight:bold; background:linear-gradient(180deg,#b91c1c,#991b1b); border:1px solid #ef4444; color:#fff; border-radius:6px; cursor:pointer;"
+                class="clan-portal__cta-btn"
+                style="background:linear-gradient(180deg,#b91c1c,#991b1b); border-color:#ef4444; min-height:36px; padding:8px 16px; font-size:11px;"
               >
                 ⚔️ Declarar Cerco
               </button>
@@ -10702,13 +10928,14 @@ export function renderClanTab(container, state) {
 
     if (!siege || siege.isCompleted) {
       subContentHtml = `
-        <div style="text-align:center; padding:30px; background:rgba(0,0,0,0.3); border-radius:8px; border:1px dashed rgba(255,255,255,0.1);">
-          <div style="font-size:36px; margin-bottom:8px;">🏰</div>
-          <div style="font-family:'Cinzel',serif; font-size:15px; color:#e2e8f0; margin-bottom:6px;">Nenhum Cerco Ativo no Momento</div>
-          <div style="font-size:12px; color:#94a3b8; margin-bottom:14px;">Vá até a aba "Castelos &amp; Tributos" e declare guerra a um dos 5 castelos de Aden!</div>
+        <div style="text-align:center; padding:36px 20px; background:rgba(6,9,14,0.5); border-radius:10px; border:1px dashed rgba(215,181,109,0.25);">
+          <div style="font-size:42px; margin-bottom:10px;">🏰</div>
+          <div style="font-family:'Cinzel',serif; font-size:16px; color:#e2e8f0; margin-bottom:6px; font-weight:bold;">Nenhum Cerco Ativo no Momento</div>
+          <div style="font-size:12px; color:#94a3b8; margin-bottom:16px;">Vá até a aba "Castelos &amp; Tributos" e declare guerra a um dos 5 castelos de Aden!</div>
           <button
             onclick="window.setClanSubTab('castles')"
-            style="padding:8px 16px; font-size:11.5px; font-weight:bold; background:linear-gradient(180deg,#ca8a04,#a16207); border:1px solid #fde047; color:#fff; border-radius:6px; cursor:pointer;"
+            class="clan-portal__cta-btn"
+            style="min-height:38px; padding:8px 18px; font-size:11.5px;"
           >
             Ver Castelos Disponíveis
           </button>
@@ -10726,33 +10953,34 @@ export function renderClanTab(container, state) {
       const hpPercent = Math.min(100, Math.max(0, Math.round((hpCurrent / hpMax) * 100)));
 
       subContentHtml = `
-        <div style="background:rgba(0,0,0,0.5); border:1px solid #ef4444; border-radius:8px; padding:16px; margin-bottom:14px;">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <div style="background:rgba(6,9,14,0.7); border:1px solid #ef4444; border-radius:10px; padding:18px; margin-bottom:14px; box-shadow:0 0 20px rgba(239,68,68,0.25);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:10px;">
             <div>
               <div style="font-family:'Cinzel',serif; font-size:16px; font-weight:bold; color:#f87171;">⚔️ CERCO ATIVO: ${siege.castleName}</div>
-              <div style="font-size:12px; color:#fde047; font-weight:bold;">${phaseNames[siege.phase]}</div>
+              <div style="font-size:12px; color:#fde047; font-weight:bold; margin-top:2px;">${phaseNames[siege.phase]}</div>
             </div>
             <button
               onclick="window.executeSiegeTurnAction()"
-              style="padding:10px 20px; font-family:'Cinzel',serif; font-size:13px; font-weight:bold; background:linear-gradient(180deg,#dc2626,#b91c1c); border:1px solid #f87171; color:#fff; border-radius:6px; cursor:pointer; box-shadow:0 0 12px rgba(239,68,68,0.5);"
+              class="clan-portal__cta-btn"
+              style="background:linear-gradient(180deg,#dc2626,#b91c1c); border-color:#f87171; box-shadow:0 0 16px rgba(239,68,68,0.5);"
             >
               ${siege.phase === 3 ? '✨ Canalizar Seal of Ruler' : '⚔️ Desferir Ataque do Clã'}
             </button>
           </div>
 
           <!-- Barra de Progresso da Fase -->
-          <div style="margin-bottom:12px;">
-            <div style="display:flex; justify-content:space-between; font-size:11px; color:#cbd5e1; margin-bottom:4px;">
+          <div style="margin-bottom:14px;">
+            <div style="display:flex; justify-content:space-between; font-size:11px; color:#cbd5e1; margin-bottom:4px; font-family:'Cinzel',serif;">
               <span>${siege.phase === 3 ? 'Progresso do Selo Sagrado' : 'HP do Alvo'}</span>
-              <span>${hpCurrent.toLocaleString()} / ${hpMax.toLocaleString()} (${hpPercent}%)</span>
+              <strong>${hpCurrent.toLocaleString()} / ${hpMax.toLocaleString()} (${hpPercent}%)</strong>
             </div>
-            <div style="width:100%; height:12px; background:#18181b; border-radius:6px; overflow:hidden; border:1px solid #3f3f46;">
+            <div style="width:100%; height:12px; background:#080a0e; border-radius:6px; overflow:hidden; border:1px solid #334155;">
               <div style="width:${hpPercent}%; height:100%; background:${siege.phase === 3 ? 'linear-gradient(90deg,#eab308,#fde047)' : 'linear-gradient(90deg,#ef4444,#dc2626)'}; transition:width 0.3s ease;"></div>
             </div>
           </div>
 
           <!-- Log do Cerco -->
-          <div style="background:#09090b; border:1px solid #27272a; border-radius:6px; padding:10px; max-height:140px; overflow-y:auto; font-family:monospace; font-size:11px; color:#cbd5e1;">
+          <div style="background:#05070a; border:1px solid #1e293b; border-radius:6px; padding:10px; max-height:140px; overflow-y:auto; font-family:monospace; font-size:11px; color:#cbd5e1;">
             ${(siege.logs || []).map(l => `<div style="margin-bottom:3px;">${l}</div>`).join('')}
           </div>
         </div>
@@ -10762,20 +10990,21 @@ export function renderClanTab(container, state) {
   // 4. Sub-aba: Loja do Castelo
   else if (activeSubTab === 'shop') {
     const shopHtml = CASTLE_SHOP_CATALOG.map(item => `
-      <div style="background:rgba(0,0,0,0.45); border:1px solid rgba(234,179,8,0.3); border-radius:8px; padding:12px; display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:10px;">
-        <div style="display:flex; align-items:center; gap:10px;">
-          <div style="width:40px; height:40px; border-radius:6px; background:#18181b; border:1px solid #eab308; display:flex; align-items:center; justify-content:center;">
-            <img src="${getAssetUrl(item.icon.startsWith('img/') || item.icon.startsWith('assets/') || item.icon.startsWith('/') ? item.icon : 'img/icons/' + item.icon)}" style="width:32px; height:32px; object-fit:contain;" onerror="this.style.display='none'" />
+      <div style="background:rgba(6,9,14,0.7); border:1px solid rgba(215,181,109,0.2); border-radius:10px; padding:14px; display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:10px; box-shadow:0 4px 14px rgba(0,0,0,0.3);">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <div style="width:44px; height:44px; border-radius:8px; background:#121824; border:1px solid rgba(215,181,109,0.35); display:flex; align-items:center; justify-content:center;">
+            <img src="${getAssetUrl(item.icon.startsWith('img/') || item.icon.startsWith('assets/') || item.icon.startsWith('/') ? item.icon : 'img/icons/' + item.icon)}" style="width:34px; height:34px; object-fit:contain;" onerror="this.style.display='none'" />
           </div>
           <div>
-            <div style="font-family:'Cinzel',serif; font-size:13px; font-weight:bold; color:#fde047;">${item.name}</div>
+            <div style="font-family:'Cinzel',serif; font-size:13.5px; font-weight:bold; color:#fde047;">${item.name}</div>
             <div style="font-size:11px; color:#cbd5e1;">${item.desc}</div>
             <div style="font-size:11px; color:#a3e635; font-weight:bold; margin-top:2px;">Preço: ${item.priceAdena.toLocaleString()} Adena</div>
           </div>
         </div>
         <button
           onclick="window.buyCastleShopItemAction('${item.id}')"
-          style="padding:6px 14px; font-size:11px; font-weight:bold; background:linear-gradient(180deg,#ca8a04,#a16207); border:1px solid #fde047; color:#fff; border-radius:6px; cursor:pointer;"
+          class="clan-portal__cta-btn"
+          style="min-height:34px; padding:6px 16px; font-size:11px;"
         >
           Comprar
         </button>
@@ -10787,28 +11016,34 @@ export function renderClanTab(container, state) {
   // 5. Sub-aba: Membros & Doações
   else if (activeSubTab === 'roster') {
     const roster = ClanService.getClanRoster(state);
-    const motto = clan.motto || 'Pela Glória e Honra de Aden!';
-    const rep = clan.reputation || 100;
-    const adenaDonated = clan.donationsAdena || 0;
-    const spDonated = clan.donationsSp || 0;
+    const motto = activeClan.motto || 'Pela Glória e Honra de Aden!';
+    const rep = activeClan.reputation || 100;
+    const adenaDonated = activeClan.donationsAdena || 0;
+    const spDonated = activeClan.donationsSp || 0;
 
-    const rosterRows = roster.map(m => `
-      <tr style="border-bottom:1px solid rgba(255,255,255,0.06); font-size:12px;">
-        <td style="padding:10px 8px; font-weight:bold; color:${m.isPlayer ? '#fde047' : '#e2e8f0'}; display:flex; align-items:center; gap:6px;">
-          ${m.isPlayer ? '👑 ' : ''}${m.name} ${m.isPlayer ? '<span style="font-size:10px; background:rgba(234,179,8,0.25); color:#fde047; padding:1px 5px; border-radius:4px;">Você</span>' : ''}
-        </td>
-        <td style="padding:10px 8px; color:#cbd5e1;">${m.rank}</td>
-        <td style="padding:10px 8px; color:#94a3b8;">Lv. ${m.level} (${m.className})</td>
-        <td style="padding:10px 8px; text-align:right; font-weight:bold; color:#a3e635;">${m.contribution.toLocaleString()}</td>
-      </tr>
-    `).join('');
+    const rosterRows = (members.length > 0 ? members : roster).map(m => {
+      const isLeader = m.role === 'leader';
+      const isPlayer = m.isPlayer || m.uid === 'self' || m.displayName === state.name;
+      return `
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.06); font-size:12px;">
+          <td style="padding:10px 12px; font-weight:bold; color:${isPlayer ? '#fde047' : '#e2e8f0'}; display:flex; align-items:center; gap:8px;">
+            <span>${isLeader ? '♛' : '⚔'}</span>
+            <span>${escapeHtml(m.displayName || m.name || 'Guerreiro')}</span>
+            ${isPlayer ? '<span style="font-size:9.5px; background:rgba(234,179,8,0.25); color:#fde047; padding:1px 6px; border-radius:4px;">Você</span>' : ''}
+          </td>
+          <td style="padding:10px 12px; color:#cbd5e1; font-family:'Cinzel',serif;">${isLeader ? 'Líder / Soberano' : (m.rank || 'Membro')}</td>
+          <td style="padding:10px 12px; color:#94a3b8;">${m.level ? `Lv. ${m.level}` : 'Online'} ${m.className ? `(${m.className})` : ''}</td>
+          <td style="padding:10px 12px; text-align:right; font-weight:bold; color:#a3e635;">${(m.contribution || 0).toLocaleString()}</td>
+        </tr>
+      `;
+    }).join('');
 
     subContentHtml = `
       <!-- Motto & Renomear Clã Card -->
-      <div style="background:rgba(0,0,0,0.45); border:1px solid rgba(234,179,8,0.25); border-radius:8px; padding:14px; margin-bottom:14px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+      <div style="background:rgba(6,9,14,0.7); border:1px solid rgba(215,181,109,0.25); border-radius:10px; padding:16px; margin-bottom:14px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
         <div>
-          <div style="font-family:'Cinzel',serif; font-size:13.5px; font-weight:bold; color:#fde047; margin-bottom:4px;">
-            📜 Lema do Clã: <span style="font-style:italic; color:#e2e8f0;">"${motto}"</span>
+          <div style="font-family:'Cinzel',serif; font-size:14px; font-weight:bold; color:#fde047; margin-bottom:4px;">
+            📜 Lema do Clã: <span style="font-style:italic; color:#e2e8f0;">"${escapeHtml(motto)}"</span>
           </div>
           <div style="font-size:11.5px; color:#94a3b8; display:flex; gap:16px; flex-wrap:wrap;">
             <span>🛡️ Reputação de Clã: <strong style="color:#fde047;">${rep.toLocaleString()} CRP</strong></span>
@@ -10816,50 +11051,57 @@ export function renderClanTab(container, state) {
             <span>✨ Doação Total de SP: <strong style="color:#38bdf8;">${spDonated.toLocaleString()}</strong></span>
           </div>
         </div>
-        <button
-          onclick="const n = prompt('Novo lema do clã:', '${motto}'); if (n) window.createOrEditClanAction('${clan.name}', n);"
-          style="padding:6px 14px; font-size:11px; font-weight:bold; background:linear-gradient(180deg,#ca8a04,#a16207); border:1px solid #fde047; color:#fff; border-radius:6px; cursor:pointer;"
-        >
-          ✏️ Editar Lema
-        </button>
+        ${myRole === 'leader' ? `
+          <button
+            onclick="const n = prompt('Novo lema do clã:', '${escapeHtml(motto)}'); if (n) window.createOrEditClanAction('${escapeHtml(activeClan.name)}', n);"
+            class="clan-portal__secondary-btn"
+          >
+            ✏️ Editar Lema
+          </button>
+        ` : ''}
       </div>
 
       <!-- Doações Rápidas -->
-      <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:14px; margin-bottom:14px;">
-        <div style="font-family:'Cinzel',serif; font-size:13px; font-weight:bold; color:#fde047; margin-bottom:8px;">
+      <div style="background:rgba(6,9,14,0.65); border:1px solid rgba(215,181,109,0.18); border-radius:10px; padding:16px; margin-bottom:14px;">
+        <div style="font-family:'Cinzel',serif; font-size:13.5px; font-weight:bold; color:#fde047; margin-bottom:6px;">
           🤝 Fundo do Clã &amp; Doações
         </div>
-        <div style="font-size:11.5px; color:#94a3b8; margin-bottom:10px;">
+        <div style="font-size:11.5px; color:#94a3b8; margin-bottom:12px;">
           Doe Adena e Pontos de SP para aumentar a Reputação do Clã e financiar melhorias e bênçãos do Clan Hall.
         </div>
         <div style="display:flex; gap:8px; flex-wrap:wrap;">
           <button
             onclick="window.donateToClanAction(50000, 0)"
-            style="padding:6px 12px; font-size:11px; background:rgba(34,197,94,0.15); border:1px solid #22c55e; color:#4ade80; border-radius:6px; cursor:pointer;"
+            class="clan-portal__secondary-btn"
+            style="border-color:#22c55e; color:#86efac; background:rgba(34,197,94,0.15);"
           >
             💰 Doar 50.000 Adena (+10 Rep)
           </button>
           <button
             onclick="window.donateToClanAction(250000, 0)"
-            style="padding:6px 12px; font-size:11px; background:rgba(34,197,94,0.2); border:1px solid #22c55e; color:#4ade80; border-radius:6px; cursor:pointer;"
+            class="clan-portal__secondary-btn"
+            style="border-color:#22c55e; color:#86efac; background:rgba(34,197,94,0.2);"
           >
             💰 Doar 250.000 Adena (+50 Rep)
           </button>
           <button
             onclick="window.donateToClanAction(1000000, 0)"
-            style="padding:6px 12px; font-size:11px; background:rgba(34,197,94,0.3); border:1px solid #22c55e; color:#86efac; border-radius:6px; cursor:pointer; font-weight:bold;"
+            class="clan-portal__secondary-btn"
+            style="border-color:#22c55e; color:#86efac; background:rgba(34,197,94,0.25); font-weight:bold;"
           >
             💰 Doar 1.000.000 Adena (+200 Rep)
           </button>
           <button
             onclick="window.donateToClanAction(0, 5000)"
-            style="padding:6px 12px; font-size:11px; background:rgba(56,189,248,0.15); border:1px solid #38bdf8; color:#38bdf8; border-radius:6px; cursor:pointer;"
+            class="clan-portal__secondary-btn"
+            style="border-color:#38bdf8; color:#7dd3fc; background:rgba(56,189,248,0.15);"
           >
             ✨ Doar 5.000 SP (+50 Rep)
           </button>
           <button
             onclick="window.donateToClanAction(0, 20000)"
-            style="padding:6px 12px; font-size:11px; background:rgba(56,189,248,0.25); border:1px solid #38bdf8; color:#7dd3fc; border-radius:6px; cursor:pointer; font-weight:bold;"
+            class="clan-portal__secondary-btn"
+            style="border-color:#38bdf8; color:#7dd3fc; background:rgba(56,189,248,0.2); font-weight:bold;"
           >
             ✨ Doar 20.000 SP (+200 Rep)
           </button>
@@ -10867,18 +11109,18 @@ export function renderClanTab(container, state) {
       </div>
 
       <!-- Tabela de Membros -->
-      <div style="background:rgba(0,0,0,0.45); border:1px solid rgba(255,255,255,0.08); border-radius:8px; overflow:hidden;">
-        <table style="width:100%; border-collapse:collapse; text-align:left;">
+      <div style="background:rgba(6,9,14,0.7); border:1px solid rgba(215,181,109,0.2); border-radius:10px; overflow:hidden;">
+        <table class="clan-portal__roster-table">
           <thead>
-            <tr style="background:rgba(255,255,255,0.04); border-bottom:1px solid rgba(255,255,255,0.1); font-size:11px; color:#94a3b8;">
-              <th style="padding:8px;">Membro</th>
-              <th style="padding:8px;">Cargo</th>
-              <th style="padding:8px;">Classe &amp; Nível</th>
-              <th style="padding:8px; text-align:right;">Contribuição Total</th>
+            <tr>
+              <th>Membro</th>
+              <th>Cargo</th>
+              <th>Classe &amp; Nível</th>
+              <th style="text-align:right;">Contribuição Total</th>
             </tr>
           </thead>
           <tbody>
-            ${rosterRows}
+            ${rosterRows || '<tr><td colspan="4" style="text-align:center; padding:16px; color:#94a3b8;">Nenhum membro listado.</td></tr>'}
           </tbody>
         </table>
       </div>
@@ -10892,9 +11134,9 @@ export function renderClanTab(container, state) {
       const remainingMin = isBuffActive ? Math.ceil((activeBuff.until - Date.now()) / 60000) : 0;
 
       return `
-        <div style="background:rgba(0,0,0,0.45); border:1px solid ${isBuffActive ? 'rgba(74,222,128,0.5)' : 'rgba(255,255,255,0.08)'}; border-radius:8px; padding:14px; display:flex; justify-content:space-between; align-items:center; gap:12px;">
+        <div style="background:rgba(6,9,14,0.7); border:1px solid ${isBuffActive ? 'rgba(74,222,128,0.5)' : 'rgba(215,181,109,0.18)'}; border-radius:10px; padding:14px; display:flex; justify-content:space-between; align-items:center; gap:12px; box-shadow:0 4px 14px rgba(0,0,0,0.3);">
           <div style="display:flex; align-items:center; gap:12px;">
-            <div style="width:44px; height:44px; border-radius:8px; background:#18181b; border:1px solid ${isBuffActive ? '#4ade80' : '#3f3f46'}; display:flex; align-items:center; justify-content:center; font-size:24px;">
+            <div style="width:44px; height:44px; border-radius:8px; background:#121824; border:1px solid ${isBuffActive ? '#4ade80' : 'rgba(215,181,109,0.3)'}; display:flex; align-items:center; justify-content:center; font-size:24px;">
               ${b.icon}
             </div>
             <div>
@@ -10909,7 +11151,8 @@ export function renderClanTab(container, state) {
           <div>
             <button
               onclick="window.activateClanHallBuffAction('${b.id}')"
-              style="padding:8px 16px; font-size:11px; font-weight:bold; background:${isBuffActive ? 'linear-gradient(180deg,#059669,#047857)' : 'linear-gradient(180deg,#ca8a04,#a16207)'}; border:1px solid ${isBuffActive ? '#34d399' : '#fde047'}; color:#fff; border-radius:6px; cursor:pointer;"
+              class="clan-portal__cta-btn"
+              style="min-height:36px; padding:6px 16px; font-size:11px; ${isBuffActive ? 'background:linear-gradient(180deg,#059669,#047857); border-color:#34d399;' : ''}"
             >
               ${isBuffActive ? '🔄 Renovar Bênção' : '✨ Ativar Bênção'}
             </button>
@@ -10919,7 +11162,7 @@ export function renderClanTab(container, state) {
     }).join('');
 
     subContentHtml = `
-      <div style="background:rgba(0,0,0,0.3); border:1px solid rgba(234,179,8,0.2); border-radius:8px; padding:14px; margin-bottom:14px;">
+      <div style="background:rgba(6,9,14,0.65); border:1px solid rgba(215,181,109,0.2); border-radius:10px; padding:16px; margin-bottom:14px;">
         <div style="font-family:'Cinzel',serif; font-size:14px; font-weight:bold; color:#fde047; margin-bottom:4px;">
           🏛️ Salão Comunal do Clã (Clan Hall Privado)
         </div>
@@ -10934,79 +11177,138 @@ export function renderClanTab(container, state) {
   }
 
   container.innerHTML = `
-    <div style="padding:14px; color:#e2e8f0;">
-      <!-- Header do Clã -->
-      <div style="background:linear-gradient(135deg,rgba(161,98,7,0.25),rgba(0,0,0,0.6)); border:1px solid rgba(234,179,8,0.4); border-radius:10px; padding:16px; margin-bottom:16px; display:flex; justify-content:space-between; align-items:center; gap:14px; flex-wrap:wrap;">
-        <div style="display:flex; align-items:center; gap:14px;">
-          <div style="font-size:40px; filter:drop-shadow(0 0 10px rgba(234,179,8,0.5));">🛡️</div>
+    <main class="clan-portal" aria-labelledby="clan-portal-title">
+      <!-- Hero Header do Clã -->
+      <header class="clan-portal__hero">
+        <div class="clan-portal__eyebrow">
+          <span>✦</span> CRÔNICAS DE ADEN · CASA DO REINO ATIVA <span>✦</span>
+        </div>
+        <div class="clan-portal__hero-row">
           <div>
-            <div style="display:flex; align-items:center; gap:8px;">
-              <span style="font-family:'Cinzel',serif; font-size:18px; font-weight:bold; color:#fde047;">${clan.name}</span>
-              <span style="background:#ca8a04; color:#fff; font-size:11px; font-weight:bold; padding:2px 8px; border-radius:10px;">Nível ${clan.level} (${lvlData.title})</span>
-            </div>
-            <div style="font-size:11.5px; color:#cbd5e1; margin-top:2px;">${lvlData.desc}</div>
-            <div style="font-size:11px; color:#94a3b8; margin-top:4px;">Capacidade: <strong>${lvlData.maxMembers} membros</strong> | Castelos Governados: <strong style="color:#fde047;">${(clan.castles || []).length}</strong></div>
+            <h2 id="clan-portal-title">${escapeHtml(activeClan.name)}</h2>
+            <p style="font-style:italic; color:#e2e8f0;">"${escapeHtml(activeClan.motto || 'Pela Glória e Honra de Aden!')}"</p>
+          </div>
+          <div class="clan-portal__sigil-wrap" aria-hidden="true">
+            <span class="clan-portal__sigil">♜</span>
           </div>
         </div>
-
-        <div>
-          ${nextLvl ? `
-            <button
-              onclick="window.upgradeClanAction()"
-              style="padding:8px 16px; font-family:'Cinzel',serif; font-size:12px; font-weight:bold; background:linear-gradient(180deg,#16a34a,#15803d); border:1px solid #4ade80; color:#fff; border-radius:6px; cursor:pointer;"
-            >
-              ⬆️ Elevar Clã para Lv. ${nextLvl.level} (${nextLvl.costAdena.toLocaleString()} Adena / ${nextLvl.costSp.toLocaleString()} SP)
-            </button>
-          ` : `
-            <span style="color:#fde047; font-weight:bold; font-size:12px;">👑 Nível Máximo do Clã</span>
-          `}
+        <div class="clan-portal__status-bar">
+          <div class="clan-portal__status clan-portal__status--active">
+            <i></i> CLÃ ATIVO <span>•</span> NÍVEL ${activeClan.level || 1} (${lvlData?.title || 'Casa Imperial'})
+          </div>
+          <div class="clan-portal__badges">
+            <span class="clan-portal__badge">Cargo: <strong>${myRole === 'leader' ? '♛ Líder Supremo' : '⚔ Membro'}</strong></span>
+            <span class="clan-portal__badge">Integrantes: <strong>${members.length || 1} / ${lvlData?.maxMembers || 50}</strong></span>
+            <span class="clan-portal__badge">Reputação: <strong>${(activeClan.reputation || 100).toLocaleString()} CRP</strong></span>
+            <span class="clan-portal__badge">Castelos: <strong>${(activeClan.castles || []).length}</strong></span>
+          </div>
+          <div>
+            ${nextLvl && myRole === 'leader' ? `
+              <button
+                onclick="window.upgradeClanAction()"
+                class="clan-portal__cta-btn"
+                style="min-height:36px; padding:6px 16px; font-size:11px;"
+              >
+                ⬆️ Elevar Clã para Lv. ${nextLvl.level} (${nextLvl.costAdena.toLocaleString()} Adena / ${nextLvl.costSp.toLocaleString()} SP)
+              </button>
+            ` : (myRole === 'leader' ? `
+              <span style="color:#fde047; font-weight:bold; font-size:11px; font-family:'Cinzel',serif;">👑 Nível Máximo do Clã</span>
+            ` : `
+              <button class="clan-portal__secondary-btn clan-portal__secondary-btn--danger" data-clan-action="leave">
+                🚪 Sair do clã
+              </button>
+            `)}
+          </div>
         </div>
-      </div>
+      </header>
 
-      <!-- Sub-Abas -->
-      <div style="display:flex; gap:8px; margin-bottom:14px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:8px; flex-wrap:wrap;">
+      ${portalState.notice ? `
+        <div class="clan-portal__notice" role="status">
+          <span style="font-size:16px;">✦</span>
+          <span>${escapeHtml(portalState.notice)}</span>
+        </div>
+      ` : ''}
+
+      ${portalState.error ? `
+        <div class="clan-portal__error" role="alert">
+          <span style="font-size:16px;">⚠️</span>
+          <span>${escapeHtml(portalState.error)}</span>
+        </div>
+      ` : ''}
+
+      <!-- Contratos Coletivos de Temporada (Ativos) -->
+      <section class="clan-portal__contracts-section" style="margin-top:0; padding-top:0; border-top:none; margin-bottom:18px;" aria-label="Contratos de clã">
+        <div class="clan-portal__section-header">
+          <span class="clan-portal__eyebrow">OBJETIVOS DE GUERRA · TEMPORADA 1</span>
+          <h3><span>✦</span> Contratos Coletivos de Temporada</h3>
+          <p>Progresso conjunto dos membros da casa. Cumpra os objetivos para ativar bônus duradouros para todo o clã!</p>
+        </div>
+        <div class="clan-portal__contracts-grid">
+          ${contractsHtml}
+        </div>
+      </section>
+
+      <!-- Sub-Abas de Navegação -->
+      <nav class="clan-portal__subtabs" aria-label="Navegação da Casa">
         <button
           onclick="window.setClanSubTab('skills')"
-          style="padding:8px 14px; font-family:'Cinzel',serif; font-size:11.5px; font-weight:bold; background:${activeSubTab === 'skills' ? 'linear-gradient(180deg,#ca8a04,#a16207)' : 'rgba(0,0,0,0.4)'}; border:1px solid ${activeSubTab === 'skills' ? '#fde047' : 'rgba(255,255,255,0.1)'}; color:${activeSubTab === 'skills' ? '#fff' : '#cbd5e1'}; border-radius:6px; cursor:pointer;"
+          class="clan-portal__subtab-btn ${activeSubTab === 'skills' ? 'clan-portal__subtab-btn--active' : ''}"
         >
           🛡️ Habilidades
         </button>
         <button
           onclick="window.setClanSubTab('roster')"
-          style="padding:8px 14px; font-family:'Cinzel',serif; font-size:11.5px; font-weight:bold; background:${activeSubTab === 'roster' ? 'linear-gradient(180deg,#ca8a04,#a16207)' : 'rgba(0,0,0,0.4)'}; border:1px solid ${activeSubTab === 'roster' ? '#fde047' : 'rgba(255,255,255,0.1)'}; color:${activeSubTab === 'roster' ? '#fff' : '#cbd5e1'}; border-radius:6px; cursor:pointer;"
+          class="clan-portal__subtab-btn ${activeSubTab === 'roster' ? 'clan-portal__subtab-btn--active' : ''}"
         >
           👥 Membros &amp; Doações
         </button>
         <button
           onclick="window.setClanSubTab('hall')"
-          style="padding:8px 14px; font-family:'Cinzel',serif; font-size:11.5px; font-weight:bold; background:${activeSubTab === 'hall' ? 'linear-gradient(180deg,#ca8a04,#a16207)' : 'rgba(0,0,0,0.4)'}; border:1px solid ${activeSubTab === 'hall' ? '#fde047' : 'rgba(255,255,255,0.1)'}; color:${activeSubTab === 'hall' ? '#fff' : '#cbd5e1'}; border-radius:6px; cursor:pointer;"
+          class="clan-portal__subtab-btn ${activeSubTab === 'hall' ? 'clan-portal__subtab-btn--active' : ''}"
         >
           🏛️ Clan Hall
         </button>
         <button
           onclick="window.setClanSubTab('castles')"
-          style="padding:8px 14px; font-family:'Cinzel',serif; font-size:11.5px; font-weight:bold; background:${activeSubTab === 'castles' ? 'linear-gradient(180deg,#ca8a04,#a16207)' : 'rgba(0,0,0,0.4)'}; border:1px solid ${activeSubTab === 'castles' ? '#fde047' : 'rgba(255,255,255,0.1)'}; color:${activeSubTab === 'castles' ? '#fff' : '#cbd5e1'}; border-radius:6px; cursor:pointer;"
+          class="clan-portal__subtab-btn ${activeSubTab === 'castles' ? 'clan-portal__subtab-btn--active' : ''}"
         >
           🏰 Castelos &amp; Tributos
         </button>
         <button
           onclick="window.setClanSubTab('siege')"
-          style="padding:8px 14px; font-family:'Cinzel',serif; font-size:11.5px; font-weight:bold; background:${activeSubTab === 'siege' ? 'linear-gradient(180deg,#ca8a04,#a16207)' : 'rgba(0,0,0,0.4)'}; border:1px solid ${activeSubTab === 'siege' ? '#fde047' : 'rgba(255,255,255,0.1)'}; color:${activeSubTab === 'siege' ? '#fff' : '#cbd5e1'}; border-radius:6px; cursor:pointer;"
+          class="clan-portal__subtab-btn ${activeSubTab === 'siege' ? 'clan-portal__subtab-btn--active' : ''}"
         >
           ⚔️ Guerra de Cerco
         </button>
         <button
           onclick="window.setClanSubTab('shop')"
-          style="padding:8px 14px; font-family:'Cinzel',serif; font-size:11.5px; font-weight:bold; background:${activeSubTab === 'shop' ? 'linear-gradient(180deg,#ca8a04,#a16207)' : 'rgba(0,0,0,0.4)'}; border:1px solid ${activeSubTab === 'shop' ? '#fde047' : 'rgba(255,255,255,0.1)'}; color:${activeSubTab === 'shop' ? '#fff' : '#cbd5e1'}; border-radius:6px; cursor:pointer;"
+          class="clan-portal__subtab-btn ${activeSubTab === 'shop' ? 'clan-portal__subtab-btn--active' : ''}"
         >
           🛍️ Loja do Castelo
         </button>
-      </div>
+      </nav>
 
-      <!-- Conteúdo da Sub-Aba -->
+      <!-- Conteúdo da Sub-Aba Ativa -->
       ${subContentHtml}
-    </div>
+    </main>
   `;
+
+  const leaveButton = container.querySelector('[data-clan-action="leave"]');
+  if (leaveButton) leaveButton.onclick = async () => {
+    if (typeof window !== 'undefined' && !window.confirm('Deseja realmente sair da sua casa de guerra? Você perderá o acesso aos bônus do clã.')) return;
+    leaveButton.disabled = true;
+    try {
+      await ClanSocialService.leaveClan();
+      state.clan = null;
+      portalState.notice = 'Você se desvinculou do clã.';
+      portalState.loaded = false;
+      await refreshPortal();
+    } catch (error) {
+      portalState.error = error?.message || 'Não foi possível sair do clã.';
+    } finally {
+      if (typeof window !== 'undefined') window._clanPortalRefresh?.();
+    }
+  };
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
