@@ -23,7 +23,10 @@ export function renderHuntingUI(state) {
   const container = el('tab-hunting') || qs('#tab-hunting, .tab-hunting');
   if (!container) return;
 
-  const hState = HuntingService.getHuntingState(state);
+    const hState = HuntingService.getHuntingState(state);
+  if (hState.isHunting && container.querySelector('#hunting-qte-track')) {
+    return;
+  }
   const vigor = LifeActivityCore.getVigorState(state);
   const playerLvl = Number(state.level) || 1;
 
@@ -229,7 +232,7 @@ export function renderHuntingUI(state) {
             <span style="color:#6ee7b7; font-weight:bold;">🎯 Golpe Crítico (60-80%)</span>
             <span style="color:#f87171;">⚠️ Alerta Alto (&gt;95%)</span>
           </div>
-          <div id="hunting-qte-track" onclick="window.triggerHuntingSweetSpot()" style="position:relative; width:100%; height:20px; background:rgba(0,0,0,0.8); border-radius:10px; border:1px solid rgba(52,211,153,0.3); overflow:hidden; cursor:pointer;">
+          <div id="hunting-qte-track" onclick="window.triggerHuntingSweetSpot(event)" style="position:relative; width:100%; height:20px; background:rgba(0,0,0,0.8); border-radius:10px; border:1px solid rgba(52,211,153,0.3); overflow:hidden; cursor:pointer;">
             <div style="position:absolute; left:45%; width:50%; height:100%; background:rgba(234,179,8,0.2);"></div>
             <div style="position:absolute; left:60%; width:20%; height:100%; background:linear-gradient(90deg, #10b981, #34d399); box-shadow:0 0 10px rgba(52,211,153,0.7);"></div>
             <div id="hunting-qte-needle" class="qte-oscillating-needle" style="position:absolute; top:0; width:6px; height:100%; background:#fff; border-radius:3px; box-shadow:0 0 8px #fff; transform:translateX(-50%); pointer-events:none; animation:qteOscillate 1.8s ease-in-out infinite;"></div>
@@ -241,7 +244,7 @@ export function renderHuntingUI(state) {
 
         <div>
           <button 
-            onclick="window.triggerHuntingSweetSpot()"
+            onclick="window.triggerHuntingSweetSpot(event)"
             style="
               padding: 10px 24px;
               font-family: 'Cinzel', serif;

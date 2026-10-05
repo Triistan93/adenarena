@@ -21,7 +21,10 @@ export function renderMiningUI(state) {
   const container = el('tab-mining') || qs('#tab-mining, .tab-mining');
   if (!container) return;
 
-  const mState = MiningService.getMiningState(state);
+    const mState = MiningService.getMiningState(state);
+  if (mState.isMining && container.querySelector('#mining-qte-track')) {
+    return;
+  }
   const vigor = LifeActivityCore.getVigorState(state);
   const playerLvl = Number(state.level) || 1;
 
@@ -196,7 +199,7 @@ export function renderMiningUI(state) {
             <span style="color:#fbbf24; font-weight:bold;">🎯 Ponto Perfeito (60-80%)</span>
             <span style="color:#f87171;">⚠️ Falha (&gt;95%)</span>
           </div>
-          <div id="mining-qte-track" onclick="window.triggerMiningSweetSpot()" style="position:relative; width:100%; height:20px; background:rgba(0,0,0,0.8); border-radius:10px; border:1px solid rgba(245,158,11,0.3); overflow:hidden; cursor:pointer;">
+          <div id="mining-qte-track" onclick="window.triggerMiningSweetSpot(event)" style="position:relative; width:100%; height:20px; background:rgba(0,0,0,0.8); border-radius:10px; border:1px solid rgba(245,158,11,0.3); overflow:hidden; cursor:pointer;">
             <div style="position:absolute; left:45%; width:50%; height:100%; background:rgba(234,179,8,0.2);"></div>
             <div style="position:absolute; left:60%; width:20%; height:100%; background:linear-gradient(90deg, #d97706, #fbbf24); box-shadow:0 0 10px rgba(245,158,11,0.7);"></div>
             <div id="mining-qte-needle" class="qte-oscillating-needle" style="position:absolute; top:0; width:6px; height:100%; background:#fff; border-radius:3px; box-shadow:0 0 8px #fff; transform:translateX(-50%); pointer-events:none; animation:qteOscillate 1.8s ease-in-out infinite;"></div>
@@ -208,7 +211,7 @@ export function renderMiningUI(state) {
 
         <div>
           <button 
-            onclick="window.triggerMiningSweetSpot()"
+            onclick="window.triggerMiningSweetSpot(event)"
             style="
               padding: 10px 24px;
               font-family: 'Cinzel', serif;

@@ -9908,41 +9908,71 @@ export function init() {
     window.getVigorState = () => LifeActivityCore.getVigorState(state);
     window.restoreVigor = (amt) => LifeActivityCore.restoreVigor(state, amt);
 
-    window.triggerGatheringSweetSpot = () => {
-      const track = document.getElementById('gathering-qte-track');
-      const needle = document.getElementById('gathering-qte-needle');
-      let pct = 70;
-      if (track && needle) {
+    window.triggerGatheringSweetSpot = (e) => {
+      const track = el('gathering-qte-track');
+      const needle = el('gathering-qte-needle');
+      let pct = null;
+      if (e && track && (e.currentTarget === track || e.target === track || track.contains(e.target)) && typeof e.clientX === 'number') {
+        const tRect = track.getBoundingClientRect();
+        if (tRect.width > 0) {
+          pct = Math.max(0, Math.min(100, Math.round(((e.clientX - tRect.left) / tRect.width) * 100)));
+        }
+      } else if (track && needle) {
         const tRect = track.getBoundingClientRect();
         const nRect = needle.getBoundingClientRect();
-        const center = nRect.left + nRect.width / 2;
-        pct = Math.round(((center - tRect.left) / tRect.width) * 100);
+        if (tRect.width > 0) {
+          const center = nRect.left + nRect.width / 2;
+          pct = Math.max(0, Math.min(100, Math.round(((center - tRect.left) / tRect.width) * 100)));
+        }
+      }
+      if (pct === null || isNaN(pct)) {
+        pct = 20; // Falha por padrão em clique cego/ausente, nunca garante 70%
       }
       return window.finishGatheringHarvest(pct);
     };
 
-    window.triggerMiningSweetSpot = () => {
-      const track = document.getElementById('mining-qte-track');
-      const needle = document.getElementById('mining-qte-needle');
-      let pct = 70;
-      if (track && needle) {
+    window.triggerMiningSweetSpot = (e) => {
+      const track = el('mining-qte-track');
+      const needle = el('mining-qte-needle');
+      let pct = null;
+      if (e && track && (e.currentTarget === track || e.target === track || track.contains(e.target)) && typeof e.clientX === 'number') {
+        const tRect = track.getBoundingClientRect();
+        if (tRect.width > 0) {
+          pct = Math.max(0, Math.min(100, Math.round(((e.clientX - tRect.left) / tRect.width) * 100)));
+        }
+      } else if (track && needle) {
         const tRect = track.getBoundingClientRect();
         const nRect = needle.getBoundingClientRect();
-        const center = nRect.left + nRect.width / 2;
-        pct = Math.round(((center - tRect.left) / tRect.width) * 100);
+        if (tRect.width > 0) {
+          const center = nRect.left + nRect.width / 2;
+          pct = Math.max(0, Math.min(100, Math.round(((center - tRect.left) / tRect.width) * 100)));
+        }
+      }
+      if (pct === null || isNaN(pct)) {
+        pct = 20;
       }
       return window.finishMiningHarvest(pct);
     };
 
-    window.triggerHuntingSweetSpot = () => {
-      const track = document.getElementById('hunting-qte-track');
-      const needle = document.getElementById('hunting-qte-needle');
-      let pct = 70;
-      if (track && needle) {
+    window.triggerHuntingSweetSpot = (e) => {
+      const track = el('hunting-qte-track');
+      const needle = el('hunting-qte-needle');
+      let pct = null;
+      if (e && track && (e.currentTarget === track || e.target === track || track.contains(e.target)) && typeof e.clientX === 'number') {
+        const tRect = track.getBoundingClientRect();
+        if (tRect.width > 0) {
+          pct = Math.max(0, Math.min(100, Math.round(((e.clientX - tRect.left) / tRect.width) * 100)));
+        }
+      } else if (track && needle) {
         const tRect = track.getBoundingClientRect();
         const nRect = needle.getBoundingClientRect();
-        const center = nRect.left + nRect.width / 2;
-        pct = Math.round(((center - tRect.left) / tRect.width) * 100);
+        if (tRect.width > 0) {
+          const center = nRect.left + nRect.width / 2;
+          pct = Math.max(0, Math.min(100, Math.round(((center - tRect.left) / tRect.width) * 100)));
+        }
+      }
+      if (pct === null || isNaN(pct)) {
+        pct = 20;
       }
       return window.skinHuntingPrey(pct);
     };

@@ -254,3 +254,52 @@ test('Anti-Autoclick & Vigor Suite — 8. Modo AFK (Automático): Pausa automát
   FishingService.processAutoFish(state);
   assert.equal(fState.autoFishing, false, 'Pesca AFK deve pausar quando o Vigor for menor que 5');
 });
+
+test('Anti-Autoclick & Vigor Suite — 9. Punição estrita de Miss fora do Sweet Spot em Caça, Coleta e Mineração', () => {
+  const state = createMockGameState();
+
+  // 1. Coleta com clique fora (<45% ou >95%)
+  const gState = GatheringService.getGatheringState(state);
+  gState.sickle = 'sickle_none';
+  gState.sickleDurability = { sickle_none: 50 };
+  state.lifeActivities.vigor.current = 100;
+  GatheringService.startHarvest(state, 'flora_peace_flower');
+  gState.harvestStartTime = Date.now() - 5000;
+  
+  // Timing 15% (fora do sweet spot)
+  const logsGather = [];
+  GatheringService.finishHarvest(state, { log: (m) => logsGather.push(m) }, 15);
+  assert.equal(logsGather.some(l => l.includes('GOLPE DESALINHADO')), true, 'Coleta fora do sweet spot deve registrar golpe desalinhado');
+  assert.equal(logsGather.some(l => l.includes('COLHEITA PERFEITA NO SWEET SPOT')), false, 'NUNCA deve gerar colheita perfeita em miss');
+
+  // 2. Mineração com clique fora
+  const mState = MiningService.getMiningState(state);
+  mState.pickaxe = 'pickaxe_none';
+  mState.pickaxeDurability = { pickaxe_none: 50 };
+  mState.galleryStability = 100;
+  state.lifeActivities.vigor.current = 100;
+  MiningService.startMining(state, 'vein_coal');
+  mState.mineStartTime = Date.now() - 5000;
+
+  // Timing 98% (fora do sweet spot)
+  const logsMine = [];
+  MiningService.finishMining(state, { log: (m) => logsMine.push(m) }, 98);
+  assert.equal(logsMine.some(l => l.includes('GOLPE BRUTO DESALINHADO')), true, 'Mineração fora do sweet spot deve registrar golpe bruto desalinhado');
+  assert.equal(logsMine.some(l => l.includes('SWEET SPOT')), false, 'NUNCA deve gerar sweet spot em miss');
+
+  // 3. Caça com clique fora
+  const hState = HuntingService.getHuntingState(state);
+  hState.knife = 'knife_none';
+  hState.knifeDurability = { knife_none: 50 };
+  hState.alertLevel = 30;
+  state.lifeActivities.vigor.current = 100;
+  HuntingService.startTracking(state, 'prey_hare');
+  hState.trackStartTime = Date.now() - 5000;
+
+  // Timing 20% (fora do sweet spot)
+  const logsHunt = [];
+  HuntingService.finishSkinning(state, { log: (m) => logsHunt.push(m) }, 20);
+  assert.equal(logsHunt.some(l => l.includes('PASSO EM FALSO')), true, 'Caça fora do sweet spot deve registrar passo em falso');
+  assert.equal(hState.alertLevel >= 40, true, 'Alerta deve aumentar em 40% por miss');
+});
+

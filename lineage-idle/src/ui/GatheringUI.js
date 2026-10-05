@@ -21,7 +21,10 @@ export function renderGatheringUI(state) {
   const container = el('tab-gathering') || qs('#tab-gathering, .tab-gathering');
   if (!container) return;
 
-  const gState = GatheringService.getGatheringState(state);
+    const gState = GatheringService.getGatheringState(state);
+  if (gState.isGathering && container.querySelector('#gathering-qte-track')) {
+    return;
+  }
   const vigor = LifeActivityCore.getVigorState(state);
   const playerLvl = Number(state.level) || 1;
 
@@ -204,7 +207,7 @@ export function renderGatheringUI(state) {
             <span style="color:#6ee7b7; font-weight:bold;">🎯 Ponto Perfeito (60-80%)</span>
             <span style="color:#f87171;">⚠️ Falha (&gt;95%)</span>
           </div>
-          <div id="gathering-qte-track" onclick="window.triggerGatheringSweetSpot()" style="position:relative; width:100%; height:20px; background:rgba(0,0,0,0.8); border-radius:10px; border:1px solid rgba(52,211,153,0.3); overflow:hidden; cursor:pointer;">
+          <div id="gathering-qte-track" onclick="window.triggerGatheringSweetSpot(event)" style="position:relative; width:100%; height:20px; background:rgba(0,0,0,0.8); border-radius:10px; border:1px solid rgba(52,211,153,0.3); overflow:hidden; cursor:pointer;">
             <div style="position:absolute; left:45%; width:50%; height:100%; background:rgba(234,179,8,0.2);"></div>
             <div style="position:absolute; left:60%; width:20%; height:100%; background:linear-gradient(90deg, #10b981, #34d399); box-shadow:0 0 10px rgba(52,211,153,0.7);"></div>
             <div id="gathering-qte-needle" class="qte-oscillating-needle" style="position:absolute; top:0; width:6px; height:100%; background:#fff; border-radius:3px; box-shadow:0 0 8px #fff; transform:translateX(-50%); pointer-events:none; animation:qteOscillate 1.8s ease-in-out infinite;"></div>
@@ -216,7 +219,7 @@ export function renderGatheringUI(state) {
 
         <div style="display:flex; justify-content:center; gap:8px;">
           <button 
-            onclick="window.triggerGatheringSweetSpot()"
+            onclick="window.triggerGatheringSweetSpot(event)"
             style="
               padding: 10px 24px;
               font-family: 'Cinzel', serif;
