@@ -58,6 +58,23 @@ canvas {
     box-shadow: 0 0 34px 6px rgba(255, 255, 255, 0.14);
   }
 }
+
+
+@keyframes qteOscillate {
+  0% {
+    left: 2%;
+  }
+  50% {
+    left: 98%;
+  }
+  100% {
+    left: 2%;
+  }
+}
+
+.qte-oscillating-needle {
+  animation: qteOscillate 1.8s ease-in-out infinite;
+}
 .animate-pulseGlow {
   animation: pulseGlow 2.6s ease-in-out infinite;
 }

@@ -27,9 +27,10 @@ for (let p = 0; p < labels.length; p++) {
   }
   if (count > 1500) parts.push({ id, count, left, right, top, bottom });
 }
-if (parts.length !== 12) throw new Error(`Expected 12 separate poses; found ${parts.length}. Inspect source before importing.`);
+if (parts.length !== 8 && parts.length !== 12) throw new Error(`Expected 8 or 12 separate poses; found ${parts.length}. Inspect source before importing.`);
 parts.sort((a,b) => a.bottom - b.bottom);
-const frames = [0,4,8].flatMap(start => parts.slice(start,start+4).sort((a,b) => a.left-b.left));
+const rows = parts.length / 4;
+const frames = Array.from({length: rows}, (_, row) => parts.slice(row*4,row*4+4).sort((a,b) => a.left-b.left)).flat();
 for (const f of frames) {
   let footLeft = width, footRight = 0;
   for (let y = f.bottom - 20; y <= f.bottom; y++) for (let x = f.left; x <= f.right; x++) {
@@ -38,7 +39,8 @@ for (const f of frames) {
   f.anchor = (footLeft + footRight) / 2;
 }
 const cellW = 384, cellH = 288, anchorX = 156, baseline = 276;
-const median = frames.slice(0,8).map(f => f.bottom-f.top+1).sort((a,b)=>a-b)[4];
+const heights = frames.map(f => f.bottom-f.top+1).sort((a,b)=>a-b);
+const median = heights[Math.floor(heights.length/2)];
 const scale = Math.min(230/median, ...frames.map(f => Math.min(
   (anchorX-12)/(f.anchor-f.left+3), (cellW-anchorX-12)/(f.right-f.anchor+3),
   (baseline-12)/(f.bottom-f.top+5)
@@ -62,6 +64,6 @@ for (let index=0; index<frames.length; index++) {
 }
 const out=path.resolve('public/action-prototype/animations');
 await mkdir(out,{recursive:true});
-await sharp({create:{width:cellW*4,height:cellH*3,channels:4,background:'#00000000'}}).composite(overlays).webp({quality:88,alphaQuality:100}).toFile(path.join(out,`${name}.webp`));
-await writeFile(path.join(out,`${name}.json`),JSON.stringify({source:path.basename(source),tool:'built-in ImageGen',columns:4,rows:3,cellW,cellH,anchorX,baseline,scale,frames},null,2));
-console.log(`${name}: 12 poses normalized, scale ${scale.toFixed(3)}, ${cellW*4}x${cellH*3}`);
+await sharp({create:{width:cellW*4,height:cellH*rows,channels:4,background:'#00000000'}}).composite(overlays).webp({quality:88,alphaQuality:100}).toFile(path.join(out,`${name}.webp`));
+await writeFile(path.join(out,`${name}.json`),JSON.stringify({source:path.basename(source),tool:'built-in ImageGen',columns:4,rows,cellW,cellH,anchorX,baseline,scale,frames},null,2));
+console.log(`${name}: ${frames.length} poses normalized, scale ${scale.toFixed(3)}, ${cellW*4}x${cellH*rows}`);

@@ -194,6 +194,10 @@ export function renderGatheringUI(state) {
 
         ${isReady ? `
         <!-- Sweet Spot QTE de Precisão -->
+        <style>
+          @keyframes qteOscillate { 0% { left: 2%; } 50% { left: 98%; } 100% { left: 2%; } }
+          .qte-oscillating-needle { animation: qteOscillate 1.8s ease-in-out infinite !important; }
+        </style>
         <div style="margin:14px auto; max-width:320px; background:rgba(10,18,14,0.9); border:1px solid rgba(52,211,153,0.4); border-radius:8px; padding:10px; box-shadow:inset 0 0 10px rgba(0,0,0,0.8);">
           <div style="display:flex; justify-content:space-between; font-size:10px; color:#aaa; margin-bottom:5px; font-family:'Cinzel',serif;">
             <span style="color:#f87171;">⚠️ Falha (&lt;45%)</span>
@@ -203,7 +207,7 @@ export function renderGatheringUI(state) {
           <div id="gathering-qte-track" onclick="window.triggerGatheringSweetSpot()" style="position:relative; width:100%; height:20px; background:rgba(0,0,0,0.8); border-radius:10px; border:1px solid rgba(52,211,153,0.3); overflow:hidden; cursor:pointer;">
             <div style="position:absolute; left:45%; width:50%; height:100%; background:rgba(234,179,8,0.2);"></div>
             <div style="position:absolute; left:60%; width:20%; height:100%; background:linear-gradient(90deg, #10b981, #34d399); box-shadow:0 0 10px rgba(52,211,153,0.7);"></div>
-            <div id="gathering-qte-needle" class="qte-oscillating-needle" style="position:absolute; top:0; width:6px; height:100%; background:#fff; border-radius:3px; box-shadow:0 0 8px #fff; transform:translateX(-50%); pointer-events:none;"></div>
+            <div id="gathering-qte-needle" class="qte-oscillating-needle" style="position:absolute; top:0; width:6px; height:100%; background:#fff; border-radius:3px; box-shadow:0 0 8px #fff; transform:translateX(-50%); pointer-events:none; animation:qteOscillate 1.8s ease-in-out infinite;"></div>
           </div>
           <div style="font-size:9px; color:#94a3b8; text-align:center; margin-top:5px;">
             Acerte no centro verde para 2.0x colheita! Cliques cegos desgastam a foice severamente (-4).

@@ -155,7 +155,7 @@ export default function HybridActionPrototype() {
           <button className="action-prototype__enter" type="button" onClick={startRun}>
             INICIAR EXPEDIÇÃO <span>→</span>
           </button>
-          <p className="action-prototype__controls">WASD para mover · segure o botão esquerdo para atacar · 1–2 habilidades · 3 poção · 4 comida · Esc pausa</p>
+          <p className="action-prototype__controls">WASD mover · Shift correr · clique atacar · 1–2 habilidades · 3 poção · 4 comida · Esc pausa</p>
         </section>
       )}
 

@@ -2,7 +2,7 @@
   "source": "exec-ca53292d-af74-42d3-ac2a-62d700bd9ad5.png",
   "tool": "built-in ImageGen",
   "columns": 4,
-  "rows": 3,
+  "rows": 5,
   "cellW": 384,
   "cellH": 288,
   "anchorX": 156,
@@ -117,5 +117,11 @@
       "bottom": 1057,
       "anchor": 1271.5
     }
-  ]
+  ],
+  "frameOrder": [
+    "walk:0-7",
+    "run:8-15",
+    "attack:16-19"
+  ],
+  "runSource": "exec-812c8871-6b12-4ea0-8449-38b87838aeea.png"
 }

@@ -12,10 +12,16 @@ test('attack releases once at the strike pose, cannot restart mid-swing and reco
  const motion=new SpriteMotion(); assert.equal(motion.startAttack(1),true);
  assert.equal(motion.startAttack(-1),false);
  assert.equal(motion.update(.09,false,-1).released,false);
- const strike=motion.update(.1,false,-1); assert.equal(strike.released,true); assert.equal(strike.frame,10); assert.equal(strike.facing,1);
+ const strike=motion.update(.1,false,-1); assert.equal(strike.released,true); assert.equal(strike.frame,18); assert.equal(strike.facing,1);
  assert.equal(motion.update(.08,false,0).released,false);
  assert.equal(motion.update(.2,false,0).attacking,false);
  assert.equal(motion.startAttack(-1),true);
+});
+test('running advances poses with offset 8',()=>{
+ const motion=new SpriteMotion();
+ const runPose=motion.update(.1,true,1,true);
+ assert.equal(runPose.running,true);
+ assert.equal(runPose.frame >= 8 && runPose.frame <= 15,true);
 });
 test('a long frame still releases exactly once and direction survives vertical movement',()=>{
  const motion=new SpriteMotion(); motion.update(.1,true,-1);

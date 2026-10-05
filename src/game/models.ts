@@ -76,9 +76,9 @@ export function animatePrototypePortrait(group: THREE.Group, frame: number, faci
   const texture = sprite.material.map;
   const flip = facing < 0;
   if (group.userData.prototypeAnimated) {
-    const index = Math.max(0, Math.min(11, frame));
-    texture.repeat.set((flip ? -1 : 1) / 4, 1 / 3);
-    texture.offset.set((index % 4 + (flip ? 1 : 0)) / 4, 1 - (Math.floor(index / 4) + 1) / 3);
+      const index = Math.max(0, Math.min(19, frame));
+      texture.repeat.set((flip ? -1 : 1) / 4, 1 / 5);
+      texture.offset.set((index % 4 + (flip ? 1 : 0)) / 4, 1 - (Math.floor(index / 4) + 1) / 5);
     sprite.center.x = flip ? 1 - 156 / 384 : 156 / 384;
   } else {
     texture.repeat.x = flip ? -1 : 1;

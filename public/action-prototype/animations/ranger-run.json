@@ -1,0 +1,85 @@
+{
+  "source": "exec-834d3f3e-257f-42ca-8641-23643975ae42.png",
+  "tool": "built-in ImageGen",
+  "columns": 4,
+  "rows": 2,
+  "cellW": 384,
+  "cellH": 288,
+  "anchorX": 156,
+  "baseline": 276,
+  "scale": 0.3457382953181273,
+  "frames": [
+    {
+      "id": 1,
+      "count": 82101,
+      "left": 13,
+      "right": 457,
+      "top": 26,
+      "bottom": 422,
+      "anchor": 394
+    },
+    {
+      "id": 3,
+      "count": 72491,
+      "left": 478,
+      "right": 875,
+      "top": 33,
+      "bottom": 422,
+      "anchor": 792.5
+    },
+    {
+      "id": 2,
+      "count": 76465,
+      "left": 915,
+      "right": 1344,
+      "top": 27,
+      "bottom": 411,
+      "anchor": 1130.5
+    },
+    {
+      "id": 4,
+      "count": 72537,
+      "left": 1351,
+      "right": 1755,
+      "top": 34,
+      "bottom": 417,
+      "anchor": 1707.5
+    },
+    {
+      "id": 6,
+      "count": 82861,
+      "left": 17,
+      "right": 478,
+      "top": 457,
+      "bottom": 856,
+      "anchor": 430.5
+    },
+    {
+      "id": 9,
+      "count": 72735,
+      "left": 481,
+      "right": 897,
+      "top": 466,
+      "bottom": 853,
+      "anchor": 834
+    },
+    {
+      "id": 8,
+      "count": 84082,
+      "left": 913,
+      "right": 1372,
+      "top": 464,
+      "bottom": 847,
+      "anchor": 1144.5
+    },
+    {
+      "id": 7,
+      "count": 72360,
+      "left": 1369,
+      "right": 1763,
+      "top": 463,
+      "bottom": 856,
+      "anchor": 1704
+    }
+  ]
+}

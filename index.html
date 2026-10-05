@@ -75,6 +75,16 @@
         }
       }, true);
     </script>
+    <style id="qte-sweetspot-style">
+      @keyframes qteOscillate {
+        0% { left: 2%; }
+        50% { left: 98%; }
+        100% { left: 2%; }
+      }
+      .qte-oscillating-needle {
+        animation: qteOscillate 1.8s ease-in-out infinite !important;
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>

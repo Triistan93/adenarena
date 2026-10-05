@@ -1010,12 +1010,14 @@ export class Game {
     }
     const ml = Math.hypot(mx, my);
     this.moving = ml > 0.1;
+    const prototypeRunning = !shouldBridgeIdleProgression(this.cfg) && this.moving && this.keys.has("shift");
     if (ml > 1) {
       mx /= ml;
       my /= ml;
     }
     const spd =
       this.speed *
+      (prototypeRunning ? 1.42 : 1) *
       (this.buffSpdT > 0 ? this.buffSpdM : 1) *
       (1 + this.bSpdPct / 100);
     this.px = clamp(this.px + mx * spd * dt, -2000, 2000);
@@ -1029,7 +1031,7 @@ export class Game {
       this.mouseDown ||
       !!this.touchRight;
     if (attackHeld) this.tryAttack();
-    if (!shouldBridgeIdleProgression(this.cfg)) this.updatePrototypeMotion(dt, mx);
+    if (!shouldBridgeIdleProgression(this.cfg)) this.updatePrototypeMotion(dt, mx, prototypeRunning);
 
     // dash
     if (this.dashT > 0) {
@@ -1161,8 +1163,8 @@ export class Game {
     }
   }
 
-  updatePrototypeMotion(dt: number, moveX: number) {
-    const pose = this.prototypeMotion.update(dt, this.moving, moveX);
+  updatePrototypeMotion(dt: number, moveX: number, running = false) {
+    const pose = this.prototypeMotion.update(dt, this.moving, moveX, running);
     if (pose.released && this.prototypePendingAction) {
       const action = this.prototypePendingAction;
       this.prototypePendingAction = null;
@@ -1173,7 +1175,7 @@ export class Game {
       this.aim = currentAim;
     }
     animatePrototypePortrait(this.playerGroup, pose.frame, pose.facing, this.playerFlash);
-    if (pose.footstep) this.spawnParticles(this.px, this.py, '#9b8b78', 2, .4);
+    if (pose.footstep) this.spawnParticles(this.px, this.py, '#9b8b78', pose.running ? 3 : 2, pose.running ? .7 : .4);
     for (let i = this.prototypeDeaths.length - 1; i >= 0; i--) {
       const death = this.prototypeDeaths[i];
       death.life += dt;
