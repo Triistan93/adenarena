@@ -4,6 +4,7 @@ import {
   awardPrototypeXp,
   createActionPrototypeConfig,
   createInitialPrototypeProgression,
+  shouldBridgeIdleProgression,
 } from "../src/game/actionPrototype.js";
 
 test("standalone action prototype has its own progression boundary", () => {
@@ -13,6 +14,8 @@ test("standalone action prototype has its own progression boundary", () => {
   assert.equal(config.bridgeIdleProgression, false);
   assert.equal(config.zoneName, "Ruínas de Aden");
   assert.equal(config.campaignWaveLimit, 5);
+  assert.equal(shouldBridgeIdleProgression(config), false);
+  assert.equal(shouldBridgeIdleProgression({}), true, "legacy arena keeps its prior bridge by default");
 });
 
 test("prototype XP can cross several local levels without an idle save", () => {

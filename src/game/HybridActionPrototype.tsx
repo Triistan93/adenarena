@@ -23,10 +23,6 @@ function resolveBuild(build: (typeof BUILDS)[number]): { race: RaceDef; cls: Cla
   return { race, cls };
 }
 
-function resultForGame(game: Game): GameResult {
-  return game.buildResult();
-}
-
 export default function HybridActionPrototype() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const hudRef = useRef<HTMLCanvasElement>(null);
@@ -102,7 +98,6 @@ export default function HybridActionPrototype() {
     setPhase("menu");
   };
 
-  const hpPercent = result ? 0 : 100;
   const campaignPercent = Math.min(100, (wave / ACTION_PROTOTYPE_CAMPAIGN.waveLimit) * 100);
 
   return (
