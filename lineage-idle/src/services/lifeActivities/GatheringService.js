@@ -352,6 +352,13 @@ export const GatheringService = {
       return { success: false, reason: 'broken_tool' };
     }
 
+    // Validação de Vigor de Trabalho (Anti-Abuso Econômico)
+    const vigor = LifeActivityCore.getVigorState(state);
+    if (vigor.current < 5) {
+      if (callbacks.log) callbacks.log(`⚡ **VIGOR INSUFICIENTE!** Você está exausto para colher (Vigor: ${vigor.current}/100). Descanse para recuperar energia.`, 'warning');
+      return { success: false, reason: 'insufficient_vigor' };
+    }
+
     if (tacticId && GATHERING_TACTICS[tacticId]) {
       gState.selectedTactic = tacticId;
       gState.activeTactic = tacticId;
@@ -409,7 +416,7 @@ export const GatheringService = {
     return { success: true };
   },
 
-  finishHarvest(state, callbacks = {}) {
+  finishHarvest(state, callbacks = {}, timingPct = null) {
     const gState = this.getGatheringState(state);
     if (!gState.isGathering || !gState.targetedNodeId) return false;
 
@@ -470,11 +477,29 @@ export const GatheringService = {
     const secMat = secMatRaw ? resolveCanonicalResourceId(secMatRaw) : null;
 
     const basePrimaryQty = node.yields.primaryQty || 1;
-    const primaryQty = pending?.primaryQty ?? RewardEngine.calculateYield(basePrimaryQty, quality);
+    let primaryQty = pending?.primaryQty ?? RewardEngine.calculateYield(basePrimaryQty, quality);
 
     const baseSecQty = node.yields.secondaryQty || 0;
-    const secQty = pending?.secQty ?? (baseSecQty > 0 ? RewardEngine.calculateYield(baseSecQty, quality) : 0);
-    const finalXp = pending?.finalXp ?? Math.round((node.xpReward || 8) * quality.mult);
+    let secQty = pending?.secQty ?? (baseSecQty > 0 ? RewardEngine.calculateYield(baseSecQty, quality) : 0);
+    let finalXp = pending?.finalXp ?? Math.round((node.xpReward || 8) * quality.mult);
+
+    // Avaliação de Precisão do Sweet Spot (Anti-Autoclicker)
+    const sweetSpot = LifeActivityCore.evaluateSweetSpot(timingPct);
+    if (sweetSpot.result === 'miss') {
+      extraDurabilityCost += 3; // severo desgaste por clique cego
+      primaryQty = Math.max(1, Math.floor(primaryQty * sweetSpot.yieldMultiplier));
+      if (secQty > 0) secQty = Math.floor(secQty * sweetSpot.yieldMultiplier);
+      finalXp = Math.max(1, Math.round(finalXp * sweetSpot.xpMultiplier));
+      if (gState.targetedNodeHazard === 'thorn') {
+        thornDamage = Math.max(thornDamage, Math.floor((state.maxHp || 100) * 0.05));
+      }
+      if (callbacks.log) callbacks.log('⚠️ **GOLPE DESALINHADO!** Você cortou a esmo e lascou a foice (-3 Durabilidade adicional)! Rendimento reduzido a sobras.', 'warning');
+    } else if (sweetSpot.result === 'perfect') {
+      primaryQty = Math.round(primaryQty * sweetSpot.yieldMultiplier);
+      if (secQty > 0) secQty = Math.round(secQty * sweetSpot.yieldMultiplier);
+      finalXp = Math.round(finalXp * sweetSpot.xpMultiplier);
+      if (callbacks.log) callbacks.log('🌸 **CORTE NO SWEET SPOT!** Extração botânica cirúrgica perfeita (+200% Materiais e XP)!', 'gain');
+    }
 
     const rewardDrops = [{ itemId: primaryMat, count: primaryQty }];
     if (secMat && secQty > 0) rewardDrops.push({ itemId: secMat, count: secQty });
@@ -486,6 +511,13 @@ export const GatheringService = {
         if (callbacks.updateAllUI) callbacks.updateAllUI();
         if (callbacks.save) callbacks.save();
       }
+      return false;
+    }
+
+    // Consome Vigor de Trabalho (5 pontos por extração concluída)
+    const vigorRes = LifeActivityCore.consumeVigor(state, 5);
+    if (!vigorRes.success) {
+      if (callbacks.log) callbacks.log(`⚡ **VIGOR ESGOTADO!** Você está sem vigor para concluir a colheita (Vigor: ${vigorRes.current}/100). Descanse para recuperar energia.`, 'warning');
       return false;
     }
 
@@ -502,7 +534,7 @@ export const GatheringService = {
     if (extraDurabilityCost > 0) {
       gState.sickleDurability[activeSickleId] = Math.max(0, gState.sickleDurability[activeSickleId] - extraDurabilityCost);
       actState.toolDurability = gState.sickleDurability[activeSickleId];
-      if (callbacks.log) callbacks.log('⚠️ A seiva pegajosa grudou na foice! (-1 Durabilidade)', 'warning');
+      if (callbacks.log) callbacks.log(`⚠️ Desgaste acelerado na foice! (-${extraDurabilityCost} Durabilidade)`, 'warning');
     }
     if (hazardPenalty > 0 && callbacks.log) {
       callbacks.log('🤢 Esporos venenosos cobriram a planta, reduzindo sua pureza!', 'warning');
@@ -528,7 +560,8 @@ export const GatheringService = {
     gState.pendingHarvestReward = null;
 
     if (callbacks.log) {
-      const qualityPrefix = quality.tier === 'perfect' ? '🌸 **COLHEITA PERFEITA!**'
+      const qualityPrefix = sweetSpot.result === 'perfect' ? '🌸 **COLHEITA PERFEITA NO SWEET SPOT!**'
+        : quality.tier === 'perfect' ? '🌸 **COLHEITA PERFEITA!**'
         : quality.tier === 'excellent' ? '✨ **COLHEITA EXCELENTE!**'
         : '✓ Colheita concluída:';
       callbacks.log(`🌿 ${qualityPrefix} Extraiu **${node.name}** [${quality.name}]! Obteve +${primaryQty}x ${primaryMat.toUpperCase()}${secMat && secQty > 0 ? ` e +${secQty}x ${secMat.toUpperCase()}` : ''}! (+${finalXp} XP de Coleta)`, 'loot');
@@ -565,7 +598,7 @@ export const GatheringService = {
     if (callbacks.log) {
       callbacks.log(
         gState.autoGathering
-          ? '🌿 **Coleta Automática (AFK) ATIVADA!** Seu personagem colherá ervas e madeiras continuamente.'
+          ? '🌿 **Coleta Automática (AFK) ATIVADA!** Consome 5 Vigor e cestos enquanto colhe continuamente.'
           : '⏸️ **Coleta Automática (AFK) PAUSADA.**',
         'system'
       );
@@ -579,6 +612,29 @@ export const GatheringService = {
   processAutoGather(state, callbacks = {}) {
     const gState = this.getGatheringState(state);
     if (!gState.autoGathering) return;
+
+    // 1. Validação de Vigor de Trabalho (5 pontos necessários)
+    const vigor = LifeActivityCore.getVigorState(state);
+    if (vigor.current < 5) {
+      gState.autoGathering = false;
+      if (callbacks.log) callbacks.log('⚡ **Coleta AFK pausada:** Vigor de Trabalho esgotado! Descanse para recuperar energia.', 'warning');
+      if (callbacks.updateAllUI) callbacks.updateAllUI();
+      return;
+    }
+
+    // 2. Validação de Cestos (Consumíveis de Coleta)
+    const totalPouches = Object.values(gState.pouchInventory || {}).reduce((sum, c) => sum + (Number(c) || 0), 0);
+    if (totalPouches <= 0) {
+      gState.autoGathering = false;
+      if (callbacks.log) callbacks.log('⚠️ **Coleta AFK pausada:** Seus cestos de coleta acabaram! Compre mais cestos na Associação de Botânica.', 'warning');
+      if (callbacks.updateAllUI) callbacks.updateAllUI();
+      return;
+    }
+
+    if (!gState.activePouch || (gState.pouchInventory[gState.activePouch] || 0) <= 0) {
+      const nextPouch = Object.keys(gState.pouchInventory).find(k => (gState.pouchInventory[k] || 0) > 0);
+      if (nextPouch) gState.activePouch = nextPouch;
+    }
 
     const activeSickleId = gState.sickle || 'sickle_none';
     const dur = gState.sickleDurability[activeSickleId] ?? 0;

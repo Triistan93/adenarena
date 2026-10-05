@@ -14,7 +14,7 @@ import {
   getGatheringZonesList
 } from '../data/gathering.js';
 import { GatheringService } from '../services/lifeActivities/GatheringService.js';
-import { LIFE_ACTIVITY_LEVEL_TABLE } from '../services/lifeActivities/LifeActivityCore.js';
+import { LifeActivityCore, LIFE_ACTIVITY_LEVEL_TABLE } from '../services/lifeActivities/LifeActivityCore.js';
 
 export function renderGatheringUI(state) {
   if (!state) return;
@@ -22,6 +22,7 @@ export function renderGatheringUI(state) {
   if (!container) return;
 
   const gState = GatheringService.getGatheringState(state);
+  const vigor = LifeActivityCore.getVigorState(state);
   const playerLvl = Number(state.level) || 1;
 
   const actState = state.lifeActivities?.gathering || { level: 1, xp: 0 };
@@ -192,9 +193,26 @@ export function renderGatheringUI(state) {
         </div>
 
         ${isReady ? `
+        <!-- Sweet Spot QTE de Precisão -->
+        <div style="margin:14px auto; max-width:320px; background:rgba(10,18,14,0.9); border:1px solid rgba(52,211,153,0.4); border-radius:8px; padding:10px; box-shadow:inset 0 0 10px rgba(0,0,0,0.8);">
+          <div style="display:flex; justify-content:space-between; font-size:10px; color:#aaa; margin-bottom:5px; font-family:'Cinzel',serif;">
+            <span style="color:#f87171;">⚠️ Falha (&lt;45%)</span>
+            <span style="color:#6ee7b7; font-weight:bold;">🎯 Ponto Perfeito (60-80%)</span>
+            <span style="color:#f87171;">⚠️ Falha (&gt;95%)</span>
+          </div>
+          <div id="gathering-qte-track" onclick="window.triggerGatheringSweetSpot()" style="position:relative; width:100%; height:20px; background:rgba(0,0,0,0.8); border-radius:10px; border:1px solid rgba(52,211,153,0.3); overflow:hidden; cursor:pointer;">
+            <div style="position:absolute; left:45%; width:50%; height:100%; background:rgba(234,179,8,0.2);"></div>
+            <div style="position:absolute; left:60%; width:20%; height:100%; background:linear-gradient(90deg, #10b981, #34d399); box-shadow:0 0 10px rgba(52,211,153,0.7);"></div>
+            <div id="gathering-qte-needle" class="qte-oscillating-needle" style="position:absolute; top:0; width:6px; height:100%; background:#fff; border-radius:3px; box-shadow:0 0 8px #fff; transform:translateX(-50%); pointer-events:none;"></div>
+          </div>
+          <div style="font-size:9px; color:#94a3b8; text-align:center; margin-top:5px;">
+            Acerte no centro verde para 2.0x colheita! Cliques cegos desgastam a foice severamente (-4).
+          </div>
+        </div>
+
         <div style="display:flex; justify-content:center; gap:8px;">
           <button 
-            onclick="window.finishGatheringHarvest()"
+            onclick="window.triggerGatheringSweetSpot()"
             style="
               padding: 10px 24px;
               font-family: 'Cinzel', serif;
@@ -209,7 +227,7 @@ export function renderGatheringUI(state) {
               letter-spacing: 0.05em;
             "
           >
-            ✂️ EXTRAIR BOTÂNICA
+            ✂️ PODAR NO MOMENTO EXATO
           </button>
         </div>
         ` : `
@@ -276,6 +294,10 @@ export function renderGatheringUI(state) {
             </p>
           </div>
           <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <div style="background:rgba(0,0,0,0.5); border:1px solid #38bdf8; border-radius:8px; padding:6px 14px; text-align:center;">
+              <div style="font-size:10px; color:#aaa; text-transform:uppercase;">⚡ Vigor de Trabalho</div>
+              <div style="font-size:16px; font-weight:bold; color:#38bdf8; font-family:'Cinzel',serif;">${vigor.current} / ${vigor.max}</div>
+            </div>
             <div style="background:rgba(0,0,0,0.5); border:1px solid rgba(52,211,153,0.3); border-radius:8px; padding:6px 14px; text-align:center;">
               <div style="font-size:10px; color:#aaa; text-transform:uppercase;">Nível de Coletor</div>
               <div style="font-size:16px; font-weight:bold; color:#6ee7b7; font-family:'Cinzel',serif;">Nv. ${skillLvl} / 40</div>

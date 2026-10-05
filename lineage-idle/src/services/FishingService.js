@@ -312,6 +312,14 @@ export const FishingService = {
       return { success: false, reason: 'already_fishing' };
     }
 
+    // Valida Vigor do jogador
+    const vigor = LifeActivityCore.getVigorState(state);
+    if (vigor.current < LifeActivityCore.VIGOR_COST_PER_ACTION) {
+      if (callbacks.log) callbacks.log('⚡ **VIGOR ESGOTADO!** Descanse para recuperar energia de trabalho.', 'warning');
+      if (callbacks.floatText) callbacks.floatText('⚡ VIGOR ESGOTADO!', 'float-miss');
+      return { success: false, reason: 'insufficient_vigor' };
+    }
+
     // Valida durabilidade da vara (regra estrita de quebra de ferramenta)
     const currentRodKey = fState.rod || 'rod_none';
     const currentDurability = fState.rodDurability[currentRodKey] ?? 0;
@@ -349,6 +357,9 @@ export const FishingService = {
         return { success: false, reason: 'no_bait' };
       }
     }
+
+    // Consome Vigor
+    LifeActivityCore.consumeVigor(state, LifeActivityCore.VIGOR_COST_PER_ACTION);
 
     // Consome 1 isca
     fState.baitInventory[fState.activeBait]--;
@@ -428,6 +439,13 @@ export const FishingService = {
     const fight = fState.activeFight;
     if (!fight || fight.status !== 'fighting') return { success: false };
 
+    // Anti-autoclick: se recolher com tensão excessiva (>= 85%), a linha estoura de imediato
+    if (fight.lineTension >= 85) {
+      fight.lineTension = 100;
+      this.consumeRodDurability(state, fState, callbacks);
+      return this._resolveFightTurn(state, fState, fight, '💥 A linha arrebentou com o recolhimento sob tensão extrema!', callbacks);
+    }
+
     fight.playerControl = Math.min(100, fight.playerControl + 16);
     fight.fishStamina = Math.max(0, fight.fishStamina - 12);
     fight.lineTension += Math.round(18 * (fight.profile.tensionRate || 1.0));
@@ -453,6 +471,14 @@ export const FishingService = {
     const fState = this.getFishingState(state);
     const fight = fState.activeFight;
     if (!fight || fight.status !== 'fighting') return { success: false };
+
+    // Anti-autoclick: se forçar com tensão >= 70%, estoura a linha e causa desgaste extra na vara
+    if (fight.lineTension >= 70) {
+      fight.lineTension = 100;
+      this.consumeRodDurability(state, fState, callbacks);
+      this.consumeRodDurability(state, fState, callbacks);
+      return this._resolveFightTurn(state, fState, fight, '💥 TENSÃO CRÍTICA! O puxão brusco arrebentou a linha imediatamente!', callbacks);
+    }
 
     fight.fishStamina = Math.max(0, fight.fishStamina - 26);
     fight.playerControl = Math.min(100, fight.playerControl + 22);
@@ -606,6 +632,14 @@ export const FishingService = {
     const fState = this.getFishingState(state);
     if (!fState.autoFishing) return;
     if (fState.pendingFishRewards.length) return;
+
+    const vigor = LifeActivityCore.getVigorState(state);
+    if (vigor.current < LifeActivityCore.VIGOR_COST_PER_ACTION) {
+      fState.autoFishing = false;
+      if (callbacks.log) callbacks.log('⚡ **Vigor Esgotado!** A Pesca Automática foi interrompida para descanso.', 'warning');
+      return;
+    }
+
     const pendingCountBefore = fState.pendingFishRewards.length;
 
     const now = Date.now();
@@ -623,6 +657,13 @@ export const FishingService = {
 
     let totalXp = 0;
     for (let t = 0; t < ticks; t++) {
+      const vigor = LifeActivityCore.getVigorState(state);
+      if (vigor.current < LifeActivityCore.VIGOR_COST_PER_ACTION) {
+        fState.autoFishing = false;
+        if (callbacks.log) callbacks.log('⚡ **Vigor Esgotado!** A Pesca Automática foi interrompida para descanso.', 'warning');
+        break;
+      }
+
       const rodId = fState.rod || 'rod_none';
       if ((fState.rodDurability[rodId] ?? 0) <= 0) {
         fState.autoFishing = false;
@@ -640,6 +681,9 @@ export const FishingService = {
         );
         break;
       }
+
+      // Consome Vigor
+      LifeActivityCore.consumeVigor(state, LifeActivityCore.VIGOR_COST_PER_ACTION);
 
       // Consome 1 isca
       fState.baitInventory[baitId]--;
@@ -712,7 +756,9 @@ export const FishingService = {
     // A eficiência reduz a quantidade de arremessos, não a chance de cada arremesso.
     // Assim o caminho offline entrega aproximadamente 25% do volume do AFK online.
     const maxCatchesByTime = Math.floor((effectiveMinutes * 60 * 1000) / FISHING_BALANCE.AUTO_FISH_INTERVAL_MS * FISHING_BALANCE.OFFLINE_EFFICIENCY);
-    const castsToSimulate = Math.min(totalAvailableBait, maxCatchesByTime, availableDurability);
+    const currentVigor = LifeActivityCore.getVigorState(state).current;
+    const maxByVigor = Math.floor(currentVigor / LifeActivityCore.VIGOR_COST_PER_ACTION);
+    const castsToSimulate = Math.min(totalAvailableBait, maxCatchesByTime, availableDurability, maxByVigor);
 
     let caughtCount = 0;
     let totalXp = 0;
@@ -724,6 +770,7 @@ export const FishingService = {
         fState.autoFishing = false;
         break;
       }
+      LifeActivityCore.consumeVigor(state, LifeActivityCore.VIGOR_COST_PER_ACTION);
       fState.baitInventory[baitKey]--;
 
       const bait = BAIT_CATALOG[baitKey];

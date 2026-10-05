@@ -14,7 +14,7 @@ import {
   getMiningZonesList
 } from '../data/mining.js';
 import { MiningService } from '../services/lifeActivities/MiningService.js';
-import { LIFE_ACTIVITY_LEVEL_TABLE } from '../services/lifeActivities/LifeActivityCore.js';
+import { LifeActivityCore, LIFE_ACTIVITY_LEVEL_TABLE } from '../services/lifeActivities/LifeActivityCore.js';
 
 export function renderMiningUI(state) {
   if (!state) return;
@@ -22,6 +22,7 @@ export function renderMiningUI(state) {
   if (!container) return;
 
   const mState = MiningService.getMiningState(state);
+  const vigor = LifeActivityCore.getVigorState(state);
   const playerLvl = Number(state.level) || 1;
 
   const actState = state.lifeActivities?.mining || { level: 1, xp: 0 };
@@ -183,27 +184,64 @@ export function renderMiningUI(state) {
           <div style="width:${progressPct}%; height:100%; background:linear-gradient(90deg, #f59e0b, #d97706); transition:width 0.2s ease;"></div>
         </div>
 
+        ${isReady ? `
+        <!-- Sweet Spot QTE de Precisão -->
+        <div style="margin:14px auto; max-width:320px; background:rgba(25,16,10,0.9); border:1px solid rgba(245,158,11,0.4); border-radius:8px; padding:10px; box-shadow:inset 0 0 10px rgba(0,0,0,0.8);">
+          <div style="display:flex; justify-content:space-between; font-size:10px; color:#aaa; margin-bottom:5px; font-family:'Cinzel',serif;">
+            <span style="color:#f87171;">⚠️ Falha (&lt;45%)</span>
+            <span style="color:#fbbf24; font-weight:bold;">🎯 Ponto Perfeito (60-80%)</span>
+            <span style="color:#f87171;">⚠️ Falha (&gt;95%)</span>
+          </div>
+          <div id="mining-qte-track" onclick="window.triggerMiningSweetSpot()" style="position:relative; width:100%; height:20px; background:rgba(0,0,0,0.8); border-radius:10px; border:1px solid rgba(245,158,11,0.3); overflow:hidden; cursor:pointer;">
+            <div style="position:absolute; left:45%; width:50%; height:100%; background:rgba(234,179,8,0.2);"></div>
+            <div style="position:absolute; left:60%; width:20%; height:100%; background:linear-gradient(90deg, #d97706, #fbbf24); box-shadow:0 0 10px rgba(245,158,11,0.7);"></div>
+            <div id="mining-qte-needle" class="qte-oscillating-needle" style="position:absolute; top:0; width:6px; height:100%; background:#fff; border-radius:3px; box-shadow:0 0 8px #fff; transform:translateX(-50%); pointer-events:none;"></div>
+          </div>
+          <div style="font-size:9px; color:#94a3b8; text-align:center; margin-top:5px;">
+            Acerte no centro dourado para 2.0x minérios! Cliques cegos provocam instabilidade sísmica e quebra acelerada (-4).
+          </div>
+        </div>
+
         <div>
           <button 
-            onclick="window.finishMiningHarvest()"
-            ${!isReady ? 'disabled' : ''}
+            onclick="window.triggerMiningSweetSpot()"
             style="
               padding: 10px 24px;
               font-family: 'Cinzel', serif;
               font-size: 14px;
               font-weight: bold;
-              background: ${isReady ? 'linear-gradient(180deg, #f59e0b, #b45309)' : 'rgba(50,40,30,0.5)'};
-              border: 1px solid ${isReady ? '#fde68a' : '#444'};
-              color: ${isReady ? '#000' : '#777'};
+              background: linear-gradient(180deg, #f59e0b, #b45309);
+              border: 1px solid #fde68a;
+              color: #000;
               border-radius: 8px;
-              cursor: ${isReady ? 'pointer' : 'not-allowed'};
-              box-shadow: ${isReady ? '0 0 16px rgba(245,158,11,0.5)' : 'none'};
+              cursor: pointer;
+              box-shadow: 0 0 16px rgba(245,158,11,0.5);
               letter-spacing: 0.05em;
             "
           >
-            ${isReady ? '⛏️ EXTRAIR MINÉRIOS' : '🪨 QUEBRANDO A ROCHA...'}
+            ⛏️ EXTRAIR NO MOMENTO EXATO
           </button>
         </div>
+        ` : `
+        <div>
+          <button 
+            disabled
+            style="
+              padding: 10px 24px;
+              font-family: 'Cinzel', serif;
+              font-size: 14px;
+              font-weight: bold;
+              background: rgba(50,40,30,0.5);
+              border: 1px solid #444;
+              color: #777;
+              border-radius: 8px;
+              cursor: not-allowed;
+            "
+          >
+            🪨 QUEBRANDO A ROCHA...
+          </button>
+        </div>
+        `}
       </div>
     `;
   } else {
@@ -304,6 +342,10 @@ export function renderMiningUI(state) {
             </p>
           </div>
           <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <div style="background:rgba(0,0,0,0.5); border:1px solid #38bdf8; border-radius:8px; padding:6px 14px; text-align:center;">
+              <div style="font-size:10px; color:#aaa; text-transform:uppercase;">⚡ Vigor de Trabalho</div>
+              <div style="font-size:16px; font-weight:bold; color:#38bdf8; font-family:'Cinzel',serif;">${vigor.current} / ${vigor.max}</div>
+            </div>
             <div style="background:rgba(0,0,0,0.5); border:1px solid rgba(245,158,11,0.3); border-radius:8px; padding:6px 14px; text-align:center;">
               <div style="font-size:10px; color:#aaa; text-transform:uppercase;">Nível de Mineiro</div>
               <div style="font-size:16px; font-weight:bold; color:#fbbf24; font-family:'Cinzel',serif;">Nv. ${skillLvl} / 40</div>

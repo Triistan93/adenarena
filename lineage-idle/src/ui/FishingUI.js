@@ -6,6 +6,7 @@
 import { el, qs } from '../core/DomHelpers.js';
 import { FISHING_ZONES, FISH_CATALOG, RODS_CATALOG, BAIT_CATALOG, getFishingZonesList } from '../data/fishing.js';
 import { FishingService } from '../services/FishingService.js';
+import { LifeActivityCore } from '../services/lifeActivities/LifeActivityCore.js';
 import { getInventoryCount } from '../services/InventoryService.js';
 import { renderLifeActivityAtlas } from './LifeActivityAtlas.js';
 
@@ -15,6 +16,7 @@ export function renderFishingUI(state) {
   if (!container) return;
 
   const fState = FishingService.getFishingState(state);
+  const vigor = LifeActivityCore.getVigorState(state);
   const prog = FishingService.getSkillProgress(state);
   const stats = FishingService.getFishingStats(state);
   const playerLvl = Number(state.level) || 1;
@@ -311,7 +313,7 @@ export function renderFishingUI(state) {
             onmousedown="this.style.transform='scale(0.97)'"
             onmouseup="this.style.transform='none'"
           >
-            🎣 LANÇAR ANZOL (MANUAL)
+            🎣 LANÇAR ANZOL (MANUAL · -5 ⚡)
           </button>
           
           <button 
@@ -431,9 +433,15 @@ export function renderFishingUI(state) {
               Domine as correntes aquáticas de Elmore-Aden, fisgue espécies lendárias e abasteça os artífices com matérias-primas nobres!
             </p>
           </div>
-          <div style="text-align:right;">
-            <div style="font-size:11px; color:#aaa;">Pescados Totais: <strong style="color:#ffd877;">${stats.totalCaught}</strong></div>
-            <div style="font-size:11px; color:#aaa;">Espécies Descobertas: <strong style="color:#60a5fa;">${stats.speciesDiscovered} / ${stats.totalSpecies}</strong></div>
+          <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+            <div style="background:rgba(0,0,0,0.5); border:1px solid #38bdf8; border-radius:8px; padding:6px 14px; text-align:center;">
+              <div style="font-size:10px; color:#aaa; text-transform:uppercase;">⚡ Vigor de Trabalho</div>
+              <div style="font-size:16px; font-weight:bold; color:#38bdf8; font-family:'Cinzel',serif;">${vigor.current} / ${vigor.max}</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:11px; color:#aaa;">Pescados Totais: <strong style="color:#ffd877;">${stats.totalCaught}</strong></div>
+              <div style="font-size:11px; color:#aaa;">Espécies Descobertas: <strong style="color:#60a5fa;">${stats.speciesDiscovered} / ${stats.totalSpecies}</strong></div>
+            </div>
           </div>
         </div>
 

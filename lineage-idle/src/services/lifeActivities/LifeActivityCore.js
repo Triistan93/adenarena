@@ -69,7 +69,131 @@ export const TOOL_DURABILITY_BY_GRADE = {
   s: 800
 };
 
+export const VIGOR_MAX_DEFAULT = 100;
+export const VIGOR_COST_PER_ACTION = 5;
+export const VIGOR_REGEN_INTERVAL_MS = 180000; // 3 minutos = 1 ponto de Vigor (20 Vigor/hora)
+
 export const LifeActivityCore = {
+  VIGOR_MAX_DEFAULT,
+  VIGOR_COST_PER_ACTION,
+  VIGOR_REGEN_INTERVAL_MS,
+
+  getVigorState(state) {
+    if (!state) return { current: 100, max: 100, percent: 100, lastRegen: Date.now() };
+    if (!state.lifeActivities) {
+      state.lifeActivities = {};
+    }
+    if (!state.lifeActivities.vigor || typeof state.lifeActivities.vigor !== 'object') {
+      state.lifeActivities.vigor = {
+        current: VIGOR_MAX_DEFAULT,
+        max: VIGOR_MAX_DEFAULT,
+        lastRegen: Date.now()
+      };
+    }
+    const vigor = state.lifeActivities.vigor;
+    vigor.max = Number(vigor.max) || VIGOR_MAX_DEFAULT;
+    vigor.current = Math.max(0, Math.min(vigor.max, Number(vigor.current) ?? VIGOR_MAX_DEFAULT));
+    vigor.lastRegen = Number(vigor.lastRegen) || Date.now();
+
+    this.regenVigor(state);
+
+    return {
+      current: Math.floor(vigor.current),
+      max: vigor.max,
+      lastRegen: vigor.lastRegen,
+      percent: Math.min(100, Math.max(0, Math.floor((vigor.current / vigor.max) * 100)))
+    };
+  },
+
+  regenVigor(state) {
+    if (!state?.lifeActivities?.vigor) return;
+    const vigor = state.lifeActivities.vigor;
+    const max = Number(vigor.max) || VIGOR_MAX_DEFAULT;
+    if (vigor.current >= max) {
+      vigor.lastRegen = Date.now();
+      return;
+    }
+    const now = Date.now();
+    const last = Number(vigor.lastRegen) || now;
+    const elapsed = now - last;
+    if (elapsed >= VIGOR_REGEN_INTERVAL_MS) {
+      const points = Math.floor(elapsed / VIGOR_REGEN_INTERVAL_MS);
+      vigor.current = Math.min(max, (Number(vigor.current) || 0) + points);
+      vigor.lastRegen = now - (elapsed % VIGOR_REGEN_INTERVAL_MS);
+    }
+  },
+
+  consumeVigor(state, cost = VIGOR_COST_PER_ACTION) {
+    if (!state) return { success: true, remaining: 100 };
+    this.regenVigor(state);
+    this.getVigorState(state);
+    const vObj = state.lifeActivities.vigor;
+    if (vObj.current < cost) {
+      return { success: false, reason: 'insufficient_vigor', current: vObj.current, cost };
+    }
+    vObj.current = Math.max(0, vObj.current - cost);
+    return { success: true, remaining: vObj.current };
+  },
+
+  restoreVigor(state, amount) {
+    if (!state) return 100;
+    this.getVigorState(state);
+    const vObj = state.lifeActivities.vigor;
+    vObj.current = Math.min(vObj.max, (vObj.current || 0) + Math.max(0, Number(amount) || 0));
+    return vObj.current;
+  },
+
+  /**
+   * Avalia a precisão do Sweet Spot interativo (0% a 100%).
+   * - 'perfect' (60% a 80%): 2.0x yield, +0.35 pureza, normal wear (1), 2.0x XP.
+   * - 'good' (45% a 59% ou 81% a 95%): 1.0x yield, normal wear (1), 1.0x XP.
+   * - 'miss' (<45% ou >95% ou spam desgovernado): 0.25x sobras, desgaste severo (-4 durabilidade), hazard triggered!
+   */
+  evaluateSweetSpot(timingPct, sweetSpotMin = 60, sweetSpotMax = 80) {
+    if (timingPct === null || timingPct === undefined) {
+      return {
+        result: 'good',
+        yieldMultiplier: 1.0,
+        durabilityWear: 1,
+        qualityBonus: 0.0,
+        xpMultiplier: 1.0,
+        hazard: false
+      };
+    }
+
+    const pct = Math.max(0, Math.min(100, Number(timingPct) || 0));
+    if (pct >= sweetSpotMin && pct <= sweetSpotMax) {
+      return {
+        result: 'perfect',
+        yieldMultiplier: 2.0,
+        durabilityWear: 1,
+        qualityBonus: 0.35,
+        xpMultiplier: 2.0,
+        hazard: false
+      };
+    }
+
+    const margin = 15;
+    if (pct >= (sweetSpotMin - margin) && pct <= (sweetSpotMax + margin)) {
+      return {
+        result: 'good',
+        yieldMultiplier: 1.0,
+        durabilityWear: 1,
+        qualityBonus: 0.0,
+        xpMultiplier: 1.0,
+        hazard: false
+      };
+    }
+
+    return {
+      result: 'miss',
+      yieldMultiplier: 0.25,
+      durabilityWear: 4,
+      qualityBonus: -0.50,
+      xpMultiplier: 0.25,
+      hazard: true
+    };
+  },
   getMinimumSkillForRarity(rarity) {
     return LIFE_ACTIVITY_RARITY_LEVELS[rarity] || 1;
   },

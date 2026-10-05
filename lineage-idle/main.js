@@ -38,6 +38,7 @@ import { MANOR_PROVINCES, MANOR_SEEDS }                                       fr
 import { ManorService }                                                       from './src/services/ManorService.js';
 import { FishingService }                                                     from './src/services/FishingService.js';
 import { HuntingService }                                                     from './src/services/HuntingService.js';
+import { LifeActivityCore }                                                   from './src/services/lifeActivities/LifeActivityCore.js';
 import { GatheringService }                                                   from './src/services/lifeActivities/GatheringService.js';
 import { restoreCharacterCp }                                                 from './src/services/ConsumableService.js';
 import { MiningService }                                                      from './src/services/lifeActivities/MiningService.js';
@@ -3840,6 +3841,7 @@ function _performFullUIUpdate() {
   uiInitTooltipEvents();
   updateGameModeUI();
   try { FortressService.updateProductionTick(state); } catch (e) {}
+  try { if (LifeActivityCore) LifeActivityCore.regenVigor(state); } catch (e) {}
   try { if (FishingService && state.fishing?.autoFishing) FishingService.processAutoFish(state, { log, updateAllUI: () => {}, save, floatText }); } catch (e) {}
   try { if (HuntingService && state.hunting?.autoHunting) HuntingService.processAutoHunt(state, { log, updateAllUI: () => {}, save, floatText }); } catch (e) {}
   try { if (GatheringService && state.gathering?.autoGathering) GatheringService.processAutoGather(state, { log, updateAllUI: () => {}, save, floatText }); } catch (e) {}
@@ -9902,7 +9904,50 @@ export function init() {
     window.repairHuntingKnife = (kId) => HuntingService.repairKnife(state, kId, { log, updateAllUI, save });
     window.selectHuntingTactic = (tId) => HuntingService.selectTactic(state, tId, { log, updateAllUI, save });
     window.startHuntingTrack = (tId) => HuntingService.startTracking(state, tId, { log, updateAllUI, save });
-    window.skinHuntingPrey = () => HuntingService.finishSkinning(state, { log, updateAllUI, save, floatText });
+    window.LifeActivityCore = LifeActivityCore;
+    window.getVigorState = () => LifeActivityCore.getVigorState(state);
+    window.restoreVigor = (amt) => LifeActivityCore.restoreVigor(state, amt);
+
+    window.triggerGatheringSweetSpot = () => {
+      const track = document.getElementById('gathering-qte-track');
+      const needle = document.getElementById('gathering-qte-needle');
+      let pct = 70;
+      if (track && needle) {
+        const tRect = track.getBoundingClientRect();
+        const nRect = needle.getBoundingClientRect();
+        const center = nRect.left + nRect.width / 2;
+        pct = Math.round(((center - tRect.left) / tRect.width) * 100);
+      }
+      return window.finishGatheringHarvest(pct);
+    };
+
+    window.triggerMiningSweetSpot = () => {
+      const track = document.getElementById('mining-qte-track');
+      const needle = document.getElementById('mining-qte-needle');
+      let pct = 70;
+      if (track && needle) {
+        const tRect = track.getBoundingClientRect();
+        const nRect = needle.getBoundingClientRect();
+        const center = nRect.left + nRect.width / 2;
+        pct = Math.round(((center - tRect.left) / tRect.width) * 100);
+      }
+      return window.finishMiningHarvest(pct);
+    };
+
+    window.triggerHuntingSweetSpot = () => {
+      const track = document.getElementById('hunting-qte-track');
+      const needle = document.getElementById('hunting-qte-needle');
+      let pct = 70;
+      if (track && needle) {
+        const tRect = track.getBoundingClientRect();
+        const nRect = needle.getBoundingClientRect();
+        const center = nRect.left + nRect.width / 2;
+        pct = Math.round(((center - tRect.left) / tRect.width) * 100);
+      }
+      return window.skinHuntingPrey(pct);
+    };
+
+    window.skinHuntingPrey = (timingPct) => HuntingService.finishSkinning(state, { log, updateAllUI, save, floatText }, timingPct);
     window.executeFieldButchering = (choice) => HuntingService.executeFieldButchering(state, choice, { log, updateAllUI, save, floatText });
     window.toggleAutoHunting = () => HuntingService.toggleAutoHunting(state, { log, updateAllUI, save, floatText });
     window.claimPendingOfflineHuntingRewards = () => HuntingService.processOfflineHunting(state, 0, { log, updateAllUI, save, floatText });
@@ -9917,7 +9962,7 @@ export function init() {
     window.repairGatheringSickle = (sId) => GatheringService.repairSickle(state, sId, { log, updateAllUI, save });
     window.selectGatheringTactic = (tId) => GatheringService.selectTactic(state, tId, { log, updateAllUI, save });
     window.startGatheringHarvest = (nId) => (typeof GatheringService.startHarvest === 'function' ? GatheringService.startHarvest(state, nId, { log, updateAllUI, save }) : GatheringService.startGathering(state, nId, { log, updateAllUI, save }));
-    window.finishGatheringHarvest = () => (typeof GatheringService.finishHarvest === 'function' ? GatheringService.finishHarvest(state, { log, updateAllUI, save, floatText }) : GatheringService.finishGathering(state, { log, updateAllUI, save, floatText }));
+    window.finishGatheringHarvest = (timingPct) => (typeof GatheringService.finishHarvest === 'function' ? GatheringService.finishHarvest(state, { log, updateAllUI, save, floatText }, timingPct) : GatheringService.finishGathering(state, { log, updateAllUI, save, floatText }));
     window.inspectGatheringNode = () => GatheringService.inspectNode(state, { log, updateAllUI, save, floatText });
     window.skipGatheringNode = () => GatheringService.skipNode(state, { log, updateAllUI, save, floatText });
     window.toggleAutoGathering = () => GatheringService.toggleAutoGathering(state, { log, updateAllUI, save, floatText });
@@ -9933,7 +9978,7 @@ export function init() {
     window.repairMiningPickaxe = (pId) => MiningService.repairPickaxe(state, pId, { log, updateAllUI, save });
     window.selectMiningTactic = (tId) => MiningService.selectTactic(state, tId, { log, updateAllUI, save });
     window.startMiningHarvest = (nId) => MiningService.startMining(state, nId, { log, updateAllUI, save });
-    window.finishMiningHarvest = () => MiningService.finishMining(state, { log, updateAllUI, save, floatText });
+    window.finishMiningHarvest = (timingPct) => MiningService.finishMining(state, { log, updateAllUI, save, floatText }, timingPct);
     window.claimPendingOfflineMiningRewards = () => MiningService.claimOfflineMiningReward(state, { log, updateAllUI, save, floatText });
     window.probeMiningVein = () => MiningService.probeVein(state, { log, updateAllUI, save });
     window.shoreUpMiningGallery = () => MiningService.shoreUpGallery(state, { log, updateAllUI, save });

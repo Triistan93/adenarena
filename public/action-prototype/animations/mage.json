@@ -1,0 +1,121 @@
+{
+  "source": "exec-52cdea7d-3493-44d3-ab6e-30b28ca418e7.png",
+  "tool": "built-in ImageGen",
+  "columns": 4,
+  "rows": 3,
+  "cellW": 384,
+  "cellH": 288,
+  "anchorX": 156,
+  "baseline": 276,
+  "scale": 0.675,
+  "frames": [
+    {
+      "id": 1,
+      "count": 41235,
+      "left": 111,
+      "right": 362,
+      "top": 4,
+      "bottom": 340,
+      "anchor": 254
+    },
+    {
+      "id": 2,
+      "count": 37242,
+      "left": 481,
+      "right": 698,
+      "top": 10,
+      "bottom": 343,
+      "anchor": 595
+    },
+    {
+      "id": 3,
+      "count": 35256,
+      "left": 812,
+      "right": 1033,
+      "top": 12,
+      "bottom": 344,
+      "anchor": 940
+    },
+    {
+      "id": 4,
+      "count": 38003,
+      "left": 1141,
+      "right": 1391,
+      "top": 13,
+      "bottom": 348,
+      "anchor": 1287.5
+    },
+    {
+      "id": 6,
+      "count": 40660,
+      "left": 107,
+      "right": 360,
+      "top": 350,
+      "bottom": 696,
+      "anchor": 259.5
+    },
+    {
+      "id": 7,
+      "count": 37321,
+      "left": 483,
+      "right": 709,
+      "top": 355,
+      "bottom": 685,
+      "anchor": 585
+    },
+    {
+      "id": 8,
+      "count": 38881,
+      "left": 844,
+      "right": 1067,
+      "top": 360,
+      "bottom": 696,
+      "anchor": 972.5
+    },
+    {
+      "id": 9,
+      "count": 39286,
+      "left": 1168,
+      "right": 1399,
+      "top": 360,
+      "bottom": 695,
+      "anchor": 1310.5
+    },
+    {
+      "id": 21,
+      "count": 45405,
+      "left": 50,
+      "right": 288,
+      "top": 697,
+      "bottom": 1043,
+      "anchor": 181.5
+    },
+    {
+      "id": 20,
+      "count": 47763,
+      "left": 352,
+      "right": 691,
+      "top": 692,
+      "bottom": 1040,
+      "anchor": 549
+    },
+    {
+      "id": 23,
+      "count": 49559,
+      "left": 692,
+      "right": 1188,
+      "top": 750,
+      "bottom": 1041,
+      "anchor": 871
+    },
+    {
+      "id": 22,
+      "count": 39903,
+      "left": 1197,
+      "right": 1392,
+      "top": 699,
+      "bottom": 1043,
+      "anchor": 1301
+    }
+  ]
+}

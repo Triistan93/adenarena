@@ -16,6 +16,7 @@ import {
   getHuntingXpForLevel
 } from '../data/hunting.js';
 import { HuntingService } from '../services/HuntingService.js';
+import { LifeActivityCore } from '../services/lifeActivities/LifeActivityCore.js';
 
 export function renderHuntingUI(state) {
   if (!state) return;
@@ -23,6 +24,7 @@ export function renderHuntingUI(state) {
   if (!container) return;
 
   const hState = HuntingService.getHuntingState(state);
+  const vigor = LifeActivityCore.getVigorState(state);
   const playerLvl = Number(state.level) || 1;
 
   const skillLvl = hState.skillLevel || 1;
@@ -215,27 +217,64 @@ export function renderHuntingUI(state) {
           <div style="width:${progressPct}%; height:100%; background:linear-gradient(90deg, #34d399, #10b981); transition:width 0.2s ease;"></div>
         </div>
 
+        ${isReady ? `
+        <!-- Sweet Spot QTE de Precisão -->
+        <div style="margin:14px auto; max-width:320px; background:rgba(16,24,20,0.9); border:1px solid rgba(52,211,153,0.4); border-radius:8px; padding:10px; box-shadow:inset 0 0 10px rgba(0,0,0,0.8);">
+          <div style="display:flex; justify-content:space-between; font-size:10px; color:#aaa; margin-bottom:5px; font-family:'Cinzel',serif;">
+            <span style="color:#f87171;">⚠️ Alerta Alto (&lt;45%)</span>
+            <span style="color:#6ee7b7; font-weight:bold;">🎯 Golpe Crítico (60-80%)</span>
+            <span style="color:#f87171;">⚠️ Alerta Alto (&gt;95%)</span>
+          </div>
+          <div id="hunting-qte-track" onclick="window.triggerHuntingSweetSpot()" style="position:relative; width:100%; height:20px; background:rgba(0,0,0,0.8); border-radius:10px; border:1px solid rgba(52,211,153,0.3); overflow:hidden; cursor:pointer;">
+            <div style="position:absolute; left:45%; width:50%; height:100%; background:rgba(234,179,8,0.2);"></div>
+            <div style="position:absolute; left:60%; width:20%; height:100%; background:linear-gradient(90deg, #10b981, #34d399); box-shadow:0 0 10px rgba(52,211,153,0.7);"></div>
+            <div id="hunting-qte-needle" class="qte-oscillating-needle" style="position:absolute; top:0; width:6px; height:100%; background:#fff; border-radius:3px; box-shadow:0 0 8px #fff; transform:translateX(-50%); pointer-events:none;"></div>
+          </div>
+          <div style="font-size:9px; color:#94a3b8; text-align:center; margin-top:5px;">
+            Acerte no centro verde para golpe crítico e esfolamento perfeito! Cliques cegos aumentam o alerta (+40%) e a presa foge!
+          </div>
+        </div>
+
         <div>
           <button 
-            onclick="window.skinHuntingPrey()"
-            ${!isReady ? 'disabled' : ''}
+            onclick="window.triggerHuntingSweetSpot()"
             style="
               padding: 10px 24px;
               font-family: 'Cinzel', serif;
               font-size: 14px;
               font-weight: bold;
-              background: ${isReady ? 'linear-gradient(180deg, #34d399, #059669)' : 'rgba(50,60,50,0.5)'};
-              border: 1px solid ${isReady ? '#6ee7b7' : '#444'};
-              color: ${isReady ? '#000' : '#777'};
+              background: linear-gradient(180deg, #34d399, #059669);
+              border: 1px solid #6ee7b7;
+              color: #000;
               border-radius: 8px;
-              cursor: ${isReady ? 'pointer' : 'not-allowed'};
-              box-shadow: ${isReady ? '0 0 16px rgba(52,211,153,0.5)' : 'none'};
+              cursor: pointer;
+              box-shadow: 0 0 16px rgba(52,211,153,0.5);
               letter-spacing: 0.05em;
             "
           >
-            ${isReady ? '🔪 ABATER PRESA' : '🐾 ENCURRALANDO...'}
+            🔪 ABATER NO MOMENTO CERTO
           </button>
         </div>
+        ` : `
+        <div>
+          <button 
+            disabled
+            style="
+              padding: 10px 24px;
+              font-family: 'Cinzel', serif;
+              font-size: 14px;
+              font-weight: bold;
+              background: rgba(50,60,50,0.5);
+              border: 1px solid #444;
+              color: #777;
+              border-radius: 8px;
+              cursor: not-allowed;
+            "
+          >
+            🐾 ENCURRALANDO...
+          </button>
+        </div>
+        `}
       </div>
     `;
   } else {
@@ -346,6 +385,10 @@ export function renderHuntingUI(state) {
             </p>
           </div>
           <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <div style="background:rgba(0,0,0,0.5); border:1px solid #38bdf8; border-radius:8px; padding:6px 14px; text-align:center;">
+              <div style="font-size:10px; color:#aaa; text-transform:uppercase;">⚡ Vigor de Trabalho</div>
+              <div style="font-size:16px; font-weight:bold; color:#38bdf8; font-family:'Cinzel',serif;">${vigor.current} / ${vigor.max}</div>
+            </div>
             <div style="background:rgba(0,0,0,0.5); border:1px solid rgba(52,211,153,0.3); border-radius:8px; padding:6px 14px; text-align:center;">
               <div style="font-size:10px; color:#aaa; text-transform:uppercase;">Nível de Caçador</div>
               <div style="font-size:16px; font-weight:bold; color:#6ee7b7; font-family:'Cinzel',serif;">Nv. ${skillLvl} / 30</div>

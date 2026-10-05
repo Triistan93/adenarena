@@ -135,6 +135,11 @@ export const DEFAULT_STATE = () => ({
   },
   lastRankingRewardClaim: 0,
   lifeActivities: {
+    vigor: {
+      current: 100,
+      max: 100,
+      lastRegen: Date.now()
+    },
     fishing: {
       level: 1, xp: 0,
       tool: 'rod_novice', toolDurability: 50, maxDurability: 50,
@@ -468,6 +473,17 @@ export function loadState() {
     // ─── Migrações Canônicas: Life Activities ───
     if (!currentState.lifeActivities) {
       currentState.lifeActivities = def.lifeActivities;
+    }
+    if (!currentState.lifeActivities.vigor || typeof currentState.lifeActivities.vigor !== 'object') {
+      currentState.lifeActivities.vigor = {
+        current: 100,
+        max: 100,
+        lastRegen: Date.now()
+      };
+    } else {
+      currentState.lifeActivities.vigor.max = Number(currentState.lifeActivities.vigor.max) || 100;
+      currentState.lifeActivities.vigor.current = Math.max(0, Math.min(currentState.lifeActivities.vigor.max, Number(currentState.lifeActivities.vigor.current) ?? 100));
+      currentState.lifeActivities.vigor.lastRegen = Number(currentState.lifeActivities.vigor.lastRegen) || Date.now();
     }
     if (data.fishing) {
       currentState.lifeActivities.fishing = currentState.lifeActivities.fishing || def.lifeActivities.fishing;

@@ -1,5 +1,93 @@
 import * as THREE from "three";
 import type { ClassDef, EnemyType, RaceDef, RaceId } from "./data";
+import { getPrototypeAnimation } from './prototypeArt.js';
+
+const prototypeTextureLoader = new THREE.TextureLoader();
+const prototypeTextures = new Map<string, Promise<THREE.Texture>>();
+
+function loadPrototypeTexture(url: string): Promise<THREE.Texture> {
+  let texture = prototypeTextures.get(url);
+  if (!texture) {
+    texture = new Promise((resolve, reject) => {
+      prototypeTextureLoader.load(url, resolve, undefined, reject);
+    });
+    prototypeTextures.set(url, texture);
+  }
+  return texture;
+}
+
+function addPrototypePortrait(
+  group: THREE.Group,
+  url: string,
+  maxDimension: number,
+  onLoaded: (sprite: THREE.Sprite) => void,
+  animationUrl?: string | null
+): THREE.Sprite {
+  const material = new THREE.SpriteMaterial({
+    color: 0xffffff,
+    transparent: true,
+    alphaTest: 0.06,
+    depthWrite: false,
+    toneMapped: false,
+  });
+  const sprite = new THREE.Sprite(material);
+  sprite.visible = false;
+  sprite.position.y = maxDimension / 2;
+  sprite.scale.set(maxDimension * 0.72, maxDimension, 1);
+  sprite.renderOrder = 2;
+  group.add(sprite);
+  group.userData.prototypePortrait = sprite;
+
+  const install = (source: THREE.Texture, animated: boolean) => {
+    if (group.userData.disposed) return;
+    const texture = source.clone();
+    texture.userData.prototypeOwned = true;
+    texture.colorSpace = THREE.SRGBColorSpace;
+    material.map = texture;
+    material.needsUpdate = true;
+    const aspect = animated ? 384 / 288 : texture.image.width / texture.image.height;
+    const width = aspect > 1 ? maxDimension : maxDimension * aspect;
+    const height = aspect > 1 ? maxDimension / aspect : maxDimension;
+    sprite.scale.set(width, height, 1);
+    sprite.position.y = height / 2;
+    if (animated) {
+      sprite.scale.set(4.8, 3.6, 1);
+      sprite.position.y = .05;
+      sprite.center.set(156 / 384, 12 / 288);
+      texture.repeat.set(1/4, 1/3);
+      texture.offset.set(0, 2/3);
+    }
+    texture.needsUpdate = true;
+    group.userData.prototypeAnimated = animated;
+    sprite.visible = true;
+    onLoaded(sprite);
+  };
+  void loadPrototypeTexture(animationUrl || url).then(texture => install(texture, Boolean(animationUrl))).catch(() => {
+    // Fall back to the approved portrait if the animation cannot be loaded.
+    if (animationUrl) void loadPrototypeTexture(url).then(t => install(t, false)).catch(() => {});
+  });
+
+  return sprite;
+}
+
+export function animatePrototypePortrait(group: THREE.Group, frame: number, facing: number, hit = 0, windup = 0) {
+  const sprite = group.userData.prototypePortrait as THREE.Sprite | undefined;
+  if (!sprite?.visible || !sprite.material.map) return;
+  const texture = sprite.material.map;
+  const flip = facing < 0;
+  if (group.userData.prototypeAnimated) {
+    const index = Math.max(0, Math.min(11, frame));
+    texture.repeat.set((flip ? -1 : 1) / 4, 1 / 3);
+    texture.offset.set((index % 4 + (flip ? 1 : 0)) / 4, 1 - (Math.floor(index / 4) + 1) / 3);
+    sprite.center.x = flip ? 1 - 156 / 384 : 156 / 384;
+  } else {
+    texture.repeat.x = flip ? -1 : 1;
+    texture.offset.x = flip ? 1 : 0;
+  }
+  const flash = Math.min(1, Math.max(0, hit / .12));
+  sprite.material.color.setRGB(1, 1 - flash * .65, 1 - flash * .65);
+  sprite.material.rotation = (flip ? -1 : 1) * (windup * .15 - flash * .08);
+}
 
 // ---------- Toon shading ----------
 const gradColors = new Uint8Array([
@@ -261,7 +349,8 @@ export interface PlayerRig {
 
 export function buildPlayer(
   race: RaceDef,
-  cls: ClassDef
+  cls: ClassDef,
+  prototypePortrait?: string | null
 ): PlayerRig {
   const group = new THREE.Group();
   const root = new THREE.Group();
@@ -498,6 +587,12 @@ export function buildPlayer(
   if (race.id === "elf") group.scale.set(0.95, 1.08, 0.95);
   if (race.id === "darkelf") group.scale.set(0.97, 1.04, 0.97);
 
+  if (prototypePortrait) {
+    addPrototypePortrait(group, prototypePortrait, 3.1, () => {
+      root.visible = false;
+    }, getPrototypeAnimation(race.id, cls.id));
+  }
+
   group.userData.weaponPivot = weaponPivot;
   return {
     group,
@@ -536,7 +631,7 @@ export function buildNPC(): { group: THREE.Group; weaponPivot: THREE.Group } {
 }
 
 // ---------- Enemies ----------
-export function buildEnemy(type: EnemyType): {
+export function buildEnemy(type: EnemyType, prototypePortrait?: string | null): {
   group: THREE.Group;
   flashMats: THREE.Material[];
   baseEmissive: string[];
@@ -695,7 +790,16 @@ export function buildEnemy(type: EnemyType): {
     }
   }
 
-  group.add(shadow(0.7));
+  const groundShadow = shadow(0.7);
+  groundShadow.userData.prototypeGroundShadow = true;
+  group.add(groundShadow);
+  if (prototypePortrait) {
+    addPrototypePortrait(group, prototypePortrait, 2.25, (sprite) => {
+      for (const child of group.children) {
+        if (child !== sprite && child.userData.prototypeGroundShadow !== true) child.visible = false;
+      }
+    });
+  }
   const baseEmissive = flashMats.map((m) => (m as THREE.MeshToonMaterial).emissive.getHexString());
   const baseIntensity = flashMats.map((m) => (m as THREE.MeshToonMaterial).emissiveIntensity);
   return { group, flashMats, baseEmissive, baseIntensity };

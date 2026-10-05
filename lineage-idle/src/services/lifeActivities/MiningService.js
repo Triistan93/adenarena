@@ -371,6 +371,19 @@ export const MiningService = {
       return { success: false, reason: 'broken_tool' };
     }
 
+    // Validação de Vigor de Trabalho (Anti-Abuso Econômico)
+    const vigor = LifeActivityCore.getVigorState(state);
+    if (vigor.current < 5) {
+      if (callbacks.log) callbacks.log(`⚡ **VIGOR INSUFICIENTE!** Você está exausto para minerar (Vigor: ${vigor.current}/100). Descanse para recuperar energia.`, 'warning');
+      return { success: false, reason: 'insufficient_vigor' };
+    }
+
+    // Validação de Estabilidade da Galeria (Desabamento por autoclick / imperícia)
+    if ((mState.galleryStability ?? 100) <= 0) {
+      if (callbacks.log) callbacks.log('💥 **GALERIA DESABADA!** As vigas de sustentação ruíram! Escora a galeria antes de continuar escavando.', 'error');
+      return { success: false, reason: 'gallery_collapsed' };
+    }
+
     if (tacticId && MINING_TACTICS[tacticId]) {
       mState.selectedTactic = tacticId;
       mState.activeTactic = tacticId;
@@ -414,7 +427,7 @@ export const MiningService = {
     return { success: true };
   },
 
-  finishMining(state, callbacks = {}) {
+  finishMining(state, callbacks = {}, timingPct = null) {
     const mState = this.getMiningState(state);
     if (!mState.isMining || !mState.targetedNodeId) return false;
 
@@ -443,7 +456,6 @@ export const MiningService = {
     if (mState.veinHazard === 'seismic_fault') {
       stabilityLoss *= 2;
     }
-    const stabilityAfter = Math.max(0, mState.galleryStability - stabilityLoss);
     const gasPocketExplosion = mState.veinHazard === 'gas_pocket' && tactic.id === 'heavy';
 
     const pickBonus = pickDef?.qualityBonus || 0.0;
@@ -460,6 +472,25 @@ export const MiningService = {
     let basePrimaryQty = node.yields.primaryQty || 1;
     let baseSecQty = node.yields.secondaryQty || 0;
 
+    // Avaliação de Precisão do Sweet Spot (Anti-Autoclicker)
+    const sweetSpot = LifeActivityCore.evaluateSweetSpot(timingPct);
+    let extraDurabilityPenalty = 0;
+
+    if (sweetSpot.result === 'miss') {
+      extraDurabilityPenalty += 3; // severo dano na picareta
+      stabilityLoss += 20; // severo abalo na sustentação da mina
+      basePrimaryQty = Math.max(1, Math.floor(basePrimaryQty * sweetSpot.yieldMultiplier));
+      baseSecQty = Math.floor(baseSecQty * sweetSpot.yieldMultiplier);
+      if (callbacks.log) callbacks.log('⚠️ **GOLPE BRUTO DESALINHADO!** A picareta ricocheteou na rocha (-3 Durabilidade extra, -20% Estabilidade da Galeria)! Minérios pulverizados.', 'warning');
+    } else if (sweetSpot.result === 'perfect') {
+      basePrimaryQty = Math.round(basePrimaryQty * sweetSpot.yieldMultiplier);
+      baseSecQty = Math.round(baseSecQty * sweetSpot.yieldMultiplier);
+      stabilityLoss = Math.floor(stabilityLoss * 0.5); // impacto suave poupa as vigas
+      if (callbacks.log) callbacks.log('💎 **GOLPE CIRÚRGICO NO SWEET SPOT!** Você cravou a fenda perfeita do minério (+200% Rendimento e XP)!', 'gain');
+    }
+
+    const stabilityAfter = Math.max(0, mState.galleryStability - stabilityLoss);
+
     if (mState.veinHazard === 'dense_crystal' && tactic.id === 'precision') {
       basePrimaryQty *= 2;
       baseSecQty *= 2;
@@ -473,7 +504,7 @@ export const MiningService = {
 
     const primaryQty = pending?.primaryQty ?? RewardEngine.calculateYield(basePrimaryQty, quality);
     const secQty = pending?.secQty ?? (baseSecQty > 0 ? RewardEngine.calculateYield(baseSecQty, quality) : 0);
-    const finalXp = pending?.finalXp ?? Math.round((node.xpReward || 8) * quality.mult);
+    const finalXp = pending?.finalXp ?? Math.round((node.xpReward || 8) * quality.mult * (sweetSpot.xpMultiplier || 1));
     const rewardDrops = [{ itemId: primaryMat, count: primaryQty }];
     if (secMat && secQty > 0) rewardDrops.push({ itemId: secMat, count: secQty });
     if (!hasRoomForStackRewards(state, rewardDrops)) {
@@ -487,8 +518,15 @@ export const MiningService = {
       return false;
     }
 
+    // Consome Vigor de Trabalho (5 pontos por extração concluída)
+    const vigorRes = LifeActivityCore.consumeVigor(state, 5);
+    if (!vigorRes.success) {
+      if (callbacks.log) callbacks.log(`⚡ **VIGOR ESGOTADO!** Você está sem vigor para concluir a extração (Vigor: ${vigorRes.current}/100). Descanse para recuperar energia.`, 'warning');
+      return false;
+    }
+
     if (mState.pickaxeDurability[activePickaxeId] !== undefined) {
-      mState.pickaxeDurability[activePickaxeId] = Math.max(0, mState.pickaxeDurability[activePickaxeId] - 1);
+      mState.pickaxeDurability[activePickaxeId] = Math.max(0, mState.pickaxeDurability[activePickaxeId] - 1 - extraDurabilityPenalty);
     }
     const actState = LifeActivityCore.getActivityState(state, 'mining');
     actState.toolDurability = mState.pickaxeDurability[activePickaxeId] ?? 0;
@@ -503,11 +541,11 @@ export const MiningService = {
 
     mState.galleryStability = stabilityAfter;
     const brokeOnThisExtraction = actState.toolDurability <= 0;
-    if (mState.galleryStability <= 15 && callbacks.log) {
+    if (mState.galleryStability <= 0) {
+      mState.autoMining = false;
+      if (callbacks.log) callbacks.log('💥 **COLAPSO TOTAL DA MINA!** As vigas cederam completamente (0% Estabilidade). Escora a galeria com madeira na cidade antes de minerar!', 'error');
+    } else if (mState.galleryStability <= 15 && callbacks.log) {
       callbacks.log('⚠️ DESABAMENTO PARCIAL NA MINA! Pedras caem do teto, você perdeu 50% dos minérios do veio.', 'error');
-    }
-    if (mState.veinHazard === 'dense_crystal' && tactic.id === 'precision' && callbacks.log) {
-      callbacks.log('✨ Extração cirúrgica de Veio Cristalino bem-sucedida! Rendimento DOBRADO.', 'system');
     }
 
     addToInventory(state, primaryMat, primaryQty, node.rarity, false, callbacks, true);
@@ -537,7 +575,8 @@ export const MiningService = {
     }
 
     if (callbacks.log) {
-      const qualityPrefix = quality.tier === 'perfect' ? '💎 **MINÉRIO IMACULADO!**'
+      const qualityPrefix = sweetSpot.result === 'perfect' ? '💎 **MINÉRIO IMACULADO NO SWEET SPOT!**'
+        : quality.tier === 'perfect' ? '💎 **MINÉRIO IMACULADO!**'
         : quality.tier === 'excellent' ? '✨ **MINÉRIO PURÍSSIMO!**'
         : '✓ Extração concluída:';
       callbacks.log(`⛏️ ${qualityPrefix} Extraiu **${node.name}** [${quality.name}]! Obteve +${primaryQty}x ${primaryMat.toUpperCase()}${secMat && secQty > 0 ? ` e +${secQty}x ${secMat.toUpperCase()}` : ''}! (+${finalXp} XP de Mineração)`, 'loot');
@@ -569,7 +608,7 @@ export const MiningService = {
     if (callbacks.log) {
       callbacks.log(
         mState.autoMining
-          ? '⛏️ **Mineração Automática (AFK) ATIVADA!** Seu anão/mineiro extrairá veios minerais continuamente.'
+          ? '⛏️ **Mineração Automática (AFK) ATIVADA!** Consome 5 Vigor e lâmpadas enquanto extrai veios continuamente.'
           : '⏸️ **Mineração Automática (AFK) PAUSADA.**',
         'system'
       );
@@ -583,6 +622,37 @@ export const MiningService = {
   processAutoMine(state, callbacks = {}) {
     const mState = this.getMiningState(state);
     if (!mState.autoMining) return;
+
+    // 1. Validação de Vigor de Trabalho (5 pontos necessários)
+    const vigor = LifeActivityCore.getVigorState(state);
+    if (vigor.current < 5) {
+      mState.autoMining = false;
+      if (callbacks.log) callbacks.log('⚡ **Mineração AFK pausada:** Vigor de Trabalho esgotado! Descanse para recuperar energia.', 'warning');
+      if (callbacks.updateAllUI) callbacks.updateAllUI();
+      return;
+    }
+
+    // 2. Validação de Lâmpadas/Óleo (Consumíveis de Mineração)
+    const totalLamps = Object.values(mState.lampInventory || {}).reduce((sum, c) => sum + (Number(c) || 0), 0);
+    if (totalLamps <= 0) {
+      mState.autoMining = false;
+      if (callbacks.log) callbacks.log('⚠️ **Mineração AFK pausada:** O combustível dos lampiões acabou! Compre mais óleo na Associação de Mineração.', 'warning');
+      if (callbacks.updateAllUI) callbacks.updateAllUI();
+      return;
+    }
+
+    if (!mState.activeLamp || (mState.lampInventory[mState.activeLamp] || 0) <= 0) {
+      const nextLamp = Object.keys(mState.lampInventory).find(k => (mState.lampInventory[k] || 0) > 0);
+      if (nextLamp) mState.activeLamp = nextLamp;
+    }
+
+    // 3. Validação de Estabilidade da Galeria
+    if ((mState.galleryStability ?? 100) <= 0) {
+      mState.autoMining = false;
+      if (callbacks.log) callbacks.log('⚠️ **Mineração AFK interrompida:** A galeria está colapsada (0% Estabilidade). Escora a mina para retomar.', 'error');
+      if (callbacks.updateAllUI) callbacks.updateAllUI();
+      return;
+    }
 
     const activePickaxeId = mState.pickaxe || 'pickaxe_none';
     const dur = mState.pickaxeDurability[activePickaxeId] ?? 0;

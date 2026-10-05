@@ -1,6 +1,8 @@
 import * as THREE from "three";
 import { OutlineEffect } from "three/examples/jsm/effects/OutlineEffect.js";
 import { shouldBridgeIdleProgression } from "./actionPrototype.js";
+import { getPrototypeEnemyPortrait, getPrototypeHeroPortrait } from "./prototypeArt.js";
+import { SpriteMotion } from './prototypeMotion.js';
 import {
   ENEMY_TYPES,
   CLASS_META,
@@ -21,6 +23,7 @@ import {
 } from "./items";
 import {
   buildPlayer,
+  animatePrototypePortrait,
   buildEnemy,
   buildProjectileMesh,
   buildOrbMesh,
@@ -337,6 +340,12 @@ export class Game {
   matk = 20;
   level = 1;
   prototypeDamageBonus = 0;
+  prototypePotions = 3;
+  prototypeRations = 2;
+  prototypeRationT = 0;
+  prototypeMotion = new SpriteMotion();
+  prototypePendingAction: { aim: number; skill: SkillDef | null } | null = null;
+  prototypeDeaths: { group: THREE.Group; life: number }[] = [];
 
   constructor(
     canvas: HTMLCanvasElement,
@@ -386,6 +395,7 @@ export class Game {
 
   // ---------- setup ----------
   initThree() {
+    const actionPrototype = Boolean(this.cfg.campaignWaveLimit);
     this.renderer = new THREE.WebGLRenderer({
       canvas: this.canvas,
       antialias: true,
@@ -397,23 +407,27 @@ export class Game {
       defaultAlpha: 0.8,
     });
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color("#0e121a");
-    this.scene.fog = new THREE.FogExp2("#0e121a", 0.009);
+    this.scene.background = new THREE.Color(actionPrototype ? "#11121b" : "#0e121a");
+    this.scene.fog = new THREE.FogExp2(actionPrototype ? "#171521" : "#0e121a", actionPrototype ? 0.016 : 0.009);
 
     // Camera Isometric 2.5D Graveyard Keeper angle (FOV 42)
     this.camera = new THREE.PerspectiveCamera(42, 1, 0.1, 900);
     this.camera.position.set(0, 18, 16);
 
-    const hemi = new THREE.HemisphereLight(0x405578, 0x38281a, 0.85);
+    const hemi = new THREE.HemisphereLight(
+      actionPrototype ? 0x68729a : 0x405578,
+      actionPrototype ? 0x241b24 : 0x38281a,
+      actionPrototype ? 0.7 : 0.85
+    );
     this.scene.add(hemi);
-    const sun = new THREE.DirectionalLight(0xffbd69, 1.25);
+    const sun = new THREE.DirectionalLight(actionPrototype ? 0xffa85d : 0xffbd69, actionPrototype ? 1.05 : 1.25);
     sun.position.set(24, 32, 16);
     this.scene.add(sun);
     this.sun = sun;
-    const fill = new THREE.DirectionalLight(0x7890cc, 0.4);
+    const fill = new THREE.DirectionalLight(actionPrototype ? 0x9a69cb : 0x7890cc, actionPrototype ? 0.55 : 0.4);
     fill.position.set(-14, 10, -8);
     this.scene.add(fill);
-    const glow = new THREE.PointLight(0xff9d26, 1.2, 80);
+    const glow = new THREE.PointLight(actionPrototype ? 0xb83d75 : 0xff9d26, actionPrototype ? 1.6 : 1.2, 80);
     glow.position.set(0, 7, 3);
     this.scene.add(glow);
 
@@ -431,7 +445,7 @@ export class Game {
 
     const ground = new THREE.Mesh(
       new THREE.PlaneGeometry(2000, 2000, 1, 1),
-      new THREE.MeshLambertMaterial({ color: "#3d5c2e" })
+      new THREE.MeshLambertMaterial({ color: actionPrototype ? "#29252d" : "#3d5c2e" })
     );
     ground.rotation.x = -Math.PI / 2;
     (ground.material as THREE.Material).userData.outlineParameters = {
@@ -441,7 +455,7 @@ export class Game {
     // stone plaza under the village
     const plaza = new THREE.Mesh(
       new THREE.CircleGeometry(22, 44),
-      new THREE.MeshLambertMaterial({ color: "#7a7a6c" })
+      new THREE.MeshLambertMaterial({ color: actionPrototype ? "#49434d" : "#7a7a6c" })
     );
     plaza.rotation.x = -Math.PI / 2;
     plaza.position.y = 0.03;
@@ -452,7 +466,7 @@ export class Game {
     // path ring
     const path = new THREE.Mesh(
       new THREE.RingGeometry(13, 15.5, 48),
-      new THREE.MeshLambertMaterial({ color: "#9a8a70" })
+      new THREE.MeshLambertMaterial({ color: actionPrototype ? "#58434c" : "#9a8a70" })
     );
     path.rotation.x = -Math.PI / 2;
     path.position.y = 0.04;
@@ -577,7 +591,12 @@ export class Game {
     this.resize();
     this.px = 0;
     this.py = 0;
-    const built = buildPlayer(this.cfg.race, this.cfg.cls);
+    const isolatedPrototype = !shouldBridgeIdleProgression(this.cfg);
+    const built = buildPlayer(
+      this.cfg.race,
+      this.cfg.cls,
+      isolatedPrototype ? getPrototypeHeroPortrait(this.cfg.race.id, this.cfg.cls.id) : null
+    );
     this.playerGroup = built.group;
     this.weaponPivot = built.weaponPivot;
     this.rig = {
@@ -675,6 +694,10 @@ export class Game {
     if (["arrowup", "arrowdown", "arrowleft", "arrowright", " "].includes(k))
       e.preventDefault();
     this.keys.add(k);
+    if (!shouldBridgeIdleProgression(this.cfg)) {
+      if (k === "3") this.usePrototypeConsumable("potion");
+      if (k === "4") this.usePrototypeConsumable("ration");
+    }
     if (k === "1" || k === "q") this.castSkill(0);
     if (k === "2" || k === "e") this.castSkill(1);
   };
@@ -700,11 +723,24 @@ export class Game {
       if (this.running) this.pause();
       return;
     }
-    // skill buttons
+    // Action hotbar. The isolated prototype maps slot 1 to attack, then skills and supplies.
     for (let i = 0; i < this.skillRects.length; i++) {
       const r = this.skillRects[i];
       if (x >= r.x && x <= r.x + r.w && y >= r.y && y <= r.y + r.h) {
-        this.castSkill(i);
+        if (!shouldBridgeIdleProgression(this.cfg)) {
+          if (i === 0) {
+            this.mouseActive = true;
+            this.lastMouseMove = performance.now();
+            this.mouseX = x;
+            this.mouseY = y;
+            this.mouseDown = true;
+          } else if (i === 1) this.castSkill(0);
+          else if (i === 2) this.castSkill(1);
+          else if (i === 3) this.usePrototypeConsumable("potion");
+          else if (i === 4) this.usePrototypeConsumable("ration");
+        } else {
+          this.castSkill(i);
+        }
         return;
       }
     }
@@ -773,17 +809,34 @@ export class Game {
     this.prototypeDamageBonus += gained * 0.035;
   }
 
+  usePrototypeConsumable(kind: "potion" | "ration") {
+    if (shouldBridgeIdleProgression(this.cfg)) return;
+    if (kind === "potion") {
+      if (this.prototypePotions <= 0 || this.hp >= this.maxHp) return;
+      this.prototypePotions -= 1;
+      const restored = Math.min(55, this.maxHp - this.hp);
+      this.hp += restored;
+      this.spawnText(this.px * S, 1.6, this.py * S, `+${Math.round(restored)}`, "#5dff8f");
+      this.spawnParticles(this.px, this.py, "#5dff8f", 14, 3);
+      return;
+    }
+    if (this.prototypeRations <= 0 || this.prototypeRationT > 0) return;
+    this.prototypeRations -= 1;
+    this.prototypeRationT = 8;
+    this.spawnText(this.px * S, 1.6, this.py * S, "VIGOR", "#ffd877");
+  }
+
   spawnSlashArc(color: string) {
     const mesh = buildSlashArcMesh(color);
     const px = this.px * S;
     const pz = this.py * S;
     const offsetDist = 0.9;
     mesh.position.set(
-      px + Math.sin(this.facingAngle || 0) * offsetDist,
+      px + Math.cos(this.aim) * offsetDist,
       1.1,
-      pz + Math.cos(this.facingAngle || 0) * offsetDist
+      pz + Math.sin(this.aim) * offsetDist
     );
-    mesh.rotation.z = -(this.facingAngle || 0);
+    mesh.rotation.z = -this.aim - Math.PI * .375;
     this.scene.add(mesh);
     this.activeVfxMeshes.push({ mesh, life: 0, maxLife: 0.2 });
   }
@@ -791,6 +844,12 @@ export class Game {
   spawnRuneCircle(wx: number, wz: number, color: string, radius = 2.5) {
     const mesh = buildRuneCircleMesh(color, radius);
     mesh.position.set(wx, 0.05, wz);
+    if (!shouldBridgeIdleProgression(this.cfg)) {
+      mesh.geometry.dispose();
+      mesh.geometry = new THREE.RingGeometry(radius * .98, radius, 64);
+      mesh.position.y = .28;
+      mesh.userData.baseOpacity = .45;
+    }
     this.scene.add(mesh);
     this.activeVfxMeshes.push({ mesh, life: 0, maxLife: 0.75 });
   }
@@ -802,7 +861,7 @@ export class Game {
       const progress = item.life / item.maxLife;
       const m = item.mesh as THREE.Mesh;
       if (m.material && "opacity" in m.material) {
-        (m.material as any).opacity = Math.max(0, 1 - progress);
+        (m.material as any).opacity = Math.max(0, 1 - progress) * (m.userData.baseOpacity ?? 1);
       }
       m.scale.setScalar(1 + progress * 0.35);
       if (item.life >= item.maxLife) {
@@ -926,6 +985,10 @@ export class Game {
     if (this.buffSpdT > 0) this.buffSpdT -= dt;
     if (this.buffAtkT > 0) this.buffAtkT -= dt;
     if (this.shieldT > 0) this.shieldT -= dt;
+    if (this.prototypeRationT > 0) {
+      this.prototypeRationT = Math.max(0, this.prototypeRationT - dt);
+      this.hp = Math.min(this.maxHp, this.hp + dt * 3);
+    }
     this.mana = Math.min(this.manaMax, this.mana + this.manaRegen * dt);
     for (let i = 0; i < this.skillCd.length; i++)
       if (this.skillCd[i] > 0)
@@ -966,6 +1029,7 @@ export class Game {
       this.mouseDown ||
       !!this.touchRight;
     if (attackHeld) this.tryAttack();
+    if (!shouldBridgeIdleProgression(this.cfg)) this.updatePrototypeMotion(dt, mx);
 
     // dash
     if (this.dashT > 0) {
@@ -1001,7 +1065,7 @@ export class Game {
     this.updateNPCs();
 
     this.syncPlayer();
-    this.animatePlayer(dt);
+    if (shouldBridgeIdleProgression(this.cfg)) this.animatePlayer(dt);
     this.updateCamera();
   }
 
@@ -1034,13 +1098,25 @@ export class Game {
     const now = performance.now();
     const cd = w.cooldown / (this.buffAtkT > 0 ? this.buffAtkM : 1);
     if (now - this.lastAttack < cd) return;
+    if (!shouldBridgeIdleProgression(this.cfg)) {
+      if (!this.prototypeMotion.startAttack(Math.cos(this.aim))) return;
+      this.lastAttack = now;
+      this.prototypePendingAction = { aim: this.aim, skill: null };
+      return;
+    }
     this.lastAttack = now;
-    const mult = this.buffDmgT > 0 ? this.buffDmgM : 1;
     this.triggerAttackAnim();
+    this.performWeaponAttack();
+  }
+
+  performWeaponAttack() {
+    const w = this.cfg.cls.weapon;
+    const mult = this.buffDmgT > 0 ? this.buffDmgM : 1;
 
     if (w.kind === "melee") {
+      if (!shouldBridgeIdleProgression(this.cfg)) this.spawnSlashArc(w.color);
       this.swing = 0.18;
-      for (const e of this.enemies) {
+      for (const e of [...this.enemies]) {
         const d = Math.hypot(e.x - this.px, e.y - this.py);
         if (d < w.reach + e.r) {
           const ang = Math.atan2(e.y - this.py, e.x - this.px);
@@ -1053,7 +1129,7 @@ export class Game {
           }
         }
       }
-      this.spawnRing(this.px, this.py, w.reach, w.color);
+      if (shouldBridgeIdleProgression(this.cfg)) this.spawnRing(this.px, this.py, w.reach, w.color);
       this.spawnParticles(
         this.px + Math.cos(this.aim) * w.reach * 0.5,
         this.py + Math.sin(this.aim) * w.reach * 0.5,
@@ -1082,6 +1158,34 @@ export class Game {
         2
       );
       this.shake = Math.max(this.shake, 2);
+    }
+  }
+
+  updatePrototypeMotion(dt: number, moveX: number) {
+    const pose = this.prototypeMotion.update(dt, this.moving, moveX);
+    if (pose.released && this.prototypePendingAction) {
+      const action = this.prototypePendingAction;
+      this.prototypePendingAction = null;
+      const currentAim = this.aim;
+      this.aim = action.aim;
+      if (action.skill) this.applySkill(action.skill);
+      else this.performWeaponAttack();
+      this.aim = currentAim;
+    }
+    animatePrototypePortrait(this.playerGroup, pose.frame, pose.facing, this.playerFlash);
+    if (pose.footstep) this.spawnParticles(this.px, this.py, '#9b8b78', 2, .4);
+    for (let i = this.prototypeDeaths.length - 1; i >= 0; i--) {
+      const death = this.prototypeDeaths[i];
+      death.life += dt;
+      const progress = Math.min(1, death.life / .4);
+      const sprite = death.group.userData.prototypePortrait as THREE.Sprite | undefined;
+      if (sprite) { sprite.material.opacity = 1 - progress; sprite.material.rotation = progress * .7; }
+      death.group.position.y = -progress * .4;
+      if (progress >= 1) {
+        this.scene.remove(death.group);
+        this.disposeGroup(death.group);
+        this.prototypeDeaths.splice(i, 1);
+      }
     }
   }
 
@@ -1156,6 +1260,11 @@ export class Game {
         Math.abs(Math.sin(performance.now() * 0.012 + e.rot)) * 0.16;
     }
     const f = clamp(e.hitFlash / 0.12, 0, 1);
+    if (!shouldBridgeIdleProgression(this.cfg)) {
+      // Enemy artwork faces left in its source; mirror when approaching from the left.
+      const windup = e.telegraph > 0 ? 1 - e.telegraph / .4 : e.telegraph < 0 ? -.7 : 0;
+      animatePrototypePortrait(e.group, 0, nx > 0 ? -1 : 1, e.hitFlash, windup);
+    }
     for (let i = 0; i < e.flashMats.length; i++) {
       const fm = e.flashMats[i] as THREE.MeshToonMaterial;
       if (f > 0) {
@@ -1440,8 +1549,8 @@ export class Game {
       this.scene.add(mesh);
       this.orbs.push({ x: e.x, y: e.y, r: 12, life: 14, heal: 0, item: drop, mesh });
     }
-    this.disposeGroup(e.group);
-    this.scene.remove(e.group);
+    if (!shouldBridgeIdleProgression(this.cfg)) this.prototypeDeaths.push({ group: e.group, life: 0 });
+    else { this.disposeGroup(e.group); this.scene.remove(e.group); }
   }
 
   damagePlayer(amount: number) {
@@ -1470,6 +1579,14 @@ export class Game {
     if (this.skillCd[i] > 0) return;
     if (this.mana < sk.mana) {
       this.spawnText(this.px * S, 1.8, this.py * S, "NO MANA", "#ff9090");
+      return;
+    }
+    if (!shouldBridgeIdleProgression(this.cfg)) {
+      if (!this.prototypeMotion.startAttack(Math.cos(this.aim))) return;
+      this.mana -= sk.mana;
+      this.skillCd[i] = sk.cooldown;
+      this.prototypePendingAction = { aim: this.aim, skill: sk };
+      this.spawnRuneCircle(this.px * S, this.py * S, this.cfg.cls.weapon.color, 1.1);
       return;
     }
     this.mana -= sk.mana;
@@ -1647,6 +1764,11 @@ export class Game {
     );
     mesh.rotation.x = -Math.PI / 2;
     mesh.position.set(x * S, 0.06, y * S);
+    if (!shouldBridgeIdleProgression(this.cfg)) {
+      mesh.geometry.dispose();
+      mesh.geometry = new THREE.RingGeometry(.98, 1, 64);
+      mesh.position.y = .28;
+    }
     this.scene.add(mesh);
     this.rings.push({ mesh, life: 0.45, max: 0.45, target: radius * S });
   }
@@ -1711,7 +1833,9 @@ export class Game {
       if (this.spawnQueue === 0 && this.enemies.length === 0) {
         this.score += 60 + this.wave * 12;
         this.waveBanner = 2.4;
-        this.waveBannerText = `WAVE ${this.wave} CLEARED`;
+        this.waveBannerText = this.cfg.campaignWaveLimit
+          ? `INVESTIDA ${this.wave} CONCLUÍDA`
+          : `WAVE ${this.wave} CLEARED`;
         this.hp = Math.min(this.maxHp, this.hp + this.maxHp * 0.12);
         this.spawnParticles(this.px, this.py, "#ffd76a", 24, 5);
         this.waveState = "intermission";
@@ -1735,9 +1859,9 @@ export class Game {
     this.spawnQueue = count + (this.bossPending ? 1 : 0);
     this.waveState = "fighting";
     this.waveBanner = 2.0;
-    this.waveBannerText = this.bossPending
-      ? `WAVE ${this.wave} — BOSS`
-      : `WAVE ${this.wave}`;
+    this.waveBannerText = this.cfg.campaignWaveLimit
+      ? (this.bossPending ? `INVESTIDA ${this.wave} · GUARDIÃO` : `INVESTIDA ${this.wave}`)
+      : (this.bossPending ? `WAVE ${this.wave} — BOSS` : `WAVE ${this.wave}`);
     this.cb.onWaveChanged?.(this.wave);
   }
 
@@ -1782,7 +1906,10 @@ export class Game {
     const dist = 360;
     const ex = this.px + Math.cos(angle) * dist;
     const ey = this.py + Math.sin(angle) * dist;
-    const built = buildEnemy(type);
+    const built = buildEnemy(
+      type,
+      !shouldBridgeIdleProgression(this.cfg) ? getPrototypeEnemyPortrait(type.shape) : null
+    );
     built.group.position.set(ex * S, 0, ey * S);
     this.scene.add(built.group);
     const e: Enemy = {
@@ -1991,6 +2118,81 @@ export class Game {
   }
 
   buildWorld() {
+    if (this.cfg.campaignWaveLimit) {
+      const paving = ["#443e48", "#3b3740", "#504650"].map(
+        (color) => new THREE.MeshLambertMaterial({ color })
+      );
+      for (let z = 12; z >= -14; z -= 2) {
+        for (let x = -4; x <= 4; x += 2) {
+          if (Math.random() < 0.12) continue;
+          const slab = new THREE.Mesh(new THREE.BoxGeometry(1.9, 0.12, 1.9), paving[Math.floor(Math.random() * paving.length)]);
+          slab.position.set(x + rand(-0.08, 0.08), 0.09, z + rand(-0.08, 0.08));
+          slab.rotation.y = rand(-0.045, 0.045);
+          slab.receiveShadow = true;
+          this.scene.add(slab);
+        }
+      }
+
+      const arch = buildArch();
+      arch.position.set(0, 0, -25);
+      arch.scale.setScalar(1.5);
+      this.scene.add(arch);
+
+      const altar = new THREE.Mesh(
+        new THREE.CylinderGeometry(4.1, 4.8, 0.75, 16),
+        new THREE.MeshLambertMaterial({ color: "#51424c" })
+      );
+      altar.position.set(0, 0.38, -20);
+      altar.receiveShadow = true;
+      this.scene.add(altar);
+      const seal = new THREE.Mesh(
+        new THREE.TorusGeometry(3.45, 0.11, 8, 40),
+        new THREE.MeshBasicMaterial({ color: "#ad4b91", transparent: true, opacity: 0.8 })
+      );
+      seal.rotation.x = -Math.PI / 2;
+      seal.position.set(0, 0.82, -20);
+      this.scene.add(seal);
+
+      for (let i = 0; i < 8; i++) {
+        const a = (i / 8) * TAU;
+        const crystal = new THREE.Mesh(
+          new THREE.OctahedronGeometry(rand(0.55, 0.95), 0),
+          new THREE.MeshToonMaterial({ color: i % 2 ? "#754d8b" : "#bd6570", emissive: "#351a4b", emissiveIntensity: 0.65 })
+        );
+        crystal.position.set(Math.cos(a) * 5.5, rand(0.55, 1.1), -20 + Math.sin(a) * 5.5);
+        crystal.rotation.set(rand(0, TAU), rand(0, TAU), rand(0, TAU));
+        this.scene.add(crystal);
+      }
+
+      for (let i = 0; i < 9; i++) {
+        const side = i % 2 ? 1 : -1;
+        const row = Math.floor(i / 2);
+        const wall = buildStoneWall();
+        wall.position.set(side * rand(8, 13), 0, 10 - row * 7 + rand(-2, 2));
+        wall.rotation.y = rand(-0.45, 0.45);
+        wall.scale.setScalar(rand(0.8, 1.45));
+        this.scene.add(wall);
+      }
+
+      for (let i = 0; i < 10; i++) {
+        const a = (i / 10) * TAU;
+        const torch = buildTorch();
+        torch.position.set(Math.cos(a) * 10, 0, Math.sin(a) * 10 - 6);
+        this.scene.add(torch);
+      }
+
+      for (let i = 0; i < 28; i++) {
+        const a = rand(0, TAU);
+        const d = rand(18, 44);
+        const rock = buildRock();
+        rock.position.set(Math.cos(a) * d, 0, Math.sin(a) * d);
+        rock.rotation.y = rand(0, TAU);
+        rock.scale.setScalar(rand(1.2, 3.3));
+        this.scene.add(rock);
+      }
+      return;
+    }
+
     const fountain = buildFountain();
     fountain.position.set(0, 0, -8);
     this.scene.add(fountain);
@@ -2125,12 +2327,16 @@ export class Game {
 
   disposeGroup(g: THREE.Object3D) {
     g.traverse((o) => {
+      o.userData.disposed = true;
       const m = o as THREE.Mesh;
-      if (m.geometry) m.geometry.dispose();
+      if (m.geometry && !(o as THREE.Sprite).isSprite) m.geometry.dispose();
       if (m.material) {
         const mat = m.material as THREE.Material | THREE.Material[];
-        if (Array.isArray(mat)) mat.forEach((x) => x.dispose());
-        else mat.dispose();
+        for (const entry of Array.isArray(mat) ? mat : [mat]) {
+          const map = (entry as THREE.SpriteMaterial).map;
+          if (map?.userData.prototypeOwned) map.dispose();
+          entry.dispose();
+        }
       }
     });
   }
@@ -2165,10 +2371,10 @@ export class Game {
     ctx.textBaseline = "alphabetic";
 
     // --- Top-Right Location Banner (Graveyard Keeper Style) ---
-    const bannerW = 220;
+    const bannerW = this.cfg.campaignWaveLimit ? 244 : 220;
     const bannerH = 36;
     const bannerX = this.w - bannerW - 16;
-    const bannerY = 16;
+    const bannerY = this.cfg.campaignWaveLimit ? 70 : 16;
     this.roundRect(ctx, bannerX, bannerY, bannerW, bannerH, 8);
     ctx.fillStyle = "rgba(18, 22, 34, 0.88)";
     ctx.fill();
@@ -2185,7 +2391,13 @@ export class Game {
       : null;
     const displayZoneName = zoneDef?.name || currentZoneId.replace(/([A-Z])/g, ' $1').replace(/^./, (s: string) => s.toUpperCase());
     const isTownZone = bridgesIdle && zoneDef?.town ? "Town · " : "Zona · ";
-    ctx.fillText(`📍 ${isTownZone}${displayZoneName}`, bannerX + bannerW / 2, bannerY + 22);
+    ctx.font = this.cfg.campaignWaveLimit ? "700 11px Inter, sans-serif" : "12px Inter, sans-serif";
+    ctx.fillStyle = "#e7d8b0";
+    ctx.fillText(
+      this.cfg.campaignWaveLimit ? "✦ RUÍNAS DE ADEN" : `📍 ${isTownZone}${displayZoneName}`,
+      bannerX + bannerW / 2,
+      bannerY + 22
+    );
 
     // --- Top-Left Ornate Circular Compass Dial & HP/MP Bars ---
     const cx = 56;
@@ -2279,13 +2491,22 @@ export class Game {
     ctx.fillText(`MP ${Math.ceil(this.mana)} / ${this.manaMax}`, barX + 6, mpY + 8);
 
     // --- Bottom Centered Graveyard Keeper Action Hotbar ---
-    const slots = [
-      { key: "1", icon: "⚔️", label: "Ataque", cd: 0, maxCd: 1 },
-      { key: "2", icon: this.skills[0]?.emoji || "🔮", label: this.skills[0]?.name || "Skill 1", cd: this.skillCd[0] || 0, maxCd: this.skills[0]?.cooldown || 1 },
-      { key: "3", icon: this.skills[1]?.emoji || "⚡", label: this.skills[1]?.name || "Skill 2", cd: this.skillCd[1] || 0, maxCd: this.skills[1]?.cooldown || 1 },
-      { key: "4", icon: "🧪", label: "Poção HP", count: 12 },
-      { key: "5", icon: "🍖", label: "Comida", count: 5 },
-    ];
+    const isolatedPrototype = !shouldBridgeIdleProgression(this.cfg);
+    const slots: { key: string; icon: string; cd?: number; maxCd?: number; count?: number }[] = isolatedPrototype
+      ? [
+          { key: "M1", icon: "⚔️" },
+          { key: "1", icon: this.skills[0]?.emoji || "🔮", cd: this.skillCd[0] || 0, maxCd: this.skills[0]?.cooldown || 1 },
+          { key: "2", icon: this.skills[1]?.emoji || "⚡", cd: this.skillCd[1] || 0, maxCd: this.skills[1]?.cooldown || 1 },
+          { key: "3", icon: "🧪", count: this.prototypePotions },
+          { key: "4", icon: "🍖", count: this.prototypeRations },
+        ]
+      : [
+          { key: "1", icon: "⚔️", cd: 0, maxCd: 1 },
+          { key: "2", icon: this.skills[0]?.emoji || "🔮", cd: this.skillCd[0] || 0, maxCd: this.skills[0]?.cooldown || 1 },
+          { key: "3", icon: this.skills[1]?.emoji || "⚡", cd: this.skillCd[1] || 0, maxCd: this.skills[1]?.cooldown || 1 },
+          { key: "4", icon: "🧪", count: 12 },
+          { key: "5", icon: "🍖", count: 5 },
+        ];
 
     const slotW = 54;
     const slotH = 54;
@@ -2308,7 +2529,7 @@ export class Game {
       const r = { x: sx, y: hotbarY, w: slotW, h: slotH };
       this.skillRects.push(r);
 
-      const onCd = s.cd > 0;
+      const onCd = (s.cd ?? 0) > 0;
       this.roundRect(ctx, sx, hotbarY, slotW, slotH, 8);
       ctx.fillStyle = onCd ? "rgba(20, 24, 36, 0.6)" : "rgba(30, 38, 56, 0.75)";
       ctx.fill();
@@ -2322,12 +2543,12 @@ export class Game {
       ctx.fillText(s.icon, sx + slotW / 2, hotbarY + 34);
 
       // Keybind badge [1..5]
-      this.roundRect(ctx, sx + 4, hotbarY + 4, 14, 14, 4);
+      this.roundRect(ctx, sx + 4, hotbarY + 4, s.key.length > 1 ? 20 : 14, 14, 4);
       ctx.fillStyle = "rgba(0, 0, 0, 0.6)";
       ctx.fill();
       ctx.font = "bold 9px Inter, sans-serif";
       ctx.fillStyle = "#f4d58a";
-      ctx.fillText(s.key, sx + 11, hotbarY + 14);
+      ctx.fillText(s.key, sx + (s.key.length > 1 ? 14 : 11), hotbarY + 14);
 
       // Quantity count (if potion / food item)
       if (s.count !== undefined) {
@@ -2339,13 +2560,13 @@ export class Game {
 
       // Cooldown Overlay
       if (onCd) {
-        const frac = clamp(s.cd / s.maxCd, 0, 1);
+        const frac = clamp((s.cd ?? 0) / (s.maxCd ?? 1), 0, 1);
         ctx.fillStyle = "rgba(0, 0, 0, 0.65)";
         ctx.fillRect(sx, hotbarY, slotW, slotH * frac);
         ctx.font = "bold 12px Inter, sans-serif";
         ctx.fillStyle = "#fff";
         ctx.textAlign = "center";
-        ctx.fillText(s.cd.toFixed(1), sx + slotW / 2, hotbarY + 32);
+        ctx.fillText((s.cd ?? 0).toFixed(1), sx + slotW / 2, hotbarY + 32);
       }
     });
 
@@ -2354,7 +2575,13 @@ export class Game {
     ctx.textAlign = "center";
     ctx.fillStyle = "#f4d58a";
     ctx.font = "800 13px Cinzel, serif";
-    ctx.fillText(`FASE ${phase}  ·  ONDA ${this.wave}`, this.w / 2, 28);
+    ctx.fillText(
+      isolatedPrototype
+        ? `EXPEDIÇÃO · CAPÍTULO I · INVESTIDA ${this.wave}`
+        : `FASE ${phase}  ·  ONDA ${this.wave}`,
+      this.w / 2,
+      28
+    );
 
     if (this.waveBanner > 0) {
       const a = clamp(this.waveBanner / 0.6, 0, 1);

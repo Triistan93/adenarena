@@ -306,6 +306,13 @@ export const HuntingService = {
       return { success: false, reason: 'broken_tool' };
     }
 
+    // Validação de Vigor de Trabalho (Anti-Abuso Econômico)
+    const vigor = LifeActivityCore.getVigorState(state);
+    if (vigor.current < 5) {
+      if (callbacks.log) callbacks.log(`⚡ **VIGOR INSUFICIENTE!** Você está exausto para caçar (Vigor: ${vigor.current}/100). Descanse para recuperar energia.`, 'warning');
+      return { success: false, reason: 'insufficient_vigor' };
+    }
+
     const zone = HUNTING_ZONES[hState.activeZone] || HUNTING_ZONES.zone_talking_forest;
     if (zone.requiredLure && (hState.activeLure !== zone.requiredLure || (hState.lureInventory[zone.requiredLure] || 0) <= 0)) {
       if (callbacks.log) callbacks.log(`⚠️ ${zone.name} exige ${LURES_CATALOG[zone.requiredLure]?.name || 'um atrativo específico'} selecionado e disponível.`, 'warning');
@@ -372,7 +379,7 @@ export const HuntingService = {
     return { success: true };
   },
 
-  finishSkinning(state, callbacks = {}) {
+  finishSkinning(state, callbacks = {}, timingPct = null) {
     const hState = this.getHuntingState(state);
     if (!hState.isHunting || !hState.trackedPreyId) return false;
 
@@ -396,27 +403,45 @@ export const HuntingService = {
     const activeKnifeId = hState.knife || 'knife_none';
     const knifeDef = KNIVES_CATALOG[activeKnifeId];
 
+    // Avaliação de Precisão do Sweet Spot (Anti-Autoclicker)
+    const sweetSpot = LifeActivityCore.evaluateSweetSpot(timingPct);
+    let extraKnifeWear = 0;
+
+    if (sweetSpot.result === 'miss') {
+      hState.alertLevel = Math.min(100, (hState.alertLevel || 0) + 40);
+      extraKnifeWear = 2; // dano extra na lâmina
+      if (callbacks.log) callbacks.log('⚠️ **PASSO EM FALSO!** Galhos estalaram sob seus pés (+40% Alerta da Presa, faca lascada)!', 'warning');
+    }
+
     if (hState.alertLevel >= 100) {
       hState.isHunting = false;
       hState.trackedPreyId = null;
       hState.autoHunting = false;
       if (hState.knifeDurability[activeKnifeId] !== undefined) {
-        hState.knifeDurability[activeKnifeId] = Math.max(0, hState.knifeDurability[activeKnifeId] - 1);
+        hState.knifeDurability[activeKnifeId] = Math.max(0, hState.knifeDurability[activeKnifeId] - 1 - extraKnifeWear);
       }
       const activity = LifeActivityCore.getActivityState(state, 'hunting');
       activity.tool = activeKnifeId;
       activity.toolDurability = hState.knifeDurability[activeKnifeId] ?? 0;
       if (activity.toolDurability <= 0) hState.autoHunting = false;
-      if (callbacks.log) callbacks.log(`💨 A presa escapou no último segundo! (Faca perdeu 1 durabilidade no tropeço)`, 'warning');
+      if (callbacks.log) callbacks.log(`💨 **A PRESA ESCAPOU!** O alerta excessivo assustou o animal no último instante (Faca perdeu ${1 + extraKnifeWear} durabilidade).`, 'warning');
       if (callbacks.updateAllUI) callbacks.updateAllUI();
       if (callbacks.save) callbacks.save();
       return false;
     }
 
+    if (extraKnifeWear > 0 && hState.knifeDurability[activeKnifeId] !== undefined) {
+      hState.knifeDurability[activeKnifeId] = Math.max(0, hState.knifeDurability[activeKnifeId] - extraKnifeWear);
+    }
+
     const tactic = APPROACH_TACTICS[hState.activeTactic] || APPROACH_TACTICS.ambush;
     const knifeBonus = knifeDef?.perfectSkinBonus || 0.0;
     const qualityMod = knifeBonus + (tactic.qualityBonus || 0.0);
-    const critical = tactic.id === 'ambush' && hState.alertLevel < 40;
+    let critical = (tactic.id === 'ambush' && hState.alertLevel < 40) || (sweetSpot.result === 'perfect');
+
+    if (sweetSpot.result === 'perfect' && callbacks.log) {
+      callbacks.log('🎯 **ABATE CIRÚRGICO NO SWEET SPOT!** Presa encurralada perfeitamente (+50% Materiais garantidos)!', 'gain');
+    }
 
     if (!hState.autoHunting) {
       hState.awaitingButchering = true;
@@ -427,6 +452,14 @@ export const HuntingService = {
       if (callbacks.updateAllUI) callbacks.updateAllUI();
       if (callbacks.save) callbacks.save();
       return true;
+    }
+
+    // Lógica AFK (Balanced Yield): Consome 5 de Vigor
+    const vigorRes = LifeActivityCore.consumeVigor(state, 5);
+    if (!vigorRes.success) {
+      hState.autoHunting = false;
+      if (callbacks.log) callbacks.log(`⚡ **VIGOR ESGOTADO!** Você está sem vigor para continuar a caça (Vigor: ${vigorRes.current}/100). Descanse para recuperar energia.`, 'warning');
+      return false;
     }
 
     // Lógica AFK (Balanced Yield). Keep the exact roll while the player frees bag space.
@@ -514,6 +547,13 @@ export const HuntingService = {
   executeFieldButchering(state, choice, callbacks = {}) {
     const hState = this.getHuntingState(state);
     if (!['pelt', 'trophy'].includes(choice) || !hState.awaitingButchering || !hState.slainPreyData) return false;
+
+    // Consome Vigor de Trabalho (5 pontos por descarne manual)
+    const vigorRes = LifeActivityCore.consumeVigor(state, 5);
+    if (!vigorRes.success) {
+      if (callbacks.log) callbacks.log(`⚡ **VIGOR ESGOTADO!** Você está sem vigor para concluir o descarne (Vigor: ${vigorRes.current}/100). Descanse para recuperar energia.`, 'warning');
+      return false;
+    }
 
     const activeKnifeId = hState.knife || 'knife_none';
     const { preyId, qualityMod, critical } = hState.slainPreyData;
@@ -638,6 +678,29 @@ export const HuntingService = {
   processAutoHunt(state, callbacks = {}) {
     const hState = this.getHuntingState(state);
     if (!hState.autoHunting) return;
+
+    // 1. Validação de Vigor de Trabalho (5 pontos necessários)
+    const vigor = LifeActivityCore.getVigorState(state);
+    if (vigor.current < 5) {
+      hState.autoHunting = false;
+      if (callbacks.log) callbacks.log('⚡ **Caça AFK pausada:** Vigor de Trabalho esgotado! Descanse para recuperar energia.', 'warning');
+      if (callbacks.updateAllUI) callbacks.updateAllUI();
+      return;
+    }
+
+    // 2. Validação de Atrativos/Iscas (Consumíveis de Caça)
+    const totalLures = Object.values(hState.lureInventory || {}).reduce((sum, c) => sum + (Number(c) || 0), 0);
+    if (totalLures <= 0) {
+      hState.autoHunting = false;
+      if (callbacks.log) callbacks.log('⚠️ **Caça AFK pausada:** Seus atrativos de caça acabaram! Compre mais carnes ou feromônios na Guilda dos Caçadores.', 'warning');
+      if (callbacks.updateAllUI) callbacks.updateAllUI();
+      return;
+    }
+
+    if (!hState.activeLure || (hState.lureInventory[hState.activeLure] || 0) <= 0) {
+      const nextLure = Object.keys(hState.lureInventory).find(k => (hState.lureInventory[k] || 0) > 0);
+      if (nextLure) hState.activeLure = nextLure;
+    }
 
     const activeKnifeId = hState.knife || 'knife_none';
     const dur = hState.knifeDurability[activeKnifeId] ?? 0;

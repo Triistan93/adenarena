@@ -12,15 +12,19 @@ import "./hybrid-action-prototype.css";
 type Phase = "menu" | "playing" | "paused" | "failed" | "complete";
 
 const BUILDS: { raceId: RaceId; classId: string; label: string; fantasy: string }[] = [
-  { raceId: "human", classId: "warrior", label: "Guerreiro", fantasy: "Combate corpo a corpo · espada" },
-  { raceId: "elf", classId: "archer", label: "Arqueira Élfica", fantasy: "Ataque à distância · arco" },
-  { raceId: "darkelf", classId: "mystic", label: "Mística Sombria", fantasy: "Magia de área · cajado" },
+  { raceId: "human", classId: "warrior", label: "Guerreiro", fantasy: "Combate corpo a corpo · alabarda" },
+  { raceId: "elf", classId: "archer", label: "Arqueiro Élfico", fantasy: "Ataque à distância · arco" },
+  { raceId: "darkelf", classId: "sorcerer", label: "Feiticeiro Sombrio", fantasy: "Magia de área · cajado" },
 ];
 
 function resolveBuild(build: (typeof BUILDS)[number]): { race: RaceDef; cls: ClassDef } {
   const race = RACES.find((entry) => entry.id === build.raceId) ?? RACES[0];
   const cls = race.classes.find((entry) => entry.id === build.classId) ?? race.classes[0];
-  return { race, cls };
+  const weapon = build.classId === 'warrior'
+    ? { ...cls.weapon, shape: 'spear' as const, name: 'Alabarda de Aden' }
+    : build.classId === 'sorcerer'
+      ? { ...cls.weapon, shape: 'staff' as const, name: 'Cajado Sombrio' } : cls.weapon;
+  return { race, cls: { ...cls, weapon } };
 }
 
 export default function HybridActionPrototype() {
@@ -151,7 +155,7 @@ export default function HybridActionPrototype() {
           <button className="action-prototype__enter" type="button" onClick={startRun}>
             INICIAR EXPEDIÇÃO <span>→</span>
           </button>
-          <p className="action-prototype__controls">WASD para mover · Mouse para mirar e atacar · 1–3 para habilidades · Esc para pausar</p>
+          <p className="action-prototype__controls">WASD para mover · segure o botão esquerdo para atacar · 1–2 habilidades · 3 poção · 4 comida · Esc pausa</p>
         </section>
       )}
 
@@ -171,7 +175,7 @@ export default function HybridActionPrototype() {
             </div>
             <div className="action-prototype__xp"><span>EXPERIÊNCIA</span><strong>{progression.xp} / {progression.xpToNext}</strong><i><b style={{ width: `${Math.min(100, progression.xp / progression.xpToNext * 100)}%` }} /></i></div>
           </aside>
-          <div className="action-prototype__controls-hint">MOVER <b>W A S D</b><span /> MIRAR <b>MOUSE</b></div>
+          <div className="action-prototype__controls-hint">MOVER <b>W A S D</b><span /> MIRAR E ATACAR <b>CLIQUE</b></div>
         </>
       )}
 
