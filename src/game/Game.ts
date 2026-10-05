@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { OutlineEffect } from "three/examples/jsm/effects/OutlineEffect.js";
+import { shouldBridgeIdleProgression } from "./actionPrototype.js";
 import {
   ENEMY_TYPES,
   CLASS_META,
@@ -147,12 +148,20 @@ export interface GameResult {
 export interface GameConfig {
   race: RaceDef;
   cls: ClassDef;
+  idleState?: any;
+  bridgeIdleProgression?: boolean;
+  zoneName?: string;
+  campaignWaveLimit?: number;
 }
 
 export interface GameCallbacks {
   onPaused: () => void;
   onResumed: () => void;
   onGameOver: (r: GameResult) => void;
+  onEnemyDefeated?: (name: string, xp: number) => void;
+  onWaveChanged?: (wave: number) => void;
+  onWaveCleared?: (wave: number, xp: number) => void;
+  onCampaignComplete?: (r: GameResult) => void;
 }
 
 const TAU = Math.PI * 2;
@@ -327,6 +336,7 @@ export class Game {
   patk = 20;
   matk = 20;
   level = 1;
+  prototypeDamageBonus = 0;
 
   constructor(
     canvas: HTMLCanvasElement,
@@ -737,6 +747,7 @@ export class Game {
   };
 
   rewardIdleGame(xp: number, gold: number) {
+    if (!shouldBridgeIdleProgression(this.cfg)) return;
     if (typeof window !== "undefined" && typeof (window as any).getGameState === "function" && typeof (window as any).loadGameState === "function") {
       try {
         const curState = (window as any).getGameState();
@@ -749,6 +760,17 @@ export class Game {
         console.warn("Error syncing 3D rewards to Idle State:", err);
       }
     }
+  }
+
+  applyPrototypeLevel(level: number) {
+    if (shouldBridgeIdleProgression(this.cfg)) return;
+    const nextLevel = Math.max(this.level, Math.floor(level));
+    const gained = nextLevel - this.level;
+    if (gained <= 0) return;
+    this.level = nextLevel;
+    this.maxHp += gained * 12;
+    this.hp = Math.min(this.maxHp, this.hp + gained * 12);
+    this.prototypeDamageBonus += gained * 0.035;
   }
 
   spawnSlashArc(color: string) {
@@ -1354,7 +1376,7 @@ export class Game {
   // ---------- combat ----------
   damageEnemy(e: Enemy, dmg: number, _ang: number) {
     // equipment: damage % then a crit roll that doubles the hit
-    let d = dmg * (1 + this.bDmgPct / 100);
+    let d = dmg * (1 + this.bDmgPct / 100 + this.prototypeDamageBonus);
     const crit = this.bCrit > 0 && Math.random() < this.bCrit / 100;
     if (crit) d *= 2;
     d = Math.max(1, d);
@@ -1395,6 +1417,10 @@ export class Game {
     const mult = Math.min(1 + this.combo * 0.08, 3);
     this.score += e.score * mult;
     this.rewardIdleGame(Math.round(e.score * 1.5), Math.round(e.score * 0.8));
+    this.cb.onEnemyDefeated?.(
+      e.type.name,
+      Math.max(12, Math.round(e.score * (e.boss ? 0.8 : 0.45)))
+    );
     this.spawnParticles(e.x, e.y, e.type.color, e.boss ? 28 : 14, e.boss ? 5 : 3);
     this.spawnRing(e.x, e.y, e.r * 3, e.type.color);
     this.shake = Math.max(this.shake, e.boss ? 12 : 5);
@@ -1690,6 +1716,14 @@ export class Game {
         this.spawnParticles(this.px, this.py, "#ffd76a", 24, 5);
         this.waveState = "intermission";
         this.intermission = 3.2;
+        this.cb.onWaveCleared?.(this.wave, 35 + this.wave * 15);
+        if (this.cfg.campaignWaveLimit && this.wave >= this.cfg.campaignWaveLimit) {
+          this.running = false;
+          this.waveBanner = 5;
+          this.waveBannerText = "EXPEDIÇÃO CONCLUÍDA";
+          this.cb.onCampaignComplete?.(this.buildResult());
+          return;
+        }
       }
     }
   }
@@ -1704,6 +1738,7 @@ export class Game {
     this.waveBannerText = this.bossPending
       ? `WAVE ${this.wave} — BOSS`
       : `WAVE ${this.wave}`;
+    this.cb.onWaveChanged?.(this.wave);
   }
 
   spawnFromWave() {
@@ -2102,7 +2137,11 @@ export class Game {
 
   gameOver() {
     this.running = false;
-    const result: GameResult = {
+    this.cb.onGameOver(this.buildResult());
+  }
+
+  buildResult(): GameResult {
+    return {
       score: Math.floor(this.score),
       time: this.elapsed,
       kills: this.kills,
@@ -2111,7 +2150,6 @@ export class Game {
       race: this.cfg.race.name,
       cls: this.cfg.cls.name,
     };
-    this.cb.onGameOver(result);
   }
 
   // ---------- render ----------
@@ -2138,10 +2176,15 @@ export class Game {
     ctx.lineWidth = 1.5;
     ctx.stroke();
     ctx.textAlign = "center";
-    const currentZoneId = (typeof window !== "undefined" && (window as any).getGameState?.()?.zone) || "talkingIsland";
-    const zoneDef = typeof window !== "undefined" && (window as any).GameData?.ZONES?.[currentZoneId];
+    const bridgesIdle = shouldBridgeIdleProgression(this.cfg);
+    const currentZoneId = bridgesIdle
+      ? ((typeof window !== "undefined" && (window as any).getGameState?.()?.zone) || "talkingIsland")
+      : (this.cfg.zoneName || "Ruínas de Aden");
+    const zoneDef = bridgesIdle && typeof window !== "undefined"
+      ? (window as any).GameData?.ZONES?.[currentZoneId]
+      : null;
     const displayZoneName = zoneDef?.name || currentZoneId.replace(/([A-Z])/g, ' $1').replace(/^./, (s: string) => s.toUpperCase());
-    const isTownZone = zoneDef?.town ? "Town · " : "Zone · ";
+    const isTownZone = bridgesIdle && zoneDef?.town ? "Town · " : "Zona · ";
     ctx.fillText(`📍 ${isTownZone}${displayZoneName}`, bannerX + bannerW / 2, bannerY + 22);
 
     // --- Top-Left Ornate Circular Compass Dial & HP/MP Bars ---
@@ -2184,7 +2227,9 @@ export class Game {
     ctx.fillStyle = "#ffd877";
     const heroTitle = this.idleState
       ? `${this.idleState.charName || this.idleState.heroName || "Herói"} · Lv.${this.level} (${this.cfg.cls.name})`
-      : `${this.cfg.cls.name} (${this.cfg.race.name})`;
+      : !bridgesIdle
+        ? `${this.cfg.cls.name} · Lv.${this.level}`
+        : `${this.cfg.cls.name} (${this.cfg.race.name})`;
     ctx.fillText(heroTitle, barX, 32);
 
     // HP Bar

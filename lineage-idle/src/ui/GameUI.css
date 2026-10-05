@@ -2166,6 +2166,29 @@
   text-align: center;
 }
 
+.l2store-cart-qty-input {
+  font-size: 11px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: bold;
+  color: #ffd877;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 3px;
+  width: 46px;
+  height: 20px;
+  text-align: center;
+  padding: 0 2px;
+  outline: none;
+  transition: all 0.15s;
+  box-sizing: border-box;
+}
+
+.l2store-cart-qty-input:focus {
+  border-color: #ffd877;
+  background: rgba(0, 0, 0, 0.85);
+  box-shadow: 0 0 6px rgba(212, 167, 68, 0.4);
+}
+
 /* ─── Bottom Status & Action Bar (Image 2) ─── */
 .l2store-bottom-bar {
   background: linear-gradient(180deg, #161b26 0%, #0d1017 100%);
@@ -2297,6 +2320,242 @@
   opacity: 0.5;
   cursor: not-allowed;
   filter: grayscale(0.5);
+}
+
+.l2store-action-btn.secondary {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #cbd5e1;
+}
+
+.l2store-action-btn.secondary:hover {
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+.l2store-action-btn.instant {
+  background: linear-gradient(180deg, #166534 0%, #052e16 100%);
+  border-color: #22c55e;
+  color: #86efac;
+}
+
+.l2store-action-btn.instant:hover:not(:disabled) {
+  background: linear-gradient(180deg, #15803d 0%, #14532d 100%);
+  color: #fff;
+  box-shadow: 0 0 12px rgba(34, 197, 94, 0.4);
+}
+
+/* ─── MODAL DE QUANTIDADE DA STORE (LINEAGE II AUTHENTIC STYLE) ─── */
+.l2store-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(4px);
+  z-index: 999999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  animation: l2store-fade-in 0.2s ease-out;
+}
+
+@keyframes l2store-fade-in {
+  from { opacity: 0; transform: scale(0.97); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.l2store-modal-card {
+  background: linear-gradient(180deg, #181d28 0%, #0d1017 100%);
+  border: 1px solid rgba(212, 167, 68, 0.45);
+  border-radius: 8px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.85), 0 0 20px rgba(212, 167, 68, 0.15);
+  width: 100%;
+  max-width: 440px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  color: #f1f5f9;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  box-sizing: border-box;
+}
+
+.l2store-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(212, 167, 68, 0.25);
+  padding-bottom: 8px;
+}
+
+.l2store-modal-title {
+  font-family: 'Cinzel', serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffd877;
+  letter-spacing: 0.5px;
+}
+
+.l2store-modal-item-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  padding: 10px;
+}
+
+.l2store-modal-item-icon {
+  width: 44px;
+  height: 44px;
+  background: #090b10;
+  border: 1px solid rgba(212, 167, 68, 0.3);
+  border-radius: 6px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.l2store-modal-item-icon img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+.l2store-modal-item-name {
+  font-size: 13px;
+  font-weight: bold;
+  color: #fff;
+  line-height: 1.2;
+}
+
+.l2store-modal-item-desc {
+  font-size: 11px;
+  color: #94a3b8;
+  margin-top: 3px;
+  line-height: 1.3;
+}
+
+.l2store-modal-item-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: #cbd5e1;
+  margin-top: 5px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+.l2store-modal-qty-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.l2store-modal-qty-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.l2store-modal-step-btn {
+  background: rgba(30, 38, 54, 0.9);
+  border: 1px solid rgba(212, 167, 68, 0.3);
+  border-radius: 4px;
+  color: #cbd5e1;
+  font-weight: bold;
+  font-size: 12px;
+  font-family: 'IBM Plex Mono', monospace;
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: all 0.12s;
+}
+
+.l2store-modal-step-btn:hover {
+  background: rgba(45, 58, 82, 1);
+  color: #fff;
+  border-color: #ffd877;
+}
+
+.l2store-modal-number-input {
+  flex: 1;
+  height: 36px;
+  background: #090b10;
+  border: 1px solid rgba(212, 167, 68, 0.4);
+  border-radius: 4px;
+  color: #ffd877;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  outline: none;
+  transition: all 0.15s;
+}
+
+.l2store-modal-number-input:focus {
+  border-color: #ffd877;
+  box-shadow: 0 0 8px rgba(255, 215, 0, 0.35);
+  background: #11141c;
+}
+
+.l2store-modal-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.l2store-preset-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 3px;
+  color: #94a3b8;
+  font-size: 11px;
+  font-family: 'IBM Plex Mono', monospace;
+  padding: 4px 8px;
+  cursor: pointer;
+  transition: all 0.12s;
+}
+
+.l2store-preset-btn:hover {
+  background: rgba(212, 167, 68, 0.2);
+  border-color: rgba(212, 167, 68, 0.5);
+  color: #ffd877;
+}
+
+.l2store-preset-btn.max {
+  color: #38bdf8;
+  border-color: rgba(56, 189, 248, 0.3);
+  font-weight: bold;
+}
+
+.l2store-preset-btn.max:hover {
+  background: rgba(56, 189, 248, 0.2);
+  border-color: #38bdf8;
+}
+
+.l2store-modal-summary {
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 6px;
+  padding: 10px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.l2store-modal-summary.afford {
+  border-left: 3px solid #4ade80;
+}
+
+.l2store-modal-summary.cannot-afford {
+  border-left: 3px solid #f87171;
+}
+
+.l2store-modal-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
 }
 
 /* ─── MERCADOR (IMPERIAL MARKETPLACE LEGACY COMPAT) ─── */

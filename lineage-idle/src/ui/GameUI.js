@@ -5144,6 +5144,296 @@ function renderStoreView(state, callbacks) {
 }
 
 /**
+ * Atualiza apenas os contadores e botões da barra inferior da loja sem re-renderizar todo o catálogo.
+ */
+function updateStoreBottomBarOnly(root, state) {
+  if (!root) return;
+  const totalPrice = _purchaseCart.reduce((sum, item) => sum + (item.unitPrice * item.qty), 0);
+  const totalCartCount = _purchaseCart.reduce((sum, item) => sum + item.qty, 0);
+
+  const bottomAdena = root.querySelector('#shop-bottom-adena');
+  const bottomPrice = root.querySelector('#shop-bottom-price');
+  const confirmBtn = root.querySelector('#shop-action-confirm-btn');
+
+  if (bottomAdena) bottomAdena.textContent = (state.gold || 0).toLocaleString();
+  if (bottomPrice) bottomPrice.textContent = totalPrice.toLocaleString();
+  if (confirmBtn) {
+    confirmBtn.textContent = totalCartCount > 0 ? `Buy (${totalCartCount})` : 'Buy';
+    confirmBtn.disabled = _purchaseCart.length === 0 || (state.gold || 0) < totalPrice;
+  }
+}
+
+/**
+ * Abre o Modal de Seleção de Quantidade para compra de itens/consumíveis na Store.
+ * Permite escolher a quantidade exata (ou botões rápidos +1, +5, +10, +50, +100, +500, +1000, Máx),
+ * ver o custo total em tempo real, e adicionar ao carrinho ou comprar imediatamente.
+ */
+export function openStoreQuantityModal({ itemId, rarity = 'common', isMystic = false, basePrice, initialQty, state, callbacks = {} }) {
+  if (typeof document === 'undefined') return;
+  const gData = D();
+  const allItems = gData?.ALL_ITEMS || {};
+  const def = allItems[itemId];
+  if (!def) return;
+
+  const price = basePrice !== undefined 
+    ? basePrice 
+    : (isMystic ? Math.floor((def.price || 500) * (gData?.RARITY?.[rarity]?.mult || 1) * 2) : (def.price || 100));
+
+  const existingInCart = _purchaseCart.find(item => item.id === itemId && item.rarity === rarity);
+  let currentQty = initialQty !== undefined ? initialQty : (existingInCart ? existingInCart.qty : 1);
+  if (currentQty < 1) currentQty = 1;
+
+  let modal = document.getElementById('shop-quantity-modal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'shop-quantity-modal';
+    const mountTarget = document.body || getRoot();
+    if (mountTarget && typeof mountTarget.appendChild === 'function') {
+      mountTarget.appendChild(modal);
+    }
+  } else {
+    modal.style.display = 'flex';
+  }
+
+  const gradeInfo = getItemGrade(def);
+  const liveState = state || (typeof window !== 'undefined' ? (window.getGameState?.() || window.state || {}) : {});
+  const userGold = liveState.gold || 0;
+
+  function renderModalContent() {
+    const cleanQty = Math.max(1, parseInt(currentQty, 10) || 1);
+    const totalPrice = price * cleanQty;
+    const canAfford = userGold >= totalPrice;
+    const maxAffordable = Math.max(1, Math.floor(userGold / Math.max(1, price)));
+
+    modal.innerHTML = `
+      <div class="l2store-modal-card" onclick="event.stopPropagation()">
+        <!-- Header -->
+        <div class="l2store-modal-header">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:16px;">🛒</span>
+            <span class="l2store-modal-title">Selecionar Quantidade</span>
+          </div>
+          <button class="l2store-icon-btn close" id="shop-modal-close-btn" title="Fechar">✕</button>
+        </div>
+
+        <!-- Item Info Preview -->
+        <div class="l2store-modal-item-card">
+          <div class="l2store-modal-item-icon">
+            <span class="l2store-slot-grade grade-${gradeInfo.code}">${gradeInfo.code.toUpperCase()}</span>
+            ${getItemIcon(def)}
+          </div>
+          <div style="flex:1; min-width:0;">
+            <div class="l2store-modal-item-name" title="${def.name}">${def.name}</div>
+            <div class="l2store-modal-item-desc">${def.desc || def.description || 'Consumível autêntico de Aden.'}</div>
+            <div class="l2store-modal-item-meta">
+              <span>Preço: <strong style="color:#ffd877;">🪙 ${price.toLocaleString()}</strong> un</span>
+              <span>•</span>
+              <span>Saldo: <strong style="color:#60a5fa;">🪙 ${userGold.toLocaleString()}</strong></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quantity Picker Input & Step Controls -->
+        <div class="l2store-modal-qty-section">
+          <div style="font-size:11px; font-weight:bold; color:#cbd5e1; margin-bottom:6px; display:flex; justify-content:space-between;">
+            <span>Quantidade Desejada</span>
+            <span style="color:#94a3b8; font-size:10px;">Máx acessível: ${maxAffordable.toLocaleString()}</span>
+          </div>
+          <div class="l2store-modal-qty-input-wrap">
+            <button class="l2store-modal-step-btn" data-step="-10" title="-10">-10</button>
+            <button class="l2store-modal-step-btn" data-step="-1" title="-1">-1</button>
+            <input type="number" id="shop-modal-number-input" class="l2store-modal-number-input" min="1" max="999999" value="${cleanQty}" />
+            <button class="l2store-modal-step-btn" data-step="1" title="+1">+1</button>
+            <button class="l2store-modal-step-btn" data-step="10" title="+10">+10</button>
+          </div>
+
+          <!-- Quick Presets -->
+          <div class="l2store-modal-presets">
+            <button class="l2store-preset-btn" data-add="1">+1</button>
+            <button class="l2store-preset-btn" data-add="5">+5</button>
+            <button class="l2store-preset-btn" data-add="10">+10</button>
+            <button class="l2store-preset-btn" data-add="50">+50</button>
+            <button class="l2store-preset-btn" data-add="100">+100</button>
+            <button class="l2store-preset-btn" data-add="500">+500</button>
+            <button class="l2store-preset-btn" data-add="1000">+1000</button>
+            <button class="l2store-preset-btn max" data-set-max="true" title="Comprar o máximo com todo o seu saldo">Máx (${maxAffordable.toLocaleString()})</button>
+          </div>
+        </div>
+
+        <!-- Total Price & Feedback -->
+        <div class="l2store-modal-summary ${canAfford ? 'afford' : 'cannot-afford'}">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-size:12px; color:#94a3b8;">Total da Compra:</span>
+            <span style="font-size:15px; font-weight:bold; font-family:'IBM Plex Mono',monospace; color:#ffd877;">
+              🪙 ${totalPrice.toLocaleString()} Adena
+            </span>
+          </div>
+          <div style="font-size:11px; margin-top:4px;">
+            ${canAfford 
+              ? `<span style="color:#4ade80;">✔ Saldo suficiente (${(userGold - totalPrice).toLocaleString()} restante)</span>` 
+              : `<span style="color:#f87171;">⚠️ Ouro insuficiente! Faltam 🪙 ${(totalPrice - userGold).toLocaleString()}</span>`}
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="l2store-modal-actions">
+          <button class="l2store-action-btn secondary" id="shop-modal-cancel-btn">Cancelar</button>
+          <button class="l2store-action-btn primary" id="shop-modal-cart-btn">
+            Adicionar à Lista (${cleanQty})
+          </button>
+          <button class="l2store-action-btn instant" id="shop-modal-buy-now-btn" ${!canAfford ? 'disabled' : ''}>
+            ⚡ Comprar Agora
+          </button>
+        </div>
+      </div>
+    `;
+
+    const closeBtn = modal.querySelector('#shop-modal-close-btn');
+    const cancelBtn = modal.querySelector('#shop-modal-cancel-btn');
+    if (closeBtn) closeBtn.onclick = () => closeStoreQuantityModal();
+    if (cancelBtn) cancelBtn.onclick = () => closeStoreQuantityModal();
+
+    const input = modal.querySelector('#shop-modal-number-input');
+    if (input) {
+      input.oninput = (e) => {
+        const val = parseInt(e.target.value, 10);
+        if (!isNaN(val) && val > 0) {
+          currentQty = val;
+          updateSummaryOnly();
+        }
+      };
+      input.onchange = (e) => {
+        const val = parseInt(e.target.value, 10);
+        currentQty = Math.max(1, isNaN(val) ? 1 : val);
+        renderModalContent();
+      };
+      input.onkeydown = (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          const cartBtn = modal.querySelector('#shop-modal-cart-btn');
+          if (cartBtn) cartBtn.click();
+        } else if (e.key === 'Escape') {
+          closeStoreQuantityModal();
+        }
+      };
+      setTimeout(() => input.focus(), 50);
+    }
+
+    modal.querySelectorAll('[data-step]').forEach(btn => {
+      btn.onclick = () => {
+        const step = parseInt(btn.dataset.step, 10) || 0;
+        currentQty = Math.max(1, (parseInt(currentQty, 10) || 1) + step);
+        renderModalContent();
+      };
+    });
+
+    modal.querySelectorAll('[data-add]').forEach(btn => {
+      btn.onclick = () => {
+        const add = parseInt(btn.dataset.add, 10) || 0;
+        currentQty = Math.max(1, (parseInt(currentQty, 10) || 1) + add);
+        renderModalContent();
+      };
+    });
+
+    const maxBtn = modal.querySelector('[data-set-max]');
+    if (maxBtn) {
+      maxBtn.onclick = () => {
+        currentQty = maxAffordable;
+        renderModalContent();
+      };
+    }
+
+    const cartBtn = modal.querySelector('#shop-modal-cart-btn');
+    if (cartBtn) {
+      cartBtn.onclick = () => {
+        const cleanVal = Math.max(1, parseInt(currentQty, 10) || 1);
+        const inCart = _purchaseCart.find(item => item.id === itemId && item.rarity === rarity);
+        if (inCart) {
+          inCart.qty = cleanVal;
+        } else {
+          _purchaseCart.push({
+            id: itemId,
+            name: def.name,
+            slot: def.slot,
+            unitPrice: price,
+            qty: cleanVal,
+            rarity,
+            def
+          });
+        }
+        closeStoreQuantityModal();
+        renderStoreBuyTab(liveState, callbacks);
+      };
+    }
+
+    const buyNowBtn = modal.querySelector('#shop-modal-buy-now-btn');
+    if (buyNowBtn) {
+      buyNowBtn.onclick = () => {
+        const cleanVal = Math.max(1, parseInt(currentQty, 10) || 1);
+        const total = price * cleanVal;
+        if (userGold < total) return;
+
+        closeStoreQuantityModal();
+        if (isMystic && callbacks.buyMysticItem) {
+          callbacks.buyMysticItem(itemId, rarity);
+        } else if (callbacks.buyItem) {
+          callbacks.buyItem(itemId, cleanVal, rarity);
+        } else if (typeof window !== 'undefined' && window.buyItem) {
+          window.buyItem(itemId, cleanVal, rarity);
+        }
+        updateShopUI(liveState, callbacks);
+      };
+    }
+
+    function updateSummaryOnly() {
+      const q = Math.max(1, parseInt(currentQty, 10) || 1);
+      const tot = price * q;
+      const ok = userGold >= tot;
+      const sumEl = modal.querySelector('.l2store-modal-summary');
+      if (sumEl) {
+        sumEl.className = `l2store-modal-summary ${ok ? 'afford' : 'cannot-afford'}`;
+        sumEl.innerHTML = `
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-size:12px; color:#94a3b8;">Total da Compra:</span>
+            <span style="font-size:15px; font-weight:bold; font-family:'IBM Plex Mono',monospace; color:#ffd877;">
+              🪙 ${tot.toLocaleString()} Adena
+            </span>
+          </div>
+          <div style="font-size:11px; margin-top:4px;">
+            ${ok 
+              ? `<span style="color:#4ade80;">✔ Saldo suficiente (${(userGold - tot).toLocaleString()} restante)</span>` 
+              : `<span style="color:#f87171;">⚠️ Ouro insuficiente! Faltam 🪙 ${(tot - userGold).toLocaleString()}</span>`}
+          </div>
+        `;
+      }
+      const bBtn = modal.querySelector('#shop-modal-buy-now-btn');
+      if (bBtn) bBtn.disabled = !ok;
+      const cBtn = modal.querySelector('#shop-modal-cart-btn');
+      if (cBtn) cBtn.textContent = `Adicionar à Lista (${q})`;
+    }
+  }
+
+  modal.onclick = (e) => {
+    if (e.target === modal) closeStoreQuantityModal();
+  };
+
+  renderModalContent();
+}
+
+export function closeStoreQuantityModal() {
+  if (typeof document === 'undefined') return;
+  const modal = document.getElementById('shop-quantity-modal');
+  if (modal) {
+    modal.remove();
+  }
+}
+
+if (typeof window !== 'undefined') {
+  window.openStoreQuantityModal = openStoreQuantityModal;
+  window.closeStoreQuantityModal = closeStoreQuantityModal;
+}
+
+/**
  * Renderiza o Catálogo de Compras da Store (Buy Tab).
  */
 function renderStoreBuyTab(state, callbacks) {
@@ -5245,7 +5535,7 @@ function renderStoreBuyTab(state, callbacks) {
     }).join('');
   }
 
-  // Ação de clique no slot para adicionar ao carrinho
+  // Ação de clique no slot para adicionar ao carrinho ou abrir modal de quantidade
   itemsContainer.onclick = (e) => {
     const slotEl = e.target.closest('[data-add-cart]');
     if (!slotEl || slotEl.classList.contains('locked')) return;
@@ -5255,6 +5545,26 @@ function renderStoreBuyTab(state, callbacks) {
     if (!def) return;
 
     const basePrice = isMystic ? Math.floor((def.price || 500) * (gData?.RARITY?.[rarity]?.mult || 1) * 2) : (def.price || 100);
+
+    const isStackable = ['consumable', 'scroll', 'powerup', 'material', 'ammo', 'potion', 'shot', 'dye', 'currency'].includes(def.slot)
+      || Boolean(def.stack && def.stack > 1)
+      || /potion|elixir|scroll|soulshot|spiritshot|arrow|ore|crystal|tea|draught|stone/i.test(itemId)
+      || _activeStoreCategory === 'consumables'
+      || (_activeStoreCategory === 'others' && _activeStoreSubcategory === 'materials');
+
+    // Se for consumível/empilhável, abre o modal de seleção de quantidade
+    if (isStackable && !isMystic) {
+      openStoreQuantityModal({
+        itemId,
+        rarity,
+        isMystic: false,
+        basePrice,
+        state,
+        callbacks
+      });
+      return;
+    }
+
     const existing = _purchaseCart.find(item => item.id === itemId && item.rarity === rarity);
     if (existing) {
       existing.qty += 1;
@@ -5284,8 +5594,8 @@ function renderStoreBuyTab(state, callbacks) {
     purchaseListContainer.innerHTML = _purchaseCart.map(cartItem => {
       const subtotal = cartItem.unitPrice * cartItem.qty;
       return `
-        <div class="l2store-cart-item">
-          <div class="l2store-cart-item-info">
+        <div class="l2store-cart-item" data-cart-row="${cartItem.id}">
+          <div class="l2store-cart-item-info" data-cart-edit="${cartItem.id}" title="Clique para alterar a quantidade" style="cursor:pointer;">
             <div style="width:30px; height:30px; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.5); border-radius:4px; flex-shrink:0;">
               ${getItemIcon(cartItem.def || cartItem)}
             </div>
@@ -5295,9 +5605,9 @@ function renderStoreBuyTab(state, callbacks) {
             </div>
           </div>
           <div class="l2store-cart-controls">
-            <button class="l2store-cart-btn" data-cart-minus="${cartItem.id}">-</button>
-            <span class="l2store-cart-qty">${cartItem.qty}</span>
-            <button class="l2store-cart-btn" data-cart-plus="${cartItem.id}">+</button>
+            <button class="l2store-cart-btn" data-cart-minus="${cartItem.id}" title="Diminuir 1">-</button>
+            <input type="number" min="1" max="999999" class="l2store-cart-qty-input" data-cart-qty-input="${cartItem.id}" value="${cartItem.qty}" title="Digite a quantidade desejada" />
+            <button class="l2store-cart-btn" data-cart-plus="${cartItem.id}" title="Aumentar 1">+</button>
             <button class="l2store-cart-btn" data-cart-max="${cartItem.id}" title="Comprar Máximo Possível" style="width:auto; padding:0 4px; font-size:9px;">Máx</button>
             <button class="l2store-cart-btn remove" data-cart-remove="${cartItem.id}" title="Remover da lista">✕</button>
           </div>
@@ -5308,6 +5618,24 @@ function renderStoreBuyTab(state, callbacks) {
 
   // Delegação de controles do carrinho
   purchaseListContainer.onclick = (e) => {
+    const editBtn = e.target.closest('[data-cart-edit]');
+    if (editBtn) {
+      const id = editBtn.dataset.cartEdit;
+      const it = _purchaseCart.find(c => c.id === id);
+      if (it) {
+        openStoreQuantityModal({
+          itemId: it.id,
+          rarity: it.rarity,
+          isMystic: isMystic || (it.rarity !== 'common'),
+          basePrice: it.unitPrice,
+          initialQty: it.qty,
+          state,
+          callbacks
+        });
+        return;
+      }
+    }
+
     const minusBtn = e.target.closest('[data-cart-minus]');
     if (minusBtn) {
       const id = minusBtn.dataset.cartMinus;
@@ -5350,6 +5678,37 @@ function renderStoreBuyTab(state, callbacks) {
       renderStoreBuyTab(state, callbacks);
       return;
     }
+  };
+
+  purchaseListContainer.oninput = (e) => {
+    const inputEl = e.target.closest('[data-cart-qty-input]');
+    if (!inputEl) return;
+    const id = inputEl.dataset.cartQtyInput;
+    const it = _purchaseCart.find(c => c.id === id);
+    if (!it) return;
+    const val = parseInt(inputEl.value, 10);
+    if (!isNaN(val) && val > 0) {
+      it.qty = val;
+      const row = inputEl.closest('.l2store-cart-item');
+      if (row) {
+        const priceEl = row.querySelector('.l2store-cart-item-price');
+        if (priceEl) {
+          priceEl.textContent = `🪙 ${(it.unitPrice * it.qty).toLocaleString()} (${it.unitPrice.toLocaleString()}g un)`;
+        }
+      }
+      updateStoreBottomBarOnly(root, state);
+    }
+  };
+
+  purchaseListContainer.onchange = (e) => {
+    const inputEl = e.target.closest('[data-cart-qty-input]');
+    if (!inputEl) return;
+    const id = inputEl.dataset.cartQtyInput;
+    const it = _purchaseCart.find(c => c.id === id);
+    if (!it) return;
+    const val = parseInt(inputEl.value, 10);
+    it.qty = Math.max(1, isNaN(val) ? 1 : val);
+    renderStoreBuyTab(state, callbacks);
   };
 
   // Barra Inferior de Status (Adena, Weight, Price e Botões Buy/Cancel)
