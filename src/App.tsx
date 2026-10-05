@@ -7,6 +7,7 @@ import { auth } from "./firebase";
 
 const ArenaApp = lazy(() => import("./ArenaApp"));
 const Aden2DGame = lazy(() => import("./pixel2d/Aden2DGame"));
+const HybridActionPrototype = lazy(() => import("./game/HybridActionPrototype"));
 
 // ---------- Mode switch (top-left collapsible hamburger menu) ----------
 type Mode = "idle" | "arena" | "pixel2d";
@@ -193,7 +194,11 @@ export default function Shell() {
 
   return (
     <ErrorBoundary>
-      {!hasEntered ? (
+      {typeof window !== "undefined" && window.location.pathname === "/action-prototype" ? (
+        <Suspense fallback={<div className="loading-spinner">Carregando protótipo de ação...</div>}>
+          <HybridActionPrototype />
+        </Suspense>
+      ) : !hasEntered ? (
         <LoginScreen onEnterGame={handleEnterGame} />
       ) : (
         <>
