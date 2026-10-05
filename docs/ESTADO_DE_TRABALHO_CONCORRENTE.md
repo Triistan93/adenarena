@@ -149,3 +149,17 @@ Antigravity homologou com 100% de aprovação a conclusão da Etapa 5 e do Plano
 - Arquivos Sagrados (`LevelEngine.js`, `MarketService.js`, `ExpeditionService.js`, `cakto-webhook.js`, `CashShopService.js`) rigorosamente preservados intactos.
 
 **Resultado:** Aden Arena está pronto para publicação segura como Release Candidate v1.0.0-RC1.
+
+## Savepoint — protótipo híbrido 2,5D, movimentação do herói (05/10/2026)
+
+**Frente ativa:** polimento visual e de movimento do protótipo de ação em `src/game/`, preservando a experiência Idle. Este trabalho continua independente do plano de lançamento e não altera seus gates.
+
+**Concluído:** caminhada e corrida usam medidas normalizadas pela silhueta central do corpo e uma âncora de pés estável; a escala da corrida é ajustada por classe; a troca de sprite, a velocidade e a cadência aceleram gradualmente e preservam continuidade da fase de animação. O objetivo é remover a aparência de salto na caminhada e a mudança de porte ao correr.
+
+**Validação registrada:** build de produção passou com 315 módulos usando saída isolada em `backups/hybrid-animation-20261004/build`; o aviso de chunks JavaScript grandes permanece. A prévia local `http://127.0.0.1:5191/action-prototype` foi aberta e conferida, sem erros de console. Nenhuma suíte automatizada foi executada nesta rodada. Nenhum save real foi utilizado ou modificado.
+
+**Próximo passo:** na próxima sessão, testar caminhada e corrida contínuas na prévia, observando cadência, inclinação do tronco, posição dos pés e aceleração; corrigir somente o que ainda parecer travado. Depois conferir as três classes e validar o build. A aba local permanece aberta.
+
+**Git e concorrência:** este savepoint será publicado em branch dedicado `codex/checkpoint-hero-movement-20261005`, contendo somente este arquivo e `DIARIO_DE_DESENVOLVIMENTO.md`. As sete alterações locais preexistentes nos arquivos do Idle foram preservadas fora do commit; não fazer stage amplo nem incluí-las ao retomar.
+
+**Pendência preservada:** foram observadas alterações locais concorrentes em `public/action-prototype/animations/{warrior,ranger,mage}.{json,webp}` durante a preparação. A origem e a compatibilidade com o layout atual não foram confirmadas. Não descartar nem incluir esses seis arquivos automaticamente; inspecionar e validar antes de usá-los.

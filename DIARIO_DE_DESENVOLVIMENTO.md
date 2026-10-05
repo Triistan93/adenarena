@@ -4921,3 +4921,13 @@ O Antigravity concluiu a Etapa 5 e formalizou a homologação final do Release C
    - Saves reais de jogadores preservados; nenhum dado de produção foi modificado.
 
 **Conclusão:** Todos os critérios das Etapas 0 a 5 de `docs/PLANO_DE_LANCAMENTO_ADEN_ARENA.md` foram integralmente concluídos e homologados. Aden Arena está pronto para publicação segura como Release Candidate v1.0.0-RC1.
+
+### Protótipo híbrido 2,5D — polimento da movimentação do herói (05/10/2026)
+
+Polimos a transição entre caminhada e corrida do protótipo de ação em `src/game/`, mantendo o modo híbrido separado do jogo Idle. O tamanho da figura agora é normalizado pela silhueta central do corpo, desconsiderando capa e arma, e a linha dos pés usa uma âncora estável nas pernas. A corrida aplica a escala calculada por classe, enquanto a troca entre os sprites de caminhada e corrida usa transição gradual e preserva a fase da animação; velocidade e cadência também aceleram progressivamente. Isso reduz a sensação de salto ao caminhar e o efeito de o personagem crescer ao correr.
+
+**Validação:** `npm run build -- --outDir backups/hybrid-animation-20261004/build` compilou com sucesso (315 módulos). Permanece o aviso conhecido de chunks JavaScript grandes. A prévia local `http://127.0.0.1:5191/action-prototype` foi conferida visualmente; o console não apresentou erros. Não executei a suíte de testes nesta rodada. Nenhum save real foi usado ou alterado.
+
+**Continuidade:** amanhã, retomar o protótipo 2,5D e avaliar a sensação da caminhada e da corrida em movimento contínuo, ajustando cadência, inclinação do tronco e respostas de aceleração se ainda parecerem artificiais. A página local permanece aberta para teste. As alterações locais preexistentes do Idle foram preservadas e não fazem parte deste registro.
+
+Durante a preparação deste checkpoint apareceram mudanças locais nos arquivos `public/action-prototype/animations/{warrior,ranger,mage}.{json,webp}`. Como não foi possível confirmar a origem nem a compatibilidade delas com o layout carregado pelo código, foram preservadas fora do commit; revisar os seis arquivos antes de continuar a validação visual.
