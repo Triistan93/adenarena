@@ -93,7 +93,7 @@ import { renderForgeRefinery, setRefineryCategory } from './RefineryUI.js';
 ═══════════════════════════════════════════════════════════════════════════ */
 export function getRoot() {
   if (typeof document === 'undefined') return null;
-  return document.getElementById?.('idle-host')?.shadowRoot || document;
+  return (typeof window !== 'undefined' && window.__SHADOW_ROOT__) || document.getElementById?.('idle-host')?.shadowRoot || document;
 }
 
 export function findElement(id) {
@@ -332,6 +332,10 @@ export function getItemIconUrl(itemOrDef, defParam) {
     else {
       return null;
     }
+  }
+
+  if (rawPath === 'sages_tea' || rawPath === 'sages_tea.png' || rawPath === 'consumables/sages_tea.png') {
+    rawPath = 'scrolls/sages_tea.png';
   }
 
   if (rawPath) {
@@ -3173,7 +3177,8 @@ export function updateCharacterUI(state, callbacks = {}) {
   }
 
   // 5. Poder de Combate (CP) Canônico & Detalhamento Auditado
-  const detailedCp = CombatPowerService.calculateDetailedCombatPower(state);
+  const stats = getStats(state);
+  const detailedCp = CombatPowerService.calculateDetailedCombatPower({ ...state, stats });
   const cp = detailedCp.totalCp;
   state.combatPower = cp;
   if (!state.stats) state.stats = {};
@@ -3183,6 +3188,10 @@ export function updateCharacterUI(state, callbacks = {}) {
   const heroCpVal = root.querySelector('#hero-cp-val');
   if (heroCpVal) {
     heroCpVal.textContent = CombatPowerService.formatCombatPower(cp);
+  }
+  const charCpEl = root.querySelector('#char-combat-power') || (typeof document !== 'undefined' ? document.getElementById('char-combat-power') : null);
+  if (charCpEl) {
+    charCpEl.textContent = `CP: ${cp.toLocaleString('pt-BR')}`;
   }
 
   const portraitSub = root.querySelector('#portrait-sub, .portrait-sub');
@@ -3234,7 +3243,6 @@ export function updateCharacterUI(state, callbacks = {}) {
   }
 
   // 7. Medidores Vitais Reais (HP & MP apenas — CP é indicador de poder)
-  const stats = getStats(state);
   const curHp = Math.round(state.hp !== undefined ? Math.max(0, state.hp) : (stats.maxHp || 100));
   const maxHp = Math.round(state.maxHp || stats.maxHp || curHp || 100);
   const curMp = Math.round(state.mp !== undefined ? Math.max(0, state.mp) : (stats.maxMp || 50));
@@ -4591,6 +4599,17 @@ let _purchaseCart = []; // [{ id, name, icon, slot, unitPrice, qty, rarity, def 
 let _forgeViewMode = 'dialogue'; // 'dialogue' (Wilbert Imagem 5) | 'workspace'
 let _forgeWilbertTopic = 'main'; // 'main' | 'taxes'
 
+export function setShopViewMode(mode) {
+  _shopViewMode = mode;
+}
+export function setForgeViewMode(mode) {
+  _forgeViewMode = mode;
+}
+if (typeof window !== 'undefined') {
+  window.setShopViewMode = setShopViewMode;
+  window.setForgeViewMode = setForgeViewMode;
+}
+
 export const SHOP_CATEGORY_TREE = {
   weapons: {
     id: 'weapons',
@@ -4644,8 +4663,7 @@ export const SHOP_CATEGORY_TREE = {
       { id: 'all', name: 'Todos os Consumíveis', icon: '🧪' },
       { id: 'shots', name: 'SoulShots & SpiritShots', icon: '✨' },
       { id: 'potions', name: 'Poções de Cura, Mana & Buffs', icon: '🍷' },
-      { id: 'scrolls', name: 'Pergaminhos de Encanto & Teleporte', icon: '📜' },
-      { id: 'books', name: 'Livros & Tomos Sagrados', icon: '📖' }
+      { id: 'scrolls', name: 'Pergaminhos de Encanto & Teleporte', icon: '📜' }
     ]
   },
   others: {
@@ -4671,6 +4689,9 @@ export function matchesShopCategory(def, category, subcat) {
   const slot = (def.slot || '').toLowerCase();
   const desc = (def.desc || '').toLowerCase();
   const text = `${id} ${name} ${desc}`;
+
+  // Spellbooks (1★ a 4★) são obtidos exclusivamente por drop/hunt, nunca vendidos no mercador comum
+  if (/^(spellbook_|book_)[1-4]star$/.test(id) || /spellbook.*[1-4]\s*star/i.test(name)) return false;
 
   // 1. Armas
   if (category === 'weapons') {
@@ -4716,14 +4737,30 @@ export function matchesShopCategory(def, category, subcat) {
 
   // 4. Consumíveis
   if (category === 'consumables') {
-    const isConsumable = ['potion', 'consumable', 'scroll', 'powerup', 'spellbook'].includes(slot) ||
-      /potion|elixir|tea|soulshot|spiritshot|scroll|teleport|resurrection|rebirth|spellbook|tome_|book_|codex/.test(id);
+    // Tomos e Livros de Habilidade não são mercadorias comuns de loja
+    if (slot === 'spellbook' || id.startsWith('spellbook_') || id.startsWith('book_')) {
+      return false;
+    }
+    // Pergaminhos de encantamento: apenas D, C e B canônicos na loja.
+    // Graus A e S (ou variantes universais/legadas) não são vendidos na loja por Adena.
+    const isEnchantScrollItem = id.includes('enchant') || id.includes('blessed') || id.includes('scroll_universal') || /encant/i.test(name) || /encant/i.test(desc);
+    if (isEnchantScrollItem) {
+      if (def.shopExempt) return false;
+      const allowedShopScrolls = [
+        'scroll_enchant_weapon_d', 'scroll_enchant_armor_d',
+        'scroll_enchant_weapon_c', 'scroll_enchant_armor_c',
+        'scroll_enchant_weapon_b', 'scroll_enchant_armor_b'
+      ];
+      if (!allowedShopScrolls.includes(id)) return false;
+    }
+
+    const isConsumable = ['potion', 'consumable', 'scroll', 'powerup'].includes(slot) ||
+      /potion|elixir|tea|soulshot|spiritshot|scroll|teleport|resurrection|rebirth/.test(id);
     if (!isConsumable) return false;
     if (!subcat || subcat === 'all') return true;
     if (subcat === 'shots') return /soulshot|spiritshot/.test(id);
     if (subcat === 'potions') return (slot === 'potion' || /potion|elixir|tea|draught/.test(id)) && !/soulshot|spiritshot/.test(id);
-    if (subcat === 'scrolls') return (/scroll|teleport|resurrection|rebirth/.test(id) || slot === 'scroll') && !/spellbook/.test(id);
-    if (subcat === 'books') return slot === 'spellbook' || /spellbook|book_|codex|tome_/.test(id) || (def.desc && def.desc.toLowerCase().includes('aprender'));
+    if (subcat === 'scrolls') return /scroll|teleport|resurrection|rebirth/.test(id) || slot === 'scroll';
     return true;
   }
 
@@ -5195,7 +5232,8 @@ function renderStoreBuyTab(state, callbacks) {
       const isLvlOk = charLvl >= reqLvl;
       const price = isMystic ? Math.floor((def.price || 500) * (gData?.RARITY?.[rarity]?.mult || 1) * 2) : (def.price || 100);
       const stats = buildShopStatsSummary(def);
-      const tooltip = `${def.name} [${gradeInfo.label}]\n${stats ? stats + '\n' : ''}Preço: ${price.toLocaleString()} Adena${!isLvlOk ? `\n🔒 Requer Lv. ${reqLvl}` : ''}`;
+      const descText = def.desc ? `\n📖 ${def.desc}` : '';
+      const tooltip = `${def.name} [${gradeInfo.label}]\n${stats ? stats + '\n' : ''}Preço: ${price.toLocaleString()} Adena${descText}${!isLvlOk ? `\n🔒 Requer Lv. ${reqLvl}` : ''}`;
 
       return `
         <div class="l2store-slot ${!isLvlOk ? 'locked' : ''}" data-add-cart="${def.id}" data-rarity="${rarity}" title="${tooltip}">
@@ -5575,8 +5613,14 @@ export function buildShopStatsSummary(def) {
   if (def.mp != null && def.mp > 0) parts.push(`💙 +${def.mp} MP`);
   if (def.castSpeed != null && def.castSpeed > 0) parts.push(`⚡ +${def.castSpeed}% Cast`);
   if (def.atkSpeed != null && def.atkSpeed > 0) parts.push(`💨 +${def.atkSpeed}% AtkSpd`);
-  if (def.effect) parts.push(`✨ ${def.effect}`);
-  if (def.healAmount) parts.push(`🧪 Recupera ${def.healAmount} HP`);
+  if (def.healAmount != null && def.healAmount > 0) parts.push(`🧪 Recupera ${def.healAmount} HP`);
+  else if (def.healAmt != null && def.healAmt > 0) {
+    if (def.id?.startsWith('mp_')) {
+      parts.push(`💙 Recupera ${def.healAmt} MP`);
+    } else {
+      parts.push(`🧪 Recupera ${def.healAmt} HP`);
+    }
+  }
   if (def.bonus) parts.push(`✨ ${def.bonus}`);
 
   return parts.join(' · ');
@@ -8742,21 +8786,24 @@ if (typeof window !== 'undefined') {
 }
 
 export function openAutoRecycleModal(state, callbacks = {}) {
-  let modal = document.getElementById('auto-recycle-modal');
+  let modal = findElement('auto-recycle-modal');
   if (!modal) {
     modal = document.createElement('div');
     modal.id = 'auto-recycle-modal';
     modal.className = 'modal-overlay active';
     modal.style.cssText = 'position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:99999; display:flex; align-items:center; justify-content:center; padding:15px;';
-    document.body.appendChild(modal);
+    (getRoot() || document.body).appendChild(modal);
   }
   modal.style.display = 'flex';
   renderAutoRecycleModal(modal, state || window.getGameState?.() || window._state, callbacks);
 }
 
 export function closeAutoRecycleModal() {
-  const modal = document.getElementById('auto-recycle-modal');
+  const modal = findElement('auto-recycle-modal');
   if (modal) modal.style.display = 'none';
+}
+if (typeof window !== 'undefined') {
+  window.closeAutoRecycleModal = closeAutoRecycleModal;
 }
 
 export function renderAutoRecycleModal(container, state, callbacks = {}) {
@@ -9934,7 +9981,7 @@ export function renderRaidsTab(container, state) {
     } else if (isLocked) {
       actionBtnHtml = `<button disabled style="width:100%; padding:10px; font-weight:bold; font-size:12px; background:#27272a; border:1px solid #3f3f46; color:#71717a; border-radius:6px; cursor:not-allowed;">🔒 Bloqueado (Requer Lv. ${boss.reqLvl})</button>`;
     } else if (insufficientCombatPower) {
-      actionBtnHtml = `<button disabled title="Poder de Combate insuficiente. Requer ${boss.minimumCP.toLocaleString('pt-BR')} CP." style="width:100%; padding:10px; font-weight:bold; font-size:12px; background:#27272a; border:1px solid #3f3f46; color:#a1a1aa; border-radius:6px; cursor:not-allowed;">🔒 Requer ${boss.minimumCP.toLocaleString('pt-BR')} CP</button>`;
+      actionBtnHtml = `<button disabled title="Poder de Combate insuficiente. Requer ${boss.minimumCP.toLocaleString('pt-BR')} CP (Seu CP: ${playerCombatPower.toLocaleString('pt-BR')}). Monte e aprimore equipamentos de grau adequado com joias para elevar seu poder." style="width:100%; padding:10px; font-weight:bold; font-size:12px; background:#27272a; border:1px solid #3f3f46; color:#a1a1aa; border-radius:6px; cursor:not-allowed;">🔒 Requer ${boss.minimumCP.toLocaleString('pt-BR')} CP (Seu: ${playerCombatPower.toLocaleString('pt-BR')})</button>`;
     } else if (!hasTickets) {
       actionBtnHtml = `<button disabled style="width:100%; padding:10px; font-weight:bold; font-size:12px; background:#450a0a; border:1px solid #7f1d1d; color:#fca5a5; border-radius:6px; cursor:not-allowed;">🎟️ Sem Ingressos Diários</button>`;
     } else {

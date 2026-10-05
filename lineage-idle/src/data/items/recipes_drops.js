@@ -1409,6 +1409,10 @@ export function generateAllCraftingRecipes(allItemsParam = null) {
 
 const STATIC_CRAFTING_RECIPES = {
   "weapon_composition_bow": { "id": "weapon_composition_bow", "level": 1, "gold": 250, "reqs": [{ "id": "iron_ore", "count": 10 }, { "id": "suede", "count": 5 }] },
+  "weapon_falchion_sword": { "id": "weapon_falchion_sword", "level": 1, "gold": 250, "reqs": [{ "id": "iron_ore", "count": 10 }, { "id": "suede", "count": 5 }] },
+  "weapon_crucifix_of_blessing_magicblunt": { "id": "weapon_crucifix_of_blessing_magicblunt", "level": 1, "gold": 250, "reqs": [{ "id": "wood", "count": 10 }, { "id": "thread", "count": 5 }] },
+  "weapon_sword_breaker": { "id": "weapon_sword_breaker", "level": 1, "gold": 250, "reqs": [{ "id": "iron_ore", "count": 8 }, { "id": "leather", "count": 4 }] },
+  "weapon_iron_hammer": { "id": "weapon_iron_hammer", "level": 1, "gold": 250, "reqs": [{ "id": "iron_ore", "count": 10 }, { "id": "wood", "count": 5 }] },
   "armor_full_plate_heavy_armor": { "id": "armor_full_plate_heavy_armor", "level": 40, "gold": 5000, "reqs": [{ "id": "iron_ore", "count": 50 }, { "id": "crafted_leather", "count": 20 }, { "id": "steel", "count": 10 }] },
   "armor_draconic_armor": { "id": "armor_draconic_armor", "level": 76, "gold": 50000, "reqs": [{ "id": "oriharukon_ore", "count": 100 }, { "id": "adamantite", "count": 50 }] },
 
@@ -1909,9 +1913,9 @@ export const ZONE_CONSUMABLES = {
   zone2: ['hp_potion_m', 'crafted_leather', 'coarse_bone_powder', 'steel', 'iron_ore'],
   zone3: ['hp_potion_l', 'oriharukon_ore', 'adamantite', 'silver_nugget', 'crafted_leather', 'book_1star'],
   zone4: ['mp_potion_s', 'mithril_ore', 'enchanted_stone', 'thread', 'adamantite', 'book_2star'],
-  zone5: ['mp_potion_l', 'dread_shard', 'titanium_ore', 'elemental_stone', 'mithril_ore', 'book_3star'],
-  zone6: ['hp_potion_xl', 'mp_potion_xl', 'dragon_bone', 'divine_crystal', 'titanium_ore', 'book_4star'],
-  zone7: ['hp_potion_xl', 'mp_potion_xl', 'dragon_bone', 'divine_crystal', 'titanium_ore', 'frost_crystal', 'book_4star'],
+  zone5: ['mp_potion_l', 'dread_shard', 'titanium_ore', 'elemental_stone', 'mithril_ore', 'book_3star', 'scroll_enchant_weapon_a', 'scroll_enchant_armor_a'],
+  zone6: ['hp_potion_xl', 'mp_potion_xl', 'dragon_bone', 'divine_crystal', 'titanium_ore', 'book_4star', 'scroll_enchant_weapon_s', 'scroll_enchant_armor_s'],
+  zone7: ['hp_potion_xl', 'mp_potion_xl', 'dragon_bone', 'divine_crystal', 'titanium_ore', 'frost_crystal', 'book_4star', 'scroll_enchant_weapon_s', 'scroll_enchant_armor_s'],
 
   // Specific 22 hunting zones
   talkingIsland: ['hp_potion_s', 'mp_potion_s', 'iron_ore', 'suede', 'charcoal'],
@@ -1929,25 +1933,25 @@ export const ZONE_CONSUMABLES = {
   gludioCastle: ['hp_potion_l', 'mp_potion_l', 'adamantite', 'crafted_leather', 'book_1star', 'book_2star'],
   wolfMountain: ['hp_potion_l', 'mp_potion_l', 'coarse_bone_powder', 'book_2star'],
   riftOfTheVoid: ['hp_potion_l', 'mp_potion_s', 'mithril_ore', 'enchanted_stone', 'book_2star', 'book_3star'],
-  emeraldGrove: ['hp_potion_l', 'hp_potion_xl', 'mithril_ore', 'dread_shard', 'book_3star'],
-  underworldGate: ['hp_potion_xl', 'mp_potion_xl', 'titanium_ore', 'elemental_stone', 'book_3star'],
-  valleyOfSaints: ['hp_potion_xl', 'mp_potion_xl', 'titanium_ore', 'elemental_stone', 'book_3star'],
-  swampOfScreams: ['hp_potion_xl', 'mp_potion_xl', 'titanium_ore', 'elemental_stone', 'book_3star', 'book_4star'],
-  adenCity: ['hp_potion_xl', 'mp_potion_xl', 'titanium_ore', 'divine_crystal', 'book_4star'],
-  dragonValley: ['hp_potion_xl', 'mp_potion_xl', 'dragon_bone', 'divine_crystal', 'book_4star'],
-  imperialTomb: ['hp_potion_xl', 'mp_potion_xl', 'dragon_bone', 'divine_crystal', 'book_4star'],
-  antharasLair: ['hp_potion_xl', 'mp_potion_xl', 'dragon_bone', 'divine_crystal', 'elemental_stone', 'book_4star'],
-  forgeOfGods: ['hp_potion_xl', 'mp_potion_xl', 'dragon_bone', 'divine_crystal', 'book_4star'],
+  emeraldGrove: ['hp_potion_l', 'hp_potion_xl', 'mithril_ore', 'dread_shard', 'book_3star', 'scroll_enchant_weapon_a', 'scroll_enchant_armor_a'],
+  underworldGate: ['hp_potion_xl', 'mp_potion_xl', 'titanium_ore', 'elemental_stone', 'book_3star', 'scroll_enchant_weapon_a', 'scroll_enchant_armor_a'],
+  valleyOfSaints: ['hp_potion_xl', 'mp_potion_xl', 'titanium_ore', 'elemental_stone', 'book_3star', 'scroll_enchant_weapon_a', 'scroll_enchant_armor_a'],
+  swampOfScreams: ['hp_potion_xl', 'mp_potion_xl', 'titanium_ore', 'elemental_stone', 'book_3star', 'book_4star', 'scroll_enchant_weapon_a', 'scroll_enchant_armor_a'],
+  adenCity: ['hp_potion_xl', 'mp_potion_xl', 'titanium_ore', 'divine_crystal', 'book_4star', 'scroll_enchant_weapon_a', 'scroll_enchant_armor_a'],
+  dragonValley: ['hp_potion_xl', 'mp_potion_xl', 'dragon_bone', 'divine_crystal', 'book_4star', 'scroll_enchant_weapon_s', 'scroll_enchant_armor_s'],
+  imperialTomb: ['hp_potion_xl', 'mp_potion_xl', 'dragon_bone', 'divine_crystal', 'book_4star', 'scroll_enchant_weapon_s', 'scroll_enchant_armor_s'],
+  antharasLair: ['hp_potion_xl', 'mp_potion_xl', 'dragon_bone', 'divine_crystal', 'elemental_stone', 'book_4star', 'scroll_enchant_weapon_s', 'scroll_enchant_armor_s'],
+  forgeOfGods: ['hp_potion_xl', 'mp_potion_xl', 'dragon_bone', 'divine_crystal', 'book_4star', 'scroll_enchant_weapon_s', 'scroll_enchant_armor_s'],
 
   // Seven Signs: 8 Necropolis & Catacombs
   necro_sacrifice: ['hp_potion_m', 'hp_potion_l', 'oriharukon_ore', 'adamantite'],
   necro_pilgrim: ['hp_potion_l', 'mp_potion_l', 'oriharukon_ore', 'adamantite', 'book_1star'],
   necro_worship: ['mp_potion_s', 'mithril_ore', 'enchanted_stone', 'adamantite', 'book_2star'],
-  necro_patriot: ['mp_potion_l', 'dread_shard', 'titanium_ore', 'elemental_stone', 'book_3star'],
-  necro_ascetics: ['mp_potion_l', 'dread_shard', 'titanium_ore', 'elemental_stone', 'book_3star'],
-  necro_martyrs: ['hp_potion_xl', 'mp_potion_xl', 'titanium_ore', 'divine_crystal', 'book_4star'],
-  necro_apostles: ['hp_potion_xl', 'mp_potion_xl', 'dragon_bone', 'divine_crystal', 'book_4star'],
-  necro_disciple: ['hp_potion_xl', 'mp_potion_xl', 'dragon_bone', 'divine_crystal', 'book_4star']
+  necro_patriot: ['mp_potion_l', 'dread_shard', 'titanium_ore', 'elemental_stone', 'book_3star', 'scroll_enchant_weapon_a', 'scroll_enchant_armor_a'],
+  necro_ascetics: ['mp_potion_l', 'dread_shard', 'titanium_ore', 'elemental_stone', 'book_3star', 'scroll_enchant_weapon_a', 'scroll_enchant_armor_a'],
+  necro_martyrs: ['hp_potion_xl', 'mp_potion_xl', 'titanium_ore', 'divine_crystal', 'book_4star', 'scroll_enchant_weapon_s', 'scroll_enchant_armor_s'],
+  necro_apostles: ['hp_potion_xl', 'mp_potion_xl', 'dragon_bone', 'divine_crystal', 'book_4star', 'scroll_enchant_weapon_s', 'scroll_enchant_armor_s'],
+  necro_disciple: ['hp_potion_xl', 'mp_potion_xl', 'dragon_bone', 'divine_crystal', 'book_4star', 'scroll_enchant_weapon_s', 'scroll_enchant_armor_s']
 };
 
 export function rollRarity(bonus = 0) {

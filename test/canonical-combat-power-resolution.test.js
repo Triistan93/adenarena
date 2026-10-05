@@ -126,3 +126,42 @@ test('CombatEngine.startCombat: does not falsely repatriate a player with 134,44
   assert.equal(state.zone, 'emeraldGrove', 'Player must remain in emeraldGrove (requires 90k CP, player has 134k CP)');
   assert.ok(!logs.some(l => l.msg.includes('Retornando para')), 'Must not repatriate player to safe town');
 });
+
+test('CombatPowerService.resolveCombatPower: evicts stale starter 120 CP on Lv 40 character and returns true CP', () => {
+  const state = {
+    level: 40,
+    classTier: 2,
+    class: 'gladiator',
+    race: 'human',
+    combatPower: 120,
+    stats: { combatPower: 120 },
+    equipment: {},
+    inventory: []
+  };
+
+  const resolved = CombatPowerService.resolveCombatPower(state);
+  assert.ok(resolved > 1000, `Lv 40 Gladiator CP must be > 1000, got: ${resolved}`);
+  assert.notEqual(resolved, 120, 'Must NOT return stale starter 120 CP');
+  assert.equal(state.combatPower, resolved, 'state.combatPower must be synchronized to true CP');
+  assert.equal(state.stats.combatPower, resolved, 'state.stats.combatPower must be synchronized to true CP');
+});
+
+test('StatsEngine.getStats: computes dynamic CP for Lv 40 Gladiator without reverting to 120', () => {
+  const state = {
+    level: 40,
+    classTier: 2,
+    class: 'gladiator',
+    race: 'human',
+    combatPower: 120,
+    stats: { combatPower: 120 },
+    equipment: {},
+    inventory: []
+  };
+
+  const stats = getStats(state);
+  assert.ok(stats.combatPower > 1000, `Computed stats.combatPower must be > 1000, got: ${stats.combatPower}`);
+  assert.notEqual(stats.combatPower, 120, 'StatsEngine must never return 120 for Lv 40');
+  assert.equal(state.combatPower, stats.combatPower, 'state.combatPower must match stats.combatPower');
+  assert.equal(state.stats.combatPower, stats.combatPower, 'state.stats.combatPower must match stats.combatPower');
+});
+

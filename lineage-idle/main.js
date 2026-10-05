@@ -1816,9 +1816,19 @@ function playSfx(type, arg, extra) {
     }
   } catch(e) {}
 }
-const el = id => (ROOT && ROOT.getElementById ? ROOT.getElementById(id) : null) || (ROOT && ROOT.querySelector ? ROOT.querySelector('#' + id) : null) || (document.getElementById(id));
-const qs = sel => (ROOT && ROOT.querySelector ? ROOT.querySelector(sel) : null) || (document.querySelector(sel));
-const qsa = sel => (ROOT && ROOT.querySelectorAll ? ROOT.querySelectorAll(sel) : []) || (document.querySelectorAll(sel));
+const getActiveRoot = () => (ROOT && ROOT.querySelector ? ROOT : null) || (typeof window !== 'undefined' && window.__SHADOW_ROOT__) || (typeof document !== 'undefined' && document.getElementById?.('idle-host')?.shadowRoot) || (typeof document !== 'undefined' ? document : null);
+const el = id => {
+  const r = getActiveRoot();
+  return (r?.getElementById ? r.getElementById(id) : null) || (r?.querySelector ? r.querySelector('#' + id) : null) || (typeof document !== 'undefined' ? document.getElementById(id) : null);
+};
+const qs = sel => {
+  const r = getActiveRoot();
+  return (r?.querySelector ? r.querySelector(sel) : null) || (typeof document !== 'undefined' ? document.querySelector(sel) : null);
+};
+const qsa = sel => {
+  const r = getActiveRoot();
+  return (r?.querySelectorAll ? r.querySelectorAll(sel) : []) || (typeof document !== 'undefined' ? document.querySelectorAll(sel) : []);
+};
 // Always create elements in the same document as ROOT so Shadow DOM styles apply.
 const doc = () => (ROOT && ROOT.ownerDocument) ? ROOT.ownerDocument : document;
 const mkEl = tag => doc().createElement(tag);
@@ -1948,6 +1958,11 @@ function updateStatsUI() {
   }
   const _spEl = el('sp-text'); if (_spEl) _spEl.textContent = state.sp;
   const _lvEl = el('level-text'); if (_lvEl) _lvEl.textContent = state.level;
+  const _cpEl = el('char-combat-power');
+  if (_cpEl) {
+    const currentCp = stats?.combatPower || state.combatPower || (typeof CombatPowerService !== 'undefined' && CombatPowerService.resolveCombatPower ? CombatPowerService.resolveCombatPower({ ...state, stats }) : 0);
+    _cpEl.textContent = `CP: ${Math.round(currentCp).toLocaleString('pt-BR')}`;
+  }
   const _atkEl = el('atk-text'); if (_atkEl) _atkEl.textContent = stats.atk;
   const _defEl = el('def-text'); if (_defEl) _defEl.textContent = stats.def;
   const _evaEl = el('eva-text'); if (_evaEl) _evaEl.textContent = stats.eva;
@@ -2315,6 +2330,9 @@ function getItemIcon(defOrId) {
     const iconIndex = (typeof window !== 'undefined' && window.IconIndex) ? window.IconIndex : ((D() && D().ICON_MAP) ? D().ICON_MAP : {});
     iconPath = iconIndex[itemId] || iconIndex['armor_' + itemId] || iconIndex['jewel_' + itemId] || iconIndex['weapon_' + itemId] || iconIndex[String(itemId).replace(/^(armor_|jewel_|weapon_|shield_|wepoan_)/, '')] || '';
   }
+  if (iconPath === 'sages_tea' || iconPath === 'sages_tea.png' || iconPath === 'consumables/sages_tea.png') {
+    iconPath = 'scrolls/sages_tea.png';
+  }
   if (!iconPath || isEmojiIconMain(iconPath)) return `<span class="item-icon-fallback" style="font-size:18px;">${emoji}</span>`;
 
   if (iconPath.startsWith('http://') || iconPath.startsWith('https://') || iconPath.startsWith('data:')) {
@@ -2488,6 +2506,7 @@ function shopRow(def, id, price, extra = '') {
 function buildStatLine(def) {
   const parts = [];
   if (def.atk) parts.push(`⚔${def.atk}`); if (def.matk) parts.push(`✦${def.matk}`); if (def.def) parts.push(`🛡${def.def}`); if (def.mdef) parts.push(`🔷${def.mdef}`); if (def.hp) parts.push(`❤${def.hp}`); if (def.mp) parts.push(`💧${def.mp}`); if (def.eva) parts.push(`🏃${def.eva}`); if (def.crit) parts.push(`💥${def.crit}%`); if (def.lifesteal) parts.push(`🩸${def.lifesteal}%`); if (def.speed) parts.push(`⚡${def.speed}`); if (def.craftBonus) parts.push(`🔨+${Math.round(def.craftBonus*100)}%`); if (def.lootBonus) parts.push(`💰+${Math.round(def.lootBonus*100)}%`);
+  if (def.healAmt) parts.push(def.id?.startsWith('mp_') ? `💧+${def.healAmt} MP` : `💚+${def.healAmt} HP`);
   return parts.join(' · ');
 }
 
@@ -2505,7 +2524,7 @@ function renderShopGear(list) {
 }
 function renderShopPotions(list) {
   const zone = ZONES[state.zone], shopId = zone?.shop, items = shopId ? D().SHOP_INVENTORY[shopId] : null;
-  const base = ['soulshot_ng','spiritshot_ng','hp_potion_s','hp_potion_m','hp_potion_l','hp_potion_xl','mp_potion_s','mp_potion_m','mp_potion_l','mp_potion_xl','antidote','scroll_of_resurrection','scroll_of_rebirth','spellbook_1star','spellbook_2star','spellbook_3star','spellbook_4star'];
+  const base = ['soulshot_ng','spiritshot_ng','hp_potion_s','hp_potion_m','hp_potion_l','hp_potion_xl','mp_potion_s','mp_potion_m','mp_potion_l','mp_potion_xl','antidote','scroll_of_resurrection','scroll_of_rebirth'];
   const shown = new Set(), list2 = [...base, ...(items || []).map(i => i.id)]; let count = 0;
   for (const id of list2) { if (shown.has(id)) continue; const def = D().ALL_ITEMS[id]; if (!def || (def.slot !== 'consumable' && def.slot !== 'scroll') || (def.req && def.req.level > state.level)) continue; shown.add(id); list.appendChild(shopRow(def, id, def.price)); count++; }
   if (!count) list.innerHTML = '<p class="shop-empty">No potions in stock.</p>';
@@ -3808,6 +3827,14 @@ function updateLiveOpsUI() {
   } catch (e) {}
 }
 
+function isTabVisible(panelId) {
+  const root = ROOT || (typeof document !== 'undefined' ? document : null);
+  if (!root) return false;
+  const pane = root.querySelector(`#tab-${panelId}, [data-menu-panel="${panelId}"], .tab-${panelId}, [data-tab-content="${panelId}"]`);
+  if (!pane) return false;
+  return pane.classList.contains('active') || pane.classList.contains('is-active') || (!pane.hidden && pane.offsetWidth > 0);
+}
+
 function _performFullUIUpdate() {
   state = getState();
   uiInitTooltipEvents();
@@ -3836,13 +3863,6 @@ function _performFullUIUpdate() {
   }
 
   // Tab-specific heavy updates (only rendered if tab is currently active/visible)
-  const isTabVisible = (panelId) => {
-    const root = ROOT || (typeof document !== 'undefined' ? document : null);
-    if (!root) return false;
-    const pane = root.querySelector(`#tab-${panelId}, [data-menu-panel="${panelId}"], .tab-${panelId}, [data-tab-content="${panelId}"]`);
-    if (!pane) return false;
-    return pane.classList.contains('active') || pane.classList.contains('is-active') || (!pane.hidden && pane.offsetWidth > 0);
-  };
 
   if (isTabVisible('skills')) safeUiUpdate('skills', updateSkillUI);
   if (isTabVisible('shop')) safeUiUpdate('shop', updateShopUI);
@@ -5329,7 +5349,7 @@ function processMonsterDefeat(monster, killingSkill = null) {
   state.gold += gold;
   if (gold > 0) trackGold(gold);
   if (gapMods.isGrey) {
-    log(`⚠️ [Penalidade de Nível] Monstro insignificante (${gapMods.reason}). 0 Adena coletada.`, 'warning', 'gold_xp');
+    log(`⚠️ [Penalidade de Nível] Monstro insignificante (${gapMods.reason}). 0 Adena coletada. Abra 'Combate & Zonas' para caçar em um mapa adequado ao seu nível!`, 'warning', 'gold_xp');
   } else if (jackpot) { 
     log(`🪙 JACKPOT! Coletou **+${gold.toLocaleString()} Adena** (×10)!`, 'rarity-legendary', 'gold_xp'); 
     floatText(`🪙 +${gold} Adena`, 'float-jackpot'); 
@@ -6003,7 +6023,7 @@ export function attackMonster() {
         // Penalidade de CP / Equipamento Insuficiente contra monstros de alta graduação
         const zoneProg = state.zone ? getZoneProgression(state.zone) : null;
         const targetMinCp = zoneProg?.minCp || monster.minCp || 0;
-        const currentCp = stats.combatPower || state.combatPower || 0;
+        const currentCp = stats.combatPower || state.combatPower || CombatPowerService.resolveCombatPower(state);
         if (targetMinCp > 0 && currentCp < targetMinCp) {
           const cpRatio = Math.max(0.05, currentCp / targetMinCp);
           sDmg = Math.max(1, Math.floor(sDmg * cpRatio));
@@ -6343,7 +6363,7 @@ export function attackMonster() {
   // Penalidade de CP / Equipamento Insuficiente contra monstros de alta graduação
   const zoneProg = state.zone ? getZoneProgression(state.zone) : null;
   const targetMinCp = zoneProg?.minCp || monster.minCp || 0;
-  const currentCp = stats.combatPower || state.combatPower || 0;
+  const currentCp = stats.combatPower || state.combatPower || CombatPowerService.resolveCombatPower(state);
   if (targetMinCp > 0 && currentCp < targetMinCp) {
     const cpRatio = Math.max(0.05, currentCp / targetMinCp);
     damage = Math.max(1, Math.floor(damage * cpRatio));
@@ -6473,7 +6493,7 @@ export function monsterAttack(monster) {
   // Avaliação Canônica de Esquiva: Precisão do Monstro vs Evasão do Jogador
   const zoneProg = state.zone ? getZoneProgression(state.zone) : null;
   const targetMinCp = zoneProg?.minCp || monster.minCp || 0;
-  const currentCp = stats.combatPower || state.combatPower || 0;
+  const currentCp = stats.combatPower || state.combatPower || CombatPowerService.resolveCombatPower(state);
   const cpRatio = (targetMinCp > 0) ? Math.min(1.0, currentCp / targetMinCp) : 1.0;
 
   const mobLvl = monster.lvl || 1;
@@ -7500,6 +7520,7 @@ function selectZone(zoneId) {
   } catch (_) {}
   return engineSelectZone(state, zoneId, {
     log, updateAllUI, save, attackMonster,
+    floatText, renderStageMonster, updateZoneKillProgressUI,
     onBeforeZoneChange: () => {
       if (state.isSpecialInstanceActive || state.activeInstanceId || state.activeMonster?.isInstanceBoss) {
         InstanceService.leaveInstance(state, { log, renderStageMonster });
@@ -8480,6 +8501,10 @@ export function openPanel(tabName) {
     checkTabGuide(targetTab, state, save);
   } catch(e) { /* silently fail — tutorial não bloqueia o jogo */ }
 }
+if (typeof window !== 'undefined') {
+  window.openPanel = openPanel;
+  window.switchTab = (tabId) => openPanel(tabId);
+}
 
 function depositAllToWarehouse() {
   const unequipped = state.inventory.filter(i => !i.equipped);
@@ -8817,6 +8842,10 @@ export function bindEvents() {
         if (modal) modal.classList.remove('active');
       };
     }
+    window.closeAdminModal = () => {
+      const modal = el('admin-modal');
+      if (modal) modal.classList.remove('active');
+    };
 
     const topReferralBtn = el('top-referral-btn');
     if (topReferralBtn) {
@@ -9972,6 +10001,9 @@ export function init() {
     window.ExpeditionService = ExpeditionService;
     window.setForgeSubTab = (tabKey) => {
       window._forgeSubTab = tabKey;
+      if (typeof window.setForgeViewMode === 'function') {
+        window.setForgeViewMode('workspace');
+      }
       updateAllUI();
     };
     window.RefineryService = RefineryService;
@@ -10774,6 +10806,7 @@ export function init() {
       window.switchGuideTab(preferredTab || 'journey');
       modal.classList.add('active');
     };
+    window.openGuideModal = window.openCurrentTabGuide;
     window.closeGuideModal = () => {
       const modal = el('guide-modal');
       if (modal) modal.classList.remove('active');
@@ -12258,6 +12291,21 @@ function tickUI() {
   for (const k of Object.keys(state.buffs || {})) { if (state.buffs[k].until < now) { delete state.buffs[k]; buffChanged = true; } }
   const gpsEl = el('gps-text'); if (gpsEl) { gpsEl.textContent = getGoldPerSec() > 0 ? `${getGoldPerSec().toFixed(1)}/s` : '—'; }
   safeUiUpdate('stats-tick', updateStatsUI);
+
+  // Atualização ativa e responsiva de profissões (mesmo com combate pausado)
+  if (typeof isTabVisible === 'function') {
+    if (isTabVisible('gathering')) safeUiUpdate('gathering-tick', updateGatheringUI);
+    if (isTabVisible('mining')) safeUiUpdate('mining-tick', updateMiningUI);
+    if (isTabVisible('fishing')) safeUiUpdate('fishing-tick', updateFishingUI);
+    if (isTabVisible('hunting')) safeUiUpdate('hunting-tick', updateHuntingUI);
+  }
+  if (typeof GatheringService !== 'undefined' && state.gathering?.autoGathering) {
+    try { GatheringService.processAutoGather(state, { log, updateAllUI: () => {}, save, floatText }); } catch (e) {}
+  }
+  if (typeof MiningService !== 'undefined' && state.mining?.autoMining) {
+    try { MiningService.processAutoMine(state, { log, updateAllUI: () => {}, save, floatText }); } catch (e) {}
+  }
+
   const mt = el('mystic-timer'); if (mt) { mt.textContent = fmtCountdown(D().getMysticRotation()[0]?.msLeft || 0); }
   if (buffChanged) { safeUiUpdate('shop-tick', updateShopUI); }
 }

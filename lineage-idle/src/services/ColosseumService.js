@@ -98,7 +98,9 @@ export class ColosseumService {
     if (!duel) return { success: false, message: 'Nenhum duelo ativo.' };
 
     const pStats = state.stats || { atk: 2500, def: 2000 };
-    const pDmg = Math.max(150, Math.floor((pStats.atk || 2000) * 1.6 - duel.pDef * 0.4));
+    const pAtkVal = typeof pStats.atk === 'number' ? pStats.atk : 2000;
+    const pDefVal = typeof pStats.def === 'number' ? pStats.def : 1800;
+    const pDmg = Math.max(150, Math.floor(pAtkVal * 1.6 - duel.pDef * 0.4));
     duel.hp = Math.max(0, duel.hp - pDmg);
 
     hooks.log?.(`⚔️ Seu golpe atingiu **${duel.opponentName}** causando **${pDmg.toLocaleString()}** de dano! (${duel.hp.toLocaleString()} HP restante)`, 'combat');
@@ -117,7 +119,7 @@ export class ColosseumService {
     }
 
     // Contra-ataque do oponente
-    const oppDmg = Math.max(100, Math.floor(duel.pAtk * 1.4 - (pStats.def || 1800) * 0.3));
+    const oppDmg = Math.max(100, Math.floor(duel.pAtk * 1.4 - pDefVal * 0.3));
     const currentPlayerHp = Number.isFinite(Number(duel.playerHp)) ? Number(duel.playerHp) : (Number(state.hp) || duel.playerMaxHp || 5000);
     duel.playerHp = Math.max(0, currentPlayerHp - oppDmg);
     state.hp = duel.playerHp;
@@ -176,7 +178,9 @@ export class ColosseumService {
     if (!s || s.isCompleted) return { success: false, message: 'Nenhum desafio de sobrevivência ativo.' };
 
     const pStats = state.stats || { atk: 3000, def: 2500 };
-    const pDmg = Math.max(200, Math.floor((pStats.atk || 2500) * 1.8 - s.pDef * 0.4));
+    const pAtkVal = typeof pStats.atk === 'number' ? pStats.atk : 2500;
+    const pDefVal = typeof pStats.def === 'number' ? pStats.def : 1800;
+    const pDmg = Math.max(200, Math.floor(pAtkVal * 1.8 - s.pDef * 0.4));
     s.currentHp = Math.max(0, s.currentHp - pDmg);
 
     hooks.log?.(`⚔️ Golpe na Onda ${s.waveIndex + 1} causando **${pDmg.toLocaleString()}** de dano! (${s.currentHp.toLocaleString()} HP restante)`, 'combat');
@@ -215,7 +219,7 @@ export class ColosseumService {
       return { success: true, nextWave: s.waveIndex + 1 };
     }
 
-    const incomingDamage = Math.max(1, Math.floor(s.pAtk * 1.4 - (pStats.def || 1800) * 0.3));
+    const incomingDamage = Math.max(1, Math.floor(s.pAtk * 1.4 - pDefVal * 0.3));
     const currentPlayerHp = Number.isFinite(Number(s.playerHp)) ? Number(s.playerHp) : (Number(state.hp) || s.playerMaxHp || 1000);
     s.playerHp = Math.max(0, currentPlayerHp - incomingDamage);
     state.hp = s.playerHp;

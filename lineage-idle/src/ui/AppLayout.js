@@ -69,7 +69,7 @@ export function getActivePanel() {
   return null;
 }
 
-const PILLAR_MAP = {
+export const PILLAR_MAP = {
   zones: 'combat',
   raids: 'combat',
   tower: 'combat',
@@ -77,6 +77,8 @@ const PILLAR_MAP = {
   expeditions: 'combat',
   fishing: 'combat',
   hunting: 'combat',
+  gathering: 'combat',
+  mining: 'combat',
   
   character: 'character',
   inventory: 'character',
@@ -169,6 +171,8 @@ export const TAB_UNLOCK_LEVELS = {
   market: 15,
   fishing: 15,
   hunting: 15,
+  gathering: 15,
+  mining: 15,
   warehouse: 15,
   codex: 15,
   clan: 20,

@@ -1556,9 +1556,10 @@ export function getStats(state) {
   finalStats.combatPower = CombatPowerService.calculateCombatPower({ ...state, stats: finalStats });
   if (state && typeof state === 'object') {
     state.combatPower = finalStats.combatPower;
-    if (state.stats && typeof state.stats === 'object') {
-      state.stats.combatPower = finalStats.combatPower;
+    if (!state.stats || typeof state.stats !== 'object') {
+      state.stats = {};
     }
+    state.stats.combatPower = finalStats.combatPower;
   }
   return finalStats;
 }

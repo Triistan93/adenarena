@@ -166,6 +166,8 @@ export const RAID_BOSSES = {
       { itemId: 'book_4star', name: 'Tomo Sagrado: 4★ (Lendário Divino)', chance: 0.25 },
       { itemId: 'jewel_earring_of_zaken', name: 'Earring of Zaken', chance: 0.25, isEpicJewel: true },
       { itemId: 'armor_zaken_cloack', name: 'Capa Pirata de Zaken', chance: 0.30 },
+      { itemId: 'scroll_enchant_weapon_a', name: 'Scroll: Enchant Weapon (A)', chance: 0.45 },
+      { itemId: 'scroll_enchant_armor_a', name: 'Scroll: Enchant Armor (A)', chance: 0.50 },
       { itemId: 'scroll_blessed_weapon', name: 'Blessed Scroll: Enchant Weapon', chance: 0.40 },
       { itemId: 'adena_coins', count: 25, name: '25x Aden Coins (AC)', chance: 0.50 }
     ]
@@ -205,6 +207,9 @@ export const RAID_BOSSES = {
       { itemId: 'book_4star', name: 'Tomo Sagrado: 4★ (Lendário Divino)', chance: 0.25 },
       { itemId: 'jewel_ring_of_baium', name: 'Ring of Baium', chance: 0.25, isEpicJewel: true },
       { itemId: 'weapon_samurai_longsword', name: 'Samurai Longsword +5', chance: 0.35 },
+      { itemId: 'scroll_enchant_weapon_s', name: 'Scroll: Enchant Weapon (S)', chance: 0.40 },
+      { itemId: 'scroll_enchant_armor_s', name: 'Scroll: Enchant Armor (S)', chance: 0.45 },
+      { itemId: 'scroll_enchant_weapon_a', name: 'Scroll: Enchant Weapon (A)', chance: 0.50 },
       { itemId: 'scroll_blessed_weapon', name: 'Blessed Scroll: Enchant Weapon', chance: 0.50 },
       { itemId: 'adena_coins', count: 50, name: '50x Aden Coins (AC)', chance: 0.50 }
     ]
@@ -244,6 +249,8 @@ export const RAID_BOSSES = {
       { itemId: 'book_4star', name: 'Tomo Sagrado: 4★ (Lendário Divino)', chance: 0.25 },
       { itemId: 'jewel_necklace_of_frintezza', name: 'Necklace of Frintezza', chance: 0.25, isEpicJewel: true },
       { itemId: 'weapon_frost_lord_sword', name: 'Frost Lord Sword (Tier 6 Apex)', chance: 0.20 },
+      { itemId: 'scroll_enchant_weapon_s', name: 'Scroll: Enchant Weapon (S)', chance: 0.45 },
+      { itemId: 'scroll_enchant_armor_s', name: 'Scroll: Enchant Armor (S)', chance: 0.50 },
       { itemId: 'scroll_blessed_weapon', name: 'Blessed Scroll: Enchant Weapon', chance: 0.55 },
       { itemId: 'adena_coins', count: 75, name: '75x Aden Coins (AC)', chance: 0.50 }
     ]
@@ -284,6 +291,8 @@ export const RAID_BOSSES = {
       { itemId: 'jewel_earring_of_antharas', name: 'Earring of Antharas', chance: 0.25, isEpicJewel: true },
       { itemId: 'weapon_frost_lord_two_hand_sword', name: 'Frost Lord Greatsword (Tier 6 Apex)', chance: 0.25 },
       { itemId: 'dragon_core_antharas', name: 'Núcleo de Pedra de Antharas', chance: 0.35 },
+      { itemId: 'scroll_enchant_weapon_s', name: 'Scroll: Enchant Weapon (S)', chance: 0.50 },
+      { itemId: 'scroll_enchant_armor_s', name: 'Scroll: Enchant Armor (S)', chance: 0.55 },
       { itemId: 'scroll_blessed_weapon', name: 'Blessed Scroll: Enchant Weapon', chance: 0.60 },
       { itemId: 'adena_coins', count: 100, name: '100x Aden Coins (AC)', chance: 0.50 }
     ]
@@ -327,6 +336,8 @@ export const RAID_BOSSES = {
       { itemId: 'armor_valakas_cloack', name: 'Valakas Dragon Cloak', chance: 0.35 },
       { itemId: 'valakas_mask', name: 'Máscara Flamejante de Valakas', chance: 0.40 },
       { itemId: 'dragon_core_valakas', name: 'Coração Flamejante de Valakas', chance: 0.35 },
+      { itemId: 'scroll_enchant_weapon_s', name: 'Scroll: Enchant Weapon (S)', chance: 0.60 },
+      { itemId: 'scroll_enchant_armor_s', name: 'Scroll: Enchant Armor (S)', chance: 0.65 },
       { itemId: 'scroll_blessed_weapon', name: 'Blessed Scroll: Enchant Weapon', chance: 0.75 },
       { itemId: 'adena_coins', count: 150, name: '150x Aden Coins (AC)', chance: 0.60 }
     ]

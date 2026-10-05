@@ -3535,7 +3535,7 @@ select:focus-visible {
   z-index: 100;
   backdrop-filter: blur(2px);
 }
-.modal.active { display: flex; animation: modal-in .3s ease; }
+.modal.active { display: flex; opacity: 1; animation: modal-in .3s ease; }
 @keyframes modal-in { from { opacity: 0; } to { opacity: 1; } }
 .modal-content {
   background: linear-gradient(180deg, var(--bg-2), var(--bg-1));

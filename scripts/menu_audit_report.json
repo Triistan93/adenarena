@@ -1,0 +1,1981 @@
+{
+  "timestamp": "2026-10-04T12:16:33.958Z",
+  "networkInterceptions": [
+    "https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Inter:wght@400;500;600;700;800&display=swap",
+    "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap",
+    "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyB36IqqrnZglElfM5kxsTi1S2Acclate9Y",
+    "https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Inter:wght@400;500;600;700;800&display=swap",
+    "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap",
+    "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyB36IqqrnZglElfM5kxsTi1S2Acclate9Y",
+    "https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyB36IqqrnZglElfM5kxsTi1S2Acclate9Y",
+    "https://firestore.googleapis.com/google.firestore.v1.Firestore/Listen/channel?VER=8&database=projects%2Fadenarena-6e448%2Fdatabases%2F(default)&RID=53516&CVER=22&X-HTTP-Session-Id=gsessionid&zx=yt0qm9sn9ryz&t=1",
+    "https://firestore.googleapis.com/google.firestore.v1.Firestore/Listen/channel?VER=8&database=projects%2Fadenarena-6e448%2Fdatabases%2F(default)&RID=37751&CVER=22&X-HTTP-Session-Id=gsessionid&zx=jzo6wjcbodgn&t=1",
+    "https://firestore.googleapis.com/google.firestore.v1.Firestore/Listen/channel?VER=8&database=projects%2Fadenarena-6e448%2Fdatabases%2F(default)&RID=50679&CVER=22&X-HTTP-Session-Id=gsessionid&zx=ppr572dxeomr&t=1",
+    "https://firestore.googleapis.com/google.firestore.v1.Firestore/Listen/channel?VER=8&database=projects%2Fadenarena-6e448%2Fdatabases%2F(default)&RID=37483&CVER=22&X-HTTP-Session-Id=gsessionid&zx=8vk1unbfn7bp&t=1",
+    "https://firestore.googleapis.com/google.firestore.v1.Firestore/Listen/channel?VER=8&database=projects%2Fadenarena-6e448%2Fdatabases%2F(default)&RID=95861&CVER=22&X-HTTP-Session-Id=gsessionid&zx=g4ujpui5zf08&t=1",
+    "https://firestore.googleapis.com/google.firestore.v1.Firestore/Listen/channel?VER=8&database=projects%2Fadenarena-6e448%2Fdatabases%2F(default)&RID=10008&CVER=22&X-HTTP-Session-Id=gsessionid&zx=rd5viic35vtz&t=1",
+    "https://l2wiki.com/upload/images/icon/agathion_magmeld_teleport.png",
+    "https://l2wiki.com/upload/images/icon/high_agathion_bracelet_i00.png",
+    "https://l2wiki.com/upload/images/icon/dimension_bracelet_i00.png",
+    "https://l2wiki.com/upload/images/icon/dimension_bracelet_i01.png",
+    "https://l2wiki.com/upload/images/icon/dimension_bracelet_i02.png",
+    "https://l2wiki.com/upload/images/icon/dimension_bracelet_i03.png",
+    "https://l2wiki.com/upload/images/icon/etc_bm_brooch_lavianrose_i00.png",
+    "https://l2wiki.com/upload/images/icon/etc_bm_brooch_lavianrose_i01.png",
+    "https://l2wiki.com/upload/images/icon/etc_bm_brooch_lavianrose_i02.png",
+    "https://l2wiki.com/upload/images/icon/etc_bm_brooch_lavianrose_i03.png",
+    "https://l2wiki.com/upload/images/icon/etc_bm_jewel_ruby_i00.png",
+    "https://l2wiki.com/upload/images/icon/etc_bm_jewel_sapphire_i00.png",
+    "https://l2wiki.com/upload/images/icon/etc_bm_jewel_emerald_i00.png",
+    "https://l2wiki.com/upload/images/icon/etc_bm_jewel_aquamarine_i00.png",
+    "https://l2wiki.com/upload/images/icon/etc_bm_jewel_opal_i00.png",
+    "https://l2wiki.com/upload/images/icon/etc_bm_jewel_amber_i00.png",
+    "https://l2wiki.com/upload/images/icon/etc_bm_jewel_topaz_i00.png",
+    "https://l2wiki.com/upload/images/icon/etc_bm_jewel_garnet_i00.png",
+    "https://l2wiki.com/upload/images/icon/etc_bm_jewel_jade_i00.png",
+    "https://l2wiki.com/upload/images/icon/agathion_magmeld_teleport.png",
+    "https://l2wiki.com/upload/images/icon/high_agathion_bracelet_i00.png",
+    "https://l2wiki.com/upload/images/icon/dimension_bracelet_i00.png",
+    "https://l2wiki.com/upload/images/icon/dimension_bracelet_i01.png",
+    "https://l2wiki.com/upload/images/icon/dimension_bracelet_i02.png",
+    "https://l2wiki.com/upload/images/icon/dimension_bracelet_i03.png",
+    "https://l2wiki.com/upload/images/icon/etc_bm_brooch_lavianrose_i00.png",
+    "https://l2wiki.com/upload/images/icon/etc_bm_brooch_lavianrose_i01.png",
+    "https://l2wiki.com/upload/images/icon/etc_bm_brooch_lavianrose_i02.png",
+    "https://l2wiki.com/upload/images/icon/etc_bm_brooch_lavianrose_i03.png",
+    "https://l2wiki.com/upload/images/icon/etc_bm_jewel_ruby_i00.png",
+    "https://l2wiki.com/upload/images/icon/etc_bm_jewel_sapphire_i00.png",
+    "https://l2wiki.com/upload/images/icon/etc_bm_jewel_emerald_i00.png",
+    "https://l2wiki.com/upload/images/icon/etc_bm_jewel_aquamarine_i00.png",
+    "https://l2wiki.com/upload/images/icon/etc_bm_jewel_opal_i00.png",
+    "https://l2wiki.com/upload/images/icon/etc_bm_jewel_amber_i00.png",
+    "https://l2wiki.com/upload/images/icon/etc_bm_jewel_topaz_i00.png",
+    "https://l2wiki.com/upload/images/icon/etc_bm_jewel_garnet_i00.png",
+    "https://l2wiki.com/upload/images/icon/etc_bm_jewel_jade_i00.png",
+    "https://firestore.googleapis.com/google.firestore.v1.Firestore/Listen/channel?VER=8&database=projects%2Fadenarena-6e448%2Fdatabases%2F(default)&RID=70428&CVER=22&X-HTTP-Session-Id=gsessionid&zx=2i4x0dsbd9n0&t=1",
+    "https://l2wiki.com/upload/images/icon/agathion_magmeld_teleport.png",
+    "https://l2wiki.com/upload/images/icon/high_agathion_bracelet_i00.png",
+    "https://l2wiki.com/upload/images/icon/dimension_bracelet_i00.png",
+    "https://l2wiki.com/upload/images/icon/dimension_bracelet_i01.png",
+    "https://l2wiki.com/upload/images/icon/dimension_bracelet_i02.png",
+    "https://l2wiki.com/upload/images/icon/dimension_bracelet_i03.png",
+    "https://l2wiki.com/upload/images/icon/etc_bm_brooch_lavianrose_i00.png",
+    "https://l2wiki.com/upload/images/icon/etc_bm_brooch_lavianrose_i01.png",
+    "https://l2wiki.com/upload/images/icon/etc_bm_brooch_lavianrose_i02.png",
+    "https://l2wiki.com/upload/images/icon/etc_bm_brooch_lavianrose_i03.png",
+    "https://l2wiki.com/upload/images/icon/etc_bm_jewel_ruby_i00.png",
+    "https://l2wiki.com/upload/images/icon/etc_bm_jewel_sapphire_i00.png",
+    "https://l2wiki.com/upload/images/icon/etc_bm_jewel_emerald_i00.png",
+    "https://l2wiki.com/upload/images/icon/etc_bm_jewel_aquamarine_i00.png",
+    "https://l2wiki.com/upload/images/icon/etc_bm_jewel_opal_i00.png",
+    "https://l2wiki.com/upload/images/icon/etc_bm_jewel_amber_i00.png",
+    "https://l2wiki.com/upload/images/icon/etc_bm_jewel_topaz_i00.png",
+    "https://l2wiki.com/upload/images/icon/etc_bm_jewel_garnet_i00.png",
+    "https://l2wiki.com/upload/images/icon/etc_bm_jewel_jade_i00.png",
+    "https://l2wiki.com/upload/images/icon/agathion_magmeld_teleport.png",
+    "https://l2wiki.com/upload/images/icon/high_agathion_bracelet_i00.png",
+    "https://l2wiki.com/upload/images/icon/dimension_bracelet_i00.png",
+    "https://l2wiki.com/upload/images/icon/dimension_bracelet_i01.png",
+    "https://l2wiki.com/upload/images/icon/dimension_bracelet_i02.png",
+    "https://l2wiki.com/upload/images/icon/dimension_bracelet_i03.png",
+    "https://firestore.googleapis.com/google.firestore.v1.Firestore/Listen/channel?VER=8&database=projects%2Fadenarena-6e448%2Fdatabases%2F(default)&RID=71099&CVER=22&X-HTTP-Session-Id=gsessionid&zx=9bjkodxbk1kq&t=1"
+  ],
+  "testedPillars": [],
+  "testedTabs": [
+    {
+      "tab": "zones",
+      "pillar": "combat",
+      "name": "Combate & Zonas",
+      "inspection": {
+        "found": true,
+        "active": true,
+        "textLength": 4727,
+        "buttonsCount": 37,
+        "sampleButtons": [
+          {
+            "id": "",
+            "text": "🌀\nINSTÂNCIAS & DESAFIOS",
+            "disabled": false
+          },
+          {
+            "id": "",
+            "text": "🟢\nNormal\n(1x)",
+            "disabled": false
+          },
+          {
+            "id": "",
+            "text": "🟡\nDifícil\n(1.5x)",
+            "disabled": false
+          },
+          {
+            "id": "",
+            "text": "🔴\nPesadelo\n🔒 (Lv.60)",
+            "disabled": true
+          },
+          {
+            "id": "",
+            "text": "🟣\nInfernal\n🔒 (Lv.76)",
+            "disabled": true
+          }
+        ],
+        "anomalies": []
+      },
+      "passed": true
+    },
+    {
+      "tab": "raids",
+      "pillar": "combat",
+      "name": "Raids & Bosses",
+      "inspection": {
+        "found": true,
+        "active": true,
+        "textLength": 5876,
+        "buttonsCount": 10,
+        "sampleButtons": [
+          {
+            "id": "",
+            "text": "🔒 Requer 7.750 CP",
+            "disabled": true
+          },
+          {
+            "id": "",
+            "text": "🔒 Bloqueado (Requer Lv. 45)",
+            "disabled": true
+          },
+          {
+            "id": "",
+            "text": "🔒 Bloqueado (Requer Lv. 50)",
+            "disabled": true
+          },
+          {
+            "id": "",
+            "text": "🔒 Bloqueado (Requer Lv. 55)",
+            "disabled": true
+          },
+          {
+            "id": "",
+            "text": "🔒 Bloqueado (Requer Lv. 70)",
+            "disabled": true
+          }
+        ],
+        "anomalies": []
+      },
+      "passed": true
+    },
+    {
+      "tab": "tower",
+      "pillar": "combat",
+      "name": "Torre da Insolência",
+      "inspection": {
+        "found": true,
+        "active": true,
+        "textLength": 1167,
+        "buttonsCount": 3,
+        "sampleButtons": [
+          {
+            "id": "tower-sweep-btn",
+            "text": "🧹 Varredura Diária",
+            "disabled": true
+          },
+          {
+            "id": "tower-claim-pending-btn",
+            "text": "🎁 Resgatar Recompensas",
+            "disabled": true
+          },
+          {
+            "id": "tower-challenge-btn",
+            "text": "⚔️ DESAFIAR ANDAR 1",
+            "disabled": false
+          }
+        ],
+        "anomalies": []
+      },
+      "passed": true
+    },
+    {
+      "tab": "colosseum",
+      "pillar": "combat",
+      "name": "Coliseu PvP",
+      "inspection": {
+        "found": true,
+        "active": true,
+        "textLength": 840,
+        "buttonsCount": 9,
+        "sampleButtons": [
+          {
+            "id": "",
+            "text": "Desafiar",
+            "disabled": false
+          },
+          {
+            "id": "",
+            "text": "Desafiar",
+            "disabled": false
+          },
+          {
+            "id": "",
+            "text": "Desafiar",
+            "disabled": false
+          },
+          {
+            "id": "",
+            "text": "Desafiar",
+            "disabled": false
+          },
+          {
+            "id": "",
+            "text": "🔥 Iniciar Desafio das 10 Onda",
+            "disabled": false
+          }
+        ],
+        "anomalies": []
+      },
+      "passed": true
+    },
+    {
+      "tab": "expeditions",
+      "pillar": "combat",
+      "name": "Expedições",
+      "inspection": {
+        "found": true,
+        "active": true,
+        "textLength": 847,
+        "buttonsCount": 52,
+        "sampleButtons": [
+          {
+            "id": "mercenary-tab-overview",
+            "text": "✦\nCentral",
+            "disabled": false
+          },
+          {
+            "id": "mercenary-tab-board",
+            "text": "📜\nMural",
+            "disabled": false
+          },
+          {
+            "id": "mercenary-tab-roster",
+            "text": "🛡️\nQuartel",
+            "disabled": false
+          },
+          {
+            "id": "mercenary-tab-recruit",
+            "text": "🍺\nRecrutamento\n4",
+            "disabled": false
+          },
+          {
+            "id": "mercenary-tab-operations",
+            "text": "🗺️\nExpedições",
+            "disabled": false
+          }
+        ],
+        "anomalies": []
+      },
+      "passed": true
+    },
+    {
+      "tab": "fishing",
+      "pillar": "combat",
+      "name": "Pesca",
+      "inspection": {
+        "found": true,
+        "active": true,
+        "textLength": 2241,
+        "buttonsCount": 20,
+        "sampleButtons": [
+          {
+            "id": "",
+            "text": "🌊\nCosta de Talking Island\nREG",
+            "disabled": false
+          },
+          {
+            "id": "",
+            "text": "🔒\nPorto de Gludin\nRequer Nv. ",
+            "disabled": true
+          },
+          {
+            "id": "",
+            "text": "🔒\nLago de Elven Village\nReque",
+            "disabled": true
+          },
+          {
+            "id": "",
+            "text": "🔒\nRio de Dion\nRequer Nv. 60+ ",
+            "disabled": true
+          },
+          {
+            "id": "",
+            "text": "🔒\nCosta de Giran\nRequer Nv. 8",
+            "disabled": true
+          }
+        ],
+        "anomalies": []
+      },
+      "passed": true
+    },
+    {
+      "tab": "hunting",
+      "pillar": "combat",
+      "name": "Caça Silvestre",
+      "inspection": {
+        "found": true,
+        "active": true,
+        "textLength": 5454,
+        "buttonsCount": 50,
+        "sampleButtons": [
+          {
+            "id": "",
+            "text": "🌲\nBosques de Talking Island\nR",
+            "disabled": false
+          },
+          {
+            "id": "",
+            "text": "🔒\nPlanícies de Gludio\nRequer ",
+            "disabled": true
+          },
+          {
+            "id": "",
+            "text": "🔒\nColinas e Pântanos de Dion\n",
+            "disabled": true
+          },
+          {
+            "id": "",
+            "text": "🔒\nSelva Litorânea de Giran\nRe",
+            "disabled": true
+          },
+          {
+            "id": "",
+            "text": "🔒\nTerras Nevadas de Oren\nRequ",
+            "disabled": true
+          }
+        ],
+        "anomalies": []
+      },
+      "passed": true
+    },
+    {
+      "tab": "gathering",
+      "pillar": "combat",
+      "name": "Coleta",
+      "inspection": {
+        "found": true,
+        "active": true,
+        "textLength": 2694,
+        "buttonsCount": 24,
+        "sampleButtons": [
+          {
+            "id": "",
+            "text": "🌾\nCampos e Prados de Gludio\nR",
+            "disabled": false
+          },
+          {
+            "id": "",
+            "text": "🔒\nPântanos Férteis de Dion\nRe",
+            "disabled": true
+          },
+          {
+            "id": "",
+            "text": "🔒\nColinas e Pomares de Giran\n",
+            "disabled": true
+          },
+          {
+            "id": "",
+            "text": "🔒\nFlorestas Gélidas de Oren\nR",
+            "disabled": true
+          },
+          {
+            "id": "",
+            "text": "🔒\nPlanalto Sagrado de Aden\nRe",
+            "disabled": true
+          }
+        ],
+        "anomalies": []
+      },
+      "passed": true
+    },
+    {
+      "tab": "mining",
+      "pillar": "combat",
+      "name": "Mineração",
+      "inspection": {
+        "found": true,
+        "active": true,
+        "textLength": 2989,
+        "buttonsCount": 24,
+        "sampleButtons": [
+          {
+            "id": "",
+            "text": "⛏️\nGalerias de Carvão de Gludi",
+            "disabled": false
+          },
+          {
+            "id": "",
+            "text": "🔒\nMinas Ancestrais dos Anões\n",
+            "disabled": true
+          },
+          {
+            "id": "",
+            "text": "🔒\nPedreira das Colinas de Dio",
+            "disabled": true
+          },
+          {
+            "id": "",
+            "text": "🔒\nVeio Profundo das Gargantas",
+            "disabled": true
+          },
+          {
+            "id": "",
+            "text": "🔒\nFosso Glacial de Schuttgart",
+            "disabled": true
+          }
+        ],
+        "anomalies": []
+      },
+      "passed": true
+    },
+    {
+      "tab": "character",
+      "pillar": "character",
+      "name": "Personagem",
+      "inspection": {
+        "found": true,
+        "active": true,
+        "textLength": 3014,
+        "buttonsCount": 7,
+        "sampleButtons": [
+          {
+            "id": "class-advancement-btn",
+            "text": "Evoluir Classe",
+            "disabled": false
+          },
+          {
+            "id": "advisor-action-btn",
+            "text": "🏰 Desafiar Andar 1",
+            "disabled": false
+          },
+          {
+            "id": "",
+            "text": "✓ EM USO",
+            "disabled": true
+          },
+          {
+            "id": "add-subclass-btn",
+            "text": "🔒 CONCLUA QUEST FATE'S WHISPE",
+            "disabled": true
+          },
+          {
+            "id": "save-btn",
+            "text": "💾 SALVAR PROGRESSO",
+            "disabled": false
+          }
+        ],
+        "anomalies": []
+      },
+      "passed": true
+    },
+    {
+      "tab": "inventory",
+      "pillar": "character",
+      "name": "Mochila",
+      "inspection": {
+        "found": true,
+        "active": true,
+        "textLength": 875,
+        "buttonsCount": 46,
+        "sampleButtons": [
+          {
+            "id": "btn-inv-open-forge",
+            "text": "⚒ Forja",
+            "disabled": false
+          },
+          {
+            "id": "",
+            "text": "?",
+            "disabled": false
+          },
+          {
+            "id": "",
+            "text": "♂",
+            "disabled": false
+          },
+          {
+            "id": "",
+            "text": "_",
+            "disabled": false
+          },
+          {
+            "id": "",
+            "text": "✕",
+            "disabled": false
+          }
+        ],
+        "anomalies": []
+      },
+      "passed": true
+    },
+    {
+      "tab": "skills",
+      "pillar": "character",
+      "name": "Habilidades",
+      "inspection": {
+        "found": true,
+        "active": true,
+        "textLength": 1625,
+        "buttonsCount": 15,
+        "sampleButtons": [
+          {
+            "id": "reset-sp-btn",
+            "text": "🔄 Resetar SP",
+            "disabled": false
+          },
+          {
+            "id": "skills-class-adv-btn",
+            "text": "Evoluir Classe",
+            "disabled": false
+          },
+          {
+            "id": "",
+            "text": "⚡ Auto-Equipar",
+            "disabled": false
+          },
+          {
+            "id": "",
+            "text": "✕ Limpar",
+            "disabled": false
+          },
+          {
+            "id": "",
+            "text": "×",
+            "disabled": false
+          }
+        ],
+        "anomalies": []
+      },
+      "passed": true
+    },
+    {
+      "tab": "astral",
+      "pillar": "character",
+      "name": "Maestria Astral",
+      "inspection": {
+        "found": true,
+        "active": true,
+        "textLength": 1628,
+        "buttonsCount": 13,
+        "sampleButtons": [
+          {
+            "id": "",
+            "text": "🔒 Requer Nível 75+",
+            "disabled": true
+          },
+          {
+            "id": "",
+            "text": "🔒 REBORN REQUERIDO",
+            "disabled": true
+          },
+          {
+            "id": "",
+            "text": "🔒 REBORN REQUERIDO",
+            "disabled": true
+          },
+          {
+            "id": "",
+            "text": "🔒 REBORN REQUERIDO",
+            "disabled": true
+          },
+          {
+            "id": "",
+            "text": "🔒 REBORN REQUERIDO",
+            "disabled": true
+          }
+        ],
+        "anomalies": []
+      },
+      "passed": true
+    },
+    {
+      "tab": "dolls",
+      "pillar": "character",
+      "name": "Dolls & Pets",
+      "inspection": {
+        "found": true,
+        "active": true,
+        "textLength": 4201,
+        "buttonsCount": 1,
+        "sampleButtons": [
+          {
+            "id": "start-doll-synth-btn",
+            "text": "COMBINAR & SINTETIZAR ✨",
+            "disabled": false
+          }
+        ],
+        "anomalies": []
+      },
+      "passed": true
+    },
+    {
+      "tab": "cosmetics",
+      "pillar": "character",
+      "name": "Cosméticos",
+      "inspection": {
+        "found": true,
+        "active": true,
+        "textLength": 1263,
+        "buttonsCount": 10,
+        "sampleButtons": [
+          {
+            "id": "",
+            "text": "👑 Auras Místicas (1/7)",
+            "disabled": false
+          },
+          {
+            "id": "",
+            "text": "🔲 Molduras de Equipamento (1/",
+            "disabled": false
+          },
+          {
+            "id": "",
+            "text": "📜 Títulos Honoríficos (1/7)",
+            "disabled": false
+          },
+          {
+            "id": "",
+            "text": "✓ Equipada",
+            "disabled": true
+          },
+          {
+            "id": "",
+            "text": "🔒 Exclusivo das Olimpíadas",
+            "disabled": true
+          }
+        ],
+        "anomalies": []
+      },
+      "passed": true
+    },
+    {
+      "tab": "quests",
+      "pillar": "character",
+      "name": "Missões",
+      "inspection": {
+        "found": true,
+        "active": true,
+        "textLength": 2330,
+        "buttonsCount": 31,
+        "sampleButtons": [
+          {
+            "id": "unlock-premium-pass-btn",
+            "text": "👑 Obter Passe Premium (R$ 15,",
+            "disabled": false
+          },
+          {
+            "id": "",
+            "text": "Tranca",
+            "disabled": true
+          },
+          {
+            "id": "",
+            "text": "👑 R$ 15",
+            "disabled": false
+          },
+          {
+            "id": "",
+            "text": "Tranca",
+            "disabled": true
+          },
+          {
+            "id": "",
+            "text": "👑 R$ 15",
+            "disabled": false
+          }
+        ],
+        "anomalies": []
+      },
+      "passed": true
+    },
+    {
+      "tab": "market",
+      "pillar": "economy",
+      "name": "Mercado Giran",
+      "inspection": {
+        "found": true,
+        "active": true,
+        "textLength": 437,
+        "buttonsCount": 13,
+        "sampleButtons": [
+          {
+            "id": "btn-world-trade-my-items",
+            "text": "📦 My items",
+            "disabled": false
+          },
+          {
+            "id": "",
+            "text": "🌐\nAll Goods",
+            "disabled": false
+          },
+          {
+            "id": "",
+            "text": "🪙\nAdena",
+            "disabled": false
+          },
+          {
+            "id": "",
+            "text": "⚔️\nEquipment",
+            "disabled": false
+          },
+          {
+            "id": "",
+            "text": "💍\nArtifact",
+            "disabled": false
+          }
+        ],
+        "anomalies": []
+      },
+      "passed": true
+    },
+    {
+      "tab": "shop",
+      "pillar": "economy",
+      "name": "Mercador de Aden",
+      "inspection": {
+        "found": true,
+        "active": true,
+        "textLength": 783,
+        "buttonsCount": 25,
+        "sampleButtons": [
+          {
+            "id": "shop-dialogue-close-btn",
+            "text": "✕",
+            "disabled": false
+          },
+          {
+            "id": "",
+            "text": "🗨️\nComprar Armas\nArcos, Espad",
+            "disabled": false
+          },
+          {
+            "id": "",
+            "text": "🗨️\nComprar Armaduras\nHeavy, L",
+            "disabled": false
+          },
+          {
+            "id": "",
+            "text": "🗨️\nComprar Acessórios\nJoias A",
+            "disabled": false
+          },
+          {
+            "id": "",
+            "text": "🗨️\nComprar Consumíveis\nSoulSh",
+            "disabled": false
+          }
+        ],
+        "anomalies": []
+      },
+      "passed": true
+    },
+    {
+      "tab": "craft",
+      "pillar": "economy",
+      "name": "Forja Imperial",
+      "inspection": {
+        "found": true,
+        "active": true,
+        "textLength": 1447,
+        "buttonsCount": 29,
+        "sampleButtons": [
+          {
+            "id": "forge-dialogue-close-btn",
+            "text": "✕",
+            "disabled": false
+          },
+          {
+            "id": "",
+            "text": "🗨️\nImbue a weapon/armor with ",
+            "disabled": false
+          },
+          {
+            "id": "",
+            "text": "🗨️\nRevoke the Soul Crystal Ef",
+            "disabled": false
+          },
+          {
+            "id": "",
+            "text": "🗨️\nAugment (Life Stones)\nAlta",
+            "disabled": false
+          },
+          {
+            "id": "",
+            "text": "🗨️\nUpgrade items of R-grade o",
+            "disabled": false
+          }
+        ],
+        "anomalies": []
+      },
+      "passed": true
+    },
+    {
+      "tab": "warehouse",
+      "pillar": "economy",
+      "name": "Baú Privado",
+      "inspection": {
+        "found": true,
+        "active": true,
+        "textLength": 104,
+        "buttonsCount": 2,
+        "sampleButtons": [
+          {
+            "id": "deposit-all-btn",
+            "text": "📥 Guardar Tudo",
+            "disabled": false
+          },
+          {
+            "id": "withdraw-all-btn",
+            "text": "📤 Retirar Tudo",
+            "disabled": false
+          }
+        ],
+        "anomalies": []
+      },
+      "passed": true
+    },
+    {
+      "tab": "magiclamp",
+      "pillar": "economy",
+      "name": "Lâmpada Mágica",
+      "inspection": {
+        "found": true,
+        "active": true,
+        "textLength": 303,
+        "buttonsCount": 1,
+        "sampleButtons": [
+          {
+            "id": "use-magic-lamp-btn",
+            "text": "🪔 Invocar Carta Mágica",
+            "disabled": true
+          }
+        ],
+        "anomalies": []
+      },
+      "passed": true
+    },
+    {
+      "tab": "alchemy",
+      "pillar": "economy",
+      "name": "Alquimia",
+      "inspection": {
+        "found": true,
+        "active": true,
+        "textLength": 1375,
+        "buttonsCount": 15,
+        "sampleButtons": [
+          {
+            "id": "",
+            "text": "🌀 INVOCAÇÃO ABISSAL: ABRIR FE",
+            "disabled": true
+          },
+          {
+            "id": "",
+            "text": "🔥 No-Grade",
+            "disabled": false
+          },
+          {
+            "id": "",
+            "text": "🔥 D-Grade",
+            "disabled": false
+          },
+          {
+            "id": "",
+            "text": "🔥 C-Grade",
+            "disabled": false
+          },
+          {
+            "id": "",
+            "text": "🔥 B-Grade",
+            "disabled": false
+          }
+        ],
+        "anomalies": []
+      },
+      "passed": true
+    },
+    {
+      "tab": "clan",
+      "pillar": "glory",
+      "name": "Clã & Castelos",
+      "inspection": {
+        "found": true,
+        "active": true,
+        "textLength": 1741,
+        "buttonsCount": 7,
+        "sampleButtons": [
+          {
+            "id": "",
+            "text": "🚪 Sair do clã",
+            "disabled": false
+          },
+          {
+            "id": "",
+            "text": "🛡️ Habilidades",
+            "disabled": false
+          },
+          {
+            "id": "",
+            "text": "👥 Membros & Doações",
+            "disabled": false
+          },
+          {
+            "id": "",
+            "text": "🏛️ Clan Hall",
+            "disabled": false
+          },
+          {
+            "id": "",
+            "text": "🏰 Castelos & Tributos",
+            "disabled": false
+          }
+        ],
+        "anomalies": []
+      },
+      "passed": true
+    },
+    {
+      "tab": "olympiad",
+      "pillar": "glory",
+      "name": "Olimpíadas",
+      "inspection": {
+        "found": true,
+        "active": true,
+        "textLength": 785,
+        "buttonsCount": 5,
+        "sampleButtons": [
+          {
+            "id": "",
+            "text": "⚔️ Arena 1v1",
+            "disabled": false
+          },
+          {
+            "id": "",
+            "text": "📜 Saga de Noblesse",
+            "disabled": false
+          },
+          {
+            "id": "",
+            "text": "👑 Monumento dos Heróis & Arma",
+            "disabled": false
+          },
+          {
+            "id": "",
+            "text": "🛍️ Loja de Tokens",
+            "disabled": false
+          },
+          {
+            "id": "",
+            "text": "🔒 Requer Nível 76+ e Conclusã",
+            "disabled": true
+          }
+        ],
+        "anomalies": []
+      },
+      "passed": true
+    },
+    {
+      "tab": "rankings",
+      "pillar": "glory",
+      "name": "Rankings Mundiais",
+      "inspection": {
+        "found": true,
+        "active": true,
+        "textLength": 273,
+        "buttonsCount": 7,
+        "sampleButtons": [
+          {
+            "id": "",
+            "text": "🎁 Reivindicar Tributo Diário",
+            "disabled": false
+          },
+          {
+            "id": "",
+            "text": "⚔️ Top Combat Power (CP)",
+            "disabled": false
+          },
+          {
+            "id": "",
+            "text": "⭐ Top Nível & XP",
+            "disabled": false
+          },
+          {
+            "id": "",
+            "text": "👑 Top Olimpíadas (PvP)",
+            "disabled": false
+          },
+          {
+            "id": "",
+            "text": "💰 Fortuna (Adena)",
+            "disabled": false
+          }
+        ],
+        "anomalies": []
+      },
+      "passed": true
+    },
+    {
+      "tab": "sevensigns",
+      "pillar": "glory",
+      "name": "Sete Selos",
+      "inspection": {
+        "found": true,
+        "active": true,
+        "textLength": 807,
+        "buttonsCount": 8,
+        "sampleButtons": [
+          {
+            "id": "",
+            "text": "📜 Facções & Pedras",
+            "disabled": false
+          },
+          {
+            "id": "",
+            "text": "👑 Lilith & Anakim",
+            "disabled": false
+          },
+          {
+            "id": "",
+            "text": "🧙‍♂️ Mercadores de Mammon",
+            "disabled": false
+          },
+          {
+            "id": "",
+            "text": "Alistar-se",
+            "disabled": false
+          },
+          {
+            "id": "",
+            "text": "Alistar-se",
+            "disabled": false
+          }
+        ],
+        "anomalies": []
+      },
+      "passed": true
+    },
+    {
+      "tab": "fortress",
+      "pillar": "glory",
+      "name": "Fortalezas",
+      "inspection": {
+        "found": true,
+        "active": true,
+        "textLength": 1513,
+        "buttonsCount": 16,
+        "sampleButtons": [
+          {
+            "id": "",
+            "text": "⚔️ Declarar Cerco",
+            "disabled": false
+          },
+          {
+            "id": "",
+            "text": "⚔️ Declarar Cerco",
+            "disabled": false
+          },
+          {
+            "id": "",
+            "text": "⚔️ Declarar Cerco",
+            "disabled": false
+          },
+          {
+            "id": "",
+            "text": "⚔️ Declarar Cerco",
+            "disabled": false
+          },
+          {
+            "id": "",
+            "text": "⚔️ Declarar Cerco",
+            "disabled": false
+          }
+        ],
+        "anomalies": []
+      },
+      "passed": true
+    },
+    {
+      "tab": "enchant",
+      "pillar": "glory",
+      "name": "Encantamento",
+      "inspection": {
+        "found": true,
+        "active": true,
+        "textLength": 246,
+        "buttonsCount": 0,
+        "sampleButtons": [],
+        "anomalies": []
+      },
+      "passed": true
+    },
+    {
+      "tab": "codex",
+      "pillar": "glory",
+      "name": "Codex",
+      "inspection": {
+        "found": true,
+        "active": true,
+        "textLength": 4316,
+        "buttonsCount": 2,
+        "sampleButtons": [
+          {
+            "id": "",
+            "text": "📜 Coleções de Equipamentos",
+            "disabled": false
+          },
+          {
+            "id": "",
+            "text": "🃏 Álbum de Cartas & Dolls de ",
+            "disabled": false
+          }
+        ],
+        "anomalies": []
+      },
+      "passed": true
+    }
+  ],
+  "testedSubmenus": [
+    {
+      "system": "Forja Imperial",
+      "submenu": "Diálogo Wilbert -> Entrar no Workspace",
+      "result": {
+        "found": true,
+        "clicked": true,
+        "isWorkspaceVisible": true
+      },
+      "passed": true
+    },
+    {
+      "system": "Forja Imperial",
+      "submenu": "Sub-aba Criação Geral (craft)",
+      "result": {
+        "found": true,
+        "clicked": true,
+        "isActive": true,
+        "anomalies": []
+      },
+      "passed": true
+    },
+    {
+      "system": "Forja Imperial",
+      "submenu": "Sub-aba Bancada de Refino (refinery)",
+      "result": {
+        "found": true,
+        "clicked": true,
+        "isActive": true,
+        "anomalies": []
+      },
+      "passed": true
+    },
+    {
+      "system": "Forja Imperial",
+      "submenu": "Sub-aba Soul Crystals (SA) (soulcrystal)",
+      "result": {
+        "found": true,
+        "clicked": true,
+        "isActive": true,
+        "anomalies": []
+      },
+      "passed": true
+    },
+    {
+      "system": "Forja Imperial",
+      "submenu": "Sub-aba Atributos Elementais (elemental)",
+      "result": {
+        "found": true,
+        "clicked": true,
+        "isActive": true,
+        "anomalies": []
+      },
+      "passed": true
+    },
+    {
+      "system": "Forja Imperial",
+      "submenu": "Sub-aba Pushkin MW (masterwork)",
+      "result": {
+        "found": true,
+        "clicked": true,
+        "isActive": true,
+        "anomalies": []
+      },
+      "passed": true
+    },
+    {
+      "system": "Forja Imperial",
+      "submenu": "Sub-aba Tatuagens & Dyes (tattoos)",
+      "result": {
+        "found": true,
+        "clicked": true,
+        "isActive": true,
+        "anomalies": []
+      },
+      "passed": true
+    },
+    {
+      "system": "Forja Imperial",
+      "submenu": "Sub-aba Síntese Imperial (synthesis)",
+      "result": {
+        "found": true,
+        "clicked": true,
+        "isActive": true,
+        "anomalies": []
+      },
+      "passed": true
+    },
+    {
+      "system": "Forja Imperial",
+      "submenu": "Sub-aba Life Stones (lifestones)",
+      "result": {
+        "found": true,
+        "clicked": true,
+        "isActive": true,
+        "anomalies": []
+      },
+      "passed": true
+    },
+    {
+      "system": "Forja Imperial",
+      "submenu": "Sub-aba Random Craft (randomcraft)",
+      "result": {
+        "found": true,
+        "clicked": true,
+        "isActive": true,
+        "anomalies": []
+      },
+      "passed": true
+    },
+    {
+      "system": "Forja Imperial",
+      "submenu": "Categoria Receita (all)",
+      "result": {
+        "found": true,
+        "clicked": true,
+        "isActive": true
+      },
+      "passed": true
+    },
+    {
+      "system": "Forja Imperial",
+      "submenu": "Categoria Receita (weapon)",
+      "result": {
+        "found": true,
+        "clicked": true,
+        "isActive": true
+      },
+      "passed": true
+    },
+    {
+      "system": "Forja Imperial",
+      "submenu": "Categoria Receita (armor)",
+      "result": {
+        "found": true,
+        "clicked": true,
+        "isActive": true
+      },
+      "passed": true
+    },
+    {
+      "system": "Forja Imperial",
+      "submenu": "Categoria Receita (jewel)",
+      "result": {
+        "found": true,
+        "clicked": true,
+        "isActive": true
+      },
+      "passed": true
+    },
+    {
+      "system": "Forja Imperial",
+      "submenu": "Categoria Receita (relic)",
+      "result": {
+        "found": true,
+        "clicked": true,
+        "isActive": true
+      },
+      "passed": true
+    },
+    {
+      "system": "Forja Imperial",
+      "submenu": "Categoria Receita (consumable)",
+      "result": {
+        "found": true,
+        "clicked": true,
+        "isActive": true
+      },
+      "passed": true
+    },
+    {
+      "system": "Forja Imperial",
+      "submenu": "Voltar ao Diálogo com Wilbert",
+      "result": {
+        "found": true,
+        "clicked": true,
+        "isDialogueVisible": true
+      },
+      "passed": true
+    },
+    {
+      "system": "Mochila",
+      "submenu": "Aba Categoria: ✨ Todos",
+      "result": {
+        "found": true,
+        "clicked": true,
+        "isActive": true
+      },
+      "passed": true
+    },
+    {
+      "system": "Mochila",
+      "submenu": "Aba Categoria: ⚔️ Equipamentos",
+      "result": {
+        "found": true,
+        "clicked": true,
+        "isActive": true
+      },
+      "passed": true
+    },
+    {
+      "system": "Mochila",
+      "submenu": "Aba Categoria: 🧪 Consumíveis",
+      "result": {
+        "found": true,
+        "clicked": true,
+        "isActive": true
+      },
+      "passed": true
+    },
+    {
+      "system": "Mochila",
+      "submenu": "Aba Categoria: 💎 Materiais",
+      "result": {
+        "found": true,
+        "clicked": true,
+        "isActive": true
+      },
+      "passed": true
+    },
+    {
+      "system": "Mochila",
+      "submenu": "Filtro Raridade: all",
+      "result": {
+        "found": true,
+        "clicked": true,
+        "isActive": true
+      },
+      "passed": true
+    },
+    {
+      "system": "Mochila",
+      "submenu": "Filtro Raridade: common",
+      "result": {
+        "found": true,
+        "clicked": true,
+        "isActive": true
+      },
+      "passed": true
+    },
+    {
+      "system": "Mochila",
+      "submenu": "Filtro Raridade: uncommon",
+      "result": {
+        "found": true,
+        "clicked": true,
+        "isActive": true
+      },
+      "passed": true
+    },
+    {
+      "system": "Mochila",
+      "submenu": "Filtro Raridade: rare",
+      "result": {
+        "found": true,
+        "clicked": true,
+        "isActive": true
+      },
+      "passed": true
+    },
+    {
+      "system": "Mochila",
+      "submenu": "Filtro Raridade: epic",
+      "result": {
+        "found": true,
+        "clicked": true,
+        "isActive": true
+      },
+      "passed": true
+    },
+    {
+      "system": "Mochila",
+      "submenu": "Filtro Raridade: legendary",
+      "result": {
+        "found": true,
+        "clicked": true,
+        "isActive": true
+      },
+      "passed": true
+    },
+    {
+      "system": "Mochila",
+      "submenu": "Filtro Grau: ALL",
+      "result": {
+        "found": true,
+        "clicked": true,
+        "isActive": true
+      },
+      "passed": true
+    },
+    {
+      "system": "Mochila",
+      "submenu": "Filtro Grau: NG",
+      "result": {
+        "found": true,
+        "clicked": true,
+        "isActive": true
+      },
+      "passed": true
+    },
+    {
+      "system": "Mochila",
+      "submenu": "Filtro Grau: D",
+      "result": {
+        "found": true,
+        "clicked": true,
+        "isActive": true
+      },
+      "passed": true
+    },
+    {
+      "system": "Mochila",
+      "submenu": "Filtro Grau: C",
+      "result": {
+        "found": true,
+        "clicked": true,
+        "isActive": true
+      },
+      "passed": true
+    },
+    {
+      "system": "Mochila",
+      "submenu": "Filtro Grau: B",
+      "result": {
+        "found": true,
+        "clicked": true,
+        "isActive": true
+      },
+      "passed": true
+    },
+    {
+      "system": "Mochila",
+      "submenu": "Filtro Grau: A",
+      "result": {
+        "found": true,
+        "clicked": true,
+        "isActive": true
+      },
+      "passed": true
+    },
+    {
+      "system": "Mochila",
+      "submenu": "Filtro Grau: S",
+      "result": {
+        "found": true,
+        "clicked": true,
+        "isActive": true
+      },
+      "passed": true
+    },
+    {
+      "system": "Mochila",
+      "submenu": "Ação em Massa: Selecionar Comuns",
+      "result": {
+        "found": true,
+        "clicked": true
+      },
+      "passed": true
+    },
+    {
+      "system": "Mochila",
+      "submenu": "Ação em Massa: Selecionar Incomuns",
+      "result": {
+        "found": true,
+        "clicked": true
+      },
+      "passed": true
+    },
+    {
+      "system": "Mochila",
+      "submenu": "Ação em Massa: Selecionar Todos",
+      "result": {
+        "found": true,
+        "clicked": true
+      },
+      "passed": true
+    },
+    {
+      "system": "Mochila",
+      "submenu": "Ação em Massa: Limpar Seleção",
+      "result": {
+        "found": true,
+        "clicked": true
+      },
+      "passed": true
+    },
+    {
+      "system": "Loja de Aden",
+      "submenu": "Diálogo Woodrow -> Entrar na Store",
+      "result": {
+        "found": true,
+        "clicked": true,
+        "isStoreVisible": true
+      },
+      "passed": true
+    },
+    {
+      "system": "Loja de Aden",
+      "submenu": "Aba Store: BUY",
+      "result": {
+        "found": true,
+        "clicked": true,
+        "isActive": true
+      },
+      "passed": true
+    },
+    {
+      "system": "Loja de Aden",
+      "submenu": "Aba Store: SELL",
+      "result": {
+        "found": true,
+        "clicked": true,
+        "isActive": true
+      },
+      "passed": true
+    },
+    {
+      "system": "Loja de Aden",
+      "submenu": "Aba Store: REFUND",
+      "result": {
+        "found": true,
+        "clicked": true,
+        "isActive": true
+      },
+      "passed": true
+    },
+    {
+      "system": "Loja de Aden",
+      "submenu": "Grau Loja: ALL",
+      "result": {
+        "found": true,
+        "clicked": true,
+        "isActive": true
+      },
+      "passed": true
+    },
+    {
+      "system": "Loja de Aden",
+      "submenu": "Grau Loja: NG",
+      "result": {
+        "found": true,
+        "clicked": true,
+        "isActive": true
+      },
+      "passed": true
+    },
+    {
+      "system": "Loja de Aden",
+      "submenu": "Grau Loja: D",
+      "result": {
+        "found": true,
+        "clicked": true,
+        "isActive": true
+      },
+      "passed": true
+    },
+    {
+      "system": "Loja de Aden",
+      "submenu": "Grau Loja: C",
+      "result": {
+        "found": true,
+        "clicked": true,
+        "isActive": true
+      },
+      "passed": true
+    },
+    {
+      "system": "Loja de Aden",
+      "submenu": "Grau Loja: B",
+      "result": {
+        "found": true,
+        "clicked": true,
+        "isActive": true
+      },
+      "passed": true
+    },
+    {
+      "system": "Loja de Aden",
+      "submenu": "Grau Loja: A",
+      "result": {
+        "found": true,
+        "clicked": true,
+        "isActive": true
+      },
+      "passed": true
+    },
+    {
+      "system": "Loja de Aden",
+      "submenu": "Grau Loja: S",
+      "result": {
+        "found": true,
+        "clicked": true,
+        "isActive": true
+      },
+      "passed": true
+    },
+    {
+      "system": "Loja de Aden",
+      "submenu": "Voltar ao Diálogo com Woodrow",
+      "result": {
+        "found": true,
+        "clicked": true,
+        "isDialogueVisible": true
+      },
+      "passed": true
+    },
+    {
+      "system": "Habilidades",
+      "submenu": "Botão Resetar SP",
+      "result": {
+        "found": true,
+        "clicked": true
+      },
+      "passed": true
+    },
+    {
+      "system": "Habilidades",
+      "submenu": "Inspeção de Detalhes da Habilidade",
+      "result": {
+        "found": true,
+        "clicked": true,
+        "hasContent": true
+      },
+      "passed": true
+    }
+  ],
+  "testedModals": [
+    {
+      "name": "Guia do Jogo (Progresso)",
+      "modalId": "guide-modal",
+      "openModalRes": {
+        "success": true
+      },
+      "openInspection": {
+        "found": true,
+        "visible": true,
+        "display": "flex",
+        "textLength": 2163,
+        "anomalies": []
+      },
+      "closeActionRes": {
+        "method": "close_button_click"
+      },
+      "closeInspection": {
+        "hidden": true,
+        "display": "none",
+        "isActive": false
+      },
+      "guideTabsTested": [
+        {
+          "tab": "journey",
+          "clicked": true,
+          "active": true
+        },
+        {
+          "tab": "forge",
+          "clicked": true,
+          "active": true
+        },
+        {
+          "tab": "codex",
+          "clicked": true,
+          "active": true
+        },
+        {
+          "tab": "combat",
+          "clicked": true,
+          "active": true
+        },
+        {
+          "tab": "sevensigns",
+          "clicked": true,
+          "active": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "Guia Contextual de Tutorial",
+      "modalId": "tutorial-guide-modal",
+      "openModalRes": {
+        "success": true
+      },
+      "openInspection": {
+        "found": true,
+        "visible": true,
+        "display": "flex",
+        "textLength": 1848,
+        "anomalies": []
+      },
+      "closeActionRes": {
+        "method": "not_found"
+      },
+      "closeInspection": {
+        "hidden": true,
+        "display": "none",
+        "isActive": true
+      },
+      "guideTabsTested": null,
+      "passed": true
+    },
+    {
+      "name": "Jornada dos Pioneiros",
+      "modalId": "starter-journey-modal",
+      "openModalRes": {
+        "success": true
+      },
+      "openInspection": {
+        "found": true,
+        "visible": true,
+        "display": "flex",
+        "textLength": 1340,
+        "anomalies": []
+      },
+      "closeActionRes": {
+        "method": "close_button_click"
+      },
+      "closeInspection": {
+        "hidden": true,
+        "display": "none",
+        "isActive": false
+      },
+      "guideTabsTested": null,
+      "passed": true
+    },
+    {
+      "name": "Check-in Diário",
+      "modalId": "daily-reward-modal",
+      "openModalRes": {
+        "success": true
+      },
+      "openInspection": {
+        "found": true,
+        "visible": true,
+        "display": "flex",
+        "textLength": 1240,
+        "anomalies": []
+      },
+      "closeActionRes": {
+        "method": "not_found"
+      },
+      "closeInspection": {
+        "hidden": true,
+        "display": "none",
+        "isActive": false
+      },
+      "guideTabsTested": null,
+      "passed": true
+    },
+    {
+      "name": "Evento Live-Ops",
+      "modalId": "liveops-event-modal",
+      "openModalRes": {
+        "success": true
+      },
+      "openInspection": {
+        "found": true,
+        "visible": true,
+        "display": "flex",
+        "textLength": 360,
+        "anomalies": []
+      },
+      "closeActionRes": {
+        "method": "close_button_click"
+      },
+      "closeInspection": {
+        "hidden": true,
+        "display": "none",
+        "isActive": false
+      },
+      "guideTabsTested": null,
+      "passed": true
+    },
+    {
+      "name": "World Boss Global",
+      "modalId": "worldboss-modal",
+      "openModalRes": {
+        "success": true
+      },
+      "openInspection": {
+        "found": true,
+        "visible": true,
+        "display": "flex",
+        "textLength": 700,
+        "anomalies": []
+      },
+      "closeActionRes": {
+        "method": "close_button_click"
+      },
+      "closeInspection": {
+        "hidden": true,
+        "display": "none",
+        "isActive": false
+      },
+      "guideTabsTested": null,
+      "passed": true
+    },
+    {
+      "name": "Configurações de Macro",
+      "modalId": "macro-settings-modal",
+      "openModalRes": {
+        "success": true
+      },
+      "openInspection": {
+        "found": true,
+        "visible": true,
+        "display": "flex",
+        "textLength": 753,
+        "anomalies": []
+      },
+      "closeActionRes": {
+        "method": "close_button_click"
+      },
+      "closeInspection": {
+        "hidden": true,
+        "display": "none",
+        "isActive": false
+      },
+      "guideTabsTested": null,
+      "passed": true
+    },
+    {
+      "name": "Transferência de Classe",
+      "modalId": "class-transfer-modal",
+      "openModalRes": {
+        "success": true
+      },
+      "openInspection": {
+        "found": true,
+        "visible": true,
+        "display": "flex",
+        "textLength": 296,
+        "anomalies": []
+      },
+      "closeActionRes": {
+        "method": "close_button_click"
+      },
+      "closeInspection": {
+        "hidden": true,
+        "display": "none",
+        "isActive": false
+      },
+      "guideTabsTested": null,
+      "passed": true
+    },
+    {
+      "name": "Contatos & Mentoria",
+      "modalId": "referral-modal",
+      "openModalRes": {
+        "success": true
+      },
+      "openInspection": {
+        "found": true,
+        "visible": true,
+        "display": "flex",
+        "textLength": 340,
+        "anomalies": []
+      },
+      "closeActionRes": {
+        "method": "close_button_click"
+      },
+      "closeInspection": {
+        "hidden": true,
+        "display": "none",
+        "isActive": false
+      },
+      "guideTabsTested": null,
+      "passed": true
+    },
+    {
+      "name": "Painel Admin",
+      "modalId": "admin-modal",
+      "openModalRes": {
+        "success": true
+      },
+      "openInspection": {
+        "found": true,
+        "visible": true,
+        "display": "flex",
+        "textLength": 868,
+        "anomalies": []
+      },
+      "closeActionRes": {
+        "method": "close_button_click"
+      },
+      "closeInspection": {
+        "hidden": true,
+        "display": "none",
+        "isActive": false
+      },
+      "guideTabsTested": null,
+      "passed": true
+    },
+    {
+      "name": "Auto-Recycle (Filtro AFK)",
+      "modalId": "auto-recycle-modal",
+      "openModalRes": {
+        "success": true
+      },
+      "openInspection": {
+        "found": true,
+        "visible": true,
+        "display": "flex",
+        "textLength": 832,
+        "anomalies": []
+      },
+      "closeActionRes": {
+        "method": "close_button_click"
+      },
+      "closeInspection": {
+        "hidden": true,
+        "display": "none",
+        "isActive": false
+      },
+      "guideTabsTested": null,
+      "passed": true
+    }
+  ],
+  "domAnomalies": [],
+  "consoleErrors": [
+    {
+      "text": "[2026-10-04T12:16:55.714Z]  @firebase/firestore: Firestore (12.16.0): Could not reach Cloud Firestore backend. Connection failed 1 times. Most recent error: FirebaseError: [code=unavailable]: The operation could not be completed\nThis typically indicates that your device does not have a healthy Internet connection at the moment. The client will operate in offline mode until it is able to successfully connect to the backend.",
+      "location": {
+        "url": "http://127.0.0.1:5187/node_modules/.vite/deps/chunk-CRYYIGZT.js?v=e6773ee0",
+        "line": 1071,
+        "column": 19,
+        "lineNumber": 1071,
+        "columnNumber": 19
+      }
+    }
+  ],
+  "consoleWarnings": [],
+  "summary": {
+    "totalTabs": 29,
+    "passedTabs": 29,
+    "totalSubmenus": 52,
+    "passedSubmenus": 52,
+    "totalModals": 11,
+    "passedModals": 11,
+    "issuesFound": 0
+  }
+}

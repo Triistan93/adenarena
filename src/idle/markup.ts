@@ -97,7 +97,7 @@ export const IDLE_MARKUP = `
         <!-- Header Nobre -->
         <div style="display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(212,169,78,0.35); padding-bottom:6px; margin-bottom:8px;">
           <h2 style="font-family:'Cinzel',serif; font-size:12px; font-weight:900; color:#f5df93; margin:0; letter-spacing:0.12em; text-transform:uppercase; text-shadow:0 0 8px rgba(212,167,68,0.3);">⚔️ Status de Aden</h2>
-          <span id="char-combat-power" style="font-family:'Cinzel',serif; font-size:10px; color:#60a5fa; font-weight:bold; background:rgba(30,58,138,0.4); border:1px solid rgba(96,165,250,0.4); padding:1px 6px; border-radius:4px;">CP: 120</span>
+          <span id="char-combat-power" style="font-family:'Cinzel',serif; font-size:10px; color:#60a5fa; font-weight:bold; background:rgba(30,58,138,0.4); border:1px solid rgba(96,165,250,0.4); padding:1px 6px; border-radius:4px;">CP: --</span>
         </div>
 
         <!-- Identidade Resumida do Herói -->
@@ -391,7 +391,7 @@ export const IDLE_MARKUP = `
             </div>
             <div class="hero-subnav-rule" aria-hidden="true"><span>OFÍCIOS</span></div>
             <div class="hero-subnav-grid" role="group" aria-label="Ofícios do império">
-              <button class="tab-btn subtab-pill-btn hero-subtab-card" data-tab="market" data-min-level="1" aria-label="Mercado Giran"><span class="hero-subtab-index" aria-hidden="true">01</span><span class="hero-subtab-icon" aria-hidden="true">◇</span><span class="hero-subtab-copy"><span class="hero-subtab-title">Mercado Giran</span><span class="hero-subtab-meta">Trocas entre jogadores</span></span></button>
+              <button class="tab-btn subtab-pill-btn hero-subtab-card" data-tab="market" data-min-level="15" aria-label="Mercado Giran"><span class="hero-subtab-index" aria-hidden="true">01</span><span class="hero-subtab-icon" aria-hidden="true">◇</span><span class="hero-subtab-copy"><span class="hero-subtab-title">Mercado Giran</span><span class="hero-subtab-meta">Trocas entre jogadores</span></span></button>
               <button class="tab-btn subtab-pill-btn hero-subtab-card" data-tab="shop" data-min-level="1" aria-label="Mercador"><span class="hero-subtab-index" aria-hidden="true">02</span><span class="hero-subtab-icon" aria-hidden="true">⚜</span><span class="hero-subtab-copy"><span class="hero-subtab-title">Mercador</span><span class="hero-subtab-meta">Suprimentos de Aden</span></span></button>
               <button class="tab-btn subtab-pill-btn hero-subtab-card" data-tab="craft" data-min-level="10" aria-label="Forja Imperial"><span class="hero-subtab-index" aria-hidden="true">03</span><span class="hero-subtab-icon" aria-hidden="true">⚒</span><span class="hero-subtab-copy"><span class="hero-subtab-title">Forja Imperial</span><span class="hero-subtab-meta">Criação e aprimoramento</span></span><span id="tab-badge-craft" class="tab-badge" style="display:none">!</span></button>
               <button class="tab-btn subtab-pill-btn hero-subtab-card" data-tab="warehouse" data-min-level="15" aria-label="Baú privado"><span class="hero-subtab-index" aria-hidden="true">04</span><span class="hero-subtab-icon" aria-hidden="true">▣</span><span class="hero-subtab-copy"><span class="hero-subtab-title">Baú Privado</span><span class="hero-subtab-meta">Reservas do herói</span></span></button>
@@ -1004,7 +1004,7 @@ export const IDLE_MARKUP = `
             <div id="shop-dialogue-view" class="l2chat-window-frame">
               <div class="l2chat-window-header">
                 <span class="l2chat-title">Chat</span>
-                <button class="l2chat-close-btn" id="shop-dialogue-close-btn" title="Fechar" onclick="window.switchTab ? window.switchTab('inventory') : null">✕</button>
+                <button class="l2chat-close-btn" id="shop-dialogue-close-btn" title="Fechar" onclick="window.switchTab ? window.switchTab('inventory') : (window.openPanel && window.openPanel('inventory'))">✕</button>
               </div>
               <div class="l2chat-inner-panel">
                 <div class="l2chat-npc-speech">
@@ -1619,7 +1619,7 @@ export const IDLE_MARKUP = `
             </h2>
             <p style="margin:4px 0 0 0; font-size:12px; color:#d1d5db;">Complete os 7 passos fundamentais do guerreiro para forjar seu destino e conquistar recompensas lendárias!</p>
           </div>
-          <button style="background:transparent; border:none; color:#9ca3af; font-size:20px; cursor:pointer; padding:0 6px;" onclick="window.closeStarterJourneyModal && window.closeStarterJourneyModal()">✕</button>
+          <button class="modal-close-btn modal-close-x" style="background:transparent; border:none; color:#9ca3af; font-size:20px; cursor:pointer; padding:0 6px;" onclick="window.closeStarterJourneyModal && window.closeStarterJourneyModal()">✕</button>
         </div>
 
         <!-- Progress Overview Banner -->
@@ -1644,7 +1644,7 @@ export const IDLE_MARKUP = `
             </h2>
             <p id="liveops-modal-subtitle" style="margin:4px 0 0 0; font-size:12px; color:#cbd5e1;">Bônus e multiplicadores comemorativos ativos em Aden!</p>
           </div>
-          <button style="background:transparent; border:none; color:#9ca3af; font-size:20px; cursor:pointer; padding:0 6px;" onclick="window.closeLiveOpsModal && window.closeLiveOpsModal()">✕</button>
+          <button class="modal-close-btn modal-close-x" style="background:transparent; border:none; color:#9ca3af; font-size:20px; cursor:pointer; padding:0 6px;" onclick="window.closeLiveOpsModal && window.closeLiveOpsModal()">✕</button>
         </div>
 
         <div id="liveops-modal-content" style="font-size:13px; line-height:1.6; color:#e2e8f0;">
@@ -1663,7 +1663,7 @@ export const IDLE_MARKUP = `
             </h2>
             <p style="margin:4px 0 0 0; font-size:12px; color:#94a3b8;">Ajuste gatilhos de poções (HP/MP), defina a ordem de rotação das habilidades e configure o filtro de reciclagem AFK.</p>
           </div>
-          <button style="background:transparent; border:none; color:#9ca3af; font-size:20px; cursor:pointer; padding:0 6px;" onclick="window.closeMacroSettingsModal && window.closeMacroSettingsModal()">✕</button>
+          <button class="modal-close-btn modal-close-x" style="background:transparent; border:none; color:#9ca3af; font-size:20px; cursor:pointer; padding:0 6px;" onclick="window.closeMacroSettingsModal && window.closeMacroSettingsModal()">✕</button>
         </div>
 
         <div id="macro-settings-content" style="display:flex; flex-direction:column; gap:16px;">
@@ -1682,7 +1682,7 @@ export const IDLE_MARKUP = `
             </h2>
             <p id="worldboss-modal-subtitle" style="margin:4px 0 0 0; font-size:12px; color:#cbd5e1;">Batalha monumental cooperativa contra os grandes dragões e tiranos milenares de Aden.</p>
           </div>
-          <button style="background:transparent; border:none; color:#9ca3af; font-size:20px; cursor:pointer; padding:0 6px;" onclick="window.closeWorldBossModal && window.closeWorldBossModal()">✕</button>
+          <button class="modal-close-btn modal-close-x" style="background:transparent; border:none; color:#9ca3af; font-size:20px; cursor:pointer; padding:0 6px;" onclick="window.closeWorldBossModal && window.closeWorldBossModal()">✕</button>
         </div>
 
         <div id="worldboss-modal-content" style="display:flex; flex-direction:column; gap:14px;">
@@ -2215,7 +2215,7 @@ export const IDLE_MARKUP = `
     <!-- Modal de Filtro de Loot AFK & Auto-Recycle -->
     <div id="auto-recycle-modal" class="modal-overlay" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.8); backdrop-filter:blur(6px); z-index:99999; justify-content:center; align-items:center;">
       <div class="craft-modal-content" style="background:linear-gradient(145deg, rgba(20,24,35,0.98), rgba(10,12,18,0.99)); border:1px solid #d4a744; border-radius:12px; width:92%; max-width:540px; padding:22px; box-shadow:0 10px 40px rgba(0,0,0,0.9); position:relative; font-family:'Cinzel',serif; color:#f8fafc;">
-        <button id="close-auto-recycle-modal-btn" style="position:absolute; top:12px; right:14px; background:none; border:none; color:#aaa; font-size:20px; cursor:pointer;" onclick="const m=document.getElementById('auto-recycle-modal'); if(m) m.style.display='none';">✖</button>
+        <button id="close-auto-recycle-modal-btn" style="position:absolute; top:12px; right:14px; background:none; border:none; color:#aaa; font-size:20px; cursor:pointer;" onclick="if(window.closeAutoRecycleModal) window.closeAutoRecycleModal(); const m=this.closest('.modal-overlay'); if(m) m.style.display='none';">✖</button>
         <div id="auto-recycle-modal-body"></div>
       </div>
     </div>

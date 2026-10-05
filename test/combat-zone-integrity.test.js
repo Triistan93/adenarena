@@ -110,3 +110,59 @@ test('every zone can be entered at its exact production level and minimum CP', (
     }
   }
 });
+
+test('Dwarven Mine (Lv 9) allows entry and farming for realistic Lv 9 and Lv 40 characters', () => {
+  // 1. Level 9 character with basic No-Grade equipment
+  const lv9State = {
+    level: 9,
+    race: 'dwarf',
+    class: 'dwarven_fighter',
+    equipment: { weapon: 'w1', armor: 'a1' },
+    inventory: [
+      { uid: 'w1', itemId: 'short_sword', equipped: true, atk: 12 },
+      { uid: 'a1', itemId: 'wooden_breastplate', equipped: true, def: 18 }
+    ],
+    zone: 'talkingIsland',
+    currentZone: 'talkingIsland',
+    isCombatActive: true
+  };
+
+  const logs = [];
+  const callbacks = {
+    log: (msg, type) => logs.push({ msg, type }),
+    updateAllUI: () => {},
+    save: () => {},
+    attackMonster: () => {}
+  };
+
+  const okLv9 = selectZone(lv9State, 'dwarvenMine', callbacks);
+  assert.equal(okLv9, true, 'Realistic Lv 9 character must be allowed into Dwarven Mine');
+  assert.equal(lv9State.zone, 'dwarvenMine', 'Current zone must be dwarvenMine');
+  assert.ok(lv9State.activeMonster, 'Active monster should have spawned');
+  assert.equal(logs.some(l => l.msg.includes('Insuficiente')), false, 'Should not log insufficient CP warning');
+  stopCombat(lv9State);
+
+  // 2. Level 40 Gladiator with 2,621 CP (user's exact character scenario)
+  const lv40State = {
+    level: 40,
+    race: 'human',
+    class: 'gladiator',
+    combatPower: 2621,
+    stats: { combatPower: 2621 },
+    zone: 'talkingIsland',
+    currentZone: 'talkingIsland',
+    isCombatActive: true
+  };
+
+  const okLv40 = selectZone(lv40State, 'dwarvenMine', callbacks);
+  assert.equal(okLv40, true, 'Lv 40 Gladiator (2,621 CP) must be allowed into Dwarven Mine');
+  assert.equal(lv40State.zone, 'dwarvenMine', 'Zone must be dwarvenMine');
+  stopCombat(lv40State);
+
+  // 3. Level 40 Gladiator can also enter Black Citadel (Lv 40 zone, minCp: 1,300)
+  const okCitadel = selectZone(lv40State, 'blackCitadel', callbacks);
+  assert.equal(okCitadel, true, 'Lv 40 Gladiator (2,621 CP) must be allowed into Black Citadel (Lv 40 zone)');
+  assert.equal(lv40State.zone, 'blackCitadel');
+  stopCombat(lv40State);
+});
+

@@ -37,14 +37,25 @@ export function addTrackedListener(target, event, handler, opts) {
   _listeners.push({ target, event, handler, opts });
 }
 
+const getActiveRoot = () => (ROOT && ROOT.querySelector ? ROOT : null) || (typeof window !== 'undefined' && window.__SHADOW_ROOT__) || (typeof document !== 'undefined' && document.getElementById?.('idle-host')?.shadowRoot) || (typeof document !== 'undefined' ? document : null);
+
 /** Retorna o elemento pelo ID dentro do Shadow DOM */
-export const el  = id  => ROOT?.getElementById ? ROOT.getElementById(id) : null;
+export const el  = id  => {
+  const r = getActiveRoot();
+  return (r?.getElementById ? r.getElementById(id) : null) || (r?.querySelector ? r.querySelector('#' + id) : null) || (typeof document !== 'undefined' ? document.getElementById(id) : null);
+};
 
 /** querySelector no Shadow DOM */
-export const qs  = sel => ROOT?.querySelector ? ROOT.querySelector(sel) : null;
+export const qs  = sel => {
+  const r = getActiveRoot();
+  return (r?.querySelector ? r.querySelector(sel) : null) || (typeof document !== 'undefined' ? document.querySelector(sel) : null);
+};
 
 /** querySelectorAll no Shadow DOM */
-export const qsa = sel => ROOT?.querySelectorAll ? ROOT.querySelectorAll(sel) : [];
+export const qsa = sel => {
+  const r = getActiveRoot();
+  return (r?.querySelectorAll ? r.querySelectorAll(sel) : []) || (typeof document !== 'undefined' ? document.querySelectorAll(sel) : []);
+};
 
 /** Retorna o documento raiz (para eventos globais) */
 export const doc = ()  => ROOT?.ownerDocument || (typeof document !== 'undefined' ? document : null);

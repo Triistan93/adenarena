@@ -38,6 +38,18 @@ export const CombatPowerService = {
    */
   resolveCombatPower(state) {
     if (!state || typeof state !== 'object') return 0;
+    const lvl = Number(state.level) || 1;
+
+    // Se o CP em cache for o valor inicial de spawn (<= 140) mas o nível já avançou (Lv >= 5), descarta o cache obsoleto
+    if (lvl >= 5) {
+      if (typeof state.stats?.combatPower === 'number' && state.stats.combatPower <= 140) {
+        delete state.stats.combatPower;
+      }
+      if (typeof state.combatPower === 'number' && state.combatPower <= 140) {
+        delete state.combatPower;
+      }
+    }
+
     if (typeof state.stats?.combatPower === 'number' && state.stats.combatPower > 0) {
       state.combatPower = state.stats.combatPower;
       return state.stats.combatPower;
@@ -48,12 +60,13 @@ export const CombatPowerService = {
       }
       return state.combatPower;
     }
-    const cp = this.calculateCombatPower(state);
-    state.combatPower = cp;
+
+    const computed = this.calculateCombatPower(state);
+    state.combatPower = computed;
     if (state.stats && typeof state.stats === 'object') {
-      state.stats.combatPower = cp;
+      state.stats.combatPower = computed;
     }
-    return cp;
+    return computed;
   },
 
   /**

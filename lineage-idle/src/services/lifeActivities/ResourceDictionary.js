@@ -19,6 +19,17 @@ export const RESOURCE_CATEGORIES = {
 };
 
 export const CANONICAL_RESOURCES = {
+  // ─── MATÉRIAS-PRIMAS BRUTAS: PESCA (RAW FISH) ───
+  fish_raw: {
+    itemId: 'fish_raw',
+    name: 'Peixe Fresco (Bruto)',
+    category: RESOURCE_CATEGORIES.RAW_FISH,
+    grade: 'none',
+    icon: 'materials/fish_raw.png',
+    price: 30,
+    desc: 'Peixe recém-pescado nas águas do Reino de Aden. Matéria-prima para óleos e culinária.'
+  },
+
   // ─── MATÉRIAS-PRIMAS BRUTAS: CAÇA (RAW HUNT) ───
   bone: {
     itemId: 'bone',

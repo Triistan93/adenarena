@@ -58,7 +58,7 @@ export function renderForgeRefinery(container, state, callbacks = {}) {
 
       let inputsHtml = '';
       for (const inp of rec.inputs) {
-        const matDef = RESOURCE_DICTIONARY[inp.matId] || { name: inp.matId, icon: 'materials/stem.png' };
+        const matDef = RESOURCE_DICTIONARY[inp.matId] || { name: inp.matId, icon: 'materials/branch.png' };
         const have = RefineryService.getMaterialCount(state, inp.matId);
         const hasEnough = have >= inp.qty;
 
@@ -72,7 +72,7 @@ export function renderForgeRefinery(container, state, callbacks = {}) {
             border-radius: 6px;
             padding: 4px 8px;
           ">
-            <img src="/img/icons/${matDef.icon}" style="width:20px; height:20px; object-fit:contain; border-radius:3px;" onerror="this.src='/img/icons/materials/stem.png'" />
+            <img src="/img/icons/${matDef.icon}" style="width:20px; height:20px; object-fit:contain; border-radius:3px;" onerror="this.onerror=null; this.src='/img/icons/materials/branch.png';" />
             <div style="font-size: 10px;">
               <span style="color: #cbd5e1;">${matDef.name}</span>
               <div style="font-weight: bold; color: ${hasEnough ? '#34d399' : '#f87171'};">
@@ -99,7 +99,7 @@ export function renderForgeRefinery(container, state, callbacks = {}) {
             <!-- Cabeçalho da Receita -->
             <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
               <div style="display: flex; align-items: center; gap: 8px;">
-                <img src="/img/icons/${outDef.icon}" style="width:28px; height:28px; object-fit:contain; border:1px solid rgba(212,167,68,0.4); border-radius:4px; background:rgba(0,0,0,0.5); padding:2px;" onerror="this.src='/img/icons/materials/steel.png'" />
+                <img src="/img/icons/${outDef.icon}" style="width:28px; height:28px; object-fit:contain; border:1px solid rgba(212,167,68,0.4); border-radius:4px; background:rgba(0,0,0,0.5); padding:2px;" onerror="this.onerror=null; this.src='/img/icons/materials/steel.png';" />
                 <div>
                   <h4 style="margin: 0; font-family: 'Cinzel', serif; font-size: 13px; color: #f4d58a;">${rec.name}</h4>
                   <div style="font-size: 9px; color: #94a3b8;">Estoque: <strong style="color:#ffd877;">${currentOutputCount}</strong> | +${rec.forgeExp} EXP Forja${rec.forgeLevel ? ` | Forja ${forgeLevel}/${rec.forgeLevel}` : ''}</div>
@@ -127,7 +127,7 @@ export function renderForgeRefinery(container, state, callbacks = {}) {
                 border-radius: 6px;
                 padding: 4px 8px;
               ">
-                <img src="/img/icons/${outDef.icon}" style="width:20px; height:20px; object-fit:contain;" onerror="this.src='/img/icons/materials/steel.png'" />
+                <img src="/img/icons/${outDef.icon}" style="width:20px; height:20px; object-fit:contain;" onerror="this.onerror=null; this.src='/img/icons/materials/steel.png';" />
                 <span style="font-size: 10px; font-weight: bold; color: #6ee7b7;">+${rec.output.qty} ${outDef.name}</span>
               </div>
             </div>
