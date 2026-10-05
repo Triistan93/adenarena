@@ -162,4 +162,4 @@ Antigravity homologou com 100% de aprovação a conclusão da Etapa 5 e do Plano
 
 **Git e concorrência:** este savepoint será publicado em branch dedicado `codex/checkpoint-hero-movement-20261005`, contendo somente este arquivo e `DIARIO_DE_DESENVOLVIMENTO.md`. As sete alterações locais preexistentes nos arquivos do Idle foram preservadas fora do commit; não fazer stage amplo nem incluí-las ao retomar.
 
-**Pendência preservada:** foram observadas alterações locais concorrentes em `public/action-prototype/animations/{warrior,ranger,mage}.{json,webp}` durante a preparação. A origem e a compatibilidade com o layout atual não foram confirmadas. Não descartar nem incluir esses seis arquivos automaticamente; inspecionar e validar antes de usá-los.
+**Conferência final dos atlas:** após alinhar o branch ao `main` atualizado, os seis arquivos de animação estão limpos no Git. Os atlas principais registram cinco linhas (caminhada, corrida e ataque); os auxiliares de corrida, duas. Não há alterações locais pendentes nesses assets. Conferir visualmente as transições das três classes ao retomar.
