@@ -31,6 +31,13 @@ import { CASTLE_SHOP_ITEMS } from './castle_shop_items.js';
 import { PRIMORDIAL_EQUIPMENT } from './primordial_equipment.js';
 import { DRAGON_WEAPONS } from './dragon_weapons.js';
 import { ESSENCE_ACCESSORY_ITEMS } from './essence_accessories.js';
+import {
+  EQUIPMENT_CATALOG_TYPE_LABELS,
+  EQUIPMENT_CATALOG_MINIMUM_PER_TYPE,
+  getEquipmentCatalogType,
+  annotateEquipmentCatalogItem,
+  buildEquipmentCatalog
+} from './equipment_catalog.js';
 
 // Normaliza recursos canônicos de Life Activities para o catálogo oficial ALL_ITEMS
 const CANONICAL_RESOURCE_ITEMS = {};
@@ -92,7 +99,7 @@ if (typeof PREY_CATALOG === 'object' && PREY_CATALOG) {
   }
 }
 
-export const ALL_ITEMS = {
+const RAW_ALL_ITEMS = {
   ...WEAPONS, ...ARMORS, ...HELMETS, ...BOOTS, ...GLOVES, ...RINGS,
   ...LEGS, ...SHIELDS, ...BELTS, ...CLOAKS, ...SIGILS, ...NECKLACES,
   ...EARRINGS, ...HAIR, ...AGATHIONS, ...CONSUMABLES, ...MATERIALS,
@@ -116,6 +123,17 @@ export const ALL_ITEMS = {
   ...ESSENCE_ACCESSORY_ITEMS
 };
 
+// Mantém o tipo de catálogo organizado para todas as fontes e graus de item.
+// O campo `catalogType` é distinto de `weaponType`, que continua reservado
+// para as regras de combate e maestria.
+export const ALL_ITEMS = Object.fromEntries(
+  Object.entries(RAW_ALL_ITEMS).map(([key, item]) => [key, annotateEquipmentCatalogItem(item)])
+);
+
+const equipmentCatalog = buildEquipmentCatalog(ALL_ITEMS);
+export const EQUIPMENT_CATALOG = equipmentCatalog.catalog;
+export const EQUIPMENT_CATALOG_COVERAGE = equipmentCatalog.coverage;
+
 if (typeof window !== 'undefined') {
   window.GameData = {
     ...(window.GameData || {}),
@@ -127,6 +145,8 @@ if (typeof window !== 'undefined') {
     AFFIX_MAP, AFFIX_POOL, AFFIX_POOLS_THEMED,
     getArmorType, getWeaponType, canEquipByType,
     ARMOR_TYPE_LABEL, WEAPON_TYPE_LABEL, ARMOR_TYPE_ARCHETYPES, WEAPON_TYPE_ARCHETYPES,
+    EQUIPMENT_CATALOG_TYPE_LABELS, EQUIPMENT_CATALOG_MINIMUM_PER_TYPE,
+    EQUIPMENT_CATALOG, EQUIPMENT_CATALOG_COVERAGE, getEquipmentCatalogType,
     ELEMENT_OPPOSITES, ELEMENTAL_STONES, getAttributeDamageBonus,
     RAID_BOSSES
   };
@@ -144,5 +164,7 @@ export {
   AFFIX_MAP, AFFIX_POOL, AFFIX_POOLS_THEMED,
   getArmorType, getWeaponType, canEquipByType,
   ARMOR_TYPE_LABEL, WEAPON_TYPE_LABEL, ARMOR_TYPE_ARCHETYPES, WEAPON_TYPE_ARCHETYPES,
+  EQUIPMENT_CATALOG_TYPE_LABELS, EQUIPMENT_CATALOG_MINIMUM_PER_TYPE,
+  getEquipmentCatalogType,
   ELEMENT_OPPOSITES, ELEMENTAL_STONES, getAttributeDamageBonus
 };

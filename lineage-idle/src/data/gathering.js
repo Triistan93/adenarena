@@ -224,6 +224,18 @@ export const FLORA_NODES_CATALOG = {
     yields: { primary: 'mold_lubricant', primaryQty: 2, secondary: 'mold_glue', secondaryQty: 2 },
     baseTime: 5000, xpReward: 95, zones: ['zone_oren_woods']
   },
+  node_glacier_moss: {
+    id: 'node_glacier_moss', name: 'Musgo de Geada de Oren', icon: '❄️', rarity: 'rare',
+    desc: 'Musgo resistente ao frio que libera resina útil para preparar moldes.',
+    yields: { primary: 'mold_glue', primaryQty: 1, secondary: 'varnish', secondaryQty: 3 },
+    baseTime: 4700, xpReward: 78, zones: ['zone_oren_woods']
+  },
+  node_compressed_timber: {
+    id: 'node_compressed_timber', name: 'Tronco Prensado de Oren', icon: '🪵', rarity: 'rare',
+    desc: 'Madeira compacta pelas nevascas, pronta para ser refinada em componentes de forja.',
+    yields: { primary: 'compressed_wood', primaryQty: 2, secondary: 'braided_hemp', secondaryQty: 2 },
+    baseTime: 4900, xpReward: 82, zones: ['zone_oren_woods']
+  },
   node_einhasad_bloom: {
     id: 'node_einhasad_bloom', name: 'Flor de Einhasad de Aden', icon: '🌸', rarity: 'epic',
     desc: 'Pétalas santificadas que brilham como ouro líquido sob o sol de Aden.',
@@ -235,6 +247,18 @@ export const FLORA_NODES_CATALOG = {
     desc: 'Fungos sagrados que condensam energia mística da terra em grânulos de Enria.',
     yields: { primary: 'enria', primaryQty: 2, secondary: 'silver_thread', secondaryQty: 2 },
     baseTime: 5400, xpReward: 120, zones: ['zone_aden_plateau']
+  },
+  node_celestial_brier: {
+    id: 'node_celestial_brier', name: 'Espinheiro Celestial', icon: '🌿', rarity: 'rare',
+    desc: 'Ramo raro de fibras prateadas que cresce nas encostas do planalto sagrado.',
+    yields: { primary: 'silver_thread', primaryQty: 2, secondary: 'compressed_wood', secondaryQty: 2 },
+    baseTime: 5100, xpReward: 96, zones: ['zone_aden_plateau']
+  },
+  node_golden_branch: {
+    id: 'node_golden_branch', name: 'Galho Dourado de Aden', icon: '✨', rarity: 'epic',
+    desc: 'Madeira dourada rica em seiva arcana, usada na fabricação de equipamentos avançados.',
+    yields: { primary: 'compressed_wood', primaryQty: 3, secondary: 'enria', secondaryQty: 1 },
+    baseTime: 5300, xpReward: 108, zones: ['zone_aden_plateau']
   },
 
   // Lendário
@@ -249,6 +273,18 @@ export const FLORA_NODES_CATALOG = {
     desc: 'Casca vegetal enriquecida com veios de minério cósmico.',
     yields: { primary: 'enria', primaryQty: 3, secondary: 'primordial_essence', secondaryQty: 1 },
     baseTime: 6200, xpReward: 300, zones: ['zone_goddard_valley']
+  },
+  node_volcanic_ash_stalk: {
+    id: 'node_volcanic_ash_stalk', name: 'Haste de Cinza Vulcânica', icon: '🌋', rarity: 'epic',
+    desc: 'Haste mineralizada pelo calor de Goddard, rica em carvão vegetal e fibras densas.',
+    yields: { primary: 'charcoal', primaryQty: 5, secondary: 'compressed_wood', secondaryQty: 3 },
+    baseTime: 6000, xpReward: 250, zones: ['zone_goddard_valley']
+  },
+  node_fire_bloom_core: {
+    id: 'node_fire_bloom_core', name: 'Núcleo da Flor Ígnea', icon: '🔥', rarity: 'epic',
+    desc: 'Flor rara que concentra enria botânica e fibras resistentes ao calor.',
+    yields: { primary: 'enria', primaryQty: 2, secondary: 'braided_hemp', secondaryQty: 3 },
+    baseTime: 6300, xpReward: 275, zones: ['zone_goddard_valley']
   },
   node_primordial_bloom: {
     id: 'node_primordial_bloom', name: 'Flor do Coração Primordial', icon: '🌺', rarity: 'legendary',

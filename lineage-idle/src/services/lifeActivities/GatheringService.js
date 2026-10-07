@@ -13,6 +13,7 @@ import { LifeActivityCore } from './LifeActivityCore.js';
 import { RewardEngine } from './RewardEngine.js';
 import { hasRoomForStackRewards } from './RewardCapacity.js';
 import { resolveCanonicalResourceId } from './ResourceDictionary.js';
+import { getOfflineActionBudget, LIFE_ACTIVITY_OFFLINE_BALANCE } from '../../data/economy/lifeActivityOfflineBalance.js';
 
 export const GatheringService = {
   getGatheringState(state) {
@@ -694,7 +695,7 @@ export const GatheringService = {
       return null;
     }
 
-    const clampedMinutes = Math.min(480, Math.max(0, minutesOffline));
+    const clampedMinutes = Math.min(LIFE_ACTIVITY_OFFLINE_BALANCE.MAX_MINUTES, Math.max(0, minutesOffline));
     if (clampedMinutes < 2) return null;
 
     const zoneId = gState.activeZone || 'zone_gludio_fields';
@@ -705,11 +706,12 @@ export const GatheringService = {
     let timeSpent = 0;
     let actualHarvests = 0;
     let totalXp = 0;
+    const maxOfflineActions = getOfflineActionBudget(clampedMinutes, zone.baseGatherTime || 3200);
     const matsGained = {};
     const discoveries = {};
-    const offlineTimeBudget = clampedMinutes * 60 * 1000 * 0.25;
+    const offlineTimeBudget = clampedMinutes * 60 * 1000;
 
-    while (durabilitySpent < availableDur) {
+    while (durabilitySpent < availableDur && actualHarvests < maxOfflineActions) {
       const pouchId = gState.activePouch;
       const pouchStock = pouchId ? (gState.pouchInventory[pouchId] || 0) : 0;
       if (pouchId && pouchStock <= 0) gState.activePouch = null;
@@ -719,8 +721,7 @@ export const GatheringService = {
       const duration = Math.max(1200, Math.floor(
         ((node.baseTime || zone.baseGatherTime || 3200) * (tactic.timeMult || 1)) / (pouch?.speedBoost || 1)
       ));
-      if (timeSpent + duration > offlineTimeBudget) break;
-
+      if (actualHarvests >= maxOfflineActions || timeSpent + duration > offlineTimeBudget) break;
       if (usablePouchId) gState.pouchInventory[usablePouchId] = Math.max(0, pouchStock - 1);
       timeSpent += duration;
       actualHarvests++;

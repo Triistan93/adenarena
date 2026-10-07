@@ -73,6 +73,18 @@ test('offline fishing synchronizes rod durability shown by the fishing professio
   assert.ok(state.fishing.rodDurability.rod_none < 8);
 });
 
+test('offline fishing uses 30% of active casts without consuming shared vigor', () => {
+  const state = createFishingState();
+  state.fishing.autoFishing = true;
+  state.lifeActivities.vigor = { current: 100, max: 100, lastRegen: Date.now() };
+
+  const result = FishingService.processOfflineFish(state, 480);
+
+  assert.equal(result.attemptedCasts, 8);
+  assert.equal(state.fishing.rodDurability.rod_none, 0);
+  assert.equal(state.lifeActivities.vigor.current, 100);
+});
+
 test('the final durability point still permits one cast and then blocks the next one', () => {
   const state = createFishingState();
   state.fishing.rodDurability.rod_none = 1;
@@ -280,4 +292,3 @@ test('fishing UI exposes the pending catch action and new casts wait for the cla
   assert.match(container.innerHTML, /claimPendingFishingRewards/);
   assert.equal(FishingService.castLine(state).reason, 'pending_rewards');
 });
-

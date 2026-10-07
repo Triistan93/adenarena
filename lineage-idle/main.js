@@ -5330,12 +5330,12 @@ function processMonsterDefeat(monster, killingSkill = null) {
 
   // Acúmulo de Lâmpada Mágica & Craft Points por Abate
   grantMagicLampProgressFromKill(state, xpGain, { log, floatText });
-  state.craftPoints = (state.craftPoints || 0) + Math.floor((monster.boss ? 50 : 10) * spoilRate);
-
-  if (state.craftPoints >= 1000) {
-    state.craftPoints -= 1000;
-    state.craftCharges = Math.min(100, (state.craftCharges || 0) + 1);
-    log(`🛠️ CARGA DE CRAFT ACUMULADA! (Total: ${state.craftCharges})`, 'rarity-rare');
+  const craftPointsFromKill = Math.floor((monster.boss ? 5 : 1) * spoilRate);
+  if (craftPointsFromKill > 0) {
+    serviceChargeRandomCraft(state, craftPointsFromKill, {
+      log: (message, type) => log(message.replace('RANDOM CRAFT:', 'FORJA:'), type || 'rarity-rare'),
+      save: null
+    });
   }
 
   const monsterGoldRange = Array.isArray(monster.gold)
@@ -8139,7 +8139,11 @@ function synthesizeDolls() {
   if (d1.level >= 5) { log('Sua Doll já está no Nível Máximo (Lv. 5)!', 'system'); return; }
 
   const rates = { 1: 0.70, 2: 0.55, 3: 0.40, 4: 0.25 };
-  const chance = rates[d1.level] || 0.30;
+  state.dollSynthesisFailures = state.dollSynthesisFailures || {};
+  const pityKey = `${d1.dollId}:${d1.level}`;
+  const failures = Math.max(0, Number(state.dollSynthesisFailures[pityKey]) || 0);
+  const baseChance = rates[d1.level] || 0.30;
+  const chance = Math.min(1, baseChance + failures * 0.10);
   const roll = Math.random();
 
   state.dolls.splice(idx2, 1);
@@ -8147,10 +8151,13 @@ function synthesizeDolls() {
 
   if (roll < chance) {
     d1.level += 1;
+    delete state.dollSynthesisFailures[pityKey];
     log(`🎉 SÍNTESE DE SUCESSO! Sua **${BOSS_DOLLS[d1.dollId]?.name}** evoluiu para o **Nível ${d1.level}**!`, 'rarity-legendary');
     floatText('✨ SÍNTESE SUCESSO!', 'float-jackpot');
   } else {
-    log(`💔 SÍNTESE FALHOU! A Doll de material foi consumida, mas a Doll base foi mantida.`, 'system');
+    state.dollSynthesisFailures[pityKey] = failures + 1;
+    const nextChance = Math.min(1, baseChance + (failures + 1) * 0.10);
+    log(`💔 SÍNTESE FALHOU! A Doll de material foi consumida, mas a base foi mantida. Proteção acumulada: ${Math.round(nextChance * 100)}% na próxima tentativa.`, 'system');
     floatText('💔 FALHOU', 'float-gold');
   }
 

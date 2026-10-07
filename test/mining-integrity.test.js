@@ -7,6 +7,7 @@ import { setRoot } from '../lineage-idle/src/core/DomHelpers.js';
 import { MINERAL_NODES_CATALOG, MINING_ZONES } from '../lineage-idle/src/data/mining.js';
 import { ALL_ITEMS } from '../lineage-idle/src/data/items/index.js';
 import { resolveCanonicalResourceId } from '../lineage-idle/src/services/lifeActivities/ResourceDictionary.js';
+import { LifeActivityCore } from '../lineage-idle/src/services/lifeActivities/LifeActivityCore.js';
 
 function createMiningState() {
   return {
@@ -113,6 +114,24 @@ test('offline mining grants its last available extraction and disables AFK at ze
   assert.equal(state.mining.pickaxeDurability.pickaxe_none, 0);
   assert.equal(state.mining.autoMining, false);
   assert.ok(state.inventory.length > 0);
+});
+
+test('offline mining grants 30% of active cycles and leaves shared vigor unchanged', () => {
+  const state = createMiningState();
+  state.level = 40;
+  state.lifeActivities.vigor = { current: 100, max: 100, lastRegen: Date.now() };
+  state.mining.autoMining = true;
+  state.mining.pickaxe = 'pickaxe_c';
+  state.mining.activeZone = 'zone_plains_quarry';
+  state.mining.pickaxeDurability = { pickaxe_c: 250 };
+  state.mining.lampInventory = {};
+  state.lifeActivities.mining = { level: 10, xp: 0, progressionVersion: 1, toolDurability: 250, maxDurability: 250 };
+
+  const result = MiningService.processOfflineMining(state, 480);
+
+  assert.equal(result.actualMines, 250);
+  assert.equal(state.mining.pickaxeDurability.pickaxe_c, 0);
+  assert.equal(LifeActivityCore.getVigorState(state).current, 100);
 });
 
 test('gallery stabilization does not consume an equipped branch for free', () => {

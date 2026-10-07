@@ -64,6 +64,7 @@ export const DEFAULT_STATE = () => ({
   achievements: { claimed: [] },
   petData: { activePetId: null, pets: {}, lastFeedTime: 0 },
   codex: {}, dolls: [], synthSelected: [null, null],
+  dollSynthesisFailures: {},
   magicLampExp: 0, magicLamps: 0,
   randomCraft: { points: 0, charge: 0, slots: [], history: [] },
   craftPoints: 0, craftCharges: 0, randomCraftWheel: [],
@@ -559,12 +560,33 @@ export function loadState() {
     }
 
     // Migração de Random Craft para namespace unificado state.randomCraft
-    currentState.randomCraft = (data.randomCraft && typeof data.randomCraft === 'object') ? data.randomCraft : {
-      points: Number(data.randomCraftCharge || data.craftPoints) || 0,
-      charge: Number(data.craftCharges) || (Number(data.randomCraftCharge) >= 100 ? 1 : 0),
+    const hasCanonicalRandomCraft = data.randomCraft && typeof data.randomCraft === 'object';
+    const hasLegacyRandomCraftPoints = Number.isFinite(Number(data.randomCraftCharge));
+    const legacyRandomCraftPoints = hasLegacyRandomCraftPoints ? Math.max(0, Number(data.randomCraftCharge)) : 0;
+    const legacyCraftPoints = Math.max(0, Number(data.craftPoints) || 0);
+    const migratedLegacyCharges = hasLegacyRandomCraftPoints
+      ? Math.floor(legacyRandomCraftPoints / 100)
+      : Math.floor(legacyCraftPoints / 1000);
+    currentState.randomCraft = hasCanonicalRandomCraft ? { ...data.randomCraft } : {
+      points: hasLegacyRandomCraftPoints
+        ? Math.floor(legacyRandomCraftPoints % 100)
+        : Math.floor((legacyCraftPoints % 1000) / 10),
+      charge: Math.min(100, (Number(data.craftCharges) || 0) + migratedLegacyCharges),
       slots: Array.isArray(data.randomCraftSlots) ? data.randomCraftSlots : [],
       history: Array.isArray(data.randomCraftHistory) ? data.randomCraftHistory : []
     };
+    currentState.craftPoints = Number(currentState.randomCraft.points) || 0;
+    currentState.craftCharges = Number(currentState.randomCraft.charge) || 0;
+    if (!hasCanonicalRandomCraft && (legacyCraftPoints > 0 || legacyRandomCraftPoints > 0)) {
+      const migratedSave = JSON.parse(raw);
+      migratedSave.randomCraft = { ...currentState.randomCraft };
+      migratedSave.craftPoints = currentState.craftPoints;
+      migratedSave.craftCharges = currentState.craftCharges;
+      migratedSave._chk = generateStateChecksum(migratedSave);
+      const serializedMigratedSave = JSON.stringify(migratedSave);
+      localStorage.setItem(SAVE_KEY, serializedMigratedSave);
+      localStorage.setItem(`${SAVE_KEY}_backup`, serializedMigratedSave);
+    }
 
     // Migração de Essência Astral -> Essência da Água
     if (Array.isArray(currentState.inventory)) {
@@ -599,6 +621,7 @@ export function loadState() {
 
     currentState.codex = data.codex && typeof data.codex === 'object' ? data.codex : {};
     currentState.dolls = Array.isArray(data.dolls) ? data.dolls : [];
+    currentState.dollSynthesisFailures = data.dollSynthesisFailures && typeof data.dollSynthesisFailures === 'object' ? data.dollSynthesisFailures : {};
 
     // Migração de Pesca — garante que saves antigos sem fishing recebam defaults
     currentState.fishing = { ...def.fishing, ...(data.fishing || {}) };
@@ -615,8 +638,8 @@ export function loadState() {
     currentState.synthSelected = Array.isArray(data.synthSelected) ? data.synthSelected : [null, null];
     currentState.magicLampExp = Number(data.magicLampExp) || 0;
     currentState.magicLamps = Number(data.magicLamps) || 0;
-    currentState.craftPoints = Number(data.craftPoints) || 0;
-    currentState.craftCharges = Number(data.craftCharges) || 0;
+    currentState.craftPoints = Number(currentState.randomCraft.points) || 0;
+    currentState.craftCharges = Number(currentState.randomCraft.charge) || 0;
     currentState.randomCraftWheel = Array.isArray(data.randomCraftWheel) ? data.randomCraftWheel : [];
     currentState.craftFoundationPity = Number(data.craftFoundationPity) || 0;
     currentState.warehouse = Array.isArray(data.warehouse)

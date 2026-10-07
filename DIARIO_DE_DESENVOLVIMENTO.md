@@ -8,6 +8,7 @@
 ---
 
 #### 📑 Índice Rápido de Páginas
+- [Registro de trabalho — 07 de outubro de 2026](#registro-de-trabalho--07-de-outubro-de-2026) — *Balanceamento offline das profissões, organização do catálogo de armas, economia de crafting e handoff para continuidade*
 - [Consolidação de `work` em `main` — 02 de outubro de 2026](#consolidação-de-work-em-main--02-de-outubro-de-2026) — *Integração local, suíte completa e build validados; auditoria integral continua aberta*
 - [Página 27 — 26 de Setembro de 2026 às 16:40](#página-27--26-de-setembro-de-2026-às-1640) — *Correção do Vínculo Indevido de Assassin Servitor com a Classe Assassin*
 - [Página 26 — 26 de Setembro de 2026 às 16:22](#página-26--26-de-setembro-de-2026-às-1622) — *Correção dos Falsos Positivos do Executor de Auditoria Funcional; Revalidação com Aprovação Integral Bloqueada*
@@ -4921,3 +4922,43 @@ O Antigravity concluiu a Etapa 5 e formalizou a homologação final do Release C
    - Saves reais de jogadores preservados; nenhum dado de produção foi modificado.
 
 **Conclusão:** Todos os critérios das Etapas 0 a 5 de `docs/PLANO_DE_LANCAMENTO_ADEN_ARENA.md` foram integralmente concluídos e homologados. Aden Arena está pronto para publicação segura como Release Candidate v1.0.0-RC1.
+
+## Registro de trabalho — 07 de outubro de 2026
+
+Esta sessão retomou o balanceamento das profissões e a organização dos equipamentos. O objetivo do jogo continua sendo fazer Pesca, Caça, Mineração, Coleta e Expedições complementarem o PvE: cada atividade deve gerar materiais úteis à Forja, com progressão compreensível desde o nível 1 até o nível 120.
+
+### Economia offline das profissões
+
+- Criado `lineage-idle/src/data/economy/lifeActivityOfflineBalance.js` como regra única: até **8 horas (480 minutos)** por processamento offline e **30% dos ciclos que seriam feitos ativamente**.
+- Coleta, Mineração, Caça e Pesca aplicam o limite por ciclos reais da zona/atividade, respeitando também durabilidade das ferramentas, iscas, atrativos, lanternas, bolsas e tempo decorrido. O cálculo offline não consome vigor; recursos e durabilidade continuam limitando a execução.
+- Pesca deixa de aplicar a taxa antiga de 25%, usa a mesma eficiência offline e devolve a quantidade de arremessos tentados para permitir auditoria dos resultados.
+- Adicionado `tools/life-activity-economy-sim.mjs`, simulador determinístico sobre os serviços reais de profissão. Ele compara personagens nos níveis 1, 40, 85 e 120, com maestrias/ferramentas representativas, e calcula ciclos, recompensas, preço de venda a NPC, consumíveis, reparos e saldo após esses custos. O valor de venda é uma aproximação pelo preço canônico do NPC; ainda não representa utilidade de materiais em receitas nem comparação contra PvE.
+- Testes focados foram acrescentados/ajustados para os 30%, teto de oito horas, preservação de vigor e integridade dos recursos/zones. **Não executei a suíte nem o build nesta sessão**, então esses resultados ainda precisam ser confirmados no próximo passo.
+
+### Progressão e integridade de materiais
+
+- Foram incluídos novos pontos de coleta em Oren, no Planalto de Aden e no Vale de Goddard para fornecer componentes de refino e materiais de progressão. O teste de integridade percorre zonas, nós e recompensas para detectar referências ausentes ou inconsistentes.
+- A correção de recompensas offline considera a capacidade de limitar ações, consumíveis e desgaste sem dar ao modo offline o mesmo rendimento da atividade ativa. A meta de 30% está centralizada para evitar fórmulas divergentes entre profissões.
+- O teste de pesca cobre arremessos simulados e confirma que o processamento offline não reduz a reserva compartilhada de vigor. Os testes de caça, coleta e mineração verificam o teto por durabilidade e a conservação de vigor.
+
+### Random Craft, Soul Crystals e Dolls
+
+- A progressão de Random Craft foi unificada no namespace `state.randomCraft`: abates concedem 1 ponto por monstro comum e 5 por chefe, e cada 100 pontos forma uma carga. A geração de cargas fica limitada a 100.
+- A migração de saves legados converte pontos/cargas antigos para a escala atual, preserva o progresso restante e grava a migração com checksum e backup. O estado também mantém os campos legados sincronizados para compatibilidade.
+- Falhas de síntese de Dolls agora acumulam proteção por Doll e nível: a chance aumenta 10 pontos percentuais por falha e o contador é zerado quando a síntese tem sucesso. O contador foi incluído no estado padrão e na leitura de saves antigos.
+- Falhas de evolução de Soul Crystal preservam uma parte das almas absorvidas; os sucessos registram o estágio alcançado como checkpoint. Isso reduz a perda total de progresso após tentativas malsucedidas.
+
+### Catálogo de equipamentos: armas, escudos e sigils
+
+- Criado `lineage-idle/src/data/items/equipment_catalog.js` para classificar equipamentos num campo `catalogType`, preservando `weaponType`, que continua atendendo as regras de combate e maestria.
+- O catálogo central agora reúne itens de todas as fontes e grades e remove aliases duplicados por ID canônico. A consulta atual retorna **192 armas, 16 escudos e 5 sigils (213 equipamentos)**.
+- Os grupos pedidos foram cobertos: Sword, Magic Sword, Dagger, Blunt, Magic Blunt, Rapier, Two Handed Spear, Two Handed Blunt, Two Handed Hammer, Two Handed Staff, Two Handed Sword, Staff, Bow, Fist, Shield e Sigil. O catálogo também separa Ancient Sword, Dual Sword e Pistol/Shooter. Cada grupo pedido contém pelo menos três itens; há um grupo adicional `Other Weapon` com Anais First, cuja classificação específica ainda merece conferência manual.
+- A listagem apresentada durante a sessão foi montada de `ALL_ITEMS`, deduplicada por ID e organizada por nome, tipo e grade. Inclui graus No-Grade até S e categorias especiais Frost Lord e Hero; armas de herança foram identificadas como evolutivas, de No-Grade até C-Grade.
+- A grafia incorreta `Lether Boots` foi corrigida para `Leather Boots` nas entradas/descrições correspondentes do catálogo de armaduras.
+
+### Ideias e estado para continuar
+
+- `docs/IDEIAS.md` foi criado como estacionamento de ideias para não interromper o trabalho ativo. Registra o planejador de atividades offline com divisão de 100%, a rota automática de farm baseada em materiais de receitas, o kit inicial No-Grade por classe e caixas de evento. Todas permanecem capturadas e não priorizadas.
+- Há mudanças locais de várias frentes no mesmo savepoint: profissões/offline, economia de crafting, catálogo de equipamentos, testes de integridade e o documento de ideias. Este registro acompanha essas mudanças para que a continuação em outro computador não dependa apenas do histórico do chat.
+- **Validação desta sessão:** não rodei testes nem build. Antes de usar os números como balanceamento final, executar `npm test`, `npm run build` e a simulação `node tools/life-activity-economy-sim.mjs`; revisar as métricas, em especial receita líquida e valor dos materiais para receitas.
+- **Próximo passo recomendado:** executar a simulação e comparar nível 1 e nível 120 entre PvE e cada profissão; corrigir os achados, revisar a classificação pendente de Anais First e então atualizar os números de balanceamento com evidências.

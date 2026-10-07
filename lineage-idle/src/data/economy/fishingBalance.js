@@ -8,8 +8,8 @@ export const FISHING_BALANCE = {
   MANUAL_CAST_TIME_MS: 5000,        // 5s por arremesso manual
   AUTO_FISH_INTERVAL_MS: 8000,      // 8s por ciclo de pesca automática
   OFFLINE_FISH_INTERVAL_MS: 15000,  // 15s efetivos por peixe offline
-  OFFLINE_MAX_MINUTES: 480,         // 8h máximo offline (igual ao combate)
-  OFFLINE_EFFICIENCY: 0.25,         // 25% da taxa online (combate é 30%)
+  OFFLINE_MAX_MINUTES: 480,         // compatibilidade: o teto canônico fica em lifeActivityOfflineBalance.js
+  OFFLINE_EFFICIENCY: 0.30,         // 30% dos ciclos ativos (igual às demais profissões)
 
   // --- Taxas de Captura ---
   BASE_CATCH_CHANCE: 0.70,          // 70% de chance base de captura

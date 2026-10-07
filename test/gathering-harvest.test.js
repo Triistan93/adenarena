@@ -2,6 +2,8 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 
 import { GatheringService } from '../lineage-idle/src/services/lifeActivities/GatheringService.js';
+import { GATHERING_ZONES, FLORA_NODES_CATALOG } from '../lineage-idle/src/data/gathering.js';
+import { LifeActivityCore } from '../lineage-idle/src/services/lifeActivities/LifeActivityCore.js';
 
 test('the final durability point completes its harvest before the sickle breaks', () => {
   const state = {
@@ -71,6 +73,51 @@ test('offline gathering consumes the saved in-progress harvest instead of leavin
   const durabilityAfterOffline = state.gathering.sickleDurability.sickle_none;
   assert.equal(GatheringService.processOfflineGathering(state, 0), null);
   assert.equal(state.gathering.sickleDurability.sickle_none, durabilityAfterOffline, 'the saved cycle must not pay twice');
+});
+
+test('offline gathering grants 30% of active cycles and leaves shared vigor unchanged', () => {
+  const state = {
+    level: 40, inventory: [], gold: 0,
+    lifeActivities: { vigor: { current: 100, max: 100, lastRegen: Date.now() } },
+    gathering: { skillLevel: 10, sickle: 'sickle_c', selectedTactic: 'standard', activeZone: 'zone_giran_hills',
+      autoGathering: true, sickleDurability: { sickle_c: 250 }, pouchInventory: {}, gatheringLog: {}, totalHarvested: 0 }
+  };
+
+  const result = GatheringService.processOfflineGathering(state, 480);
+
+  assert.equal(result.actualHarvests, 250);
+  assert.equal(state.gathering.sickleDurability.sickle_c, 0);
+  assert.equal(LifeActivityCore.getVigorState(state).current, 100);
+});
+
+test('offline gathering caps long absences at eight hours', () => {
+  const state = {
+    level: 40, inventory: [], gold: 0,
+    lifeActivities: { vigor: { current: 100, max: 100, lastRegen: Date.now() } },
+    gathering: { skillLevel: 10, sickle: 'sickle_c', selectedTactic: 'standard', activeZone: 'zone_giran_hills',
+      autoGathering: true, sickleDurability: { sickle_c: 500 }, pouchInventory: {}, gatheringLog: {}, totalHarvested: 0 }
+  };
+
+  const result = GatheringService.processOfflineGathering(state, 1440);
+
+  assert.equal(result.actualHarvests, 500);
+  assert.equal(state.gathering.sickleDurability.sickle_c, 0);
+});
+
+test('every gathering zone points to defined nodes with canonical material rewards', async () => {
+  const { ALL_ITEMS } = await import('../lineage-idle/src/data/items/index.js');
+  const { resolveCanonicalResourceId } = await import('../lineage-idle/src/services/lifeActivities/ResourceDictionary.js');
+  for (const zone of Object.values(GATHERING_ZONES)) {
+    assert.ok(zone.availableNodes.length > 0, `${zone.id} has no nodes`);
+    for (const nodeId of zone.availableNodes) {
+      const node = FLORA_NODES_CATALOG[nodeId];
+      assert.ok(node, `${zone.id} references missing node ${nodeId}`);
+      assert.ok(node.zones.includes(zone.id), `${nodeId} is not assigned to ${zone.id}`);
+      for (const rawId of [node.yields.primary, node.yields.secondary].filter(Boolean)) {
+        assert.ok(ALL_ITEMS[resolveCanonicalResourceId(rawId)], `${nodeId} yields undefined material ${rawId}`);
+      }
+    }
+  }
 });
 
 test('a second start request cannot replace a live harvest or consume another pouch', () => {
@@ -205,4 +252,3 @@ test('a full backpack preserves the in-progress harvest and tool durability', ()
   assert.equal(state.gathering.isGathering, false);
   assert.equal(state.gathering.pendingHarvestReward, null);
 });
-

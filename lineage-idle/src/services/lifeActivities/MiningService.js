@@ -11,6 +11,7 @@ import { LifeActivityCore } from './LifeActivityCore.js';
 import { RewardEngine } from './RewardEngine.js';
 import { hasRoomForStackRewards } from './RewardCapacity.js';
 import { resolveCanonicalResourceId } from './ResourceDictionary.js';
+import { getOfflineActionBudget, LIFE_ACTIVITY_OFFLINE_BALANCE } from '../../data/economy/lifeActivityOfflineBalance.js';
 
 export const MiningService = {
   getMiningState(state) {
@@ -699,25 +700,26 @@ export const MiningService = {
       return null;
     }
 
-    const clampedMinutes = Math.min(480, Math.max(0, minutesOffline));
+    const clampedMinutes = Math.min(LIFE_ACTIVITY_OFFLINE_BALANCE.MAX_MINUTES, Math.max(0, minutesOffline));
     if (clampedMinutes < 2) return null;
 
     const zoneId = mState.activeZone || 'zone_abandoned_coal';
     const zone = MINING_ZONES[zoneId] || MINING_ZONES.zone_abandoned_coal;
     const activePickaxe = PICKAXES_CATALOG[activePickaxeId] || PICKAXES_CATALOG.pickaxe_none;
     const tactic = MINING_TACTICS[mState.selectedTactic] || MINING_TACTICS.standard;
-    const offlineTimeBudget = clampedMinutes * 60 * 1000 * 0.25;
+    const offlineTimeBudget = clampedMinutes * 60 * 1000;
     let timeSpent = 0;
     let actualMines = 0;
     let durabilitySpent = 0;
+    const maxOfflineActions = getOfflineActionBudget(clampedMinutes, zone.baseMineTime || 3300);
     let totalXp = 0;
     const matsGained = {};
     const discoveries = {};
     let hazard = mState.veinHazard || 'none';
 
-    // Simula 25% do tempo real, preservando as regras do veio ativo,
+    // Simula 30% dos ciclos ativos, preservando as regras do veio,
     // incluindo qualidade, gasto da lanterna, riscos e estabilidade da galeria.
-    while (durabilitySpent < availableDur) {
+    while (durabilitySpent < availableDur && actualMines < maxOfflineActions) {
       const lampId = mState.activeLamp;
       const lampStock = lampId ? (mState.lampInventory[lampId] || 0) : 0;
       if (lampId && lampStock <= 0) mState.activeLamp = null;
@@ -727,8 +729,7 @@ export const MiningService = {
       const duration = Math.max(1200, Math.floor(
         ((node.baseTime || zone.baseMineTime || 3300) * (tactic.timeMult || 1)) / (lamp?.speedBoost || 1)
       ));
-      if (timeSpent + duration > offlineTimeBudget) break;
-
+      if (actualMines >= maxOfflineActions || timeSpent + duration > offlineTimeBudget) break;
       if (usableLampId) mState.lampInventory[usableLampId] = Math.max(0, lampStock - 1);
       timeSpent += duration;
       actualMines++;

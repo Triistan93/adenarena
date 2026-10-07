@@ -420,9 +420,11 @@ export function processSoulDrainOnKill(state, monster = {}, callbacks = {}) {
       const successChance = 0.70 - (currentLevel * 0.04);
       if (Math.random() < successChance) {
         setSoulCrystalStage(crystal, currentLevel + 1);
+        crystal.soulCheckpointStage = crystal.stage;
         if (callbacks.log) callbacks.log(`🔮 SOUL UPGRADE! Soul Crystal absorveu almas e subiu para o Nível ${crystal.stage}!`, 'rarity-epic');
       } else {
-        if (callbacks.log) callbacks.log(`⚠️ Falha na absorção de almas! O cristal manteve o Nível ${currentLevel}.`, 'system');
+        crystal.absorbedSouls = Math.floor(reqSouls / 2);
+        if (callbacks.log) callbacks.log(`⚠️ Falha na absorção. O cristal manteve o estágio e preservou ${crystal.absorbedSouls}/${reqSouls} almas para a próxima tentativa.`, 'system');
       }
     }
     return;
@@ -439,7 +441,11 @@ export function processSoulDrainOnKill(state, monster = {}, callbacks = {}) {
         const successChance = 0.45;
         if (Math.random() < successChance) {
           setSoulCrystalStage(crystal, currentLevel + 1);
+          crystal.soulCheckpointStage = crystal.stage;
           if (callbacks.log) callbacks.log(`🔮 SOUL UPGRADE! Soul Crystal absorveu almas de elite e subiu para o Nível ${crystal.stage}!`, 'rarity-legendary');
+        } else {
+          crystal.absorbedSouls = Math.floor(reqSouls / 4);
+          if (callbacks.log) callbacks.log(`⚠️ A ressonância falhou. Checkpoint preservou ${crystal.absorbedSouls}/${reqSouls} almas; o cristal segue no Estágio ${currentLevel}.`, 'system');
         }
       }
     }
@@ -947,7 +953,7 @@ export function chargeRandomCraft(state, pointsToAdd = 20, callbacks = {}) {
 
   while (rc.points >= RANDOM_CRAFT_POINTS_PER_CHARGE) {
     rc.points -= RANDOM_CRAFT_POINTS_PER_CHARGE;
-    rc.charge = (rc.charge || 0) + 1;
+    rc.charge = Math.min(100, (rc.charge || 0) + 1);
     if (callbacks.log) {
       callbacks.log(`🛠️ RANDOM CRAFT: +1 Carga Imperial gerada! (Total: ${rc.charge} Cargas)`, 'rarity-legendary');
     }

@@ -5,6 +5,7 @@ import { addToInventory, removeFromInventoryByItemId, getInventoryCount } from '
 import { LifeActivityCore, LIFE_ACTIVITY_LEVEL_TABLE } from './lifeActivities/LifeActivityCore.js';
 import { RewardEngine } from './lifeActivities/RewardEngine.js';
 import { resolveCanonicalResourceId } from './lifeActivities/ResourceDictionary.js';
+import { LIFE_ACTIVITY_OFFLINE_BALANCE } from '../data/economy/lifeActivityOfflineBalance.js';
 
 function grantOrQueueFishReward(state, fish, callbacks = {}) {
   if (addToInventory(state, fish.id, 1, fish.rarity, false, callbacks, true)) return true;
@@ -730,7 +731,7 @@ export const FishingService = {
     if (!fState.autoFishing) return { totalCaught: 0, xpGained: 0 };
     if (fState.pendingFishRewards.length) return { totalCaught: 0, xpGained: 0, pendingRewards: fState.pendingFishRewards.length };
 
-    const effectiveMinutes = Math.min(minutesOffline, FISHING_BALANCE.OFFLINE_MAX_MINUTES);
+    const effectiveMinutes = Math.min(minutesOffline, LIFE_ACTIVITY_OFFLINE_BALANCE.MAX_MINUTES);
     if (effectiveMinutes <= 0) return { totalCaught: 0, xpGained: 0 };
 
     const zoneId = fState.activeZone || 'zone_talking_island';
@@ -754,11 +755,10 @@ export const FishingService = {
     // Calcula quantos arremessos foram possíveis
     const rodBonus = rod.catchBonus - 1.0;
     // A eficiência reduz a quantidade de arremessos, não a chance de cada arremesso.
-    // Assim o caminho offline entrega aproximadamente 25% do volume do AFK online.
-    const maxCatchesByTime = Math.floor((effectiveMinutes * 60 * 1000) / FISHING_BALANCE.AUTO_FISH_INTERVAL_MS * FISHING_BALANCE.OFFLINE_EFFICIENCY);
-    const currentVigor = LifeActivityCore.getVigorState(state).current;
-    const maxByVigor = Math.floor(currentVigor / LifeActivityCore.VIGOR_COST_PER_ACTION);
-    const castsToSimulate = Math.min(totalAvailableBait, maxCatchesByTime, availableDurability, maxByVigor);
+    // O modo offline entrega 30% dos ciclos ativos, sujeito a iscas e durabilidade.
+    const offlineEfficiency = LIFE_ACTIVITY_OFFLINE_BALANCE.EFFICIENCY;
+    const maxCatchesByTime = Math.floor((effectiveMinutes * 60 * 1000) / FISHING_BALANCE.AUTO_FISH_INTERVAL_MS * offlineEfficiency);
+    const castsToSimulate = Math.min(totalAvailableBait, maxCatchesByTime, availableDurability);
 
     let caughtCount = 0;
     let totalXp = 0;
@@ -770,7 +770,6 @@ export const FishingService = {
         fState.autoFishing = false;
         break;
       }
-      LifeActivityCore.consumeVigor(state, LifeActivityCore.VIGOR_COST_PER_ACTION);
       fState.baitInventory[baitKey]--;
 
       const bait = BAIT_CATALOG[baitKey];
@@ -812,6 +811,7 @@ export const FishingService = {
 
     return {
       totalCaught: caughtCount,
+      attemptedCasts: castsToSimulate,
       xpGained: totalXp
     };
   },

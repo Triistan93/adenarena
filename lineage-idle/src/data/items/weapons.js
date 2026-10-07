@@ -1,4 +1,6 @@
-export const WEAPONS = {
+import { annotateEquipmentCatalogItem } from './equipment_catalog.js';
+
+const RAW_WEAPONS = {
   "weapon_ertheia_no_grade_fist": {"id":"weapon_ertheia_no_grade_fist","name":"Ertheia No-Grade Fist Weapon","slot":"weapon","tier":1,"atk":30,"matk":0,"crit":8,"eva":0,"req":{"level":1},"price":1400,"icon":"nograde/weapons/weapon_iron_hammer.png","desc":"No-Grade fist weapon for Ertheia Fighter skills."},
   "weapon_composition_bow": {"id":"weapon_composition_bow","name":"Composition Bow","slot":"weapon","tier":1,"atk":34,"matk":0,"crit":12,"eva":0,"req":{"level":1},"price":1400,"icon":"nograde/weapons/weapon_composition_bow.png","desc":"Composition Bow (No Grade)."},
   "composition_bow": {"id":"weapon_composition_bow","name":"Composition Bow","slot":"weapon","tier":1,"atk":34,"matk":0,"crit":12,"eva":0,"req":{"level":1},"price":1400,"icon":"nograde/weapons/weapon_composition_bow.png","desc":"Composition Bow (No Grade)."},
@@ -240,3 +242,7 @@ export const WEAPONS = {
   "weapon_infinity_duals": {"id":"weapon_infinity_duals","name":"Infinity Dual Swords 👑","slot":"weapon","tier":6,"rarity":"legendary","atk":340,"matk":190,"crit":16,"atkSpeed":20,"hp":550,"req":{"level":76,"isHero":true},"price":1000000,"icon":"gradespecial/weapons/juriel_dual_sword.png","desc":"Lâminas Duplas do Herói: +340 P.Atk, +20% Velocidade de Ataque (Atk Spd), +16% Crit e +550 HP."},
   "infinity_duals": {"id":"weapon_infinity_duals","name":"Infinity Dual Swords 👑","slot":"weapon","tier":6,"rarity":"legendary","atk":340,"matk":190,"crit":16,"atkSpeed":20,"hp":550,"req":{"level":76,"isHero":true},"price":1000000,"icon":"gradespecial/weapons/juriel_dual_sword.png","desc":"Lâminas Duplas do Herói: +340 P.Atk, +20% Velocidade de Ataque (Atk Spd), +16% Crit e +550 HP."}
 };
+
+export const WEAPONS = Object.fromEntries(
+  Object.entries(RAW_WEAPONS).map(([key, item]) => [key, annotateEquipmentCatalogItem(item)])
+);

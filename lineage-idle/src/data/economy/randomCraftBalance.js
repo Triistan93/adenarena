@@ -5,6 +5,8 @@
  *
  * Regras Canônicas:
  * 1. 100 Pontos = 1 Carga de Random Craft (state.randomCraft.charge).
+ *    Abates concedem 1 ponto por monstro comum e 5 por chefe; reciclagem e
+ *    outras atividades completam a progressão pelo mesmo conversor.
  * 2. Geração independente de 5 slots:
  *    - 99% de chance por slot de gerar item de Grau inferior a S (Consumíveis, B/A Grade).
  *    - 1% de chance por slot de gerar item de Grau S ou superior (Armas S, Armaduras S, Joias de Boss).

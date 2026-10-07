@@ -7,6 +7,7 @@ import { ALL_ITEMS } from '../lineage-idle/src/data/items/index.js';
 import { resolveCanonicalResourceId } from '../lineage-idle/src/services/lifeActivities/ResourceDictionary.js';
 import { renderHuntingUI } from '../lineage-idle/src/ui/HuntingUI.js';
 import { setRoot } from '../lineage-idle/src/core/DomHelpers.js';
+import { LifeActivityCore } from '../lineage-idle/src/services/lifeActivities/LifeActivityCore.js';
 
 function createHuntingState() {
   return {
@@ -178,6 +179,22 @@ test('offline hunting grants the final durability-limited result and stops AFK',
   assert.equal(state.hunting.knifeDurability.knife_none, 0);
   assert.equal(state.lifeActivities.hunting.toolDurability, 0);
   assert.equal(state.hunting.autoHunting, false);
+});
+
+test('offline hunting grants 30% of active cycles and leaves shared vigor unchanged', () => {
+  const state = createHuntingState();
+  state.lifeActivities.vigor = { current: 100, max: 100, lastRegen: Date.now() };
+  state.hunting.autoHunting = true;
+  state.hunting.knife = 'knife_c';
+  state.hunting.knifeDurability = { knife_c: 250 };
+  state.hunting.activeZone = 'zone_talking_forest';
+  state.lifeActivities.hunting = { level: 10, xp: 0, progressionVersion: 1, toolDurability: 250, maxDurability: 250 };
+
+  const result = HuntingService.processOfflineHunting(state, 480);
+
+  assert.equal(result.attemptedHunts, 250);
+  assert.equal(state.hunting.knifeDurability.knife_c, 0);
+  assert.equal(LifeActivityCore.getVigorState(state).current, 100);
 });
 
 test('offline hunting preserves its exact report when full inventory blocks rewards', () => {

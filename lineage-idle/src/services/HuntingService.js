@@ -12,6 +12,7 @@ import { LifeActivityCore } from './lifeActivities/LifeActivityCore.js';
 import { RewardEngine } from './lifeActivities/RewardEngine.js';
 import { hasRoomForStackRewards } from './lifeActivities/RewardCapacity.js';
 import { resolveCanonicalResourceId } from './lifeActivities/ResourceDictionary.js';
+import { getOfflineActionBudget, LIFE_ACTIVITY_OFFLINE_BALANCE } from '../data/economy/lifeActivityOfflineBalance.js';
 
 export const HuntingService = {
   getHuntingState(state) {
@@ -755,7 +756,7 @@ export const HuntingService = {
     }
     if (hState.awaitingButchering && !hState.pendingOfflineHunting) return null;
 
-    const clampedMinutes = Math.min(480, Math.max(0, minutesOffline));
+    const clampedMinutes = Math.min(LIFE_ACTIVITY_OFFLINE_BALANCE.MAX_MINUTES, Math.max(0, minutesOffline));
     if (!hState.pendingOfflineHunting) {
       if (clampedMinutes < 2) return null;
       const zoneId = hState.activeZone || 'zone_talking_forest';
@@ -775,12 +776,13 @@ export const HuntingService = {
       let timeSpent = 0;
       let actualHunts = 0;
       let criticalHunts = 0;
-      const timeBudget = clampedMinutes * 60 * 1000 * 0.25;
+      const maxOfflineActions = getOfflineActionBudget(clampedMinutes, zone.baseTrackTime || 3000);
+      const timeBudget = clampedMinutes * 60 * 1000;
       const preyCounts = {};
       let totalXp = 0;
       const matsGained = {};
 
-      while (durabilitySpent < availableDur) {
+      while (durabilitySpent < availableDur && durabilitySpent < maxOfflineActions) {
         const lureId = hState.activeLure;
         const lureStock = lureId ? (hState.lureInventory[lureId] || 0) : 0;
         if (requiredLure && (lureId !== requiredLure || lureStock <= 0)) break;
@@ -793,8 +795,7 @@ export const HuntingService = {
         const duration = Math.max(1200, Math.floor(
           ((prey.baseTrackTime || zone.baseTrackTime || 3000) * (tactic.timeMult || 1)) / (lure?.speedBoost || 1)
         ));
-        if (timeSpent + duration > timeBudget) break;
-
+        if (durabilitySpent >= maxOfflineActions || timeSpent + duration > timeBudget) break;
         if (usableLureId) hState.lureInventory[usableLureId] = Math.max(0, lureStock - 1);
         timeSpent += duration;
         durabilitySpent++;
@@ -898,7 +899,7 @@ export const HuntingService = {
     if (callbacks.updateAllUI) callbacks.updateAllUI();
     if (callbacks.save) callbacks.save();
 
-    return { actualHunts, matsGained, totalXp };
+    return { actualHunts, attemptedHunts: pending.attemptedHunts || 0, matsGained, totalXp };
   },
 
   exchangePelts(state, preyId, qty = 1, callbacks = {}) {
