@@ -4953,7 +4953,7 @@ Esta sessão retomou o balanceamento das profissões e a organização dos equip
 - Criado `lineage-idle/src/data/items/equipment_catalog.js` para classificar equipamentos num campo `catalogType`, preservando `weaponType`, que continua atendendo as regras de combate e maestria.
 - O catálogo central agora reúne itens de todas as fontes e grades e remove aliases duplicados por ID canônico. A consulta atual retorna **192 armas, 16 escudos e 5 sigils (213 equipamentos)**.
 - Os grupos pedidos foram cobertos: Sword, Magic Sword, Dagger, Blunt, Magic Blunt, Rapier, Two Handed Spear, Two Handed Blunt, Two Handed Hammer, Two Handed Staff, Two Handed Sword, Staff, Bow, Fist, Shield e Sigil. O catálogo também separa Ancient Sword, Dual Sword e Pistol/Shooter. Cada grupo pedido contém pelo menos três itens; há um grupo adicional `Other Weapon` com Anais First, cuja classificação específica ainda merece conferência manual.
-- A listagem apresentada durante a sessão foi montada de `ALL_ITEMS`, deduplicada por ID e organizada por nome, tipo e grade. Inclui graus No-Grade até S e categorias especiais Frost Lord e Hero; armas de herança foram identificadas como evolutivas, de No-Grade até C-Grade.
+- A listagem integral foi salva em [`docs/CATALOGO_ARMAS_ATUAL.md`](docs/CATALOGO_ARMAS_ATUAL.md), montada de `ALL_ITEMS`, deduplicada por ID e organizada por nome, tipo e grade. Inclui graus No-Grade até S e categorias especiais Frost Lord e Hero; armas de herança foram identificadas como evolutivas, de No-Grade até C-Grade.
 - A grafia incorreta `Lether Boots` foi corrigida para `Leather Boots` nas entradas/descrições correspondentes do catálogo de armaduras.
 
 ### Ideias e estado para continuar
