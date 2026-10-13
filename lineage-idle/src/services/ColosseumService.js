@@ -12,16 +12,63 @@ export class ColosseumService {
         badges: 0,
         duelWins: 0,
         duelLosses: 0,
+        duelRating: 1000,
       survivalLosses: 0,
         highestWave: 0,
         activeDuel: null,
-        activeSurvival: null
+        activeSurvival: null,
+        matchmakingOpponents: [],
+        pvpLeaderboard: []
       };
     }
-    for (const key of ['badges', 'duelWins', 'duelLosses', 'survivalLosses', 'highestWave']) {
+    for (const key of ['badges', 'duelWins', 'duelLosses', 'duelRating', 'survivalLosses', 'highestWave']) {
       if (typeof state.colosseum[key] !== 'number' || !Number.isFinite(state.colosseum[key])) state.colosseum[key] = 0;
     }
+    if (state.colosseum.duelRating < 1000 && state.colosseum.duelWins === 0 && state.colosseum.duelLosses === 0) state.colosseum.duelRating = 1000;
+    if (!Array.isArray(state.colosseum.matchmakingOpponents)) state.colosseum.matchmakingOpponents = [];
+    if (!Array.isArray(state.colosseum.pvpLeaderboard)) state.colosseum.pvpLeaderboard = [];
     return state.colosseum;
+  }
+
+  /** Starts an asynchronous ranked duel against a real player's published combat snapshot. */
+  static startRankedDuel(state, opponent, hooks = {}) {
+    const colState = this.ensureState(state);
+    if (colState.activeDuel || colState.activeSurvival) {
+      return { success: false, message: 'Conclua o combate atual antes de entrar na arena.' };
+    }
+    const playerId = typeof window !== 'undefined' ? window.FirebaseBridge?.getCurrentUserId?.() : null;
+    const opponentId = opponent?.userId || opponent?.id;
+    if (!opponentId || (playerId && opponentId === playerId)) {
+      return { success: false, message: 'Selecione um jogador real válido para desafiar.' };
+    }
+    const snap = opponent.statsSnapshot || {};
+    const pStats = state.stats || {};
+    const maxHp = Math.max(1, Number(pStats.maxHp || state.maxHp || state.hp) || 1000);
+    const opponentMaxHp = Math.max(1, Number(snap.hp) || 1000);
+    const playerHp = Math.min(maxHp, Math.max(1, Number(state.hp) || maxHp));
+    if (Number(state.hp) <= 0) return { success: false, message: 'Seu personagem precisa estar vivo para entrar na arena.' };
+
+    colState.activeDuel = {
+      ranked: true,
+      opponentId,
+      opponentName: opponent.charName || opponent.name || 'Jogador',
+      opponentTitle: `Nv. ${Number(opponent.level) || 1} ${opponent.className || 'Aventureiro'}`,
+      opponentIcon: '⚔️',
+      opponentRating: Number(opponent.duelRating) || 1000,
+      opponentCombatPower: Number(opponent.combatPower) || 0,
+      hp: opponentMaxHp,
+      maxHp: opponentMaxHp,
+      pAtk: Math.max(1, Number(snap.pAtk) || 100),
+      pDef: Math.max(0, Number(snap.pDef) || 80),
+      playerHp,
+      playerMaxHp: maxHp,
+      playerPAtk: Math.max(1, Number(pStats.atk || pStats.pAtk) || 100),
+      playerPDef: Math.max(0, Number(pStats.def || pStats.pDef) || 80),
+      turn: 1
+    };
+    hooks.log?.(`⚔️ Você desafiou ${colState.activeDuel.opponentName} na Arena PvP.`, 'warning');
+    hooks.onUpdate?.();
+    return { success: true, duel: colState.activeDuel };
   }
 
   /**
@@ -98,8 +145,8 @@ export class ColosseumService {
     if (!duel) return { success: false, message: 'Nenhum duelo ativo.' };
 
     const pStats = state.stats || { atk: 2500, def: 2000 };
-    const pAtkVal = typeof pStats.atk === 'number' ? pStats.atk : 2000;
-    const pDefVal = typeof pStats.def === 'number' ? pStats.def : 1800;
+    const pAtkVal = duel.ranked ? duel.playerPAtk : (typeof pStats.atk === 'number' ? pStats.atk : 2000);
+    const pDefVal = duel.ranked ? duel.playerPDef : (typeof pStats.def === 'number' ? pStats.def : 1800);
     const pDmg = Math.max(150, Math.floor(pAtkVal * 1.6 - duel.pDef * 0.4));
     duel.hp = Math.max(0, duel.hp - pDmg);
 
@@ -107,35 +154,47 @@ export class ColosseumService {
 
     if (duel.hp <= 0) {
       // Vitória!
-      const winGold = duel.bet * 2;
-      state.gold = (state.gold || 0) + winGold;
-      colState.badges += 10;
+      const winGold = duel.ranked ? 0 : duel.bet * 2;
+      if (!duel.ranked) colState.badges += 10;
+      const ratingChange = duel.ranked ? this._updateDuelRating(colState, true) : 0;
+      if (!duel.ranked) state.gold = (state.gold || 0) + winGold;
       colState.duelWins++;
 
-      hooks.log?.(`🏆 VITÓRIA NO DUELO! Você derrotou **${duel.opponentName}**! Prêmio: +${winGold.toLocaleString()}g e +10 Colosseum Badges!`, 'victory');
+      hooks.log?.(duel.ranked
+        ? `🏆 Vitória na Arena contra ${duel.opponentName}! Rating ${ratingChange >= 0 ? '+' : ''}${ratingChange}.`
+        : `🏆 VITÓRIA NO DUELO! Você derrotou **${duel.opponentName}**! Prêmio: +${winGold.toLocaleString()}g e +10 Colosseum Badges!`, 'victory');
       colState.activeDuel = null;
       hooks.onUpdate?.();
-      return { success: true, isVictory: true, goldWon: winGold };
+      return { success: true, isVictory: true, goldWon: winGold, ratingChange, ranked: Boolean(duel.ranked) };
     }
 
     // Contra-ataque do oponente
     const oppDmg = Math.max(100, Math.floor(duel.pAtk * 1.4 - pDefVal * 0.3));
     const currentPlayerHp = Number.isFinite(Number(duel.playerHp)) ? Number(duel.playerHp) : (Number(state.hp) || duel.playerMaxHp || 5000);
     duel.playerHp = Math.max(0, currentPlayerHp - oppDmg);
-    state.hp = duel.playerHp;
+    if (!duel.ranked) state.hp = duel.playerHp;
     hooks.log?.(`💥 **${duel.opponentName}** desferiu uma combinação de golpes causando **${oppDmg.toLocaleString()}** de dano no seu herói!`, 'danger');
 
     if (duel.playerHp <= 0) {
       colState.duelLosses++;
+      const ratingChange = duel.ranked ? this._updateDuelRating(colState, false) : 0;
       colState.activeDuel = null;
-      hooks.log?.(`☠️ Você perdeu o duelo contra **${duel.opponentName}**. A aposta de ${duel.bet.toLocaleString()}g foi perdida.`, 'danger');
+      hooks.log?.(duel.ranked
+        ? `☠️ Derrota na Arena contra ${duel.opponentName}. Rating ${ratingChange}.`
+        : `☠️ Você perdeu o duelo contra **${duel.opponentName}**. A aposta de ${duel.bet.toLocaleString()}g foi perdida.`, 'danger');
       hooks.onUpdate?.();
-      return { success: true, isVictory: false, isDefeat: true, goldLost: duel.bet };
+      return { success: true, isVictory: false, isDefeat: true, goldLost: duel.ranked ? 0 : duel.bet, ratingChange, ranked: Boolean(duel.ranked) };
     }
 
     duel.turn++;
     hooks.onUpdate?.();
     return { success: true, isVictory: false, duel };
+  }
+
+  static _updateDuelRating(colState, won) {
+    const change = won ? 25 : -15;
+    colState.duelRating = Math.max(0, (Number(colState.duelRating) || 1000) + change);
+    return change;
   }
 
   /**

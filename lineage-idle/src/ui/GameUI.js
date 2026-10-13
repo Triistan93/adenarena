@@ -12442,135 +12442,84 @@ export function renderColosseumTab(container, state) {
   const colState = ColosseumService.ensureState(state);
   const activeDuel = colState.activeDuel;
   const activeSurvival = colState.activeSurvival;
-  const hasActiveChallenge = Boolean(activeDuel || activeSurvival);
+  const busy = Boolean(activeDuel || activeSurvival);
+  const opponents = colState.matchmakingOpponents || [];
+  const leaders = (colState.pvpLeaderboard || []).slice().sort((a, b) =>
+    (Number(b.duelRating) || 1000) - (Number(a.duelRating) || 1000) || (Number(b.duelWins) || 0) - (Number(a.duelWins) || 0)
+  );
+  const winRate = (Number(colState.duelWins) + Number(colState.duelLosses))
+    ? Math.round((Number(colState.duelWins) / (Number(colState.duelWins) + Number(colState.duelLosses))) * 100) : 0;
+  const hpBar = (current, max, color) => `<div style="height:10px;background:#090a0e;border:1px solid #3e4148;border-radius:9px;overflow:hidden;margin-top:8px"><div style="height:100%;width:${Math.max(0, Math.min(100, (current / Math.max(1, max)) * 100))}%;background:${color};transition:width .25s"></div></div><small style="color:#b7bbc4">${Number(current).toLocaleString()} / ${Number(max).toLocaleString()} HP</small>`;
+  const playerName = state.heroName || state.name || state.charName || 'Seu personagem';
 
   container.innerHTML = `
-    <div class="colosseum-container" style="display:flex; flex-direction:column; gap:14px;">
-      <!-- Header Banner -->
-      <div class="colosseum-arena-hero" style="background:linear-gradient(135deg, rgba(30,15,10,0.95), rgba(15,8,5,0.98)); border:1px solid rgba(239,68,68,0.4); border-radius:10px; padding:16px; box-shadow:0 6px 20px rgba(0,0,0,0.6);">
-        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
-          <div>
-            <h2 style="margin:0; font-family:'Cinzel',serif; color:#fca5a5; font-size:20px; display:flex; align-items:center; gap:8px;">
-              🎭 Coliseu & Duelos Livres de Aden
-            </h2>
-            <div style="font-size:12px; color:#d1d5db; margin-top:4px;">
-              Vitórias em Duelo: <strong>${colState.duelWins || 0}</strong> | Onda Máxima no Coliseu: <strong>${colState.highestWave || 0}/10</strong> | Badges do Coliseu: <strong style="color:#fde047;">${colState.badges || 0} 🎖️</strong>
-            </div>
+    <section class="colosseum-container" style="display:flex;flex-direction:column;gap:18px;color:#e9e2d4">
+      <header style="position:relative;overflow:hidden;border:1px solid #8f6c31;border-radius:14px;padding:24px;background:radial-gradient(ellipse at 78% 20%,rgba(143,95,31,.3),transparent 38%),linear-gradient(115deg,#19150f,#101116 68%,#17120d);box-shadow:0 12px 32px #0008">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap">
+          <div style="max-width:620px">
+            <div style="font-size:10px;letter-spacing:.24em;color:#d9b76b;font-weight:800">ARENA COMPETITIVA · TEMPORADA 01</div>
+            <h2 style="font:700 clamp(24px,3vw,38px) 'Cinzel',serif;color:#f4e2b9;margin:8px 0">Coliseu de Aden</h2>
+            <p style="margin:0;color:#aeb0b7;font-size:13px;line-height:1.6">Encontre combatentes reais da comunidade, desafie um perfil de força semelhante e suba no ranking PvP.</p>
+          </div>
+          <div style="min-width:180px;text-align:center;padding:14px 20px;border:1px solid #806332;border-radius:12px;background:#0a0b10b8">
+            <div style="font-size:10px;letter-spacing:.16em;color:#cbb16f">RATING ARENA</div>
+            <strong style="display:block;font:700 32px 'Cinzel',serif;color:#f0ce7a">${Number(colState.duelRating || 1000).toLocaleString()}</strong>
+            <small style="color:#9599a2">${Number(colState.duelWins) || 0}V · ${Number(colState.duelLosses) || 0}D</small>
           </div>
         </div>
-      </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:18px">
+          <span style="padding:6px 10px;border-radius:20px;background:#ffffff0b;border:1px solid #ffffff16;font-size:11px">${winRate}% de vitórias</span>
+          <span style="padding:6px 10px;border-radius:20px;background:#ffffff0b;border:1px solid #ffffff16;font-size:11px">${Number(colState.badges) || 0} Insígnias</span>
+          <span style="padding:6px 10px;border-radius:20px;background:#ffffff0b;border:1px solid #ffffff16;font-size:11px">Recorde PvE: ${Number(colState.highestWave) || 0}/10 ondas</span>
+        </div>
+      </header>
 
-      <!-- Duelo Ativo -->
       ${activeDuel ? `
-        <div class="colosseum-active-challenge colosseum-active-challenge--duel" style="background:linear-gradient(135deg, rgba(40,15,15,0.95), rgba(20,5,5,0.98)); border:2px solid #ef4444; border-radius:10px; padding:16px;">
-          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
-            <div>
-              <h3 style="margin:0; color:#fca5a5; font-family:'Cinzel',serif; font-size:18px;">⚔️ Duelo 1v1: ${escapeHTML(activeDuel.opponentName)}</h3>
-              <div style="font-size:12px; color:#f87171;">${escapeHTML(activeDuel.opponentTitle)} | Aposta: ${(activeDuel.bet * 2).toLocaleString()}g em jogo!</div>
-              <div style="font-size:12px; color:#cbd5e1; margin-top:4px;">Seu HP: ${Number(activeDuel.playerHp || 0).toLocaleString()} / ${Number(activeDuel.playerMaxHp || 0).toLocaleString()}</div>
-            </div>
-            <button
-              onclick="window.executeDuelTurnAction()"
-              style="padding:10px 24px; font-size:13px; font-weight:bold; background:#dc2626; border:1px solid #ef4444; color:#fff; border-radius:8px; cursor:pointer;"
-            >
-              ⚔️ Desferir Golpe de Duelo!
-            </button>
+        <section style="border:1px solid #b68b3e;border-radius:14px;background:linear-gradient(140deg,#17151a,#0c0e13);padding:18px;box-shadow:0 8px 24px #0007">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+            <div><div style="font-size:10px;letter-spacing:.18em;color:#d7b86e">${activeDuel.ranked ? 'DUELO PvP · SNAPSHOT DO JOGADOR' : 'DUELO'}</div><h3 style="margin:5px 0;font:700 20px 'Cinzel',serif;color:#f5e6c5">${escapeHTML(playerName)} <span style="color:#d2a84f">VS</span> ${escapeHTML(activeDuel.opponentName)}</h3><div style="font-size:12px;color:#a7aab4">${escapeHTML(activeDuel.opponentTitle)} ${activeDuel.ranked ? `· Rating ${Number(activeDuel.opponentRating).toLocaleString()} · CP ${Number(activeDuel.opponentCombatPower).toLocaleString()}` : ''}</div></div>
+            <button onclick="window.executeDuelTurnAction()" style="padding:10px 18px;border:1px solid #d6b35e;border-radius:8px;background:linear-gradient(#bf913d,#8e6424);color:#160f05;font-weight:800;cursor:pointer">⚔️ Atacar · Turno ${Number(activeDuel.turn) || 1}</button>
           </div>
-          <div style="margin-top:12px; background:rgba(0,0,0,0.6); border:1px solid #ef4444; border-radius:8px; height:18px; position:relative; overflow:hidden;">
-            <div style="width:${Math.max(0, Math.min(100, (activeDuel.hp / activeDuel.maxHp) * 100))}%; height:100%; background:linear-gradient(90deg, #dc2626, #f87171);"></div>
-            <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:bold; color:#fff;">
-              ${activeDuel.hp.toLocaleString()} / ${activeDuel.maxHp.toLocaleString()} HP
-            </div>
+          <div style="display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:14px;margin-top:16px">
+            <div><b>${escapeHTML(playerName)}</b>${hpBar(activeDuel.playerHp, activeDuel.playerMaxHp, 'linear-gradient(90deg,#286c53,#53bb83)')}</div>
+            <strong style="font:700 18px 'Cinzel',serif;color:#bb9650">VS</strong>
+            <div style="text-align:right"><b>${escapeHTML(activeDuel.opponentName)}</b>${hpBar(activeDuel.hp, activeDuel.maxHp, 'linear-gradient(90deg,#862d32,#db5556)')}</div>
           </div>
-        </div>
+          ${activeDuel.ranked ? '<p style="font-size:11px;color:#858a94;margin:14px 0 0">Combate assíncrono: os atributos do adversário vêm do perfil público salvo. Seu HP de PvE não é consumido.</p>' : ''}
+        </section>
       ` : ''}
 
-      <!-- Sobrevivência Ativa -->
-      ${activeSurvival ? `
-        <div class="colosseum-active-challenge colosseum-active-challenge--survival" style="background:linear-gradient(135deg, rgba(40,20,5,0.95), rgba(20,10,2,0.98)); border:2px solid #f59e0b; border-radius:10px; padding:16px;">
-          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
-            <div>
-              <h3 style="margin:0; color:#fde047; font-family:'Cinzel',serif; font-size:18px;">🔥 Onda ${activeSurvival.waveIndex + 1}/10: ${activeSurvival.waveData.name}</h3>
-              <div style="font-size:12px; color:#fbbf24;">Badges Acumulados no Desafio: +${activeSurvival.totalBadgesAccumulated} 🎖️</div>
-            <div style="font-size:12px; color:#cbd5e1; margin-top:4px;">Seu HP: ${Number(activeSurvival.playerHp || 0).toLocaleString()} / ${Number(activeSurvival.playerMaxHp || 0).toLocaleString()}</div>
-            </div>
-            <button
-              onclick="window.executeSurvivalTurnAction()"
-              style="padding:10px 24px; font-size:13px; font-weight:bold; background:#d97706; border:1px solid #f59e0b; color:#fff; border-radius:8px; cursor:pointer;"
-            >
-              ⚔️ Atacar Onda do Coliseu!
-            </button>
-          </div>
-          <div style="margin-top:12px; background:rgba(0,0,0,0.6); border:1px solid #f59e0b; border-radius:8px; height:18px; position:relative; overflow:hidden;">
-            <div style="width:${Math.max(0, Math.min(100, (activeSurvival.currentHp / activeSurvival.maxHp) * 100))}%; height:100%; background:linear-gradient(90deg, #d97706, #fde047);"></div>
-            <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:bold; color:#fff;">
-              ${activeSurvival.currentHp.toLocaleString()} / ${activeSurvival.maxHp.toLocaleString()} HP
-            </div>
-          </div>
-        </div>
-      ` : ''}
+      ${activeSurvival ? `<section style="border:1px solid #a87933;border-radius:12px;background:#15110c;padding:16px"><b>Provação PvE · Onda ${activeSurvival.waveIndex + 1}/10: ${escapeHTML(activeSurvival.waveData.name)}</b><div style="margin-top:10px">${hpBar(activeSurvival.currentHp, activeSurvival.maxHp, 'linear-gradient(90deg,#9f5918,#f0bd4f)')}</div><button onclick="window.executeSurvivalTurnAction()" style="margin-top:10px;padding:8px 14px;border-radius:7px;background:#8f5d20;color:#fff;border:1px solid #c18b3f;cursor:pointer">Atacar onda</button></section>` : ''}
 
-      <!-- Modos de Jogo -->
-      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:14px;">
-        <!-- Duelos com Apostas -->
-        <div class="colosseum-mode-card colosseum-mode-card--duel" style="background:rgba(0,0,0,0.4); border:1px solid rgba(239,68,68,0.3); border-radius:8px; padding:14px;">
-          <h3 style="margin:0 0 10px 0; color:#fca5a5; font-family:'Cinzel',serif; font-size:15px;">⚔️ Duelos 1v1 com Apostas</h3>
-          <div style="display:flex; flex-direction:column; gap:10px;">
-            ${DUEL_BET_TIERS.map(tier => `
-              <div style="background:rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:12px; display:flex; justify-content:space-between; align-items:center;">
-                <div>
-                  <div style="font-weight:bold; color:#fee2e2; font-size:13px;">${tier.name}</div>
-                  <div style="font-size:11px; color:#fca5a5;">Aposta: ${tier.label} (Prêmio 2x: ${(tier.bet * 2).toLocaleString()}g)</div>
-                </div>
-                <button
-                  onclick="window.startColosseumDuelAction('${tier.id}')"
-                  ${hasActiveChallenge ? 'disabled title="Conclua o desafio atual antes de iniciar outro."' : ''}
-                  style="padding:6px 14px; font-size:11px; font-weight:bold; background:#b91c1c; border:1px solid #ef4444; color:#fff; border-radius:6px; cursor:pointer;"
-                >
-                  Desafiar
-                </button>
-              </div>
-            `).join('')}
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:16px;align-items:start">
+        <section style="border:1px solid #34343a;border-radius:13px;background:linear-gradient(145deg,#17181e,#101116);padding:16px">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap">
+            <div><div style="font-size:10px;letter-spacing:.18em;color:#d1ae64">PROCURAR OPONENTES</div><h3 style="margin:4px 0;font:700 19px 'Cinzel',serif;color:#eee0c2">Desafiantes da comunidade</h3></div>
+            <button onclick="window.searchColosseumOpponentsAction()" ${busy ? 'disabled' : ''} style="padding:9px 13px;border:1px solid #a57b37;border-radius:8px;background:#292217;color:#f1d28a;font-weight:700;cursor:pointer">${colState.matchmakingLoading ? 'Buscando…' : '⟳ Buscar jogadores'}</button>
           </div>
-        </div>
+          <p style="font-size:11px;color:#8e929d;margin:0 0 12px">Perfis reais encontrados por Combat Power. Os duelos usam o snapshot público mais recente do personagem.</p>
+          ${opponents.length ? `<div style="display:flex;flex-direction:column;gap:8px">${opponents.map((opponent, index) => `
+            <article style="display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:10px;padding:11px 12px;border:1px solid #2d3037;border-radius:10px;background:linear-gradient(90deg,#1a1c22,#111216)">
+              <div style="min-width:0"><div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap"><strong style="color:#eadbb9">${escapeHTML(opponent.charName || 'Aventureiro')}</strong><span style="font-size:10px;color:#c0a363;border:1px solid #54472d;border-radius:12px;padding:2px 7px">${escapeHTML(opponent.className || 'Aventureiro')}</span></div><div style="font-size:11px;color:#8f949f;margin-top:4px">Nv. ${Number(opponent.level) || 1} · CP ${Number(opponent.combatPower || 0).toLocaleString()} · Rating ${Number(opponent.duelRating || 1000).toLocaleString()} · ${Number(opponent.duelWins) || 0}V/${Number(opponent.duelLosses) || 0}D</div></div>
+              <button onclick="window.startColosseumRankedDuelAction(${index})" ${busy ? 'disabled' : ''} style="padding:8px 12px;border:1px solid #b38d4c;border-radius:7px;background:#352a18;color:#f2d486;font-weight:800;cursor:pointer">Desafiar</button>
+            </article>`).join('')}</div>` : `<div style="padding:28px 14px;text-align:center;border:1px dashed #393a40;border-radius:10px;color:#9296a0"><div style="font-size:26px;margin-bottom:5px">⚔</div><b style="color:#d7c7a7">Nenhum desafiante carregado</b><div style="font-size:11px;margin-top:4px">Busque jogadores para montar uma luta equilibrada.</div></div>`}
+        </section>
 
-        <!-- Desafio de Sobrevivência & Loja de Badges -->
-        <div class="colosseum-mode-card colosseum-mode-card--survival" style="background:rgba(0,0,0,0.4); border:1px solid rgba(245,158,11,0.3); border-radius:8px; padding:14px; display:flex; flex-direction:column; justify-content:space-between;">
-          <div>
-            <h3 style="margin:0 0 10px 0; color:#fde047; font-family:'Cinzel',serif; font-size:15px;">🏆 Desafio das 10 Ondas</h3>
-            <p style="font-size:12px; color:#9ca3af; margin:0 0 12px 0;">Enfrente 10 ondas consecutivas de gladiadores e chefes do coliseu sem descanso para conquistar glória e Badges!</p>
-            <button
-              onclick="window.startColosseumSurvivalAction()"
-              ${hasActiveChallenge ? 'disabled title="Conclua o desafio atual antes de iniciar outro."' : ''}
-              style="width:100%; padding:10px; font-size:13px; font-weight:bold; background:#d97706; border:1px solid #f59e0b; color:#fff; border-radius:8px; cursor:pointer;"
-            >
-              🔥 Iniciar Desafio das 10 Ondas
-            </button>
-          </div>
-
-          <!-- Loja de Badges do Coliseu -->
-          <div style="margin-top:16px; border-top:1px solid rgba(245,158,11,0.2); padding-top:12px;">
-            <h4 style="margin:0 0 8px 0; color:#fde047; font-size:13px;">Loja de Badges do Coliseu</h4>
-            <div style="display:flex; flex-direction:column; gap:6px; max-height:160px; overflow-y:auto;">
-              ${COLOSSEUM_SHOP_CATALOG.map(it => `
-                <div style="background:rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.08); border-radius:6px; padding:6px 10px; display:flex; justify-content:space-between; align-items:center;">
-                  <div>
-                    <div style="font-weight:bold; color:#fef3c7; font-size:11px;">${it.name}</div>
-                    <div style="font-size:10px; color:#f59e0b;">${it.costBadges} Badges</div>
-                  </div>
-                  <button
-                    onclick="window.buyColosseumShopItemAction('${it.id}')"
-                    style="padding:4px 8px; font-size:10px; font-weight:bold; background:#b45309; border:1px solid #f59e0b; color:#fff; border-radius:4px; cursor:pointer;"
-                  >
-                    Comprar
-                  </button>
-                </div>
-              `).join('')}
-            </div>
-          </div>
-        </div>
+        <aside style="border:1px solid #66532e;border-radius:13px;background:linear-gradient(155deg,#1a1711,#101116 68%);padding:16px">
+          <div style="font-size:10px;letter-spacing:.18em;color:#d4b467">HALL DA FAMA</div><h3 style="margin:4px 0 12px;font:700 19px 'Cinzel',serif;color:#eee0c2">Top PvP</h3>
+          ${leaders.length ? `<div style="display:flex;flex-direction:column;gap:8px">${leaders.slice(0,5).map((entry, index) => `<div style="display:grid;grid-template-columns:28px 1fr auto;gap:8px;align-items:center;padding:9px 8px;border-bottom:1px solid #ffffff10"><strong style="font:700 15px 'Cinzel',serif;color:${index === 0 ? '#f1cc73' : '#8f939d'}">${String(index + 1).padStart(2,'0')}</strong><div style="min-width:0"><div style="font-size:12px;font-weight:700;color:#ddd2ba;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escapeHTML(entry.charName || 'Aventureiro')}${entry.isCurrentPlayer ? ' <small style="color:#d3ae5d">(você)</small>' : ''}</div><small style="color:#858a94">${escapeHTML(entry.className || 'Aventureiro')} · ${Number(entry.duelWins) || 0}V/${Number(entry.duelLosses) || 0}D</small></div><b style="color:#e6c371">${Number(entry.duelRating || 1000).toLocaleString()}</b></div>`).join('')}</div>` : `<div style="padding:20px 6px;text-align:center;color:#858a94;font-size:12px">Atualize os desafiantes para carregar a classificação.</div>`}
+          <button onclick="window.searchColosseumOpponentsAction()" style="width:100%;margin-top:12px;padding:8px;border:1px solid #51452d;border-radius:7px;background:#211d15;color:#cfb16a;font-weight:700;cursor:pointer">Atualizar classificação</button>
+        </aside>
       </div>
-    </div>
+
+      <details style="border:1px solid #37343a;border-radius:10px;background:#111217;padding:12px 14px">
+        <summary style="cursor:pointer;color:#aaaeb7;font:700 13px 'Cinzel',serif">Provação PvE e loja de insígnias · atividade secundária</summary>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:14px;margin-top:12px">
+          <div style="padding:12px;border:1px solid #3b3428;border-radius:8px;background:#17140f"><b style="color:#e5c274">Desafio das 10 ondas</b><p style="font-size:11px;color:#9296a0">Modo PvE opcional para conquistar insígnias; não conta para o ranking PvP.</p><button onclick="window.startColosseumSurvivalAction()" ${busy ? 'disabled' : ''} style="padding:8px 11px;border:1px solid #9a7130;border-radius:6px;background:#523b19;color:#f2d28a;cursor:pointer">Iniciar provação</button></div>
+          <div><b style="font-size:12px;color:#d7bd82">Loja de insígnias · ${Number(colState.badges) || 0} disponíveis</b><div style="display:flex;gap:6px;overflow:auto;margin-top:7px;padding-bottom:4px">${COLOSSEUM_SHOP_CATALOG.map(it => `<div style="min-width:160px;padding:9px;border:1px solid #2e3035;border-radius:7px;background:#0c0d11"><b style="font-size:11px;color:#d9d0bc">${escapeHTML(it.name)}</b><div style="font-size:10px;color:#b4934f;margin:5px 0">${it.costBadges} insígnias</div><button onclick="window.buyColosseumShopItemAction('${it.id}')" style="padding:4px 9px;border:1px solid #75602f;border-radius:5px;background:#342b19;color:#e9c76f;cursor:pointer">Trocar</button></div>`).join('')}</div></div>
+        </div>
+      </details>
+    </section>
   `;
 }
 

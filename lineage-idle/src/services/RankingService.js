@@ -60,6 +60,7 @@ export const RankingService = {
       olympiadLosses: Number(state.olympiad?.losses) || 0,
       duelWins: Number(state.colosseum?.duelWins) || 0,
       duelLosses: Number(state.colosseum?.duelLosses) || 0,
+      duelRating: Number(state.colosseum?.duelRating) || 1000,
       clanName: state.clan?.name || 'Sem Clã',
       castleLord: state.clan?.castle || (state.clan?.castles && state.clan.castles[0]) || null,
       isHero: Boolean(state.isHero || state.olympiad?.isHero),
@@ -283,7 +284,7 @@ export const RankingService = {
     } else if (category === 'olympiad') {
       merged.sort((a, b) => (b.olympiadPoints || 0) - (a.olympiadPoints || 0));
     } else if (category === 'duels') {
-      merged.sort((a, b) => (b.duelWins || 0) - (a.duelWins || 0));
+      merged.sort((a, b) => (b.duelRating || 1000) - (a.duelRating || 1000) || (b.duelWins || 0) - (a.duelWins || 0));
     } else if (category === 'wealth') {
       merged.sort((a, b) => (b.gold || 0) - (a.gold || 0));
     } else {

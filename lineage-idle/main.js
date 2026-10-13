@@ -11292,6 +11292,40 @@ export function init() {
     };
 
     // Colosseum Window Actions
+    window.searchColosseumOpponentsAction = async () => {
+      const colosseum = ColosseumService.ensureState(state);
+      colosseum.matchmakingLoading = true;
+      updateColosseumUI();
+      try {
+        const [opponents, leaderboard] = await Promise.all([
+          RankingService.getMatchmakingOpponents(state, 6),
+          RankingService.getLeaderboard('duels', state, { forceRefresh: true })
+        ]);
+        colosseum.matchmakingOpponents = opponents;
+        colosseum.pvpLeaderboard = leaderboard.slice(0, 5);
+      } catch (error) {
+        console.warn('[Colosseum] Falha ao atualizar arena PvP:', error);
+        colosseum.matchmakingOpponents = [];
+        colosseum.pvpLeaderboard = [];
+      }
+      colosseum.matchmakingLoading = false;
+      updateColosseumUI();
+      save();
+      return colosseum.matchmakingOpponents;
+    };
+    window.startColosseumRankedDuelAction = (opponentIndex) => {
+      const colosseum = ColosseumService.ensureState(state);
+      const opponent = colosseum.matchmakingOpponents[Number(opponentIndex)];
+      const res = ColosseumService.startRankedDuel(state, opponent, {
+        log,
+        onUpdate: () => { updateAllUI(); save(); }
+      });
+      if (!res.success) { log(res.message || 'Não foi possível entrar na arena.', 'warning'); return res; }
+      pauseCombatForColosseum();
+      updateAllUI();
+      save(true);
+      return res;
+    };
     window.startColosseumDuelAction = (tierId) => {
       const res = ColosseumService.startDuel(state, tierId, {
         log,
@@ -11362,24 +11396,25 @@ export function init() {
       updateRankingsUI();
       log('🏆 Rankings e Combat Powers globais atualizados.', 'system');
     };
-    window.challengeRankingPlayerAction = (charName, oppCP) => {
+    window.challengeRankingPlayerAction = async (charName, oppCP) => {
       openPanel('colosseum');
-      const res = ColosseumService.startDuel(state, 'bet_500k', {
+      const leaderboard = await RankingService.getLeaderboard('duels', state, { forceRefresh: true });
+      const opponent = leaderboard.find(entry => entry.charName === charName && !entry.isCurrentPlayer);
+      if (!opponent) {
+        log(`Não foi possível carregar o perfil PvP de ${charName}. Atualize o ranking e tente novamente.`, 'warning');
+        updateColosseumUI();
+        return { success: false, message: 'Perfil PvP indisponível.' };
+      }
+      const colosseum = ColosseumService.ensureState(state);
+      colosseum.matchmakingOpponents = [opponent];
+      const res = ColosseumService.startRankedDuel(state, opponent, {
         log,
         onUpdate: () => { updateAllUI(); save(); }
-      }, {
-        charName,
-        name: charName,
-        className: 'Rival do Ranking',
-        statsSnapshot: {
-          hp: Math.floor(oppCP * 0.08),
-          pAtk: Math.floor(oppCP * 0.06),
-          pDef: Math.floor(oppCP * 0.04)
-        }
       });
       if (!res.success) { log(res.message || 'Não foi possível desafiar este rival.', 'warning'); return res; }
+      pauseCombatForColosseum();
       updateAllUI();
-      save();
+      save(true);
       return res;
     };
     

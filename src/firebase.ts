@@ -294,6 +294,7 @@ export async function savePlayerStateToCloud(userId: string, stateData: any, imm
         olympiadLosses:  Number(cleanState.olympiad?.losses  || cleanState.olympiadLosses)  || 0,
         duelWins:        Number(cleanState.colosseum?.duelWins  || cleanState.duelWins)     || 0,
         duelLosses:      Number(cleanState.colosseum?.duelLosses || cleanState.duelLosses)  || 0,
+        duelRating:      Number(cleanState.colosseum?.duelRating) || 1000,
         clanName:        sanitizeString(cleanState.clan?.name || 'Sem Clã', 24),
         castleLord:      cleanState.clan?.castle || null,
         isHero:          Boolean(cleanState.olympiad?.isHero || cleanState.isHero),
@@ -656,6 +657,7 @@ export async function fetchLeaderboardRankings(category: 'cp' | 'olympiad' | 'du
           olympiadLosses: Number(uData.olympiadLosses || state.olympiad?.losses || state.olympiadLosses) || 0,
           duelWins: Number(uData.duelWins || state.colosseum?.duelWins || state.duelWins) || 0,
           duelLosses: Number(uData.duelLosses || state.colosseum?.duelLosses || state.duelLosses) || 0,
+          duelRating: Number(uData.duelRating || state.colosseum?.duelRating) || 1000,
           clanName: uData.clanName || state.clan?.name || 'Sem Clã',
           castleLord: uData.castleLord || state.clan?.castle || null,
           isHero: Boolean(uData.isHero || state.olympiad?.isHero || state.isHero),
@@ -676,7 +678,7 @@ export async function fetchLeaderboardRankings(category: 'cp' | 'olympiad' | 'du
     if (category === 'olympiad') {
       results.sort((a, b) => (b.olympiadPoints || 0) - (a.olympiadPoints || 0));
     } else if (category === 'duels') {
-      results.sort((a, b) => (b.duelWins || 0) - (a.duelWins || 0));
+      results.sort((a, b) => (b.duelRating || 1000) - (a.duelRating || 1000) || (b.duelWins || 0) - (a.duelWins || 0));
     } else {
       results.sort((a, b) => (b.combatPower || 0) - (a.combatPower || 0));
     }
