@@ -1,0 +1,107 @@
+/* Screen level art direction. Loaded last in the game Shadow DOM so legacy
+   component rules cannot wash out the art or spacing of these views. */
+
+:host{--screen-ink:#efe8da;--screen-muted:#aeb5b5;--screen-gilt:#e3c37e;--screen-border:rgba(220,188,124,.27)}
+#tab-colosseum,#tab-expeditions,#tab-fishing,#tab-hunting,#tab-gathering,#tab-mining,#tab-character,#tab-skills,#tab-astral,#tab-dolls{gap:14px}
+
+/* Coliseum: make the arena the clear focal point, then group the challenges. */
+.colosseum-container{gap:17px!important;padding-bottom:10px;font-family:'IBM Plex Sans',sans-serif}
+.colosseum-arena-hero{min-height:282px!important;align-items:flex-end!important;padding:clamp(22px,4vw,38px)!important;border:1px solid rgba(224,190,125,.48)!important;border-radius:18px!important;background-image:linear-gradient(90deg,rgba(8,9,13,.96),rgba(8,9,13,.76) 42%,rgba(8,9,13,.12)),linear-gradient(0deg,rgba(7,8,12,.68),transparent 65%),url('/img/Maps/gludioCastle.png')!important;background-position:center 54%!important;background-size:cover!important;box-shadow:0 20px 48px rgba(0,0,0,.4),inset 0 1px rgba(255,255,255,.12)!important}
+.colosseum-arena-hero>div{max-width:820px!important}
+.colosseum-arena-hero h2{display:block!important;color:#fff0d0!important;font-size:clamp(24px,3vw,38px)!important;line-height:1.1;text-shadow:0 3px 18px #000!important}
+.colosseum-arena-hero h2:before{content:'PROVA DE GLÓRIA · ARENA REAL';display:block;margin-bottom:10px;color:#e8c57e;font:700 9px 'IBM Plex Mono',monospace;letter-spacing:.22em}
+.colosseum-arena-hero>div>div{margin-top:12px!important;color:#e6dfd3!important;font:500 11px/1.8 'IBM Plex Mono',monospace!important}
+.colosseum-arena-hero>div>div strong{color:#f3d38c}
+.colosseum-mode-card{position:relative;overflow:hidden;min-height:290px;border:1px solid var(--screen-border)!important;border-radius:15px!important;padding:20px!important;background:linear-gradient(145deg,rgba(22,24,29,.97),rgba(9,12,18,.99))!important;box-shadow:0 12px 34px rgba(0,0,0,.28),inset 0 1px rgba(255,255,255,.04);transition:transform .2s,border-color .2s,box-shadow .2s}
+.colosseum-mode-card:before{content:'';position:absolute;top:-58px;right:-42px;width:180px;height:180px;border:1px solid rgba(225,187,116,.1);border-radius:50%;box-shadow:0 0 0 17px rgba(225,187,116,.025),0 0 0 34px rgba(225,187,116,.02);pointer-events:none}
+.colosseum-mode-card:hover{transform:translateY(-3px);border-color:rgba(230,194,128,.5)!important;box-shadow:0 18px 40px rgba(0,0,0,.38)}
+.colosseum-mode-card h3{position:relative;color:#f1dfbd!important;font:700 16px 'Cinzel',serif!important;letter-spacing:.035em}
+.colosseum-mode-card--duel{border-top-color:rgba(224,119,112,.6)!important}
+.colosseum-mode-card--survival{border-top-color:rgba(228,177,87,.65)!important}
+.colosseum-mode-card button:not(:disabled){transition:filter .16s,transform .16s}
+.colosseum-mode-card button:not(:disabled):hover{filter:brightness(1.18);transform:translateY(-1px)}
+.colosseum-active-challenge{border-radius:14px!important;box-shadow:0 16px 38px rgba(0,0,0,.4)!important}
+
+/* Expedition and gathering atlases: let the landscape lead, with clear map pins. */
+.expedition-atlas{min-height:420px!important;border-radius:17px!important;border-color:rgba(225,192,129,.68)!important;box-shadow:inset 0 0 90px rgba(0,0,0,.3),0 20px 45px rgba(0,0,0,.42)!important}
+.expedition-map-node{gap:7px!important}
+.expedition-map-node .node-mark{width:50px!important;height:50px!important;border-width:2px!important;background:radial-gradient(circle at 35% 25%,#85916c,#31423b 45%,#101a1c 78%)!important;box-shadow:0 0 0 6px rgba(9,18,20,.52),0 8px 19px rgba(0,0,0,.55)!important}
+.expedition-map-node:hover .node-mark,.expedition-map-node.is-selected .node-mark{transform:scale(1.15)!important;box-shadow:0 0 0 6px rgba(9,18,20,.58),0 0 30px rgba(241,202,121,.82)!important}
+.expedition-map-node .node-name{padding:4px 7px;border:1px solid rgba(231,211,164,.17);border-radius:5px;background:rgba(8,13,16,.68);font-size:9px!important}
+.life-atlas-wrap{border:1px solid rgba(218,187,124,.48)!important;border-radius:17px!important;box-shadow:0 18px 42px rgba(0,0,0,.38)!important}
+.life-atlas-map{height:clamp(390px,42vw,600px)!important;min-height:390px!important;background-position:center!important}
+.life-atlas-map-pins{position:absolute;z-index:2;inset:0;pointer-events:none}
+.life-atlas-map-pin{position:absolute;left:var(--pin-left);top:var(--pin-top);display:grid;place-items:center;width:46px;height:46px;padding:0;transform:translate(-50%,-50%);border:1px solid rgba(248,224,174,.88);border-radius:50%;background:radial-gradient(circle at 34% 24%,#c4b17d,#425147 38%,#10191b 76%);color:#fff1c8;box-shadow:0 0 0 6px rgba(8,14,16,.42),0 8px 20px rgba(0,0,0,.65);font:700 16px 'Cinzel',serif;cursor:pointer;pointer-events:auto;transition:transform .18s,box-shadow .18s,border-color .18s}
+.life-atlas-map-pin i{position:absolute;inset:-8px;border:1px solid rgba(240,201,125,.7);border-radius:50%;opacity:0;transform:scale(.72);transition:transform .22s,opacity .22s}
+.life-atlas-map-pin:hover,.life-atlas-map-pin.is-active{z-index:1;transform:translate(-50%,-50%) scale(1.13);border-color:#fff0b5;box-shadow:0 0 0 7px rgba(8,14,16,.5),0 0 34px color-mix(in srgb,var(--atlas-accent) 75%,transparent)}
+.life-atlas-map-pin.is-active i{opacity:1;transform:scale(1);animation:premium-map-pulse 2s ease-out infinite}
+.life-atlas-map-pin.is-locked{filter:grayscale(.85);opacity:.63;cursor:not-allowed}
+@keyframes premium-map-pulse{0%,100%{box-shadow:0 0 0 0 color-mix(in srgb,var(--atlas-accent) 32%,transparent)}50%{box-shadow:0 0 0 8px transparent}}
+.life-atlas-heading>div{box-shadow:0 10px 28px rgba(0,0,0,.45)!important}
+.life-atlas-location{padding:12px 16px!important;border-radius:11px!important;backdrop-filter:blur(9px)!important}
+.life-atlas-location strong{font-size:17px!important}
+.life-atlas-zone-picker{gap:9px!important;padding:12px!important}
+.life-atlas-zone-option{min-height:58px;padding:9px 11px!important;border-radius:10px!important;background:linear-gradient(140deg,rgba(23,30,35,.94),rgba(10,15,21,.97))!important;box-shadow:inset 0 1px rgba(255,255,255,.035)}
+.life-atlas-zone-option.is-active{box-shadow:inset 3px 0 var(--atlas-accent),0 7px 20px rgba(0,0,0,.24)!important}
+.life-atlas-zone-icon{width:35px!important;height:35px!important;border:1px solid rgba(255,255,255,.08);font-size:17px!important}
+.life-atlas-zone-copy strong{font-size:11px!important}
+.life-atlas-brief{padding:17px 19px!important;background:linear-gradient(120deg,rgba(19,27,31,.99),rgba(9,15,21,.99))!important}
+
+/* Hero identity and skill book. */
+#tab-character .l2-hero-dossier{min-height:320px;border:1px solid rgba(224,189,119,.58);border-radius:17px;overflow:hidden;background:linear-gradient(90deg,rgba(10,14,21,.97),rgba(10,14,21,.85) 57%,rgba(10,14,21,.55)),linear-gradient(0deg,rgba(6,8,12,.72),transparent 74%),url('/img/Maps/adencity.jpg') center 46%/cover;box-shadow:0 20px 48px rgba(0,0,0,.42),inset 0 1px rgba(255,255,255,.1)}
+#tab-character .l2-hero-avatar-frame{flex-basis:235px;height:286px;border-color:#c29b57;box-shadow:0 0 0 1px #05070a,0 14px 28px rgba(0,0,0,.55)}
+#tab-character .l2-hero-identity-box{align-self:center}
+#tab-character .l2-hero-name{font-size:clamp(24px,3vw,38px)!important;text-shadow:0 4px 18px rgba(0,0,0,.75)}
+#tab-character .l2-cp-plaque,#tab-character .l2-cp-breakdown-card,#tab-character .l2-vital-meter{border-radius:11px;backdrop-filter:blur(9px);box-shadow:0 8px 22px rgba(0,0,0,.2)}
+
+.skill-command-header{position:relative;isolation:isolate;min-height:150px;overflow:hidden;padding:22px 25px!important;border:1px solid rgba(203,171,105,.43)!important;border-radius:16px;background:linear-gradient(90deg,rgba(9,13,21,.98),rgba(10,14,22,.88) 60%,rgba(10,14,22,.4)),linear-gradient(0deg,rgba(5,8,13,.62),transparent),url('/img/Maps/kamaelLair.png') center 44%/cover!important;box-shadow:0 15px 38px rgba(0,0,0,.36)}
+.skill-command-header:after{content:'✧';position:absolute;z-index:-1;right:8%;top:50%;transform:translateY(-50%);color:rgba(231,201,137,.18);font-size:clamp(100px,17vw,190px);text-shadow:0 0 48px rgba(224,184,104,.2)}
+.skill-command-copy>span{display:block;color:#dec17e;font:700 9px 'IBM Plex Mono',monospace;letter-spacing:.2em}
+.skill-command-copy h3{margin:5px 0!important;border:0!important;color:#f4e5c8!important;font:700 clamp(22px,2.7vw,34px) 'Cinzel',serif!important;letter-spacing:.02em!important;text-transform:none!important}
+.skill-command-copy p{font-size:11px;color:#c2c2bd}
+#tab-skills .skill-tree-scroll{min-height:360px;border:1px solid rgba(207,173,105,.25);border-radius:14px;background:radial-gradient(ellipse at 50% 0,rgba(160,116,51,.15),transparent 57%),linear-gradient(145deg,rgba(9,13,19,.98),rgba(13,16,24,.98));box-shadow:inset 0 1px rgba(255,255,255,.045),0 13px 32px rgba(0,0,0,.24)}
+#tab-skills .skill-category-block{border:1px solid rgba(203,171,105,.2);border-radius:12px;background:linear-gradient(145deg,rgba(22,27,36,.88),rgba(11,15,22,.96));box-shadow:0 9px 23px rgba(0,0,0,.24)}
+#tab-skills .skill-node-card{min-height:68px;border-radius:9px;background:linear-gradient(135deg,rgba(35,41,51,.96),rgba(13,18,27,.98));box-shadow:inset 0 1px rgba(255,255,255,.04);transition:transform .16s,border-color .16s,box-shadow .16s}
+#tab-skills .skill-node-card:hover{transform:translateY(-2px);border-color:rgba(230,193,120,.65);box-shadow:0 9px 20px rgba(0,0,0,.3)}
+
+/* Astral mastery and dolls: give both screens their own illustrated identity. */
+.astral-screen-shell{max-width:1220px;width:100%;align-self:center}
+.astral-screen-hero{position:relative;isolation:isolate;min-height:210px!important;overflow:hidden!important;padding:27px!important;border:1px solid rgba(208,173,122,.46)!important;border-radius:17px!important;background:linear-gradient(90deg,rgba(13,10,22,.97),rgba(18,13,30,.82) 55%,rgba(15,12,25,.35)),linear-gradient(0deg,rgba(6,7,11,.52),transparent 70%),url('/img/Maps/valleyofsaints.jpg') center 48%/cover!important;box-shadow:0 18px 40px rgba(0,0,0,.4)!important}
+.astral-screen-hero:after{content:'✦';position:absolute;z-index:-1;right:8%;top:48%;transform:translateY(-50%);color:rgba(239,215,255,.28);font-size:clamp(135px,20vw,240px);text-shadow:0 0 58px rgba(168,85,247,.38)}
+.astral-screen-hero h3{color:#fff0d0!important;font-size:clamp(24px,3vw,36px)!important;text-shadow:0 3px 18px #000}
+.astral-constellation{padding:20px!important;border:1px solid rgba(190,152,232,.25)!important;border-radius:15px;background:radial-gradient(ellipse at 90% 0,rgba(134,86,184,.12),transparent 38%),linear-gradient(140deg,rgba(22,20,34,.97),rgba(10,13,21,.98));box-shadow:0 12px 30px rgba(0,0,0,.28)}
+.astral-reincarnation-panel{border-radius:14px!important;box-shadow:0 12px 30px rgba(0,0,0,.3)!important}
+.companion-command-hero{position:relative;isolation:isolate;display:flex;align-items:center;gap:19px;min-height:205px;overflow:hidden;margin-bottom:16px;padding:25px 30px;border:1px solid rgba(222,188,126,.48);border-radius:17px;background:linear-gradient(90deg,rgba(10,15,19,.97),rgba(10,15,19,.8) 54%,rgba(10,15,19,.25)),linear-gradient(0deg,rgba(7,9,13,.62),transparent 74%),url('/img/Maps/antharaslair.jpg') center 46%/cover;box-shadow:0 18px 42px rgba(0,0,0,.4)}
+.companion-command-hero:after{content:'♧';position:absolute;z-index:-1;right:12%;top:48%;transform:translateY(-50%);color:rgba(234,203,145,.22);font-size:clamp(120px,18vw,205px);text-shadow:0 0 44px rgba(201,153,89,.25)}
+.companion-command-art{width:76px;height:76px;border:1px solid rgba(231,195,125,.62);border-radius:19px;background:linear-gradient(145deg,rgba(208,164,93,.3),rgba(12,17,22,.82));font-size:36px;box-shadow:0 12px 25px rgba(0,0,0,.35),inset 0 1px rgba(255,255,255,.13)}
+.companion-command-copy>span{color:#e0c27e;font:700 9px 'IBM Plex Mono',monospace;letter-spacing:.2em}
+.companion-command-copy h2{margin:6px 0;color:#fff0d0;font-size:clamp(23px,3vw,36px);text-shadow:0 3px 17px rgba(0,0,0,.7)}
+.companion-command-copy p{max-width:580px;color:#d2d2ca;font-size:11px}
+.companion-command-action{min-height:43px;padding:0 16px;border-color:rgba(234,199,130,.65);background:linear-gradient(180deg,rgba(133,97,43,.65),rgba(48,38,25,.78));font-size:11px;box-shadow:0 8px 20px rgba(0,0,0,.35)}
+#tab-dolls .dolls-header,#tab-dolls .dolls-synthesis-box{padding:18px;border:1px solid rgba(213,177,109,.28);border-radius:14px;background:linear-gradient(145deg,rgba(23,24,29,.98),rgba(10,13,19,.98));box-shadow:0 12px 30px rgba(0,0,0,.27)}
+#tab-dolls .dolls-header h3{color:#f0dfbc;font:700 19px 'Cinzel',serif}
+#tab-dolls .dolls-header .shop-info{max-width:760px;line-height:1.6}
+#tab-dolls .dolls-synthesis-box{margin-top:14px;border-color:rgba(180,139,221,.32);background:radial-gradient(ellipse at 50% 0,rgba(132,86,174,.17),transparent 55%),linear-gradient(145deg,rgba(20,20,29,.98),rgba(9,13,20,.99));text-align:center}
+#tab-dolls .dolls-synthesis-box h4{color:#dfcafa;font:700 16px 'Cinzel',serif}
+#tab-dolls .dolls-grid{gap:14px!important}
+
+@media(max-width:760px){
+  .colosseum-arena-hero{min-height:235px!important;padding:18px!important;background-position:58% center!important}
+  .colosseum-mode-card{min-height:0;padding:15px!important}
+  .expedition-atlas{min-height:340px!important}
+  .expedition-map-node .node-mark{width:38px!important;height:38px!important}
+  .expedition-map-node .node-name{max-width:84px;font-size:8px!important}
+  .life-atlas-map{height:370px!important;min-height:370px!important}
+  .life-atlas-map-pin{width:35px;height:35px;font-size:13px}
+  .life-atlas-zone-picker{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  #tab-character .l2-hero-dossier{min-height:0;padding:11px;gap:11px}
+  #tab-character .l2-hero-avatar-frame{flex-basis:118px;height:160px}
+  .skill-command-header{min-height:150px;padding:16px!important}
+  .skill-command-header>div:last-child{width:100%;justify-content:space-between;flex-wrap:wrap}
+  .astral-screen-shell{padding:8px!important}
+  .astral-screen-hero{min-height:180px!important;padding:17px!important}
+  .companion-command-hero{min-height:180px;padding:17px;flex-wrap:wrap}
+  .companion-command-art{width:53px;height:53px;font-size:26px}
+  .companion-command-copy{flex-basis:calc(100% - 75px)}
+  .companion-command-action{margin-left:72px}
+}

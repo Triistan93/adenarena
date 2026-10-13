@@ -21,6 +21,10 @@ import idleCss from "../../lineage-idle/style.css?raw";
 import grimoireCss from "../../lineage-idle/theme-grimoire.css?raw";
 // @ts-ignore -- GameUI consolidated CSS
 import gameUiCss from "../../lineage-idle/src/ui/GameUI.css?raw";
+// Final game screen theme layer: keep this after legacy and feature styles so the
+// premium treatment remains visible inside the game's Shadow DOM.
+// @ts-ignore -- Vite ?raw import returns CSS source as a string.
+import premiumScreensCss from "../../lineage-idle/src/ui/PremiumScreens.css?raw";
 
 import { IDLE_MARKUP } from "./markup";
 import "./heroImages";
@@ -266,7 +270,7 @@ export default function IdleGame() {
 
     const shadow = host.shadowRoot ?? host.attachShadow({ mode: "open" });
     (window as any).__SHADOW_ROOT__ = shadow;
-    shadow.innerHTML = `<style>${idleCss}\n${grimoireCss}\n${gameUiCss}</style>${IDLE_MARKUP}`;
+    shadow.innerHTML = `<style>${idleCss}\n${grimoireCss}\n${gameUiCss}\n${premiumScreensCss}</style>${IDLE_MARKUP}`;
     
     // Inicialização unificada via GameBootstrap
     bootstrap(shadow as unknown as Document);
