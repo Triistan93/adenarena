@@ -270,13 +270,15 @@ import {
   getTowerFloorDef,
   getTowerFloorDef as serviceGetTowerFloorDef,
   challengeTowerFloor as serviceChallengeTowerFloor,
+  selectTowerApproach as serviceSelectTowerApproach,
+  TOWER_APPROACHES,
   completeTowerFloor as serviceCompleteTowerFloor,
   claimPendingTowerRewards as serviceClaimPendingTowerRewards,
   sweepTowerDaily as serviceSweepTowerDaily,
   getTowerFloorMinimumCP,
   getTowerFloorRecommendedCP
 } from './src/services/TowerService.js';
-import { renderTowerJourney } from './src/ui/TowerPresentation.js';
+import { getTowerBossPortrait, renderTowerJourney } from './src/ui/TowerPresentation.js';
 
 import {
   startRaidBoss as serviceStartRaidBoss,
@@ -3554,6 +3556,14 @@ function challengeTowerFloor() {
   if (result?.success) triggerQuestEvent('tower', 1);
   return result;
 }
+function selectTowerApproach(approachId) {
+  const selected = serviceSelectTowerApproach(state, approachId);
+  if (selected) {
+    updateTowerUI();
+    save();
+  }
+  return selected;
+}
 function onTowerFloorVictory(floorNum) {
   const completed = serviceCompleteTowerFloor(state, floorNum, { log, floatText, updateAllUI, save });
   if (completed) triggerQuestEvent('tower', 1);
@@ -3571,29 +3581,60 @@ function claimPendingTowerRewards() {
 
 function updateTowerUI() {
   if (!state.tower) state.tower = { highestFloor: 0, currentFloor: 1, lastSweepTime: 0 };
-  const highest = state.tower.highestFloor || 0;
+  const highest = Math.max(0, Math.min(100, Number(state.tower.highestFloor) || 0));
   const nextFloor = Math.min(100, highest + 1);
+  const nextDef = getTowerFloorDef(nextFloor);
+  const approachId = Object.hasOwn(TOWER_APPROACHES, state.tower.selectedApproach) ? state.tower.selectedApproach : 'sanctuary';
+  const approach = TOWER_APPROACHES[approachId];
+  const floorBusy = Boolean(state.towerCombatActive);
 
   const highestText = el('tower-highest-floor-text');
-  if (highestText) highestText.textContent = `Andar Atual: ${highest} / 100`;
+  if (highestText) highestText.innerHTML = `${highest} <small>/ 100 andares</small>`;
+
+  const chapterNames = ['O Vestíbulo', 'Galeria dos Ecos', 'Salão Rubro', 'Asas de Elmore', 'Câmara Imperial', 'Santuário Astral', 'Bastião de Aço', 'Trono das Cinzas', 'Abismo dos Guardiões', 'Cume da Insolência'];
+  const chapterLabel = el('tower-chapter-label');
+  if (chapterLabel) chapterLabel.textContent = highest >= 100
+    ? 'Torre conquistada'
+    : `Capítulo ${String(Math.floor(highest / 10) + 1).padStart(2, '0')} · ${chapterNames[Math.floor(highest / 10)]}`;
+
+  const overallProgress = el('tower-overall-progress-fill');
+  if (overallProgress) overallProgress.style.width = `${highest}%`;
 
   const bonusText = el('tower-bonus-text');
-  if (bonusText) bonusText.textContent = `Bônus Passivo Ativo: +${highest}% ATK, DEF & MATK`;
+  if (bonusText) bonusText.textContent = `+${highest}% ATK · DEF · MATK`;
 
   const nextNumText = el('tower-next-floor-num');
   if (nextNumText) nextNumText.textContent = `${nextFloor}`;
 
+  const approachGrid = el('tower-approach-grid');
+  if (approachGrid) {
+    approachGrid.innerHTML = Object.values(TOWER_APPROACHES).map(option => {
+      const selected = option.id === approachId;
+      const effect = option.healPercent > 0
+        ? `Recupera ${Math.round(option.healPercent * 100)}% HP · inimigo −${Math.round((1 - option.atkMultiplier) * 100)}% ATK`
+        : `Inimigo +${Math.round((option.hpMultiplier - 1) * 100)}% HP · +${Math.round((option.atkMultiplier - 1) * 100)}% ATK`;
+      const secondary = option.healPercent > 0
+        ? 'Recompensas padrão'
+        : `+${Math.round((option.goldMultiplier - 1) * 100)}% Adena · +${Math.round((option.spMultiplier - 1) * 100)}% SP`;
+      return `<button type="button" class="tower-approach-card ${selected ? 'is-selected' : ''}" data-tower-approach="${option.id}" aria-pressed="${selected}" ${floorBusy ? 'disabled' : ''}>
+        <span class="tower-approach-top"><span class="tower-approach-icon" aria-hidden="true">${option.icon}</span><span class="tower-approach-label">${option.label}</span></span>
+        <strong>${option.title}</strong><span class="tower-approach-description">${option.description}</span>
+        <span class="tower-approach-effects">${effect}<br>${secondary}</span>
+      </button>`;
+    }).join('');
+  }
+
   const challengeBtn = el('tower-challenge-btn');
   if (challengeBtn) {
     if (highest >= 100) {
-      challengeBtn.textContent = '🏆 Torre 100% Concluída';
+      challengeBtn.textContent = '🏆 Torre conquistada';
       challengeBtn.disabled = true;
     } else {
       const currentCp = Number(getStats().combatPower) || Number(state.combatPower) || 0;
       const minimumCp = getTowerFloorMinimumCP(nextFloor);
-      const levelReady = (Number(state.level) || 1) >= getTowerFloorDef(nextFloor).reqLvl;
-      const instanceBusy = Boolean(state.towerCombatActive || state.isRaidActive);
-      challengeBtn.textContent = `⚔️ Desafiar Andar ${nextFloor}`;
+      const levelReady = (Number(state.level) || 1) >= nextDef.reqLvl;
+      const instanceBusy = Boolean(state.towerCombatActive || state.isRaidActive || state.isSpecialInstanceActive || state.activeInstanceId);
+      challengeBtn.textContent = floorBusy ? `⚔️ Em combate · Andar ${nextFloor}` : `⚔️ Enfrentar andar ${nextFloor}`;
       challengeBtn.disabled = !levelReady || currentCp < minimumCp || instanceBusy;
       challengeBtn.onclick = () => challengeTowerFloor();
     }
@@ -3618,9 +3659,8 @@ function updateTowerUI() {
     claimPendingBtn.onclick = () => claimPendingTowerRewards();
   }
 
-  const nextDef = getTowerFloorDef(nextFloor);
   const recommendEl = el('tower-floor-recommend');
-  if (recommendEl) recommendEl.textContent = `Nv. ${nextDef.reqLvl} · CP mínimo ${getTowerFloorMinimumCP(nextFloor).toLocaleString()} · recomendado ${getTowerFloorRecommendedCP(nextFloor).toLocaleString()}`;
+  if (recommendEl) recommendEl.textContent = `Nível ${nextDef.reqLvl} · CP ${getTowerFloorMinimumCP(nextFloor).toLocaleString()} mínimo · ${getTowerFloorRecommendedCP(nextFloor).toLocaleString()} recomendado`;
 
   const detailsCard = el('tower-floor-details-card');
   if (detailsCard) {
@@ -3630,13 +3670,16 @@ function updateTowerUI() {
     rewardsStr.push(`⚡ ${getTowerFloorMinimumCP(nextFloor).toLocaleString()} CP mínimo`);
     if (nextDef.rewardLamps > 0) rewardsStr.push(`🪔 +${nextDef.rewardLamps} Lâmpadas`);
     if (nextDef.rewardCrystals) rewardsStr.push(`✨ +3x ${D().ALL_ITEMS[nextDef.rewardCrystals]?.name || nextDef.rewardCrystals}`);
-
+    const bossPortrait = nextDef.isBoss ? getTowerBossPortrait(nextFloor) : null;
+    const hpPreview = Math.floor(nextDef.hp * approach.hpMultiplier);
+    const atkPreview = Math.floor(nextDef.atk * approach.atkMultiplier);
     detailsCard.innerHTML = `
-      <div style="display:flex; justify-content:space-between; align-items:center;">
-        <span style="font-weight:bold; font-size:13px; color:var(--gilt-bright);">${nextDef.name}</span>
-        <span style="font-size:11px; color:#fb7185;">HP: ${nextDef.hp.toLocaleString()} · ATK: ${nextDef.atk.toLocaleString()}</span>
+      ${bossPortrait ? `<div class="tower-preview-portrait"><img src="${bossPortrait}" alt="${nextDef.name}" loading="lazy"><span>CHEFE DE MARCO · ANDAR ${nextFloor}</span></div>` : `<div class="tower-preview-ordinary"><span>ANDAR ${String(nextFloor).padStart(2, '0')}</span><strong>${nextFloor % 10}º combate do capítulo</strong></div>`}
+      <div class="tower-preview-copy">
+        <div class="tower-preview-title"><div><span class="tower-eyebrow">${approach.title}</span><strong>${nextDef.name}</strong></div><span class="tower-preview-level">Nv. ${nextDef.reqLvl}</span></div>
+        <div class="tower-preview-stats"><span>♥ ${hpPreview.toLocaleString()} HP</span><span>⚔ ${atkPreview.toLocaleString()} ATK</span><span>✧ ${nextDef.def.toLocaleString()} DEF</span></div>
+        <div class="tower-preview-rewards">${rewardsStr.map(reward => `<span>${reward}</span>`).join('')}</div>
       </div>
-      <div style="font-size:11px; color:var(--text-muted); margin-top:4px;">Recompensas de Primeiro Abate: ${rewardsStr.join(' · ')}</div>
     `;
   }
 
@@ -8764,6 +8807,12 @@ export function bindEvents() {
     const towerChallengeBtn = el('tower-challenge-btn');
     if (towerChallengeBtn) towerChallengeBtn.onclick = challengeTowerFloor;
 
+    const towerApproachGrid = el('tower-approach-grid');
+    if (towerApproachGrid) towerApproachGrid.onclick = (event) => {
+      const button = event.target.closest('[data-tower-approach]');
+      if (button && !button.disabled) selectTowerApproach(button.dataset.towerApproach);
+    };
+
     const towerSweepBtn = el('tower-sweep-btn');
     if (towerSweepBtn) towerSweepBtn.onclick = sweepTowerDaily;
     
@@ -9850,6 +9899,7 @@ export function init() {
     window.claimPassReward = claimPassReward;
     window.unlockPremiumPass = unlockPremiumPass;
     window.challengeTowerFloor = challengeTowerFloor;
+    window.selectTowerApproach = selectTowerApproach;
     window.sweepTowerDaily = sweepTowerDaily;
     window.getTowerFloorDef = getTowerFloorDef;
     window.checkDailyReset = checkDailyReset;

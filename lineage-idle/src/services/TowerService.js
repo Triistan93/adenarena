@@ -13,6 +13,52 @@ import { triggerQuestEvent } from './QuestService.js';
 import { startCombat, stopCombat } from '../engine/CombatEngine.js';
 import { CombatPowerService } from './CombatPowerService.js';
 
+export const TOWER_APPROACHES = Object.freeze({
+  assault: Object.freeze({
+    id: 'assault',
+    title: 'Investida do Conquistador',
+    icon: '⚔️',
+    label: 'Risco elevado',
+    description: 'Enfrente um guardião mais resistente e receba mais Adena e SP.',
+    hpMultiplier: 1.18,
+    atkMultiplier: 1.12,
+    goldMultiplier: 1.45,
+    spMultiplier: 1.35,
+    healPercent: 0
+  }),
+  relic: Object.freeze({
+    id: 'relic',
+    title: 'Busca pela Relíquia',
+    icon: '🔱',
+    label: 'Mais tesouros',
+    description: 'Guardião ligeiramente fortalecido e maior recompensa em Adena.',
+    hpMultiplier: 1.08,
+    atkMultiplier: 1.04,
+    goldMultiplier: 1.8,
+    spMultiplier: 1.15,
+    healPercent: 0
+  }),
+  sanctuary: Object.freeze({
+    id: 'sanctuary',
+    title: 'Santuário dos Peregrinos',
+    icon: '🛡️',
+    label: 'Rota segura',
+    description: 'Recupere parte do HP e reduza o dano recebido neste desafio.',
+    hpMultiplier: 1,
+    atkMultiplier: 0.82,
+    goldMultiplier: 1,
+    spMultiplier: 1,
+    healPercent: 0.15
+  })
+});
+
+export function selectTowerApproach(state, approachId) {
+  if (state?.towerCombatActive || !Object.hasOwn(TOWER_APPROACHES, approachId)) return false;
+  state.tower = state.tower || { highestFloor: 0, currentFloor: 1, lastSweepTime: 0 };
+  state.tower.selectedApproach = approachId;
+  return true;
+}
+
 /**
  * Retorna as propriedades e estatísticas de um andar da Torre.
  * @param {number} floorNum — Número do andar (1 a 100)
@@ -107,6 +153,10 @@ export function challengeTowerFloor(state, callbacks = {}) {
   }
 
   const fDef = getTowerFloorDef(targetFloor);
+  const approachId = Object.hasOwn(TOWER_APPROACHES, state.tower.selectedApproach)
+    ? state.tower.selectedApproach
+    : 'sanctuary';
+  const approach = TOWER_APPROACHES[approachId];
 
   if ((Number(state.level) || 1) < fDef.reqLvl) {
     if (callbacks.log) callbacks.log(`⚠️ Nível insuficiente! O Andar ${targetFloor} requer Nível ${fDef.reqLvl}.`, 'system');
@@ -120,26 +170,33 @@ export function challengeTowerFloor(state, callbacks = {}) {
     return { success: false, reason: 'insufficient_cp', requiredCP: minimumCP, currentCP: combatPower };
   }
 
-  if (callbacks.log) callbacks.log(`🏰 Desafiando Andar ${targetFloor}: **${fDef.name}**!`, 'rarity-legendary');
+  if (approach.healPercent > 0) {
+    const maxHp = Math.max(1, Number(state.maxHp) || Number(state.hp) || 1);
+    const currentHp = Math.max(0, Number(state.hp) || maxHp);
+    state.hp = Math.min(maxHp, currentHp + Math.floor(maxHp * approach.healPercent));
+  }
+
+  if (callbacks.log) callbacks.log(`🏰 ${approach.title}: Andar ${targetFloor} — **${fDef.name}**!`, 'rarity-legendary');
   if (callbacks.floatText) callbacks.floatText(`ANDAR ${targetFloor}!`, 'float-jackpot');
 
   const towerMonsterId = `tower_floor_${targetFloor}`;
   const monsterObj = {
     id: towerMonsterId,
     name: fDef.name,
-    hp: fDef.hp,
-    _maxHp: fDef.hp,
-    maxHp: fDef.hp,
-    atk: fDef.atk,
+    hp: Math.floor(fDef.hp * approach.hpMultiplier),
+    _maxHp: Math.floor(fDef.hp * approach.hpMultiplier),
+    maxHp: Math.floor(fDef.hp * approach.hpMultiplier),
+    atk: Math.max(1, Math.floor(fDef.atk * approach.atkMultiplier)),
     def: fDef.def,
     mdef: fDef.mdef,
     eva: Math.min(20, Math.floor(fDef.floor / 5)),
     xp: fDef.xp,
-    sp: fDef.sp,
-    gold: [fDef.gold, Math.floor(fDef.gold * 1.3)],
+    sp: Math.floor(fDef.sp * approach.spMultiplier),
+    gold: [Math.floor(fDef.gold * approach.goldMultiplier), Math.floor(fDef.gold * 1.3 * approach.goldMultiplier)],
     boss: fDef.isBoss,
     isTower: true,
     towerFloor: targetFloor,
+    towerApproach: approachId,
     _stunnedUntil: 0
   };
 

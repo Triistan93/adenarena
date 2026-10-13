@@ -1450,42 +1450,62 @@ export const IDLE_MARKUP = `
           <div id="tab-tower" class="tab-pane">
             <div class="tower-header-frame">
               <div class="tower-title-group">
-                <span class="tower-window-icon">🏰</span>
-                <span class="tower-window-title">Torre da Insolência (Tower of Insolence)</span>
+                <span class="tower-window-icon" aria-hidden="true">♜</span>
+                <div class="tower-title-copy">
+                  <span class="tower-eyebrow">PROVAÇÃO IMPERIAL · 100 ANDARES</span>
+                  <span class="tower-window-title">Torre da Insolência</span>
+                  <span class="tower-subtitle">Suba pelos capítulos, escolha sua estratégia e enfrente os guardiões de Baium.</span>
+                </div>
               </div>
               <div class="tower-reset-info">
-                <button id="tower-sweep-btn" class="inv-batch-btn gold-glow-btn" title="Reclamar 50% de todas as recompensas dos andares conquistados">🧹 Varredura Diária</button>
+                <button id="tower-sweep-btn" class="inv-batch-btn gold-glow-btn" title="Reclamar 50% das recompensas dos andares conquistados">↻ Varredura diária</button>
                 <button id="tower-claim-pending-btn" class="inv-batch-btn" style="display:none;" title="Resgatar recompensas de primeiro abate guardadas pela Torre">🎁 Resgatar Recompensas</button>
               </div>
             </div>
 
-            <!-- Tower Stats & Passive Bonus Banner -->
             <div class="tower-banner-container">
-              <div class="tower-header-info">
-                <div class="tower-level-badge">
-                  <span class="tower-lvl-num" id="tower-highest-floor-text">Andar Atual: 0 / 100</span>
-                  <span class="tower-title" id="tower-bonus-text">Bônus Passivo: +0% ATK, DEF &amp; MATK</span>
+              <div class="tower-stat-card tower-stat-card--progress">
+                <span class="tower-stat-label">PROGRESSO ATUAL</span>
+                <div class="tower-progress-line">
+                  <strong id="tower-highest-floor-text">0 <small>/ 100 andares</small></strong>
+                  <span id="tower-chapter-label">Capítulo 01 · O Vestíbulo</span>
                 </div>
-                <div class="tower-action-group">
-                  <button id="tower-challenge-btn" class="action-btn action-btn--primary" style="font-size:12px; font-weight:bold;">⚔️ Desafiar Andar <span id="tower-next-floor-num">1</span></button>
-                </div>
+                <div class="tower-overall-progress"><span id="tower-overall-progress-fill"></span></div>
+              </div>
+              <div class="tower-stat-card tower-stat-card--bonus">
+                <span class="tower-stat-label">BÊNÇÃO DA ASCENSÃO</span>
+                <strong id="tower-bonus-text">+0% ATK · DEF · MATK</strong>
+                <span>Uma marca permanente por andar conquistado</span>
+              </div>
+              <div class="tower-stat-action">
+                <span class="tower-stat-label">PRÓXIMA PROVAÇÃO</span>
+                <strong>Andar <span id="tower-next-floor-num">1</span></strong>
+                <button id="tower-challenge-btn" class="action-btn action-btn--primary">⚔️ Iniciar desafio</button>
               </div>
             </div>
 
-            <!-- Current Floor Challenge Preview Card -->
-            <div class="pane-section">
-              <div style="display:flex; justify-content:space-between; align-items:center;">
-                <h3>🗡️ Detalhes do Próximo Desafio</h3>
-                <span id="tower-floor-recommend" class="sp-pill" style="font-size:11px;">Lv. Requerido: 10</span>
+            <section class="tower-challenge-panel" aria-labelledby="tower-approach-heading">
+              <div class="tower-section-heading">
+                <div>
+                  <span class="tower-eyebrow">PLANEJE A SUBIDA</span>
+                  <h3 id="tower-approach-heading">Escolha sua abordagem</h3>
+                </div>
+                <span id="tower-floor-recommend" class="tower-recommend-pill">Nv. 10 · CP —</span>
               </div>
-              <div id="tower-floor-details-card" class="tower-details-card" style="margin-top:10px;"></div>
-            </div>
+              <div id="tower-approach-grid" class="tower-approach-grid"></div>
+              <div id="tower-floor-details-card" class="tower-details-card"></div>
+            </section>
 
-            <!-- Floors Map Grid (1 to 100) -->
-            <div class="pane-section" style="margin-top: 10px;">
-              <h3>🗺️ A escalada em dez capítulos</h3>
-              <div id="tower-floors-grid" class="tower-floors-grid" style="margin-top:10px;"></div>
-            </div>
+            <section class="tower-journey-section" aria-labelledby="tower-journey-heading">
+              <div class="tower-section-heading">
+                <div>
+                  <span class="tower-eyebrow">MAPA DA ASCENSÃO</span>
+                  <h3 id="tower-journey-heading">Dez capítulos. Cem andares.</h3>
+                </div>
+                <span class="tower-journey-caption">A cada décimo andar, um guardião de marco</span>
+              </div>
+              <div id="tower-floors-grid" class="tower-floors-grid"></div>
+            </section>
           </div>
 
           <!-- Warehouse Tab Pane (Imperial Vault 50/50 Split View: Mochila ↔ Baú) -->
