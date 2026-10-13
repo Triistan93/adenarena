@@ -53,6 +53,14 @@ export function renderLifeActivityAtlas({
     </style>
     <section class="life-atlas-wrap" style="--atlas-accent:${accent};">
       <div class="life-atlas-map">
+        <div class="life-atlas-map-pins" aria-label="Pontos das zonas de ${escapeText(title)}">
+          ${zones.map((zone, index) => {
+            const [left, top] = scene?.points?.[index] || [50, 50];
+            const unlocked = playerLevel >= zone.minLevel && activityLevel >= (zone.minSkillLevel || 1);
+            const selected = zone.id === activeZoneId;
+            return `<button class="life-atlas-map-pin ${selected ? 'is-active' : ''} ${unlocked ? '' : 'is-locked'}" style="--pin-left:${left}%;--pin-top:${top}%;" onclick="${unlocked ? `window.${selectHandler}('${escapeText(zone.id)}')` : ''}" ${unlocked ? '' : 'disabled'} aria-label="${escapeText(zone.name)} · ${unlocked ? (selected ? 'região ativa' : 'selecionar região') : `requer nível ${zone.minLevel}+ e profissão ${zone.minSkillLevel || 1}+`}" aria-pressed="${selected}" title="${escapeText(zone.name)}${unlocked ? '' : ` · Requer Nv. ${zone.minLevel}+ / Prof. ${zone.minSkillLevel || 1}+`}"><span>${unlocked ? escapeText(zone.icon) : '⌑'}</span><i></i></button>`;
+          }).join('')}
+        </div>
         <header class="life-atlas-heading">
           <div style="max-width:min(70%,620px);padding:9px 12px;border:1px solid rgba(212,167,68,.35);border-radius:9px;background:rgba(8,14,18,.78);backdrop-filter:blur(5px);">
             <div style="font:700 9px 'Cinzel',serif;letter-spacing:1.8px;text-transform:uppercase;color:${accent};">Atlas da profissão · ${escapeText(title)}</div>

@@ -660,8 +660,12 @@ export const IDLE_MARKUP = `
 
           <!-- Skills Tab -->
           <div id="tab-skills" class="tab-pane">
-            <div class="skills-head">
-              <h3>Árvore de Habilidades &amp; Talentos</h3>
+            <div class="skills-head skill-command-header">
+              <div class="skill-command-copy">
+                <span>GRIMÓRIO DE COMBATE · DISCIPLINAS</span>
+                <h3>Habilidades &amp; Talentos</h3>
+                <p>Aprenda técnicas, fortaleça passivas e prepare a rotação do seu herói.</p>
+              </div>
               <div style="display:flex; gap:10px; align-items:center;">
                 <span class="sp-pill"><span class="sp-icon">✦</span> <span id="sp-available">0</span> SP Disponível</span>
                 <button id="reset-sp-btn" class="inv-batch-btn" title="Redistribuir todos os pontos de habilidade investidos">🔄 Resetar SP</button>
@@ -1341,6 +1345,15 @@ export const IDLE_MARKUP = `
 
           <!-- Dolls Tab -->
           <div id="tab-dolls" class="tab-pane">
+            <section class="companion-command-hero">
+              <div class="companion-command-art" aria-hidden="true">♧</div>
+              <div class="companion-command-copy">
+                <span>VÍNCULOS DE ADEN · COLEÇÃO</span>
+                <h2>Dolls &amp; Companheiros</h2>
+                <p>Reúna ecos de chefes, fortaleça sua coleção e leve seu mascote para a jornada.</p>
+              </div>
+              <button class="companion-command-action" onclick="window.openPetModal && window.openPetModal()">🐾 Gerenciar Pets <b>→</b></button>
+            </section>
             <div class="dolls-header">
               <h3>🧸 Coleção &amp; Síntese de Boss Dolls</h3>
               <p class="shop-info">Mantenha Bonecos de Chefões em sua coleção para obter grandes bônus. Combine 2 Dolls idênticas do mesmo nível para tentar elevar seu nível!</p>

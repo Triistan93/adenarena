@@ -7346,13 +7346,13 @@ export function renderAstralMasteryUI(state) {
     }
 
     constellationsHtml += `
-      <div style="margin-bottom:18px;">
+      <section class="astral-constellation" style="margin-bottom:18px;">
         <h4 style="margin:0 0 4px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:15px;">${constDef.name}</h4>
         <p style="margin:0 0 10px 0; font-size:11px; color:#aaa;">${constDef.desc}</p>
         <div style="display:flex; flex-direction:column; gap:8px;">
           ${nodesHtml}
         </div>
-      </div>
+      </section>
     `;
   }
 
@@ -7370,10 +7370,10 @@ export function renderAstralMasteryUI(state) {
   ` : '';
 
   container.innerHTML = `
-    <div style="padding:16px; font-family:sans-serif; color:#fff;">
+    <div class="astral-screen-shell" style="padding:16px; font-family:sans-serif; color:#fff;">
       ${lockNoticeBanner}
       <!-- Header Banner -->
-      <div style="background:linear-gradient(180deg, rgba(26,18,48,0.95), rgba(12,8,26,0.95)); border:1px solid rgba(168,85,247,0.4); border-radius:12px; padding:16px; margin-bottom:18px; box-shadow:0 4px 20px rgba(168,85,247,0.2);">
+      <div class="astral-screen-hero" style="background:linear-gradient(180deg, rgba(26,18,48,0.95), rgba(12,8,26,0.95)); border:1px solid rgba(168,85,247,0.4); border-radius:12px; padding:16px; margin-bottom:18px; box-shadow:0 4px 20px rgba(168,85,247,0.2);">
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
           <div>
             <span style="font-size:11px; text-transform:uppercase; color:#c084fc; font-weight:bold; letter-spacing:1px;">✨ Sistema de Prestígio Ancestral</span>
@@ -7395,7 +7395,7 @@ export function renderAstralMasteryUI(state) {
       </div>
 
       <!-- Reincarnation Ritual Panel -->
-      <div style="background:linear-gradient(180deg, rgba(40,20,20,0.85), rgba(20,10,10,0.85)); border:1px solid ${canReincarnate ? 'rgba(239,68,68,0.6)' : 'rgba(255,255,255,0.1)'}; border-radius:12px; padding:14px; margin-bottom:20px;">
+      <div class="astral-reincarnation-panel" style="background:linear-gradient(180deg, rgba(40,20,20,0.85), rgba(20,10,10,0.85)); border:1px solid ${canReincarnate ? 'rgba(239,68,68,0.6)' : 'rgba(255,255,255,0.1)'}; border-radius:12px; padding:14px; margin-bottom:20px;">
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
           <div>
             <h4 style="margin:0; font-family:'Cinzel',serif; color:#fca5a5; font-size:16px; display:flex; align-items:center; gap:6px;">
@@ -12462,7 +12462,7 @@ export function renderColosseumTab(container, state) {
 
       <!-- Duelo Ativo -->
       ${activeDuel ? `
-        <div style="background:linear-gradient(135deg, rgba(40,15,15,0.95), rgba(20,5,5,0.98)); border:2px solid #ef4444; border-radius:10px; padding:16px;">
+        <div class="colosseum-active-challenge colosseum-active-challenge--duel" style="background:linear-gradient(135deg, rgba(40,15,15,0.95), rgba(20,5,5,0.98)); border:2px solid #ef4444; border-radius:10px; padding:16px;">
           <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
             <div>
               <h3 style="margin:0; color:#fca5a5; font-family:'Cinzel',serif; font-size:18px;">⚔️ Duelo 1v1: ${escapeHTML(activeDuel.opponentName)}</h3>
@@ -12487,7 +12487,7 @@ export function renderColosseumTab(container, state) {
 
       <!-- Sobrevivência Ativa -->
       ${activeSurvival ? `
-        <div style="background:linear-gradient(135deg, rgba(40,20,5,0.95), rgba(20,10,2,0.98)); border:2px solid #f59e0b; border-radius:10px; padding:16px;">
+        <div class="colosseum-active-challenge colosseum-active-challenge--survival" style="background:linear-gradient(135deg, rgba(40,20,5,0.95), rgba(20,10,2,0.98)); border:2px solid #f59e0b; border-radius:10px; padding:16px;">
           <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
             <div>
               <h3 style="margin:0; color:#fde047; font-family:'Cinzel',serif; font-size:18px;">🔥 Onda ${activeSurvival.waveIndex + 1}/10: ${activeSurvival.waveData.name}</h3>
@@ -12513,7 +12513,7 @@ export function renderColosseumTab(container, state) {
       <!-- Modos de Jogo -->
       <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:14px;">
         <!-- Duelos com Apostas -->
-        <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(239,68,68,0.3); border-radius:8px; padding:14px;">
+        <div class="colosseum-mode-card colosseum-mode-card--duel" style="background:rgba(0,0,0,0.4); border:1px solid rgba(239,68,68,0.3); border-radius:8px; padding:14px;">
           <h3 style="margin:0 0 10px 0; color:#fca5a5; font-family:'Cinzel',serif; font-size:15px;">⚔️ Duelos 1v1 com Apostas</h3>
           <div style="display:flex; flex-direction:column; gap:10px;">
             ${DUEL_BET_TIERS.map(tier => `
@@ -12535,7 +12535,7 @@ export function renderColosseumTab(container, state) {
         </div>
 
         <!-- Desafio de Sobrevivência & Loja de Badges -->
-        <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(245,158,11,0.3); border-radius:8px; padding:14px; display:flex; flex-direction:column; justify-content:space-between;">
+        <div class="colosseum-mode-card colosseum-mode-card--survival" style="background:rgba(0,0,0,0.4); border:1px solid rgba(245,158,11,0.3); border-radius:8px; padding:14px; display:flex; flex-direction:column; justify-content:space-between;">
           <div>
             <h3 style="margin:0 0 10px 0; color:#fde047; font-family:'Cinzel',serif; font-size:15px;">🏆 Desafio das 10 Ondas</h3>
             <p style="font-size:12px; color:#9ca3af; margin:0 0 12px 0;">Enfrente 10 ondas consecutivas de gladiadores e chefes do coliseu sem descanso para conquistar glória e Badges!</p>
