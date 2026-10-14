@@ -1,3 +1,11 @@
+# Nota de atualização — 13/10/2026
+
+Este arquivo reúne checkpoints históricos de outubro; as instruções de propriedade, pausa, staging e publicação registradas abaixo pertencem às rodadas antigas e **não são o estado de trabalho atual**. O checkpoint atual está no final de `DIARIO_DE_DESENVOLVIMENTO.md`; o commit mais recente relacionado ao Coliseu é `a28654bd`, já enviado para `origin/main`.
+
+Estado mais recente: Coliseu redesenhado para priorizar perfis PvP reais e ranking por rating. A implementação usa duelos assíncronos contra snapshots e rating salvo pelo cliente; não fornece presença, aceitação mútua nem resultado autoritativo. Próximo objetivo é construir esses componentes no backend antes de considerar o placar competitivo seguro.
+
+---
+
 # Checkpoint de trabalho concorrente — 03/10/2026
 
 ## Objetivo compartilhado

@@ -4962,3 +4962,24 @@ Esta sessão retomou o balanceamento das profissões e a organização dos equip
 - Há mudanças locais de várias frentes no mesmo savepoint: profissões/offline, economia de crafting, catálogo de equipamentos, testes de integridade e o documento de ideias. Este registro acompanha essas mudanças para que a continuação em outro computador não dependa apenas do histórico do chat.
 - **Validação desta sessão:** não rodei testes nem build. Antes de usar os números como balanceamento final, executar `npm test`, `npm run build` e a simulação `node tools/life-activity-economy-sim.mjs`; revisar as métricas, em especial receita líquida e valor dos materiais para receitas.
 - **Próximo passo recomendado:** executar a simulação e comparar nível 1 e nível 120 entre PvE e cada profissão; corrigir os achados, revisar a classificação pendente de Anais First e então atualizar os números de balanceamento com evidências.
+
+## Registro de trabalho — 13 de outubro de 2026
+
+### Reestruturação do Coliseu para PvP
+
+O Coliseu foi reorganizado para apresentar a arena competitiva como atividade principal. A antiga tela enfatizava duelos com aposta contra arquétipos fictícios e a provação PvE; agora o foco inicial é encontrar jogadores reais por Combat Power e desafiar seus perfis.
+
+- A tela mostra o rating do personagem, vitórias/derrotas, taxa de vitórias, insígnias e recorde da provação. Inclui uma lista Top PvP ordenada por rating e, em empate, por vitórias.
+- O matchmaking consulta perfis públicos existentes no Firebase e filtra o próprio personagem. Cada desafiante mostra classe, nível, CP, rating e recorde.
+- O duelo usa os atributos publicados do adversário como snapshot assíncrono. Não cobra Adena, não reduz o HP de PvE do jogador e atualiza o registro/rating local: +25 por vitória e -15 por derrota (mínimo de zero).
+- A Provação das 10 Ondas e a loja de insígnias permanecem disponíveis como seção PvE secundária. O caminho antigo de desafiar alguém pelo ranking também foi ligado ao perfil real publicado, removendo os atributos fictícios baseados apenas em CP.
+- O rating e o Top PvP são sincronizados no perfil público e lidos pelo ranking de duelos. **A pontuação ainda é gravada pelo cliente; não é um ranking competitivo autoritativo e pode ser manipulada.** Oponentes não recebem uma derrota quando alguém combate seu snapshot.
+
+### Validação e estado de continuidade
+
+- `npm run build`: aprovado. Permanece o aviso conhecido de chunks grandes, incluindo o bundle principal acima de 1,5 MB.
+- Não executei a suíte de testes nesta sessão.
+- Arquivos alterados: `lineage-idle/main.js`, `lineage-idle/src/services/ColosseumService.js`, `lineage-idle/src/services/RankingService.js`, `lineage-idle/src/ui/GameUI.js` e `src/firebase.ts`.
+- Commit `a28654bd` (`Reestrutura Coliseu como arena PvP`) já foi enviado para `origin/main`. O push deve iniciar o deploy automático do Vercel, mas o estado do deploy não foi conferido.
+- **Próximo passo para PvP competitivo real:** implementar presença de jogadores online, convite/aceitação mútua e resolução/rating autoritativos no backend. Antes disso, manter o modo atual rotulado como duelo assíncrono por snapshot e não tratar o Top PvP como placar inviolável.
+- Para continuar de casa: `git pull origin main`, consulte primeiro este registro e o commit `a28654bd`; o histórico anterior em `docs/ESTADO_DE_TRABALHO_CONCORRENTE.md` era um checkpoint de 03/10 e não descreve a propriedade de arquivos atual.

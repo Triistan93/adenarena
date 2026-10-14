@@ -13,7 +13,8 @@
 5. [Guia Rápido: Onde Mexer em Cada Parte](#-guia-rápido-onde-mexer-em-cada-parte)
 6. [Estrutura Completa de Pastas](#-estrutura-completa-de-pastas)
 7. [Mecânicas Centrais do Jogo](#-mecânicas-centrais-do-jogo)
-8. [Comandos & Deploy](#-comandos--deploy)
+8. [Estado para Continuidade](#-estado-para-continuidade)
+9. [Comandos & Deploy](#-comandos--deploy)
 
 ---
 
@@ -31,6 +32,18 @@ O **Aden Arena** une a nostalgia e complexidade matemática do **Lineage II** co
   1. **Idle Game (Principal)**: Interface completa inspirada no client clássico de Lineage II.
   2. **2D Pixel RPG**: Auto-battler retro em canvas HTML5 com spritesheets.
   3. **3D Arena**: Sobrevivência e ação em Three.js.
+
+---
+
+## 🏟️ Estado para Continuidade — 13/10/2026
+
+O Coliseu está em transição de um painel centrado em duelos PvE fictícios para uma arena competitiva. A tela atual busca perfis reais por Combat Power, mostra rating e Top PvP, e mantém a Provação das 10 Ondas como conteúdo PvE secundário.
+
+**Limitação atual:** os duelos são assíncronos e usam o snapshot público dos atributos do adversário; não há combate simultâneo, convite/aceitação nem resolução de partida no servidor. O rating (+25 vitória / -15 derrota) é gravado pelo cliente, portanto o ranking ainda não é autoritativo nem protegido contra manipulação.
+
+**Próxima etapa:** implementar presença online, fluxo mútuo de desafio e resolução/rating autoritativos no backend. Até isso existir, apresentar o Coliseu como PvP assíncrono por snapshot.
+
+O estado detalhado de implementação e validação está em [`DIARIO_DE_DESENVOLVIMENTO.md`](DIARIO_DE_DESENVOLVIMENTO.md). O checkpoint antigo em [`docs/ESTADO_DE_TRABALHO_CONCORRENTE.md`](docs/ESTADO_DE_TRABALHO_CONCORRENTE.md) contém registros históricos de 03/10/2026; consulte sua nota inicial antes de usar instruções antigas de propriedade ou publicação. A última alteração do Coliseu está no commit `a28654bd` (`Reestrutura Coliseu como arena PvP`), enviado para `main`.
 
 ---
 
