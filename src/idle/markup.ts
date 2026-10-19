@@ -209,7 +209,7 @@ export const IDLE_MARKUP = `
               <button id="soulshot-toggle-btn" class="combat-ctrl-btn" title="Ativar Soulshot no combate (+100% dano)"><span>⚡ SS</span> <span style="font-size:9px; color:#ffd877;">(OFF)</span></button>
               <button id="autopotion-toggle-btn" class="combat-ctrl-btn" title="Usar poções de HP automaticamente quando HP < 50%"><span>🧪 Auto-HP</span> <span style="font-size:9px; color:#ffd877;">(OFF)</span></button>
               <button id="speed-toggle-btn" class="combat-ctrl-btn" title="Velocidade do combate (1x Normal ou 2x Turbo)"><span>⏩ 1x</span></button>
-              <button id="macro-settings-btn" class="combat-ctrl-btn" onclick="window.openMacroSettingsModal && window.openMacroSettingsModal()" title="Configurações de Macro Idle: Gatilhos de HP/MP, Rotação de Skills e Auto-Recycle"><span>⚙️ Macro</span></button>
+              <button id="macro-settings-btn" class="combat-ctrl-btn" onclick="window.openMacroSettingsModal && window.openMacroSettingsModal()" title="Central de Automações: poções, ressurreição, habilidades e filtro AFK"><span>⚙️ Automações</span></button>
               <label class="combat-ctrl-btn combat-ctrl-vfx" style="display:inline-flex; align-items:center; gap:4px; cursor:pointer;" title="Qualidade dos efeitos visuais">
                 <span>VFX</span>
                 <select id="vfx-quality-select" title="Qualidade dos efeitos visuais">
@@ -1686,15 +1686,15 @@ export const IDLE_MARKUP = `
       </div>
     </div>
 
-        <!-- Macro Idle & Automation Settings Modal -->
+        <!-- Combat and Idle Automation Settings Modal -->
     <div id="macro-settings-modal" class="modal">
       <div class="modal-content" style="max-width:740px; width:95%; max-height:88vh; overflow-y:auto; background:linear-gradient(180deg, #181512 0%, #0d0a08 100%); border:2px solid rgba(212, 167, 68, 0.5); box-shadow:0 10px 40px rgba(0,0,0,0.8), 0 0 24px rgba(212,167,68,0.2); border-radius:12px; padding:20px;">
         <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px; border-bottom:1px solid rgba(212,167,68,0.25); padding-bottom:10px;">
           <div>
             <h2 style="margin:0; font-family:'Cinzel',serif; color:#fef08a; font-size:19px; display:flex; align-items:center; gap:8px;">
-              ⚙️ Central de Macro Idle &amp; Automação
+              ⚙️ Central de Automações
             </h2>
-            <p style="margin:4px 0 0 0; font-size:12px; color:#94a3b8;">Ajuste gatilhos de poções (HP/MP), defina a ordem de rotação das habilidades e configure o filtro de reciclagem AFK.</p>
+            <p style="margin:4px 0 0 0; font-size:12px; color:#94a3b8;">Configure poções, auto-ressurreição, rotação de habilidades e filtros da caça AFK.</p>
           </div>
           <button class="modal-close-btn modal-close-x" style="background:transparent; border:none; color:#9ca3af; font-size:20px; cursor:pointer; padding:0 6px;" onclick="window.closeMacroSettingsModal && window.closeMacroSettingsModal()">✕</button>
         </div>

@@ -24,14 +24,22 @@ test('Etapa 1 — recompensa, equipamento e caça pelos controles de produção 
       setAttribute() {},
       remove() {},
       getBoundingClientRect: () => ({ width: 0, height: 0 })
-    })
+    }),
+    appendChild() {}
   };
   const combatToggleButton = {
     innerHTML: '',
     onclick: null,
+    disabled: false,
+    setAttribute() {},
     classList: { toggle() {} },
     style: { removeProperty() {} }
   };
+  const modalClasses = new Set();
+  const deathModal = { classList: { add: name => modalClasses.add(name), remove: name => modalClasses.delete(name), contains: name => modalClasses.has(name) } };
+  const deathXpLoss = { textContent: '' };
+  const freeResurrectButton = { textContent: '', disabled: false };
+  const scrollResurrectButton = { disabled: false, title: '' };
   const questBadge = { style: { display: 'none' } };
   const stageHeroNodes = {
     '#hero-name, .stage-hero-name': { textContent: '' },
@@ -47,12 +55,17 @@ test('Etapa 1 — recompensa, equipamento e caça pelos controles de produção 
       if (selector === '#stage-hero, .stage-hero') return { querySelector: childSelector => stageHeroNodes[childSelector] || null };
       return stageHeroNodes[selector] || null;
     },
-    querySelectorAll() { return []; }
+    querySelectorAll() { return []; },
+    appendChild() {}
   };
   const idleHost = { shadowRoot: stageRoot };
   globalThis.document.getElementById = id => {
     if (id === 'tab-badge-quests') return questBadge;
     if (id === 'idle-host') return idleHost;
+    if (id === 'death-modal') return deathModal;
+    if (id === 'xp-loss') return deathXpLoss;
+    if (id === 'res-free') return freeResurrectButton;
+    if (id === 'res-scroll') return scrollResurrectButton;
     return null;
   };
   globalThis.window = { addEventListener() {}, GameData: {} };
@@ -78,10 +91,14 @@ test('Etapa 1 — recompensa, equipamento e caça pelos controles de produção 
     const monstersModule = await server.ssrLoadModule('/lineage-idle/src/data/monsters.js');
     const questsModule = await server.ssrLoadModule('/lineage-idle/src/data/quests.js');
     const advisorModule = await server.ssrLoadModule('/lineage-idle/src/services/NextActionAdvisor.js');
+    const combatEngine = await server.ssrLoadModule('/lineage-idle/src/engine/CombatEngine.js');
+    const idleMarkup = await server.ssrLoadModule('/src/idle/markup.ts');
     const statsModule = await server.ssrLoadModule('/lineage-idle/src/engine/StatsEngine.js');
     const gameUI = await server.ssrLoadModule('/lineage-idle/src/ui/GameUI.js');
     const main = await server.ssrLoadModule('/lineage-idle/main.js');
     const state = stateModule.DEFAULT_STATE();
+    assert.equal(state.autoResurrect, false, 'a auto-ressurreição deve iniciar desativada');
+    assert.match(idleMarkup.IDLE_MARKUP, /⚙️ Automações/, 'o controle deve usar o nome Central de Automações');
     stateModule.applyStarterKit(state, 'human', 'fighter', 'DisposableCombatCheck', 'M');
     state.isCombatActive = true;
     state.combatActive = true;
@@ -130,7 +147,15 @@ test('Etapa 1 — recompensa, equipamento e caça pelos controles de produção 
     let updateCalls = 0;
     let zoneNavigationCalls = 0;
     const saveCalls = [];
-    const zoneTab = { dataset: { tab: 'zones' }, click() { zoneNavigationCalls += 1; } };
+    const zoneTab = {
+      dataset: { tab: 'zones' },
+      classList: { add() {}, remove() {} },
+      style: {},
+      querySelector: () => null,
+      removeAttribute() {},
+      appendChild() {},
+      click() { zoneNavigationCalls += 1; }
+    };
     const advisorContainer = {
       style: {},
       set innerHTML(markup) { renderedMarkup = markup; actionButton = { onclick: null }; },
@@ -138,11 +163,16 @@ test('Etapa 1 — recompensa, equipamento e caça pelos controles de produção 
     };
     const root = {
       querySelector: selector => selector === '#next-action-advisor-char' ? advisorContainer : null,
-      querySelectorAll: selector => selector === '.tab-btn[data-tab]' ? [zoneTab] : []
+      querySelectorAll: selector => selector === '.tab-btn[data-tab]' ? [zoneTab] : [],
+      appendChild() {}
     };
     document.getElementById = id => {
       if (id === 'idle-host') return { shadowRoot: root };
       if (id === 'combat-toggle-btn') return combatToggleButton;
+      if (id === 'death-modal') return deathModal;
+      if (id === 'xp-loss') return deathXpLoss;
+      if (id === 'res-free') return freeResurrectButton;
+      if (id === 'res-scroll') return scrollResurrectButton;
       return null;
     };
     let callbacks;
@@ -175,6 +205,7 @@ test('Etapa 1 — recompensa, equipamento e caça pelos controles de produção 
     after.activeMonster = null;
     after.isCombatActive = false;
     after.combatActive = false;
+    after.autoResurrect = true;
     main.bindEvents();
     assert.equal(typeof combatToggleButton.onclick, 'function', 'o controle de caça deve receber o handler de produção');
     combatToggleButton.onclick();
@@ -186,6 +217,30 @@ test('Etapa 1 — recompensa, equipamento e caça pelos controles de produção 
     const savedSnapshot = storedValues.get(configModule.SAVE_KEY);
     assert.ok(savedSnapshot, 'o controle de caça deve agendar salvamento local no armazenamento descartável');
     assert.equal(JSON.parse(savedSnapshot).isCombatActive, false, 'o save local descartável deve preservar a caça pausada');
+    assert.equal(JSON.parse(savedSnapshot).autoResurrect, true, 'o save local deve preservar a preferência de auto-ressurreição');
+
+    after.hp = 0;
+    after.inventory.push({ uid: 'auto-resurrection-test-scroll', itemId: 'scroll_of_resurrection', count: 2 });
+    const scrollCountBefore = after.inventory.find(item => item.uid === 'auto-resurrection-test-scroll').count;
+    main.playerDeath(after.activeMonster);
+    assert.equal(after.hp, after.maxHp, 'o auto-reviver deve restaurar HP ao ressuscitar');
+    assert.equal(after.isCombatActive, false, 'o auto-reviver deve esperar a janela de ressurreição antes de retomar a caça');
+    assert.equal(after.inventory.find(item => item.uid === 'auto-resurrection-test-scroll').count, scrollCountBefore - 1,
+      'o auto-reviver deve consumir um pergaminho quando disponível');
+    assert.equal(modalClasses.has('active'), false, 'o modal de morte deve fechar após o auto-reviver');
+    await new Promise(resolve => setTimeout(resolve, 550));
+    assert.equal(after.isCombatActive, true, 'o auto-reviver deve retomar o combate após a ressurreição');
+    after.hp = 0;
+    main.playerDeath(after.activeMonster);
+    assert.equal(after.hp, after.maxHp, 'o Auto-Reviver deve continuar ativo após mortes repetidas');
+    assert.equal(after.isCombatActive, false, 'cada ressurreição deve aguardar a janela antes de retomar a caça');
+    assert.equal(after.inventory.find(item => item.uid === 'auto-resurrection-test-scroll')?.count ?? 0, scrollCountBefore - 2,
+      'cada morte deve consumir outro pergaminho quando o Auto-Reviver está ligado');
+    assert.equal(modalClasses.has('active'), false, 'o modal de morte deve continuar fechado no Auto-Reviver');
+    await new Promise(resolve => setTimeout(resolve, 550));
+    assert.equal(after.isCombatActive, true, 'o combate deve retomar após a segunda ressurreição');
+    combatEngine.stopCombat(after);
+    await new Promise(resolve => setTimeout(resolve, 600));
   } finally {
     if (server) await server.close();
     for (const [key, value] of previousGlobals) {

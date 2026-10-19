@@ -2636,6 +2636,10 @@ function toggleCombatSpeed() {
 }
 
 function toggleCombatState() {
+  if (Number(state.hp) <= 0) {
+    log('Ressuscite seu personagem antes de retomar a caça automática.', 'warning');
+    return;
+  }
   if (state.colosseum?.activeDuel || state.colosseum?.activeSurvival) {
     log('Conclua o desafio do Coliseu antes de retomar a caça automática.', 'warning');
     return;
@@ -2659,9 +2663,15 @@ function toggleCombatState() {
 function updateCombatControlsUI() {
   const combatBtn = el('combat-toggle-btn');
   if (combatBtn) {
-    const isActive = state.isCombatActive !== false;
+    const isDead = Number(state.hp) <= 0;
+    const isActive = !isDead && state.isCombatActive !== false;
+    combatBtn.disabled = isDead;
+    combatBtn.setAttribute('aria-pressed', String(isActive));
+    combatBtn.setAttribute('aria-label', isDead ? 'Personagem derrotado; ressuscite para caçar' : isActive ? 'Pausar caça automática' : 'Iniciar caça automática');
+    combatBtn.title = isDead ? 'Ressuscite seu personagem para retomar a caça.' : isActive ? 'Pausar caça automática' : 'Iniciar caça automática';
     combatBtn.classList.toggle('active', isActive);
-    combatBtn.innerHTML = `<span class="combat-stance-gem"></span> <span>${isActive ? '⚔️ Caçando' : '⏸️ Parado'}</span>`;
+    combatBtn.classList.toggle('defeated', isDead);
+    combatBtn.innerHTML = `<span class="combat-stance-gem"></span> <span>${isDead ? '💀 Derrotado' : isActive ? '⚔️ Caçando' : '⏸️ Parado'}</span>`;
     combatBtn.style.removeProperty('background');
     combatBtn.style.removeProperty('borderColor');
     combatBtn.style.removeProperty('color');
@@ -2707,7 +2717,7 @@ function updateCombatControlsUI() {
     const hpPct = Math.round((state.autoPotionSettings?.hpThreshold || 0.6) * 100);
     apBtn.innerHTML = `<span>🧪 Auto-Pot</span> <span style="font-size:9px; color:${isApActive ? '#ffd877' : '#94a3b8'};">(${hpCount} HP / ${mpCount} MP)</span>`;
     const mpPct = Math.round((state.autoPotionSettings?.mpThreshold || 0.4) * 100);
-    apBtn.title = `Auto-Poções: ${isApActive ? 'LIGADO' : 'DESLIGADO'} (HP < ${hpPct}%, MP < ${mpPct}%) - Clique para alternar ou configure no botão Macro ⚙️`;
+    apBtn.title = `Auto-Poções: ${isApActive ? 'LIGADO' : 'DESLIGADO'} (HP < ${hpPct}%, MP < ${mpPct}%) - Configure na Central de Automações ⚙️`;
   }
   const spdBtn = el('speed-toggle-btn');
   if (spdBtn) {
@@ -7585,7 +7595,7 @@ function showSagaModal(saga) {
 }
 
 function updateSagaProgress(silent = true) { return engineUpdateSagaProgress(state, silent, { log, floatText, showSagaModal }); }
-function playerDeath(monster) {
+export function playerDeath(monster) {
   try {
     if (globalVFXOrchestrator && typeof globalVFXOrchestrator.clear === 'function') globalVFXOrchestrator.clear();
     if (VFX && typeof VFX.clear === 'function') VFX.clear();
@@ -7596,13 +7606,25 @@ function playerDeath(monster) {
   if (state.hp <= 0 && (state.isSpecialInstanceActive || state.activeInstanceId || state.activeMonster?.isInstanceBoss)) {
     InstanceService.leaveInstance(state, { log, save });
   }
+  if (state.hp <= 0 && state.autoResurrect === true) {
+    const hasResurrectionScroll = state.inventory?.some(item =>
+      item?.itemId === 'scroll_of_resurrection' && Number(item.count ?? item.qty ?? 1) > 0
+    );
+    const useScroll = hasResurrectionScroll && Number(state._pendingLoss ?? 0.2) > 0.1;
+    const lossPct = Math.round(Number(state._pendingLoss ?? 0.2) * 100);
+    log(useScroll
+      ? '🤖 Auto-Reviver: usando 1 Pergaminho da Ressurreição para reduzir a perda de XP a 10%.'
+      : `🤖 Auto-Reviver: sem pergaminho utilizável; ressuscitando com a penalidade atual de ${lossPct}% de XP.`, 'system');
+    resurrect(useScroll);
+  }
+  updateCombatControlsUI();
   return result;
 }
 function resurrect(useScroll = false) {
   if (state.isSpecialInstanceActive || state.activeInstanceId || state.activeMonster?.isInstanceBoss) {
     InstanceService.leaveInstance(state, { silent: true });
   }
-  return engineResurrect(state, useScroll, { log, el, updateAllUI, save, attackMonster });
+  return engineResurrect(state, useScroll, { log, el, updateAllUI, updateCombatControlsUI, save, attackMonster });
 }
 
 export function spendSP(skillId) { return engineSpendSP(state, skillId, { log, floatText, classSatisfies, removeFromInventory, updateAllUI, save }); }
@@ -8932,7 +8954,7 @@ export function bindEvents() {
     // Modal background click to close
     qsa('.modal, .modal-overlay').forEach(modal => {
       modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
+        if (e.target === modal && modal.id !== 'death-modal') {
           modal.classList.remove('active');
           if (modal.classList.contains('modal-overlay')) modal.style.display = 'none';
         }
@@ -8943,7 +8965,7 @@ export function bindEvents() {
     if (typeof window !== 'undefined') {
       window.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
-          qsa('.modal.active').forEach(m => m.classList.remove('active'));
+          qsa('.modal.active').forEach(m => { if (m.id !== 'death-modal') m.classList.remove('active'); });
           qsa('.modal-overlay').forEach(m => { if (m.style.display !== 'none') m.style.display = 'none'; });
         }
       });
@@ -11441,6 +11463,7 @@ export function init() {
         autoHp: true,
         autoMp: true
       };
+      state.autoResurrect = state.autoResurrect === true;
       state.skillAutoCast = state.skillAutoCast || {};
       state.skillPriorityOrder = state.skillPriorityOrder || [];
 
@@ -11469,6 +11492,17 @@ export function init() {
       });
 
       contentEl.innerHTML = `
+        <!-- Section 1: Automatic Resurrection -->
+        <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(212,167,68,0.3); border-radius:10px; padding:14px;">
+          <label style="display:flex; align-items:flex-start; gap:10px; cursor:pointer;">
+            <input type="checkbox" ${state.autoResurrect ? 'checked' : ''} onchange="window.setAutoResurrectAction(this.checked)" style="margin-top:3px; accent-color:#d4a744;" />
+            <span>
+              <strong style="display:block; font-family:'Cinzel',serif; font-size:14px; color:#ffd877;">⚰️ Auto-Reviver</strong>
+              <span style="display:block; margin-top:4px; font-size:11px; line-height:1.5; color:#94a3b8;">Ao morrer, ressuscita e retoma a caça automaticamente. Usa um Pergaminho da Ressurreição quando ele puder reduzir a perda de XP para 10%; sem pergaminho utilizável, aplica a penalidade atual. A automação continua ativa até você desligá-la.</span>
+            </span>
+          </label>
+        </div>
+
         <!-- Section 1: Auto-Poções Avançadas -->
         <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(212,167,68,0.3); border-radius:10px; padding:14px;">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
@@ -11605,6 +11639,12 @@ export function init() {
     window.setMacroToggleMp = (checked) => {
       state.autoPotionSettings = state.autoPotionSettings || {};
       state.autoPotionSettings.autoMp = !!checked;
+      save();
+    };
+
+    window.setAutoResurrectAction = (checked) => {
+      state.autoResurrect = !!checked;
+      log(`Auto-Reviver ${state.autoResurrect ? 'ativado' : 'desativado'}.`, 'system');
       save();
     };
 

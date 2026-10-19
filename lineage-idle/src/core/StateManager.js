@@ -45,6 +45,7 @@ export const DEFAULT_STATE = () => ({
   dailyRewards: { currentDay: 1, claimedDays: [], lastClaimDate: '', streak: 0, totalClaims: 0 },
   tower: { highestFloor: 0, currentFloor: 1, lastSweepTime: 0, pendingFirstClearRewards: [] },
   zone: 'talkingIsland', currentSaga: 0, gold: 2000, adenCoins: 0, dailyRaidTickets: 3, pendingRaidRewards: [], inventory: [],
+  autoResurrect: false,
   equipment: {
     weapon: null, weapon2: null, shield: null,
     helmet: null, chest: null, gloves: null, legs: null, boots: null,
@@ -677,6 +678,7 @@ export function loadState() {
     currentState.zoneTab = data.zoneTab || 'map';
     currentState.soulshotActive = !!data.soulshotActive;
     currentState.autoPotionActive = !!data.autoPotionActive;
+    currentState.autoResurrect = data.autoResurrect === true;
     currentState.combatSpeed = data.combatSpeed === 2 ? 2 : 1;
     currentState.selectedSkill = data.selectedSkill || null;
     currentState.startTime = Date.now();

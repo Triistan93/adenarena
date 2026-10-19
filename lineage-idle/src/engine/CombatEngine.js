@@ -487,7 +487,10 @@ export function resurrect(state, useScroll = false, callbacks = {}) {
   if (callbacks.updateAllUI) callbacks.updateAllUI();
   if (callbacks.save) callbacks.save();
 
-  setTimeout(() => startCombat(state, callbacks), 500);
+  setTimeout(() => {
+    startCombat(state, callbacks);
+    if (callbacks.updateCombatControlsUI) callbacks.updateCombatControlsUI();
+  }, 500);
 }
 
 /** Alterna ativação de Soulshots */
