@@ -12,7 +12,7 @@
 
 import EventBus from './EventBus.js';
 import { setRoot as setDomRoot, _intervals, addTrackedListener, cleanupTracked, el } from './DomHelpers.js';
-import { setRoot as setMainRoot, bindEvents } from '../../main.js';
+import { setRoot as setMainRoot, bindEvents, restoreDeathState } from '../../main.js';
 import { getState, setState, loadState, saveState, DEFAULT_STATE, applyStarterKit } from './StateManager.js';
 import { getStats, getClass } from '../engine/StatsEngine.js';
 import { startCombat, stopCombat } from '../engine/CombatEngine.js';
@@ -88,6 +88,7 @@ export async function bootstrap(shadowRoot) {
 
     // 4. Força renderização inicial de toda a UI
     updateAllUI(state);
+    if (state.isDead === true) restoreDeathState();
 
     // 5. Inicia o combate se houver uma zona selecionada
     if (shouldStartCombatAtStartup(state)) {

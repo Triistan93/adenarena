@@ -121,7 +121,7 @@ test('3. Death Knight Fatal Survival Mechanic: Born to Die triggers on lethal da
   dkState.hp = 0;
   const secondDeath = playerDeath(dkState, monster, callbacks);
   assert.notEqual(secondDeath, false, 'Normal playerDeath completes without interception');
-  assert.ok(dkState._pendingLoss > 0, 'Player must suffer pending death penalty when skill is on cooldown');
+  assert.ok(dkState.pendingDeathLoss > 0, 'Player must suffer pending death penalty when skill is on cooldown');
 });
 
 test('4. Race Equity & Passives Across All Non-Human Races in StatsEngine', () => {

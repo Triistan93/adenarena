@@ -46,6 +46,8 @@ export const DEFAULT_STATE = () => ({
   tower: { highestFloor: 0, currentFloor: 1, lastSweepTime: 0, pendingFirstClearRewards: [] },
   zone: 'talkingIsland', currentSaga: 0, gold: 2000, adenCoins: 0, dailyRaidTickets: 3, pendingRaidRewards: [], inventory: [],
   autoResurrect: false,
+  isDead: false,
+  pendingDeathLoss: 0,
   equipment: {
     weapon: null, weapon2: null, shield: null,
     helmet: null, chest: null, gloves: null, legs: null, boots: null,
@@ -285,6 +287,18 @@ export function replaceStateSnapshot(snapshot) {
   return currentState;
 }
 
+/** Clona dados de save sem compartilhar referências mutáveis com o estado vivo. */
+function cloneSaveValue(value) {
+  if (value === null || typeof value !== 'object') return value;
+  if (value instanceof Date) return new Date(value.getTime());
+  if (value instanceof Set) return new Set(Array.from(value, cloneSaveValue));
+  if (value instanceof Map) return new Map(Array.from(value, ([key, entry]) => [cloneSaveValue(key), cloneSaveValue(entry)]));
+  if (Array.isArray(value)) return value.map(cloneSaveValue);
+  const copy = {};
+  for (const [key, entry] of Object.entries(value)) copy[key] = cloneSaveValue(entry);
+  return copy;
+}
+
 /**
  * Salva o estado atual no localStorage com Checksum de integridade, Backup de segurança e Cloud Push.
  * @param {boolean} [manual=false] Se true, executa flash-save imediato cancelando throttling
@@ -298,26 +312,29 @@ export function saveState(manual = false, forceCloud = false) {
 
   currentState.lastSaveTime = Date.now();
   currentState._saveVersion = (Number(currentState._saveVersion) || 0) + 1;
-  sanitizeGameState(currentState);
+  // A sanitização normaliza campos e inventário; faça isso no snapshot para não
+  // alterar silenciosamente o estado que a UI e os motores estão usando.
+  const snapshot = cloneSaveValue(currentState);
+  sanitizeGameState(snapshot);
 
   // Sincroniza chaves dedicadas de controle administrativo de alta autoridade
   try {
-    if (currentState.serverSeason) {
-      localStorage.setItem('aden_server_season', String(currentState.serverSeason));
-      localStorage.setItem('aden_admin_season', String(currentState.serverSeason));
+    if (snapshot.serverSeason) {
+      localStorage.setItem('aden_server_season', String(snapshot.serverSeason));
+      localStorage.setItem('aden_admin_season', String(snapshot.serverSeason));
     }
-    if (currentState.serverMaxLevel) {
-      localStorage.setItem('aden_server_cap', String(currentState.serverMaxLevel));
+    if (snapshot.serverMaxLevel) {
+      localStorage.setItem('aden_server_cap', String(snapshot.serverMaxLevel));
     }
-    if (currentState.adminUnlockedAll) {
+    if (snapshot.adminUnlockedAll) {
       localStorage.setItem('aden_admin_unlock_all', 'true');
     }
   } catch (_) {}
 
   const data = {
-    ...currentState,
-    totalPlaytime: (currentState.totalPlaytime || 0) + (Date.now() - (currentState.startTime || Date.now())),
-    selectedUids: Array.from(getSelectedSet(currentState))
+    ...snapshot,
+    totalPlaytime: (snapshot.totalPlaytime || 0) + (Date.now() - (snapshot.startTime || Date.now())),
+    selectedUids: Array.from(getSelectedSet(snapshot))
   };
   delete data.startTime;
 
@@ -429,7 +446,7 @@ export function loadState() {
       ? data.inventory.filter(item => item && item.itemId && (!hasItemsDict || allItems[item.itemId]))
       : [];
 
-    currentState = { ...def, ...data };
+    replaceStateSnapshot({ ...def, ...data });
     sanitizeGameState(currentState);
 
     // Sanitização preventiva de zona salva: impede que saves antigos ou dessincronizados deixem o jogador preso em zonas de alto CP
@@ -450,7 +467,16 @@ export function loadState() {
     currentState.heroName = currentState.charName;
     currentState.playerName = currentState.charName;
     currentState.name = currentState.charName;
-    if (currentState.hp <= 0) {
+    currentState.isDead = data.isDead === true;
+    const pendingDeathLoss = Number(data.pendingDeathLoss);
+    currentState.pendingDeathLoss = currentState.isDead
+      ? Math.max(0, Math.min(0.2, Number.isFinite(pendingDeathLoss) ? pendingDeathLoss : 0.2))
+      : 0;
+    if (currentState.isDead) {
+      currentState.hp = 0;
+      currentState.isCombatActive = false;
+      currentState.combatActive = false;
+    } else if (currentState.hp <= 0) {
       currentState.hp = currentState.maxHp || 100;
     }
     currentState.skills = { ...def.skills, ...(data.skills || {}) };
@@ -706,6 +732,7 @@ export function loadState() {
     }
 
     EventBus.emit('state:loaded', currentState);
+    EventBus.emit('state:updated', currentState);
     setSaveRecoveryRequired(false);
     return true;
   } catch (err) {
@@ -722,7 +749,7 @@ export function resetState() {
   localStorage.removeItem(SAVE_KEY);
   localStorage.removeItem(`${SAVE_KEY}_backup`);
   setSaveRecoveryRequired(false);
-  currentState = DEFAULT_STATE();
+  replaceStateSnapshot(DEFAULT_STATE());
   EventBus.emit('state:reset', currentState);
 }
 

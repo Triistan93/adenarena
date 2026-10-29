@@ -88,8 +88,13 @@ export function sanitizeGameState(state) {
   state.xp = Math.max(0, parseInt(state.xp, 10) || 0);
   state.sp = Math.max(0, parseInt(state.sp, 10) || 0);
   state.gold = Math.max(0, parseInt(state.gold, 10) || 0);
+  state.isDead = state.isDead === true;
+  const deathLoss = Number(state.pendingDeathLoss);
+  state.pendingDeathLoss = state.isDead
+    ? Math.max(0, Math.min(0.2, Number.isFinite(deathLoss) ? deathLoss : 0.2))
+    : 0;
   state.maxHp = Math.max(10, parseInt(state.maxHp, 10) || 100);
-  state.hp = Math.max(1, Math.min(state.maxHp, parseInt(state.hp, 10) || state.maxHp));
+  state.hp = state.isDead === true ? 0 : Math.max(1, Math.min(state.maxHp, parseInt(state.hp, 10) || state.maxHp));
   state.maxMp = Math.max(5, parseInt(state.maxMp, 10) || 50);
   state.mp = Math.max(0, Math.min(state.maxMp, parseInt(state.mp, 10) || state.maxMp));
 

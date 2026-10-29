@@ -6,6 +6,7 @@
  */
 
 import { D, HIGH_RARITIES, ALL_EQUIP_SLOTS } from '../core/GameConfig.js';
+import EventBus from '../core/EventBus.js';
 import { getSellValue } from '../data/economy/economyBalance.js';
 
 /**
@@ -495,7 +496,9 @@ export function removeFromInventoryByItemId(state, itemId, count) {
       if (remaining <= 0) break;
     }
   }
-  return remaining <= 0;
+  const removed = remaining <= 0;
+  if (removed) EventBus.emit('inventory:updated', { state, itemId, count });
+  return removed;
 }
 
 /**

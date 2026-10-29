@@ -8,6 +8,8 @@
 ---
 
 #### 📑 Índice Rápido de Páginas
+- [Registro de trabalho — 28 de outubro de 2026](#registro-de-trabalho--28-de-outubro-de-2026) — *Refatoração canônica do ciclo de Morte, Ressurreição, Persistência, Safety Brake do Auto-Reviver e inteligência de design L2*
+- [Registro de trabalho — 13 de outubro de 2026](#registro-de-trabalho--13-de-outubro-de-2026) — *Reestruturação do Coliseu para PvP*
 - [Registro de trabalho — 07 de outubro de 2026](#registro-de-trabalho--07-de-outubro-de-2026) — *Balanceamento offline das profissões, organização do catálogo de armas, economia de crafting e handoff para continuidade*
 - [Consolidação de `work` em `main` — 02 de outubro de 2026](#consolidação-de-work-em-main--02-de-outubro-de-2026) — *Integração local, suíte completa e build validados; auditoria integral continua aberta*
 - [Página 27 — 26 de Setembro de 2026 às 16:40](#página-27--26-de-setembro-de-2026-às-1640) — *Correção do Vínculo Indevido de Assassin Servitor com a Classe Assassin*
@@ -4983,3 +4985,41 @@ O Coliseu foi reorganizado para apresentar a arena competitiva como atividade pr
 - Commit `a28654bd` (`Reestrutura Coliseu como arena PvP`) já foi enviado para `origin/main`. O push deve iniciar o deploy automático do Vercel, mas o estado do deploy não foi conferido.
 - **Próximo passo para PvP competitivo real:** implementar presença de jogadores online, convite/aceitação mútua e resolução/rating autoritativos no backend. Antes disso, manter o modo atual rotulado como duelo assíncrono por snapshot e não tratar o Top PvP como placar inviolável.
 - Para continuar de casa: `git pull origin main`, consulte primeiro este registro e o commit `a28654bd`; o histórico anterior em `docs/ESTADO_DE_TRABALHO_CONCORRENTE.md` era um checkpoint de 03/10 e não descreve a propriedade de arquivos atual.
+
+
+## Registro de trabalho — 28 de outubro de 2026
+
+### ⚰️ Refatoração Canônica do Ciclo de Morte, Ressurreição e Persistência do Idle
+
+Implementação e homologação completa da refatoração em 5 fases do fluxo de Morte, Ressurreição, Proteção de Saves e Retomada de Combate no Aden Arena (Lineage Idle):
+
+1. **Fase 1 — Matemática de XP, Atributos e Travas de Concorrência (Motor)**:
+   - **Correção da Penalidade de Morte**: A perda de XP em `CombatEngine.js` (`computeDeathXpLoss`) agora incide exclusivamente sobre a faixa do nível atual (`getXPForLevel(state.level)`), travando a dedução no piso do nível (`baseXP = getTotalXP(state.level - 1)`). Elimina tanto a queda de nível (*de-level*) quanto o congelamento da barra de progresso em 0%.
+   - **Travas de Idempotência**: `playerDeath()` ignora chamadas duplicadas no mesmo tick (`if (state.isDead) return false;`); `resurrect()` bloqueia chamadas espúrias se o personagem estiver vivo (`if (!state.isDead) return false;`).
+   - **Restauração Completa de CP**: A ressurreição agora recalcula e recupera 100% de HP, MP e CP (`state.maxCp = stats.maxCp; state.cp = state.maxCp;`).
+   - **Consumo Seguro de Itens**: Migração das mutações manuais `.splice()` para `InventoryService.removeFromInventoryByItemId(state, ..., 1)`, com emissão do evento `EventBus.emit('inventory:updated')`.
+
+2. **Fase 2 — Persistência da Morte e Bloqueio de Exploits (Save & Load)**:
+   - **Serialização Explícita**: `isDead: true` e `pendingDeathLoss: 0.2` agora são persistidos no schema canônico do `StateManager.js` e salvos no `localStorage`/nuvem.
+   - **Blindagem do Autosave**: `SecurityEngine.js` (`sanitizeGameState`) agora preserva `hp = 0` quando `isDead === true`, impedindo cura gratuita durante o salvamento em segundo plano.
+   - **Recuperação de Morte no Load**: Ao carregar um save de um personagem derrotado, `restoreDeathState()` mantém `hp = 0`, mantém o combate pausado e reabre o `#death-modal`.
+   - **Preservação de Referência**: `loadState()` e `resetState()` utilizam `replaceStateSnapshot()` sem quebrar referências de objeto compartilhadas com o motor.
+   - **Bloqueio de Progresso Offline de Cadáver**: `checkOfflineProgress()` aborta imediatamente se o herói estiver morto (`canAccrueOfflineProgress(state)`).
+
+3. **Fase 3 — Fluxo de Combate, Consentimento de Itens e Safety Brake**:
+   - **Consentimento de Pergaminhos**: Fim do consumo automático de `scroll_of_rebirth` no dano fatal; uso passa a ser opção explícita no modal (`Usar Renascimento (-0 XP)`). O Auto-Reviver consome estritamente pergaminhos comuns de ressurreição.
+   - **Controle de Retomada**: Na ressurreição manual, a caça permanece pausada (`state.isCombatActive = false`). A retomada após 500ms ocorre exclusivamente quando o Auto-Reviver estiver ligado, com cancelamento preventivo via `cancelAutoResume()`.
+   - **Freio de Segurança (*Safety Brake*)**: Implementado `AutoReviveSafetyPolicy.js`. Caso ocorram 3 mortes em menos de 120s com o Auto-Reviver ligado, o macro é desarmado, o personagem é movido para a cidade pacífica (`talkingIsland`), e um alerta preventivo é registrado no log.
+   - **Opção Canônica "Ressuscitar na Cidade" (*To Village*)**: Botão explícito no modal que teleporta o herói para `lastSafeZone` com combate pausado.
+
+4. **Fase 4 — UI, Acessibilidade e Estilo**:
+   - Atributos ARIA (`role="dialog"`, `aria-modal="true"`, `aria-labelledby`, `aria-describedby`) e contenção de foco (*focus trap* via Tab) no `#death-modal`.
+   - Estilização de status derrotado no botão de caça (`.combat-ctrl-btn.defeated`).
+   - Tradução e esclarecimento da mensagem de uso de pergaminhos na mochila.
+
+5. **Fase 5 — Validação e Testes Automatizados**:
+   - Nova suíte `test/death-resurrection-flow.test.js` com 6 cenários aprovados em 3,6s.
+   - Suíte de produção `test/stage1-combat-reward-production.test.js` aprovada com isolamento de HMR/watcher.
+   - Suítes `cloud-save-queue.test.js`, `cloud-save-hydration.test.js`, `canonical-skill-system-full-audit.test.js`, `save-conflict-policy.test.js` e `legacy-save-roundtrip.test.js` 100% aprovadas.
+   - Build de produção `npm run build` gerado com sucesso (319 módulos transformados).
+   - Disponibilização dos arquivos `docs/ADEN_ARENA_LINEAGE2_CROSS_REFERENCE.md` e `docs/ADEN_ARENA_LINEAGE2_IMPLEMENTATION_PLAN.md` no git para continuidade do trabalho remoto.

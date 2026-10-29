@@ -187,6 +187,9 @@ import {
   useChaosBossSummonStone as serviceUseChaosBossSummonStone,
   processChaosBossLoot as serviceProcessChaosBossLoot
 } from './src/services/AlchemyService.js';
+import { canAccrueOfflineProgress } from './src/core/CombatStartupPolicy.js';
+import { createAutoReviveDeathTracker } from './src/core/AutoReviveSafetyPolicy.js';
+
 // ─── Sprint 4: Importa motores de Combate e Habilidades ────────────────────
 import {
   startCombat as engineStartCombat,
@@ -198,6 +201,8 @@ import {
   updateSagaProgress as engineUpdateSagaProgress,
   playerDeath as enginePlayerDeath,
   resurrect as engineResurrect,
+  getDeathOptions as engineGetDeathOptions,
+  renderDeathModal as engineRenderDeathModal,
   getNearestTown,
   toggleSoulshot as engineToggleSoulshot,
   toggleAutoPotion as engineToggleAutoPotion
@@ -555,6 +560,7 @@ function load() {
     if (state.godMode) {
       log('🛡️ [AVISO ADMIN] God Mode (Invencibilidade) está ATIVADO neste save! Digite //god no chat para desativar.', 'warning');
     }
+    restoreDeathState();
     if (state.lastSaveTime) {
       setTimeout(() => checkOfflineProgress(state.lastSaveTime), 600);
     }
@@ -1613,7 +1619,7 @@ export function useItem(uid) {
       log('Abra o menu de Reespecialização para utilizar o Scroll of Race & Class Change.', 'system');
     }
     return;
-  } else if (def.type === 'resurrect') { log('Scrolls auto-use on death.', 'system'); return; } 
+  } else if (def.type === 'resurrect') { log('Pergaminhos de ressurreição são usados na tela de morte (ou pelo Auto-Reviver), não pela mochila.', 'system'); return; }
   else { log(`Used ${def.name}`, 'heal'); }
   
   // Robust stack deduction — handles both item.count and item.qty
@@ -2636,7 +2642,7 @@ function toggleCombatSpeed() {
 }
 
 function toggleCombatState() {
-  if (Number(state.hp) <= 0) {
+  if (state.isDead === true || Number(state.hp) <= 0) {
     log('Ressuscite seu personagem antes de retomar a caça automática.', 'warning');
     return;
   }
@@ -2663,7 +2669,7 @@ function toggleCombatState() {
 function updateCombatControlsUI() {
   const combatBtn = el('combat-toggle-btn');
   if (combatBtn) {
-    const isDead = Number(state.hp) <= 0;
+    const isDead = state.isDead === true || Number(state.hp) <= 0;
     const isActive = !isDead && state.isCombatActive !== false;
     combatBtn.disabled = isDead;
     combatBtn.setAttribute('aria-pressed', String(isActive));
@@ -2757,6 +2763,8 @@ function setLogFilter(filterType) {
 
 function checkOfflineProgress(lastTime) {
   if (!lastTime) return;
+  // Personagem derrotado não acumula progresso offline.
+  if (!canAccrueOfflineProgress(state)) return;
   const val = validateOfflineTime(lastTime);
   if (!val.valid || val.minutesOffline < 1) return;
   
@@ -7551,8 +7559,10 @@ function finishColosseumChallenge(result) {
   const resumeCombat = colosseum.resumeCombatAfterChallenge === true;
   colosseum.resumeCombatAfterChallenge = false;
   if (result.isDefeat && state.hp <= 0) {
-    playerDeath(state.activeMonster);
-    if (resumeCombat && state.hp > 0) startCombat();
+    const deathHandled = playerDeath(state.activeMonster);
+    // A real death must respect the Auto-Reviver delay (or await a manual choice).
+    // Only resume immediately when a passive such as Born to Die prevented death.
+    if (resumeCombat && !deathHandled && state.hp > 0) startCombat();
   } else if (resumeCombat && state.hp > 0) {
     startCombat();
   }
@@ -7603,28 +7613,44 @@ export function playerDeath(monster) {
   const result = enginePlayerDeath(state, monster, { log, el });
   // Preserve Born to Die's fatal-survival behavior; only abandon the encounter
   // after the player has actually entered the death state.
-  if (state.hp <= 0 && (state.isSpecialInstanceActive || state.activeInstanceId || state.activeMonster?.isInstanceBoss)) {
+  if (state.isDead && (state.isSpecialInstanceActive || state.activeInstanceId || state.activeMonster?.isInstanceBoss)) {
     InstanceService.leaveInstance(state, { log, save });
   }
-  if (state.hp <= 0 && state.autoResurrect === true) {
-    const hasResurrectionScroll = state.inventory?.some(item =>
-      item?.itemId === 'scroll_of_resurrection' && Number(item.count ?? item.qty ?? 1) > 0
-    );
-    const useScroll = hasResurrectionScroll && Number(state._pendingLoss ?? 0.2) > 0.1;
-    const lossPct = Math.round(Number(state._pendingLoss ?? 0.2) * 100);
-    log(useScroll
-      ? '🤖 Auto-Reviver: usando 1 Pergaminho da Ressurreição para reduzir a perda de XP a 10%.'
-      : `🤖 Auto-Reviver: sem pergaminho utilizável; ressuscitando com a penalidade atual de ${lossPct}% de XP.`, 'system');
-    resurrect(useScroll);
+  if (state.isDead && state.autoResurrect === true) {
+    if (registerAutoReviveDeath()) {
+      state.autoResurrect = false;
+      autoReviveDeathTracker.reset();
+      log('🛑 Auto-Reviver desligado: 3 mortes em menos de 2 minutos. A caça automática foi interrompida e você voltou à cidade para proteger seu XP e seus pergaminhos.', 'warning');
+      resurrect('town');
+    } else {
+      const useScroll = engineGetDeathOptions(state).scroll.enabled;
+      const lossPct = Math.round(Number(state.pendingDeathLoss ?? 0.2) * 100);
+      log(useScroll
+        ? '🤖 Auto-Reviver: usando 1 Pergaminho da Ressurreição para reduzir a perda de XP a 10%.'
+        : `🤖 Auto-Reviver: sem pergaminho utilizável; ressuscitando com a penalidade atual de ${lossPct}% de XP.`, 'system');
+      resurrect(useScroll ? 'scroll' : 'free');
+    }
   }
   updateCombatControlsUI();
   return result;
 }
-function resurrect(useScroll = false) {
+const autoReviveDeathTracker = createAutoReviveDeathTracker();
+/** Registra uma morte com o Auto-Reviver ligado; true quando o freio de segurança deve disparar. */
+function registerAutoReviveDeath(now = Date.now()) { return autoReviveDeathTracker.record(now); }
+/** Reabre o modal de morte quando o save foi carregado com uma morte pendente. */
+export function restoreDeathState() {
+  if (state.isDead !== true) return;
+  state.hp = 0;
+  stopCombat();
+  engineRenderDeathModal(state, { log, el });
+  updateCombatControlsUI();
+}
+function resurrect(option = false) {
+  if (!state.isDead) return false;
   if (state.isSpecialInstanceActive || state.activeInstanceId || state.activeMonster?.isInstanceBoss) {
     InstanceService.leaveInstance(state, { silent: true });
   }
-  return engineResurrect(state, useScroll, { log, el, updateAllUI, updateCombatControlsUI, save, attackMonster });
+  return engineResurrect(state, option, { log, el, updateAllUI, updateCombatControlsUI, save, attackMonster });
 }
 
 export function spendSP(skillId) { return engineSpendSP(state, skillId, { log, floatText, classSatisfies, removeFromInventory, updateAllUI, save }); }
@@ -8881,8 +8907,26 @@ export function bindEvents() {
     };
     const startBtn = el('start-btn'); if (startBtn) startBtn.onclick = startGame;
     const resetBtn = el('reset-btn'); if (resetBtn) resetBtn.onclick = resetSave;
-    const resFree = el('res-free'); if (resFree) resFree.onclick = () => resurrect(false);
-    const resScroll = el('res-scroll'); if (resScroll) resScroll.onclick = () => resurrect(true);
+    const resFree = el('res-free'); if (resFree) resFree.onclick = () => resurrect('free');
+    const resScroll = el('res-scroll'); if (resScroll) resScroll.onclick = () => resurrect('scroll');
+    const resRebirth = el('res-rebirth'); if (resRebirth) resRebirth.onclick = () => resurrect('rebirth');
+    const resTown = el('res-town'); if (resTown) resTown.onclick = () => resurrect('town');
+    const deathModalEl = el('death-modal');
+    if (deathModalEl && !deathModalEl.dataset?.deathFocusTrapBound && typeof deathModalEl.addEventListener === 'function') {
+      // Focus trap: com o modal de morte aberto, Tab circula só entre os botões habilitados.
+      deathModalEl.addEventListener('keydown', (e) => {
+        if (e.key !== 'Tab') return;
+        const buttons = Array.from(deathModalEl.querySelectorAll('button:not([disabled])'));
+        if (!buttons.length) return;
+        const root = deathModalEl.getRootNode ? deathModalEl.getRootNode() : document;
+        const active = root.activeElement;
+        const idx = buttons.indexOf(active);
+        const next = e.shiftKey ? (idx <= 0 ? buttons.length - 1 : idx - 1) : (idx === buttons.length - 1 ? 0 : idx + 1);
+        e.preventDefault();
+        buttons[next].focus();
+      });
+      if (deathModalEl.dataset) deathModalEl.dataset.deathFocusTrapBound = 'true';
+    }
     const sagaOk = el('saga-ok'); if (sagaOk) sagaOk.onclick = () => { const modal = el('saga-modal'); if (modal) { modal.classList.remove('active'); modal.style.display = 'none'; } };
     const unequipBtn = el('unequip-all-btn'); if (unequipBtn) unequipBtn.onclick = unequipAll;
     qsa('.equip-slot').forEach(slot => { slot.onclick = () => { const s = slot.dataset.slot, uid = state.equipment[s]; if (uid) unequipItem(s); }; });
@@ -11644,6 +11688,7 @@ export function init() {
 
     window.setAutoResurrectAction = (checked) => {
       state.autoResurrect = !!checked;
+      autoReviveDeathTracker.reset();
       log(`Auto-Reviver ${state.autoResurrect ? 'ativado' : 'desativado'}.`, 'system');
       save();
     };
@@ -11900,7 +11945,16 @@ export function init() {
       state.heroName = state.charName;
       state.playerName = state.charName;
       state.name = state.charName;
-      if (state.hp <= 0) {
+      state.isDead = cloudData.isDead === true;
+      const pendingDeathLoss = Number(cloudData.pendingDeathLoss);
+      state.pendingDeathLoss = state.isDead
+        ? Math.max(0, Math.min(0.2, Number.isFinite(pendingDeathLoss) ? pendingDeathLoss : 0.2))
+        : 0;
+      if (state.isDead) {
+        state.hp = 0;
+        state.isCombatActive = false;
+        state.combatActive = false;
+      } else if (state.hp <= 0) {
         state.hp = state.maxHp || 100;
       }
       const rawPriv = Number(cloudData.privilegeLevel) || (cloudData.role === 'admin' ? 1 : 0) || 0;
@@ -11960,6 +12014,7 @@ export function init() {
       } catch (_) {}
 
       updateAllUI();
+      restoreDeathState();
       save(true, true);
       if (cloudData.lastSaveTime) {
         setTimeout(() => checkOfflineProgress(cloudData.lastSaveTime), 600);

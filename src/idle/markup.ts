@@ -1568,13 +1568,15 @@ export const IDLE_MARKUP = `
     </main>
 
     <!-- Death Modal -->
-    <div id="death-modal" class="modal">
+    <div id="death-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="death-title" aria-describedby="death-penalty">
       <div class="modal-content">
-        <h2>Você foi derrotado em combate!</h2>
-        <p id="death-penalty">Você perderá <span id="xp-loss">0</span> XP.</p>
+        <h2 id="death-title">Você foi derrotado em combate!</h2>
+        <p id="death-penalty">Você perderá <span id="xp-loss">0</span> XP (faixa do nível atual). A caça só retoma quando você decidir.</p>
         <div class="modal-actions">
           <button id="res-free" class="action-btn">Ressuscitar (Grátis, -20% XP)</button>
           <button id="res-scroll" class="action-btn">Usar Pergaminho (-10% XP)</button>
+          <button id="res-rebirth" class="action-btn">Usar Renascimento (-0 XP)</button>
+          <button id="res-town" class="action-btn">Voltar para a Cidade</button>
         </div>
       </div>
     </div>

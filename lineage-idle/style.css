@@ -9037,8 +9037,15 @@ select:focus-visible {
   color: #ffd877;
 }
 
+/* Personagem derrotado: o botão de caça fica bloqueado até a ressurreição. */
+.combat-ctrl-btn.defeated,
+.combat-ctrl-btn.defeated:hover {
+  background: rgba(127, 29, 29, 0.35);
+  border-color: rgba(248, 113, 113, 0.7);
+  color: #fecaca;
+  cursor: not-allowed;
+  opacity: 0.85;
+}
 
-
-
-
-
+#death-modal .modal-actions { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+#death-modal .modal-actions .action-btn:disabled { opacity: 0.45; cursor: not-allowed; }

@@ -74,9 +74,10 @@ test('Etapa 1 — recompensa, equipamento e caça pelos controles de produção 
   let server;
   try {
     server = await createServer({
-      configFile: 'vite.config.ts',
-      server: { middlewareMode: true },
-      appType: 'custom'
+      configFile: false,
+      server: { middlewareMode: true, hmr: false, watch: null },
+      appType: 'custom',
+      logLevel: 'silent'
     });
 
     const itemsModule = await server.ssrLoadModule('/lineage-idle/src/data/items/index.js');

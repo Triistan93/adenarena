@@ -18,6 +18,8 @@ import { combatEvents, CombatEventType, CombatEventFactory } from '../vfx/Combat
 import { ClassValidationService } from '../services/ClassValidationService.js';
 import { getShotGradeCode } from '../data/items/item_grade.js';
 import { CombatPowerService } from '../services/CombatPowerService.js';
+import { getTotalXP, getXPForLevel } from './LevelEngine.js';
+import { removeFromInventoryByItemId } from '../services/InventoryService.js';
 
 export { combatEvents, CombatEventType, CombatEventFactory };
 
@@ -101,6 +103,8 @@ export function getNearestTown(zoneId, state = null) {
  */
 export function startCombat(state, callbacks = {}) {
   if (!hasValidState(state)) return false;
+  if (state.isDead === true) return false;
+  cancelAutoResume();
   state.combatActive = true;
   state.isCombatActive = true;
 
@@ -163,6 +167,7 @@ export function setCombatSpeed(state, speed, callbacks = {}) {
  */
 export function stopCombat(state) {
   if (!hasValidState(state)) return false;
+  cancelAutoResume();
   state.combatActive = false;
   state.isCombatActive = false;
   if (combatInterval) {
@@ -345,14 +350,100 @@ export function updateSagaProgress(state, silent = true, callbacks = {}) {
   }
 }
 
+/** Perda padrão de XP na morte (fração da faixa do nível atual). */
+export const DEFAULT_DEATH_LOSS = 0.2;
+/** Perda aplicada ao usar o Pergaminho da Ressurreição. */
+export const RESURRECTION_SCROLL_LOSS = 0.1;
+const AUTO_RESUME_DELAY_MS = 500;
+let autoResumeTimer = null;
+
+function cancelAutoResume() {
+  if (autoResumeTimer) {
+    clearTimeout(autoResumeTimer);
+    autoResumeTimer = null;
+  }
+}
+
+/** Quantidade disponível (não equipada) de um item, no mesmo critério do InventoryService. */
+export function countInventoryItem(state, itemId) {
+  if (!Array.isArray(state?.inventory)) return 0;
+  return state.inventory.reduce((total, item) =>
+    item && item.itemId === itemId && !item.equipped ? total + Math.max(1, Number(item.count) || 1) : total, 0);
+}
+
+/**
+ * XP que seria perdido com a taxa informada. A perda incide só sobre a faixa do
+ * nível atual e nunca leva o XP abaixo do piso do nível (sem de-level).
+ */
+export function computeDeathXpLoss(state, rate) {
+  const level = Math.max(1, Number(state?.level) || 1);
+  const baseXP = level <= 1 ? 0 : getTotalXP(level - 1);
+  const levelSpan = getXPForLevel(level);
+  const wanted = Math.floor(levelSpan * rate);
+  return Math.max(0, Math.min(wanted, (Number(state?.xp) || 0) - baseXP));
+}
+
+/** Descreve as opções de ressurreição disponíveis para o estado de morte atual. */
+export function getDeathOptions(state) {
+  const baseLoss = Number(state?.pendingDeathLoss) > 0 ? Number(state.pendingDeathLoss) : DEFAULT_DEATH_LOSS;
+  const scrolls = countInventoryItem(state, 'scroll_of_resurrection');
+  const rebirths = countInventoryItem(state, 'scroll_of_rebirth');
+  const scrollRate = Math.min(baseLoss, RESURRECTION_SCROLL_LOSS);
+  return {
+    baseLoss,
+    scrolls,
+    rebirths,
+    free: { rate: baseLoss, xpLoss: computeDeathXpLoss(state, baseLoss) },
+    scroll: { rate: scrollRate, xpLoss: computeDeathXpLoss(state, scrollRate), enabled: scrolls > 0 && baseLoss > RESURRECTION_SCROLL_LOSS },
+    rebirth: { rate: 0, xpLoss: 0, enabled: rebirths > 0 },
+    town: { rate: baseLoss, xpLoss: computeDeathXpLoss(state, baseLoss) }
+  };
+}
+
+/** Preenche e abre o modal de morte a partir do estado persistido. */
+export function renderDeathModal(state, callbacks = {}) {
+  if (!callbacks.el) return;
+  const options = getDeathOptions(state);
+  const fmt = n => Number(n).toLocaleString('pt-BR');
+  const pct = r => `${Math.round(r * 100)}%`;
+  const modal = callbacks.el('death-modal');
+  if (modal) modal.classList.add('active');
+  const xpEl = callbacks.el('xp-loss');
+  if (xpEl) xpEl.textContent = fmt(options.free.xpLoss);
+
+  const setButton = (id, label, enabled, title) => {
+    const button = callbacks.el(id);
+    if (!button) return;
+    button.textContent = label;
+    button.disabled = !enabled;
+    button.title = title;
+  };
+  setButton('res-free', `Ressuscitar (Grátis, -${fmt(options.free.xpLoss)} XP · ${pct(options.free.rate)} do nível atual)`, true,
+    'Ressuscita no local com HP, MP e CP completos. A caça fica pausada.');
+  setButton('res-scroll', `Usar Pergaminho (-${fmt(options.scroll.xpLoss)} XP · ${pct(options.scroll.rate)}) · Restantes: ${fmt(options.scrolls)}`,
+    options.scroll.enabled,
+    options.scrolls <= 0 ? 'Você não possui Pergaminho da Ressurreição.'
+      : options.baseLoss <= RESURRECTION_SCROLL_LOSS ? 'Sua perda de XP já é de 10% ou menos.'
+        : 'Consome 1 Pergaminho da Ressurreição e reduz a perda de XP para 10%.');
+  setButton('res-rebirth', `Usar Renascimento (-0 XP) · Restantes: ${fmt(options.rebirths)}`, options.rebirth.enabled,
+    options.rebirths <= 0 ? 'Você não possui Pergaminho do Renascimento.' : 'Consome 1 Pergaminho do Renascimento e ressuscita sem perder XP.');
+  setButton('res-town', `Voltar para a Cidade (-${fmt(options.town.xpLoss)} XP · ${pct(options.town.rate)})`, true,
+    'Ressuscita na cidade segura com HP, MP e CP completos. A caça fica pausada.');
+  const first = callbacks.el('res-free');
+  if (first && typeof first.focus === 'function') first.focus();
+}
+
 /**
  * Lida com a morte do jogador em combate.
+ * Idempotente: mortes repetidas no mesmo estado são ignoradas. A morte fica
+ * persistida em `state.isDead` / `state.pendingDeathLoss` até `resurrect`.
  * @param {Object} state
  * @param {Object} monster
  * @param {Object} [callbacks] — { log, el }
  */
 export function playerDeath(state, monster, callbacks = {}) {
   if (!hasValidState(state)) return false;
+  if (state.isDead) return false;
 
   // CANONICAL PASSIVE: Born to Die (Death Knight unique fatal survival)
   // On dying from attack: Triggers Reviving After Death.
@@ -378,90 +469,63 @@ export function playerDeath(state, monster, callbacks = {}) {
   }
 
   stopCombat(state);
-  const scroll = state.inventory?.find(i => i.itemId === 'scroll_of_rebirth' && (i.count || 1) > 0);
-  let lossRate = 0.2;
-
-  if (scroll) {
-    lossRate = 0.0;
-    if (scroll.count > 1) scroll.count--;
-    else {
-      scroll.equipped = false;
-      state.inventory.splice(state.inventory.indexOf(scroll), 1);
-    }
-    if (callbacks.log) callbacks.log('Scroll of Rebirth used! No XP loss!', 'loot');
-  }
-
-  const xpLoss = Math.floor(state.xp * lossRate);
-  if (callbacks.el) {
-    const xpEl = callbacks.el('xp-loss');
-    if (xpEl) xpEl.textContent = xpLoss.toLocaleString();
-    const modal = callbacks.el('death-modal');
-    if (modal) modal.classList.add('active');
-    const freeButton = callbacks.el('res-free');
-    if (freeButton) {
-      freeButton.textContent = `Ressuscitar (Grátis, -${Math.round(lossRate * 100)}% XP)`;
-    }
-    const scrollButton = callbacks.el('res-scroll');
-    if (scrollButton) {
-      const hasResurrectionScroll = state.inventory?.some(item =>
-        item?.itemId === 'scroll_of_resurrection' && Number(item.count ?? item.qty ?? 1) > 0
-      );
-      const canReducePenalty = lossRate > 0.1;
-      scrollButton.disabled = !hasResurrectionScroll || !canReducePenalty;
-      scrollButton.title = !hasResurrectionScroll
-        ? 'Você não possui Pergaminho da Ressurreição.'
-        : canReducePenalty
-          ? 'Consome 1 Pergaminho da Ressurreição e reduz a perda de XP para 10%.'
-          : 'Sua perda de XP já é de 10% ou menos.';
-    }
-  }
-  state._pendingLoss = lossRate;
+  state.isDead = true;
+  state.hp = 0;
+  state.pendingDeathLoss = DEFAULT_DEATH_LOSS;
+  renderDeathModal(state, callbacks);
+  return true;
 }
 
 /**
  * Ressuscita o jogador após a morte.
  * @param {Object} state
- * @param {boolean} [useScroll=false]
- * @param {Object} [callbacks] — { log, el, updateAllUI, save, attackMonster }
+ * @param {boolean|'free'|'scroll'|'rebirth'|'town'} [option=false] — `true` equivale a 'scroll'
+ * @param {Object} [callbacks] — { log, el, updateAllUI, updateCombatControlsUI, save, attackMonster }
+ * @returns {boolean} true se a ressurreição foi concluída
  */
-export function resurrect(state, useScroll = false, callbacks = {}) {
+export function resurrect(state, option = false, callbacks = {}) {
   if (!hasValidState(state)) return false;
-  let loss = state._pendingLoss ?? 0.2;
-  if (useScroll) {
-    if (loss <= 0.1) {
+  if (!state.isDead) return false;
+  const mode = option === true ? 'scroll' : (!option ? 'free' : String(option));
+  let loss = Number(state.pendingDeathLoss) > 0 ? Number(state.pendingDeathLoss) : DEFAULT_DEATH_LOSS;
+
+  if (mode === 'scroll') {
+    if (loss <= RESURRECTION_SCROLL_LOSS) {
       if (callbacks.log) callbacks.log('Sua perda de XP já é de 10% ou menos; o pergaminho não será consumido.', 'system');
       return false;
     }
-    const scroll = state.inventory?.find(item =>
-      item?.itemId === 'scroll_of_resurrection' && Number(item.count ?? item.qty ?? 1) > 0
-    );
-    if (!scroll) {
+    if (!removeFromInventoryByItemId(state, 'scroll_of_resurrection', 1)) {
       if (callbacks.log) callbacks.log('Você não possui Pergaminho da Ressurreição.', 'warning');
       return false;
     }
-    const count = Number(scroll.count ?? scroll.qty ?? 1);
-    if (count > 1) {
-      if (scroll.count != null) scroll.count = count - 1;
-      if (scroll.qty != null) scroll.qty = count - 1;
-    } else {
-      scroll.equipped = false;
-      state.inventory.splice(state.inventory.indexOf(scroll), 1);
-    }
-    loss = 0.1;
+    loss = RESURRECTION_SCROLL_LOSS;
     if (callbacks.log) callbacks.log('Pergaminho da Ressurreição usado! Perda de 10% de XP.', 'loot');
+  } else if (mode === 'rebirth') {
+    if (!removeFromInventoryByItemId(state, 'scroll_of_rebirth', 1)) {
+      if (callbacks.log) callbacks.log('Você não possui Pergaminho do Renascimento.', 'warning');
+      return false;
+    }
+    loss = 0;
+    if (callbacks.log) callbacks.log('Pergaminho do Renascimento usado! Sem perda de XP.', 'loot');
   }
+
   if (callbacks.el) {
     const modal = callbacks.el('death-modal');
     if (modal) modal.classList.remove('active');
   }
-  state.xp = Math.max(0, state.xp - Math.floor(state.xp * loss));
-  state._pendingLoss = 0;
+  state.xp = (Number(state.xp) || 0) - computeDeathXpLoss(state, loss);
+  state.isDead = false;
+  state.pendingDeathLoss = 0;
 
   const stats = getStats(state);
   state.maxHp = stats.maxHp;
   state.maxMp = stats.maxMp;
   state.hp = state.maxHp;
   state.mp = state.maxMp;
+  if (Number.isFinite(stats.maxCp)) {
+    state.maxCp = stats.maxCp;
+    state.cp = state.maxCp;
+  }
 
   // Limpa instâncias / raid / torre ao ressuscitar
   state.isRaidActive = false;
@@ -470,9 +534,14 @@ export function resurrect(state, useScroll = false, callbacks = {}) {
   state.target = null;
   state.activeMonster = null;
 
-  // Sempre permanece no mesmo mapa ao ressuscitar (mantém hunting zone atual)
-  const currentHuntingZone = state.zone || state.lastHuntingZone || 'talkingIsland';
-  state.zone = ZONES[currentHuntingZone] ? currentHuntingZone : 'talkingIsland';
+  if (mode === 'town') {
+    const lastSafe = state.lastSafeZone;
+    state.zone = ZONES[lastSafe]?.town ? lastSafe : 'talkingIsland';
+  } else {
+    // Permanece no mesmo mapa ao ressuscitar (mantém hunting zone atual)
+    const currentHuntingZone = state.zone || state.lastHuntingZone || 'talkingIsland';
+    state.zone = ZONES[currentHuntingZone] ? currentHuntingZone : 'talkingIsland';
+  }
   state.currentZone = state.zone;
   if (ZONES[state.zone]?.town) {
     state.lastSafeZone = state.zone;
@@ -484,13 +553,30 @@ export function resurrect(state, useScroll = false, callbacks = {}) {
     const zoneName = ZONES[state.zone]?.name || state.zone;
     callbacks.log(`Ressuscitou em ${zoneName}!`, 'system');
   }
+
+  // A caça só retoma sozinha com o Auto-Reviver; na ressurreição manual o jogador decide.
+  state.isCombatActive = false;
+  state.combatActive = false;
+  cancelAutoResume();
+  const autoResume = state.autoResurrect === true && mode !== 'town';
   if (callbacks.updateAllUI) callbacks.updateAllUI();
+  if (callbacks.updateCombatControlsUI) callbacks.updateCombatControlsUI();
   if (callbacks.save) callbacks.save();
 
-  setTimeout(() => {
-    startCombat(state, callbacks);
-    if (callbacks.updateCombatControlsUI) callbacks.updateCombatControlsUI();
-  }, 500);
+  if (autoResume) {
+    autoResumeTimer = setTimeout(() => {
+      autoResumeTimer = null;
+      if (state.isDead || state.isCombatActive === true || state.autoResurrect !== true) return;
+      if (state.colosseum?.activeDuel || state.colosseum?.activeSurvival
+        || state.isRaidActive || state.activeInstanceId || state.isSpecialInstanceActive
+        || state.tower?.activeRun || state.fishing?.isFishing || state.fishing?.autoFishing
+        || state.hunting?.isHunting || state.hunting?.autoHunting
+        || state.gathering?.autoGathering || state.mining?.autoMining) return;
+      startCombat(state, callbacks);
+      if (callbacks.updateCombatControlsUI) callbacks.updateCombatControlsUI();
+    }, AUTO_RESUME_DELAY_MS);
+  }
+  return true;
 }
 
 /** Alterna ativação de Soulshots */
